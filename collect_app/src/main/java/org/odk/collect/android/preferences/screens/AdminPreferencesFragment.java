@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.androidshared.OneSignTextWatcher;
+import org.odk.collect.projects.DeleteProjectDialog;
 import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
 
@@ -131,10 +132,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     startActivity(pref);
                     break;
                 case DELETE_PROJECT_KEY:
-                    projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
-                    currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
-                    ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
-                    ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
+                    DialogUtils.showIfNotShowing(DeleteProjectDialog.class, requireActivity().getSupportFragmentManager());
                     break;
                 case "main_menu":
                     displayPreferences(new MainMenuAccessPreferencesFragment());
@@ -209,5 +207,12 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     return null;
             }
         }
+    }
+
+    public void deleteProject() {
+        projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
+        currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
+        ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
     }
 }
