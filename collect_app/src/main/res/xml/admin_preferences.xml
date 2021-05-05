@@ -50,6 +50,11 @@
             android:key="import_settings"
             android:title="@string/configure_via_qr_code"
             app:iconSpaceReserved="false" />
+
+        <PreferenceScreen
+            android:key="delete_project"
+            android:title="@string/delete_project"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_access_control"

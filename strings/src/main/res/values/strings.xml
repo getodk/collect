@@ -998,4 +998,5 @@
     <string name="configure_later">Try Collect and configure later</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
+    <string name="delete_project">Delete project</string>
 </resources>
