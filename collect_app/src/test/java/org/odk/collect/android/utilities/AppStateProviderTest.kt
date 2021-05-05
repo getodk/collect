@@ -1,12 +1,12 @@
 package org.odk.collect.android.utilities
 
 import android.content.pm.PackageInfo
-import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.Settings
 
@@ -26,18 +26,18 @@ class AppStateProviderTest {
     fun `When app is newly installed isFreshInstall() should return true when opened for the first time`() {
         packageInfo.firstInstallTime = 100
         packageInfo.lastUpdateTime = 100
-        `when`(metaSettings.contains(MetaKeys.FIRST_LAUNCH)).thenReturn(false)
+        whenever(metaSettings.contains(MetaKeys.FIRST_LAUNCH)).thenReturn(false)
 
-        assertThat(appStateProvider.isFreshInstall(), `is`(true))
+        assertThat(appStateProvider.isFreshInstall(), equalTo(true))
     }
 
     @Test
     fun `When app is newly installed isFreshInstall() should return false when opened not for the first time`() {
         packageInfo.firstInstallTime = 100
         packageInfo.lastUpdateTime = 100
-        `when`(metaSettings.contains(MetaKeys.FIRST_LAUNCH)).thenReturn(true)
+        whenever(metaSettings.contains(MetaKeys.FIRST_LAUNCH)).thenReturn(true)
 
-        assertThat(appStateProvider.isFreshInstall(), `is`(false))
+        assertThat(appStateProvider.isFreshInstall(), equalTo(false))
     }
 
     @Test
@@ -45,6 +45,6 @@ class AppStateProviderTest {
         packageInfo.firstInstallTime = 100
         packageInfo.lastUpdateTime = 200
 
-        assertThat(appStateProvider.isFreshInstall(), `is`(false))
+        assertThat(appStateProvider.isFreshInstall(), equalTo(false))
     }
 }
