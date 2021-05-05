@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowDialog;
@@ -37,7 +37,7 @@ public class DeleteRepeatDialogFragmentTest {
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(TestActivity.class);
+        activity = CollectHelpers.createThemedActivity(TestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
 

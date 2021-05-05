@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.AndroidShared.Toolbar.Primary.CloseIcon" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="navigationIcon">@drawable/ic_close_black_24dp</item>
+        <item name="navigationContentDescription">@string/close</item>
+    </style>
+</resources>

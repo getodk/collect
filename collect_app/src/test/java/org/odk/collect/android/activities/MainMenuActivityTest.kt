@@ -25,7 +25,7 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.formmanagement.InstancesCountRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.projects.Project
@@ -47,7 +47,7 @@ class MainMenuActivityTest {
         `when`(mainMenuViewModel.sentFormsCount).thenReturn(livedata)
         `when`(mainMenuViewModel.unsentFormsCount).thenReturn(livedata)
 
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMainMenuViewModel(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesCountRepository: InstancesCountRepository): MainMenuViewModel.Factory {
                 return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

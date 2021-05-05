@@ -24,7 +24,7 @@ the License.
 
         <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
-            style="@style/Widget.Collect.Toolbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="0dp"

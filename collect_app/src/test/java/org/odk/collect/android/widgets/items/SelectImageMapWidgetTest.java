@@ -8,8 +8,8 @@ import androidx.core.util.Pair;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.widgets.base.SelectWidgetTest;
 
 import static java.util.Arrays.asList;
@@ -37,7 +37,7 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
                 new Pair<>("jr://images/body.svg", "body.svg")
         ));
 
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ReferenceManager providesReferenceManager() {
                 return referenceManager;

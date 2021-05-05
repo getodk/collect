@@ -29,7 +29,7 @@ import javax.inject.Singleton
  */
 
 interface AudioRecorderDependencyComponentProvider {
-    fun getAudioRecorderDependencyComponentProvider(): AudioRecorderDependencyComponent
+    val audioRecorderDependencyComponent: AudioRecorderDependencyComponent
 }
 
 @Component(modules = [AudioRecorderDependencyModule::class])

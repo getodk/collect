@@ -24,7 +24,7 @@ import java.io.File;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.support.RobolectricHelpers.setupMediaPlayerDataSource;
+import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)

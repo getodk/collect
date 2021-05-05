@@ -8,7 +8,7 @@ import org.odk.collect.shared.UUIDGenerator
 class SharedPreferencesProjectsRepository(
     private val uuidGenerator: UUIDGenerator,
     private val gson: Gson,
-    private val metaSettings: Settings,
+    private val settings: Settings,
     private val key: String
 ) : ProjectsRepository {
 
@@ -17,7 +17,7 @@ class SharedPreferencesProjectsRepository(
     }
 
     override fun getAll(): List<Project> {
-        val projects = metaSettings.getString(key)
+        val projects = settings.getString(key)
         return if (projects != null && projects.isNotBlank()) {
             gson.fromJson(projects, TypeToken.getParameterized(ArrayList::class.java, Project::class.java).type)
         } else {
@@ -38,15 +38,15 @@ class SharedPreferencesProjectsRepository(
                 projects.set(projectIndex, project)
             }
         }
-        metaSettings.save(key, gson.toJson(projects))
+        settings.save(key, gson.toJson(projects))
     }
 
     override fun delete(uuid: String) {
         val projects = getAll().toMutableList().minus(get(uuid))
-        metaSettings.save(key, gson.toJson(projects))
+        settings.save(key, gson.toJson(projects))
     }
 
     override fun deleteAll() {
-        metaSettings.remove(key)
+        settings.remove(key)
     }
 }

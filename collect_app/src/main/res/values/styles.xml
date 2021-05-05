@@ -38,11 +38,6 @@
         <item name="behavior_peekHeight">300dp</item>
     </style>
 
-    <style name="Widget.Collect.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">?colorOnSurface</item>
-        <item name="hintTextColor">?colorOnSurface</item>
-    </style>
-
     <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="shapeAppearance">@style/ShapeAppearance.Collect.SmallComponent</item>
         <item name="android:textColor">?colorOnSurface</item>

@@ -26,8 +26,9 @@ import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ProjectSettingsDialogTest {
@@ -41,7 +42,7 @@ class ProjectSettingsDialogTest {
         appDependencyComponent = DaggerUtils.getComponent(Collect.getInstance())
         appDependencyComponent.projectsRepository().deleteAll()
 
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider): CurrentProjectViewModel.Factory {
                 return object : CurrentProjectViewModel.Factory(currentProjectProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -54,7 +55,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'X' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(withId(R.id.close_icon)).perform(click())
@@ -64,7 +65,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -74,7 +75,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `General settings should be started after clicking on the 'General Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
             assertThat(it.isVisible, `is`(true))
@@ -87,7 +88,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `Admin settings should be started after clicking on the 'Admin Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
             assertThat(it.isVisible, `is`(true))
@@ -100,7 +101,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `About section should be started after clicking on the 'About' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
             assertThat(it.isVisible, `is`(true))
@@ -117,7 +118,7 @@ class ProjectSettingsDialogTest {
         appDependencyComponent.projectsRepository().save(Project("Project Y", "Y", "#ffffff", "2"))
         appDependencyComponent.currentProjectProvider().setCurrentProject("1")
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withText("Project Y")).perform(click())
             verify(currentProjectViewModel).setCurrentProject(Project("Project Y", "Y", "#ffffff", "2"))

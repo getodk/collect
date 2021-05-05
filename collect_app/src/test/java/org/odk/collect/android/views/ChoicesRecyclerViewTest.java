@@ -31,8 +31,8 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.robolectric.RobolectricTestRunner;
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
+import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView;
 
 @RunWith(RobolectricTestRunner.class)
 public class ChoicesRecyclerViewTest {
@@ -68,7 +68,7 @@ public class ChoicesRecyclerViewTest {
     @Before
     public void setUp() throws InvalidReferenceException {
         audioHelper = mock(AudioHelper.class);
-        activityController = RobolectricHelpers.buildThemedActivity(TestScreenContextActivity.class);
+        activityController = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class);
         Activity activity = activityController.get();
         FrameLayout frameLayout = new FrameLayout(activity);
         activity.setContentView(frameLayout);

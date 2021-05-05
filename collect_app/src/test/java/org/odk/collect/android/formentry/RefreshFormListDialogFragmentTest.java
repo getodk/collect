@@ -9,7 +9,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.R;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -21,7 +22,7 @@ public class RefreshFormListDialogFragmentTest {
 
     @Test
     public void dialogIsNotCancellable() {
-        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(RefreshFormListDialogFragment.class);
+        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(RefreshFormListDialogFragment.class, R.style.Theme_Collect_Light);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(false));
         });
@@ -29,7 +30,7 @@ public class RefreshFormListDialogFragmentTest {
 
     @Test
     public void clickingCancel_calls_onCancelFormLoading() {
-        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(RefreshFormListDialogFragment.class);
+        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = RobolectricHelpers.launchDialogFragment(RefreshFormListDialogFragment.class, R.style.Theme_Collect_Light);
         fragmentScenario.onFragment(fragment -> {
             fragment.listener = mock(RefreshFormListDialogFragment.RefreshFormListDialogFragmentListener.class);
 

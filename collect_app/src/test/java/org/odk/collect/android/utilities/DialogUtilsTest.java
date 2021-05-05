@@ -14,8 +14,8 @@ import org.robolectric.android.controller.ActivityController;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.support.RobolectricHelpers.buildThemedActivity;
-import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
+import static org.odk.collect.android.support.CollectHelpers.buildThemedActivity;
+import static org.odk.collect.android.support.CollectHelpers.createThemedActivity;
 
 @RunWith(RobolectricTestRunner.class)
 public class DialogUtilsTest {

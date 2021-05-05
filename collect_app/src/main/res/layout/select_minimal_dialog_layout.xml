@@ -5,7 +5,18 @@
     android:background="?attr/colorSurface"
     android:orientation="vertical">
 
-    <include layout="@layout/material_full_screen_dialog_toolbar" />
+    <com.google.android.material.appbar.AppBarLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            tools:title="Title" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <org.odk.collect.android.views.ChoicesRecyclerView
         android:id="@+id/choices_recycler_view"

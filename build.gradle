@@ -76,4 +76,5 @@ ext {
     daggerVersion = '2.32'
     okhttp3Version = '4.9.0'
     timberVersion = '4.7.1'
+    materialVersion = '1.3.0'
 }

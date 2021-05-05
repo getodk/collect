@@ -16,8 +16,9 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 import org.robolectric.fakes.RoboMenu;
@@ -36,8 +37,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.RobolectricHelpers.createThemedActivity;
-import static org.odk.collect.android.support.RobolectricHelpers.getFragmentByClass;
+import static org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -54,7 +54,7 @@ public class FormEntryMenuDelegateTest {
 
     @Before
     public void setup() {
-        activity = createThemedActivity(AppCompatActivity.class, R.style.Theme_MaterialComponents);
+        activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class, R.style.Theme_MaterialComponents);
         FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
         formSaveViewModel = mock(FormSaveViewModel.class);

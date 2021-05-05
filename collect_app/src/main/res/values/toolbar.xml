@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Widget.Collect.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="titleTextAppearance">@style/TextAppearance.Collect.Headline6</item>
-    </style>
-</resources>

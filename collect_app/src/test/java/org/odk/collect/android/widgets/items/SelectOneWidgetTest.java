@@ -31,8 +31,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
@@ -53,7 +53,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
-import static org.odk.collect.android.support.RobolectricHelpers.populateRecyclerView;
+import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView;
 
 /**
  * @author James Knight
@@ -311,7 +311,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
     private void overrideDependencyModule() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
             public ReferenceManager providesReferenceManager() {

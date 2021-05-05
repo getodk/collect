@@ -11,7 +11,7 @@ import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent
  */
 internal class RobolectricApplication : Application(), AudioRecorderDependencyComponentProvider {
 
-    lateinit var audioRecorderDependencyComponent: AudioRecorderDependencyComponent
+    override lateinit var audioRecorderDependencyComponent: AudioRecorderDependencyComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -25,9 +25,5 @@ internal class RobolectricApplication : Application(), AudioRecorderDependencyCo
             .dependencyModule(dependencyModule)
             .application(this)
             .build()
-    }
-
-    override fun getAudioRecorderDependencyComponentProvider(): AudioRecorderDependencyComponent {
-        return audioRecorderDependencyComponent
     }
 }

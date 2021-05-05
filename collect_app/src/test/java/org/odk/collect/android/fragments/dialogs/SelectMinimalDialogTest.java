@@ -12,8 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.robolectric.RobolectricTestRunner;
 
@@ -34,7 +34,7 @@ public class SelectMinimalDialogTest {
 
     @Before
     public void setup() {
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class);
+        FragmentActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
     }
 

@@ -5,12 +5,21 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <include
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/add_project_toolbar"
-        layout="@layout/material_full_screen_dialog_toolbar"
-        app:layout_constraintBottom_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,11 +37,12 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/project_name"
-                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/project_name"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -44,11 +54,12 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/project_icon"
-                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/project_icon"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
                 app:layout_constraintTop_toBottomOf="@+id/project_name">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -61,11 +72,12 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/project_color"
-                style="@style/Widget.Collect.TextInputLayout.OutlinedBox"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/project_color"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
                 app:layout_constraintTop_toBottomOf="@+id/project_icon">
 
                 <com.google.android.material.textfield.TextInputEditText

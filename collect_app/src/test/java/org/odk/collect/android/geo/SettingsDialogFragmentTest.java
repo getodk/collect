@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -39,7 +39,7 @@ public class SettingsDialogFragmentTest {
 
     @Before
     public void setup() {
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
+        FragmentActivity activity = CollectHelpers.createThemedActivity(FragmentActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new SettingsDialogFragment();
 

@@ -13,7 +13,7 @@ open class AudioRecorderFactory(private val application: Application) {
 
     open fun create(): AudioRecorder {
         val provider = application.applicationContext as AudioRecorderDependencyComponentProvider
-        provider.getAudioRecorderDependencyComponentProvider().inject(this)
+        provider.audioRecorderDependencyComponent.inject(this)
 
         return ForegroundServiceAudioRecorder(application, recordingRepository)
     }

@@ -243,7 +243,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation 'com.google.android:flexbox:2.0.1'
 
     implementation "com.google.android.gms:play-services-auth:19.0.0"
@@ -361,8 +361,12 @@ dependencies {
     testImplementation "org.mockito:mockito-core:3.7.7"
     testImplementation 'org.mockito:mockito-inline:3.7.7'
 
-    testImplementation project(path: ':testshared')
-    testImplementation "org.robolectric:robolectric:4.3.1"
+    testImplementation(project(path: ':testshared')) {
+        exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
+    }
+
+    testImplementation "org.robolectric:robolectric:4.3.1" // Some tests in `collect_app` don't work with newer Robolectric
+
     testImplementation 'androidx.test.ext:junit:1.1.2'
     debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
         exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731

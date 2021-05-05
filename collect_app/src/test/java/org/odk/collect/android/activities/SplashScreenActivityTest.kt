@@ -23,10 +23,11 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.AddProjectDialog
 import org.odk.collect.android.rules.MainCoroutineScopeRule
-import org.odk.collect.android.support.RobolectricHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
@@ -39,7 +40,7 @@ class SplashScreenActivityTest {
     fun setup() {
         splashScreenViewModel = mock(SplashScreenViewModel::class.java)
 
-        RobolectricHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, appStateProvider: AppStateProvider): SplashScreenViewModel.Factory {
                 return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -61,7 +62,7 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun `The Fist Launch Screen should be displayed if the app is newly installed`() {
+    fun `The First Launch Screen should be displayed if the app is newly installed`() {
         doReturn(true).`when`(splashScreenViewModel).isFirstLaunch
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
@@ -71,7 +72,7 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun `The Fist Launch Screen should not be displayed if the app is not newly installed`() {
+    fun `The First Launch Screen should not be displayed if the app is not newly installed`() {
         doReturn(false).`when`(splashScreenViewModel).isFirstLaunch
         doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
         doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist

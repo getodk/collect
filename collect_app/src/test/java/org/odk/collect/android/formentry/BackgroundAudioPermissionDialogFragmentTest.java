@@ -20,7 +20,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.utilities.Clock;
 
@@ -41,7 +42,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
         fakePermissionsProvider = new FakePermissionsProvider();
 
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
             public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
@@ -63,7 +64,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
     @Test
     public void isNotCancellable() {
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class, R.style.Theme_Collect_Light);
         scenario.onFragment(f -> {
             assertThat(f.isCancelable(), is(false));
         });
@@ -71,7 +72,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
     @Test
     public void clickingOk_andGrantingPermissions_callsGrantPermission() {
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class, R.style.Theme_Collect_Light);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
@@ -89,7 +90,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
     public void clickingOk_andGrantingPermissions_whenGrantPermissionsThrowsIllegalStateException_finishesActivity() {
         doThrow(IllegalStateException.class).when(backgroundAudioViewModel).grantAudioPermission();
 
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class, R.style.Theme_Collect_Light);
         scenario.onFragment(f -> {
             FragmentActivity activity = f.getActivity(); // Need to grab this here as `getActivity()` will return null later
 

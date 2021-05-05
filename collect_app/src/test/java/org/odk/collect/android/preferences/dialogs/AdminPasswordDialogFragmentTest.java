@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.robolectric.annotation.LooperMode;
@@ -33,7 +33,7 @@ public class AdminPasswordDialogFragmentTest {
 
     @Before
     public void setup() {
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public AdminPasswordProvider providesAdminPasswordProvider(SettingsProvider settingsProvider) {
                 return new StubAdminPasswordProvider();

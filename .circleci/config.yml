@@ -78,9 +78,6 @@ jobs:
           name: Run strings unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 strings:testDebug
       - run:
-          name: Run material unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 material:testDebug
-      - run:
           name: Run audioclips unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audioclips:testDebug
       - run:
@@ -88,7 +85,7 @@ jobs:
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audiorecorder:testDebug
       - run:
           name: Run projects unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 projects:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 projects:testDebug
 
       - save_cache:
           paths:

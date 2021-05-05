@@ -14,7 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.support.RobolectricHelpers;
+import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
@@ -33,7 +34,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
         File stubRecording = File.createTempFile("test", ".m4a");
         stubRecording.deleteOnExit();
         audioRecorder = new StubAudioRecorder(stubRecording.getAbsolutePath());
-        RobolectricHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public AudioRecorder providesAudioRecorder(Application application) {
                 return audioRecorder;
@@ -43,7 +44,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void clickingOK_dismissesDialog() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class, R.style.Theme_Collect_Light);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
@@ -57,7 +58,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void onDismiss_consumesConsumable() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(AudioRecordingErrorDialogFragment.class, R.style.Theme_Collect_Light);
         scenario.onFragment(DialogFragment::dismiss);
         assertThat(audioRecorder.failedToStart().getValue().isConsumed(), is(true));
     }
