@@ -2,7 +2,6 @@
 ![Platform](https://img.shields.io/badge/platform-Android-blue.svg)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Build status](https://circleci.com/gh/getodk/collect.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/getodk/collect)
-[![codecov.io](https://codecov.io/github/getodk/collect/branch/master/graph/badge.svg)](https://codecov.io/github/getodk/collect)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-brightgreen)](https://slack.getodk.org)
 
 ODK Collect is an Android app for filling out forms. It is designed to be used in resource-constrained environments with challenges such as unreliable connectivity or power infrastructure. ODK Collect is part the ODK project, a free and open-source set of tools which help organizations author, field, and manage mobile data collection solutions. Learn more about ODK and its history [here](https://getodk.org/) and read about example ODK deployments [here](https://forum.getodk.org/c/showcase).
