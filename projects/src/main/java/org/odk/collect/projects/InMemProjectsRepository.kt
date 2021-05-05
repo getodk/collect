@@ -9,11 +9,16 @@ class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : Projec
 
     override fun getAll() = projects
 
-    override fun add(project: Project) {
+    override fun save(project: Project) {
         if (project.uuid == NOT_SPECIFIED_UUID) {
             projects.add(project.copy(uuid = uuidGenerator.generateUUID()))
         } else {
-            projects.add(project)
+            val projectIndex = projects.indexOf(get(project.uuid))
+            if (projectIndex == -1) {
+                projects.add(project)
+            } else {
+                projects.set(projectIndex, project)
+            }
         }
     }
 

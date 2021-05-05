@@ -15,7 +15,6 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.android.preferences.screens.AdminPreferencesFragment.MainMenuAccessPreferences;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -41,7 +40,7 @@ public class MainMenuAccessPreferencesTest {
     public void whenMatchExactlyEnabled_showsGetBlankFormAsUncheckedAndDisabled() {
         generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
 
-        FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
+        FragmentScenario<MainMenuAccessPreferencesFragment> scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference getBlankForm = f.findPreference(KEY_GET_BLANK);
             assertThat(getBlankForm.isEnabled(), is(false));
@@ -55,7 +54,7 @@ public class MainMenuAccessPreferencesTest {
         generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
         generalSettings.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
 
-        FragmentScenario<MainMenuAccessPreferences> scenario = FragmentScenario.launch(MainMenuAccessPreferences.class);
+        FragmentScenario<MainMenuAccessPreferencesFragment> scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment.class);
         scenario.onFragment(f -> {
             CheckBoxPreference getBlankForm = f.findPreference(KEY_GET_BLANK);
             assertThat(getBlankForm.isEnabled(), is(true));

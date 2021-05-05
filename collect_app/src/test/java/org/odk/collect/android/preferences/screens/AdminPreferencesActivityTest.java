@@ -100,8 +100,8 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        AdminPreferencesFragment.MainMenuAccessPreferences preferences
-                = (AdminPreferencesFragment.MainMenuAccessPreferences) activityController.get()
+        MainMenuAccessPreferencesFragment preferences
+                = (MainMenuAccessPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 
@@ -116,8 +116,8 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        AdminPreferencesFragment.UserSettingsAccessPreferences preferences
-                = (AdminPreferencesFragment.UserSettingsAccessPreferences) activityController.get()
+        UserSettingsAccessPreferencesFragment preferences
+                = (UserSettingsAccessPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 
@@ -132,8 +132,8 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
-        AdminPreferencesFragment.FormEntryAccessPreferences preferences
-                = (AdminPreferencesFragment.FormEntryAccessPreferences) activityController.get()
+        FormEntryAccessPreferencesFragment preferences
+                = (FormEntryAccessPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
 

@@ -225,8 +225,6 @@ public interface AppDependencyComponent {
 
     void inject(DeleteSavedFormActivity deleteSavedFormActivity);
 
-    void inject(AdminPreferencesFragment.MainMenuAccessPreferences mainMenuAccessPreferences);
-
     void inject(SelectMinimalDialog selectMinimalDialog);
 
     void inject(AudioRecordingControllerFragment audioRecordingControllerFragment);
@@ -264,6 +262,8 @@ public interface AppDependencyComponent {
     void inject(AddProjectDialog addProjectDialog);
 
     void inject(FirstLaunchDialog firstLaunchDialog);
+
+    void inject(AdminPreferencesFragment adminPreferencesFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

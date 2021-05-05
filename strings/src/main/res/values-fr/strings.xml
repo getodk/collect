@@ -689,7 +689,6 @@
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
-  <string name="app_configuration">Configuration de l\'application</string>
   <string name="reset_settings_dialog">Réinitialiser l\'application …</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>

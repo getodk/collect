@@ -221,11 +221,13 @@ abstract class Page<T extends Page<T>> {
 
     public T inputText(String text) {
         onView(withClassName(endsWith("EditText"))).perform(replaceText(text));
+        closeSoftKeyboard();
         return (T) this;
     }
 
     public T inputText(int hint, String text) {
         onView(withHint(getTranslatedString(hint))).perform(replaceText(text));
+        closeSoftKeyboard();
         return (T) this;
     }
 

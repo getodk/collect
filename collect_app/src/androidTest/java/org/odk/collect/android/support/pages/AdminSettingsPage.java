@@ -23,7 +23,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage openUserSettings() {
-        clickOnString(R.string.user_settings);
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.user_settings));
         return this;
     }
 
@@ -61,5 +61,26 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     public QRCodePage clickConfigureQR() {
         clickOnString(R.string.configure_via_qr_code);
         return new QRCodePage(rule).assertOnPage();
+    }
+
+    public AdminSettingsPage setProjectName(String projectName) {
+        clickOnString(R.string.project_name);
+        inputText(projectName);
+        clickOKOnDialog();
+        return this;
+    }
+
+    public AdminSettingsPage setProjectIcon(String projectIcon) {
+        clickOnString(R.string.project_icon);
+        inputText(projectIcon);
+        clickOKOnDialog();
+        return this;
+    }
+
+    public AdminSettingsPage setProjectColor(String projectColor) {
+        clickOnString(R.string.project_color);
+        inputText(projectColor);
+        clickOKOnDialog();
+        return this;
     }
 }

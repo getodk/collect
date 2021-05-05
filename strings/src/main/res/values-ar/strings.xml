@@ -684,7 +684,6 @@
   <string name="found_in_main">الغاء القفل للاخفاء من القائمة الرئيسية</string>
   <string name="found_in_settings">الغاء القفل للاخفاء من الاعدادات الرئيسية</string>
   <string name="form_entry">خيارات تعبئة الاستمارة</string>
-  <string name="app_configuration">إعداد تكوين التطبيق</string>
   <string name="reset_settings_dialog">إعادة التطبيق للضبط الافتراضي…</string>
   <string name="select_all">تحديد الكل</string>
   <string name="clear_all">إلغاء التحديد</string>

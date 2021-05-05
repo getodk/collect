@@ -16,41 +16,55 @@ package org.odk.collect.android.preferences.screens;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
-import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.OneSignTextWatcher;
+import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectsRepository;
 
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
-import static org.odk.collect.android.preferences.keys.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import javax.inject.Inject;
+
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_CHANGE_ADMIN_PASSWORD;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_GET_BLANK;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_IMPORT_SETTINGS;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_JUMP_TO;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
-import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
-public class AdminPreferencesFragment extends BaseAdminPreferencesFragment implements Preference.OnPreferenceClickListener {
+public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
+        implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
+
+    public static final String PROJECT_NAME_KEY = "project_name";
+    public static final String PROJECT_ICON_KEY = "project_icon";
+    public static final String PROJECT_COLOR_KEY = "project_color";
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    ProjectsRepository projectsRepository;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
+    }
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
@@ -62,6 +76,20 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+
+        findPreference(PROJECT_NAME_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_NAME_KEY, currentProjectProvider));
+        findPreference(PROJECT_ICON_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_ICON_KEY, currentProjectProvider));
+        findPreference(PROJECT_COLOR_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_COLOR_KEY, currentProjectProvider));
+
+        findPreference(PROJECT_NAME_KEY).setOnPreferenceChangeListener(this);
+        findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
+        findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
+
+        ((EditTextPreference) findPreference(PROJECT_NAME_KEY)).setText(currentProjectProvider.getCurrentProject().getName());
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setText(currentProjectProvider.getCurrentProject().getIcon());
+        ((EditTextPreference) findPreference(PROJECT_COLOR_KEY)).setText(currentProjectProvider.getCurrentProject().getColor());
+
+        ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> editText.addTextChangedListener(new OneSignTextWatcher(editText)));
     }
 
     @Override
@@ -90,24 +118,21 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
                     intent.putExtra(INTENT_KEY_ADMIN_MODE, true);
                     startActivity(intent);
                     break;
-
                 case KEY_CHANGE_ADMIN_PASSWORD:
-                    DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class,
-                            getActivity().getSupportFragmentManager());
+                    DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class, getActivity().getSupportFragmentManager());
                     break;
-
                 case KEY_IMPORT_SETTINGS:
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
                     startActivity(pref);
                     break;
                 case "main_menu":
-                    displayPreferences(new MainMenuAccessPreferences());
+                    displayPreferences(new MainMenuAccessPreferencesFragment());
                     break;
                 case "user_settings":
-                    displayPreferences(new UserSettingsAccessPreferences());
+                    displayPreferences(new UserSettingsAccessPreferencesFragment());
                     break;
                 case "form_entry":
-                    displayPreferences(new FormEntryAccessPreferences());
+                    displayPreferences(new FormEntryAccessPreferencesFragment());
                     break;
             }
 
@@ -115,6 +140,23 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         }
 
         return false;
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Project currentProject = currentProjectProvider.getCurrentProject();
+        switch (preference.getKey()) {
+            case PROJECT_NAME_KEY:
+                projectsRepository.save(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+                break;
+            case PROJECT_ICON_KEY:
+                projectsRepository.save(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
+                break;
+            case PROJECT_COLOR_KEY:
+                projectsRepository.save(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
+                break;
+        }
+        return true;
     }
 
     private void displayPreferences(Fragment fragment) {
@@ -127,79 +169,34 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment imple
         }
     }
 
-    public static class MainMenuAccessPreferences extends BaseAdminPreferencesFragment {
+    public void preventOtherWaysOfEditingForm() {
+        FormEntryAccessPreferencesFragment fragment = (FormEntryAccessPreferencesFragment) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
+        fragment.preventOtherWaysOfEditingForm();
+    }
 
-        @Override
-        public void onAttach(@NonNull Context context) {
-            super.onAttach(context);
-            DaggerUtils.getComponent(context).inject(this);
+    private static class ProjectDetailsSummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
+        private final String key;
+        private final CurrentProjectProvider currentProjectProvider;
+
+        ProjectDetailsSummaryProvider(String key, CurrentProjectProvider currentProjectProvider) {
+            this.key = key;
+            this.currentProjectProvider = currentProjectProvider;
         }
 
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey);
-            findPreference(KEY_EDIT_SAVED).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-
-            FormUpdateMode formUpdateMode = getFormUpdateMode(requireContext(), settingsProvider.getGeneralSettings());
-            if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
-                displayDisabled(findPreference(KEY_GET_BLANK), false);
+        public CharSequence provideSummary(EditTextPreference preference) {
+            switch (key) {
+                case PROJECT_NAME_KEY:
+                    return currentProjectProvider.getCurrentProject().getName();
+                case PROJECT_ICON_KEY:
+                    return currentProjectProvider.getCurrentProject().getIcon();
+                case PROJECT_COLOR_KEY:
+                    Spannable summary = new SpannableString("■");
+                    summary.setSpan(new ForegroundColorSpan(Color.parseColor(currentProjectProvider.getCurrentProject().getColor())), 0, summary.length(), 0);
+                    return summary;
+                default:
+                    return null;
             }
         }
-    }
-
-    public static class UserSettingsAccessPreferences extends BaseAdminPreferencesFragment {
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            setPreferencesFromResource(R.xml.user_settings_access_preferences, rootKey);
-        }
-    }
-
-    public static class FormEntryAccessPreferences extends BaseAdminPreferencesFragment {
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            super.onCreatePreferences(savedInstanceState, rootKey);
-            addPreferencesFromResource(R.xml.form_entry_access_preferences);
-
-            findPreference(KEY_MOVING_BACKWARDS).setOnPreferenceChangeListener((preference, newValue) -> {
-                if (((CheckBoxPreference) preference).isChecked()) {
-                    new MovingBackwardsDialog().show(getActivity().getSupportFragmentManager(), MOVING_BACKWARDS_DIALOG_TAG);
-                } else {
-                    SimpleDialog.newInstance(getActivity().getString(R.string.moving_backwards_enabled_title), 0, getActivity().getString(R.string.moving_backwards_enabled_message), getActivity().getString(R.string.ok), false).show(((AdminPreferencesActivity) getActivity()).getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);
-                    onMovingBackwardsEnabled();
-                }
-                return true;
-            });
-            findPreference(KEY_JUMP_TO).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-            findPreference(KEY_SAVE_MID).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        }
-
-        private void preventOtherWaysOfEditingForm() {
-            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-            settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
-            settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
-            settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
-            settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
-
-            findPreference(KEY_JUMP_TO).setEnabled(false);
-            findPreference(KEY_SAVE_MID).setEnabled(false);
-
-            ((CheckBoxPreference) findPreference(KEY_JUMP_TO)).setChecked(false);
-            ((CheckBoxPreference) findPreference(KEY_SAVE_MID)).setChecked(false);
-        }
-
-        private void onMovingBackwardsEnabled() {
-            settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
-            findPreference(KEY_JUMP_TO).setEnabled(true);
-            findPreference(KEY_SAVE_MID).setEnabled(true);
-        }
-    }
-
-    public void preventOtherWaysOfEditingForm() {
-        FormEntryAccessPreferences fragment = (FormEntryAccessPreferences) getFragmentManager().findFragmentById(R.id.preferences_fragment_container);
-        fragment.preventOtherWaysOfEditingForm();
     }
 }

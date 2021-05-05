@@ -688,7 +688,6 @@
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
-  <string name="app_configuration">Sovelluksen asetukset</string>
   <string name="reset_settings_dialog">Palauta sovellus alkutilaan…</string>
   <string name="select_all">Valitse kaikki</string>
   <string name="clear_all">Tyhjennä kaikki</string>
