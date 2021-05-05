@@ -34,7 +34,9 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -67,6 +69,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Inject
     CurrentProjectViewModel.Factory currentProjectViewModelFactory;
 
+    @Inject
+    SettingsProvider settingsProvider;
+
     private MainMenuViewModel mainMenuViewModel;
 
     private CurrentProjectViewModel currentProjectViewModel;
@@ -76,6 +81,8 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         setContentView(R.layout.main_menu);
+
+        settingsProvider.getMetaSettings().save(MetaKeys.FIRST_LAUNCH, false);
 
         mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
         currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);

@@ -65,10 +65,10 @@ class MainMenuActivityTest {
             val projectIcon = activity.findViewById<TextView>(R.id.project_icon_text)
 
             assertThat(projectIcon.visibility, `is`(View.VISIBLE))
-            assertThat(projectIcon.text, `is`("P"))
+            assertThat(projectIcon.text, `is`("D"))
 
             val background = projectIcon.background as GradientDrawable
-            assertThat(background.color!!.defaultColor, equalTo(Color.parseColor("#ffffff")))
+            assertThat(background.color!!.defaultColor, equalTo(Color.parseColor("#3e9fcc")))
         }
     }
 
