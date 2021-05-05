@@ -30,6 +30,7 @@ import androidx.preference.Preference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
@@ -211,8 +212,12 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
     public void deleteProject() {
         projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
-        currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
-        ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
-        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
+        if (projectsRepository.getAll().isEmpty()) {
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
+        } else {
+            currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
+        }
     }
 }
