@@ -1,4 +1,4 @@
-package org.odk.collect.android;
+package org.odk.collect.android.support;
 
 import android.content.Context;
 

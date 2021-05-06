@@ -100,6 +100,7 @@ jobs:
 
   test_app:
     <<: *android_config
+    parallelism: 10
     steps:
       - attach_workspace:
           at: ~/work
@@ -109,12 +110,8 @@ jobs:
           key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - run:
-          name: Compile app unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:compileDebugUnitTestSources
-
-      - run:
           name: Run app unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:testDebug $(ls collect_app/src/test/java/org/odk/collect/android/ | circleci tests split | awk '{for (i=1; i<=NF; i++) printf "--tests org.odk.collect.android.%s* ",$i}')
 
       - save_cache:
           paths:
