@@ -18,6 +18,8 @@ import org.robolectric.RuntimeEnvironment;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_THEME;
 
 /**
@@ -29,7 +31,7 @@ public class ThemeUtilsTest {
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private Settings generalSettings;
 
     public ThemeUtilsTest() {
         attrs = new int[]{
@@ -46,6 +48,7 @@ public class ThemeUtilsTest {
 
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
+        generalSettings = TestSettingsProvider.getGeneralSettings();
     }
 
     @Test
@@ -117,6 +120,7 @@ public class ThemeUtilsTest {
 
     private void applyDarkTheme() {
         generalSettings.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        assertThat(generalSettings.getString(KEY_APP_THEME), is(mainMenuActivity.getString(R.string.app_theme_dark)));
     }
 
     private void applyLightTheme() {
