@@ -7,12 +7,14 @@ import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val appStateProvider: AppStateProvider
+    private val appStateProvider: AppStateProvider,
+    private val projectsRepository: ProjectsRepository
 ) : ViewModel() {
 
     val shouldDisplaySplashScreen
@@ -27,15 +29,16 @@ class SplashScreenViewModel(
     val doesLogoFileExist
         get() = splashScreenLogoFile.exists()
 
-    val isFirstLaunch
-        get() = appStateProvider.isFreshInstall()
+    val shouldFirstLaunchScreenBeDisplayed
+        get() = appStateProvider.isFreshInstall() || projectsRepository.getAll().isEmpty()
 
     open class Factory constructor(
         private val generalSettings: Settings,
-        private val appStateProvider: AppStateProvider
+        private val appStateProvider: AppStateProvider,
+        private val projectsRepository: ProjectsRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, appStateProvider) as T
+            return SplashScreenViewModel(generalSettings, appStateProvider, projectsRepository) as T
         }
     }
 }

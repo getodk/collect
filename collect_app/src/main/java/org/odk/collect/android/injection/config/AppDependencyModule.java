@@ -563,8 +563,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider, ProjectsRepository projectsRepository) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider, projectsRepository);
     }
 
     @Provides
