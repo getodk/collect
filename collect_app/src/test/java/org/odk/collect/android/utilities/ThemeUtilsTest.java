@@ -18,20 +18,22 @@ import org.robolectric.RuntimeEnvironment;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_THEME;
 
 /**
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
 @RunWith(RobolectricTestRunner.class)
-public class ThemeUtilsTests {
+public class ThemeUtilsTest {
 
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private Settings generalSettings;
 
-    public ThemeUtilsTests() {
+    public ThemeUtilsTest() {
         attrs = new int[]{
                 android.R.attr.alertDialogTheme,
                 android.R.attr.searchViewStyle,
@@ -46,6 +48,7 @@ public class ThemeUtilsTests {
 
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
+        generalSettings = TestSettingsProvider.getGeneralSettings();
     }
 
     @Test
@@ -117,6 +120,7 @@ public class ThemeUtilsTests {
 
     private void applyDarkTheme() {
         generalSettings.save(KEY_APP_THEME, mainMenuActivity.getString(R.string.app_theme_dark));
+        assertThat(generalSettings.getString(KEY_APP_THEME), is(mainMenuActivity.getString(R.string.app_theme_dark)));
     }
 
     private void applyLightTheme() {

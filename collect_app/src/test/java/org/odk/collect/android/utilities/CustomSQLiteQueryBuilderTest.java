@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class CustomSQLiteQueryBuilderTestCase {
+public class CustomSQLiteQueryBuilderTest {
 
     private final String[] columns = {"_id", "col1", "col2", "col3"};
 

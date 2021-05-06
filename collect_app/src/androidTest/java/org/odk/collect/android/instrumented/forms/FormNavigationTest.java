@@ -46,7 +46,7 @@ import static junit.framework.Assert.assertEquals;
  * need to navigate to an index of the first question of all we want to display on one page.
  */
 @RunWith(Parameterized.class)
-public class FormNavigationTestCase {
+public class FormNavigationTest {
 
     @Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
@@ -81,7 +81,7 @@ public class FormNavigationTestCase {
     private final String formName;
     private final String[] expectedIndices;
 
-    public FormNavigationTestCase(String formName, String[] expectedIndices) {
+    public FormNavigationTest(String formName, String[] expectedIndices) {
         this.formName = formName;
         this.expectedIndices = expectedIndices;
     }
