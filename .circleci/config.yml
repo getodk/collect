@@ -117,7 +117,7 @@ jobs:
           command: ls -R collect_app/src/test/java/ | grep Test.kt >> collect_app_test_files.txt
       - run:
           name: Convert test file list to test class list
-          command: cat collect_app_test_files.txt | sed 's@/@.@g' | sed "s/\.java//" | sed "s/\.kt//" > collect_app_test_classes.txt
+          command: cat collect_app_test_files.txt | sed "s/\.java//" | sed "s/\.kt//" > collect_app_test_classes.txt
 
       - run:
           name: Generate list of tests for this fork
