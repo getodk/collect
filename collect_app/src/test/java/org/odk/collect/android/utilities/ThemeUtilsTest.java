@@ -24,14 +24,14 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_THEME
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
 @RunWith(RobolectricTestRunner.class)
-public class ThemeUtilsTests {
+public class ThemeUtilsTest {
 
     private final int[] attrs;
     private ThemeUtils themeUtils;
     private MainMenuActivity mainMenuActivity;
     private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
 
-    public ThemeUtilsTests() {
+    public ThemeUtilsTest() {
         attrs = new int[]{
                 android.R.attr.alertDialogTheme,
                 android.R.attr.searchViewStyle,
