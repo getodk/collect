@@ -10,6 +10,7 @@ public class MetaKeys {
     public static final String CURRENT_PROJECT_ID = "current_project_id";
     public static final String KEY_PROJECTS = "projects";
     public static final String FIRST_LAUNCH = "first_launch";
+    public static final String ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT = "already_tried_to_import_existing_project";
 
     private MetaKeys() {
 
