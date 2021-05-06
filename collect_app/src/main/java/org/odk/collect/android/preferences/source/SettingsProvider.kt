@@ -8,7 +8,9 @@ import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 import org.odk.collect.projects.NOT_SPECIFIED_UUID
 import org.odk.collect.shared.Settings
+import javax.inject.Singleton
 
+@Singleton
 class SettingsProvider(private val context: Context) {
 
     private val settings = mutableMapOf<String, Settings>()
