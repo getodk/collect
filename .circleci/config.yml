@@ -8,7 +8,7 @@ references:
     working_directory: ~/work
     docker:
       - image: circleci/android:api-30
-    resource_class: xlarge
+    resource_class: large
 
 jobs:
   compile:
@@ -22,7 +22,7 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 androidDependencies
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 androidDependencies
       - run:
           name: Copy gradle config
           command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -33,7 +33,7 @@ jobs:
 
       - run:
           name: Compile code
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 assembleDebug
 
       - persist_to_workspace:
           root: ~/work
@@ -50,7 +50,7 @@ jobs:
 
       - run:
           name: Run code quality checks
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 checkCode
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 checkCode
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -67,25 +67,25 @@ jobs:
 
       - run:
           name: Run shared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 shared:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 shared:test
       - run:
           name: Run formtest unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 formstest:test
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 formstest:test
       - run:
           name: Run async unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 async:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 async:testDebug
       - run:
           name: Run strings unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 strings:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 strings:testDebug
       - run:
           name: Run audioclips unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audioclips:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 audioclips:testDebug
       - run:
           name: Run audiorecorder unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 audiorecorder:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 audiorecorder:testDebug
       - run:
           name: Run projects unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 projects:testDebug
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 projects:testDebug
 
       - save_cache:
           paths:
@@ -125,7 +125,7 @@ jobs:
       - run:
           name: Run app unit tests
           command: |
-            ./gradlew -PdisablePreDex --no-daemon --max-workers=8 collect_app:testDebug $(cat fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
+            ./gradlew -PdisablePreDex --no-daemon --max-workers=4 collect_app:testDebug $(cat fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
 
       - save_cache:
           paths:
@@ -148,7 +148,7 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 assembleDebugAndroidTest
 
   test_instrumented:
     <<: *android_config
@@ -160,7 +160,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=8 assembleDebug assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 assembleDebug assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
