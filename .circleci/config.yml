@@ -100,7 +100,7 @@ jobs:
 
   test_app:
     <<: *android_config
-    parallelism: 50
+    parallelism: 83
     steps:
       - attach_workspace:
           at: ~/work
