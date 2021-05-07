@@ -92,8 +92,6 @@ class SharedPreferencesSettings(private val sharedPreferences: SharedPreferences
     }
 
     override fun unregisterOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
-        if (this::sharedPreferencesListener.isInitialized) {
-            sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
-        }
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 }
