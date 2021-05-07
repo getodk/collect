@@ -13,6 +13,11 @@ class CurrentProjectProvider(private val settingsProvider: SettingsProvider, pri
     }
 
     fun getCurrentProject(): Project? {
+        // This should be removed. It was added just to fix tests because ResetStateRule which should be responsible for it is not always called first
+        if (projectsRepository.getAll().isEmpty()) {
+            ProjectImporter(projectsRepository, settingsProvider.getMetaSettings()).importDemoProject()
+        }
+
         return projectsRepository.get(getCurrentProjectId())
     }
 
