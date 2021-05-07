@@ -5,7 +5,7 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvide
 
 import okhttp3.OkHttpClient;
 
-public class OkHttpConnectionPostRequest extends OpenRosaPostRequestTest {
+public class OkHttpConnectionPostRequestTest extends OpenRosaPostRequestTest {
 
     @Override
     protected OpenRosaHttpInterface buildSubject(OpenRosaHttpInterface.FileToContentTypeMapper mapper) {
