@@ -111,14 +111,14 @@ jobs:
 
       - run:
           name: Generate list of test classes
-          command: ./circleci/generate-app-test-list.sh
+          command: .circleci/generate-app-test-list.sh
 
       - run:
           name: Generate list of tests for this fork
           command: |
-            cat .circleci/collect_app_test_classes.txt | circleci tests split > fork_test_classes.txt && \
+            cat .circleci/collect_app_test_classes.txt | circleci tests split > .circleci/fork_test_classes.txt && \
             echo "Tests for this fork:" && \
-            cat fork_test_classes.txt
+            cat .circleci/fork_test_classes.txt
 
       - run:
           name: Run app unit tests
