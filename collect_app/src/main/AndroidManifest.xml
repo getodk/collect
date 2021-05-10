@@ -181,6 +181,10 @@ the specific language governing permissions and limitations under the License.
             android:name=".provider.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
+        <provider
+            android:name=".provider.ProjectsProvider"
+            android:authorities="org.odk.collect.android.provider.odk.projects"
+            android:exported="true" />
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
