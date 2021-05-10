@@ -10,7 +10,13 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.Collections;
 
-public class FastExternalItemsetTest {
+/**
+ * This tests the "External selects" feature of XLSForms. This will often be referred to as "fast
+ * external itemsets".
+ *
+ * @see <a href="https://xlsform.org/en/#external-selects">External selects</a>
+ */
+public class ExternalSelectsTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
@@ -20,7 +26,7 @@ public class FastExternalItemsetTest {
             .around(rule);
 
     @Test
-    public void testFastExternalItemset() {
+    public void testExternalSelectsTest() {
         new MainMenuPage()
                 .startBlankForm("selectOneExternal")
                 .clickOnText("Texas")
