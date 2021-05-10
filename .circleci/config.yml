@@ -62,8 +62,6 @@ jobs:
           at: ~/work
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
-      - restore_cache:
-          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - run:
           name: Run shared unit tests
@@ -87,11 +85,6 @@ jobs:
           name: Run projects unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 projects:testDebug
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: deps-robolectric-{{ checksum "deps.txt" }}
-
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -100,37 +93,28 @@ jobs:
 
   test_app:
     <<: *android_config
-    parallelism: 50
+    parallelism: 83
     steps:
       - attach_workspace:
           at: ~/work
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
-      - restore_cache:
-          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - run:
-          name: Generate list of test Java tests
-          command: ls -R collect_app/src/test/java/ | grep Test.java >> collect_app_test_files.txt
-      - run:
-          name: Generate list of test Kotlin tests
-          command: ls -R collect_app/src/test/java/ | grep Test.kt >> collect_app_test_files.txt
-      - run:
-          name: Convert test file list to test class list
-          command: cat collect_app_test_files.txt | sed "s/\.java//" | sed "s/\.kt//" > collect_app_test_classes.txt
+          name: Generate list of test classes
+          command: .circleci/generate-app-test-list.sh
 
       - run:
           name: Generate list of tests for this fork
-          command: cat collect_app_test_classes.txt | circleci tests split > fork_test_classes.txt
+          command: |
+            cat .circleci/collect_app_test_classes.txt | circleci tests split > .circleci/fork_test_classes.txt && \
+            echo "Tests for this fork:" && \
+            cat .circleci/fork_test_classes.txt
+
       - run:
           name: Run app unit tests
           command: |
-            ./gradlew -PdisablePreDex --no-daemon --max-workers=4 collect_app:testDebug $(cat fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: deps-robolectric-{{ checksum "deps.txt" }}
+            ./gradlew -PdisablePreDex --no-daemon --max-workers=4 collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
