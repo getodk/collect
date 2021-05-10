@@ -26,37 +26,12 @@ public class ExternalSelectsTest {
             .around(rule);
 
     @Test
-    public void testExternalSelectsTest() {
+    public void displaysAllChoicesFromItemsetsCSV() {
         new MainMenuPage()
                 .startBlankForm("selectOneExternal")
-                .clickOnText("Texas")
-                .swipeToNextQuestion("county")
-                .clickOnText("King")
-                .swipeToNextQuestion("city")
-                .clickOnText("Dumont")
-                .swipeToNextQuestion("state")
-                .openSelectMinimalDialog()
-                .clickOnText("Washington")
-                .swipeToNextQuestion("county")
-                .openSelectMinimalDialog()
-                .clickOnText("Pierce")
-                .swipeToNextQuestion("city")
-                .openSelectMinimalDialog()
-                .clickOnText("Puyallup")
-                .swipeToEndScreen()
-                .clickSaveAndExit();
 
-        new MainMenuPage()
-                .clickEditSavedForm()
-                .clickOnForm("selectOneExternal")
-                .assertText("Texas", "King", "Dumont", "Washington", "Pierce", "Puyallup")
-                .clickOnQuestion("Texas")
-                .swipeToNextQuestion("county")
-                .swipeToNextQuestion("city")
-                .swipeToNextQuestion("state")
-                .swipeToNextQuestion("county")
-                .swipeToNextQuestion("city")
-                .swipeToEndScreen()
-                .clickSaveAndExit();
+                // Check all states in `itemsets.csv` are displayed
+                .assertText("Texas")
+                .assertText("Washington");
     }
 }
