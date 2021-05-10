@@ -62,8 +62,6 @@ jobs:
           at: ~/work
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
-      - restore_cache:
-          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - run:
           name: Run shared unit tests
@@ -87,11 +85,6 @@ jobs:
           name: Run projects unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 projects:testDebug
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: deps-robolectric-{{ checksum "deps.txt" }}
-
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -106,8 +99,6 @@ jobs:
           at: ~/work
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
-      - restore_cache:
-          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - run:
           name: Generate list of test classes
@@ -124,11 +115,6 @@ jobs:
           name: Run app unit tests
           command: |
             ./gradlew -PdisablePreDex --no-daemon --max-workers=4 collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
-
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: deps-robolectric-{{ checksum "deps.txt" }}
 
       - store_artifacts:
           path: collect_app/build/reports
