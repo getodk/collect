@@ -239,7 +239,7 @@ This can be configured under **File > Project Structure** in Android Studio, or 
 This is encountered when Robolectric has problems downloading the jars it needs for different Android SDK levels. If you keep running into this you can download the JARs locally and point Robolectric to them by doing:
 
 ```
-./install-robolectric-deps.sh
+./download-robolectric-deps.sh
 ```
 
 ## Creating signed releases for Google Play Store
