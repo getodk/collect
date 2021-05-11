@@ -52,3 +52,4 @@ collect_app/src/odkCollectRelease/
 
 # Robolectric dependencies
 robolectric-deps/
+**/robolectric-deps.properties
