@@ -38,7 +38,6 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
 public class AdminPreferencesActivity extends CollectAbstractActivity implements
         MovingBackwardsDialog.MovingBackwardsDialogListener,
         ResetSettingsResultDialog.ResetSettingsResultDialogListener {
-    public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
     @Override
