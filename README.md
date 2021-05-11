@@ -234,6 +234,14 @@ If you encounter the `java.lang.NullPointerException (no error message).` when r
 
 This can be configured under **File > Project Structure** in Android Studio, or by editing `$USER_HOME/.gradle/gradle.properties` to set `org.gradle.java.home=(path to JDK home)` for command-line use.
 
+#### `Unable to resolve artifact: Missing` while running tests
+
+This is encountered when Robolectric has problems downloading the jars it needs for different Android SDK levels. If you keep running into this you can download the JARs locally and point Robolectric to them by doing:
+
+```
+./install-robolectric-deps.sh
+```
+
 ## Creating signed releases for Google Play Store
 Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.
 
