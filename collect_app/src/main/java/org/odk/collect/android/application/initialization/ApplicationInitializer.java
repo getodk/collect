@@ -150,10 +150,10 @@ public class ApplicationInitializer {
     }
 
     private void importExistingProjectIfNeeded() {
-        if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT)) {
+        if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
             projectImporter.importExistingProject();
         }
-        metaSettings.save(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT, true);
+        metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);
     }
 }
 

@@ -48,7 +48,7 @@ class ApplicationInitializerTest {
     @Test
     fun `Should existing project be imported when it's not first launch and it has not been already imported`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT, false)
+        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
         applicationInitializer.initialize()
         verify(projectImporter).importExistingProject()
     }
@@ -63,15 +63,15 @@ class ApplicationInitializerTest {
     @Test
     fun `Should not existing project be imported when it was already imported once`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT, true)
+        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, true)
         applicationInitializer.initialize()
         verifyNoInteractions(projectImporter)
     }
 
     @Test
     fun `Initializing the app should set ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT flag to true`() {
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT, false)
+        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
         applicationInitializer.initialize()
-        assertThat(TestSettingsProvider.getMetaSettings().getBoolean(MetaKeys.ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT), equalTo(true))
+        assertThat(TestSettingsProvider.getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED), equalTo(true))
     }
 }
