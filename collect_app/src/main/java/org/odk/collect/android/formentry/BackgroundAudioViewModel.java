@@ -18,12 +18,12 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
-import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
@@ -62,9 +62,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
         this.clock = clock;
         this.analytics = analytics;
 
-        this.recordAudioActionRegistry.register((treeReference, quality) -> {
-            new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
-        });
+        this.recordAudioActionRegistry.register(this::handleRecordAction);
 
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalSettings.getBoolean(KEY_BACKGROUND_RECORDING));
     }
@@ -194,7 +192,9 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             RecordAudioActionRegistry recordAudioActionRegistry = new RecordAudioActionRegistry() {
                 @Override
                 public void register(BiConsumer<TreeReference, String> listener) {
-                    RecordAudioActions.setRecordAudioListener(listener::accept);
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        RecordAudioActions.setRecordAudioListener(listener::accept);
+                    });
                 }
 
                 @Override
