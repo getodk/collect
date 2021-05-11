@@ -24,7 +24,6 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.projects.DeleteProjectDialog;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -38,8 +37,7 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
  */
 public class AdminPreferencesActivity extends CollectAbstractActivity implements
         MovingBackwardsDialog.MovingBackwardsDialogListener,
-        ResetSettingsResultDialog.ResetSettingsResultDialogListener,
-        DeleteProjectDialog.DeleteProjectListener {
+        ResetSettingsResultDialog.ResetSettingsResultDialogListener {
     public static final String ADMIN_PREFERENCES = "admin_prefs";
     public static final String TAG = "AdminPreferencesFragment";
 
@@ -72,11 +70,5 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     @Override
     public void onDialogClosed() {
         startActivityAndCloseAllOthers(this, MainMenuActivity.class);
-    }
-
-    @Override
-    public void deleteProject() {
-        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getSupportFragmentManager().findFragmentByTag(TAG);
-        fragment.deleteProject();
     }
 }

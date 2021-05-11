@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
@@ -41,7 +43,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.androidshared.OneSignTextWatcher;
-import org.odk.collect.projects.DeleteProjectDialog;
 import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
 
@@ -133,7 +134,11 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     startActivity(pref);
                     break;
                 case DELETE_PROJECT_KEY:
-                    DialogUtils.showIfNotShowing(DeleteProjectDialog.class, requireActivity().getSupportFragmentManager());
+                    new MaterialAlertDialogBuilder(requireActivity())
+                            .setTitle(R.string.delete_project_confirm_message)
+                            .setNegativeButton(R.string.delete_project_no, (dialog, which) -> { })
+                            .setPositiveButton(R.string.delete_project_yes, (dialog, which) -> deleteProject())
+                            .show();
                     break;
                 case "main_menu":
                     displayPreferences(new MainMenuAccessPreferencesFragment());
