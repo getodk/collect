@@ -27,7 +27,12 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.ActivityUtils;
+import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
@@ -36,6 +41,7 @@ import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragment
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.androidshared.OneSignTextWatcher;
 import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
@@ -52,6 +58,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     public static final String PROJECT_NAME_KEY = "project_name";
     public static final String PROJECT_ICON_KEY = "project_icon";
     public static final String PROJECT_COLOR_KEY = "project_color";
+    public static final String DELETE_PROJECT_KEY = "delete_project";
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
@@ -76,6 +83,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
         findPreference("form_entry").setOnPreferenceClickListener(this);
+        findPreference(DELETE_PROJECT_KEY).setOnPreferenceClickListener(this);
 
         findPreference(PROJECT_NAME_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_NAME_KEY, currentProjectProvider));
         findPreference(PROJECT_ICON_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_ICON_KEY, currentProjectProvider));
@@ -124,6 +132,13 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                 case KEY_IMPORT_SETTINGS:
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
                     startActivity(pref);
+                    break;
+                case DELETE_PROJECT_KEY:
+                    new MaterialAlertDialogBuilder(requireActivity())
+                            .setTitle(R.string.delete_project_confirm_message)
+                            .setNegativeButton(R.string.delete_project_no, (dialog, which) -> { })
+                            .setPositiveButton(R.string.delete_project_yes, (dialog, which) -> deleteProject())
+                            .show();
                     break;
                 case "main_menu":
                     displayPreferences(new MainMenuAccessPreferencesFragment());
@@ -197,6 +212,17 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                 default:
                     return null;
             }
+        }
+    }
+
+    public void deleteProject() {
+        projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
+        if (projectsRepository.getAll().isEmpty()) {
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
+        } else {
+            currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
         }
     }
 }

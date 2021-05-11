@@ -318,10 +318,10 @@ public class AppDependencyModule {
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
                                                                  Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                                                 ProjectsRepository projectsRepository, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+                                                                 AppStateProvider appStateProvider, ProjectImporter projectImporter) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
                 propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), projectsRepository, appStateProvider, projectImporter);
+                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter);
     }
 
     @Provides
@@ -563,8 +563,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider, ProjectsRepository projectsRepository) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider, projectsRepository);
     }
 
     @Provides

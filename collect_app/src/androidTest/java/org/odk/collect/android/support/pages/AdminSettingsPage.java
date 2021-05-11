@@ -83,4 +83,16 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         clickOKOnDialog();
         return this;
     }
+
+    public MainMenuPage deleteProject() {
+        clickOnString(R.string.delete_project);
+        clickOnString(R.string.delete_project_yes);
+        return new MainMenuPage(rule);
+    }
+
+    public FirstLaunchDialogPage deleteLastProject() {
+        clickOnString(R.string.delete_project);
+        clickOnString(R.string.delete_project_yes);
+        return new FirstLaunchDialogPage(rule);
+    }
 }
