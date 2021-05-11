@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 
 import org.robolectric.Robolectric;
-import org.robolectric.Shadows;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
@@ -25,6 +24,9 @@ import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
 import java.util.List;
+
+import static android.os.Looper.getMainLooper;
+import static org.robolectric.Shadows.shadowOf;
 
 public class RobolectricHelpers {
 
@@ -39,11 +41,11 @@ public class RobolectricHelpers {
     }
 
     public static int getCreatedFromResId(ImageButton button) {
-        return Shadows.shadowOf(button.getDrawable()).getCreatedFromResId();
+        return shadowOf(button.getDrawable()).getCreatedFromResId();
     }
 
     public static int getCreatedFromResId(Drawable drawable) {
-        return Shadows.shadowOf(drawable).getCreatedFromResId();
+        return shadowOf(drawable).getCreatedFromResId();
     }
 
     public static DataSource setupMediaPlayerDataSource(String testFile) {
@@ -119,5 +121,9 @@ public class RobolectricHelpers {
          */
         ApplicationProvider.getApplicationContext().setTheme(theme);
         return FragmentScenario.launchInContainer(fragmentClass, fragmentArgs);
+    }
+
+    public static void runLooper() {
+        shadowOf(getMainLooper()).idle();
     }
 }
