@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
@@ -99,7 +99,7 @@ class ProjectSettingsDialog : DialogFragment() {
 
     private fun inflateListOfInActiveProjects(context: Context) {
         if (projectsRepository.getAll().none { it.uuid != currentProjectProvider.getCurrentProjectId() }) {
-            binding.topDivider.visibility = GONE
+            binding.topDivider.visibility = INVISIBLE
         } else {
             binding.topDivider.visibility = VISIBLE
         }
