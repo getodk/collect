@@ -26,7 +26,7 @@ class ProjectsProvider : ContentProvider() {
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
         deferDaggerInit()
 
-        val cursor = MatrixCursor(arrayOf(PROJECT_UUID_COLUMN_NAME, PROJECT_NAME_COLUMN_NAME))
+        val cursor = MatrixCursor(arrayOf(PROJECT_UUID, PROJECT_NAME))
         projectsRepository.getAll().forEach {
             cursor.addRow(arrayOf<Any>(it.uuid, it.name))
         }
@@ -42,7 +42,7 @@ class ProjectsProvider : ContentProvider() {
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?) = throw UnsupportedOperationException()
 
     companion object {
-        const val PROJECT_UUID_COLUMN_NAME = "uuid"
-        const val PROJECT_NAME_COLUMN_NAME = "name"
+        const val PROJECT_UUID = "uuid"
+        const val PROJECT_NAME = "name"
     }
 }
