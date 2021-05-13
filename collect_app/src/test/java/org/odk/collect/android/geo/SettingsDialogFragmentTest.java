@@ -16,6 +16,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -49,16 +50,22 @@ public class SettingsDialogFragmentTest {
     @Test
     public void dialogIsCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(true));
     }
 
     @Test
     public void clickingStart_shouldDismissTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+        RobolectricHelpers.runLooper();
+
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
@@ -66,10 +73,14 @@ public class SettingsDialogFragmentTest {
     @Test
     public void clickingCancel_shouldDismissTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+        RobolectricHelpers.runLooper();
+
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
@@ -77,6 +88,8 @@ public class SettingsDialogFragmentTest {
     @Test
     public void clickingStart_callsCorrectMethodsInCorrectOrder() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
         Spinner autoInterval = dialog.findViewById(R.id.auto_interval);
@@ -85,9 +98,10 @@ public class SettingsDialogFragmentTest {
         radioGroup.check(sampleId);
         autoInterval.setSelection(2);
         accuracyThreshold.setSelection(2);
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
 
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+        RobolectricHelpers.runLooper();
 
         InOrder orderVerifier = Mockito.inOrder(dialogFragment.callback);
         orderVerifier.verify(dialogFragment.callback).updateRecordingMode(sampleId);
@@ -99,6 +113,8 @@ public class SettingsDialogFragmentTest {
     @Test
     public void selectingAutomaticMode_displaysIntervalAndAccuracyOptions() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
         RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
@@ -112,6 +128,8 @@ public class SettingsDialogFragmentTest {
     @Test
     public void notSelectingAutomaticMode_doesNotDisplayIntervalAndAccuracyOptions() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         RadioGroup radioGroup = dialog.findViewById(R.id.radio_group);
         View autoOptions = dialog.findViewById(R.id.auto_options);
@@ -127,6 +145,8 @@ public class SettingsDialogFragmentTest {
         when(dialogFragment.callback.getAccuracyThresholdIndex()).thenReturn(2);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
 
         assertThat(dialog.findViewById(R.id.auto_options).getVisibility(), equalTo(VISIBLE));
