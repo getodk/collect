@@ -25,6 +25,7 @@ import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingStatusHandler;
 import org.odk.collect.audioclips.Clip;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
@@ -431,7 +432,7 @@ public class AudioWidgetTest {
 
         AlertDialog dialog = (AlertDialog) getLatestDialog();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
-
+        RobolectricHelpers.runLooper();
         assertThat(widget.getAnswer(), nullValue());
     }
 
@@ -455,7 +456,7 @@ public class AudioWidgetTest {
 
         AlertDialog dialog = (AlertDialog) getLatestDialog();
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).performClick();
-
+        RobolectricHelpers.runLooper();
         assertThat(widget.binding.audioPlayer.audioController.getVisibility(), is(GONE));
         assertThat(widget.binding.captureButton.getVisibility(), is(VISIBLE));
         assertThat(widget.binding.chooseButton.getVisibility(), is(VISIBLE));
