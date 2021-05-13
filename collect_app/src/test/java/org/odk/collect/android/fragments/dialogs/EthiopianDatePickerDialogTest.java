@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.when;
@@ -34,12 +35,16 @@ public class EthiopianDatePickerDialogTest {
     @Test
     public void dialogIsCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsCancellable(true);
     }
 
     @Test
     public void dialogShouldShowCorrectDate() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogShowsCorrectDate(2012, 8, 4, "4 Ginbot 2012 (2020May12)");
     }
 
@@ -48,6 +53,7 @@ public class EthiopianDatePickerDialogTest {
         when(datePickerDetails.isYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(2012, "2012 (2019)");
     }
@@ -57,6 +63,7 @@ public class EthiopianDatePickerDialogTest {
         when(datePickerDetails.isMonthYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2012, 8, "Ginbot 2012 (2020May)");
     }
@@ -64,6 +71,8 @@ public class EthiopianDatePickerDialogTest {
     @Test
     public void settingDateInDatePicker_changesDateShownInTextView() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Ginbot 2012 (2020May12)");
     }
 
@@ -75,18 +84,24 @@ public class EthiopianDatePickerDialogTest {
     @Test
     public void clickingOk_updatesDateInActivity() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2028, 2, 20);
     }
 
     @Test
     public void clickingOk_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_POSITIVE);
     }
 
     @Test
     public void clickingCancel_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_NEGATIVE);
     }
 }
