@@ -103,6 +103,7 @@ public class QuitFormDialogFragmentTest {
             assertTrue(dialog.isShowing());
 
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+            RobolectricHelpers.runLooper();
             assertFalse(dialog.isShowing());
         });
     }
