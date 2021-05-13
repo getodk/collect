@@ -35,7 +35,6 @@ import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.annotation.LooperMode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +50,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
 import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMapActivityTest {
@@ -150,7 +148,6 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(false));
     }
 
-    @LooperMode(PAUSED)
     @Test public void tappingOnLayerMenu_opensLayerDialog() {
         List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, not(hasItem(isA(MapsPreferencesFragment.class))));
@@ -162,7 +159,6 @@ public class FormMapActivityTest {
         assertThat(fragments, hasItem(isA(MapsPreferencesFragment.class)));
     }
 
-    @LooperMode(PAUSED)
     @Test public void tappingOnInstance_centersToThatInstanceAndKeepsTheSameZoom() {
         MapPoint sent = new MapPoint(10.3, 125.7);
         map.zoomToPoint(new MapPoint(7, 8), 7, false);
@@ -209,7 +205,6 @@ public class FormMapActivityTest {
         }
     }
 
-    @LooperMode(PAUSED)
     @Test public void openingEditableInstances_launchesEditActivity() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
@@ -229,7 +224,6 @@ public class FormMapActivityTest {
         }
     }
 
-    @LooperMode(PAUSED)
     @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
         TestSettingsProvider.getAdminSettings().save(AdminKeys.KEY_EDIT_SAVED, false);
 
@@ -251,7 +245,6 @@ public class FormMapActivityTest {
         }
     }
 
-    @LooperMode(PAUSED)
     @Test public void openingUneditableInstances_launchesViewActivity() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
@@ -265,7 +258,6 @@ public class FormMapActivityTest {
         assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
     }
 
-    @LooperMode(PAUSED)
     @Test public void tappingOnEditableInstance_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
@@ -283,7 +275,6 @@ public class FormMapActivityTest {
         }
     }
 
-    @LooperMode(PAUSED)
     @Test public void tappingOnUneditableInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
@@ -296,7 +287,6 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance encryption but just in case there is an
     // encrypted instance with geometry available, show an encrypted toast.
-    @LooperMode(PAUSED)
     @Test public void tappingOnEncryptedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint submissionFailedCantEditWhenFinalized = new MapPoint(10.4, 125.6);
 
@@ -309,7 +299,6 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance deletion but just in case there is a
     // deleted instance with geometry available, show a deleted toast.
-    @LooperMode(PAUSED)
     @Test public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint deleted = new MapPoint(10.0, 125.6);
 

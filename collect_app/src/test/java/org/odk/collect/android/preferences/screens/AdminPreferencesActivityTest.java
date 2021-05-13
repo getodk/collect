@@ -18,7 +18,6 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.annotation.LooperMode;
 
 import timber.log.Timber;
 
@@ -31,12 +30,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 /**
  * Tests for Admin Preferences
  */
-@LooperMode(PAUSED)
 @RunWith(AndroidJUnit4.class)
 public class AdminPreferencesActivityTest {
 
