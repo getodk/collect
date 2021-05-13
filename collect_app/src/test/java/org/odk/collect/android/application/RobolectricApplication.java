@@ -1,11 +1,11 @@
 package org.odk.collect.android.application;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowApplication;
 
 import static org.robolectric.Shadows.shadowOf;
@@ -25,7 +25,7 @@ public class RobolectricApplication extends Collect {
 
         // We need this so WorkManager.getInstance doesn't explode
         try {
-            WorkManager.initialize(RuntimeEnvironment.application, new Configuration.Builder().build());
+            WorkManager.initialize(ApplicationProvider.getApplicationContext(), new Configuration.Builder().build());
         } catch (IllegalStateException e) {
             // initialize() explodes if it's already been called
         }

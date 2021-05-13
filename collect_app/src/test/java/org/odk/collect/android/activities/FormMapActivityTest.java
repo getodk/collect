@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -21,6 +22,7 @@ import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
@@ -179,7 +181,7 @@ public class FormMapActivityTest {
     @Test public void tappingOnNewInstanceButton_opensNewInstance() {
         activity.findViewById(R.id.new_instance).performClick();
 
-        Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+        Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
 
         assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
         assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(nullValue()));
@@ -220,7 +222,7 @@ public class FormMapActivityTest {
 
             activity.onFeatureClicked(featureId);
             clickOnOpenFormChip();
-            Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+            Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
             assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(nullValue()));
@@ -242,7 +244,7 @@ public class FormMapActivityTest {
 
             activity.onFeatureClicked(featureId);
             clickOnOpenFormChip();
-            Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+            Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
 
             assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
             assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
@@ -257,7 +259,7 @@ public class FormMapActivityTest {
 
         activity.onFeatureClicked(featureId);
         clickOnOpenFormChip();
-        Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+        Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
 
         assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
         assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));

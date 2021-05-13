@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -12,10 +13,10 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.LooperMode;
 
@@ -87,7 +88,7 @@ public class AdminPreferencesActivityTest {
         adminPreferencesFragment.onPreferenceClick(preference);
 
         Intent expectedIntent = new Intent(activityController.get(), GeneralPreferencesActivity.class);
-        Intent actual = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+        Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
         assertThat(expectedIntent.getComponent(), is(actual.getComponent()));
         assertThat(actual.getExtras().getBoolean(INTENT_KEY_ADMIN_MODE), is(true));
     }

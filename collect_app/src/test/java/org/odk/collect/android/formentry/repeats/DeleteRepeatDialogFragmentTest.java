@@ -6,6 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -64,7 +64,7 @@ public class DeleteRepeatDialogFragmentTest {
         AlertDialog dialog = launchDialog();
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
 
-        assertThat(message, equalTo(RuntimeEnvironment.application.getString(R.string.delete_repeat_confirm, "blah (1)")));
+        assertThat(message, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.delete_repeat_confirm, "blah (1)")));
     }
 
     @Test
