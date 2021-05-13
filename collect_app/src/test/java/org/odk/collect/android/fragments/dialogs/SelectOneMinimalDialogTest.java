@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.SelectChoice;
 import org.junit.Test;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class SelectOneMinimalDialogTest extends SelectMinimalDialogTest {
         dialogFragment.setListener(listener);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
         dialogFragment.onBackPressed();
         verify(listener, times(0)).updateSelectedItems(anyList());
         dialogFragment.show(fragmentManager, "TAG");
@@ -39,6 +41,8 @@ public class SelectOneMinimalDialogTest extends SelectMinimalDialogTest {
         dialogFragment.setListener(listener);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         dialogFragment.getToolbar().getChildAt(0).performClick();
         verify(listener, times(0)).updateSelectedItems(anyList());
         dialogFragment.show(fragmentManager, "TAG");
