@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.when;
@@ -34,12 +35,16 @@ public class CopticDatePickerDialogTest {
     @Test
     public void dialogIsCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsCancellable(true);
     }
 
     @Test
     public void dialogShouldShowCorrectDate() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogShowsCorrectDate(1736, 8, 4, "4 Pashons 1736 (2020May12)");
     }
 
@@ -48,6 +53,7 @@ public class CopticDatePickerDialogTest {
         when(datePickerDetails.isYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(1736, "1736 (2019)");
     }
@@ -57,6 +63,7 @@ public class CopticDatePickerDialogTest {
         when(datePickerDetails.isMonthYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1736, 8, "Pashons 1736 (2020May)");
     }
@@ -64,6 +71,8 @@ public class CopticDatePickerDialogTest {
     @Test
     public void settingDateInDatePicker_changesDateShownInTextView() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogTextViewUpdatesDate("4 Pashons 1736 (2020May12)");
     }
 
@@ -75,18 +84,24 @@ public class CopticDatePickerDialogTest {
     @Test
     public void clickingOk_updatesDateInActivity() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2304, 2, 23);
     }
 
     @Test
     public void clickingOk_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_POSITIVE);
     }
 
     @Test
     public void clickingCancel_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_NEGATIVE);
     }
 }
