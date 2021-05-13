@@ -15,6 +15,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
@@ -47,6 +48,8 @@ public class SelectMinimalDialogTest {
         dialogFragment.setListener(listener);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         assertThat(isDialogVisible(), is(true));
         dialogFragment.onBackPressed();
         assertThat(isDialogVisible(), is(false));
@@ -61,6 +64,8 @@ public class SelectMinimalDialogTest {
         dialogFragment.setListener(listener);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         assertThat(isDialogVisible(), is(true));
         dialogFragment.getToolbar().getChildAt(0).performClick();
         assertThat(isDialogVisible(), is(false));
@@ -75,6 +80,8 @@ public class SelectMinimalDialogTest {
         dialogFragment.setListener(listener);
 
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         assertThat(dialogFragment.getToolbar().findViewById(R.id.menu_filter).getVisibility(), equalTo(View.VISIBLE));
     }
 
