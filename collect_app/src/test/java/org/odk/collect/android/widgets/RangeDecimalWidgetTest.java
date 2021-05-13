@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.test.core.view.MotionEventBuilder;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
@@ -13,7 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.robolectric.RobolectricTestRunner;
 
 import java.math.BigDecimal;
 
@@ -30,7 +30,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class RangeDecimalWidgetTest {
     private static final String NO_TICKS_APPEARANCE = "no-ticks";
 

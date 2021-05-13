@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.view.View;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.google.common.collect.ImmutableList;
 
 import org.javarosa.core.model.FormDef;
@@ -23,7 +25,6 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 
 import java.io.File;
@@ -45,7 +46,7 @@ import static org.robolectric.Shadows.shadowOf;
 /**
  * @author James Knight
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class OSMWidgetTest {
     private final FakeWaitingForDataRegistry fakeWaitingForDataRegistry = new FakeWaitingForDataRegistry();
 

@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +15,6 @@ import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
@@ -27,7 +27,7 @@ import static org.hamcrest.Matchers.is;
 import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class AudioButtonIntegrationTest {
 
     private final MediaPlayer mediaPlayer = new MediaPlayer();

@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
@@ -18,7 +19,6 @@ import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,7 +32,7 @@ import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.ISL
 import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.MYANMAR;
 import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.PERSIAN;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class DateTimeWidgetUtilsTest {
     private DateTimeWidgetUtils dateTimeWidgetUtils;
 

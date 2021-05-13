@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
 
@@ -22,7 +23,6 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 
@@ -39,7 +39,7 @@ import static org.robolectric.Shadows.shadowOf;
 /**
  * @author James Knight
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     //Package visibility for sharing with related tests

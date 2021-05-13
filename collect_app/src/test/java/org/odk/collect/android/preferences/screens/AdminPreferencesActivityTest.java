@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,6 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.annotation.LooperMode;
@@ -36,7 +36,7 @@ import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
  * Tests for Admin Preferences
  */
 @LooperMode(PAUSED)
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class AdminPreferencesActivityTest {
 
     private AdminPreferencesFragment adminPreferencesFragment;

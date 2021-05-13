@@ -2,10 +2,11 @@ package org.odk.collect.android.utilities;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import static android.content.Context.MODE_PRIVATE;
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class SQLiteUtilsTest {
 
     @Test

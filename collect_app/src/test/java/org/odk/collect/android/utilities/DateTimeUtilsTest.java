@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -23,11 +25,10 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class DateTimeUtilsTest {
     private final LocalDateTime date = new LocalDateTime().withDate(2010, 5, 12);
     private final LocalDateTime time = new LocalDateTime().withTime(12, 10, 0, 0);

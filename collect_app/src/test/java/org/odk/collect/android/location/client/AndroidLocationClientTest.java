@@ -3,13 +3,14 @@ package org.odk.collect.android.location.client;
 import android.location.Location;
 import android.location.LocationManager;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.google.common.collect.ImmutableList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.location.LocationTestUtils;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +31,7 @@ import static org.odk.collect.android.location.client.LocationClient.Priority.PR
 import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_LOW_POWER;
 import static org.odk.collect.android.location.client.LocationClient.Priority.PRIORITY_NO_POWER;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class AndroidLocationClientTest {
 
     private LocationManager locationManager;

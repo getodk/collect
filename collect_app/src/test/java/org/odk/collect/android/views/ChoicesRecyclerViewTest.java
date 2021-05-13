@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 
@@ -36,7 +37,6 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
 import java.io.File;
@@ -56,7 +56,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ChoicesRecyclerViewTest {
     private ChoicesRecyclerView recyclerView;
 

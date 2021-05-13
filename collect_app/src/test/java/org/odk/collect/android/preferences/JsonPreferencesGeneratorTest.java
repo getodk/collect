@@ -1,5 +1,7 @@
 package org.odk.collect.android.preferences;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import junit.framework.TestCase;
 
 import org.json.JSONException;
@@ -9,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +21,7 @@ import static org.hamcrest.Matchers.not;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class JsonPreferencesGeneratorTest extends TestCase {
     private JsonPreferencesGenerator jsonPreferencesGenerator;
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();

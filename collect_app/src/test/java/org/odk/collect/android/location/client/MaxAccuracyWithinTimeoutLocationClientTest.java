@@ -2,11 +2,12 @@ package org.odk.collect.android.location.client;
 
 import android.location.Location;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 import static org.robolectric.shadows.ShadowSystemClock.advanceBy;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class MaxAccuracyWithinTimeoutLocationClientTest {
     private FakeLocationClient fakeLocationClient;
     private TestLocationListener testLocationListener;

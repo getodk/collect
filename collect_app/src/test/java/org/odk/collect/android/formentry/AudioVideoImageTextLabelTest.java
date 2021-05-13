@@ -6,6 +6,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,7 +20,6 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.TestScreenContextActivity;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.createThemedActivity;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class AudioVideoImageTextLabelTest {
 
     @Rule

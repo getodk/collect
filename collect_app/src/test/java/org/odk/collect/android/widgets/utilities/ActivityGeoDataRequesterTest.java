@@ -3,6 +3,8 @@ package org.odk.collect.android.widgets.utilities;
 import android.content.ComponentName;
 import android.content.Intent;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
@@ -17,7 +19,6 @@ import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowActivity;
 
 import static junit.framework.TestCase.assertEquals;
@@ -36,7 +37,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ActivityGeoDataRequesterTest {
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
     private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider);

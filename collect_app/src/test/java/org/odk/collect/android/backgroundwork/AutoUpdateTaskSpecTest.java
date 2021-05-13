@@ -3,6 +3,7 @@ package org.odk.collect.android.backgroundwork;
 import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +29,6 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.ManifestFile;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class AutoUpdateTaskSpecTest {
 

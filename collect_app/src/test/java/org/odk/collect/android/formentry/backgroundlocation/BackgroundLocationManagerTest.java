@@ -2,6 +2,8 @@ package org.odk.collect.android.formentry.backgroundlocation;
 
 import android.location.Location;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +16,6 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.formentry.audit.AuditEvent;
-import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class BackgroundLocationManagerTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.View.OnLongClickListener;
 
 import androidx.browser.customtabs.CustomTabsServiceConnection;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -14,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,7 +32,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
  * @author James Knight
  */
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class UrlWidgetTest {
     private TestScreenContextActivity spyActivity;
     private ExternalWebPageHelper externalWebPageHelper;

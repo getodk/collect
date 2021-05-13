@@ -73,7 +73,7 @@ Widgets should have the majority of their behavior driven out by tests that trea
 You can use [Robolectric](https://robolectric.org) to write tests for widgets without having to run them on device or manually mock out the Android SDK:
 
 ```java
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class TriggerWidgetTest {
 
     @Test

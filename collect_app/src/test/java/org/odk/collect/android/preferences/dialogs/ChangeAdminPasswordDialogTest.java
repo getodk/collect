@@ -8,6 +8,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +20,6 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -29,7 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ChangeAdminPasswordDialogTest {
 
     private FragmentManager fragmentManager;
