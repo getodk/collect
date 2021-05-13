@@ -24,7 +24,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
