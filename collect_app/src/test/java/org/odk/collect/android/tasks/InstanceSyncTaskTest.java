@@ -14,6 +14,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InstanceUtils;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.io.File;
 import java.util.List;
@@ -34,7 +35,7 @@ public class InstanceSyncTaskTest {
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
         instanceSyncTask.execute();
-
+        RobolectricHelpers.runLooper();
         assertThat(instancesRepository.getAllNotDeleted().size(), is(0));
     }
 
@@ -47,7 +48,7 @@ public class InstanceSyncTaskTest {
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
         instanceSyncTask.execute();
-
+        RobolectricHelpers.runLooper();
         List<Instance> instances = new InstancesRepositoryProvider().get().getAllByFormId("one_question");
         assertThat(instances.size(), is(1));
         assertThat(instances.get(0).getFormId(), is("one_question"));
