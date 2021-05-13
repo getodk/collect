@@ -16,6 +16,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowToast;
 
@@ -184,6 +185,7 @@ public class RangeWidgetUtilsTest {
     public void clickingPickerButton_showsNumberPickerDialog() {
         TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
         RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{}, 0, 0);
+        RobolectricHelpers.runLooper();
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
 
