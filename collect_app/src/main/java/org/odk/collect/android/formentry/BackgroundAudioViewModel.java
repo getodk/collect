@@ -62,7 +62,9 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
         this.clock = clock;
         this.analytics = analytics;
 
-        this.recordAudioActionRegistry.register(this::handleRecordAction);
+        this.recordAudioActionRegistry.register((treeReference, quality) -> {
+            new Handler(Looper.getMainLooper()).post(() -> handleRecordAction(treeReference, quality));
+        });
 
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalSettings.getBoolean(KEY_BACKGROUND_RECORDING));
     }
@@ -192,9 +194,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             RecordAudioActionRegistry recordAudioActionRegistry = new RecordAudioActionRegistry() {
                 @Override
                 public void register(BiConsumer<TreeReference, String> listener) {
-                    new Handler(Looper.getMainLooper()).post(() -> {
-                        RecordAudioActions.setRecordAudioListener(listener::accept);
-                    });
+                    RecordAudioActions.setRecordAudioListener(listener::accept);
                 }
 
                 @Override
