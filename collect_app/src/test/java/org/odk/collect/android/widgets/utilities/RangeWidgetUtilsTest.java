@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.RangeQuestion;
 import org.javarosa.core.model.data.StringData;
@@ -16,7 +17,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.views.TrackingTouchSlider;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowToast;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class RangeWidgetUtilsTest {
     private static final String VERTICAL_APPEARANCE = "vertical";
 
@@ -184,6 +185,7 @@ public class RangeWidgetUtilsTest {
     public void clickingPickerButton_showsNumberPickerDialog() {
         TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
         RangeWidgetUtils.showNumberPickerDialog(activity, new String[]{}, 0, 0);
+        RobolectricHelpers.runLooper();
         NumberPickerDialog numberPickerDialog = (NumberPickerDialog) activity.getSupportFragmentManager()
                 .findFragmentByTag(NumberPickerDialog.NUMBER_PICKER_DIALOG_TAG);
 

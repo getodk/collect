@@ -1,6 +1,5 @@
 package org.odk.collect.android.formentry;
 
-
 import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
@@ -36,6 +35,7 @@ public class RefreshFormListDialogFragmentTest {
 
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+            RobolectricHelpers.runLooper();
             verify(fragment.listener).onCancelFormLoading();
         });
     }

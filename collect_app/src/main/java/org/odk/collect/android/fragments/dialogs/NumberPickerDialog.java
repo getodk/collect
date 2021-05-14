@@ -56,10 +56,8 @@ public class NumberPickerDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try {
+        if (context instanceof NumberPickerListener) {
             listener = (NumberPickerListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener");
         }
     }
 

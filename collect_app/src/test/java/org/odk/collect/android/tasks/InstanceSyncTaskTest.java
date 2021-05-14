@@ -14,6 +14,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InstanceUtils;
+import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
+@LooperMode(LooperMode.Mode.LEGACY)
 public class InstanceSyncTaskTest {
 
     @Test

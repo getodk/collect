@@ -1,12 +1,13 @@
 package org.odk.collect.android.utilities;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.formstest.FormUtils.createXFormFile;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class InstanceUploaderUtilsTest {
     /**
      * 1000 instances is a big number that would product a very long sql query that would cause

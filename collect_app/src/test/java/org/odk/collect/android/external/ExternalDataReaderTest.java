@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +17,6 @@ import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 import org.odk.collect.shared.Md5;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.BufferedWriter;
@@ -38,7 +39,7 @@ import static org.odk.collect.android.external.ExternalDataUtil.COLUMN_MD5_HASH;
 import static org.odk.collect.android.external.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
 import static org.odk.collect.android.external.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ExternalDataReaderTest {
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_FORM_FILENAME = "simple-search-external-csv.xml";
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_NAME = "simple-search-external-csv-fruits";

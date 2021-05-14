@@ -366,7 +366,7 @@ dependencies {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 
-    testImplementation "org.robolectric:robolectric:4.3.1" // Some tests in `collect_app` don't work with newer Robolectric
+    testImplementation "org.robolectric:robolectric:4.5.1"
 
     testImplementation 'androidx.test.ext:junit:1.1.2'
     debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {

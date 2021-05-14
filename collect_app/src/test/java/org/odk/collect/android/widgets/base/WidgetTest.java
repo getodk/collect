@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.base;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.IFormElement;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -13,14 +15,13 @@ import org.mockito.junit.MockitoRule;
 
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.robolectric.RobolectricTestRunner;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public abstract class WidgetTest {
 
     @Rule

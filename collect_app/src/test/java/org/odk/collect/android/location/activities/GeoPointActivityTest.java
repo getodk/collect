@@ -3,6 +3,8 @@ package org.odk.collect.android.location.activities;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +17,6 @@ import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.location.client.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
 import static android.app.Activity.RESULT_OK;
@@ -31,7 +32,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class GeoPointActivityTest extends BaseGeoActivityTest {
 
     @Rule

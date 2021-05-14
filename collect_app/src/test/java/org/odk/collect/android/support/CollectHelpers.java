@@ -14,7 +14,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.Robolectric;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
 import java.util.List;
@@ -57,10 +56,10 @@ public final class CollectHelpers {
 
     public static void overrideAppDependencyModule(AppDependencyModule appDependencyModule) {
         AppDependencyComponent testComponent = DaggerAppDependencyComponent.builder()
-                .application(RuntimeEnvironment.application)
+                .application(ApplicationProvider.getApplicationContext())
                 .appDependencyModule(appDependencyModule)
                 .build();
-        ((Collect) RuntimeEnvironment.application).setComponent(testComponent);
+        ((Collect) ApplicationProvider.getApplicationContext()).setComponent(testComponent);
     }
 
     public static void createThemedContext() {

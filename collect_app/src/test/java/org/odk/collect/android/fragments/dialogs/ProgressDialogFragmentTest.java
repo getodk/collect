@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.annotation.LooperMode;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,11 +20,9 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 import static org.robolectric.shadows.ShadowView.innerText;
 
 @RunWith(AndroidJUnit4.class)
-@LooperMode(PAUSED)
 public class ProgressDialogFragmentTest {
 
     @Test

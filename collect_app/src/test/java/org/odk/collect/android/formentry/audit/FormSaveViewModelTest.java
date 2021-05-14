@@ -4,6 +4,7 @@ import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.common.io.Files;
 
@@ -16,8 +17,8 @@ import org.mockito.InOrder;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
-import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -26,7 +27,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,7 +55,8 @@ import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveRes
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.WAITING_TO_SAVE;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
+@LooperMode(LooperMode.Mode.LEGACY)
 public class FormSaveViewModelTest {
     private static final long CURRENT_TIME = 123L;
 

@@ -1,12 +1,13 @@
 package org.odk.collect.android.location.client;
 
 import android.location.Location;
-import android.os.Looper;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,9 +16,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.location.LocationTestUtils.createLocation;
-import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.shadows.ShadowSystemClock.advanceBy;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class MaxAccuracyWithinTimeoutLocationClientTest {
     private FakeLocationClient fakeLocationClient;
     private TestLocationListener testLocationListener;
@@ -35,6 +36,7 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     @Test
     public void requestingLocationUpdates_ShouldResultInUpdate() {
         maxAccuracyLocationClient.requestLocationUpdates(5);
+        RobolectricHelpers.runLooper();
 
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
@@ -57,6 +59,7 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     @Test
     public void onlyMoreAccurateFixes_ShouldResultInUpdates() {
         maxAccuracyLocationClient.requestLocationUpdates(5);
+        RobolectricHelpers.runLooper();
 
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
@@ -74,6 +77,7 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     @Test
     public void fixWithAccuracyAfterAFixWithout_ShouldResultInUpdate() {
         maxAccuracyLocationClient.requestLocationUpdates(5);
+        RobolectricHelpers.runLooper();
 
         Location locationWithoutAccuracy = createLocation("GPS", 1, 1, 1);
         fakeLocationClient.receiveFix(locationWithoutAccuracy);
@@ -87,6 +91,7 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     @Test
     public void fixWithoutAccuracyAfterAFixWith_ShouldNotResultInUpdate() {
         maxAccuracyLocationClient.requestLocationUpdates(5);
+        RobolectricHelpers.runLooper();
 
         Location locationWithAccuracy = createLocation("GPS", 5, 5, 5, 100);
         fakeLocationClient.receiveFix(locationWithAccuracy);
@@ -100,6 +105,7 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     @Test
     public void requestingLocationUpdatesAgain_ShouldResetHighestAccuracy() {
         maxAccuracyLocationClient.requestLocationUpdates(5);
+        RobolectricHelpers.runLooper();
 
         Location location = createLocation("GPS", 1, 1, 1, 2);
         fakeLocationClient.receiveFix(location);
@@ -116,7 +122,9 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     public void timeoutSecondsPassing_ShouldStopUpdates() {
         int timeoutSeconds = 5;
         maxAccuracyLocationClient.requestLocationUpdates(timeoutSeconds);
-        shadowOf(Looper.getMainLooper()).getScheduler().advanceBy(timeoutSeconds, TimeUnit.SECONDS);
+        RobolectricHelpers.runLooper();
+        advanceBy(timeoutSeconds, TimeUnit.SECONDS);
+        RobolectricHelpers.runLooper();
 
         // verify that stop() was called so resources are released
         assertFalse(fakeLocationClient.isRunning());
@@ -131,16 +139,17 @@ public class MaxAccuracyWithinTimeoutLocationClientTest {
     public void requestingLocationUpdatesAgain_ShouldResetTimeout() {
         int timeoutSeconds = 5;
         maxAccuracyLocationClient.requestLocationUpdates(timeoutSeconds);
+        RobolectricHelpers.runLooper();
 
         // advance time but not enough for updates to stop
-        shadowOf(Looper.getMainLooper()).getScheduler().advanceBy(timeoutSeconds - 1, TimeUnit.SECONDS);
+        advanceBy(timeoutSeconds - 1, TimeUnit.SECONDS);
         assertTrue(fakeLocationClient.isRunning());
 
         // initiate a new request
         maxAccuracyLocationClient.requestLocationUpdates(timeoutSeconds);
 
         // verify that the new request reset the timer
-        shadowOf(Looper.getMainLooper()).getScheduler().advanceBy(timeoutSeconds - 1, TimeUnit.SECONDS);
+        advanceBy(timeoutSeconds - 1, TimeUnit.SECONDS);
         assertTrue(fakeLocationClient.isRunning());
     }
 }

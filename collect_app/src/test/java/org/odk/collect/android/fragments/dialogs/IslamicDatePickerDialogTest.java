@@ -3,6 +3,7 @@ package org.odk.collect.android.fragments.dialogs;
 import android.content.DialogInterface;
 
 import androidx.fragment.app.FragmentManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +11,11 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.CollectHelpers;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.testshared.RobolectricHelpers;
 
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class IslamicDatePickerDialogTest {
     private FragmentManager fragmentManager;
     private IslamicDatePickerDialog dialogFragment;
@@ -34,12 +35,16 @@ public class IslamicDatePickerDialogTest {
     @Test
     public void dialogIsCancellable() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsCancellable(true);
     }
 
     @Test
     public void dialogShouldShowCorrectDate() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogShowsCorrectDate(1441, 8, 19, "19 Ramadan 1441 (2020May12)");
     }
 
@@ -48,6 +53,7 @@ public class IslamicDatePickerDialogTest {
         when(datePickerDetails.isYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForYearMode(1441, "1441 (2019)");
     }
@@ -57,6 +63,7 @@ public class IslamicDatePickerDialogTest {
         when(datePickerDetails.isMonthYearMode()).thenReturn(true);
         when(datePickerDetails.isSpinnerMode()).thenReturn(false);
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
 
         DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(1441, 8, "Ramadan 1441 (2020Apr)");
     }
@@ -64,6 +71,8 @@ public class IslamicDatePickerDialogTest {
     @Test
     public void settingDateInDatePicker_changesDateShownInTextView() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogTextViewUpdatesDate("19 Ramadan 1441 (2020May12)");
     }
 
@@ -75,18 +84,24 @@ public class IslamicDatePickerDialogTest {
     @Test
     public void clickingOk_updatesDateInActivity() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDateUpdateInActivity(activity, 2581, 11, 10);
     }
 
     @Test
     public void clickingOk_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_POSITIVE);
     }
 
     @Test
     public void clickingCancel_dismissesTheDialog() {
         dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+
         DialogFragmentHelpers.assertDialogIsDismissedOnButtonClick(DialogInterface.BUTTON_NEGATIVE);
     }
 }

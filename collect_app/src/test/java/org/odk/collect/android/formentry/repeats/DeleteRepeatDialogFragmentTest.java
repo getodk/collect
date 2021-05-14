@@ -6,6 +6,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +15,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.CollectHelpers;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -28,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class DeleteRepeatDialogFragmentTest {
 
     private TestActivity activity;
@@ -48,57 +49,64 @@ public class DeleteRepeatDialogFragmentTest {
 
     @Test
     public void fragmentActivityShouldImplementDeleteRepeatDialogCallback() {
-        dialogFragment.show(fragmentManager, "TAG");
+        launchDialog();
         assertThat(dialogFragment.getActivity(), instanceOf(DeleteRepeatDialogFragment.DeleteRepeatDialogCallback.class));
     }
 
     @Test
     public void dialogIsNotCancellable() {
-        dialogFragment.show(fragmentManager, "TAG");
+        launchDialog();
         assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(false));
     }
 
     @Test
     public void shouldShowCorrectMessage() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog();
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
 
-        assertThat(message, equalTo(RuntimeEnvironment.application.getString(R.string.delete_repeat_confirm, "blah (1)")));
+        assertThat(message, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.delete_repeat_confirm, "blah (1)")));
     }
 
     @Test
     public void clickingCancel_shouldDismissTheDialog() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog();
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+
+        RobolectricHelpers.runLooper();
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
     @Test
     public void clickingRemoveGroup_shouldDismissTheDialog() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog();
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+
+        RobolectricHelpers.runLooper();
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
     @Test
     public void clickingRemoveGroup_callsDeleteGroup() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog();
         assertThat(activity.deleteGroupCalled, equalTo(false));
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
-        assertThat(activity.deleteGroupCalled, equalTo(true));
 
+        RobolectricHelpers.runLooper();
+        assertThat(activity.deleteGroupCalled, equalTo(true));
         verify(dialogFragment.formController).deleteRepeat();
+    }
+
+    private AlertDialog launchDialog() {
+        dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+        return (AlertDialog) ShadowDialog.getLatestDialog();
     }
 
     public static class TestActivity extends FragmentActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 
@@ -35,7 +36,7 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 
 import java.io.File;
@@ -55,7 +56,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ChoicesRecyclerViewTest {
     private ChoicesRecyclerView recyclerView;
 
@@ -82,14 +83,14 @@ public class ChoicesRecyclerViewTest {
     @Test
     public void whenNonFLexAppearanceIsUsed_shouldGridLayoutManagerBeUsed() {
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(GridLayoutManager.class.getName()));
     }
 
     @Test
     public void whenFLexAppearanceIsUsed_shouldFlexboxLayoutManagerBeUsed() {
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
-        recyclerView.initRecyclerView(adapter, true);
+        initRecyclerView(adapter, true);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(FlexboxLayoutManager.class.getName()));
     }
 
@@ -100,7 +101,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertThat(recyclerView.getItemDecorationCount(), is(1));
         assertThat(recyclerView.getItemDecorationAt(0), is(instanceOf(DividerItemDecoration.class)));
@@ -113,7 +114,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertThat(recyclerView.getItemDecorationCount(), is(0));
     }
@@ -125,7 +126,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
 
-        recyclerView.initRecyclerView(adapter, true);
+        initRecyclerView(adapter, true);
 
         assertThat(recyclerView.getItemDecorationCount(), is(0));
     }
@@ -137,16 +138,16 @@ public class ChoicesRecyclerViewTest {
 
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertVisibleItemsInButtonsMode("AAA", "BBB");
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInButtonsMode("BBB");
-        adapter.getFilter().filter("bc");
+        filterList(adapter, "bc");
         assertVisibleItemsInButtonsMode();
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInButtonsMode("BBB");
-        adapter.getFilter().filter("");
+        filterList(adapter, "");
         assertVisibleItemsInButtonsMode("AAA", "BBB");
     }
 
@@ -157,16 +158,16 @@ public class ChoicesRecyclerViewTest {
 
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertVisibleItemsInButtonsMode("AAA", "BBB");
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInButtonsMode("BBB");
-        adapter.getFilter().filter("bc");
+        filterList(adapter, "bc");
         assertVisibleItemsInButtonsMode();
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInButtonsMode("BBB");
-        adapter.getFilter().filter("");
+        filterList(adapter, "");
         assertVisibleItemsInButtonsMode("AAA", "BBB");
     }
 
@@ -177,16 +178,16 @@ public class ChoicesRecyclerViewTest {
 
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertVisibleItemsInNoButtonsMode("AAA", "BBB");
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInNoButtonsMode("BBB");
-        adapter.getFilter().filter("bc");
+        filterList(adapter, "bc");
         assertVisibleItemsInNoButtonsMode();
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInNoButtonsMode("BBB");
-        adapter.getFilter().filter("");
+        filterList(adapter, "");
         assertVisibleItemsInNoButtonsMode("AAA", "BBB");
     }
 
@@ -197,16 +198,16 @@ public class ChoicesRecyclerViewTest {
 
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertVisibleItemsInNoButtonsMode("AAA", "BBB");
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInNoButtonsMode("BBB");
-        adapter.getFilter().filter("bc");
+        filterList(adapter, "bc");
         assertVisibleItemsInNoButtonsMode();
-        adapter.getFilter().filter("b");
+        filterList(adapter, "b");
         assertVisibleItemsInNoButtonsMode("BBB");
-        adapter.getFilter().filter("");
+        filterList(adapter, "");
         assertVisibleItemsInNoButtonsMode("AAA", "BBB");
     }
 
@@ -218,7 +219,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -237,7 +238,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -256,7 +257,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -275,7 +276,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -294,7 +295,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -313,7 +314,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -332,7 +333,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -351,7 +352,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         assertThat(isItemSelected(0), is(true));
@@ -370,7 +371,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         AudioVideoImageTextLabel view = (AudioVideoImageTextLabel) getChoiceView(0);
         File file = mock(File.class);
@@ -397,7 +398,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         assertThat(getChoiceView(0).isLongClickable(), is(true));
     }
@@ -412,7 +413,7 @@ public class ChoicesRecyclerViewTest {
         selectedItems.add(items.get(0).selection());
         SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(1); // Select BBB
         assertThat(adapter.hasAnswerChanged(), is(true));
@@ -436,7 +437,7 @@ public class ChoicesRecyclerViewTest {
         AudioHelper audioHelper = mock(AudioHelper.class);
         SelectOneListAdapter adapter = spy(new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
 
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         verify(adapter).playAudio(any());
@@ -450,7 +451,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         AudioHelper audioHelper = mock(AudioHelper.class);
         SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
         verify(adapter).playAudio(any());
@@ -465,7 +466,7 @@ public class ChoicesRecyclerViewTest {
         List<Selection> selectedItems = new ArrayList<>();
         selectedItems.add(items.get(0).selection());
         SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
-        recyclerView.initRecyclerView(adapter, false);
+        initRecyclerView(adapter, false);
 
         clickChoice(0); // Unselect AAA
         verify(adapter.getAudioHelper()).stop();
@@ -479,7 +480,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, referenceManager, null, 0, 1, false));
-        recyclerView.initRecyclerView(adapter, true);
+        initRecyclerView(adapter, true);
 
         assertThat(getAudioVideoImageTextLabelView(0).getImageView().getVisibility(), is(View.GONE));
         assertThat(getAudioVideoImageTextLabelView(0).getVideoButton().getVisibility(), is(View.GONE));
@@ -576,5 +577,15 @@ public class ChoicesRecyclerViewTest {
         return recyclerView.getAdapter() instanceof SelectOneListAdapter
                 ? getRadioButton(index).isChecked()
                 : getCheckBox(index).isChecked();
+    }
+
+    private void initRecyclerView(AbstractSelectListAdapter adapter, boolean isFlex) {
+        recyclerView.initRecyclerView(adapter, isFlex);
+        RobolectricHelpers.runLooper();
+    }
+
+    private void filterList(AbstractSelectListAdapter adapter, String text) {
+        adapter.getFilter().filter(text);
+        RobolectricHelpers.runLooper();
     }
 }

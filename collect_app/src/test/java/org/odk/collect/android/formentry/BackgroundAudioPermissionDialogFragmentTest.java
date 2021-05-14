@@ -82,6 +82,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             fakePermissionsProvider.setPermissionGranted(true);
 
             button.performClick();
+            RobolectricHelpers.runLooper();
             verify(backgroundAudioViewModel).grantAudioPermission();
         });
     }
@@ -100,6 +101,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
             fakePermissionsProvider.setPermissionGranted(true);
 
             button.performClick();
+            RobolectricHelpers.runLooper();
             assertThat(activity.isFinishing(), is(true));
         });
     }

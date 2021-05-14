@@ -3,6 +3,8 @@ package org.odk.collect.android.location.client;
 import android.location.Location;
 import android.location.LocationManager;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
@@ -14,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.location.LocationTestUtils;
-import org.robolectric.RobolectricTestRunner;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class GoogleFusedLocationClientTest {
 
     private GoogleApiClient googleApiClient;

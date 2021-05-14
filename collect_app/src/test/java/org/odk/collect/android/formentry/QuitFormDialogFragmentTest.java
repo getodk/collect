@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +21,6 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowDialog;
 
 import static android.view.View.GONE;
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class QuitFormDialogFragmentTest {
 
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
@@ -103,6 +103,7 @@ public class QuitFormDialogFragmentTest {
             assertTrue(dialog.isShowing());
 
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+            RobolectricHelpers.runLooper();
             assertFalse(dialog.isShowing());
         });
     }

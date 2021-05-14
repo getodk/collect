@@ -16,13 +16,15 @@
 
 package org.odk.collect.android.formentry.audit;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.apache.commons.io.FileUtils;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,7 +47,8 @@ import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.QUESTION;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
+@LooperMode(LooperMode.Mode.LEGACY)
 public class AsyncTaskAuditEventWriterTest {
 
     private File auditFile;
@@ -117,7 +120,7 @@ public class AsyncTaskAuditEventWriterTest {
                 "form save,,1548106953600,,User1\n" +
                 "form exit,,1548106953601,,User1\n" +
                 "form finalize,,1548106953601,,User1\n";
-        
+
         assertEquals(expectedData, expectedAuditContent);
     }
 
@@ -130,7 +133,7 @@ public class AsyncTaskAuditEventWriterTest {
         ));
 
         String auditContent = FileUtils.readFileToString(auditFile);
-        String expectedData =  "event,node,start,end,change-reason\n" +
+        String expectedData = "event,node,start,end,change-reason\n" +
                 "form resume,,1548108900606,,\n" +
                 "change reason,,1548108900606,,A good reason\n";
         assertEquals(expectedData, auditContent);
@@ -145,7 +148,7 @@ public class AsyncTaskAuditEventWriterTest {
         ));
 
         String auditContent = FileUtils.readFileToString(auditFile);
-        String expectedData =  "event,node,start,end,change-reason\n" +
+        String expectedData = "event,node,start,end,change-reason\n" +
                 "form resume,,1548108900606,,\n" +
                 "change reason,,1548108900606,,\"A \"\"good\"\", reason\"\n";
         assertEquals(expectedData, auditContent);

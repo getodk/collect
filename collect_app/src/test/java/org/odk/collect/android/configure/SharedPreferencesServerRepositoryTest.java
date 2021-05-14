@@ -1,16 +1,16 @@
 package org.odk.collect.android.configure;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class SharedPreferencesServerRepositoryTest {
 
     private String defaultServer;

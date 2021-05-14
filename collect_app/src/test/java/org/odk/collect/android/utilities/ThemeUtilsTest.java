@@ -3,18 +3,20 @@ package org.odk.collect.android.utilities;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
@@ -25,7 +27,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_APP_THEME
 /**
  * Unit tests for checking the behaviour of updating themes from User Interface settings
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ThemeUtilsTest {
 
     private final int[] attrs;
@@ -43,8 +45,8 @@ public class ThemeUtilsTest {
 
     @Before
     public void setup() {
-        DaggerUtils.getComponent(RuntimeEnvironment.application).projectsRepository().save(new Project("Project 1", "P", "#ffffff", "1"));
-        DaggerUtils.getComponent(RuntimeEnvironment.application).currentProjectProvider().setCurrentProject("1");
+        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).projectsRepository().save(new Project("Project 1", "P", "#ffffff", "1"));
+        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).currentProjectProvider().setCurrentProject("1");
 
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);

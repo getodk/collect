@@ -1,5 +1,7 @@
 package org.odk.collect.android.location.activities;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +13,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.geo.MapPoint;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
 
 import static android.app.Activity.RESULT_OK;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest extends BaseGeoActivityTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPointMapActivity> controller;

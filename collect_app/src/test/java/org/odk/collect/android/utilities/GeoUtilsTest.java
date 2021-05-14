@@ -3,12 +3,13 @@ package org.odk.collect.android.utilities;
 import android.location.Location;
 import android.os.Bundle;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class GeoUtilsTest {
     private final List<MapPoint> points = new ArrayList<>(Arrays.asList(
             new MapPoint(11, 12, 13, 14),

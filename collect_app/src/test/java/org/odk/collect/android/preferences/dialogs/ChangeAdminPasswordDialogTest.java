@@ -8,6 +8,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.fragments.support.DialogFragmentHelpers;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.support.TestActivityScenario;
-import org.robolectric.RobolectricTestRunner;
+import org.odk.collect.shared.Settings;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -28,7 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
 import static org.robolectric.Shadows.shadowOf;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class ChangeAdminPasswordDialogTest {
 
     private FragmentManager fragmentManager;
@@ -45,18 +46,18 @@ public class ChangeAdminPasswordDialogTest {
 
     @Test
     public void dialogIsCancellable() {
-        dialogFragment.show(fragmentManager, "TAG");
+        launchDialog(fragmentManager);
         assertThat(shadowOf(dialogFragment.getDialog()).isCancelable(), equalTo(true));
     }
 
     @Test
     public void clickingOkAfterSettingPassword_setsPasswordInSharedPreferences() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog(fragmentManager);
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         passwordEditText.setText("blah");
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
 
+        RobolectricHelpers.runLooper();
         assertThat(adminSettings.getString(KEY_ADMIN_PW), equalTo("blah"));
     }
 
@@ -65,8 +66,7 @@ public class ChangeAdminPasswordDialogTest {
         TestActivityScenario<DialogFragmentHelpers.DialogFragmentTestActivity> activityScenario = TestActivityScenario
                 .launch(DialogFragmentHelpers.DialogFragmentTestActivity.class);
         activityScenario.onActivity(activity -> {
-            dialogFragment.show(activity.getSupportFragmentManager(), "TAG");
-            AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+            AlertDialog dialog = launchDialog(activity.getSupportFragmentManager());
             ((EditText) dialog.findViewById(R.id.pwd_field)).setText("blah");
             ((CheckBox) dialog.findViewById(R.id.checkBox2)).setChecked(true);
         });
@@ -83,30 +83,31 @@ public class ChangeAdminPasswordDialogTest {
 
     @Test
     public void clickingOk_dismissesTheDialog() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog(fragmentManager);
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+
+        RobolectricHelpers.runLooper();
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
     @Test
     public void clickingCancel_dismissesTheDialog() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog(fragmentManager);
         assertTrue(dialog.isShowing());
 
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick();
+
+        RobolectricHelpers.runLooper();
         assertFalse(dialog.isShowing());
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
     @Test
     public void checkingShowPassword_displaysPasswordAsText() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog(fragmentManager);
 
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         CheckBox passwordCheckBox = dialog.findViewById(R.id.checkBox2);
@@ -117,13 +118,18 @@ public class ChangeAdminPasswordDialogTest {
 
     @Test
     public void uncheckingShowPassword_displaysPasswordAsPassword() {
-        dialogFragment.show(fragmentManager, "TAG");
-        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        AlertDialog dialog = launchDialog(fragmentManager);
 
         EditText passwordEditText = dialog.findViewById(R.id.pwd_field);
         CheckBox passwordCheckBox = dialog.findViewById(R.id.checkBox2);
 
         passwordCheckBox.setChecked(false);
         assertThat(passwordEditText.getInputType(), equalTo(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD));
+    }
+
+    private AlertDialog launchDialog(FragmentManager fragmentManager) {
+        dialogFragment.show(fragmentManager, "TAG");
+        RobolectricHelpers.runLooper();
+        return (AlertDialog) ShadowDialog.getLatestDialog();
     }
 }

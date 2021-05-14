@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.ReferenceManager;
@@ -28,7 +29,6 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
-import org.robolectric.RobolectricTestRunner;
 
 import static java.util.Arrays.asList;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class QuestionWidgetTest {
 
     @Rule

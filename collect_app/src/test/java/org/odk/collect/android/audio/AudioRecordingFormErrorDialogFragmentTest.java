@@ -52,6 +52,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
             assertThat(button.getText(), is(f.getString(R.string.ok)));
 
             button.performClick();
+            RobolectricHelpers.runLooper();
             assertThat(dialog.isShowing(), is(false));
         });
     }

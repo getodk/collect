@@ -16,6 +16,7 @@ import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
 import static junit.framework.TestCase.assertTrue;
@@ -85,6 +86,7 @@ public class DialogFragmentHelpers {
         setDatePickerValue(dialog, 2020, 5, 12);
 
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
+        RobolectricHelpers.runLooper();
 
         assertThat(activity.selectedDate.getYear(), equalTo(year));
         assertThat(activity.selectedDate.getMonthOfYear(), equalTo(month));
@@ -94,6 +96,7 @@ public class DialogFragmentHelpers {
     public static void assertDialogIsDismissedOnButtonClick(int dialogButton) {
         AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
         dialog.getButton(dialogButton).performClick();
+        RobolectricHelpers.runLooper();
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
@@ -102,6 +105,7 @@ public class DialogFragmentHelpers {
                 .launch(DialogFragmentTestActivity.class);
         activityScenario.onActivity(activity -> {
             dialogFragment.show(activity.getSupportFragmentManager(), "TAG");
+            RobolectricHelpers.runLooper();
             AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
             setDatePickerValue(dialog, 2020, 5, 12);
         });

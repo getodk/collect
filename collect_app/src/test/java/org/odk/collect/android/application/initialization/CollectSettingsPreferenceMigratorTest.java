@@ -1,5 +1,7 @@
 package org.odk.collect.android.application.initialization;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
@@ -8,7 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.shared.Settings;
-import org.robolectric.RobolectricTestRunner;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefsEmpty;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(AndroidJUnit4.class)
 public class CollectSettingsPreferenceMigratorTest {
 
     private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();

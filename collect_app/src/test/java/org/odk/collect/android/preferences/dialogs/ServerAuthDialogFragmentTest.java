@@ -6,7 +6,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -22,12 +21,6 @@ import static org.hamcrest.Matchers.is;
 public class ServerAuthDialogFragmentTest {
 
     private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
-
-    @Before
-    public void setup() {
-        generalSettings.save(GeneralKeys.KEY_USERNAME, "Alpen");
-        generalSettings.save(GeneralKeys.KEY_PASSWORD, "swiss");
-    }
 
     @Test
     public void prefillsUsernameAndPassword() {
@@ -58,6 +51,7 @@ public class ServerAuthDialogFragmentTest {
             ((AlertDialog) fragment.getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).performClick();
         });
 
+        RobolectricHelpers.runLooper();
         assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), is("Frederick Chilton"));
         assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), is("chesapeake"));
     }

@@ -1,9 +1,9 @@
 package org.odk.collect.android.preferences.dialogs;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -16,7 +16,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestActivityScenario;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
-import org.robolectric.annotation.LooperMode;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,10 +24,8 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.ARG_ACTION;
 import static org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action.ADMIN_SETTINGS;
 import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.annotation.LooperMode.Mode.PAUSED;
 
 @RunWith(AndroidJUnit4.class)
-@LooperMode(PAUSED)
 public class AdminPasswordDialogFragmentTest {
 
     @Before
