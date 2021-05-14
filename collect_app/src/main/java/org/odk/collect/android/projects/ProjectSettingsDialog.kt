@@ -1,15 +1,13 @@
 package org.odk.collect.android.projects
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
@@ -53,17 +51,10 @@ class ProjectSettingsDialog : DialogFragment() {
         currentProjectViewModel = ViewModelProvider(requireActivity(), currentProjectViewModelFactory)[CurrentProjectViewModel::class.java]
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        binding = ProjectSettingsDialogLayoutBinding.inflate(inflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
         setupCurrentProjectView()
-        inflateListOfInActiveProjects(view.context)
+        inflateListOfInActiveProjects(requireContext())
 
         binding.closeIcon.setOnClickListener {
             dismiss()
@@ -95,6 +86,10 @@ class ProjectSettingsDialog : DialogFragment() {
             startActivity(Intent(requireContext(), AboutActivity::class.java))
             dismiss()
         }
+
+        return AlertDialog.Builder(requireActivity())
+            .setView(binding.root)
+            .create()
     }
 
     private fun inflateListOfInActiveProjects(context: Context) {
