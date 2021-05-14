@@ -98,8 +98,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         enterDataButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),
-                        FillBlankFormActivity.class);
+                Intent i = new Intent(getApplicationContext(), FillBlankFormActivity.class);
                 startActivity(i);
             }
         });
