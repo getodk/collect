@@ -23,11 +23,10 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ActivityUtils;
@@ -134,7 +133,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     startActivity(pref);
                     break;
                 case DELETE_PROJECT_KEY:
-                    new MaterialAlertDialogBuilder(requireActivity())
+                    new AlertDialog.Builder(requireActivity())
                             .setTitle(R.string.delete_project_confirm_message)
                             .setNegativeButton(R.string.delete_project_no, (dialog, which) -> { })
                             .setPositiveButton(R.string.delete_project_yes, (dialog, which) -> deleteProject())

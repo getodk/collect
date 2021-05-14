@@ -8,7 +8,7 @@ import android.media.MediaMetadataRetriever;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import androidx.appcompat.app.AlertDialog;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -178,7 +178,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
 
                 @Override
                 public void onRemoveClicked() {
-                    new MaterialAlertDialogBuilder(getContext())
+                    new AlertDialog.Builder(getContext())
                             .setTitle(R.string.delete_answer_file_question)
                             .setMessage(R.string.answer_file_delete_warning)
                             .setPositiveButton(R.string.delete_answer_file, (dialog, which) -> clearAnswer())
