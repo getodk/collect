@@ -47,4 +47,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50dp</item>
     </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
 </resources>

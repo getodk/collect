@@ -48,6 +48,7 @@
         <item name="android:fadeScrollbars">false</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
+        <item name="alertDialogTheme">@style/Theme.Collect.Dark.Dialog</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView.Dark</item>
         <item name="iconColor">#ffffff</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
@@ -66,7 +67,10 @@
         <item name="searchHintIcon">@null</item>
     </style>
 
-    <style name="Theme.Collect.Dark.Dialog" parent="android:Theme.Material.Dialog">
-        <item name="android:colorAccent">?attr/colorSecondary</item>
+    <style name="Theme.Collect.Dark.Dialog" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 </resources>

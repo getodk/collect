@@ -59,6 +59,9 @@
 
     <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 
     <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
