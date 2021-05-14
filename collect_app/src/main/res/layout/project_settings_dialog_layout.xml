@@ -78,25 +78,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
 
-    <LinearLayout
-        android:id="@+id/project_list"
+    <ScrollView
+        android:id="@+id/project_list_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        app:layout_constraintHeight_max="100dp"
+        android:layout_marginBottom="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/top_divider" />
+        app:layout_constraintTop_toBottomOf="@+id/top_divider">
+
+        <LinearLayout
+            android:id="@+id/project_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <View
         android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_list" />
+        app:layout_constraintTop_toBottomOf="@+id/project_list_container" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_project_button"
