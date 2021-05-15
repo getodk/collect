@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +65,13 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         if (!permissionsProvider.areStoragePermissionsGranted() && !isEntryPointActivity(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog);
 
+            Timber.e("xoxoxo - storage permissions not set");    // smap
+            for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {   // smap
+                Timber.i(ste.toString());
+            }
+
             builder.setTitle(R.string.storage_runtime_permission_denied_title)
-                    .setMessage(R.string.storage_runtime_permission_denied_desc)
+                    .setMessage(R.string.smap_storage_runtime_permission_denied_desc)
                     .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
                         finishAndRemoveTask();
                     })
@@ -146,6 +152,8 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         activities.add(SplashScreenActivity.class);
         activities.add(FormDownloadListActivity.class);
         activities.add(InstanceUploaderActivity.class);
+        activities.add(SmapLoginActivity.class);    // smap
+        activities.add(SmapMain.class);             // smap
 
         for (Class<?> act : activities) {
             if (activity.getClass().equals(act)) {

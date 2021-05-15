@@ -83,6 +83,12 @@ public class PermissionsProvider {
      * @param action is a listener that provides the calling component with the permission result.
      */
     public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
+
+        Timber.e("xoxoxo - fieldTask request storage permissions:q");   // smap
+        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {   // smap
+            Timber.i(ste.toString());
+        }
+
         if (storageStateProvider.isScopedStorageUsed()) {
             action.granted();
             return;
@@ -96,6 +102,11 @@ public class PermissionsProvider {
 
             @Override
             public void denied() {
+                Timber.e("xoxoxo - fieldTask storage permissions denied");   // smap
+                for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {   // smap
+                    Timber.i(ste.toString());
+                }
+
                 showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
                         R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
             }
@@ -112,7 +123,7 @@ public class PermissionsProvider {
             @Override
             public void denied() {
                 showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
+                        R.string.smap_storage_runtime_permission_denied_desc, R.drawable.sd, action);
             }
         }, Manifest.permission.READ_EXTERNAL_STORAGE);
     }
