@@ -51,17 +51,13 @@
 
         <item name="alertDialogTheme">@style/Theme.Collect.Magenta.Dialog</item>
 
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Magenta.Theme</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
 
         <!-- Always show scrollbars for a11y reasons -->
         <item name="android:fadeScrollbars">false</item>
 
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
-    </style>
-
-    <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@null</item>
     </style>
 
     <style name="Theme.Collect.Magenta.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">

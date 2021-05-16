@@ -51,7 +51,7 @@
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/Theme.Collect.BaseLight.Dialog.Alert</item>
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Light</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
         <item name="iconColor">#000000</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
@@ -62,10 +62,6 @@
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="dialogCornerRadius">8dp</item>
-    </style>
-
-    <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
-        <item name="searchHintIcon">@null</item>
     </style>
 
     <style name="Theme.Collect.Light.Dialog" parent="android:Theme.Material.Light.Dialog">
