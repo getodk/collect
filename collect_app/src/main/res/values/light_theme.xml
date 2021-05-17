@@ -46,7 +46,7 @@
         <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
         <item name="android:scrollbarSize">1.75mm</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
-        <item name="android:fadeScrollbars">false</item>
+        <item name="android:fadeScrollbars">true</item>
         <item name="colorAccent">@color/blue_500</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
