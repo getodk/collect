@@ -232,7 +232,7 @@ public class DateTimeWidgetUtils {
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
         int theme = 0;
         if (!isBrokenSamsungDevice()) {
-            theme = themeUtils.getMaterialDialogTheme();
+            theme = themeUtils.getCalendarDatePickerDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
             theme = themeUtils.getHoloDialogTheme();

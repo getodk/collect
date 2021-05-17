@@ -49,7 +49,7 @@
         <!-- Used as divider in many places. Not sure why. -->
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
 
-        <item name="alertDialogTheme">@style/Theme.Collect.Magenta.Dialog</item>
+        <item name="alertDialogTheme">@style/Theme.Collect.Magenta.Dialog.Alert</item>
 
         <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
 
@@ -60,7 +60,7 @@
         <item name="android:textDirection">locale</item>
     </style>
 
-    <style name="Theme.Collect.Magenta.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="Theme.Collect.Magenta.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>

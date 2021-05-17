@@ -99,10 +99,10 @@ public final class ThemeUtils {
     }
 
     @StyleRes
-    public int getMaterialDialogTheme() {
+    public int getCalendarDatePickerDialogTheme() {
         return isDarkTheme()
-                ? R.style.Theme_Collect_Dark_Dialog
-                : R.style.Theme_Collect_Light_Dialog;
+                ? R.style.Theme_Collect_Dark_Calendar_DatePicker_Dialog
+                : R.style.Theme_Collect_Light_Calendar_DatePicker_Dialog;
     }
 
     @StyleRes
