@@ -31,14 +31,14 @@ public class TriggerWidgetTest {
 
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Guidance Form Sample")
                 .assertText("Guidance text")
                 .swipeToEndScreen()
@@ -48,14 +48,14 @@ public class TriggerWidgetTest {
 
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Guidance Form Sample")
                 .checkIsIdDisplayed(R.id.help_icon)
                 .clickOnText("TriggerWidget")

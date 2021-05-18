@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
@@ -15,8 +14,7 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
     private final String formName;
 
-    public FormHierarchyPage(String formName, ActivityTestRule rule) {
-        super(rule);
+    public FormHierarchyPage(String formName) {
         this.formName = formName;
     }
 
@@ -33,12 +31,12 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
     public FormEntryPage clickGoToStart() {
         onView(withId(R.id.jumpBeginningButton)).perform(click());
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 
     public FormEntryPage addGroup() {
         onView(withId(R.id.menu_add_repeat)).perform(click());
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 
     public FormHierarchyPage deleteGroup() {
@@ -49,13 +47,13 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
     public FormEndPage clickJumpEndButton() {
         onView(withId(R.id.jumpEndButton)).perform(click());
-        return new FormEndPage(formName, rule).assertOnPage();
+        return new FormEndPage(formName).assertOnPage();
     }
 
     public FormEntryPage clickOnQuestion(String questionLabel) {
         onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(questionLabel))));
         clickOnText(questionLabel);
-        return new FormEntryPage(formName, rule);
+        return new FormEntryPage(formName);
     }
 
     public FormHierarchyPage clickOnGroup(String groupLabel) {

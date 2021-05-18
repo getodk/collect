@@ -74,8 +74,8 @@ public class AudioRecordingTest {
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
-                .pressBack(new OkDialog(rule))
-                .clickOK(new FormEntryPage("Audio Question", rule))
+                .pressBack(new OkDialog())
+                .clickOK(new FormEntryPage("Audio Question"))
                 .assertQuestion("What does it sound like?");
     }
 
@@ -86,7 +86,7 @@ public class AudioRecordingTest {
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .swipeToEndScreenWhileRecording()
-                .clickOK(new FormEntryPage("Audio Question", rule))
+                .clickOK(new FormEntryPage("Audio Question"))
                 .assertQuestion("What does it sound like?");
     }
 }

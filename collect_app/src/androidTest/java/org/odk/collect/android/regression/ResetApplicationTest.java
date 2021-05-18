@@ -2,14 +2,13 @@ package org.odk.collect.android.regression;
 
 import android.Manifest;
 
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AdminSettingsPage;
@@ -20,7 +19,7 @@ import org.odk.collect.android.support.pages.ResetApplicationDialog;
 //Issue NODK-240
 public class ResetApplicationTest {
 
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -32,16 +31,16 @@ public class ResetApplicationTest {
     @Test
     public void when_rotateScreen_should_resetDialogNotDisappear() {
         //TestCase1
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnResetApplication()
                 .assertText(R.string.reset_settings_dialog_title)
                 .assertDisabled(R.string.reset_settings_button_reset)
-                .rotateToLandscape(new ResetApplicationDialog(rule))
+                .rotateToLandscape(new ResetApplicationDialog())
                 .assertText(R.string.reset_settings_dialog_title)
                 .assertDisabled(R.string.reset_settings_button_reset)
-                .rotateToPortrait(new ResetApplicationDialog(rule))
+                .rotateToPortrait(new ResetApplicationDialog())
                 .assertText(R.string.reset_settings_dialog_title)
                 .assertDisabled(R.string.reset_settings_button_reset);
     }
@@ -49,14 +48,14 @@ public class ResetApplicationTest {
     @Test
     public void savedAndBlankForms_shouldBeReset() {
         //TestCase1,4
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit()
                 .clickEditSavedForm()
                 .assertText("All widgets")
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnResetApplication()
@@ -65,10 +64,10 @@ public class ResetApplicationTest {
                 .clickOnString(R.string.reset_blank_forms)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .assertTextDoesNotExist("All widgets")
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .clickEditSavedForm()
                 .assertTextDoesNotExist("All widgets");
     }
@@ -76,24 +75,24 @@ public class ResetApplicationTest {
     @Test
     public void adminSettings_shouldBeReset() {
         //TestCase2
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .openUserSettings()
                 .uncheckServerOption()
-                .pressBack(new AdminSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new AdminSettingsPage())
+                .pressBack(new MainMenuPage())
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .checkIfServerOptionIsNotDisplayed()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .checkIfServerOptionIsDisplayed();
@@ -102,34 +101,34 @@ public class ResetApplicationTest {
     @Test
     public void userInterfaceSettings_shouldBeReset() {
         //TestCase3
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText(R.string.theme_light)
                 .clickOnTheme()
                 .clickOnString(R.string.theme_dark);
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText(R.string.theme_dark)
                 .clickOnLanguage()
                 .clickOnSelectedLanguage("español");
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText("español")
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
@@ -142,7 +141,7 @@ public class ResetApplicationTest {
     @Test
     public void formManagementSettings_shouldBeReset() {
         //TestCase3
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .openFormManagement()
@@ -150,8 +149,8 @@ public class ResetApplicationTest {
                 .clickOnString(R.string.wifi_autosend)
                 .assertText(R.string.wifi_autosend)
                 .clickOnDefaultToFinalized()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
@@ -163,13 +162,13 @@ public class ResetApplicationTest {
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .assertText(R.string.off)
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()

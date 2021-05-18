@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -17,8 +15,7 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
     private final String formName;
 
-    public ChangesReasonPromptPage(String formName, ActivityTestRule rule) {
-        super(rule);
+    public ChangesReasonPromptPage(String formName) {
         this.formName = formName;
     }
 
@@ -36,7 +33,7 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
     public MainMenuPage clickSave() {
         clickOnString(R.string.save);
-        return new MainMenuPage(rule).assertOnPage();
+        return new MainMenuPage().assertOnPage();
     }
 
     public <D extends Page<D>> D clickSave(D destination) {

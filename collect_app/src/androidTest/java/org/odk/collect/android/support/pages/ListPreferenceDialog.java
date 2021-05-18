@@ -1,14 +1,11 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 public class ListPreferenceDialog<T extends Page<T>> extends Page<ListPreferenceDialog<T>> {
 
     private final int title;
     private final T page;
 
-    ListPreferenceDialog(int title, T page, ActivityTestRule rule) {
-        super(rule);
+    ListPreferenceDialog(int title, T page) {
         this.title = title;
         this.page = page;
     }

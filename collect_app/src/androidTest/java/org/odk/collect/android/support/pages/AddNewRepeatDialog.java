@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -13,8 +11,7 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     private final String repeatName;
 
-    public AddNewRepeatDialog(String repeatName, ActivityTestRule rule) {
-        super(rule);
+    public AddNewRepeatDialog(String repeatName) {
         this.repeatName = repeatName;
     }
 

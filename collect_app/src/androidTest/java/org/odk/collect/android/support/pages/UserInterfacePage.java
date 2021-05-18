@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
@@ -10,10 +9,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class UserInterfacePage extends Page<UserInterfacePage> {
-
-    UserInterfacePage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public UserInterfacePage assertOnPage() {
@@ -29,7 +24,7 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
     public MainMenuPage clickOnSelectedLanguage(String language) {
         onView(withText(language)).perform(ViewActions.scrollTo());
         onView(withText(language)).perform(click());
-        return new MainMenuPage(rule).assertOnPage();
+        return new MainMenuPage().assertOnPage();
     }
 
     public UserInterfacePage clickNavigation() {

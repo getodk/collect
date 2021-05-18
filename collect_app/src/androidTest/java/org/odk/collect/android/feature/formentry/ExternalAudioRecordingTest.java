@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.GrantPermissionRule;
 
@@ -17,7 +16,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.RecordedIntentsRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -46,12 +46,12 @@ public class ExternalAudioRecordingTest {
         }
     };
 
-    public final IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain(testDependencies)
             .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
-            .around(rule)
+            .around(new RecordedIntentsRule())
             .around(new RunnableRule(() -> {
                 // Return audio file when RECORD_SOUND_ACTION intent is sent
 
@@ -67,11 +67,11 @@ public class ExternalAudioRecordingTest {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-            }));
-
+            }))
+            .around(rule);
     @Test
     public void onAudioQuestion_whenAudioQualityIsExternal_usesExternalRecorder() throws Exception {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -82,7 +82,7 @@ public class ExternalAudioRecordingTest {
 
     @Test
     public void onAudioQuestion_withoutAudioQuality_usesExternalRecorder() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)

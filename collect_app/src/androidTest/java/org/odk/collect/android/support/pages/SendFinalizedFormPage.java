@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -13,10 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 
 public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
-
-    public SendFinalizedFormPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public SendFinalizedFormPage assertOnPage() {
@@ -31,6 +25,6 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
 
     public OkDialog clickSendSelected() {
         clickOnText(getTranslatedString(R.string.send_selected_data));
-        return new OkDialog(rule);
+        return new OkDialog();
     }
 }

@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry;
 import android.text.TextUtils;
 
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.rule.ActivityTestRule;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.BeforeClass;
@@ -12,13 +11,13 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.GuidanceHint;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.ResetStateRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
@@ -41,7 +40,7 @@ public class GuidanceHintFormTest {
     }
 
     @Rule
-    public ActivityTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(GUIDANCE_SAMPLE_FORM);
+    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(GUIDANCE_SAMPLE_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

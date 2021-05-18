@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 public class DeleteSelectedDialog extends Page<DeleteSelectedDialog> {
@@ -9,8 +7,7 @@ public class DeleteSelectedDialog extends Page<DeleteSelectedDialog> {
     private final int numberSelected;
     private final DeleteSavedFormPage destination;
 
-    public DeleteSelectedDialog(int numberSelected, DeleteSavedFormPage destination, ActivityTestRule rule) {
-        super(rule);
+    public DeleteSelectedDialog(int numberSelected, DeleteSavedFormPage destination) {
         this.numberSelected = numberSelected;
         this.destination = destination;
     }

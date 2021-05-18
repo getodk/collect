@@ -67,8 +67,8 @@ public class MatchExactlyTest {
                         "ODK Collect",
                         "Form update failed",
                         "Fill Blank Form",
-                        new FillBlankFormPage(rule)
-                ).pressBack(new MainMenuPage(rule)); // Check we return to Fill Blank Form, not open a new one
+                        new FillBlankFormPage()
+                ).pressBack(new MainMenuPage()); // Check we return to Fill Blank Form, not open a new one
     }
 
     @Test
@@ -83,7 +83,7 @@ public class MatchExactlyTest {
                 .clickRefreshWithAuthError()
                 .fillUsername("Klay")
                 .fillPassword("Thompson")
-                .clickOK(new FillBlankFormPage(rule))
+                .clickOK(new FillBlankFormPage())
                 .clickRefresh()
                 .assertText("One Question Updated");
     }
@@ -102,7 +102,7 @@ public class MatchExactlyTest {
                 .assertText("Two Question")
                 .assertText("One Question Updated")
                 .assertTextDoesNotExist("One Question Repeat")
-                .pressBack(new MainMenuPage(rule));
+                .pressBack(new MainMenuPage());
 
         testDependencies.server.removeForm("Two Question");
         testDependencies.scheduler.runDeferredTasks();

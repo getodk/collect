@@ -1,13 +1,8 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 public class FormMapPage extends Page<FormMapPage> {
-    FormMapPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public FormMapPage assertOnPage() {
@@ -16,6 +11,6 @@ public class FormMapPage extends Page<FormMapPage> {
 
     public FormEntryPage clickFillBlankFormButton(String formName) {
         clickOnId(R.id.new_instance);
-        return new FormEntryPage(formName, rule).assertOnPage();
+        return new FormEntryPage(formName).assertOnPage();
     }
 }

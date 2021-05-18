@@ -33,7 +33,7 @@ public class GetBlankFormsTest {
                 .clickGetBlankFormWithAuthenticationError()
                 .fillUsername("Draymond")
                 .fillPassword("Green")
-                .clickOK(new GetBlankFormPage(rule))
+                .clickOK(new GetBlankFormPage())
                 .assertText("One Question");
     }
 
@@ -45,7 +45,7 @@ public class GetBlankFormsTest {
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankFormWithError()
                 .assertText(R.string.load_remote_form_error)
-                .clickOK(new GetBlankFormPage(rule));
+                .clickOK(new GetBlankFormPage());
     }
 
     @Test
@@ -58,6 +58,6 @@ public class GetBlankFormsTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one-question) - Failure")
-                .clickOK(new GetBlankFormPage(rule));
+                .clickOK(new GetBlankFormPage());
     }
 }

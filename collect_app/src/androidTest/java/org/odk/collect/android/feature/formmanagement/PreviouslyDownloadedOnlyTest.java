@@ -63,7 +63,7 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.scheduler.runDeferredTasks();
 
         notificationDrawer.open()
-                .clickNotification("Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage(rule))
+                .clickNotification("Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage())
                 .assertText(R.string.newer_version_of_a_form_info)
                 .assertOnPage();
     }

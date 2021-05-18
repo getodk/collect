@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -9,10 +7,6 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class ServerSettingsPage extends Page<ServerSettingsPage> {
-
-    public ServerSettingsPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public ServerSettingsPage assertOnPage() {
@@ -37,7 +31,7 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
 
     public CustomServerPathsPage clickCustomServerPaths() {
         onView(withText(getTranslatedString(R.string.custom_server_paths))).perform(click());
-        return new CustomServerPathsPage(rule).assertOnPage();
+        return new CustomServerPathsPage().assertOnPage();
     }
 
     public ServerSettingsPage clickServerPassword() {

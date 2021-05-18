@@ -28,7 +28,7 @@ public class CascadingSelectWithNumberInHeaderTest {
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("numberInCSV")
                 .swipeToNextQuestion()
                 .clickOnText("Venda de animais")

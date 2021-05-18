@@ -30,7 +30,7 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertNoForms();
     }
@@ -49,10 +49,10 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertNoForms()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
 
                 .clickEditSavedForm()
                 .clickOnForm("One Question")
@@ -71,7 +71,7 @@ public class DeleteBlankFormTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one_question) - Success")
-                .clickOK(new MainMenuPage(rule))
+                .clickOK(new MainMenuPage())
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
                 .swipeToEndScreen()
@@ -82,12 +82,12 @@ public class DeleteBlankFormTest {
                 .clickForm("One Question")
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
 
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one_question) - Success")
-                .clickOK(new MainMenuPage(rule))
+                .clickOK(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
     }

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
@@ -12,9 +11,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.InstallIDProvider;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -27,7 +26,7 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 public class FormMetadataTest {
 
     private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
-    public ActivityTestRule<MainMenuActivity> rule = new ActivityTestRule<>(MainMenuActivity.class);
+    public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -43,7 +42,7 @@ public class FormMetadataTest {
 
     @Test
     public void settingMetadata_letsThemBeIncludedInAForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -60,27 +59,27 @@ public class FormMetadataTest {
                 .inputText("664615")
                 .clickOKOnDialog()
                 .assertPreference(R.string.phone_number, "664615")
-                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new UserAndDeviceIdentitySettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino", "chino@whitepony.com", "664615");
     }
 
     @Test // Issue number NODK-238 TestCase4 TestCase5
     public void settingServerUsername_usedAsFallbackForMetadataUsername() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickServerUsername()
                 .inputText("Chino")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino")
-                .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Metadata", new MainMenuPage()))
                 .clickIgnoreChanges()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
@@ -89,16 +88,16 @@ public class FormMetadataTest {
                 .clickUsername()
                 .inputText("Stephen")
                 .clickOKOnDialog()
-                .pressBack(new UserAndDeviceIdentitySettingsPage(rule))
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new UserAndDeviceIdentitySettingsPage())
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Stephen");
     }
 
     @Test
     public void deviceIdentifiersAreDisplayedInSettings() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickUserAndDeviceIdentity()
@@ -108,7 +107,7 @@ public class FormMetadataTest {
 
     @Test
     public void deviceIdentifiersCanBeIncludedInAForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Metadata")
                 .scrollToAndAssertText(deviceDetailsProvider.getDeviceId());
     }

@@ -1,10 +1,11 @@
-package org.odk.collect.android.feature.formmanagement;
+package org.odk.collect.android.feature.external;
 
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -24,9 +25,11 @@ public class AndroidShortcutsTest {
     CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain testRuleChain = TestRuleChain.chain().around(rule);
+    public RuleChain testRuleChain = TestRuleChain.chain()
+            .around(rule);
 
     @Test
+    @Ignore("See comment in #pickAndLaunchShortcutForForm")
     public void canFillOutFormFromShortcut() {
         rule.mainMenu()
                 .copyForm("one-question.xml")
@@ -42,7 +45,10 @@ public class AndroidShortcutsTest {
         Intent resultData = scenario.getResult().getResultData();
         Intent shortcutIntent = resultData.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 
-        rule.getActivity().startActivity(shortcutIntent);
-        return new FormEntryPage(formName, rule);
+         /*
+        This launch call doesn't work because of: https://github.com/android/android-test/issues/496
+         */
+        ActivityScenario.launch(shortcutIntent);
+        return new FormEntryPage(formName);
     }
 }

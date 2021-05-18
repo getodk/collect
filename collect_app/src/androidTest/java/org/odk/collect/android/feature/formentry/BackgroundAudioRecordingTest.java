@@ -143,7 +143,7 @@ public class BackgroundAudioRecordingTest {
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickSaveChanges();
     }
 
@@ -160,7 +160,7 @@ public class BackgroundAudioRecordingTest {
         assertThat(stubAudioRecorderViewModel.getLastRecording(), is(nullValue()));
 
         formEntryPage.closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickIgnoreChanges()
                 .startBlankForm("One Question");
 
@@ -176,10 +176,10 @@ public class BackgroundAudioRecordingTest {
                 .copyForm("one-question-background-audio.xml")
                 .startBlankFormWithDialog("One Question")
                 .assertText(R.string.background_audio_permission_explanation)
-                .clickOK(new FormEntryPage("One Question", rule));
+                .clickOK(new FormEntryPage("One Question"));
 
         permissionsProvider.deny();
-        new MainMenuPage(rule).assertOnPage();
+        new MainMenuPage().assertOnPage();
     }
 
     private static class RevokeableRecordAudioPermissionsChecker extends PermissionsChecker {
