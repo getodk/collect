@@ -70,7 +70,7 @@
     </style>
 
     <style name="Theme.Collect.Light.Spinner.DatePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
-        <item name="android:datePickerStyle">@style/Theme.Collect.Spinner.DatePicker</item>
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
     </style>
 
     <style name="Theme.Collect.Light.Spinner.TimePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
