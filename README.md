@@ -68,7 +68,7 @@ All pull requests are verified on the following devices (ordered by Android vers
 * [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1 (used irregularly)
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
 * [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
-* [Samsung Galaxy M11 SM-M115F/DSN](https://www.gsmarena.com/samsung_galaxy_m11-10124.php) - Andorid 10
+* [Samsung Galaxy M11 SM-M115F/DSN](https://www.gsmarena.com/samsung_galaxy_m11-10124.php) - Andorid 10.0
 * [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 11.0
 
 Our regular code contributors use these devices (ordered by Android version):
