@@ -28,7 +28,7 @@ public class QuickSaveTest {
                 .inputText("123")
                 .clickSave()
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickIgnoreChanges()
 
                 .clickEditSavedForm(1)
@@ -67,7 +67,7 @@ public class QuickSaveTest {
                 .inputText("456")
                 .clickSave()
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickIgnoreChanges()
 
                 .clickEditSavedForm(1)
@@ -91,7 +91,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .inputText("789")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickIgnoreChanges()
 
                 .clickEditSavedForm(1)

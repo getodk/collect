@@ -1,7 +1,6 @@
 package org.odk.collect.android.support.pages;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 
@@ -19,10 +18,6 @@ import static org.hamcrest.CoreMatchers.not;
 
 public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
-    public GeneralSettingsPage(ActivityTestRule rule) {
-        super(rule);
-    }
-
     @Override
     public GeneralSettingsPage assertOnPage() {
         assertText(R.string.general_preferences);
@@ -31,7 +26,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
     public UserInterfacePage clickOnUserInterface() {
         clickOnString(R.string.client);
-        return new UserInterfacePage(rule).assertOnPage();
+        return new UserInterfacePage().assertOnPage();
     }
 
     public GeneralSettingsPage openFormManagement() {
@@ -51,18 +46,18 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
     public ServerSettingsPage clickServerSettings() {
         clickOnString(R.string.server_settings_title);
-        return new ServerSettingsPage(rule).assertOnPage();
+        return new ServerSettingsPage().assertOnPage();
     }
 
     public MapsSettingsPage clickMaps() {
         clickOnString(R.string.maps);
-        return new MapsSettingsPage(rule).assertOnPage();
+        return new MapsSettingsPage().assertOnPage();
     }
 
 
     public UserAndDeviceIdentitySettingsPage clickUserAndDeviceIdentity() {
         clickOnString(R.string.user_and_device_identity_title);
-        return new UserAndDeviceIdentitySettingsPage(rule).assertOnPage();
+        return new UserAndDeviceIdentitySettingsPage().assertOnPage();
     }
 
     public GeneralSettingsPage checkIfServerOptionIsDisplayed() {
@@ -118,11 +113,11 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
 
     public FormManagementPage clickFormManagement() {
         onView(withText(getTranslatedString(R.string.form_management_preferences))).perform(click());
-        return new FormManagementPage(rule);
+        return new FormManagementPage();
     }
 
     public ExperimentalPage clickExperimental() {
         onView(withText(getTranslatedString(R.string.experimental))).perform(click());
-        return new ExperimentalPage(rule).assertOnPage();
+        return new ExperimentalPage().assertOnPage();
     }
 }

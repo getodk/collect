@@ -1,22 +1,20 @@
 package org.odk.collect.android.feature.formentry;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.FormLoadingUtils;
 
 public class ContextMenuTest {
     private static final String STRING_WIDGETS_TEST_FORM = "string_widgets_in_field_list.xml";
 
     @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(STRING_WIDGETS_TEST_FORM);
+    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(STRING_WIDGETS_TEST_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -25,7 +23,7 @@ public class ContextMenuTest {
 
     @Test
     public void whenRemoveStringAnswer_ShouldAppropriateQuestionBeCleared() {
-        new FormEntryPage("string_widgets", activityTestRule)
+        new FormEntryPage("string_widgets")
                 .putTextOnIndex(0, "TestString")
                 .putTextOnIndex(1, "1234")
                 .assertText("TestString")
@@ -44,7 +42,7 @@ public class ContextMenuTest {
 
     @Test
     public void whenLongPressedOnEditText_ShouldNotRemoveAnswerOptionAppear() {
-        new FormEntryPage("string_widgets", activityTestRule)
+        new FormEntryPage("string_widgets")
                 .longPressOnView(R.id.answer_container, 0)
                 .assertTextDoesNotExist(R.string.clear_answer);
     }

@@ -28,11 +28,11 @@ public class RequiredQuestionTest {
     public void requiredQuestions_ShouldDisplayAsterisk() {
 
         //TestCase1
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("required")
                 .assertText("* Foo")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage()))
                 .clickIgnoreChanges();
     }
 
@@ -40,12 +40,12 @@ public class RequiredQuestionTest {
     public void requiredQuestions_ShouldDisplayCustomMessage() {
 
         //TestCase2
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("required")
                 .swipeToNextQuestion()
                 .checkIsToastWithMessageDisplayed("Custom required message")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage()))
                 .clickIgnoreChanges();
     }
 }

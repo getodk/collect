@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.settings;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -8,8 +7,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
@@ -23,10 +23,11 @@ public class ServerSettingsTest {
 
     private final TestDependencies testDependencies = new TestDependencies();
 
-    public IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
+    public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
+            .around(new RecordedIntentsRule())
             .around(rule);
 
     @Test
@@ -34,7 +35,7 @@ public class ServerSettingsTest {
         testDependencies.server.setCredentials("Joe", "netsky");
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        new MainMenuPage(rule).assertOnPage()
+        new MainMenuPage().assertOnPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
@@ -50,13 +51,13 @@ public class ServerSettingsTest {
                 .inputText("netsky")
                 .clickOKOnDialog()
                 .assertText("********")
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one-question) - Success")
-                .clickOK(new MainMenuPage(rule));
+                .clickOK(new MainMenuPage());
     }
 
     /**
@@ -67,7 +68,7 @@ public class ServerSettingsTest {
      */
     @Test
     public void selectingGoogleAccount_showsGoogleAccountSettings() {
-        new MainMenuPage(rule).assertOnPage()
+        new MainMenuPage().assertOnPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickServerSettings()
@@ -79,7 +80,7 @@ public class ServerSettingsTest {
 
     @Test
     public void selectingGoogleAccount_disablesAutomaticUpdates() {
-        MainMenuPage mainMenu = new MainMenuPage(rule).assertOnPage()
+        MainMenuPage mainMenu = new MainMenuPage().assertOnPage()
                 .enablePreviouslyDownloadedOnlyUpdates();
         assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(1));
 

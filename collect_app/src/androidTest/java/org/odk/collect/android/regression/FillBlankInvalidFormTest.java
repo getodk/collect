@@ -34,7 +34,7 @@ public class FillBlankInvalidFormTest {
     @Test
     public void brokenForms_shouldNotBeVisibleOnFOrmList() {
         //TestCase53
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .checkIsSnackbarErrorVisible()
                 .assertTextDoesNotExist("Invalid events")

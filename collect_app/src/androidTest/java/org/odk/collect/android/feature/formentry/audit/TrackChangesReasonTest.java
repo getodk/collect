@@ -8,8 +8,8 @@ import org.junit.rules.RuleChain;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
@@ -37,7 +37,7 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -54,7 +54,7 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andPressingBack_returnsToForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -66,13 +66,13 @@ public class TrackChangesReasonTest {
                 .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
-                .pressBack(new FormEntryPage("Track Changes Reason", rule))
+                .pressBack(new FormEntryPage("Track Changes Reason"))
                 .assertText(R.string.save_form_as);
     }
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andClickingCross_returnsToForm() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -84,13 +84,13 @@ public class TrackChangesReasonTest {
                 .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .closeSoftKeyboard()
-                .pressClose(new FormEntryPage("Track Changes Reason", rule))
+                .pressClose(new FormEntryPage("Track Changes Reason"))
                 .assertText(R.string.save_form_as);
     }
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andRotating_remainsOnPrompt() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -102,7 +102,7 @@ public class TrackChangesReasonTest {
                 .swipeToEndScreen()
                 .clickSaveAndExitWithChangesReasonPrompt()
                 .enterReason("Something")
-                .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason", rule))
+                .rotateToLandscape(new ChangesReasonPromptPage("Track Changes Reason"))
                 .assertText("Something")
                 .closeSoftKeyboard()
                 .clickSave();
@@ -110,7 +110,7 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andPressingBack_andClickingSaveChanges_promptsForReason() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -120,13 +120,13 @@ public class TrackChangesReasonTest {
                 .clickGoToStart()
                 .inputText("Nothing much!")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new ChangesReasonPromptPage("Track Changes Reason", rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new ChangesReasonPromptPage("Track Changes Reason")))
                 .clickSaveChanges();
     }
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andPressingBack_andIgnoringChanges_returnsToMainMenu() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -136,13 +136,13 @@ public class TrackChangesReasonTest {
                 .clickGoToStart()
                 .inputText("Nothing much!")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new MainMenuPage(rule), rule))
+                .pressBack(new SaveOrIgnoreDialog<>("Track Changes Reason", new MainMenuPage()))
                 .clickIgnoreChanges();
     }
 
     @Test
     public void openingAFormToEdit_andNotChangingAValue_andClickingSaveAndExit_returnsToMainMenu() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -157,7 +157,7 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingFormToEdit_andChangingValue_andClickingSave_promptsForReason() {
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -168,7 +168,7 @@ public class TrackChangesReasonTest {
                 .inputText("Nothing much!")
                 .clickSaveWithChangesReasonPrompt()
                 .enterReason("Bah")
-                .clickSave(new FormEntryPage("Track Changes Reason", rule))
+                .clickSave(new FormEntryPage("Track Changes Reason"))
                 .assertQuestion("What up?");
     }
 }

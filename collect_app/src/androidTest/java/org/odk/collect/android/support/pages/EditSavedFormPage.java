@@ -19,7 +19,6 @@ package org.odk.collect.android.support.pages;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.test.rule.ActivityTestRule;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
@@ -37,9 +36,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
-    public EditSavedFormPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public EditSavedFormPage assertOnPage() {
@@ -51,30 +47,30 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
         int desiredImageId = InstanceListCursorAdapter.getFormStateImageResourceIdForStatus(desiredStatus);
 
         onView(allOf(instanceOf(RelativeLayout.class),
-                    hasDescendant(withText(instanceName)),
-                    not(hasDescendant(instanceOf(Toolbar.class)))))
+                hasDescendant(withText(instanceName)),
+                not(hasDescendant(instanceOf(Toolbar.class)))))
                 .check(matches(hasDescendant(withTagValue(equalTo(desiredImageId)))));
         return this;
     }
 
     public OkDialog clickOnFormWithDialog(String instanceName) {
         clickOnForm(instanceName);
-        return new OkDialog(rule).assertOnPage();
+        return new OkDialog().assertOnPage();
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {
         scrollToAndClickOnForm(formName);
-        return new IdentifyUserPromptPage(formName, rule).assertOnPage();
+        return new IdentifyUserPromptPage(formName).assertOnPage();
     }
 
     public FormHierarchyPage clickOnForm(String formName, String instanceName) {
         scrollToAndClickOnForm(instanceName);
-        return new FormHierarchyPage(formName, rule);
+        return new FormHierarchyPage(formName);
     }
 
     public FormHierarchyPage clickOnForm(String formName) {
         scrollToAndClickOnForm(formName);
-        return new FormHierarchyPage(formName, rule);
+        return new FormHierarchyPage(formName);
     }
 
     private void scrollToAndClickOnForm(String formName) {

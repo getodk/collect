@@ -1,15 +1,12 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 public class ExitFormDialog extends Page<ExitFormDialog> {
 
     private final String formName;
 
-    public ExitFormDialog(String formName, ActivityTestRule rule) {
-        super(rule);
+    public ExitFormDialog(String formName) {
         this.formName = formName;
     }
 

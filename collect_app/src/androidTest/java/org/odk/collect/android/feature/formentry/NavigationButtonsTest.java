@@ -63,8 +63,8 @@ public class NavigationButtonsTest {
                 .clickFormEntrySettings()
                 .clickMovingBackwards()
                 .clickOnString(R.string.yes)
-                .pressBack(new AdminSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new AdminSettingsPage())
+                .pressBack(new MainMenuPage())
 
                 .copyForm("two-question.xml")
 
@@ -89,8 +89,8 @@ public class NavigationButtonsTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickSwipes()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new MainMenuPage())
                 .copyForm("two-question.xml")
 
                 .startBlankForm("Two Question")

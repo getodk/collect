@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -11,10 +9,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class ResetApplicationDialog extends Page<ResetApplicationDialog> {
-
-    public ResetApplicationDialog(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public ResetApplicationDialog assertOnPage() {

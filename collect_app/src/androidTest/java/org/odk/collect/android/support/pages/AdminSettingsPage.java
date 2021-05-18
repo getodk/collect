@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -11,10 +9,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
-
-    public AdminSettingsPage(ActivityTestRule rule) {
-        super(rule);
-    }
 
     @Override
     public AdminSettingsPage assertOnPage() {
@@ -29,7 +23,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     public GeneralSettingsPage clickGeneralSettings() {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.general_preferences));
-        return new GeneralSettingsPage(rule).assertOnPage();
+        return new GeneralSettingsPage().assertOnPage();
     }
 
 
@@ -60,7 +54,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     public QRCodePage clickConfigureQR() {
         clickOnString(R.string.configure_via_qr_code);
-        return new QRCodePage(rule).assertOnPage();
+        return new QRCodePage().assertOnPage();
     }
 
     public AdminSettingsPage setProjectName(String projectName) {
@@ -87,12 +81,12 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     public MainMenuPage deleteProject() {
         clickOnString(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
-        return new MainMenuPage(rule);
+        return new MainMenuPage();
     }
 
     public FirstLaunchDialogPage deleteLastProject() {
         clickOnString(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
-        return new FirstLaunchDialogPage(rule);
+        return new FirstLaunchDialogPage();
     }
 }

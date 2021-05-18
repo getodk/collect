@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.test.rule.ActivityTestRule;
-
 import org.odk.collect.android.R;
 
 public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDialog<D>> {
@@ -9,8 +7,7 @@ public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDial
     private final String formName;
     private final D destination;
 
-    public SaveOrIgnoreDialog(String title, D destination, ActivityTestRule rule) {
-        super(rule);
+    public SaveOrIgnoreDialog(String title, D destination) {
         this.formName = title;
         this.destination = destination;
     }

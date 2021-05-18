@@ -11,7 +11,6 @@ import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
@@ -38,9 +37,9 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -78,12 +77,6 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
 
 abstract class Page<T extends Page<T>> {
 
-    final ActivityTestRule rule;
-
-    Page(ActivityTestRule rule) {
-        this.rule = rule;
-    }
-
     public abstract T assertOnPage();
 
     public <P extends Page<P>> P assertOnPage(P page) {
@@ -104,7 +97,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T assertText(String...  text) {
+    public T assertText(String... text) {
         closeSoftKeyboard();
         for (String t : text) {
             onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()));
@@ -114,6 +107,11 @@ abstract class Page<T extends Page<T>> {
 
     public T assertText(int stringID) {
         assertText(getTranslatedString(stringID));
+        return (T) this;
+    }
+
+    public T assertText(int stringID, Object... formatArgs) {
+        assertText(getTranslatedString(stringID, formatArgs));
         return (T) this;
     }
 
@@ -142,7 +140,7 @@ abstract class Page<T extends Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string));
     }
 
-    public T assertTextDoesNotExist(String...  text) {
+    public T assertTextDoesNotExist(String... text) {
         for (String t : text) {
             onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist());
         }
@@ -288,7 +286,7 @@ abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    private static Activity getCurrentActivity() {
+    public static Activity getCurrentActivity() {
         getInstrumentation().waitForIdleSync();
 
         final Activity[] activity = new Activity[1];

@@ -1,29 +1,47 @@
 package org.odk.collect.android.support;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.rule.ActivityTestRule;
+import androidx.test.core.app.ActivityScenario;
 
-import org.odk.collect.android.activities.MainMenuActivity;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
-public class CollectTestRule extends ActivityTestRule<MainMenuActivity> {
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+public class CollectTestRule implements TestRule {
+
+    private final boolean skipProject;
 
     public CollectTestRule() {
-        super(MainMenuActivity.class);
+        this(true);
+    }
+
+    public CollectTestRule(boolean skipProject) {
+        this.skipProject = skipProject;
+    }
+
+    @Override
+    public Statement apply(Statement base, Description description) {
+        return new Statement() {
+            @Override
+            public void evaluate() throws Throwable {
+                ActivityScenario.launch(SplashScreenActivity.class);
+
+                if (skipProject) {
+                    onView(withText(R.string.configure_later)).perform(click());
+                }
+
+                base.evaluate();
+            }
+        };
     }
 
     public MainMenuPage mainMenu() {
-        return new MainMenuPage(this).assertOnPage();
-    }
-
-    public static class StubbedIntents extends IntentsTestRule<MainMenuActivity> {
-
-        public StubbedIntents() {
-            super(MainMenuActivity.class);
-        }
-
-        public MainMenuPage mainMenu() {
-            return new MainMenuPage(this).assertOnPage();
-        }
+        return new MainMenuPage().assertOnPage();
     }
 }

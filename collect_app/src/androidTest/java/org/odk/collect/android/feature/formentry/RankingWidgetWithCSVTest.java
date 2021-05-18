@@ -1,15 +1,13 @@
 package org.odk.collect.android.feature.formentry;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.FormLoadingUtils;
 
 import java.util.Collections;
 
@@ -23,11 +21,11 @@ public class RankingWidgetWithCSVTest {
             .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv")));
 
     @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Test
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
-        new FormEntryPage("ranking_widget", activityTestRule)
+        new FormEntryPage("ranking_widget")
                 .clickRankingButton()
                 .assertText("Mango", "Oranges", "Strawberries");
     }

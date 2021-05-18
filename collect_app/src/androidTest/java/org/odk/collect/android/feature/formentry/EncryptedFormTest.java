@@ -20,25 +20,25 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
+import org.odk.collect.forms.instances.Instance;
 
 public class EncryptedFormTest {
 
     TestDependencies testDependencies = new TestDependencies();
 
-    @Rule
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
             .around(new CopyFormRule("encrypted.xml"))
-            .around(new CopyFormRule("encrypted-no-instanceID.xml"));
+            .around(new CopyFormRule("encrypted-no-instanceID.xml"))
+            .around(rule);
 
     @Test
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
@@ -67,8 +67,8 @@ public class EncryptedFormTest {
                 .clickSendFinalizedForm(1)
                 .clickOnForm("encrypted")
                 .clickSendSelected()
-                .clickOK(new SendFinalizedFormPage(rule))
-                .pressBack(new MainMenuPage(rule))
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
 
                 .clickViewSentForm(1)
                 .clickOnText("encrypted")

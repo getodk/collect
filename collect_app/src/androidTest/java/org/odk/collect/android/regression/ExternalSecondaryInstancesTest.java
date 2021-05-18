@@ -30,7 +30,7 @@ public class ExternalSecondaryInstancesTest {
     public void external_ShouldFillTheForm() {
 
         //TestCase1
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("external select 10")
                 .clickOnText("b")
                 .swipeToNextQuestion()
@@ -43,7 +43,7 @@ public class ExternalSecondaryInstancesTest {
     public void internal_ShouldFillTheForm() {
 
         //TestCase2
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .startBlankForm("internal select 10")
                 .clickOnText("c")
                 .swipeToNextQuestion()

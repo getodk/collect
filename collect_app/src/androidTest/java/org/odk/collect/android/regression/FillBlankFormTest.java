@@ -67,7 +67,7 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("All_widgets.xml")
                 .startBlankForm("All widgets")
-                .pressBack(new ExitFormDialog("All widgets", rule))
+                .pressBack(new ExitFormDialog("All widgets"))
                 .assertText(R.string.keep_changes)
                 .assertText(R.string.do_not_save)
                 .clickOnString(R.string.do_not_save)
@@ -78,12 +78,12 @@ public class FillBlankFormTest {
     @Test
     public void searchBar_ShouldSearchForm() {
         //TestCase12
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .clickFillBlankForm()
                 .clickMenuFilter()
                 .searchInBar("Aaa")
-                .pressBack(new BlankFormSearchPage(rule))
-                .pressBack(new FillBlankFormPage(rule));
+                .pressBack(new BlankFormSearchPage())
+                .pressBack(new FillBlankFormPage());
     }
 
     @Test
@@ -98,8 +98,8 @@ public class FillBlankFormTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage(rule))
-                .pressBack(new FormEntryPage("All widgets", rule))
+                .pressBack(new GeneralSettingsPage())
+                .pressBack(new FormEntryPage("All widgets"))
                 .checkAreNavigationButtonsDisplayed();
     }
 
@@ -133,7 +133,7 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("formulaire_adherent.xml", singletonList("espece.csv"))
                 .startBlankFormWithRepeatGroup("formulaire_adherent", "Ajouté une observation")
-                .clickOnAdd(new FormEntryPage("formulaire_adherent", rule))
+                .clickOnAdd(new FormEntryPage("formulaire_adherent"))
                 .clickOnText("Plante")
                 .inputText("Abi")
                 .swipeToNextQuestion("Nom latin de l'espece", true)
@@ -191,7 +191,7 @@ public class FillBlankFormTest {
         pressBack();
         pressBack();
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
@@ -334,7 +334,7 @@ public class FillBlankFormTest {
         List<String> secondQuestionAnswers = new ArrayList<>();
 
         for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage(rule).startBlankForm("random");
+            FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion();
             secondQuestionAnswers.add(getQuestionText());
@@ -352,7 +352,7 @@ public class FillBlankFormTest {
         firstQuestionAnswers.clear();
 
         for (int i = 1; i <= 3; i++) {
-            FormEntryPage formEntryPage = new MainMenuPage(rule).startBlankForm("random test");
+            FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random test");
             formEntryPage.inputText("3");
             formEntryPage.swipeToNextQuestion();
             firstQuestionAnswers.add(getQuestionText());
@@ -370,30 +370,30 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("g6Error.xml")
                 .startBlankFormWithError("g6Error")
-                .clickOK(new FormEntryPage("g6Error", rule))
+                .clickOK(new FormEntryPage("g6Error"))
                 .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("g6Error2.xml")
                 .startBlankForm("g6Error2")
                 .inputText("bla")
                 .swipeToNextQuestionWithError()
-                .clickOK(new FormEntryPage("g6Error2", rule))
+                .clickOK(new FormEntryPage("g6Error2"))
                 .swipeToEndScreen()
                 .inputText("ble")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("emptyGroupFieldList.xml")
                 .clickFillBlankForm()
                 .clickOnEmptyForm("emptyGroupFieldList")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("emptyGroupFieldList2.xml")
                 .startBlankForm("emptyGroupFieldList2")
                 .inputText("nana")
@@ -416,7 +416,7 @@ public class FillBlankFormTest {
     @Test
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
         //TestCase23
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("manyQ.xml")
                 .startBlankForm("manyQ")
                 .swipeToNextQuestion("t2")
@@ -430,7 +430,7 @@ public class FillBlankFormTest {
     @Test
     public void bigForm_ShouldBeFilledSuccessfully() {
         //TestCase18
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .copyForm("nigeria-wards.xml")
                 .startBlankForm("Nigeria Wards")
                 .assertQuestion("State")
@@ -524,27 +524,27 @@ public class FillBlankFormTest {
                 .startBlankForm("Event: odk-new-repeat")
                 .inputText("3")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat", rule))
+                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
                 .assertText("1")
                 .swipeToNextQuestion("B value")
                 .assertText("5")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat", rule))
+                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
                 .assertText("2")
                 .swipeToNextQuestion("B value")
                 .assertText("5")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat", rule))
+                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
                 .assertText("3")
                 .swipeToNextQuestion("B value")
                 .assertText("5")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat", rule))
+                .clickOnAdd(new FormEntryPage("Event: odk-new-repeat"))
                 .assertText("4")
                 .swipeToNextQuestion("B value")
                 .assertText("5")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnDoNotAdd(new FormEntryPage("Event: odk-new-repeat", rule))
+                .clickOnDoNotAdd(new FormEntryPage("Event: odk-new-repeat"))
                 .inputText("2")
                 .swipeToNextQuestion("A value")
                 .assertText("1")
@@ -553,7 +553,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("C value")
                 .swipeToNextQuestion("C value")
                 .swipeToNextQuestionWithRepeatGroup("null")
-                .clickOnDoNotAdd(new FormEndPage("Event: odk-new-repeat", rule))
+                .clickOnDoNotAdd(new FormEndPage("Event: odk-new-repeat"))
                 .clickSaveAndExit();
     }
 
@@ -578,7 +578,7 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("CalcTest.xml")
                 .startBlankFormWithRepeatGroup("CalcTest", "Fishing gear type")
-                .clickOnAdd(new FormEntryPage("CalcTest", rule))
+                .clickOnAdd(new FormEntryPage("CalcTest"))
                 .clickOnText("Gillnet")
                 .swipeToNextQuestion("7.2 What is the size of the mesh for the Gillnet ?", true)
                 .swipeToPreviousQuestion("7.1 Select the type of fishing equipment used today to catch the fish present", true)
@@ -643,9 +643,9 @@ public class FillBlankFormTest {
                 .clickOnId(R.id.save_name)
                 .inputText("submission")
                 .closeSoftKeyboard()
-                .rotateToLandscape(new FormEntryPage("All widgets", rule))
+                .rotateToLandscape(new FormEntryPage("All widgets"))
                 .assertText("submission")
-                .rotateToPortrait(new FormEntryPage("All widgets", rule))
+                .rotateToPortrait(new FormEntryPage("All widgets"))
                 .assertText("submission");
     }
 
@@ -692,13 +692,13 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("repeat_group_form.xml")
                 .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
-                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToLandscape(new FormEntryPage("Repeat Group", rule))
+                .rotateToLandscape(new FormEntryPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToPortrait(new FormEntryPage("Repeat Group", rule))
+                .rotateToPortrait(new FormEntryPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
 
@@ -708,7 +708,7 @@ public class FillBlankFormTest {
         rule.mainMenu()
                 .copyForm("repeat_group_form.xml")
                 .startBlankFormWithRepeatGroup("Repeat Group", "Grp1")
-                .clickOnDoNotAdd(new FormEntryPage("Repeat Group", rule))
+                .clickOnDoNotAdd(new FormEntryPage("Repeat Group"))
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickGoToArrow()

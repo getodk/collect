@@ -34,8 +34,7 @@ public class DeleteFilledFormTest {
                 .clickDeleteSelected(1)
                 .clickDeleteForms()
                 .assertTextDoesNotExist("One Question")
-
-                .pressBack(new MainMenuPage(rule))
+                .pressBack(new MainMenuPage())
                 .assertNumberOfFinalizedForms(0);
     }
 }

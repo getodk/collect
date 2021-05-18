@@ -7,23 +7,32 @@ import androidx.preference.Preference;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.gson.Gson;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.projects.InMemProjectsRepository;
+import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.UUIDGenerator;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
 import timber.log.Timber;
 
 import static junit.framework.Assert.assertFalse;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -43,6 +52,23 @@ public class AdminPreferencesActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        InMemProjectsRepository projectsRepository = new InMemProjectsRepository(new UUIDGenerator());
+        Project project = new Project("name", "icon", "#ffffff", "id");
+        projectsRepository.save(project);
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ProjectsRepository providesProjectsRepository(UUIDGenerator uuidGenerator, Gson gson, SettingsProvider settingsProvider) {
+                return projectsRepository;
+            }
+
+            @Override
+            public CurrentProjectProvider providesCurrentProjectProvider(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+                CurrentProjectProvider currentProjectProvider = super.providesCurrentProjectProvider(settingsProvider, projectsRepository);
+                currentProjectProvider.setCurrentProject(project.getUuid());
+                return currentProjectProvider;
+            }
+        });
+
         activityController = Robolectric
                 .buildActivity(AdminPreferencesActivity.class)
                 .setup();

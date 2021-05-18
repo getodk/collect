@@ -25,7 +25,7 @@ public class UserSettingsTest {
     @Test
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
-        new MainMenuPage(rule)
+        new MainMenuPage()
                 .openProjectSettingsDialog()
                 .clickAdminSettings()
                 .openUserSettings()

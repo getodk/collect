@@ -1,12 +1,10 @@
 package org.odk.collect.android.feature.formentry;
 
-import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -17,7 +15,7 @@ public class ExternalCsvSearchTest {
 
     private static final String EXTERNAL_CSV_SEARCH_FORM = "external-csv-search.xml";
 
-    public IntentsTestRule<FormEntryActivity> rule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
+    public FormActivityTestRule rule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -27,7 +25,7 @@ public class ExternalCsvSearchTest {
 
     @Test
     public void search_withoutFilter_displaysAllChoices() {
-        new FormEntryPage("external-csv-search", rule).assertOnPage()
+        new FormEntryPage("external-csv-search").assertOnPage()
                 .assertText("Artichoke")
                 .assertText("Apple")
                 .assertText("Banana")
@@ -39,7 +37,7 @@ public class ExternalCsvSearchTest {
     @Test
     // Regression: https://github.com/getodk/collect/issues/3132
     public void search_withFilter_showsMatchingChoices() {
-        new FormEntryPage("external-csv-search", rule).assertOnPage()
+        new FormEntryPage("external-csv-search").assertOnPage()
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")
                 .swipeToNextQuestion("Produce")

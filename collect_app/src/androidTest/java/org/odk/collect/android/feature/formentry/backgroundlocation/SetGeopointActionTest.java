@@ -3,20 +3,20 @@ package org.odk.collect.android.feature.formentry.backgroundlocation;
 import android.Manifest;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.Espresso;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.ResetStateRule;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -25,14 +25,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class SetGeopointActionTest {
     private static final String SETGEOPOINT_ACTION_FORM = "setgeopoint-action.xml";
 
-    @Rule
-    public IntentsTestRule<FormEntryActivity> activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(SETGEOPOINT_ACTION_FORM);
+    public FormActivityTestRule rule = FormLoadingUtils.getFormActivityTestRuleFor(SETGEOPOINT_ACTION_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, true));
+            .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, true))
+            .around(rule);
 
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {
@@ -42,7 +42,7 @@ public class SetGeopointActionTest {
 
     @Test
     public void locationCollectionToggle_ShouldBeAvailable() {
-        openActionBarOverflowOrOptionsMenu(activityTestRule.getActivity());
+        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
         onView(withText(R.string.track_location)).check(matches(isDisplayed()));
     }
 }
