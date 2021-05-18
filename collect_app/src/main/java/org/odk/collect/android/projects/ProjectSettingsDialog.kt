@@ -40,7 +40,7 @@ class ProjectSettingsDialog : DialogFragment() {
     @Inject
     lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
 
-    private lateinit var binding: ProjectSettingsDialogLayoutBinding
+    lateinit var binding: ProjectSettingsDialogLayoutBinding
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
