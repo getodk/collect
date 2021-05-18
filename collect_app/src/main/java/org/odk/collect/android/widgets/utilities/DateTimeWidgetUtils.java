@@ -193,7 +193,7 @@ public class DateTimeWidgetUtils {
         ThemeUtils themeUtils = new ThemeUtils(context);
 
         Bundle bundle = new Bundle();
-        bundle.putInt(DIALOG_THEME, themeUtils.getSpinnerDatePickerDialogTheme());
+        bundle.putInt(DIALOG_THEME, themeUtils.getSpinnerTimePickerDialogTheme());
         bundle.putSerializable(TIME, dateTime);
 
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FragmentActivity) context).getSupportFragmentManager());

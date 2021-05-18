@@ -112,6 +112,13 @@ public final class ThemeUtils {
                 R.style.Theme_Collect_Light_Spinner_DatePicker_Dialog;
     }
 
+    @StyleRes
+    public int getSpinnerTimePickerDialogTheme() {
+        return isDarkTheme() ?
+                R.style.Theme_Collect_Dark_Spinner_TimePicker_Dialog :
+                R.style.Theme_Collect_Light_Spinner_TimePicker_Dialog;
+    }
+
     private int getAttributeValue(@AttrRes int resId) {
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(resId, outValue, true);

@@ -72,4 +72,12 @@
     <style name="Theme.Collect.Light.Spinner.DatePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
         <item name="android:datePickerStyle">@style/Theme.Collect.Spinner.DatePicker</item>
     </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/Theme.Collect.Light.Spinner.TimePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
 </resources>
