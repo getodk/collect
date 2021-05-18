@@ -75,4 +75,8 @@
         <item name="android:background">?attr/colorPrimary</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
+
+    <style name="Theme.Collect.Dark.Spinner.DatePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
+        <item name="android:datePickerStyle">@style/Theme.Collect.Spinner.DatePicker</item>
+    </style>
 </resources>

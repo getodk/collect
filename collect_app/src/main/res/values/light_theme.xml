@@ -68,4 +68,8 @@
         <item name="colorAccent">?attr/colorSecondary</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
+
+    <style name="Theme.Collect.Light.Spinner.DatePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@style/Theme.Collect.Spinner.DatePicker</item>
+    </style>
 </resources>

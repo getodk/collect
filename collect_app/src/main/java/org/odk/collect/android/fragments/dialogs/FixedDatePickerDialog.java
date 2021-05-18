@@ -5,13 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.Window;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
@@ -65,16 +62,11 @@ public class FixedDatePickerDialog extends DialogFragment {
         DatePickerDialog dialog = new DatePickerDialog(requireActivity(), viewModel.getDialogTheme(), viewModel.getDateSetListener(),
                 viewModel.getLocalDateTime().getYear(), viewModel.getLocalDateTime().getMonthOfYear() - 1, viewModel.getLocalDateTime().getDayOfMonth());
 
-        if (themeUtils.isHoloDialogTheme(viewModel.getDialogTheme())) {
+        if (themeUtils.isSpinnerDatePickerDialogTheme(viewModel.getDialogTheme())) {
             dialog.setTitle(requireContext().getString(R.string.select_date));
             fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getYear(), viewModel.getLocalDateTime().getMonthOfYear() - 1,
                     viewModel.getLocalDateTime().getDayOfMonth());
             hidePickersIfNeeded(dialog, viewModel.getLocalDateTime());
-
-            Window window = dialog.getWindow();
-            if (window != null) {
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            }
 
             //noinspection deprecation
             dialog.getDatePicker().setCalendarViewShown(false);

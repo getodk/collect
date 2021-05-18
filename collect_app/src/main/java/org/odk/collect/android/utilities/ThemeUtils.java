@@ -93,9 +93,9 @@ public final class ThemeUtils {
         return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;
     }
 
-    public boolean isHoloDialogTheme(int theme) {
-        return theme == android.R.style.Theme_Holo_Light_Dialog ||
-                theme == android.R.style.Theme_Holo_Dialog;
+    public boolean isSpinnerDatePickerDialogTheme(int theme) {
+        return theme == R.style.Theme_Collect_Dark_Spinner_DatePicker_Dialog ||
+                theme == R.style.Theme_Collect_Light_Spinner_DatePicker_Dialog;
     }
 
     @StyleRes
@@ -106,10 +106,10 @@ public final class ThemeUtils {
     }
 
     @StyleRes
-    public int getHoloDialogTheme() {
+    public int getSpinnerDatePickerDialogTheme() {
         return isDarkTheme() ?
-                android.R.style.Theme_Holo_Dialog :
-                android.R.style.Theme_Holo_Light_Dialog;
+                R.style.Theme_Collect_Dark_Spinner_DatePicker_Dialog :
+                R.style.Theme_Collect_Light_Spinner_DatePicker_Dialog;
     }
 
     private int getAttributeValue(@AttrRes int resId) {
