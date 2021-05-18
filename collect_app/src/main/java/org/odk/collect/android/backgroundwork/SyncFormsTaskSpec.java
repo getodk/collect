@@ -7,7 +7,7 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.async.TaskSpec;
@@ -28,7 +28,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
     ServerFormsSynchronizer serverFormsSynchronizer;
 
     @Inject
-    SyncStatusRepository syncStatusRepository;
+    SyncStatusAppState syncStatusAppState;
 
     @Inject
     Notifier notifier;
@@ -48,16 +48,16 @@ public class SyncFormsTaskSpec implements TaskSpec {
         return () -> {
             changeLock.withLock((Function<Boolean, Void>) acquiredLock -> {
                 if (acquiredLock) {
-                    syncStatusRepository.startSync();
+                    syncStatusAppState.startSync();
 
                     FormSourceException exception = null;
                     try {
                         serverFormsSynchronizer.synchronize();
-                        syncStatusRepository.finishSync(null);
+                        syncStatusAppState.finishSync(null);
                         notifier.onSync(null);
                     } catch (FormSourceException e) {
                         exception = e;
-                        syncStatusRepository.finishSync(e);
+                        syncStatusAppState.finishSync(e);
                         notifier.onSync(e);
                     }
 

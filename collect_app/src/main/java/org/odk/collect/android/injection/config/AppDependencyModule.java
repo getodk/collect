@@ -61,11 +61,11 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
-import org.odk.collect.android.formmanagement.InstancesCountRepository;
+import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -385,8 +385,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public SyncStatusRepository providesServerFormSyncRepository() {
-        return new SyncStatusRepository();
+    public SyncStatusAppState providesServerFormSyncRepository(Context context) {
+        return new SyncStatusAppState(context);
     }
 
     @Provides
@@ -526,8 +526,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public InstancesCountRepository providesFormCountRepository() {
-        return new InstancesCountRepository();
+    public InstancesAppState providesInstancesAppState(Application application) {
+        return new InstancesAppState(application);
     }
 
     @Provides
@@ -586,8 +586,8 @@ public class AppDependencyModule {
 
     @Provides
     public MainMenuViewModel.Factory providesMainMenuViewModel(VersionInformation versionInformation, Application application,
-                                                               SettingsProvider settingsProvider, InstancesCountRepository instancesCountRepository) {
-        return new MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesCountRepository);
+                                                               SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+        return new MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState);
     }
 
     @Provides

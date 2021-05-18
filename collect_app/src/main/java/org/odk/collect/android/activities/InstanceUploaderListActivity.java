@@ -305,6 +305,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             selectedInstances.clear();
             return;
         }
+
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:

@@ -15,22 +15,23 @@
 package org.odk.collect.android.upload;
 
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.shared.Settings;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -83,7 +84,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 throw new UploadException(FAIL + "Host name may not be null");
             }
 
@@ -91,7 +92,7 @@ public class InstanceServerUploader extends InstanceUploader {
             try {
                 uri = URI.create(submissionUri.toString());
             } catch (IllegalArgumentException e) {
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.url_error));
             }
@@ -112,13 +113,13 @@ public class InstanceServerUploader extends InstanceUploader {
                 }
 
             } catch (Exception e) {
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 throw new UploadException(FAIL
                         + (e.getMessage() != null ? e.getMessage() : e.toString()));
             }
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 throw new UploadAuthRequestedException(TranslationHandler.getString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
@@ -139,20 +140,20 @@ public class InstanceServerUploader extends InstanceUploader {
                         } else {
                             // Don't follow a redirection attempt to a different host.
                             // We can't tell if this is a spoof or not.
-                            saveFailedStatusToDatabase(instance);
+                            submissionComplete(instance, false);
                             throw new UploadException(FAIL
                                     + "Unexpected redirection attempt to a different host: "
                                     + newURI.toString());
                         }
                     } catch (Exception e) {
-                        saveFailedStatusToDatabase(instance);
+                        submissionComplete(instance, false);
                         throw new UploadException(FAIL + urlString + " " + e.toString());
                     }
                 }
             } else {
                 if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
-                    saveFailedStatusToDatabase(instance);
+                    submissionComplete(instance, false);
                     throw new UploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
                             "submission endpoint? If you have a web proxy you may need to log in to " +
                             "your network.\n\nHEAD request result status code: " + headResult.getStatusCode());
@@ -174,7 +175,7 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
-            saveFailedStatusToDatabase(instance);
+            submissionComplete(instance, false);
             throw new UploadException(FAIL + "instance XML file does not exist!");
         }
 
@@ -191,7 +192,7 @@ public class InstanceServerUploader extends InstanceUploader {
         try {
             URI uri = URI.create(submissionUri.toString());
 
-            postResult = httpInterface.uploadSubmissionFile(files, submissionFile, uri,
+            postResult = httpInterface.uploadSubmissionAndFiles(submissionFile, files, uri,
                     webCredentialsUtils.getCredentials(uri), contentLength);
 
             int responseCode = postResult.getResponseCode();
@@ -215,17 +216,17 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
 
                 }
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 throw exception;
             }
 
         } catch (Exception e) {
-            saveFailedStatusToDatabase(instance);
+            submissionComplete(instance, false);
             throw new UploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
 
-        saveSuccessStatusToDatabase(instance);
+        submissionComplete(instance, true);
 
         if (messageParser.isValid()) {
             return messageParser.getMessageResponse();

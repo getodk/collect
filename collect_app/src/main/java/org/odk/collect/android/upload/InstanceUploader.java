@@ -17,13 +17,30 @@ package org.odk.collect.android.upload;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public abstract class InstanceUploader {
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    InstancesAppState instancesAppState;
+
+    public InstanceUploader() {
+        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
+    }
+
     public static final String FAIL = "Error: ";
 
     /**
@@ -51,17 +68,21 @@ public abstract class InstanceUploader {
         return instances;
     }
 
-    public void saveSuccessStatusToDatabase(Instance instance) {
-        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
-                .status(Instance.STATUS_SUBMITTED)
-                .build()
-        );
-    }
+    public void submissionComplete(Instance instance, boolean successful) {
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
 
-    public void saveFailedStatusToDatabase(Instance instance) {
-        new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
-                .status(Instance.STATUS_SUBMISSION_FAILED)
-                .build()
-        );
+        if (successful) {
+            instancesRepository.save(new Instance.Builder(instance)
+                    .status(Instance.STATUS_SUBMITTED)
+                    .build()
+            );
+        } else {
+            instancesRepository.save(new Instance.Builder(instance)
+                    .status(Instance.STATUS_SUBMISSION_FAILED)
+                    .build()
+            );
+        }
+
+        instancesAppState.update();
     }
 }

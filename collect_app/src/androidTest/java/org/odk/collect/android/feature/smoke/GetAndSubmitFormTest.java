@@ -13,6 +13,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 
 @RunWith(AndroidJUnit4.class)
 public class GetAndSubmitFormTest {
@@ -34,19 +35,28 @@ public class GetAndSubmitFormTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
         rule.mainMenu()
+                // Fetch form
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertText("One Question (Version:: 1 ID: one-question) - Success")
                 .clickOK(new MainMenuPage())
 
+                // Fill out form
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
+                // Send form
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
                 .clickSendSelected()
-                .assertText("One Question - Success");
+                .assertText("One Question - Success")
+                .clickOK(new SendFinalizedFormPage())
+                .assertTextDoesNotExist("One Question")
+
+                // Back to the start
+                .pressBack(new MainMenuPage())
+                .assertNumberOfFinalizedForms(0);
     }
 }

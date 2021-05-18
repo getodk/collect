@@ -1,6 +1,7 @@
 package org.odk.collect.android.backgroundwork;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,7 +15,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusRepository;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
@@ -37,7 +38,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 public class SyncFormsTaskSpecTest {
 
     private final ServerFormsSynchronizer serverFormsSynchronizer = mock(ServerFormsSynchronizer.class);
-    private final SyncStatusRepository syncStatusRepository = mock(SyncStatusRepository.class);
+    private final SyncStatusAppState syncStatusAppState = mock(SyncStatusAppState.class);
     private final Notifier notifier = mock(Notifier.class);
     private final Analytics analytics = mock(Analytics.class);
     private final BooleanChangeLock changeLock = new BooleanChangeLock();
@@ -57,8 +58,8 @@ public class SyncFormsTaskSpecTest {
             }
 
             @Override
-            public SyncStatusRepository providesServerFormSyncRepository() {
-                return syncStatusRepository;
+            public SyncStatusAppState providesServerFormSyncRepository(Context context) {
+                return syncStatusAppState;
             }
 
             @Override
@@ -75,15 +76,15 @@ public class SyncFormsTaskSpecTest {
 
     @Test
     public void setsRepositoryToSyncing_runsSync_thenSetsRepositoryToNotSyncingAndNotifies() throws Exception {
-        InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
+        InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
         Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
         task.get();
 
-        inOrder.verify(syncStatusRepository).startSync();
+        inOrder.verify(syncStatusAppState).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync(null);
+        inOrder.verify(syncStatusAppState).finishSync(null);
 
         verify(notifier).onSync(null);
     }
@@ -101,15 +102,15 @@ public class SyncFormsTaskSpecTest {
     public void whenSynchronizingFails_setsRepositoryToNotSyncingAndNotifiesWithError() throws Exception {
         FormSourceException exception = new FormSourceException.FetchError();
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
-        InOrder inOrder = inOrder(syncStatusRepository, serverFormsSynchronizer);
+        InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
         Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
         task.get();
 
-        inOrder.verify(syncStatusRepository).startSync();
+        inOrder.verify(syncStatusAppState).startSync();
         inOrder.verify(serverFormsSynchronizer).synchronize();
-        inOrder.verify(syncStatusRepository).finishSync(exception);
+        inOrder.verify(syncStatusAppState).finishSync(exception);
 
         verify(notifier).onSync(exception);
     }
@@ -135,7 +136,7 @@ public class SyncFormsTaskSpecTest {
         task.get();
 
         verifyNoInteractions(serverFormsSynchronizer);
-        verifyNoInteractions(syncStatusRepository);
+        verifyNoInteractions(syncStatusAppState);
         verifyNoInteractions(notifier);
     }
 }

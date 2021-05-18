@@ -29,7 +29,7 @@ public interface OpenRosaHttpInterface {
     /**
      * Creates a http connection and sets up an input stream.
      *
-     * @param uri of the stream
+     * @param uri         of the stream
      * @param contentType check the returned Mime Type to ensure it matches. "text/xml" causes a Hash to be calculated
      * @param credentials to use for this executeGetRequest request
      * @return HttpGetResult - An object containing the Stream, Hash and Headers
@@ -41,7 +41,7 @@ public interface OpenRosaHttpInterface {
     /**
      * Performs a Http Head request.
      *
-     * @param uri of which to perform a Http head
+     * @param uri         of which to perform a Http head
      * @param credentials to use for this head request
      * @return HttpHeadResult containing status code and headers
      * @throws Exception various Exceptions such as IOException can be thrown
@@ -50,21 +50,21 @@ public interface OpenRosaHttpInterface {
     HttpHeadResult executeHeadRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials) throws Exception;
 
     /**
-     * Uploads files to a Server.
+     * Uploads submission files and then list of other files to server
      *
-     * @param fileList List of Files to be uploaded
      * @param submissionFile The main file to be uploaded (Form file)
-     * @param uri where to send the submissionFile and fileList
-     * @param contentLength contentLength requested by the server
+     * @param fileList       List of Files to be uploaded
+     * @param uri            where to send the submissionFile and fileList
+     * @param contentLength  contentLength requested by the server
      * @return ResponseMessageParser object that contains the response XML
      * @throws IOException can be thrown if files do not exist
      */
     @NonNull
-    HttpPostResult uploadSubmissionFile(@NonNull List<File> fileList,
-                                        @NonNull File submissionFile,
-                                        @NonNull URI uri,
-                                        @Nullable HttpCredentialsInterface credentials,
-                                        @NonNull long contentLength) throws Exception;
+    HttpPostResult uploadSubmissionAndFiles(@NonNull File submissionFile,
+                                            @NonNull List<File> fileList,
+                                            @NonNull URI uri,
+                                            @Nullable HttpCredentialsInterface credentials,
+                                            @NonNull long contentLength) throws Exception;
 
     interface FileToContentTypeMapper {
 

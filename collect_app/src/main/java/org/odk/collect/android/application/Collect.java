@@ -29,12 +29,6 @@ import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.projects.DaggerProjectsDependencyComponent;
-import org.odk.collect.projects.ProjectsDependencyComponent;
-import org.odk.collect.projects.ProjectsDependencyComponentProvider;
-import org.odk.collect.projects.ProjectsDependencyModule;
-import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
@@ -43,7 +37,13 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.forms.Form;
+import org.odk.collect.projects.DaggerProjectsDependencyComponent;
+import org.odk.collect.projects.ProjectsDependencyComponent;
+import org.odk.collect.projects.ProjectsDependencyComponentProvider;
+import org.odk.collect.projects.ProjectsDependencyModule;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
@@ -78,6 +78,12 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
 
+    /**
+     * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
+     * should either have a {@link Context} instance passed to it (or have any references removed if
+     * possible).
+     */
+    @Deprecated
     public static Collect getInstance() {
         return singleton;
     }

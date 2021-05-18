@@ -22,7 +22,6 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -61,7 +60,6 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAG
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
@@ -90,12 +88,6 @@ public class FormsProvider extends ContentProvider {
     @Inject
     StoragePathProvider storagePathProvider;
 
-    public static void notifyChange() {
-        // Make sure content observers (CursorLoaders for instance) are notified of change
-        Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
-        Collect.getInstance().getContentResolver().notifyChange(CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
-    }
-
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
     private void deferDaggerInit() {
         DaggerUtils.getComponent(getContext()).inject(this);
@@ -114,26 +106,28 @@ public class FormsProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 cursor = databaseQuery(projection, selection, selectionArgs, sortOrder, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
+                break;
+
+            case NEWEST_FORMS_BY_FORM_ID:
+                Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
+                filteredProjectionMap.put(DATE, MAX_DATE);
+                cursor = databaseQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
+                cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
                 cursor = databaseQuery(null, _ID + "=?", new String[]{formId}, null, null);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
             // Only include the latest form that was downloaded with each form_id
-            case NEWEST_FORMS_BY_FORM_ID:
-                Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
-                filteredProjectionMap.put(DATE, MAX_DATE);
-                cursor = databaseQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
-                break;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        // Tell the cursor what uri to watch, so it knows when its source data changes
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 

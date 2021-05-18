@@ -34,12 +34,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.forms.Form;
 import org.odk.collect.android.gdrive.sheets.DriveApi;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.gdrive.sheets.SheetsHelper;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -49,6 +47,8 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,7 +101,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             Form form = forms.get(0);
             if (form.getBASE64RSAPublicKey() != null) {
-                saveFailedStatusToDatabase(instance);
+                submissionComplete(instance, false);
                 throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
             }
 
@@ -119,14 +119,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
         } catch (UploadException e) {
-            saveFailedStatusToDatabase(instance);
+            submissionComplete(instance, false);
             throw e;
         } catch (GoogleJsonResponseException e) {
-            saveFailedStatusToDatabase(instance);
+            submissionComplete(instance, false);
             throw new UploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
 
-        saveSuccessStatusToDatabase(instance);
+        submissionComplete(instance, true);
         // Google Sheets can't provide a custom success message
         return null;
     }
