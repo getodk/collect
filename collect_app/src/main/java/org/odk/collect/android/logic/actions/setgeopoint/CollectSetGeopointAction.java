@@ -23,12 +23,12 @@ import com.google.android.gms.location.LocationListener;
 import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.shared.Settings;
 
 import timber.log.Timber;
 
@@ -63,7 +63,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     // Needed to set the action name.
     CollectSetGeopointAction(TreeReference targetReference) {
         super(targetReference);
-        generalSettings = new SettingsProvider(Collect.getInstance()).getGeneralSettings();
+        generalSettings = DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings();
     }
 
     @Override

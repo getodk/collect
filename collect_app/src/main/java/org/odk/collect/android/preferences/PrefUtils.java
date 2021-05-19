@@ -5,8 +5,8 @@ import android.content.Context;
 import androidx.preference.ListPreference;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Arrays;
 
@@ -14,7 +14,7 @@ public class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
     public static Settings getSharedPrefs() {
-        return new SettingsProvider(Collect.getInstance()).getGeneralSettings();
+        return DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings();
     }
 
     public static ListPreference createListPref(
