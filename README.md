@@ -63,12 +63,13 @@ Translations are updated right before the first beta for a release and before th
 ## Contributing testing
 All pull requests are verified on the following devices (ordered by Android version):
 * [Huawei Y560-L01](http://www.gsmarena.com/huawei_y560-7829.php) - Android 5.1.1
-* [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1
-* [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0
-* [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1
+* [Sony Xperia Z3 D6603](http://www.gsmarena.com/sony_xperia_z3-6539.php) - Android 6.0.1 (used irregularly)
+* [Samsung Galaxy S7 SM-G930F](https://www.gsmarena.com/samsung_galaxy_s7-7821.php) - Android 7.0.0 (used irregularly)
+* [Motorola Moto G4 Play](https://www.gsmarena.com/motorola_moto_g4_play-8104.php) - Android 7.1.1 (used irregularly)
 * [LG Nexus 5X](https://www.gsmarena.com/lg_nexus_5x-7556.php) - Android 8.1
-* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0
-* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 10.0
+* [Xiaomi Redmi 7](https://www.gsmarena.com/xiaomi_redmi_7-9498.php) - Android 9.0 (used irregularly)
+* [Samsung Galaxy M11 SM-M115F/DSN](https://www.gsmarena.com/samsung_galaxy_m11-10124.php) - Andorid 10.0
+* [Google Pixel 3a](https://www.gsmarena.com/google_pixel_3a-9408.php) - Android 11.0
 
 Our regular code contributors use these devices (ordered by Android version):
 * [Samsung Galaxy Tab SM-T285](http://www.gsmarena.com/samsung_galaxy_tab_a_7_0_(2016)-7880.php) - Android 5.1.1 [@lognaturel](https://github.com/lognaturel)
