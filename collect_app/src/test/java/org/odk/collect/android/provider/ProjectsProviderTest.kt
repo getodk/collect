@@ -2,6 +2,7 @@ package org.odk.collect.android.provider
 
 import android.content.ContentResolver
 import android.content.Context
+import android.provider.BaseColumns
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -32,20 +33,23 @@ class ProjectsProviderTest {
 
         contentResolver.query(ProjectsProviderAPI.CONTENT_URI, null, null, null, null).use { cursor ->
             assertThat(cursor!!.count, `is`(3))
-            assertThat(cursor.columnCount, `is`(2))
+            assertThat(cursor.columnCount, `is`(3))
 
             cursor.moveToNext()
 
+            assertThat(cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)), `is`(1))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_UUID)), `is`("1"))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_NAME)), `is`("Project 1"))
 
             cursor.moveToNext()
 
+            assertThat(cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)), `is`(2))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_UUID)), `is`("2"))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_NAME)), `is`("Project 2"))
 
             cursor.moveToNext()
 
+            assertThat(cursor.getInt(cursor.getColumnIndex(BaseColumns._ID)), `is`(3))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_UUID)), `is`("3"))
             assertThat(cursor.getString(cursor.getColumnIndex(PROJECT_NAME)), `is`("Project 3"))
         }

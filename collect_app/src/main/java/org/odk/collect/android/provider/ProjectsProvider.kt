@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import android.provider.BaseColumns
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -26,9 +27,10 @@ class ProjectsProvider : ContentProvider() {
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
         deferDaggerInit()
 
-        val cursor = MatrixCursor(arrayOf(PROJECT_UUID, PROJECT_NAME))
+        val cursor = MatrixCursor(arrayOf(BaseColumns._ID, PROJECT_UUID, PROJECT_NAME))
+        var index = 1
         projectsRepository.getAll().forEach {
-            cursor.addRow(arrayOf<Any>(it.uuid, it.name))
+            cursor.addRow(arrayOf<Any>(index++, it.uuid, it.name))
         }
         return cursor
     }
