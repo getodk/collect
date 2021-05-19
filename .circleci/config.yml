@@ -32,6 +32,10 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
 
       - run:
+          name: Download Robolectric deps
+          command: ./download-robolectric-deps.sh
+
+      - run:
           name: Compile code
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=4 assembleDebug
 
@@ -93,7 +97,7 @@ jobs:
 
   test_app:
     <<: *android_config
-    parallelism: 83
+    parallelism: 50
     steps:
       - attach_workspace:
           at: ~/work
