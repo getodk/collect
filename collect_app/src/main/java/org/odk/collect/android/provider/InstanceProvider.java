@@ -80,6 +80,11 @@ public class InstanceProvider extends ContentProvider {
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
 
+    // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
+    private void daggerInit() {
+        DaggerUtils.getComponent(getContext()).inject(this);
+    }
+
     @Override
     public boolean onCreate() {
         return true;
@@ -88,7 +93,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        DaggerUtils.getComponent(getContext()).inject(this);
+        daggerInit();
 
         Cursor c;
         switch (URI_MATCHER.match(uri)) {
@@ -130,7 +135,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
-        DaggerUtils.getComponent(getContext()).inject(this);
+        daggerInit();
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
@@ -176,7 +181,7 @@ public class InstanceProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        DaggerUtils.getComponent(getContext()).inject(this);
+        daggerInit();
 
         int count;
 
@@ -223,7 +228,7 @@ public class InstanceProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
-        DaggerUtils.getComponent(getContext()).inject(this);
+        daggerInit();
         InstancesRepository instancesRepository = instancesRepositoryProvider.get();
 
         int count;
