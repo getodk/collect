@@ -8,6 +8,8 @@ import android.net.Uri
 import android.provider.BaseColumns
 import org.odk.collect.projects.ProjectsDependencyComponentProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.projects.providers.ProjectsProviderAPI.PROJECT_NAME
+import org.odk.collect.projects.providers.ProjectsProviderAPI.PROJECT_UUID
 import javax.inject.Inject
 
 class ProjectsProvider : ContentProvider() {
@@ -43,9 +45,4 @@ class ProjectsProvider : ContentProvider() {
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?) = throw UnsupportedOperationException()
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?) = throw UnsupportedOperationException()
-
-    companion object {
-        const val PROJECT_UUID = "uuid"
-        const val PROJECT_NAME = "name"
-    }
 }
