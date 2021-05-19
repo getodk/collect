@@ -89,7 +89,7 @@ public class FormsProvider extends ContentProvider {
     StoragePathProvider storagePathProvider;
 
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
-    private void deferDaggerInit() {
+    private void daggerInit() {
         DaggerUtils.getComponent(getContext()).inject(this);
     }
 
@@ -100,7 +100,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        deferDaggerInit();
+        daggerInit();
 
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
@@ -148,7 +148,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public synchronized Uri insert(@NonNull Uri uri, ContentValues initialValues) {
-        deferDaggerInit();
+        daggerInit();
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != FORMS) {
@@ -166,7 +166,7 @@ public class FormsProvider extends ContentProvider {
      */
     @Override
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
-        deferDaggerInit();
+        daggerInit();
 
         int count;
 
@@ -199,7 +199,7 @@ public class FormsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
-        deferDaggerInit();
+        daggerInit();
         FormsRepository formsRepository = formsRepositoryProvider.get();
 
         int count;

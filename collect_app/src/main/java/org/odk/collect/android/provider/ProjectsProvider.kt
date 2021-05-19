@@ -16,7 +16,7 @@ class ProjectsProvider : ContentProvider() {
     lateinit var projectsRepository: ProjectsRepository
 
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
-    private fun deferDaggerInit() {
+    private fun daggerInit() {
         DaggerUtils.getComponent(context).inject(this)
     }
 
@@ -25,7 +25,7 @@ class ProjectsProvider : ContentProvider() {
     }
 
     override fun query(uri: Uri, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor? {
-        deferDaggerInit()
+        daggerInit()
 
         val cursor = MatrixCursor(arrayOf(BaseColumns._ID, PROJECT_UUID, PROJECT_NAME))
         var index = 1
