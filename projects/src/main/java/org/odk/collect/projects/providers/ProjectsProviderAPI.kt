@@ -1,4 +1,4 @@
-package org.odk.collect.android.provider
+package org.odk.collect.projects.providers
 
 import android.net.Uri
 

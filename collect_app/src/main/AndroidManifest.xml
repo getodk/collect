@@ -182,7 +182,7 @@ the specific language governing permissions and limitations under the License.
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
         <provider
-            android:name=".provider.ProjectsProvider"
+            android:name="org.odk.collect.projects.providers.ProjectsProvider"
             android:authorities="org.odk.collect.android.provider.odk.projects"
             android:exported="true" />
 

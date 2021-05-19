@@ -1,4 +1,4 @@
-package org.odk.collect.android.provider
+package org.odk.collect.projects.providers
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -6,7 +6,7 @@ import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
 import android.provider.BaseColumns
-import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.projects.ProjectsDependencyComponentProvider
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
@@ -17,7 +17,8 @@ class ProjectsProvider : ContentProvider() {
 
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
     private fun daggerInit() {
-        DaggerUtils.getComponent(context).inject(this)
+        val provider = context!!.applicationContext as ProjectsDependencyComponentProvider
+        provider.projectsDependencyComponent.inject(this)
     }
 
     override fun onCreate(): Boolean {
