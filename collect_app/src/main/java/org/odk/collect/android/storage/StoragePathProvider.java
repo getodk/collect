@@ -37,6 +37,11 @@ public class StoragePathProvider {
                 : "";
     }
 
+    public String getProjectRootDirPath() {
+        String projectId = currentProjectProvider.getCurrentProject().getUuid();
+        return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + projectId;
+    }
+
     public String getOdkDirPath(StorageSubdirectory subdirectory) {
         switch (subdirectory) {
             case FORMS:
@@ -44,8 +49,7 @@ public class StoragePathProvider {
             case CACHE:
             case METADATA:
             case LAYERS:
-                String projectId = currentProjectProvider.getCurrentProject().getUuid();
-                return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + projectId + File.separator + subdirectory.getDirectoryName();
+                return getProjectRootDirPath() + File.separator + subdirectory.getDirectoryName();
             case SETTINGS:
             case PROJECTS:
                 return getOdkRootDirPath() + File.separator + subdirectory.getDirectoryName();
