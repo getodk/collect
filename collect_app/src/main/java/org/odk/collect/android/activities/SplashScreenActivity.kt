@@ -27,6 +27,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.NewProject
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
@@ -81,8 +83,11 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
         }
     }
 
-    override fun onProjectAdded() {
+    override fun onProjectAdded(newProject: NewProject) {
+        projectsRepository.save(Project(newProject.name, newProject.icon, newProject.color))
+
         currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
+
         endSplashScreen()
     }
 }

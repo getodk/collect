@@ -12,10 +12,7 @@ interface ProjectsDependencyComponentProvider {
 
 @Component(modules = [ProjectsDependencyModule::class])
 @Singleton
-interface ProjectsDependencyComponent {
-
-    fun inject(addProjectDialog: AddProjectDialog)
-}
+interface ProjectsDependencyComponent
 
 @Module
 open class ProjectsDependencyModule {
