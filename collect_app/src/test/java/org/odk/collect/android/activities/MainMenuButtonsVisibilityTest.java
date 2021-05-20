@@ -5,21 +5,13 @@ import android.widget.Button;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.gson.Gson;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.projects.InMemProjectsRepository;
-import org.odk.collect.projects.Project;
-import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.shared.UUIDGenerator;
 import org.robolectric.Robolectric;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,21 +26,15 @@ import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_VIEW_SENT;
 public class MainMenuButtonsVisibilityTest {
 
     private MainMenuActivity mainMenuActivity;
-    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private Settings adminSettings;
 
     @Before
     public void setup() {
+        CollectHelpers.setupDemoProject();
+
+        adminSettings = TestSettingsProvider.getAdminSettings();
         adminSettings.clear();
         adminSettings.setDefaultForAllSettingsWithoutValues();
-
-        InMemProjectsRepository projectsRepository = new InMemProjectsRepository(new UUIDGenerator());
-        projectsRepository.save(new Project("", "", "", ""));
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public ProjectsRepository providesProjectsRepository(UUIDGenerator uuidGenerator, Gson gson, SettingsProvider settingsProvider) {
-                return projectsRepository;
-            }
-        });
     }
 
     @Test

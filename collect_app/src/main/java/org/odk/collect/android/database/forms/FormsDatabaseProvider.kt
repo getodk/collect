@@ -25,14 +25,14 @@ class FormsDatabaseProvider {
             return _dbHelper ?: recreateDatabaseHelper()
         }
 
-    fun recreateDatabaseHelper(): FormsDatabaseHelper {
-        return FormsDatabaseHelper(FormDatabaseMigrator(), StoragePathProvider()).also {
-            _dbHelper = it
-        }
-    }
-
     fun releaseDatabaseHelper() {
         _dbHelper?.close()
         _dbHelper = null
+    }
+
+    private fun recreateDatabaseHelper(): FormsDatabaseHelper {
+        return FormsDatabaseHelper(FormDatabaseMigrator(), StoragePathProvider()).also {
+            _dbHelper = it
+        }
     }
 }

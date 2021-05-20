@@ -64,15 +64,18 @@ public class FormMapActivityTest {
             new MapPoint(10.4, 125.6));
     private final MapPoint currentLocation = new MapPoint(5, 5);
 
-    @Before public void setUpActivity() {
+    @Before
+    public void setUpActivity() {
+        CollectHelpers.setupDemoProject();
+
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-               @Override
-               public MapProvider providesMapProvider() {
-                   MapProvider mapProvider = mock(MapProvider.class);
-                   when(mapProvider.createMapFragment(ArgumentMatchers.any())).thenReturn(map);
-                   return mapProvider;
-               }
-           });
+            @Override
+            public MapProvider providesMapProvider() {
+                MapProvider mapProvider = mock(MapProvider.class);
+                when(mapProvider.createMapFragment(ArgumentMatchers.any())).thenReturn(map);
+                return mapProvider;
+            }
+        });
 
         activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
@@ -84,7 +87,8 @@ public class FormMapActivityTest {
         activityController.setup();
     }
 
-    @Test public void startingFormMap_zoomsToFitAllInstanceMarkers_ifThereAreInstanceMarkers() {
+    @Test
+    public void startingFormMap_zoomsToFitAllInstanceMarkers_ifThereAreInstanceMarkers() {
         assertThat(map.getZoomCount(), is(1));
         assertThat(map.getLatestZoomPoint(), is(nullValue()));
         assertThat(map.getLatestZoomBoundingBox(), is(expectedPoints));
@@ -92,7 +96,8 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(false));
     }
 
-    @Test public void startingFormMap_doesNotZoom_ifThereAreNoInstanceMarkers_andLocationIsUnavailable() {
+    @Test
+    public void startingFormMap_doesNotZoom_ifThereAreNoInstanceMarkers_andLocationIsUnavailable() {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
@@ -108,7 +113,8 @@ public class FormMapActivityTest {
         assertThat(map.getZoomCount(), is(0));
     }
 
-    @Test public void locationChange_zoomsToCurrentLocation_ifTheViewportWasNotPreviouslyUpdated() {
+    @Test
+    public void locationChange_zoomsToCurrentLocation_ifTheViewportWasNotPreviouslyUpdated() {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
@@ -130,7 +136,8 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(true));
     }
 
-    @Test public void tappingOnZoomToCurrentLocationButton_zoomsToCurrentLocationWithAnimation() {
+    @Test
+    public void tappingOnZoomToCurrentLocationButton_zoomsToCurrentLocationWithAnimation() {
         activity.findViewById(R.id.zoom_to_location).performClick();
 
         assertThat(map.getZoomCount(), is(2)); // once on initialization and once on click
@@ -138,7 +145,8 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(true));
     }
 
-    @Test public void tappingOnZoomToFitButton_zoomsToFitAllInstanceMarkersWithoutAnimation() {
+    @Test
+    public void tappingOnZoomToFitButton_zoomsToFitAllInstanceMarkersWithoutAnimation() {
         activity.findViewById(R.id.zoom_to_bounds).performClick();
 
         assertThat(map.getZoomCount(), is(2));
@@ -148,7 +156,8 @@ public class FormMapActivityTest {
         assertThat(map.wasLatestZoomCallAnimated(), is(false));
     }
 
-    @Test public void tappingOnLayerMenu_opensLayerDialog() {
+    @Test
+    public void tappingOnLayerMenu_opensLayerDialog() {
         List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
         assertThat(fragments, not(hasItem(isA(MapsPreferencesFragment.class))));
 
@@ -159,7 +168,8 @@ public class FormMapActivityTest {
         assertThat(fragments, hasItem(isA(MapsPreferencesFragment.class)));
     }
 
-    @Test public void tappingOnInstance_centersToThatInstanceAndKeepsTheSameZoom() {
+    @Test
+    public void tappingOnInstance_centersToThatInstanceAndKeepsTheSameZoom() {
         MapPoint sent = new MapPoint(10.3, 125.7);
         map.zoomToPoint(new MapPoint(7, 8), 7, false);
 
@@ -174,7 +184,8 @@ public class FormMapActivityTest {
         assertThat(map.getZoom(), is(7.0));
     }
 
-    @Test public void tappingOnNewInstanceButton_opensNewInstance() {
+    @Test
+    public void tappingOnNewInstanceButton_opensNewInstance() {
         activity.findViewById(R.id.new_instance).performClick();
 
         Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
@@ -185,7 +196,8 @@ public class FormMapActivityTest {
 
     @Ignore("Doesn't work with field-based dependency injection because we don't get an opportunity" +
             "to set test doubles before onCreate() is called after the orientation change")
-    @Test public void centerAndZoomLevel_areRestoredAfterOrientationChange() {
+    @Test
+    public void centerAndZoomLevel_areRestoredAfterOrientationChange() {
         map.zoomToPoint(new MapPoint(7, 7), 7, false);
 
         RuntimeEnvironment.setQualifiers("+land");
@@ -198,14 +210,16 @@ public class FormMapActivityTest {
     // Note that there's a point with deleted status included. This shouldn't be possible in real
     // usage because deleting a form removes the geometry from the database. However, the database
     // allows a deleted instance with geometry so we test it.
-    @Test public void mappedPoints_matchInstancesWithGeometry() {
+    @Test
+    public void mappedPoints_matchInstancesWithGeometry() {
         assertThat(map.getMappedPointCount(), is(expectedPoints.size()));
         for (MapPoint expectedPoint : expectedPoints) {
             assertThat(map.isMapped(expectedPoint), is(true));
         }
     }
 
-    @Test public void openingEditableInstances_launchesEditActivity() {
+    @Test
+    public void openingEditableInstances_launchesEditActivity() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
         MapPoint failedToSend = new MapPoint(10.3, 125.6);
@@ -224,7 +238,8 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
+    @Test
+    public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
         TestSettingsProvider.getAdminSettings().save(AdminKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
@@ -245,7 +260,8 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void openingUneditableInstances_launchesViewActivity() {
+    @Test
+    public void openingUneditableInstances_launchesViewActivity() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
         int featureId = map.getFeatureIdFor(sent);
@@ -258,7 +274,8 @@ public class FormMapActivityTest {
         assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
     }
 
-    @Test public void tappingOnEditableInstance_showsSubmissionSummaryWithAppropriateMessage() {
+    @Test
+    public void tappingOnEditableInstance_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
         MapPoint failedToSend = new MapPoint(10.3, 125.6);
@@ -275,7 +292,8 @@ public class FormMapActivityTest {
         }
     }
 
-    @Test public void tappingOnUneditableInstances_showsSubmissionSummaryWithAppropriateMessage() {
+    @Test
+    public void tappingOnUneditableInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint sent = new MapPoint(10.3, 125.7);
 
         int featureId = map.getFeatureIdFor(sent);
@@ -287,7 +305,8 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance encryption but just in case there is an
     // encrypted instance with geometry available, show an encrypted toast.
-    @Test public void tappingOnEncryptedInstances_showsSubmissionSummaryWithAppropriateMessage() {
+    @Test
+    public void tappingOnEncryptedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint submissionFailedCantEditWhenFinalized = new MapPoint(10.4, 125.6);
 
         int featureId = map.getFeatureIdFor(submissionFailedCantEditWhenFinalized);
@@ -299,7 +318,8 @@ public class FormMapActivityTest {
 
     // Geometry is removed from the database on instance deletion but just in case there is a
     // deleted instance with geometry available, show a deleted toast.
-    @Test public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
+    @Test
+    public void tappingOnDeletedInstances_showsSubmissionSummaryWithAppropriateMessage() {
         MapPoint deleted = new MapPoint(10.0, 125.6);
 
         int featureId = map.getFeatureIdFor(deleted);
