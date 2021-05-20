@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.ParameterizedRobolectricTestRunner;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
@@ -42,6 +43,8 @@ public class GeneralPreferencesActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        CollectHelpers.setupDemoProject();
+
         Intent intent = new Intent();
         intent.putExtra(INTENT_KEY_ADMIN_MODE, accessedFromAdminSettings);
         activityController = Robolectric
