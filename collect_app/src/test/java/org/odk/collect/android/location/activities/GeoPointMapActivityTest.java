@@ -12,6 +12,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
@@ -23,15 +24,21 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest extends BaseGeoActivityTest {
-    @Rule public MockitoRule rule = MockitoJUnit.rule();
+
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPointMapActivity> controller;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
+
+        CollectHelpers.setupDemoProject();
         controller = Robolectric.buildActivity(GeoPointMapActivity.class, intent);
     }
 
-    @Test public void shouldReturnPointFromSecondLocationFix() {
+    @Test
+    public void shouldReturnPointFromSecondLocationFix() {
         GeoPointMapActivity activity = controller.create().start().resume().visible().get();
 
         // The very first fix is ignored.
