@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseConstants.INSTANCES_TABLE_NAME;
@@ -38,10 +39,12 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private final InstancesDatabaseProvider instancesDatabaseProvider;
     private final StoragePathProvider storagePathProvider;
+    private final Supplier<Long> clock;
 
-    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, StoragePathProvider storagePathProvider) {
+    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, StoragePathProvider storagePathProvider, Supplier<Long> clock) {
         this.instancesDatabaseProvider = instancesDatabaseProvider;
         this.storagePathProvider = storagePathProvider;
+        this.clock = clock;
     }
 
     @Override
@@ -154,29 +157,33 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        if (instance.getLastStatusChangeDate() == null) {
-            instance = new Instance.Builder(instance)
-                    .lastStatusChangeDate(System.currentTimeMillis())
-                    .build();
-        }
+        if (instance.getDbId() == null) {
+            if (instance.getLastStatusChangeDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
 
-        Long instanceId = instance.getDbId();
-        ContentValues values = getValuesFromInstance(instance);
-
-        if (instanceId == null) {
-            long insertId = insert(values);
+            long insertId = insert(getValuesFromInstance(instance));
             return get(insertId);
         } else {
-            update(instanceId, values);
+            if (instance.getDeletedDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
 
-            return get(instanceId);
+            update(instance.getDbId(), getValuesFromInstance(instance));
+            return get(instance.getDbId());
         }
     }
 
     @Override
-    public void softDelete(Long id) {
+    public void deleteWithLogging(Long id) {
         ContentValues values = new ContentValues();
-        values.put(DELETED_DATE, System.currentTimeMillis());
+        values.putNull(GEOMETRY);
+        values.putNull(GEOMETRY_TYPE);
+        values.put(DELETED_DATE, clock.get());
         update(id, values);
 
         Instance instance = get(id);
@@ -226,7 +233,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private long insert(ContentValues values) {
-        return instancesDatabaseProvider.getWriteableDatabase().insert(
+        return instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(
                 INSTANCES_TABLE_NAME,
                 null,
                 values

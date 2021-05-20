@@ -20,16 +20,22 @@ import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.io.File;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public abstract class InstancesRepositoryTest {
 
     public abstract InstancesRepository buildSubject();
+
+    public abstract InstancesRepository buildSubject(Supplier<Long> clock);
 
     public abstract String getInstancesDir();
 
@@ -205,6 +211,19 @@ public abstract class InstancesRepositoryTest {
     }
 
     @Test
+    public void save_whenInstanceHasId_updatesLastStatusChangeDate() {
+        Supplier<Long> clock = mock(Supplier.class);
+        when(clock.get()).thenReturn(123L);
+
+        InstancesRepository instancesRepository = buildSubject(clock);
+
+        Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
+
+        instancesRepository.save(instance);
+        assertThat(instancesRepository.get(instance.getDbId()).getLastStatusChangeDate(), is(123L));
+    }
+
+    @Test
     public void save_whenStatusIsNull_usesIncomplete() {
         InstancesRepository instancesRepository = buildSubject();
 
@@ -225,16 +244,33 @@ public abstract class InstancesRepositoryTest {
     }
 
     @Test
-    public void softDelete_setsDeletedDate() {
+    public void save_whenInstanceHasDeletedDate_doesNotUpdateLastChangesStatusDate() {
+        Supplier<Long> clock = mock(Supplier.class);
+        when(clock.get()).thenReturn(123L);
+
+        InstancesRepository instancesRepository = buildSubject(clock);
+
+        Instance originalInstance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
+        Long originalInstanceDbId = originalInstance.getDbId();
+
+        when(clock.get()).thenReturn(456L);
+        instancesRepository.deleteWithLogging(originalInstanceDbId);
+        instancesRepository.save(instancesRepository.get(originalInstanceDbId));
+
+        assertThat(instancesRepository.get(originalInstanceDbId).getLastStatusChangeDate(), is(123L));
+    }
+
+    @Test
+    public void deleteWithLogging_setsDeletedDate() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
-        instancesRepository.softDelete(instance.getDbId());
+        instancesRepository.deleteWithLogging(instance.getDbId());
         assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), is(notNullValue()));
     }
 
     @Test
-    public void softDelete_deletesInstanceDir() {
+    public void deleteWithLogging_deletesInstanceDir() {
         InstancesRepository instancesRepository = buildSubject();
         Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir()).build());
 
@@ -242,8 +278,21 @@ public abstract class InstancesRepositoryTest {
         assertThat(instanceDir.exists(), is(true));
         assertThat(instanceDir.isDirectory(), is(true));
 
-        instancesRepository.softDelete(instance.getDbId());
+        instancesRepository.deleteWithLogging(instance.getDbId());
         assertThat(instanceDir.exists(), is(false));
+    }
+
+    @Test
+    public void deleteWithLogging_clearsGeometryData() {
+        InstancesRepository instancesRepository = buildSubject();
+        Instance instance = instancesRepository.save(InstanceUtils.buildInstance("formid", "1", getInstancesDir())
+                .geometry("blah")
+                .geometryType("blah")
+                .build());
+
+        instancesRepository.deleteWithLogging(instance.getDbId());
+        assertThat(instancesRepository.get(instance.getDbId()).getGeometry(), is(nullValue()));
+        assertThat(instancesRepository.get(instance.getDbId()).getGeometryType(), is(nullValue()));
     }
 
     @Test

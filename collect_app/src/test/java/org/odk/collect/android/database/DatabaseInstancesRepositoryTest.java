@@ -18,6 +18,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
+import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -25,6 +27,8 @@ import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.InstancesRepositoryTest;
+
+import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
@@ -37,6 +41,11 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
     @Override
     public InstancesRepository buildSubject() {
         return new InstancesRepositoryProvider().get();
+    }
+
+    @Override
+    public InstancesRepository buildSubject(Supplier<Long> clock) {
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), new StoragePathProvider(), clock);
     }
 
     @Override

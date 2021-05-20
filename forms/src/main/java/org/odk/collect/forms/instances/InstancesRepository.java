@@ -42,5 +42,9 @@ public interface InstancesRepository {
 
     Instance save(Instance instance);
 
-    void softDelete(Long id);
+    /**
+     * Deletes any sensitive data (the submission file and geometry data) but leaves the Instance
+     * record in place.
+     */
+    void deleteWithLogging(Long id);
 }

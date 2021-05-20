@@ -10,19 +10,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class InMemInstancesRepository implements InstancesRepository {
 
     private final List<Instance> instances;
+    private final Supplier<Long> clock;
+
     private long idCounter = 1L;
 
-    public InMemInstancesRepository(List<Instance> instances) {
-        this.instances = new ArrayList<>(instances);
+    public InMemInstancesRepository() {
+        this(System::currentTimeMillis, new ArrayList<>());
     }
 
-    public InMemInstancesRepository() {
-        this.instances = new ArrayList<>();
+    public InMemInstancesRepository(List<Instance> instances) {
+        this(System::currentTimeMillis, instances);
+    }
+
+    public InMemInstancesRepository(Supplier<Long> clock) {
+        this(clock, new ArrayList<>());
+    }
+
+    public InMemInstancesRepository(Supplier<Long> clock, List<Instance> instances) {
+        this.clock = clock;
+        this.instances = new ArrayList<>(instances);
     }
 
     @Override
@@ -131,20 +143,26 @@ public final class InMemInstancesRepository implements InstancesRepository {
                     .build();
         }
 
-        if (instance.getLastStatusChangeDate() == null) {
-            instance = new Instance.Builder(instance)
-                    .lastStatusChangeDate(System.currentTimeMillis())
-                    .build();
-        }
-
         Long id = instance.getDbId();
         if (id == null) {
+            if (instance.getLastStatusChangeDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
+
             Instance newInstance = new Instance.Builder(instance)
                     .dbId(idCounter++)
                     .build();
             instances.add(newInstance);
             return newInstance;
         } else {
+            if (instance.getDeletedDate() == null) {
+                instance = new Instance.Builder(instance)
+                        .lastStatusChangeDate(clock.get())
+                        .build();
+            }
+
             instances.removeIf(i -> i.getDbId().equals(id));
             instances.add(instance);
             return instance;
@@ -152,9 +170,11 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public void softDelete(Long id) {
+    public void deleteWithLogging(Long id) {
         Instance instance = new Instance.Builder(get(id))
-                .deletedDate(System.currentTimeMillis())
+                .geometry(null)
+                .geometryType(null)
+                .deletedDate(clock.get())
                 .build();
 
         instances.removeIf(i -> i.getDbId().equals(id));

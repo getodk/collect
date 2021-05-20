@@ -1,18 +1,17 @@
 package org.odk.collect.android.instancemanagement;
 
 import org.junit.Test;
-import org.odk.collect.formstest.InMemFormsRepository;
-import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.shared.TempFiles;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
 public class InstanceDeleterTest {
@@ -40,7 +39,7 @@ public class InstanceDeleterTest {
     }
 
     @Test
-    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherSoftDeletedInstance_deletesForm() {
+    public void whenFormForInstanceIsSoftDeleted_andThereIsAnotherInstaceWithDeletedDate_deletesForm() {
         formsRepository.save(new Form.Builder()
                 .formId("1")
                 .version("version")
@@ -176,27 +175,12 @@ public class InstanceDeleterTest {
     }
 
     @Test
-    public void whenInstanceIsSubmitted_softDeletesInstance() {
+    public void whenInstanceIsSubmitted_deletesInstanceWithLogging() {
         Instance instance = instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath())
                 .status(Instance.STATUS_SUBMITTED)
                 .build());
 
         instanceDeleter.delete(instance.getDbId());
         assertThat(instancesRepository.get(instance.getDbId()).getDeletedDate(), notNullValue());
-    }
-
-    @Test
-    public void whenInstanceIsSubmitted_clearsGeometryData() {
-        Instance instance = instancesRepository.save(buildInstance("1", "version", TempFiles.createTempDir().getAbsolutePath())
-                .status(Instance.STATUS_SUBMITTED)
-                .geometryType("Point")
-                .geometry("{\"type\":\"Point\",\"coordinates\":[127.6, 11.1]}")
-                .build());
-
-        instanceDeleter.delete(instance.getDbId());
-
-        Instance deletedInstance = instancesRepository.get(instance.getDbId());
-        assertThat(deletedInstance.getGeometry(), nullValue());
-        assertThat(deletedInstance.getGeometryType(), nullValue());
     }
 }

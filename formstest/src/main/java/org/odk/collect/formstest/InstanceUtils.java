@@ -24,8 +24,6 @@ public class InstanceUtils {
                 .displayName(displayName)
                 .instanceFilePath(instanceFile.getAbsolutePath())
                 .status(status)
-                .lastStatusChangeDate(System.currentTimeMillis())
-                .status(status)
                 .deletedDate(deletedDate);
     }
 
