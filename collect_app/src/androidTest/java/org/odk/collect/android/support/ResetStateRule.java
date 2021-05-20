@@ -32,6 +32,10 @@ public class ResetStateRule implements TestRule {
         this(null, true);
     }
 
+    public ResetStateRule(boolean upgrade) {
+        this(null, upgrade);
+    }
+
     public ResetStateRule(AppDependencyModule appDependencyModule) {
         this(appDependencyModule, true);
     }

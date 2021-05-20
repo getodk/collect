@@ -75,6 +75,7 @@ import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.provider.FormsProvider;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -294,4 +295,6 @@ public interface AppDependencyComponent {
     ProjectImporter projectImporter();
 
     StorageInitializer storageInitializer();
+
+    StoragePathProvider storagePathProvider();
 }
