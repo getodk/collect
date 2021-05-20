@@ -38,14 +38,13 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.io.File;
@@ -68,13 +67,15 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
+    protected final String tmpImageFilePath;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
-                           WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils) {
+                           WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils, String tmpImageFilePath) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mediaUtils = mediaUtils;
+        this.tmpImageFilePath = tmpImageFilePath;
     }
 
     @Override
@@ -229,7 +230,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (binaryName != null) {
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(getFile()));
             }
-            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(new StoragePathProvider().getTmpImageFilePath())));
+
+            i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(tmpImageFilePath)));
             i = addExtrasToIntent(i);
             launchActivityForResult(i, requestCode, stringResourceId);
         }
@@ -266,8 +268,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     /**
      * Standard method for launching an Activity.
      *
-     * @param intent - The Intent to start
-     * @param resourceCode - Code to return when Activity exits
+     * @param intent              - The Intent to start
+     * @param resourceCode        - Code to return when Activity exits
      * @param errorStringResource - String resource for error toast
      */
     protected void launchActivityForResult(Intent intent, final int resourceCode, final int errorStringResource) {
@@ -281,6 +283,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             waitingForDataRegistry.cancelWaitingForData();
         }
     }
+
     @Nullable
     private File getFile() {
         File file = questionMediaManager.getAnswerFile(binaryName);

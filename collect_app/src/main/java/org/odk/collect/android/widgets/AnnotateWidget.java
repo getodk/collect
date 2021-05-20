@@ -30,12 +30,11 @@ import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -63,8 +62,8 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     Button chooseButton;
     Button annotateButton;
 
-    public AnnotateWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, prompt, questionMediaManager, waitingForDataRegistry, new MediaUtils());
+    public AnnotateWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
+        super(context, prompt, questionMediaManager, waitingForDataRegistry, new MediaUtils(), tmpImageFilePath);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
@@ -187,7 +186,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         try {
             Uri uri = ContentUriProvider.getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
-                    new File(new StoragePathProvider().getTmpImageFilePath()));
+                    new File(tmpImageFilePath));
             // if this gets modified, the onActivityResult in
             // FormEntyActivity will also need to be updated.
             intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);

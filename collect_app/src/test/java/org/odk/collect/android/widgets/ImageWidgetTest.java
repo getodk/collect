@@ -17,10 +17,11 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 
@@ -58,7 +59,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
             }
         };
         return new ImageWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                fakeQuestionMediaManager, new FakeWaitingForDataRegistry());
+                fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 
     @NonNull
