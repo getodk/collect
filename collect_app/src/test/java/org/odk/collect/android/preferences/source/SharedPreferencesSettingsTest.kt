@@ -256,6 +256,25 @@ class SharedPreferencesSettingsTest {
         verify(listener, never()).onSettingChanged("test2")
     }
 
+    @Test
+    fun `can register multiple change listeners`() {
+        sharedPreferencesSettings = SharedPreferencesSettings(sharedPreferences, defaultSettings)
+        val listener1: Settings.OnSettingChangeListener = mock(Settings.OnSettingChangeListener::class.java)
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener1)
+
+        val listener2: Settings.OnSettingChangeListener = mock(Settings.OnSettingChangeListener::class.java)
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener2)
+
+        sharedPreferencesSettings.save("test", "string")
+        verify(listener1).onSettingChanged("test")
+        verify(listener2).onSettingChanged("test")
+
+        sharedPreferencesSettings.unregisterOnSettingChangeListener(listener1)
+        sharedPreferencesSettings.save("test2", "string2")
+        verify(listener1, never()).onSettingChanged("test2")
+        verify(listener2).onSettingChanged("test2")
+    }
+
     fun assertDefaultPrefs(allSettings: Map<String, *>) {
         assertThat(allSettings.size, `is`(defaultSettings.size))
         assertThat(allSettings[KEY_STRING], `is`(DEFAULT_STRING_VALUE))
