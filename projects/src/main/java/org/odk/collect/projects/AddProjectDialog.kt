@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import org.jetbrains.annotations.TestOnly
 import org.odk.collect.androidshared.OneSignTextWatcher
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
@@ -71,6 +72,11 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
 
     private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
+
+    @TestOnly
+    fun setAddProjectDialogListener(listener: AddProjectDialogListener) {
+        this.listener = listener
+    }
 
     interface AddProjectDialogListener {
         fun onProjectAdded(newProject: NewProject)
