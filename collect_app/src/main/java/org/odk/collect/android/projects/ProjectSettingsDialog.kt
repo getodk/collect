@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
@@ -120,6 +121,8 @@ class ProjectSettingsDialog : DialogFragment() {
 
     private fun switchProject(project: Project.Saved) {
         currentProjectProvider.setCurrentProject(project.uuid)
+        Collect.resetDatabaseConnections()
+
         currentProjectViewModel.setCurrentProject(project)
         ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
         dismiss()

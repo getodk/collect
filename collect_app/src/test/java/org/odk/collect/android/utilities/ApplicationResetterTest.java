@@ -55,9 +55,9 @@ public class ApplicationResetterTest {
             }
         });
 
-        AppDependencyComponent component = DaggerUtils.getComponent((Application) ApplicationProvider.getApplicationContext());
-        component.projectImporter().importDemoProject();
+        CollectHelpers.setupDemoProject();
 
+        AppDependencyComponent component = DaggerUtils.getComponent((Application) ApplicationProvider.getApplicationContext());
         storagePathProvider = component.storagePathProvider();
         generalSettings = component.settingsProvider().getGeneralSettings();
         adminSettings = component.settingsProvider().getAdminSettings();

@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
@@ -89,6 +90,8 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
     override fun onProjectAdded(project: Project.Saved) {
         storageInitializer.createProjectDirsOnStorage(project)
         currentProjectProvider.setCurrentProject(project.uuid)
+        Collect.resetDatabaseConnections()
+
         endSplashScreen()
     }
 }

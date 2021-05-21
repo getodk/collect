@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectImporter
@@ -60,6 +61,8 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
         binding.configureLaterButton.setOnClickListener {
             projectImporter.importDemoProject()
+            Collect.resetDatabaseConnections()
+
             ActivityUtils.startActivityAndCloseAllOthers(
                 requireActivity(),
                 MainMenuActivity::class.java
