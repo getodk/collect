@@ -321,7 +321,7 @@ public class AppDependencyModule {
                                                                  AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
                 propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter);
+                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter, currentProjectProvider);
     }
 
     @Provides
@@ -567,7 +567,7 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, StorageInitializer storageInitializer) {
-        return new ProjectImporter(projectsRepository, currentProjectProvider, storageInitializer);
+        return new ProjectImporter(projectsRepository, storageInitializer);
     }
 
     @Provides

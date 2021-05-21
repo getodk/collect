@@ -22,9 +22,11 @@ import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActio
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.AppStateProvider;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -47,11 +49,12 @@ public class ApplicationInitializer {
     private final StorageInitializer storageInitializer;
     private final AppStateProvider appStateProvider;
     private final ProjectImporter projectImporter;
+    private final CurrentProjectProvider currentProjectProvider;
 
     @SuppressWarnings("PMD.ExcessiveParameterList")
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
                                   PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
-                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
@@ -63,6 +66,7 @@ public class ApplicationInitializer {
         this.storageInitializer = storageInitializer;
         this.appStateProvider = appStateProvider;
         this.projectImporter = projectImporter;
+        this.currentProjectProvider = currentProjectProvider;
     }
 
     public void initialize() {
@@ -151,7 +155,8 @@ public class ApplicationInitializer {
 
     private void importExistingProjectIfNeeded() {
         if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
-            projectImporter.importExistingProject();
+            Project.Saved project = projectImporter.importExistingProject();
+            currentProjectProvider.setCurrentProject(project.getUuid());
         }
 
         metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);

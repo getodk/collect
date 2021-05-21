@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
@@ -26,6 +27,9 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var versionInformation: VersionInformation
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var binding: FirstLaunchDialogLayoutBinding
 
@@ -61,6 +65,7 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
         binding.configureLaterButton.setOnClickListener {
             projectImporter.importDemoProject()
+            currentProjectProvider.setCurrentProject(ProjectImporter.DEMO_PROJECT_ID)
             Collect.resetDatabaseConnections()
 
             ActivityUtils.startActivityAndCloseAllOthers(

@@ -21,9 +21,9 @@ class UpdateProjectTest {
     @Test
     fun updateProjectTest() {
         rule.mainMenu()
-            .assertProjectIcon("D", "#3e9fcc")
+            .assertProjectIcon("E", "#3e9fcc")
             .openProjectSettings()
-            .assertCurrentProject("Demo project")
+            .assertCurrentProject("Existing project")
             .clickAdminSettings()
             .setProjectName("Project X")
             .setProjectIcon("X")
