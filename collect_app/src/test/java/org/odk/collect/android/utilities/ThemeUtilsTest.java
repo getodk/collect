@@ -3,7 +3,6 @@ package org.odk.collect.android.utilities;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -12,9 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.projects.Project;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.shared.Settings;
 import org.robolectric.Robolectric;
 
@@ -45,8 +42,7 @@ public class ThemeUtilsTest {
 
     @Before
     public void setup() {
-        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).projectsRepository().save(new Project.Saved("1", "Project 1", "P", "#ffffff"));
-        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).currentProjectProvider().setCurrentProject("1");
+        CollectHelpers.setupDemoProject();
 
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);
         themeUtils = new ThemeUtils(mainMenuActivity);
