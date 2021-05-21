@@ -2,7 +2,6 @@ package org.odk.collect.android.projects
 
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.`when`
@@ -30,14 +29,6 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun `Id of current project should be returned after calling getCurrentProjectId()`() {
-        `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
-        `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
-
-        assertThat(currentProjectProvider.getCurrentProjectId(), `is`("123e4567"))
-    }
-
-    @Test
     fun `A project should be returned after calling getCurrentProject() if there is a project for given id`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
         `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
@@ -48,19 +39,27 @@ class CurrentProjectProviderTest {
     }
 
     @Test
-    fun `Null should be returned after calling getCurrentProject() if there is no project for given id`() {
-        `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
-        `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
-        `when`(projectsRepository.get("123e4567")).thenReturn(null)
-
-        assertThat(currentProjectProvider.getCurrentProject(), `is`(nullValue()))
-    }
-
-    @Test
     fun `save() on meta settings should be called after current project is set`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
 
         currentProjectProvider.setCurrentProject("123e4567")
         verify(metaSettings).save(MetaKeys.CURRENT_PROJECT_ID, "123e4567")
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `getCurrentProject throws IllegalStateException when there is no current project`() {
+        `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
+        `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn(null)
+
+        currentProjectProvider.getCurrentProject()
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `getCurrentProject throws IllegalStateException when current project does not exist`() {
+        `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
+        `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
+        `when`(projectsRepository.get("123e4567")).thenReturn(null)
+
+        currentProjectProvider.getCurrentProject()
     }
 }

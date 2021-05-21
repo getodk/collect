@@ -216,7 +216,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     }
 
     public void deleteProject() {
-        projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
+        projectsRepository.delete(currentProjectProvider.getCurrentProject().getUuid());
         if (projectsRepository.getAll().isEmpty()) {
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
         } else {

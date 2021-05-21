@@ -30,6 +30,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
@@ -44,7 +45,7 @@ class MainMenuActivityTest {
     }
 
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
-        on { currentProject } doReturn MutableLiveData(project)
+        on { currentProject } doReturn MutableNonNullLiveData(project)
     }
 
     @Before
