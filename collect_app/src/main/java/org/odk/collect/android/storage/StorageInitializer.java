@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.projects.Project;
 
 import java.io.File;
 
@@ -27,8 +28,8 @@ public class StorageInitializer {
         createDirs(storagePathProvider.getOdkRootDirPaths());
     }
 
-    public void createProjectDirsOnStorage() {
-        createDirs(storagePathProvider.getProjectDirPaths());
+    public void createProjectDirsOnStorage(Project.Saved project) {
+        createDirs(storagePathProvider.getProjectDirPaths(project));
     }
 
     private void createDirs(String[] dirPaths) {

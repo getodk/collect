@@ -10,9 +10,9 @@ import org.odk.collect.projects.Project
 class CurrentProjectViewModel(private val currentProjectProvider: CurrentProjectProvider) : ViewModel() {
 
     private val _currentProject = MutableLiveData(currentProjectProvider.getCurrentProject()!!)
-    val currentProject: LiveData<Project> = _currentProject
+    val currentProject: LiveData<Project.Saved> = _currentProject
 
-    fun setCurrentProject(project: Project) {
+    fun setCurrentProject(project: Project.Saved) {
         _currentProject.postValue(project)
     }
 

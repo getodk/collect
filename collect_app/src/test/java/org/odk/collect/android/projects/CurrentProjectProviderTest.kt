@@ -41,7 +41,7 @@ class CurrentProjectProviderTest {
     fun `A project should be returned after calling getCurrentProject() if there is a project for given id`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
         `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn("123e4567")
-        val project = Project("ProjectX", "X", "#00FF00", "123e4567")
+        val project = Project.Saved("123e4567", "ProjectX", "X", "#00FF00")
         `when`(projectsRepository.get("123e4567")).thenReturn(project)
 
         assertThat(currentProjectProvider.getCurrentProject(), `is`(project))

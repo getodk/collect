@@ -26,6 +26,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
@@ -39,10 +40,13 @@ import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
+import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.projects.AddProjectDialog;
+import org.odk.collect.projects.Project;
 
 import javax.inject.Inject;
 
@@ -55,7 +59,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback, AddProjectDialog.AddProjectDialogListener {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -71,6 +75,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    StorageInitializer storageInitializer;
 
     private MainMenuViewModel mainMenuViewModel;
 
@@ -275,5 +282,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     public void onIncorrectAdminPassword() {
         ToastUtils.showShortToast(R.string.admin_password_incorrect);
+    }
+
+    @Override
+    public void onProjectAdded(@NotNull Project.Saved project) {
+        storageInitializer.createProjectDirsOnStorage(project);
     }
 }

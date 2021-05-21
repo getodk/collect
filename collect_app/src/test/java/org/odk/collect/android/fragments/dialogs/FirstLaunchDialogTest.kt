@@ -28,6 +28,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler.getString
 import org.odk.collect.android.version.VersionInformation
@@ -51,7 +52,11 @@ class FirstLaunchDialogTest {
     fun `Importing default project should be triggered after clicking on the 'Configure later' button`() {
         val projectImporter = mock(ProjectImporter::class.java)
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesProjectImporter(projectsRepository: ProjectsRepository, currentProjectProvider: CurrentProjectProvider): ProjectImporter? {
+            override fun providesProjectImporter(
+                projectsRepository: ProjectsRepository,
+                currentProjectProvider: CurrentProjectProvider,
+                storageInitializer: StorageInitializer
+            ): ProjectImporter? {
                 return projectImporter
             }
         })

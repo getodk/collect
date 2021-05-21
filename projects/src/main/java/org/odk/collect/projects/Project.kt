@@ -1,10 +1,28 @@
 package org.odk.collect.projects
 
-const val NOT_SPECIFIED_UUID = "not_specified"
+sealed class Project {
+    abstract val name: String
+    abstract val icon: String
+    abstract val color: String
 
-data class Project(
-    val name: String,
-    val icon: String,
-    val color: String,
-    val uuid: String = NOT_SPECIFIED_UUID,
-)
+    data class New(
+        override val name: String,
+        override val icon: String,
+        override val color: String
+    ) : Project()
+
+    data class Saved(
+        val uuid: String,
+        override val name: String,
+        override val icon: String,
+        override val color: String
+    ) : Project() {
+
+        constructor(uuid: String, project: New) : this(
+            uuid,
+            project.name,
+            project.icon,
+            project.color
+        )
+    }
+}

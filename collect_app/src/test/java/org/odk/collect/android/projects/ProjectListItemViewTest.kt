@@ -21,14 +21,14 @@ class ProjectListItemViewTest {
     @Test
     fun `shows project name`() {
         val view = ProjectListItemView(context)
-        view.project = Project("SOM", "S", "#ffffff")
+        view.project = Project.New("SOM", "S", "#ffffff")
         assertThat(view.findViewById<TextView>(R.id.project_name).text, equalTo("SOM"))
     }
 
     @Test
     fun `shows project icon with color as background`() {
         val view = ProjectListItemView(context)
-        view.project = Project("SOM", "S", "#ffffff")
+        view.project = Project.New("SOM", "S", "#ffffff")
         assertThat(view.findViewById<TextView>(R.id.project_icon_text).text, equalTo("S"))
 
         val background = view.findViewById<TextView>(R.id.project_icon_text).background as GradientDrawable

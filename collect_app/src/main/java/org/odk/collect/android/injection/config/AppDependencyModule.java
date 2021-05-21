@@ -566,8 +566,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider) {
-        return new ProjectImporter(projectsRepository, currentProjectProvider);
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, StorageInitializer storageInitializer) {
+        return new ProjectImporter(projectsRepository, currentProjectProvider, storageInitializer);
     }
 
     @Provides

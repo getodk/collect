@@ -37,11 +37,11 @@ class DeleteProjectTest {
         rule.mainMenu()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
             .assertProjectIcon("T", "#0000FF")
-
-        // Delete Turtle nesting project
-        rule.mainMenu()
-            .openProjectSettings()
-            .clickAdminSettings()
-            .deleteLastProject()
+//
+//        // Delete Turtle nesting project
+//        rule.mainMenu()
+//            .openProjectSettings()
+//            .clickAdminSettings()
+//            .deleteLastProject()
     }
 }

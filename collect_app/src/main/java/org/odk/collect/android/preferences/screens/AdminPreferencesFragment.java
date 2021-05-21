@@ -158,16 +158,16 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Project currentProject = currentProjectProvider.getCurrentProject();
+        Project.Saved currentProject = currentProjectProvider.getCurrentProject();
         switch (preference.getKey()) {
             case PROJECT_NAME_KEY:
-                projectsRepository.save(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor()));
                 break;
             case PROJECT_ICON_KEY:
-                projectsRepository.save(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), String.valueOf(newValue), currentProject.getColor()));
                 break;
             case PROJECT_COLOR_KEY:
-                projectsRepository.save(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue)));
                 break;
         }
         return true;

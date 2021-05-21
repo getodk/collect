@@ -66,7 +66,7 @@ class SplashScreenViewModelTest {
     @Test
     fun `shouldFirstLaunchScreenBeDisplayed should return false if the app is not newly installed and there are saved projects`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        `when`(projectsRepository.getAll()).thenReturn(listOf(Project("Project X", "P", "#cccccc")))
+        `when`(projectsRepository.getAll()).thenReturn(listOf(Project.Saved("123", "Project X", "P", "#cccccc")))
         assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(false))
     }
 }

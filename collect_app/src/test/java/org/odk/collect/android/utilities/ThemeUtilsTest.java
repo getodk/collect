@@ -45,7 +45,7 @@ public class ThemeUtilsTest {
 
     @Before
     public void setup() {
-        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).projectsRepository().save(new Project("Project 1", "P", "#ffffff", "1"));
+        DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).projectsRepository().save(new Project.Saved("1", "Project 1", "P", "#ffffff"));
         DaggerUtils.getComponent((Collect) ApplicationProvider.getApplicationContext()).currentProjectProvider().setCurrentProject("1");
 
         mainMenuActivity = Robolectric.setupActivity(MainMenuActivity.class);

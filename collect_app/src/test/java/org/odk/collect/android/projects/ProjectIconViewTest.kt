@@ -22,7 +22,7 @@ class ProjectIconViewTest {
     @Test
     fun `shows project icon with color as background`() {
         val view = ProjectIconView(context)
-        view.project = Project("SOM", "S", "#ffffff")
+        view.project = Project.New("SOM", "S", "#ffffff")
         assertThat(view.findViewById<TextView>(R.id.project_icon_text).text, equalTo("S"))
 
         val background = view.findViewById<TextView>(R.id.project_icon_text).background as GradientDrawable

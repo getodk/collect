@@ -3,6 +3,7 @@ package org.odk.collect.android.storage;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.projects.Project;
 
 import java.io.File;
 
@@ -20,13 +21,13 @@ public class StoragePathProvider {
         };
     }
 
-    public String[] getProjectDirPaths() {
+    public String[] getProjectDirPaths(Project.Saved project) {
         return new String[]{
-                getOdkDirPath(StorageSubdirectory.FORMS),
-                getOdkDirPath(StorageSubdirectory.INSTANCES),
-                getOdkDirPath(StorageSubdirectory.CACHE),
-                getOdkDirPath(StorageSubdirectory.METADATA),
-                getOdkDirPath(StorageSubdirectory.LAYERS)
+                getOdkDirPath(StorageSubdirectory.FORMS, project),
+                getOdkDirPath(StorageSubdirectory.INSTANCES, project),
+                getOdkDirPath(StorageSubdirectory.CACHE, project),
+                getOdkDirPath(StorageSubdirectory.METADATA, project),
+                getOdkDirPath(StorageSubdirectory.LAYERS, project)
         };
     }
 
@@ -38,18 +39,30 @@ public class StoragePathProvider {
     }
 
     public String getProjectRootDirPath() {
-        String projectId = currentProjectProvider.getCurrentProject().getUuid();
-        return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + projectId;
+        return getProjectRootDirPath(null);
+    }
+
+    public String getProjectRootDirPath(Project.Saved project) {
+        if (project == null) {
+            String projectId = currentProjectProvider.getCurrentProject().getUuid();
+            return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + projectId;
+        } else {
+            return getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + project.getUuid();
+        }
     }
 
     public String getOdkDirPath(StorageSubdirectory subdirectory) {
+        return getOdkDirPath(subdirectory, null);
+    }
+
+    public String getOdkDirPath(StorageSubdirectory subdirectory, Project.Saved project) {
         switch (subdirectory) {
             case FORMS:
             case INSTANCES:
             case CACHE:
             case METADATA:
             case LAYERS:
-                return getProjectRootDirPath() + File.separator + subdirectory.getDirectoryName();
+                return getProjectRootDirPath(project) + File.separator + subdirectory.getDirectoryName();
             case SETTINGS:
             case PROJECTS:
                 return getOdkRootDirPath() + File.separator + subdirectory.getDirectoryName();

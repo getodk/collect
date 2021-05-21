@@ -35,7 +35,7 @@ import org.odk.collect.projects.Project
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {
 
-    private val project = Project("Project", "P", "#f5f5f5")
+    private val project = Project.Saved("123", "Project", "P", "#f5f5f5")
 
     private val mainMenuViewModel = mock<MainMenuViewModel> {
         on { finalizedFormsCount } doReturn MutableLiveData(0)

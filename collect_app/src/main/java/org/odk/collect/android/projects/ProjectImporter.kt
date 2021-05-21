@@ -1,22 +1,26 @@
 package org.odk.collect.android.projects
 
+import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
 class ProjectImporter(
     private val projectsRepository: ProjectsRepository,
-    private val currentProjectProvider: CurrentProjectProvider
+    private val currentProjectProvider: CurrentProjectProvider,
+    private val storageInitializer: StorageInitializer
 ) {
     fun importDemoProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
+        val project = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         projectsRepository.save(project)
+        storageInitializer.createProjectDirsOnStorage(project)
         currentProjectProvider.setCurrentProject(DEMO_PROJECT_ID)
     }
 
     // Now it does the same like importDemoProject() but it should be changed later
     fun importExistingProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
+        val project = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         projectsRepository.save(project)
+        storageInitializer.createProjectDirsOnStorage(project)
         currentProjectProvider.setCurrentProject(DEMO_PROJECT_ID)
     }
 
