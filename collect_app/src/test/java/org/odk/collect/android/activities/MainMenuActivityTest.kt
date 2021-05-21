@@ -12,6 +12,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.gson.Gson
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -20,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
@@ -30,7 +32,11 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.NewProject
 import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.shared.UUIDGenerator
 
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {
@@ -41,6 +47,10 @@ class MainMenuActivityTest {
         on { finalizedFormsCount } doReturn MutableLiveData(0)
         on { sentFormsCount } doReturn MutableLiveData(0)
         on { unsentFormsCount } doReturn MutableLiveData(0)
+    }
+
+    private val projectsRepository = mock<ProjectsRepository> {
+        on { getAll() } doReturn listOf(Project("ProjectX", "X", "#cccccc", "1"))
     }
 
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
@@ -58,6 +68,10 @@ class MainMenuActivityTest {
                 }
             }
 
+            override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {
+                return projectsRepository
+            }
+
             override fun providesCurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider): CurrentProjectViewModel.Factory {
                 return object : CurrentProjectViewModel.Factory(currentProjectProvider) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -66,6 +80,25 @@ class MainMenuActivityTest {
                 }
             }
         })
+    }
+
+    @Test
+    fun `MainMenuActivity should implement AddProjectDialogListener`() {
+        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
+        }
+    }
+
+    @Test
+    fun `New project should be saved to repository when onProjectAdded() is called`() {
+        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(newProject)
+
+            verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
+        }
     }
 
     @Test
