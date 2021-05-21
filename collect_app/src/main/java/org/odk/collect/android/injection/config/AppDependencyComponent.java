@@ -292,4 +292,6 @@ public interface AppDependencyComponent {
     InstancesAppState instancesAppState();
 
     ProjectImporter projectImporter();
+
+    SettingsProvider settingsProvider();
 }

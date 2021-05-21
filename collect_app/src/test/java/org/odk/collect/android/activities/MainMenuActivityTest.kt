@@ -1,6 +1,7 @@
 package org.odk.collect.android.activities
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,8 +27,11 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
@@ -98,6 +103,20 @@ class MainMenuActivityTest {
             activity.onProjectAdded(newProject)
 
             verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
+        }
+    }
+
+    @Test
+    fun `Username and password should be saved to settings when onProjectAdded() is called`() {
+        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(newProject)
+
+            val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
+
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_USERNAME), `is`("Adam"))
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
         }
     }
 
