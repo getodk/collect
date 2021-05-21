@@ -1,9 +1,11 @@
 package org.odk.collect.android.activities
 
+import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ActivityScenario
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
@@ -12,6 +14,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Rule
@@ -23,8 +26,11 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.rules.MainCoroutineScopeRule
@@ -127,6 +133,24 @@ class SplashScreenActivityTest {
             Intents.intended(hasComponent(MainMenuActivity::class.java.name))
 
             Intents.release()
+        }
+    }
+
+    @Test
+    fun `Username and password should be saved to settings when onProjectAdded() is called`() {
+        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
+
+        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        scenario.onActivity { activity: SplashScreenActivity ->
+            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
+
+            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(newProject)
+
+            val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
+
+            MatcherAssert.assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_USERNAME), `is`("Adam"))
+            MatcherAssert.assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
         }
     }
 
