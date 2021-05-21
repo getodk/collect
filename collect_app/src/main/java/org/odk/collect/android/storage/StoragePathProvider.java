@@ -10,9 +10,16 @@ import java.io.File;
 public class StoragePathProvider {
 
     private final CurrentProjectProvider currentProjectProvider;
+    private final String externalFilesDirPath;
 
     public StoragePathProvider() {
         currentProjectProvider = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider();
+        externalFilesDirPath = Collect.getInstance().getExternalFilesDir(null).getAbsolutePath();
+    }
+
+    public StoragePathProvider(CurrentProjectProvider currentProjectProvider, String externalFilesDirPath) {
+        this.currentProjectProvider = currentProjectProvider;
+        this.externalFilesDirPath = externalFilesDirPath;
     }
 
     public String[] getOdkRootDirPaths() {
@@ -32,10 +39,7 @@ public class StoragePathProvider {
     }
 
     public String getOdkRootDirPath() {
-        File odkDirPath = Collect.getInstance().getExternalFilesDir(null);
-        return odkDirPath != null
-                ? odkDirPath.getAbsolutePath()
-                : "";
+        return externalFilesDirPath;
     }
 
     public String getProjectRootDirPath() {
