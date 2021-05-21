@@ -63,6 +63,7 @@ class AddProjectDialogTest {
         scenario.onFragment {
             it.setAddProjectDialogListener(listener)
 
+            onView(withHint(R.string.server_url)).perform(scrollTo(), typeText("my-server.com"))
             onView(withHint(R.string.username)).perform(scrollTo(), typeText("Adam"))
             onView(withHint(R.string.password)).perform(scrollTo(), typeText("1234"))
             onView(withHint(R.string.project_name)).perform(scrollTo(), typeText("ProjectX"))
@@ -71,7 +72,7 @@ class AddProjectDialogTest {
 
             onView(withText(R.string.add)).perform(click())
 
-            verify(listener).onProjectAdded(NewProject("Adam", "1234", "ProjectX", "X", "#cccccc"))
+            verify(listener).onProjectAdded(NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc"))
         }
     }
 
@@ -88,7 +89,7 @@ class AddProjectDialogTest {
     fun `Only one emoji should be accepted as a project icon`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
-            onView(withHint(R.string.project_icon)).perform(replaceText("\uD83D\uDC22"))
+            onView(withHint(R.string.project_icon)).perform(scrollTo(), replaceText("\uD83D\uDC22"))
             onView(allOf(withHint(R.string.project_icon), withText("\uD83D\uDC22"))).check(matches(isDisplayed()))
         }
     }

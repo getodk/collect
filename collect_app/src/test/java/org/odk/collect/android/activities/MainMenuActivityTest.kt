@@ -99,7 +99,7 @@ class MainMenuActivityTest {
     fun `New project should be saved to repository when onProjectAdded() is called`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
@@ -110,11 +110,12 @@ class MainMenuActivityTest {
     fun `Username and password should be saved to settings when onProjectAdded() is called`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
 
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL), `is`("my-server.com"))
             assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_USERNAME), `is`("Adam"))
             assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
         }

@@ -14,7 +14,6 @@ import com.google.gson.Gson
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
-import org.hamcrest.MatcherAssert
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Rule
@@ -95,7 +94,7 @@ class SplashScreenActivityTest {
         scenario.onActivity { activity: SplashScreenActivity ->
             `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
@@ -110,7 +109,7 @@ class SplashScreenActivityTest {
         scenario.onActivity { activity: SplashScreenActivity ->
             `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             verify(currentProjectProvider).setCurrentProject("1")
@@ -127,7 +126,7 @@ class SplashScreenActivityTest {
 
             `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             Intents.intended(hasComponent(MainMenuActivity::class.java.name))
@@ -144,13 +143,14 @@ class SplashScreenActivityTest {
         scenario.onActivity { activity: SplashScreenActivity ->
             `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("Adam", "1234", "ProjectX", "X", "#cccccc")
+            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
             activity.onProjectAdded(newProject)
 
             val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
 
-            MatcherAssert.assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_USERNAME), `is`("Adam"))
-            MatcherAssert.assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL), `is`("my-server.com"))
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_USERNAME), `is`("Adam"))
+            assertThat(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
         }
     }
 
