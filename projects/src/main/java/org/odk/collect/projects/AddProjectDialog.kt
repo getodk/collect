@@ -41,7 +41,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val newProject = NewProject(getUsername(), getPassword(), getProjectName(), getProjectIcon(), getProjectColor())
+            val newProject = NewProject(getUrl(), getUsername(), getPassword(), getProjectName(), getProjectIcon(), getProjectColor())
             listener?.onProjectAdded(newProject)
             dismiss()
         }
@@ -62,6 +62,8 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         toolbar?.setTitle(R.string.add_project)
         toolbar?.navigationIcon = null
     }
+
+    private fun getUrl() = binding.url.editText?.text?.trim().toString()
 
     private fun getUsername() = binding.username.editText?.text?.trim().toString()
 

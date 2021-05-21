@@ -36,6 +36,23 @@
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/url"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                android:hint="@string/server_url"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -43,7 +60,7 @@
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/username"
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/url">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
