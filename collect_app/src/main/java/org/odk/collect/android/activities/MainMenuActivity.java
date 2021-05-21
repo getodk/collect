@@ -290,6 +290,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements
 
     @Override
     public void onProjectAdded(@NotNull NewProject newProject) {
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_USERNAME, newProject.getUsername());
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, newProject.getPassword());
+
         projectsRepository.save(new Project(newProject.getName(), newProject.getIcon(), newProject.getColor(), NOT_SPECIFIED_UUID));
     }
 }
