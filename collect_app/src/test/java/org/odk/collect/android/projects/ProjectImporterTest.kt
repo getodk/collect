@@ -5,21 +5,35 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 import org.odk.collect.android.storage.StorageInitializer
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.UUIDGenerator
+import java.io.File
 
 class ProjectImporterTest {
 
     private val projectsRepository = InMemProjectsRepository(UUIDGenerator())
-    private val storageInitializer = mock<StorageInitializer>()
+
+    private val rootDir = TempFiles.createTempDir()
+    private val legacyRootDirs = listOf(
+        File(rootDir, "forms"),
+        File(rootDir, "instances"),
+        File(rootDir, "metadata"),
+        File(rootDir, "layers"),
+        File(rootDir, ".cache"),
+    )
+
+    private val storagePathProvider = StoragePathProvider(null, rootDir.absolutePath)
+    private val storageInitializer = StorageInitializer(storagePathProvider, mock())
 
     private val projectImporter = ProjectImporter(
         projectsRepository,
-        storageInitializer
+        storageInitializer,
+        storagePathProvider
     )
 
     @Test
@@ -33,7 +47,13 @@ class ProjectImporterTest {
     @Test
     fun `importDemoProject() creates storage for project`() {
         projectImporter.importDemoProject()
-        verify(storageInitializer).createProjectDirsOnStorage(projectsRepository.getAll()[0])
+
+        val demoProject = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        storagePathProvider.getProjectDirPaths(demoProject).forEach {
+            val dir = File(it)
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+        }
     }
 
     @Test
@@ -43,8 +63,34 @@ class ProjectImporterTest {
     }
 
     @Test
-    fun `importExistingProject() creates storage for project`() {
-        projectImporter.importExistingProject()
-        verify(storageInitializer).createProjectDirsOnStorage(projectsRepository.getAll()[0])
+    fun `importExistingProject() moves files from root`() {
+        legacyRootDirs.forEach {
+            it.mkdir()
+            TempFiles.createTempFile(it, "file", ".temp")
+        }
+
+        val existingProject = projectImporter.importExistingProject()
+
+        legacyRootDirs.forEach {
+            assertThat(it.exists(), `is`(false))
+        }
+
+        storagePathProvider.getProjectDirPaths(existingProject).forEach {
+            val dir = File(it)
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+            assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
+        }
+    }
+
+    @Test
+    fun `importExistingProject() creates storage if root files don't exist`() {
+        val existingProject = projectImporter.importExistingProject()
+
+        storagePathProvider.getProjectDirPaths(existingProject).forEach {
+            val dir = File(it)
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+        }
     }
 }
