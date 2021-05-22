@@ -103,6 +103,8 @@ class SharedPreferencesSettings(
 
     override fun unregisterOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
         val pair = listeners.find { pair -> listener == pair.first.get() }
+        listeners.remove(pair)
+
         if (pair != null) {
             sharedPreferences.unregisterOnSharedPreferenceChangeListener(pair.second)
         }
