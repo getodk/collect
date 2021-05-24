@@ -8,6 +8,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
 
@@ -32,10 +33,10 @@ class CurrentProjectViewModelTest {
     }
 
     @Test
-    fun `setCurrentProject() should add new project to live data`() {
-        val project = Project.Saved("123", "Project Y", "Y", "#ffffff")
+    fun `setCurrentProject() sets current project`() {
+        val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
 
         currentProjectViewModel.setCurrentProject(project)
-        assertThat(currentProjectViewModel.currentProject.value, `is`(project))
+        verify(currentProjectProvider).setCurrentProject("456")
     }
 }

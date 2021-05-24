@@ -9,9 +9,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoInteractions
-import org.odk.collect.android.TestSettingsProvider
+import org.mockito.kotlin.verify
+import org.odk.collect.android.TestSettingsProvider.getMetaSettings
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -23,6 +23,7 @@ import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.robolectric.RobolectricTestRunner
 
@@ -30,6 +31,7 @@ import org.robolectric.RobolectricTestRunner
 class ApplicationInitializerTest {
     val appStateProvider: AppStateProvider = mock(AppStateProvider::class.java)
     val projectImporter: ProjectImporter = mock(ProjectImporter::class.java)
+    val currentProjectProvider: CurrentProjectProvider = mock(CurrentProjectProvider::class.java)
 
     lateinit var applicationInitializer: ApplicationInitializer
 
@@ -48,8 +50,15 @@ class ApplicationInitializerTest {
                 currentProjectProvider: CurrentProjectProvider,
                 storageInitializer: StorageInitializer,
                 storagePathProvider: StoragePathProvider
-            ): ProjectImporter? {
+            ): ProjectImporter {
                 return projectImporter
+            }
+
+            override fun providesCurrentProjectProvider(
+                settingsProvider: SettingsProvider?,
+                projectsRepository: ProjectsRepository?
+            ): CurrentProjectProvider {
+                return currentProjectProvider
             }
         })
 
@@ -61,9 +70,12 @@ class ApplicationInitializerTest {
     @Test
     fun `Should existing project be imported when it's not first launch and it has not been already imported`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
+        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
+
+        val existing = Project.Saved("123", "Existing", "E", "#ffffff")
+        `when`(projectImporter.importExistingProject()).thenReturn(existing)
         applicationInitializer.initialize()
-        verify(projectImporter).importExistingProject()
+        verify(currentProjectProvider).setCurrentProject(existing.uuid)
     }
 
     @Test
@@ -76,18 +88,19 @@ class ApplicationInitializerTest {
     @Test
     fun `Should not existing project be imported when it was already imported once`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, true)
+        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, true)
         applicationInitializer.initialize()
         verifyNoInteractions(projectImporter)
     }
 
     @Test
     fun `Initializing the app should set ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT flag to true`() {
-        TestSettingsProvider.getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
+        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
+
+        val existing = Project.Saved("123", "Existing", "E", "#ffffff")
+        `when`(projectImporter.importExistingProject()).thenReturn(existing)
+
         applicationInitializer.initialize()
-        assertThat(
-            TestSettingsProvider.getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED),
-            equalTo(true)
-        )
+        assertThat(getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED), equalTo(true))
     }
 }

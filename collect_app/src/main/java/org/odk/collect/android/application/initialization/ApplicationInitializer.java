@@ -155,8 +155,8 @@ public class ApplicationInitializer {
 
     private void importExistingProjectIfNeeded() {
         if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
-            Project.Saved project = projectImporter.importExistingProject();
-            currentProjectProvider.setCurrentProject(project.getUuid());
+            Project.Saved existingProject = projectImporter.importExistingProject();
+            currentProjectProvider.setCurrentProject(existingProject.getUuid());
         }
 
         metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);
