@@ -28,7 +28,7 @@ public class AdminSettingsTest {
     @Test
     public void when_openAdminSettings_should_notCrash() {
         //TestCase1
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .assertOnPage();
@@ -37,7 +37,7 @@ public class AdminSettingsTest {
     @Test
     public void when_rotateOnAdminSettingsView_should_notCrash() {
         //TestCase2
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .assertOnPage()

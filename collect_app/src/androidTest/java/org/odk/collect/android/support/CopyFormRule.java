@@ -1,8 +1,15 @@
 package org.odk.collect.android.support;
 
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
+
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.projects.ProjectImporter;
 
 import java.util.List;
 
@@ -57,6 +64,15 @@ public class CopyFormRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
+            // Set up demo project if none exists
+            AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
+            try {
+                component.currentProjectProvider().getCurrentProject();
+            } catch (IllegalStateException e) {
+                component.projectImporter().importDemoProject();
+                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+            }
+
             AdbFormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase, fileName);
             base.evaluate();
         }

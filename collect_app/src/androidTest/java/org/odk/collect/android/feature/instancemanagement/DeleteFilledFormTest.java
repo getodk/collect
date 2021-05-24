@@ -23,7 +23,7 @@ public class DeleteFilledFormTest {
 
     @Test
     public void deletingAForm_removesFormFromFinalizedForms() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "30")
                 .swipeToEndScreen()

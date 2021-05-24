@@ -14,12 +14,12 @@ class LaunchScreenTest {
     private val rule = CollectTestRule(false)
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain(false)
+    val chain: RuleChain = TestRuleChain.chain()
         .around(rule)
 
     @Test
     fun clickingTryCollectAtLaunch_setsAppUpWithDemoProject() {
-        rule.firstLaunch()
+        rule.startAtFirstLaunch()
             .clickTryCollect()
             .openProjectSettings()
             .assertCurrentProject("Demo project")
@@ -31,7 +31,7 @@ class LaunchScreenTest {
 
     @Test
     fun clickingManuallyEnter_andAddingProjectDetails_setsAppUpWithProjectDetails() {
-        rule.firstLaunch()
+        rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
             .inputProjectName("Strange Days")
             .inputProjectIcon("S")

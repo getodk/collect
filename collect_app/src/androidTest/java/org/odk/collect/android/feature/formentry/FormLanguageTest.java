@@ -22,7 +22,7 @@ public class FormLanguageTest {
 
     @Test
     public void canSwitchLanguagesInForm() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question-translation.xml")
                 .startBlankForm("One Question")
                 .assertQuestion("what is your age")
@@ -34,7 +34,7 @@ public class FormLanguageTest {
 
     @Test
     public void languageChoiceIsPersisted() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question-translation.xml")
                 .startBlankForm("One Question")
                 .clickOptionsIcon()

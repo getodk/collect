@@ -25,14 +25,14 @@ public class ManualUpdatesTest {
 
     @Test
     public void whenManualUpdatesEnabled_getBlankFormsIsAvailable() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .enableManualUpdates()
                 .assertText(R.string.get_forms);
     }
 
     @Test
     public void whenManualUpdatesEnabled_fillBlankFormRefreshButtonIsGone() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .enableManualUpdates()
                 .clickFillBlankForm();
 

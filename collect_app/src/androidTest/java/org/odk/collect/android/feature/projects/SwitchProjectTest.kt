@@ -16,13 +16,13 @@ class SwitchProjectTest {
     val testDependencies = TestDependencies()
 
     @get:Rule
-    var chain: RuleChain = TestRuleChain.chain(testDependencies, false)
+    var chain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
 
     @Test
     fun canSwitchActiveProjectToAnotherInList() {
         // Add project Turtle nesting
-        rule.mainMenu()
+        rule.startAtMainMenu()
             .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettings()
             .clickAddProject()
@@ -31,8 +31,7 @@ class SwitchProjectTest {
             .inputProjectColor("#0000FF")
             .addProject()
 
-        // Switch to Turtle nesting
-        rule.mainMenu()
+            // Switch to Turtle nesting
             .openProjectSettings()
             .assertCurrentProject("Demo project")
             .assertInactiveProject("Turtle nesting")
@@ -45,7 +44,7 @@ class SwitchProjectTest {
     fun switchingProject_switchesServerFormsAndInstances() {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml")
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
             // Copy and fill form
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")

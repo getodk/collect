@@ -29,7 +29,7 @@ public class FormsAdbTest {
 
     @Test
     public void canUpdateFormOnDisk() throws Exception {
-        MainMenuPage mainMenuPage = rule.mainMenu()
+        MainMenuPage mainMenuPage = rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm()
                 .assertFormExists("One Question")
@@ -45,7 +45,7 @@ public class FormsAdbTest {
 
     @Test
     public void canDeleteFormFromDisk() {
-        MainMenuPage mainMenuPage = rule.mainMenu()
+        MainMenuPage mainMenuPage = rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm()
                 .assertFormExists("One Question")

@@ -32,7 +32,7 @@ public class SendFinalizedFormTest {
 
     @Test
     public void canViewSentForms() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
@@ -53,7 +53,7 @@ public class SendFinalizedFormTest {
 
     @Test
     public void whenDeleteAfterSendIsEnabled_deletesFilledForm() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
 
                 .openProjectSettings()
@@ -85,7 +85,7 @@ public class SendFinalizedFormTest {
         testDependencies.googleAccountPicker.setDeviceAccount("dani@davey.com");
         testDependencies.googleApi.setAccount("dani@davey.com");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setGoogleAccount("dani@davey.com")
                 .copyForm("one-question-google.xml")
                 .startBlankForm("One Question Google")

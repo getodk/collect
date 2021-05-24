@@ -46,7 +46,7 @@ public class BadServerTest {
         server.removeHashInFormList();
         server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()

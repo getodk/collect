@@ -42,7 +42,7 @@ public class EncryptedFormTest {
 
     @Test
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .startBlankForm("encrypted")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()
@@ -56,7 +56,7 @@ public class EncryptedFormTest {
 
     @Test
     public void instanceOfEncryptedForm_cantBeViewedAfterSending() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
 
                 .startBlankForm("encrypted")
@@ -79,7 +79,7 @@ public class EncryptedFormTest {
     //TestCase47
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .startBlankForm("encrypted-no-instanceID")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()

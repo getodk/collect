@@ -16,10 +16,12 @@
 
 package org.odk.collect.android.instrumented.utilities;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeElement;
@@ -31,6 +33,10 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -70,7 +76,13 @@ public class ImageConverterTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule());
+            .outerRule(new ResetStateRule())
+            .around(new RunnableRule(() -> {
+                // Set up demo project
+                AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
+                component.projectImporter().importDemoProject();
+                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+            }));
 
     @Before
     public void setUp() {

@@ -17,14 +17,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class CollectTestRule implements TestRule {
 
-    private final boolean skipProject;
+    private final boolean skipLaunchScreen;
 
     public CollectTestRule() {
         this(true);
     }
 
-    public CollectTestRule(boolean skipProject) {
-        this.skipProject = skipProject;
+    public CollectTestRule(boolean skipLaunchScreen) {
+        this.skipLaunchScreen = skipLaunchScreen;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class CollectTestRule implements TestRule {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
                 Boolean overrideFresh = AppStateProvider.overrideFresh;
-                if (overrideFresh != null && overrideFresh && skipProject) {
+                if (overrideFresh != null && overrideFresh && skipLaunchScreen) {
                     onView(withText(R.string.configure_later)).perform(click());
                 }
 
@@ -44,11 +44,11 @@ public class CollectTestRule implements TestRule {
         };
     }
 
-    public MainMenuPage mainMenu() {
+    public MainMenuPage startAtMainMenu() {
         return new MainMenuPage().assertOnPage();
     }
 
-    public FirstLaunchPage firstLaunch() {
+    public FirstLaunchPage startAtFirstLaunch() {
         return new FirstLaunchPage().assertOnPage();
     }
 }

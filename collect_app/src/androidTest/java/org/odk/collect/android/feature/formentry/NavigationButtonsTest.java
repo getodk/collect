@@ -36,7 +36,7 @@ public class NavigationButtonsTest {
 
     @Test //TestCase14
     public void showsAndHidesButtonsCorrectlyOnEachScreen() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("two-question.xml")
 
                 .startBlankForm("Two Question")
@@ -57,7 +57,7 @@ public class NavigationButtonsTest {
 
     @Test
     public void whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .clickFormEntrySettings()
@@ -83,7 +83,7 @@ public class NavigationButtonsTest {
 
     @Test
     public void whenButtonsDisabled_buttonsNotShown() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickGeneralSettings()
                 .clickOnUserInterface()

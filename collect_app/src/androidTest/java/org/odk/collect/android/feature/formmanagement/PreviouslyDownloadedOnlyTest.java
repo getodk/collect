@@ -38,7 +38,7 @@ public class PreviouslyDownloadedOnlyTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_notifiesOnFormUpdates_automaticallyAndRepeatedly() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
@@ -55,7 +55,7 @@ public class PreviouslyDownloadedOnlyTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_clickingOnNotification_navigatesToGetBlankForm() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates();
 
@@ -70,14 +70,14 @@ public class PreviouslyDownloadedOnlyTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_getBlankFormsIsAvailable() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .enablePreviouslyDownloadedOnlyUpdates()
                 .assertText(R.string.get_forms);
     }
 
     @Test
     public void whenPreviouslyDownloadedOnlyEnabled_fillBlankFormRefreshButtonIsGone() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .enablePreviouslyDownloadedOnlyUpdates()
                 .clickFillBlankForm();
 
@@ -86,7 +86,7 @@ public class PreviouslyDownloadedOnlyTest {
 
     @Test
     public void whenPreviouslyDownloadedOnlyDisabled_stopsCheckingForUpdates() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enablePreviouslyDownloadedOnlyUpdates()
                 .enableManualUpdates();

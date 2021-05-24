@@ -94,7 +94,7 @@ public class ConfigureWithQRCodeTest {
 
     @Test
     public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
-        QRCodePage qrCodePage = rule.mainMenu()
+        QRCodePage qrCodePage = rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .clickConfigureQR();
@@ -112,7 +112,7 @@ public class ConfigureWithQRCodeTest {
 
     @Test
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .clickConfigureQR()
@@ -125,7 +125,7 @@ public class ConfigureWithQRCodeTest {
 
     @Test
     public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAdminSettings()
                 .clickOnString(R.string.admin_password)
@@ -145,7 +145,7 @@ public class ConfigureWithQRCodeTest {
 
     @Test
     public void whenThereIsAServerPassword_canRemoveFromQRCode() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickGeneralSettings()
                 .clickServerSettings()

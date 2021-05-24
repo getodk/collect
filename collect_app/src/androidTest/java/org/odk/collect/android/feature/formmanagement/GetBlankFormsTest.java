@@ -28,7 +28,7 @@ public class GetBlankFormsTest {
         testDependencies.server.setCredentials("Draymond", "Green");
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankFormWithAuthenticationError()
                 .fillUsername("Draymond")
@@ -41,7 +41,7 @@ public class GetBlankFormsTest {
     public void whenThereIsAnErrorFetchingFormList_showsError() {
         testDependencies.server.alwaysReturnError();
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankFormWithError()
                 .assertText(R.string.load_remote_form_error)
@@ -53,7 +53,7 @@ public class GetBlankFormsTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
         testDependencies.server.errorOnFetchingForms();
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()

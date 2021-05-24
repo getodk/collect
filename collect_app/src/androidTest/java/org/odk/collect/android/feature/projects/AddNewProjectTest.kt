@@ -11,11 +11,11 @@ class AddNewProjectTest {
     val rule = CollectTestRule()
 
     @get:Rule
-    var chain: RuleChain = TestRuleChain.chain(false).around(rule)
+    var chain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
     fun addingProject_addsNewProject() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
             .inputProjectName("Project 1")
@@ -23,7 +23,6 @@ class AddNewProjectTest {
             .inputProjectColor("#0000FF")
             .addProject()
 
-        rule.mainMenu()
             .openProjectSettings()
             .assertInactiveProject("Project 1")
     }

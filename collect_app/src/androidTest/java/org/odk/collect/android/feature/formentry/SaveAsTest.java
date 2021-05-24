@@ -20,7 +20,7 @@ public class SaveAsTest {
 
     @Test
     public void fillingFormNameAtEndOfForm_savesInstanceWithName() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
@@ -32,7 +32,7 @@ public class SaveAsTest {
 
     @Test
     public void editingFormWithSavedName_prefillsName() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .swipeToEndScreen()

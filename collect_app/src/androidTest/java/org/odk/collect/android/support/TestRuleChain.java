@@ -17,17 +17,9 @@ public class TestRuleChain {
     }
 
     public static RuleChain chain(TestDependencies testDependencies) {
-        return chain(testDependencies, true);
-    }
-
-    public static RuleChain chain(boolean upgrade) {
-        return chain(new TestDependencies(), upgrade);
-    }
-
-    public static RuleChain chain(TestDependencies testDependencies, boolean upgrade) {
         return RuleChain
                 .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-                .around(new ResetStateRule(testDependencies, upgrade))
+                .around(new ResetStateRule(testDependencies))
                 .around(new IdlingResourceRule(testDependencies.idlingResources));
     }
 }
