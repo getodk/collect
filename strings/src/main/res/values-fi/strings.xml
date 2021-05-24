@@ -810,7 +810,5 @@
   <string name="fs_create_media_folder_error">Ei voitu luoda mediakansiota \'%s\'.</string>
   <string name="fs_file_copy_error">Ei voitu kopioida \'%1$s\' yli \'%2$s\'. Syy: %3$s</string>
   <string name="survey_multiple_forms_error">Olet ladannut kaksi eri lomaketta, joilla on sama lomake tunnus ja versio. Ehkä ne olivat samat lomake ladattuna eri aikoina tai eri palvelimille. Joka tapauksessa, sinun pitäisi poistaa toinen.</string>
-  <string name="cannot_create_directory">Hakemistoa ei voi luoda: %s</string>
-  <string name="not_a_directory">%s on olemassa, mutta ei ole hakemisto</string>
   <string name="select_odk_shortcut">Valitse ODK-oikotie</string>
 </resources>

@@ -562,6 +562,23 @@ public class FileUtils {
         return mimeType;
     }
 
+    public static void createDir(String dirPath) {
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                String message = String.format("Cannot create directory: %s", dirPath);
+                Timber.w(message);
+                throw new RuntimeException(message);
+            }
+        } else {
+            if (!dir.isDirectory()) {
+                String message = String.format("%s exists, but is not a directory", dirPath);
+                Timber.w(message);
+                throw new RuntimeException(message);
+            }
+        }
+    }
+
     /** An iterator that walks over all the directories and files under a given path. */
     private static class Walker implements Iterator<File> {
         private final List<File> queue = new ArrayList<>();

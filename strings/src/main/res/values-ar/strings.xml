@@ -806,7 +806,5 @@
   <string name="fs_create_media_folder_error">لا يمكن انشاء ملف وسائط متعددة \'%s\'.</string>
   <string name="fs_file_copy_error">لا يمكن النسخ  \'%1$s\' فوق  \'%2$s\'. السبب: \'%3$s\'</string>
   <string name="survey_multiple_forms_error">قمت بتحميل استمارتين مختلفتين بنفس رقم النموذج والاصدار. ربما قد يكون نفس النموذج تم تحميله في اوقات مختلفة او في خودام مختلفة. بأي حال يجب عليك حذف واحدة.</string>
-  <string name="cannot_create_directory">لا يمكن إنشاء مجلد: %s</string>
-  <string name="not_a_directory">%s موجود ، ولكنه ليس مجلدا</string>
   <string name="select_odk_shortcut">اختيار اختصار ODK</string>
 </resources>

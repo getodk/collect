@@ -799,7 +799,5 @@
   <string name="fs_create_media_folder_error">Tidak dapat membuat folder media \'%s\'.</string>
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>
   <string name="survey_multiple_forms_error">Anda mengunduh dua formulir berbeda, tetapi memiliki ID dan versi formulir yang sama. Kemungkinan keduanya adalah formulir yang sama dan diunggah pada saat yang berbeda atau pada server yang berbeda. Pada kasus ini, hapus salah satu formulir.</string>
-  <string name="cannot_create_directory">Tidak dapat membuat direktori: %s</string>
-  <string name="not_a_directory">%s sudah ada, tetapi bukan sebuah direktori.</string>
   <string name="select_odk_shortcut">Pilih pintasan ODK</string>
 </resources>

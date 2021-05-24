@@ -666,7 +666,5 @@
   <string name="fs_create_media_folder_error">Не удалось создать директорию media \'%s\'.</string>
   <string name="fs_file_copy_error">Не удалось скопировать \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_multiple_forms_error">Вы загрузили два разных опросника с одинаковым ID и версией. Возможно, это один и тот же опросник загруженный в разное время или на разные сервера. В любом случае, вам следует удалить один из них.</string>
-  <string name="cannot_create_directory">Не получилось создать папку: %s</string>
-  <string name="not_a_directory">%s существует, но не является папкой</string>
   <string name="select_odk_shortcut">Выбрать ярлык ODK</string>
 </resources>

@@ -39,6 +39,7 @@ import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -78,6 +79,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Inject
     StorageInitializer storageInitializer;
+
+    @Inject
+    ProjectImporter projectImporter;
 
     private MainMenuViewModel mainMenuViewModel;
 
@@ -286,6 +290,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     @Override
     public void onProjectAdded(@NotNull Project.Saved project) {
-        storageInitializer.createProjectDirsOnStorage(project);
+        projectImporter.setupProject(project);
     }
 }

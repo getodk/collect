@@ -222,8 +222,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public StorageInitializer providesStorageInitializer() {
-        return new StorageInitializer();
+    public StorageInitializer providesStorageInitializer(StoragePathProvider storagePathProvider) {
+        return new StorageInitializer(storagePathProvider);
     }
 
     @Provides
@@ -567,7 +567,7 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, StorageInitializer storageInitializer, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
-        return new ProjectImporter(context, storageInitializer, storagePathProvider, projectsRepository, settingsProvider);
+        return new ProjectImporter(context, storagePathProvider, projectsRepository, settingsProvider);
     }
 
     @Provides

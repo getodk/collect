@@ -10,10 +10,8 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
-import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -30,12 +28,10 @@ class ProjectImporterTest {
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val storagePathProvider = StoragePathProvider(null, rootDir.absolutePath)
-    private val storageInitializer = StorageInitializer(storagePathProvider, mock())
     private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(
         context,
-        storageInitializer,
         storagePathProvider,
         projectsRepository,
         settingsProvider

@@ -26,7 +26,7 @@ import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.storage.StorageInitializer
+import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
@@ -45,7 +45,7 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
     lateinit var projectsRepository: ProjectsRepository
 
     @Inject
-    lateinit var storageInitializer: StorageInitializer
+    lateinit var projectImporter: ProjectImporter
 
     lateinit var viewModel: SplashScreenViewModel
 
@@ -88,7 +88,7 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
     }
 
     override fun onProjectAdded(project: Project.Saved) {
-        storageInitializer.createProjectDirsOnStorage(project)
+        projectImporter.setupProject(project)
         currentProjectProvider.setCurrentProject(project.uuid)
         Collect.resetDatabaseConnections()
 

@@ -810,7 +810,5 @@
   <string name="fs_file_copy_error">No ha podido copiar \'%1$s\' sobre \'%2$s\'. Razón: %3$s</string>
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
 </string>
-  <string name="cannot_create_directory">No se puede crear directorio: %s</string>
-  <string name="not_a_directory">%s existe, pero no es un directorio</string>
   <string name="select_odk_shortcut">Seleccionar acceso directo</string>
 </resources>

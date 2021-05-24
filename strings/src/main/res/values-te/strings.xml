@@ -767,7 +767,5 @@
   <string name="fs_create_media_folder_error">మీడియా ఫోల్డర్‌%sను తయారు చేయడం సాధ్యం కాలేదు.</string>
   <string name="fs_file_copy_error">%2$sమీద %1$sను కాపీ చేయలేకపోయింది . కారణం :%3$s</string>
   <string name="survey_multiple_forms_error">మీరు ఒకే ఫారమ్ ఐడి, వెర్షన్‌తో రెండు వేర్వేరు ఫారమ్‌లను డౌన్‌లోడ్ చేసారు. అది వేర్వేరు సమయాల్లో లేదా వేర్వేరు సర్వర్‌లకు అప్‌లోడ్ చేసిన ఒకే ఫారం కావచ్చు. మీరు ఒకదాన్ని తొలగించవలసిందే. </string>
-  <string name="cannot_create_directory">%s డైరెక్టరి సృష్టించడానికి వీలు లేదు</string>
-  <string name="not_a_directory">%sఉంది, కాని ఇది డైరెక్టరి కాదు</string>
   <string name="select_odk_shortcut">ODK సత్వరమార్గాన్ని ఎంచుకోండి</string>
 </resources>

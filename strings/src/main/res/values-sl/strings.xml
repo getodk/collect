@@ -460,6 +460,4 @@
   <string name="fs_create_media_folder_error">Ne morem ustvariti medijsko mapo \'%s\'.</string>
   <string name="fs_file_copy_error">Ne morem kopirat \'%1$s\' preko \'%2$s\'. Razlog: %3$s.</string>
   <string name="survey_multiple_forms_error">Naložili ste dva različna obrazca z istim ID obrazca in verzijo. Izbrišite enega od obeh.</string>
-  <string name="cannot_create_directory">Ne morem narediti mape: %s</string>
-  <string name="not_a_directory">%s obstaja, vendar ni mapa</string>
 </resources>

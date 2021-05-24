@@ -1,6 +1,5 @@
 package org.odk.collect.android.storage;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -20,7 +19,7 @@ public class StorageInitializerTest {
     @Before
     public void setup() {
         storagePathProvider = new StoragePathProvider();
-        storageInitializer = new StorageInitializer(storagePathProvider, ApplicationProvider.getApplicationContext());
+        storageInitializer = new StorageInitializer(storagePathProvider);
 
         for (String dirName : storagePathProvider.getOdkRootDirPaths()) {
             File dir = new File(dirName);

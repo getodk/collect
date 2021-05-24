@@ -669,7 +669,5 @@
   <string name="fs_create_media_folder_error">មិនអាចបង្កើតថតមេឌៀបាន \'%s\'.</string>
   <string name="fs_file_copy_error">មិនអាចចម្លងបាន \'%1$s\' លើសពី \'%2$s\' ។ មូលហេតុ: %3$s</string>
   <string name="survey_multiple_forms_error">អ្នក​បាន​ទាញ​យក​សំណុំ​បែប​បទ​ពីរខុស​គ្នា​ដែល​មាន​លេខ​សម្គាល់​ទម្រង់​ និង​កំណែ។ ពួក​វា​ប្រហែល​ជា​សំណុំ​បែប​បទ​តែ​មួយ​ដែល​បាន​ផ្ទុក​ឡើង​នៅ​ម៉ោង​ ឬ​ម៉ាស៊ីន​មេ​ខុស​គ្នា។ សូម​អ្នក​លុប​វាមួយ​ក្នុង​​ករណី​ណា​មួយ។</string>
-  <string name="cannot_create_directory">ពុំអាច​បង្កើត​ថតឯកសារ: %s</string>
-  <string name="not_a_directory">%s មានរួច, ប៉ុន្តែ​ពុំមែន​ជាថត​ឯក​សារ</string>
   <string name="select_odk_shortcut">ជ្រើសរើសផ្លូវកាត់ ODK</string>
 </resources>

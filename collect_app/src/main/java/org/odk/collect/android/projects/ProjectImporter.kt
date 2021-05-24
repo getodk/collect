@@ -4,27 +4,27 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.FileUtils.moveDirectoryToDirectory
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.projects.Project
+import org.odk.collect.projects.Project.Saved
 import org.odk.collect.projects.ProjectsRepository
 import java.io.File
 import java.io.FileNotFoundException
 
 class ProjectImporter(
     private val context: Context,
-    private val storageInitializer: StorageInitializer,
     private val storagePathProvider: StoragePathProvider,
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider
 ) {
     fun importDemoProject() {
-        val project = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        val project = Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         projectsRepository.save(project)
-        storageInitializer.createProjectDirsOnStorage(project)
+        setupProject(project)
     }
 
-    fun importExistingProject(): Project.Saved {
+    fun importExistingProject(): Saved {
         val project = projectsRepository.save(Project.New("Existing project", "E", "#3e9fcc"))
 
         try {
@@ -40,7 +40,7 @@ class ProjectImporter(
                 moveDirectoryToDirectory(it, projectDir, true)
             }
         } catch (_: FileNotFoundException) {
-            storageInitializer.createProjectDirsOnStorage(project)
+            createProjectDirs(project)
         }
 
         val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -49,6 +49,14 @@ class ProjectImporter(
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
         return project
+    }
+
+    fun setupProject(project: Saved) {
+        createProjectDirs(project)
+    }
+
+    private fun createProjectDirs(project: Saved) {
+        storagePathProvider.getProjectDirPaths(project).forEach { FileUtils.createDir(it) }
     }
 
     companion object {
