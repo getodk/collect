@@ -20,6 +20,15 @@ class ProjectListItemView(context: Context, attrs: AttributeSet?) : FrameLayout(
         if (new != null) {
             findViewById<ProjectIconView>(R.id.project_icon).project = new
             findViewById<TextView>(R.id.project_name).text = new.name
+            findViewById<TextView>(R.id.project_url).text = getUsernameAndUrl(new)
+        }
+    }
+
+    private fun getUsernameAndUrl(project: Project): String {
+        return if (project.username.isNotBlank()) {
+            return "${project.username} / ${project.url}"
+        } else {
+            project.url
         }
     }
 }
