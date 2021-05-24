@@ -52,27 +52,20 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
 
-        binding.urlInputText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                generateNameAndIcon()
-            }
-        }
-
         binding.urlInputText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 generateNameAndIcon()
             }
 
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         binding.projectNameInputText.post {
             binding.projectNameInputText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (binding.projectNameInputText.tag != VALUE_CHANGED_PROGRAMMATICALLY) {
                         projectNameSetByUser = true
@@ -86,6 +79,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         binding.projectIconInputText.post {
             binding.projectIconInputText.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                     if (binding.projectIconInputText.tag != VALUE_CHANGED_PROGRAMMATICALLY) {
                         projectIconSetByUser = true
