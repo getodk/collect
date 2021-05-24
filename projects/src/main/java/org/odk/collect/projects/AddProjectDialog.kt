@@ -12,7 +12,6 @@ import org.jetbrains.annotations.TestOnly
 import org.odk.collect.androidshared.OneSignTextWatcher
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
-import java.net.URL
 
 class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
@@ -117,30 +116,18 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun generateNameAndIcon() {
-        val urlString = getUrl()
-        if (urlString.isNotEmpty()) {
-            try {
-                val url = URL(urlString)
-                var projectName = url.host
-                if (projectName.startsWith("www.")) {
-                    projectName = projectName.substring(4)
-                }
-                projectName = projectName.substring(0, projectName.indexOf("."))
+        val projectNameAndIcon = ProjectDetailsGenerator.getProjectNameAndIconFromUrl(getUrl())
 
-                if (!projectNameSetByUser) {
-                    binding.projectNameInputText.tag = VALUE_CHANGED_PROGRAMMATICALLY
-                    binding.projectNameInputText.setText(projectName)
-                    binding.projectNameInputText.tag = ""
-                }
+        if (!projectNameSetByUser) {
+            binding.projectNameInputText.tag = VALUE_CHANGED_PROGRAMMATICALLY
+            binding.projectNameInputText.setText(projectNameAndIcon.first)
+            binding.projectNameInputText.tag = ""
+        }
 
-                if (!projectIconSetByUser) {
-                    val projectIcon = projectName.first().toUpperCase().toString()
-                    binding.projectIconInputText.tag = VALUE_CHANGED_PROGRAMMATICALLY
-                    binding.projectIconInputText.setText(projectIcon)
-                    binding.projectIconInputText.tag = ""
-                }
-            } catch (e: Exception) {
-            }
+        if (!projectIconSetByUser) {
+            binding.projectIconInputText.tag = VALUE_CHANGED_PROGRAMMATICALLY
+            binding.projectIconInputText.setText(projectNameAndIcon.second)
+            binding.projectIconInputText.tag = ""
         }
     }
 
