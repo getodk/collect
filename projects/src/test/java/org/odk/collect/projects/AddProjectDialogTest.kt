@@ -93,4 +93,70 @@ class AddProjectDialogTest {
             onView(allOf(withHint(R.string.project_icon), withText("\uD83D\uDC22"))).check(matches(isDisplayed()))
         }
     }
+
+    @Test
+    fun `Project name should be generated after passing url`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_name), withText("my-server"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://second-server.com"))
+            onView(allOf(withHint(R.string.project_name), withText("second-server"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            scenario.recreate()
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://third-server.com"))
+            onView(allOf(withHint(R.string.project_name), withText("third-server"))).perform(scrollTo()).check(matches(isDisplayed()))
+        }
+    }
+
+    @Test
+    fun `Project icon should be generated after passing url`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_icon), withText("M"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://second-server.com"))
+            onView(allOf(withHint(R.string.project_icon), withText("S"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            scenario.recreate()
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://third-server.com"))
+            onView(allOf(withHint(R.string.project_icon), withText("T"))).perform(scrollTo()).check(matches(isDisplayed()))
+        }
+    }
+
+    @Test
+    fun `Project name should not be generated again after being changed by a user`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_name))).perform(scrollTo(), replaceText("Project X"))
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_name), withText("Project X"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            scenario.recreate()
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_name), withText("Project X"))).perform(scrollTo()).check(matches(isDisplayed()))
+        }
+    }
+
+    @Test
+    fun `Project icon should not be generated again after being changed by a user`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_icon))).perform(scrollTo(), replaceText("X"))
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_icon), withText("X"))).perform(scrollTo()).check(matches(isDisplayed()))
+
+            scenario.recreate()
+
+            onView(withHint(R.string.server_url)).perform(scrollTo(), replaceText("https://my-server.com"))
+            onView(allOf(withHint(R.string.project_icon), withText("X"))).perform(scrollTo()).check(matches(isDisplayed()))
+        }
+    }
 }
