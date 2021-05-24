@@ -49,6 +49,7 @@
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
         <item name="alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>
         <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
         <item name="iconColor">#ffffff</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
