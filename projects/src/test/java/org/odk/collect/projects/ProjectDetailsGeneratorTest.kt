@@ -8,12 +8,9 @@ class ProjectDetailsGeneratorTest {
 
     @Test
     fun `Project name should be extracted from url if url is valid`() {
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://www.my-server.com").first, `is`("my-server"))
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("http://www.my-server.com").first, `is`("my-server"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://my-server.com").first, `is`("my-server"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("http://my-server.com").first, `is`("my-server"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://my-server.something.com").first, `is`("my-server"))
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://www.my-server.something.com").first, `is`("my-server"))
     }
 
     @Test
@@ -25,12 +22,9 @@ class ProjectDetailsGeneratorTest {
 
     @Test
     fun `Project icon should be extracted from url if url is invalid`() {
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://www.my-server.com").second, `is`("M"))
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("http://www.my-server.com").second, `is`("M"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://my-server.com").second, `is`("M"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("http://my-server.com").second, `is`("M"))
         assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://my-server.something.com").second, `is`("M"))
-        assertThat(ProjectDetailsGenerator.getProjectNameAndIconFromUrl("https://www.my-server.something.com").second, `is`("M"))
     }
 
     @Test

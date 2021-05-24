@@ -8,12 +8,7 @@ object ProjectDetailsGenerator {
         var projectIcon = ""
         try {
             val url = URL(urlString)
-            projectName = url.host
-            if (projectName.startsWith("www.")) {
-                projectName = projectName.substring(4)
-            }
-            projectName = projectName.substring(0, projectName.indexOf("."))
-
+            projectName = url.host.substring(0, url.host.indexOf("."))
             projectIcon = projectName.first().toUpperCase().toString()
         } catch (e: Exception) {
         }
