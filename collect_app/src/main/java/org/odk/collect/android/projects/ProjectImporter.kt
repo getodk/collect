@@ -27,20 +27,20 @@ class ProjectImporter(
     fun importExistingProject(): Saved {
         val project = projectsRepository.save(Project.New("Existing project", "E", "#3e9fcc"))
 
-        try {
-            val rootDir = storagePathProvider.odkRootDirPath
-            listOf(
-                File(rootDir, "forms"),
-                File(rootDir, "instances"),
-                File(rootDir, "metadata"),
-                File(rootDir, "layers"),
-                File(rootDir, ".cache"),
-            ).forEach {
+        val rootDir = storagePathProvider.odkRootDirPath
+        listOf(
+            File(rootDir, "forms"),
+            File(rootDir, "instances"),
+            File(rootDir, "metadata"),
+            File(rootDir, "layers"),
+            File(rootDir, ".cache"),
+        ).forEach {
+            try {
                 val projectDir = File(storagePathProvider.getProjectRootDirPath(project))
                 moveDirectoryToDirectory(it, projectDir, true)
+            } catch (_: FileNotFoundException) {
+                // Original dir doesn't exist - no  need to copy
             }
-        } catch (_: FileNotFoundException) {
-            createProjectDirs(project)
         }
 
         val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -48,6 +48,7 @@ class ProjectImporter(
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
+        setupProject(project)
         return project
     }
 

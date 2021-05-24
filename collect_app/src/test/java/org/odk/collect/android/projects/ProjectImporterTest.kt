@@ -93,13 +93,31 @@ class ProjectImporterTest {
     }
 
     @Test
-    fun `importExistingProject() creates storage if root files don't exist`() {
+    fun `importExistingProject() still copies other files if a directory is missing`() {
+        val legacyRootDirsWithoutForms = listOf(
+            File(rootDir, "instances"),
+            File(rootDir, "metadata"),
+            File(rootDir, "layers"),
+            File(rootDir, ".cache"),
+        )
+
+        legacyRootDirsWithoutForms.forEach {
+            it.mkdir()
+            TempFiles.createTempFile(it, "file", ".temp")
+        }
+
         val existingProject = projectImporter.importExistingProject()
 
         storagePathProvider.getProjectDirPaths(existingProject).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
+
+            if (it.endsWith("forms")) {
+                assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
+            } else {
+                assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
+            }
         }
     }
 
