@@ -45,14 +45,12 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.projects.AddProjectDialog;
-import org.odk.collect.projects.NewProject;
 import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.projects.ProjectKt.NOT_SPECIFIED_UUID;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -289,11 +287,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements
     }
 
     @Override
-    public void onProjectAdded(@NotNull NewProject newProject) {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SERVER_URL, newProject.getUrl());
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_USERNAME, newProject.getUsername());
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, newProject.getPassword());
+    public void onProjectAdded(@NotNull Project project) {
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SERVER_URL, project.getUrl());
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_USERNAME, project.getUsername());
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, project.getPassword());
 
-        projectsRepository.save(new Project(newProject.getName(), newProject.getIcon(), newProject.getColor(), NOT_SPECIFIED_UUID));
+        projectsRepository.save(project);
     }
 }

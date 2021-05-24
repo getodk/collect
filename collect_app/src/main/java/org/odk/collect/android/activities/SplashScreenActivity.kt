@@ -29,7 +29,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.projects.AddProjectDialog
-import org.odk.collect.projects.NewProject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -88,12 +87,12 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
         }
     }
 
-    override fun onProjectAdded(newProject: NewProject) {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SERVER_URL, newProject.url)
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_USERNAME, newProject.username)
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, newProject.password)
+    override fun onProjectAdded(project: Project) {
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SERVER_URL, project.url)
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_USERNAME, project.username)
+        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, project.password)
 
-        projectsRepository.save(Project(newProject.name, newProject.icon, newProject.color))
+        projectsRepository.save(project)
 
         currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
 

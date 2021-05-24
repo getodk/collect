@@ -8,9 +8,9 @@ import org.junit.Before
 import org.junit.Test
 
 abstract class ProjectsRepositoryTest {
-    private val projectX = Project("ProjectX", "X", "#FF0000")
-    private val projectY = Project("ProjectY", "Y", "#00FF00")
-    private val projectZ = Project("ProjectZ", "Z", "#0000FF")
+    private val projectX = Project("https://my-serverX.com", "username", "1234", "ProjectX", "X", "#FF0000")
+    private val projectY = Project("https://my-serverY.com", "username", "1234", "ProjectY", "Y", "#00FF00")
+    private val projectZ = Project("https://my-serverZ.com", "username", "1234", "ProjectZ", "Z", "#0000FF")
 
     lateinit var projectsRepository: ProjectsRepository
 
@@ -64,7 +64,7 @@ abstract class ProjectsRepositoryTest {
         projectsRepository.save(projectZ)
 
         val originalProjectX = projectsRepository.getAll()[0]
-        val updatedProjectX = originalProjectX.copy(name = "Project X2", "2", "#ff80ff")
+        val updatedProjectX = originalProjectX.copy(name = "Project X2", icon = "2", color = "#ff80ff")
         projectsRepository.save(updatedProjectX)
 
         val projects = projectsRepository.getAll()

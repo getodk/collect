@@ -114,14 +114,14 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `currentProjectViewModel should be notified when project switched`() {
-        appDependencyComponent.projectsRepository().save(Project("Project X", "X", "#cccccc", "1"))
-        appDependencyComponent.projectsRepository().save(Project("Project Y", "Y", "#ffffff", "2"))
+        appDependencyComponent.projectsRepository().save(Project("https://my-serverX.com", "username", "1234", "Project X", "X", "#cccccc", "1"))
+        appDependencyComponent.projectsRepository().save(Project("https://my-serverY.com", "username", "1234", "Project Y", "Y", "#ffffff", "2"))
         appDependencyComponent.currentProjectProvider().setCurrentProject("1")
 
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withText("Project Y")).perform(click())
-            verify(currentProjectViewModel).setCurrentProject(Project("Project Y", "Y", "#ffffff", "2"))
+            verify(currentProjectViewModel).setCurrentProject(Project("https://my-serverY.com", "username", "1234", "Project Y", "Y", "#ffffff", "2"))
         }
     }
 }

@@ -42,7 +42,7 @@ public class MainMenuButtonsVisibilityTest {
         adminSettings.setDefaultForAllSettingsWithoutValues();
 
         InMemProjectsRepository projectsRepository = new InMemProjectsRepository(new UUIDGenerator());
-        projectsRepository.save(new Project("", "", "", ""));
+        projectsRepository.save(new Project("", "", "", "", "", "", ""));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public ProjectsRepository providesProjectsRepository(UUIDGenerator uuidGenerator, Gson gson, SettingsProvider settingsProvider) {

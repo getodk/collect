@@ -53,7 +53,7 @@ public class AdminPreferencesActivityTest {
     @Before
     public void setUp() throws Exception {
         InMemProjectsRepository projectsRepository = new InMemProjectsRepository(new UUIDGenerator());
-        Project project = new Project("name", "icon", "#ffffff", "id");
+        Project project = new Project("https://my-serverX.com", "username", "1234", "name", "icon", "#ffffff", "id");
         projectsRepository.save(project);
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override

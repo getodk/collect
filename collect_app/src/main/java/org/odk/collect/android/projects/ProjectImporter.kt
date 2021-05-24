@@ -10,14 +10,14 @@ class ProjectImporter(
     private val metaSettings: Settings
 ) {
     fun importDemoProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
+        val project = Project("https://my-server.com", "username", "1234", "Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
         projectsRepository.save(project)
         metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }
 
     // Now it does the same like importDemoProject() but it should be changed later
     fun importExistingProject() {
-        val project = Project("Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
+        val project = Project("https://my-server.com", "username", "1234", "Demo project", "D", "#3e9fcc", DEMO_PROJECT_ID)
         projectsRepository.save(project)
         metaSettings.save(MetaKeys.CURRENT_PROJECT_ID, DEMO_PROJECT_ID)
     }

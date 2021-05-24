@@ -36,7 +36,6 @@ import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.projects.AddProjectDialog
-import org.odk.collect.projects.NewProject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator
@@ -92,12 +91,12 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
+            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
-            verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
+            verify(projectsRepository).save(project)
         }
     }
 
@@ -107,10 +106,10 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
+            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
             verify(currentProjectProvider).setCurrentProject("1")
         }
@@ -124,10 +123,10 @@ class SplashScreenActivityTest {
         scenario.onActivity { activity: SplashScreenActivity ->
             Intents.init()
 
-            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
+            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc", "1")))
 
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
             Intents.intended(hasComponent(MainMenuActivity::class.java.name))
 
@@ -141,10 +140,10 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("ProjectX", "X", "#cccccc", "1")))
+            `when`(projectsRepository.getAll()).thenReturn(listOf(Project("my-server.com", "Adam", "1234", "ProjectX", "X", "1")))
 
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
             val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
 

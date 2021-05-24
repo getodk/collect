@@ -97,8 +97,8 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val newProject = NewProject(getUrl(), getUsername(), getPassword(), getProjectName(), getProjectIcon(), getProjectColor())
-            listener?.onProjectAdded(newProject)
+            val project = Project(getUrl(), getUsername(), getPassword(), getProjectName(), getProjectIcon(), getProjectColor())
+            listener?.onProjectAdded(project)
             dismiss()
         }
     }
@@ -159,6 +159,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     interface AddProjectDialogListener {
-        fun onProjectAdded(newProject: NewProject)
+        fun onProjectAdded(project: Project)
     }
 }

@@ -38,7 +38,6 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.projects.AddProjectDialog
-import org.odk.collect.projects.NewProject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.UUIDGenerator
@@ -46,7 +45,7 @@ import org.odk.collect.shared.UUIDGenerator
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {
 
-    private val project = Project("Project", "P", "#f5f5f5")
+    private val project = Project("https://my-server.com", "username", "1234", "Project", "P", "#f5f5f5")
 
     private val mainMenuViewModel = mock<MainMenuViewModel> {
         on { finalizedFormsCount } doReturn MutableLiveData(0)
@@ -55,7 +54,7 @@ class MainMenuActivityTest {
     }
 
     private val projectsRepository = mock<ProjectsRepository> {
-        on { getAll() } doReturn listOf(Project("ProjectX", "X", "#cccccc", "1"))
+        on { getAll() } doReturn listOf(Project("https://my-server.com", "username", "1234", "ProjectX", "X", "#cccccc", "1"))
     }
 
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
@@ -99,10 +98,10 @@ class MainMenuActivityTest {
     fun `New project should be saved to repository when onProjectAdded() is called`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
-            verify(projectsRepository).save(Project(newProject.name, newProject.icon, newProject.color))
+            verify(projectsRepository).save(project)
         }
     }
 
@@ -110,8 +109,8 @@ class MainMenuActivityTest {
     fun `Username and password should be saved to settings when onProjectAdded() is called`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
-            activity.onProjectAdded(newProject)
+            val project = Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc")
+            activity.onProjectAdded(project)
 
             val settingsProvider = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Collect).settingsProvider()
 

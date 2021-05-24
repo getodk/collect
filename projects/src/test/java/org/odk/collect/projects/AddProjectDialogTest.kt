@@ -72,7 +72,7 @@ class AddProjectDialogTest {
 
             onView(withText(R.string.add)).perform(click())
 
-            verify(listener).onProjectAdded(NewProject("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc"))
+            verify(listener).onProjectAdded(Project("my-server.com", "Adam", "1234", "ProjectX", "X", "#cccccc"))
         }
     }
 
