@@ -1,10 +1,17 @@
 package org.odk.collect.android.projects
 
+import android.app.Application
+import android.content.Context
+import androidx.preference.PreferenceManager
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.contains
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.storage.StoragePathProvider
@@ -14,26 +21,24 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.UUIDGenerator
 import java.io.File
 
+@RunWith(AndroidJUnit4::class)
 class ProjectImporterTest {
 
     private val projectsRepository = InMemProjectsRepository(UUIDGenerator())
 
     private val rootDir = TempFiles.createTempDir()
-    private val legacyRootDirs = listOf(
-        File(rootDir, "forms"),
-        File(rootDir, "instances"),
-        File(rootDir, "metadata"),
-        File(rootDir, "layers"),
-        File(rootDir, ".cache"),
-    )
 
+    private val context = ApplicationProvider.getApplicationContext<Application>()
     private val storagePathProvider = StoragePathProvider(null, rootDir.absolutePath)
     private val storageInitializer = StorageInitializer(storagePathProvider, mock())
+    private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(
-        projectsRepository,
+        context,
         storageInitializer,
-        storagePathProvider
+        storagePathProvider,
+        projectsRepository,
+        settingsProvider
     )
 
     @Test
@@ -64,6 +69,14 @@ class ProjectImporterTest {
 
     @Test
     fun `importExistingProject() moves files from root`() {
+        val legacyRootDirs = listOf(
+            File(rootDir, "forms"),
+            File(rootDir, "instances"),
+            File(rootDir, "metadata"),
+            File(rootDir, "layers"),
+            File(rootDir, ".cache"),
+        )
+
         legacyRootDirs.forEach {
             it.mkdir()
             TempFiles.createTempFile(it, "file", ".temp")
@@ -92,5 +105,20 @@ class ProjectImporterTest {
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
         }
+    }
+
+    @Test
+    fun `importExistingProject migrates general and admin settings`() {
+        val oldGeneralSettings = PreferenceManager.getDefaultSharedPreferences(context)
+        oldGeneralSettings.edit().putString("generalKey", "generalValue").apply()
+        val oldAdminSettings = context.getSharedPreferences("admin", Context.MODE_PRIVATE)
+        oldAdminSettings.edit().putString("adminKey", "adminValue").apply()
+
+        val existingProject = projectImporter.importExistingProject()
+
+        val generalSettings = settingsProvider.getGeneralSettings(existingProject.uuid)
+        assertThat(generalSettings.getString("generalKey"), `is`("generalValue"))
+        val adminSettings = settingsProvider.getAdminSettings(existingProject.uuid)
+        assertThat(adminSettings.getString("adminKey"), `is`("adminValue"))
     }
 }

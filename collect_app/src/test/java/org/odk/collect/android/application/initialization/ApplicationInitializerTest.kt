@@ -49,8 +49,10 @@ class ApplicationInitializerTest {
                 projectsRepository: ProjectsRepository,
                 currentProjectProvider: CurrentProjectProvider,
                 storageInitializer: StorageInitializer,
-                storagePathProvider: StoragePathProvider
-            ): ProjectImporter {
+                storagePathProvider: StoragePathProvider,
+                context: Context,
+                settingsProvider: SettingsProvider
+            ): ProjectImporter? {
                 return projectImporter
             }
 

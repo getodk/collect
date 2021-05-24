@@ -1,5 +1,6 @@
 package org.odk.collect.android.fragments.dialogs
 
+import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -26,6 +27,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.storage.StorageInitializer
@@ -57,7 +59,9 @@ class FirstLaunchDialogTest {
                 projectsRepository: ProjectsRepository,
                 currentProjectProvider: CurrentProjectProvider,
                 storageInitializer: StorageInitializer,
-                storagePathProvider: StoragePathProvider
+                storagePathProvider: StoragePathProvider,
+                context: Context,
+                settingsProvider: SettingsProvider
             ): ProjectImporter? {
                 return projectImporter
             }
