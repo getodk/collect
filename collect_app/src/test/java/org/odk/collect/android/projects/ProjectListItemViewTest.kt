@@ -26,6 +26,20 @@ class ProjectListItemViewTest {
     }
 
     @Test
+    fun `shows username and url`() {
+        val view = ProjectListItemView(context)
+        view.project = Project("https://my-server.com", "username", "1234", "SOM", "S", "#ffffff")
+        assertThat(view.findViewById<TextView>(R.id.project_url).text, equalTo("username / https://my-server.com"))
+    }
+
+    @Test
+    fun `shows jus url if username not exist`() {
+        val view = ProjectListItemView(context)
+        view.project = Project("https://my-server.com", " ", "1234", "SOM", "S", "#ffffff")
+        assertThat(view.findViewById<TextView>(R.id.project_url).text, equalTo("https://my-server.com"))
+    }
+
+    @Test
     fun `shows project icon with color as background`() {
         val view = ProjectListItemView(context)
         view.project = Project("https://my-server.com", "username", "1234", "SOM", "S", "#ffffff")
