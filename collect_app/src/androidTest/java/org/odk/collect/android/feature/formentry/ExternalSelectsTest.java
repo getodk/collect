@@ -29,9 +29,9 @@ public class ExternalSelectsTest {
     public void displaysAllChoicesFromItemsetsCSV() {
         new MainMenuPage()
                 .startBlankForm("selectOneExternal")
-
-                // Check all states in `itemsets.csv` are displayed
-                .assertText("Texas")
-                .assertText("Washington");
+                .clickOnText("Texas")
+                .swipeToNextQuestion("county")
+                .assertText("King")
+                .assertText("Cameron");
     }
 }
