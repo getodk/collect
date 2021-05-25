@@ -19,7 +19,6 @@ import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
-import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
@@ -47,8 +46,6 @@ class ApplicationInitializerTest {
 
             override fun providesProjectImporter(
                 projectsRepository: ProjectsRepository,
-                currentProjectProvider: CurrentProjectProvider,
-                storageInitializer: StorageInitializer,
                 storagePathProvider: StoragePathProvider,
                 context: Context,
                 settingsProvider: SettingsProvider

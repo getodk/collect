@@ -19,7 +19,6 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
-import org.odk.collect.android.storage.StorageInitializer
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -38,9 +37,6 @@ class ProjectSettingsDialog : DialogFragment() {
 
     @Inject
     lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
-
-    @Inject
-    lateinit var storageInitializer: StorageInitializer
 
     lateinit var binding: ProjectSettingsDialogLayoutBinding
 

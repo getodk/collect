@@ -530,7 +530,7 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public FormsDatabaseProvider providesFormsDatabaseProvider(CurrentProjectProvider currentProjectProvider) {
+    public FormsDatabaseProvider providesFormsDatabaseProvider() {
         return new FormsDatabaseProvider();
     }
 
@@ -566,7 +566,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, StorageInitializer storageInitializer, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
         return new ProjectImporter(context, storagePathProvider, projectsRepository, settingsProvider);
     }
 
