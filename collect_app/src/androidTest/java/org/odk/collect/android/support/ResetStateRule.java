@@ -26,19 +26,13 @@ public class ResetStateRule implements TestRule {
 
     private final AppDependencyModule appDependencyModule;
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
-    private final boolean firstLaunch;
 
     public ResetStateRule() {
-        this(null, true);
+        this(null);
     }
 
     public ResetStateRule(AppDependencyModule appDependencyModule) {
-        this(appDependencyModule, true);
-    }
-
-    public ResetStateRule(AppDependencyModule appDependencyModule, boolean firstLaunch) {
         this.appDependencyModule = appDependencyModule;
-        this.firstLaunch = firstLaunch;
     }
 
     @Override
@@ -73,7 +67,7 @@ public class ResetStateRule implements TestRule {
 
     private void setTestState() {
         MultiClickGuard.test = true;
-        AppStateProvider.overrideFresh = firstLaunch;
+        AppStateProvider.alwaysFresh = true;
     }
 
     private void clearDisk() {
