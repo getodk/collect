@@ -34,7 +34,8 @@ public class StoragePathProvider {
                 getOdkDirPath(StorageSubdirectory.INSTANCES, project),
                 getOdkDirPath(StorageSubdirectory.CACHE, project),
                 getOdkDirPath(StorageSubdirectory.METADATA, project),
-                getOdkDirPath(StorageSubdirectory.LAYERS, project)
+                getOdkDirPath(StorageSubdirectory.LAYERS, project),
+                getOdkDirPath(StorageSubdirectory.SETTINGS, project)
         };
     }
 

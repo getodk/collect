@@ -71,6 +71,7 @@ class ProjectImporterTest {
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
             File(rootDir, ".cache"),
+            File(rootDir, "settings")
         )
 
         legacyRootDirs.forEach {
@@ -99,6 +100,7 @@ class ProjectImporterTest {
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
             File(rootDir, ".cache"),
+            File(rootDir, "settings")
         )
 
         legacyRootDirsWithoutForms.forEach {

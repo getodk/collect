@@ -34,6 +34,7 @@ class ProjectImporter(
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
             File(rootDir, ".cache"),
+            File(rootDir, "settings")
         ).forEach {
             try {
                 val projectDir = File(storagePathProvider.getProjectRootDirPath(project))
