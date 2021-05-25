@@ -66,8 +66,8 @@ public class StoragePathProvider {
             case CACHE:
             case METADATA:
             case LAYERS:
-                return getProjectRootDirPath(project) + File.separator + subdirectory.getDirectoryName();
             case SETTINGS:
+                return getProjectRootDirPath(project) + File.separator + subdirectory.getDirectoryName();
             case PROJECTS:
                 return getOdkRootDirPath() + File.separator + subdirectory.getDirectoryName();
             default:

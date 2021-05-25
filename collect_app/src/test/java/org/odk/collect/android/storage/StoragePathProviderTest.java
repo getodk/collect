@@ -56,7 +56,7 @@ public class StoragePathProviderTest {
 
     @Test
     public void getSettingsDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is("/root/settings"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is("/root/projects/123/settings"));
     }
 
     @Test
