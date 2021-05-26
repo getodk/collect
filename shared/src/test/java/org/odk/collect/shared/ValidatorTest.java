@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+package org.odk.collect.shared;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-@RunWith(AndroidJUnit4.class)
 public class ValidatorTest {
 
     @Test

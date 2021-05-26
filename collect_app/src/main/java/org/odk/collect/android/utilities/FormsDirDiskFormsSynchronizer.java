@@ -11,6 +11,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.Validator;
 
 import java.io.File;
 import java.util.ArrayList;

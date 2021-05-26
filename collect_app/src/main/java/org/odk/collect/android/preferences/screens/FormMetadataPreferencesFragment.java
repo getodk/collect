@@ -16,7 +16,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.Validator;
+import org.odk.collect.shared.Validator;
 
 import javax.inject.Inject;
 
