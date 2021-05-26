@@ -21,17 +21,31 @@ class ProjectListItemViewTest {
     @Test
     fun `shows project name`() {
         val view = ProjectListItemView(context)
-        view.project = Project.New("SOM", "S", "#ffffff")
+        view.setupView(Project.New("SOM", "S", "#ffffff"), "", "")
         assertThat(view.findViewById<TextView>(R.id.project_name).text, equalTo("SOM"))
     }
 
     @Test
     fun `shows project icon with color as background`() {
         val view = ProjectListItemView(context)
-        view.project = Project.New("SOM", "S", "#ffffff")
+        view.setupView(Project.New("SOM", "S", "#ffffff"), "", "")
         assertThat(view.findViewById<TextView>(R.id.project_icon_text).text, equalTo("S"))
 
         val background = view.findViewById<TextView>(R.id.project_icon_text).background as GradientDrawable
         assertThat(background.color!!.defaultColor, equalTo(Color.parseColor("#ffffff")))
+    }
+
+    @Test
+    fun `shows project username and url`() {
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), "Adam", "https://my-project.com")
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("Adam / https://my-project.com"))
+    }
+
+    @Test
+    fun `shows project only url if username is not set`() {
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), "", "https://my-project.com")
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("https://my-project.com"))
     }
 }
