@@ -43,7 +43,8 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val newProject = Project.New("", "", "")
+            val generatedProjectDetails = ProjectDetailsGenerator.generateProjectDetails(getUrl())
+            val newProject = Project.New(generatedProjectDetails.projectName, generatedProjectDetails.projectIcon, generatedProjectDetails.projectColor)
             val savedProject = projectsRepository.save(newProject)
 
             listener?.onProjectAdded(savedProject)
@@ -66,6 +67,8 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         toolbar?.setTitle(R.string.add_project)
         toolbar?.navigationIcon = null
     }
+
+    private fun getUrl() = binding.url.editText?.text?.trim().toString()
 
     interface AddProjectDialogListener {
         fun onProjectAdded(project: Project.Saved)
