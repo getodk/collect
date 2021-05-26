@@ -5,10 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -55,17 +53,9 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext()).create()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
         binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
-        currentProjectViewModel.currentProject.observe(viewLifecycleOwner) { project ->
+        currentProjectViewModel.currentProject.observe(this) { project ->
             binding.currentProject.project = project
             binding.currentProject.contentDescription =
                 getString(R.string.using_project, project.name)
@@ -113,11 +103,9 @@ class ProjectSettingsDialog : DialogFragment() {
             dismiss()
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        (requireDialog() as AlertDialog).setView(view)
+        return AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .create()
     }
 
     private fun inflateListOfInActiveProjects(context: Context, currentProject: Project.Saved) {
