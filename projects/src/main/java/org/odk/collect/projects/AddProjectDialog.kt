@@ -61,7 +61,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
             val newProject = Project.New(generatedProjectDetails.projectName, generatedProjectDetails.projectIcon, generatedProjectDetails.projectColor)
             val savedProject = projectsRepository.save(newProject)
 
-            listener?.onProjectAdded(savedProject)
+            listener?.onProjectAdded(savedProject, getUrl(), getUsername(), getPassword())
             dismiss()
         }
     }
@@ -84,7 +84,11 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
 
     private fun getUrl() = binding.url.editText?.text?.trim().toString()
 
+    private fun getUsername() = binding.username.editText?.text?.trim().toString()
+
+    private fun getPassword() = binding.password.editText?.text?.trim().toString()
+
     interface AddProjectDialogListener {
-        fun onProjectAdded(project: Project.Saved)
+        fun onProjectAdded(project: Project.Saved, url: String, username: String, password: String)
     }
 }
