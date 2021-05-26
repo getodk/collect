@@ -21,12 +21,15 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
@@ -40,6 +43,9 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var projectImporter: ProjectImporter
 
     lateinit var viewModel: SplashScreenViewModel
 
@@ -81,8 +87,11 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
         }
     }
 
-    override fun onProjectAdded() {
-        currentProjectProvider.setCurrentProject(projectsRepository.getAll()[0].uuid)
+    override fun onProjectAdded(project: Project.Saved) {
+        projectImporter.setupProject(project)
+        currentProjectProvider.setCurrentProject(project.uuid)
+        Collect.resetDatabaseConnections()
+
         endSplashScreen()
     }
 }

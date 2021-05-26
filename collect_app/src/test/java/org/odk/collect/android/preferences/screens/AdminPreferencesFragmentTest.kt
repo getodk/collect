@@ -34,7 +34,7 @@ class AdminPreferencesFragmentTest {
         currentProjectProvider = mock(CurrentProjectProvider::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
 
-        `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project("Project X", "X", "#cccccc"))
+        `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project.Saved("123", "Project X", "X", "#cccccc"))
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository): CurrentProjectProvider {

@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.support.CollectHelpers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -92,8 +93,9 @@ public class GeoUtilsTest {
 
     @Test
     public void whenOfflineLayerFileExist_should_getReferenceLayerFileReturnThatFile() {
+        CollectHelpers.setupDemoProject();
         File file = new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath("MapBox_Demo_Layer/demo_layers.mbtiles"));
-        FileUtils.write(file, new byte[] {});
+        FileUtils.write(file, new byte[]{});
 
         Bundle config = mock(Bundle.class);
         StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);

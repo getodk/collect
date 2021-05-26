@@ -7,6 +7,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SplashScreenActivity;
+import org.odk.collect.android.support.pages.FirstLaunchPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -15,14 +16,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class CollectTestRule implements TestRule {
 
-    private final boolean skipProject;
+    private final boolean skipLaunchScreen;
 
     public CollectTestRule() {
         this(true);
     }
 
-    public CollectTestRule(boolean skipProject) {
-        this.skipProject = skipProject;
+    public CollectTestRule(boolean skipLaunchScreen) {
+        this.skipLaunchScreen = skipLaunchScreen;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class CollectTestRule implements TestRule {
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
-                if (skipProject) {
+                if (skipLaunchScreen) {
                     onView(withText(R.string.configure_later)).perform(click());
                 }
 
@@ -41,7 +42,11 @@ public class CollectTestRule implements TestRule {
         };
     }
 
-    public MainMenuPage mainMenu() {
+    public MainMenuPage startAtMainMenu() {
         return new MainMenuPage().assertOnPage();
+    }
+
+    public FirstLaunchPage startAtFirstLaunch() {
+        return new FirstLaunchPage().assertOnPage();
     }
 }

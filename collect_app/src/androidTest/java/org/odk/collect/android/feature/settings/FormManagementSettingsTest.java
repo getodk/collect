@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -48,7 +48,7 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -73,7 +73,7 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -96,14 +96,14 @@ public class FormManagementSettingsTest {
     public void whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms() throws Exception {
         FormManagementPage page = new MainMenuPage().assertOnPage()
                 .setServer(testDependencies.server.getURL())
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only)
                 .clickOnString(R.string.automatic_download);
 
-        FormLoadingUtils.copyFormToStorage("one-question.xml");
+        AdbFormLoadingUtils.copyFormToStorage("one-question.xml");
         testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
 
@@ -123,7 +123,7 @@ public class FormManagementSettingsTest {
         new MainMenuPage().assertOnPage()
                 .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
                 .setGoogleAccount("steph@curry.basket")
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .assertDisabled(R.string.form_update_mode_title)

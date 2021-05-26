@@ -1,44 +1,20 @@
 package org.odk.collect.android.storage;
 
-import android.content.Context;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-
-import java.io.File;
-
-import timber.log.Timber;
+import org.odk.collect.android.utilities.FileUtils;
 
 public class StorageInitializer {
 
     private final StoragePathProvider storagePathProvider;
-    private final Context context;
 
-    public StorageInitializer() {
-        this(new StoragePathProvider(), Collect.getInstance());
-    }
-
-    public StorageInitializer(StoragePathProvider storagePathProvider, Context context) {
+    public StorageInitializer(StoragePathProvider storagePathProvider) {
         this.storagePathProvider = storagePathProvider;
-        this.context = context;
     }
 
     public void createOdkDirsOnStorage() throws RuntimeException {
-        for (String dirPath : storagePathProvider.getOdkDirPaths()) {
-            File dir = new File(dirPath);
-            if (!dir.exists()) {
-                if (!dir.mkdirs()) {
-                    String message = context.getString(R.string.cannot_create_directory, dirPath);
-                    Timber.w(message);
-                    throw new RuntimeException(message);
-                }
-            } else {
-                if (!dir.isDirectory()) {
-                    String message = context.getString(R.string.not_a_directory, dirPath);
-                    Timber.w(message);
-                    throw new RuntimeException(message);
-                }
-            }
+        String[] dirPaths = storagePathProvider.getOdkRootDirPaths();
+        for (String dirPath : dirPaths) {
+            FileUtils.createDir(dirPath);
         }
     }
+
 }

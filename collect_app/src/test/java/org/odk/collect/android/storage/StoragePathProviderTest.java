@@ -2,14 +2,15 @@ package org.odk.collect.android.storage;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.projects.Project;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayWithSize;
-import static org.hamcrest.Matchers.hasItemInArray;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class StoragePathProviderTest {
 
@@ -17,104 +18,99 @@ public class StoragePathProviderTest {
 
     @Before
     public void setup() {
-        storagePathProvider = spy(new StoragePathProvider());
+        CurrentProjectProvider currentProjectProvider = mock(CurrentProjectProvider.class);
+        when(currentProjectProvider.getCurrentProject()).thenReturn(new Project.Saved("123", "Project", "D", "#ffffff"));
 
-        doReturn("/storage/emulated/0/Android/data/org.odk.collect.android/files").when(storagePathProvider).getOdkRootDirPath();
+        storagePathProvider = new StoragePathProvider(currentProjectProvider, "/root");
     }
 
     @Test
     public void getStorageRootDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkRootDirPath(), is("/storage/emulated/0/Android/data/org.odk.collect.android/files"));
+        assertThat(storagePathProvider.getOdkRootDirPath(), is("/root"));
     }
 
     @Test
     public void getFormsDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), is("/root/projects/123/forms"));
     }
 
     @Test
     public void getInstancesDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), is("/root/projects/123/instances"));
     }
 
     @Test
     public void getMetadataDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/metadata"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), is("/root/projects/123/metadata"));
     }
 
     @Test
     public void getCacheDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE), is("/root/projects/123/.cache"));
     }
 
     @Test
     public void getLayersDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), is("/root/projects/123/layers"));
     }
 
     @Test
     public void getSettingsDirWithScopedStorageTest() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/settings"));
+        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is("/root/projects/123/settings"));
     }
 
     @Test
     public void getODKDirPathsWithScopedStorageTest() {
-        String[] storageSubdirectories = storagePathProvider.getOdkDirPaths();
-        assertThat(storageSubdirectories, arrayWithSize(5));
-
-        assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms"));
-        assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances"));
-        assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache"));
-        assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/metadata"));
-        assertThat(storageSubdirectories, hasItemInArray("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers"));
+        String[] storageSubdirectories = storagePathProvider.getOdkRootDirPaths();
+        assertThat(storageSubdirectories, arrayWithSize(1));
     }
 
     @Test
     public void getFormDbPathWithScopedStorageTest() {
         assertThat(storagePathProvider.getRelativeFormPath("All widgets.xml"), is("All widgets.xml"));
-        assertThat(storagePathProvider.getRelativeFormPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"), is("All widgets.xml"));
+        assertThat(storagePathProvider.getRelativeFormPath("/root/projects/123/forms/All widgets.xml"), is("All widgets.xml"));
 
         assertThat(storagePathProvider.getRelativeFormPath("All widgets-media"), is("All widgets-media"));
-        assertThat(storagePathProvider.getRelativeFormPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"), is("All widgets-media"));
+        assertThat(storagePathProvider.getRelativeFormPath("/root/projects/123/forms/All widgets-media"), is("All widgets-media"));
 
         assertThat(storagePathProvider.getRelativeFormPath("All widgets-media/itemsets.csv"), is("All widgets-media/itemsets.csv"));
-        assertThat(storagePathProvider.getRelativeFormPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"), is("All widgets-media/itemsets.csv"));
+        assertThat(storagePathProvider.getRelativeFormPath("/root/projects/123/forms/All widgets-media/itemsets.csv"), is("All widgets-media/itemsets.csv"));
     }
 
     @Test
     public void getInstanceDbPathWithScopedStorageTest() {
         assertThat(storagePathProvider.getRelativeInstancePath("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-        assertThat(storagePathProvider.getRelativeInstancePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
+        assertThat(storagePathProvider.getRelativeInstancePath("/root/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
     }
 
     @Test
     public void getCacheDbPathWithScopedStorageTest() {
         assertThat(storagePathProvider.getRelativeCachePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is("a688a8b48b2e50c070bc76239f572e16.formdef"));
-        assertThat(storagePathProvider.getRelativeCachePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("a688a8b48b2e50c070bc76239f572e16.formdef"));
+        assertThat(storagePathProvider.getRelativeCachePath("/root/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("a688a8b48b2e50c070bc76239f572e16.formdef"));
     }
 
     @Test
     public void getAbsoluteFormFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets.xml"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets.xml"), is("/root/projects/123/forms/All widgets.xml"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/root/projects/123/forms/All widgets.xml"), is("/root/projects/123/forms/All widgets.xml"));
 
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media"), is("/root/projects/123/forms/All widgets-media"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/root/projects/123/forms/All widgets-media"), is("/root/projects/123/forms/All widgets-media"));
 
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/forms/All widgets-media/itemsets.csv"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media/itemsets.csv"), is("/root/projects/123/forms/All widgets-media/itemsets.csv"));
+        assertThat(storagePathProvider.getAbsoluteFormFilePath("/root/projects/123/forms/All widgets-media/itemsets.csv"), is("/root/projects/123/forms/All widgets-media/itemsets.csv"));
     }
 
     @Test
     public void getAbsoluteInstanceFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteInstanceFilePath("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-        assertThat(storagePathProvider.getAbsoluteInstanceFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
+        assertThat(storagePathProvider.getAbsoluteInstanceFilePath("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("/root/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
+        assertThat(storagePathProvider.getAbsoluteInstanceFilePath("/root/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("/root/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
     }
 
     @Test
     public void getAbsoluteCacheFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteCacheFilePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
-        assertThat(storagePathProvider.getAbsoluteCacheFilePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
+        assertThat(storagePathProvider.getAbsoluteCacheFilePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is("/root/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
+        assertThat(storagePathProvider.getAbsoluteCacheFilePath("/root/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("/root/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
     }
 
     @Test
@@ -122,12 +118,12 @@ public class StoragePathProviderTest {
         assertThat(storagePathProvider.getRelativeMapLayerPath(null), is(nullValue()));
         assertThat(storagePathProvider.getRelativeMapLayerPath(""), is(nullValue()));
         assertThat(storagePathProvider.getRelativeMapLayerPath("countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
-        assertThat(storagePathProvider.getRelativeMapLayerPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getRelativeMapLayerPath("/root/projects/123/layers/countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
     }
 
     @Test
     public void getOfflineMapLayerPathTestWithScopedStorage() {
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/root/projects/123/layers/countries/countries-raster.mbtiles"), is("/root/projects/123/layers/countries/countries-raster.mbtiles"));
     }
 }

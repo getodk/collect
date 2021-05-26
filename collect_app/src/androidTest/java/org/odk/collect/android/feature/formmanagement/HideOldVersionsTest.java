@@ -23,7 +23,7 @@ public class HideOldVersionsTest {
 
     @Test
     public void whenHideOldVersionsEnabled_onlyTheNewestVersionOfAFormShowsInFormList() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm() // Sync forms on disk
                 .pressBack(new MainMenuPage())
@@ -36,8 +36,8 @@ public class HideOldVersionsTest {
 
     @Test
     public void whenHideOldVersionsDisabled_allVersionOfAFormShowsInFormList() {
-        rule.mainMenu()
-                .openProjectSettingsDialog()
+        rule.startAtMainMenu()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.hide_old_form_versions_setting_title)

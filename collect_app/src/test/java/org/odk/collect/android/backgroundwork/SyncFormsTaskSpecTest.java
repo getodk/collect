@@ -20,10 +20,12 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.function.Supplier;
@@ -46,6 +48,11 @@ public class SyncFormsTaskSpecTest {
     @Before
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+
+            @Override
+            public FormDownloader providesFormDownloader(FormSource formSource, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
+                return mock(FormDownloader.class); // We don't want to build this dependency for `ServerFormsSynchronizer`
+            }
 
             @Override
             public ChangeLock providesFormsChangeLock() {

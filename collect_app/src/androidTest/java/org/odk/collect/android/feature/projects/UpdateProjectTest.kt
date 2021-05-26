@@ -1,13 +1,11 @@
 package org.odk.collect.android.feature.projects
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.pressBack
-import androidx.test.espresso.matcher.ViewMatchers
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.MainMenuPage
 
 class UpdateProjectTest {
 
@@ -20,20 +18,18 @@ class UpdateProjectTest {
 
     @Test
     fun updateProjectTest() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
             .assertProjectIcon("D", "#3e9fcc")
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertCurrentProject("Demo project")
             .clickAdminSettings()
             .setProjectName("Project X")
             .setProjectIcon("X")
             .setProjectColor("#cccccc")
+            .pressBack(MainMenuPage())
 
-        onView(ViewMatchers.isRoot()).perform(pressBack())
-
-        rule.mainMenu()
             .assertProjectIcon("X", "#cccccc")
-            .openProjectSettingsDialog()
+            .openProjectSettings()
             .assertCurrentProject("Project X")
     }
 }

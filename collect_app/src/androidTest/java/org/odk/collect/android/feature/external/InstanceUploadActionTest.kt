@@ -10,6 +10,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.InstanceUploaderActivity
+import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.OkDialog
 
@@ -18,9 +19,11 @@ class InstanceUploadActionTest {
 
     @get:Rule
     val rule: RuleChain = TestRuleChain.chain()
+        .around(CollectTestRule())
 
     @Test
     fun whenInstanceDoesNotExist_showsError() {
+
         val instanceIds = longArrayOf(11)
         instanceUploadAction(instanceIds)
 

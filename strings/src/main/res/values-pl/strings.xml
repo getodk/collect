@@ -758,7 +758,5 @@
   <string name="fs_create_media_folder_error">Nie mogę utworzyć folderu mediów \'%s\'.</string>
   <string name="fs_file_copy_error">Nie mogę skopiować \'%1$s\' na \'%2$s\'. Powód: %3$s</string>
   <string name="survey_multiple_forms_error">Pobrałeś dwa różne formularze z tym samym ID formularza oraz wersją. Może był to ten sam formularz wysłany w różnym czasie lub na różne serwery. Powinieneś usunąć jeden z tych formularzy.</string>
-  <string name="cannot_create_directory">Nie można utworzyć katalogu: %s</string>
-  <string name="not_a_directory">%sistnieje, ale nie jest w folderze</string>
   <string name="select_odk_shortcut">Wybierz skrót ODK</string>
 </resources>

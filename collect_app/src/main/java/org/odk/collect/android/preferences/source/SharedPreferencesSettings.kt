@@ -2,11 +2,16 @@ package org.odk.collect.android.preferences.source
 
 import android.content.SharedPreferences
 import org.odk.collect.shared.Settings
+import java.lang.ref.WeakReference
 import java.util.Collections
 
-class SharedPreferencesSettings(private val sharedPreferences: SharedPreferences, private val settingKeysToDefaults: Map<String, Any> = emptyMap()) : Settings {
+class SharedPreferencesSettings(
+    private val sharedPreferences: SharedPreferences,
+    private val settingKeysToDefaults: Map<String, Any> = emptyMap()
+) : Settings {
 
-    private var sharedPreferencesListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+    private val listeners =
+        mutableListOf<Pair<WeakReference<Settings.OnSettingChangeListener>, SharedPreferences.OnSharedPreferenceChangeListener>>()
 
     override fun setDefaultForAllSettingsWithoutValues() {
         for ((key, value) in settingKeysToDefaults) {
@@ -87,11 +92,21 @@ class SharedPreferencesSettings(private val sharedPreferences: SharedPreferences
     }
 
     override fun registerOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
-        sharedPreferencesListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key -> listener.onSettingChanged(key) }
+        val sharedPreferencesListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                listener.onSettingChanged(key)
+            }
+
+        listeners.add(Pair(WeakReference(listener), sharedPreferencesListener))
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 
     override fun unregisterOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
+        val pair = listeners.find { pair -> listener == pair.first.get() }
+        listeners.remove(pair)
+
+        if (pair != null) {
+            sharedPreferences.unregisterOnSharedPreferenceChangeListener(pair.second)
+        }
     }
 }

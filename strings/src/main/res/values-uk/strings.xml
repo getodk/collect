@@ -714,7 +714,5 @@
   <string name="fs_create_media_folder_error">Неможливо створити медіа директорію \'%s\'.</string>
   <string name="fs_file_copy_error">Неможливо скопіювати \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_multiple_forms_error">Ви завантажили дві різні анкети однакової версії з однаковим ID. Можливо це та сама акета опублікована в різний час або на різних серверах. В будь-якому разі одну треба видалити.</string>
-  <string name="cannot_create_directory">Неможливо створити директорію: %s</string>
-  <string name="not_a_directory">%s існує, але це не директорія</string>
   <string name="select_odk_shortcut">Обрати посилання ODK</string>
 </resources>

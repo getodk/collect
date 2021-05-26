@@ -32,6 +32,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
@@ -158,16 +159,16 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Project currentProject = currentProjectProvider.getCurrentProject();
+        Project.Saved currentProject = currentProjectProvider.getCurrentProject();
         switch (preference.getKey()) {
             case PROJECT_NAME_KEY:
-                projectsRepository.save(new Project(String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), String.valueOf(newValue), currentProject.getIcon(), currentProject.getColor()));
                 break;
             case PROJECT_ICON_KEY:
-                projectsRepository.save(new Project(currentProject.getName(), String.valueOf(newValue), currentProject.getColor(), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), String.valueOf(newValue), currentProject.getColor()));
                 break;
             case PROJECT_COLOR_KEY:
-                projectsRepository.save(new Project(currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue), currentProject.getUuid()));
+                projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue)));
                 break;
         }
         return true;
@@ -215,11 +216,12 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     }
 
     public void deleteProject() {
-        projectsRepository.delete(currentProjectProvider.getCurrentProjectId());
+        projectsRepository.delete(currentProjectProvider.getCurrentProject().getUuid());
         if (projectsRepository.getAll().isEmpty()) {
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
         } else {
             currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
+            Collect.resetDatabaseConnections();
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
             ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
         }

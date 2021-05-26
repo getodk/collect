@@ -31,7 +31,7 @@ public class AndroidShortcutsTest {
     @Test
     @Ignore("See comment in #pickAndLaunchShortcutForForm")
     public void canFillOutFormFromShortcut() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm(); // Load form
 

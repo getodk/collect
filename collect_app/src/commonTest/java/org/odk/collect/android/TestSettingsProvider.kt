@@ -12,7 +12,7 @@ import org.odk.collect.shared.Settings
 object TestSettingsProvider {
     @JvmStatic
     fun getSettingsProvider(): SettingsProvider {
-        return DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).preferencesRepository()
+        return DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).settingsProvider()
     }
 
     @JvmStatic

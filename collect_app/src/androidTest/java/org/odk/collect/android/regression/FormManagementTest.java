@@ -57,7 +57,7 @@ public class FormManagementTest {
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
@@ -74,7 +74,7 @@ public class FormManagementTest {
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()

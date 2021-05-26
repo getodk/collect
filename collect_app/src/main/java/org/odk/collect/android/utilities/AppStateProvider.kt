@@ -6,10 +6,12 @@ import org.odk.collect.shared.Settings
 
 class AppStateProvider(private val packageInfo: PackageInfo, private val metaSettings: Settings) {
     fun isFreshInstall(): Boolean {
-        return if (alwaysFresh) {
-            true
-        } else {
-            !isUpdatedVersion() && !metaSettings.contains(MetaKeys.FIRST_LAUNCH)
+        return alwaysFresh.let {
+            if (it) {
+                true
+            } else {
+                !isUpdatedVersion() && !metaSettings.contains(MetaKeys.FIRST_LAUNCH)
+            }
         }
     }
 

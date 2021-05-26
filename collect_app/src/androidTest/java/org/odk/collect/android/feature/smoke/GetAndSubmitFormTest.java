@@ -34,7 +34,7 @@ public class GetAndSubmitFormTest {
     public void canGetBlankForm_fillItIn_andSubmit() {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 // Fetch form
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()

@@ -2,11 +2,13 @@ package org.odk.collect.android.tasks;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -14,7 +16,6 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InstanceUtils;
-import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
 import java.util.List;
@@ -23,8 +24,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
-@LooperMode(LooperMode.Mode.LEGACY)
 public class InstanceSyncTaskTest {
+
+    @Before
+    public void setup() {
+        CollectHelpers.setupDemoProject();
+    }
+
 
     @Test
     public void whenAnInstanceFileNoLongerExists_deletesFromDatabase() {
@@ -35,7 +41,7 @@ public class InstanceSyncTaskTest {
         assertThat(instancesRepository.getAllNotDeleted().size(), is(1));
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
-        instanceSyncTask.execute();
+        instanceSyncTask.doInBackground();
 
         assertThat(instancesRepository.getAllNotDeleted().size(), is(0));
     }
@@ -48,7 +54,7 @@ public class InstanceSyncTaskTest {
         );
 
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
-        instanceSyncTask.execute();
+        instanceSyncTask.doInBackground();
 
         List<Instance> instances = new InstancesRepositoryProvider().get().getAllByFormId("one_question");
         assertThat(instances.size(), is(1));

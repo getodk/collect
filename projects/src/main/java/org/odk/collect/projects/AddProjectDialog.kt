@@ -46,8 +46,10 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            projectsRepository.save(Project(getProjectName(), getProjectIcon(), getProjectColor()))
-            listener?.onProjectAdded()
+            val newProject = Project.New(getProjectName(), getProjectIcon(), getProjectColor())
+            val savedProject = projectsRepository.save(newProject)
+
+            listener?.onProjectAdded(savedProject)
             dismiss()
         }
     }
@@ -75,6 +77,6 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
 
     interface AddProjectDialogListener {
-        fun onProjectAdded()
+        fun onProjectAdded(project: Project.Saved)
     }
 }

@@ -27,6 +27,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -189,15 +190,15 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
                 if (appearance.equals(Appearances.SIGNATURE)) {
-                    questionWidget = new SignatureWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new SignatureWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.contains(Appearances.ANNOTATE)) {
-                    questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new AnnotateWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.equals(Appearances.DRAW)) {
-                    questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.startsWith(Appearances.EX)) {
                     questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
                 } else {
-                    questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 }
                 break;
             case Constants.CONTROL_OSM_CAPTURE:

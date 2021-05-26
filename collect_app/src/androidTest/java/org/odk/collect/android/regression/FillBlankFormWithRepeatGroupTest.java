@@ -181,7 +181,7 @@ public class FillBlankFormWithRepeatGroupTest {
 
         //TestCase6
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .clickNavigation()

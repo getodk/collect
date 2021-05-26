@@ -811,7 +811,5 @@
   <string name="fs_create_media_folder_error">Das Medien-Verzeichnis \'%s\' kann nicht angelegt werden.</string>
   <string name="fs_file_copy_error">Konnte \'%1$s\' nicht über \'%2$s\' kopieren. Grund: %3$s</string>
   <string name="survey_multiple_forms_error">Zwei unterschiedliche Formulare mit derselben Form ID und Version heruntergeladen. Vielleicht wurde das gleiche Formular zu unterschiedlichen Zeiten oder auf unterschiedliche Server hochgeladen. In jedem Fall sollten Sie ein Formular löschen.</string>
-  <string name="cannot_create_directory">Kann Verzeichnis %s nicht erstellen</string>
-  <string name="not_a_directory">%s existiert, aber ist kein Verzeichnis</string>
   <string name="select_odk_shortcut">ODK Verknüpfung auswählen</string>
 </resources>

@@ -1,19 +1,21 @@
 package org.odk.collect.android.activities.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.projects.Project
 
-class CurrentProjectViewModel(private val currentProjectProvider: CurrentProjectProvider) : ViewModel() {
+class CurrentProjectViewModel(private val currentProjectProvider: CurrentProjectProvider) :
+    ViewModel() {
 
-    private val _currentProject = MutableLiveData(currentProjectProvider.getCurrentProject()!!)
-    val currentProject: LiveData<Project> = _currentProject
+    private val _currentProject = MutableNonNullLiveData(currentProjectProvider.getCurrentProject())
+    val currentProject: NonNullLiveData<Project.Saved> = _currentProject
 
-    fun setCurrentProject(project: Project) {
-        _currentProject.postValue(project)
+    fun setCurrentProject(project: Project.Saved) {
+        currentProjectProvider.setCurrentProject(project.uuid)
+        refresh()
     }
 
     fun refresh() {
@@ -22,7 +24,8 @@ class CurrentProjectViewModel(private val currentProjectProvider: CurrentProject
         }
     }
 
-    open class Factory constructor(private val currentProjectProvider: CurrentProjectProvider) : ViewModelProvider.Factory {
+    open class Factory constructor(private val currentProjectProvider: CurrentProjectProvider) :
+        ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return CurrentProjectViewModel(currentProjectProvider) as T
         }

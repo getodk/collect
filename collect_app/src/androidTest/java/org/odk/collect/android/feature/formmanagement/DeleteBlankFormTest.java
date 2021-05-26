@@ -23,7 +23,7 @@ public class DeleteBlankFormTest {
 
     @Test
     public void deletingAForm_removesFormFromBlankFormList() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickDeleteSavedForm()
                 .clickBlankForms()
@@ -38,7 +38,7 @@ public class DeleteBlankFormTest {
 
     @Test
     public void deletingAForm_whenThereFilledForms_removesFormFromBlankFormList_butAllowsEditingFilledForms() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
@@ -67,7 +67,7 @@ public class DeleteBlankFormTest {
     public void afterFillingAForm_andDeletingIt_allowsFormToBeReDownloaded() {
         testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()

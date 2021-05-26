@@ -16,10 +16,8 @@
 
 package org.odk.collect.android.support;
 
-import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
+import androidx.test.core.app.ApplicationProvider;
+
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
@@ -28,32 +26,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
-public class FormLoadingUtils {
+/**
+ * Emulates the process of copying a form via ADB
+ */
+public class AdbFormLoadingUtils {
 
-    public static final String ALL_WIDGETS_FORM = "all-widgets.xml";
-
-    private FormLoadingUtils() {
+    private AdbFormLoadingUtils() {
 
     }
 
     /**
-     * Copies a form with the given file name and given associated media to the SD Card where it
-     * will be loaded by {@link FormLoaderTask}.
+     * Copies a form with the given file name and given associated media to the SD Card.
+     *
+     * @param copyToDatabase if true the forms will be loaded into the database as if a form list
+     *                       had been opened.
      */
     public static void copyFormToStorage(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase, String copyTo) throws IOException {
-        new StorageInitializer().createOdkDirsOnStorage();
-        ReferenceManager.instance().reset();
-
-        String pathname = copyForm(formFilename, copyTo);
+        copyForm(formFilename, copyTo);
         if (mediaFilePaths != null) {
             copyFormMediaFiles(formFilename, mediaFilePaths);
         }
 
         if (copyToDatabase) {
-            setupReferenceManagerForForm(ReferenceManager.instance(), FileUtils.getFormMediaDir(new File(pathname)));
             new FormsDirDiskFormsSynchronizer().synchronize();
         }
     }
@@ -70,18 +66,22 @@ public class FormLoadingUtils {
         copyFormToStorage(formFilename, null, false, copyTo);
     }
 
+    public static void copyFormToStorage(String formFilename, boolean copyToDatabase) throws IOException {
+        copyFormToStorage(formFilename, null, copyToDatabase, formFilename);
+    }
+
     public static FormActivityTestRule getFormActivityTestRuleFor(String formFilename) {
         return new FormActivityTestRule(formFilename);
     }
 
     private static String copyForm(String formFilename, String copyTo) throws IOException {
-        String pathname = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + copyTo;
+        String pathname = getFormsDirPath() + copyTo;
         copyFileFromAssets("forms/" + formFilename, pathname);
         return pathname;
     }
 
     private static void copyFormMediaFiles(String formFilename, List<String> mediaFilePaths) throws IOException {
-        String mediaPathName = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
+        String mediaPathName = getFormsDirPath() + formFilename.replace(".xml", "") + FileUtils.MEDIA_SUFFIX + "/";
         FileUtils.checkMediaPath(new File(mediaPathName));
 
         for (String mediaFilePath : mediaFilePaths) {
@@ -93,5 +93,15 @@ public class FormLoadingUtils {
         return mediaFilePath.contains(File.separator)
                 ? mediaFilePath.substring(mediaFilePath.indexOf(File.separator) + 1)
                 : mediaFilePath;
+    }
+
+    /**
+     * @return the forms dir path that the user would expect (from docs)
+     */
+    private static String getFormsDirPath() {
+        String projectsDirPath = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/projects/";
+        String firstProjectId = new File(projectsDirPath).list()[0];
+
+        return projectsDirPath + "/" + firstProjectId + "/forms/";
     }
 }

@@ -811,7 +811,5 @@
   <string name="fs_create_media_folder_error">Impossible de créer le dossier multimédia: %s</string>
   <string name="fs_file_copy_error">Impossible de copier \'%1$s\' sur \'%2$s\'. Raison: %3$s</string>
   <string name="survey_multiple_forms_error">Vous avez téléchargé deux formulaires différents avec le même numéro d\'identification et la même version. Peut-être que le même formulaire a été téléchargés deux fois ou à deux serveurs différents. Dans tous les cas, vous devez en supprimer un.</string>
-  <string name="cannot_create_directory">Impossible de créer un dossier: %s</string>
-  <string name="not_a_directory">%s existe, mais ce n\'est pas un dossier</string>
   <string name="select_odk_shortcut">Sélectionnez le raccourci ODK</string>
 </resources>

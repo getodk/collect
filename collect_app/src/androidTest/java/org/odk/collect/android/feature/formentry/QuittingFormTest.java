@@ -29,7 +29,7 @@ public class QuittingFormTest {
 
     @Test
     public void partiallyFillingForm_andPressingBack_andClickingSaveChanges_savesCurrentAnswers() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion()
@@ -44,7 +44,7 @@ public class QuittingFormTest {
 
     @Test
     public void partiallyFillingForm_andPressingBack_andClickingIgnoreChanges_doesNotSaveForm() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))

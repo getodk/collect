@@ -35,7 +35,7 @@ public class AboutPageTest {
     public void when_rotateScreenOnAboutPage_should_notCrash() {
         //TestCase1
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickAbout()
                 .rotateToLandscape(new AboutPage())
                 .assertOnPage()
@@ -46,7 +46,7 @@ public class AboutPageTest {
     public void when_openAboutPage_should_iconsBeVisible() {
         //TestCase2
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickAbout()
                 .assertOnPage();
 
@@ -115,7 +115,7 @@ public class AboutPageTest {
     public void when_OpenSourcesLibrariesLicenses_should_openSourceLicensesTitleBeDisplayed() {
         //TestCase3
         new MainMenuPage()
-                .openProjectSettingsDialog()
+                .openProjectSettings()
                 .clickAbout()
                 .clickOnOpenSourceLibrariesLicenses();
     }

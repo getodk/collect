@@ -810,7 +810,5 @@
   <string name="fs_create_media_folder_error">Nemohu vytvořit adresář pro mediální soubory \'%s\'.</string>
   <string name="fs_file_copy_error">Nezdařilo se nakopírovat \'%1$s\' přes \'%2$s\'. Důvod: %3$s </string>
   <string name="survey_multiple_forms_error">Stáhli jste dva různé formuláře se shodným ID a verzí. Možná jste nahráli stejný dotazník dvakrát nebo na jiné servery. Každopádně, jeden byste měli smazat.</string>
-  <string name="cannot_create_directory">Adresář %s nelze vytvořit.</string>
-  <string name="not_a_directory">%s existuje, ale není to adresář</string>
   <string name="select_odk_shortcut">Vybrat ODK zástupce</string>
 </resources>

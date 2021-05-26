@@ -4,9 +4,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.pages.FormEndPage;
@@ -20,13 +20,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 public class DeletingRepeatGroupsTest {
     private static final String TEST_FORM = "repeat_groups.xml";
 
-    @Rule
-    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    private final FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, true));
+            .around(new CopyFormRule(TEST_FORM, true))
+            .around(activityTestRule);
 
     @Test
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {

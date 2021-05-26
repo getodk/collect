@@ -5,17 +5,22 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
 import java.util.Collections;
 
-public class ExternalCsvSearchTest {
+/**
+ * This tests the "Dynamic selects from pre-loaded data" feature of XLSForms.
+ *
+ * * @see <a href="https://xlsform.org/en/#dynamic-selects-from-pre-loaded-data">Dynamic selects from pre-loaded data</a>
+ */
+public class DynamicPreLoadedDataSelects {
 
     private static final String EXTERNAL_CSV_SEARCH_FORM = "external-csv-search.xml";
 
-    public FormActivityTestRule rule = FormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
+    public FormActivityTestRule rule = AdbFormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -24,7 +29,7 @@ public class ExternalCsvSearchTest {
             .around(rule);
 
     @Test
-    public void search_withoutFilter_displaysAllChoices() {
+    public void withoutFilter_displaysAllChoices() {
         new FormEntryPage("external-csv-search").assertOnPage()
                 .assertText("Artichoke")
                 .assertText("Apple")
@@ -36,7 +41,7 @@ public class ExternalCsvSearchTest {
 
     @Test
     // Regression: https://github.com/getodk/collect/issues/3132
-    public void search_withFilter_showsMatchingChoices() {
+    public void withFilter_showsMatchingChoices() {
         new FormEntryPage("external-csv-search").assertOnPage()
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")

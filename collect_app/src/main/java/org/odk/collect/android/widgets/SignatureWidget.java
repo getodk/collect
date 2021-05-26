@@ -42,8 +42,8 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
 
     Button signButton;
 
-    public SignatureWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, prompt, questionMediaManager, waitingForDataRegistry, new MediaUtils());
+    public SignatureWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
+        super(context, prompt, questionMediaManager, waitingForDataRegistry, new MediaUtils(), tmpImageFilePath);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
         setUpLayout();
         addCurrentImageToLayout();

@@ -27,7 +27,7 @@ public class AutoSendTest {
 
     @Test
     public void whenAutoSendEnabled_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
-        MainMenuPage mainMenuPage = rule.mainMenu()
+        MainMenuPage mainMenuPage = rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableAutoSend()
                 .copyForm("one-question.xml")
@@ -48,7 +48,7 @@ public class AutoSendTest {
 
     @Test
     public void whenFormHasAutoSend_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
-        MainMenuPage mainMenuPage = rule.mainMenu()
+        MainMenuPage mainMenuPage = rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .copyForm("one-question-autosend.xml")
                 .startBlankForm("One Question Autosend")

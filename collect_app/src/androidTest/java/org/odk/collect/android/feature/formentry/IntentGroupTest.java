@@ -35,7 +35,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 
 import java.io.File;
@@ -69,7 +69,7 @@ import static org.odk.collect.android.support.actions.NestedScrollToAction.neste
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    public FormActivityTestRule activityTestRule = FormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
+    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

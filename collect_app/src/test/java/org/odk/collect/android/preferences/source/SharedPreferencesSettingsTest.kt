@@ -23,7 +23,8 @@ class SharedPreferencesSettingsTest {
 
     @Before
     fun setup() {
-        sharedPreferences = ApplicationProvider.getApplicationContext<Context>().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        sharedPreferences = ApplicationProvider.getApplicationContext<Context>()
+            .getSharedPreferences("prefs", Context.MODE_PRIVATE)
     }
 
     @Test
@@ -247,13 +248,57 @@ class SharedPreferencesSettingsTest {
     @Test
     fun `When SettingChangeListener registered, should listen to changes in settings`() {
         sharedPreferencesSettings = SharedPreferencesSettings(sharedPreferences, defaultSettings)
-        val listener: Settings.OnSettingChangeListener = mock(Settings.OnSettingChangeListener::class.java)
+        val listener: Settings.OnSettingChangeListener =
+            mock(Settings.OnSettingChangeListener::class.java)
         sharedPreferencesSettings.registerOnSettingChangeListener(listener)
         sharedPreferencesSettings.save("test", "string")
         verify(listener).onSettingChanged("test")
+
         sharedPreferencesSettings.unregisterOnSettingChangeListener(listener)
         sharedPreferencesSettings.save("test2", "string2")
         verify(listener, never()).onSettingChanged("test2")
+    }
+
+    @Test
+    fun `can register multiple change listeners`() {
+        sharedPreferencesSettings = SharedPreferencesSettings(sharedPreferences, defaultSettings)
+        val listener1: Settings.OnSettingChangeListener =
+            mock(Settings.OnSettingChangeListener::class.java)
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener1)
+
+        val listener2: Settings.OnSettingChangeListener =
+            mock(Settings.OnSettingChangeListener::class.java)
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener2)
+
+        sharedPreferencesSettings.save("test", "string")
+        verify(listener1).onSettingChanged("test")
+        verify(listener2).onSettingChanged("test")
+
+        sharedPreferencesSettings.unregisterOnSettingChangeListener(listener1)
+        sharedPreferencesSettings.save("test2", "string2")
+        verify(listener1, never()).onSettingChanged("test2")
+        verify(listener2).onSettingChanged("test2")
+    }
+
+    /*
+    Accounts for a possible bug listeners are unregistered but stay in the implementations list. In
+    that case the second unregister results in the wrong listener being unregistered from
+    SharedPreferences.
+     */
+    @Test
+    fun `unregister works multiple times for the same listener`() {
+        sharedPreferencesSettings = SharedPreferencesSettings(sharedPreferences, defaultSettings)
+        val listener: Settings.OnSettingChangeListener =
+            mock(Settings.OnSettingChangeListener::class.java)
+
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener)
+        sharedPreferencesSettings.unregisterOnSettingChangeListener(listener)
+
+        sharedPreferencesSettings.registerOnSettingChangeListener(listener)
+        sharedPreferencesSettings.unregisterOnSettingChangeListener(listener)
+
+        sharedPreferencesSettings.save("test", "string")
+        verify(listener, never()).onSettingChanged("test")
     }
 
     fun assertDefaultPrefs(allSettings: Map<String, *>) {

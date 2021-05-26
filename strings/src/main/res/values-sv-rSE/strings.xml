@@ -684,6 +684,5 @@ Dela ODK Collect med dem.</string>
   <string name="fs_create_media_folder_error">Kan inte skapa mediamappen \'%s\'.</string>
   <string name="fs_file_copy_error">Kan inte kopiera \'%1$s\' över \'%2$s\'. Orsak: %3$s</string>
   <string name="survey_multiple_forms_error">Du har laddat ner två olika formulär med samma ID och version. Kanske har dem laddats upp vid olika tidpunkter eller till olika servrar. I vilket fall som helst bör du radera ett av dem.</string>
-  <string name="cannot_create_directory">Kan inte skapa mappen: %s</string>
-  <string name="select_odk_shortcut">Välj ODK genväg</string>
+    <string name="select_odk_shortcut">Välj ODK genväg</string>
 </resources>

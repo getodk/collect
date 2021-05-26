@@ -19,28 +19,25 @@ class DeleteProjectTest {
     @Test
     fun deleteProjectTest() {
         // Add project Turtle nesting
-        rule.mainMenu()
-            .openProjectSettingsDialog()
+        rule.startAtMainMenu()
+            .openProjectSettings()
             .clickAddProject()
             .inputProjectName("Turtle nesting")
             .inputProjectIcon("T")
             .inputProjectColor("#0000FF")
             .addProject()
 
-        // Delete Demo project
-        rule.mainMenu()
-            .openProjectSettingsDialog()
+            // Delete Demo project
+            .openProjectSettings()
             .clickAdminSettings()
             .deleteProject()
 
-        // Assert switching to Turtle nesting
-        rule.mainMenu()
+            // Assert switching to Turtle nesting
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
             .assertProjectIcon("T", "#0000FF")
 
-        // Delete Turtle nesting project
-        rule.mainMenu()
-            .openProjectSettingsDialog()
+            // Delete Turtle nesting project
+            .openProjectSettings()
             .clickAdminSettings()
             .deleteLastProject()
     }

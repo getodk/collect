@@ -17,7 +17,7 @@ import androidx.test.runner.lifecycle.Stage;
 import junit.framework.AssertionFailedError;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
@@ -75,7 +75,7 @@ import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withR
  * @see <a href="https://en.wikipedia.org/wiki/Fluent_interface">Fluent Interfaces</a>
  */
 
-abstract class Page<T extends Page<T>> {
+public abstract class Page<T extends Page<T>> {
 
     public abstract T assertOnPage();
 
@@ -429,7 +429,7 @@ abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename) {
         try {
-            FormLoadingUtils.copyFormToStorage(formFilename);
+            AdbFormLoadingUtils.copyFormToStorage(formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -439,7 +439,7 @@ abstract class Page<T extends Page<T>> {
 
     public T copyForm(String formFilename, List<String> mediaFileNames) {
         try {
-            FormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename);
+            AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

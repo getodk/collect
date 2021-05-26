@@ -12,6 +12,7 @@ import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
 
 @RunWith(AndroidJUnit4::class)
 class SettingsProviderTest {
+
     private val settingsProvider = SettingsProvider(ApplicationProvider.getApplicationContext())
 
     @Before

@@ -717,7 +717,5 @@
   <string name="fs_create_media_folder_error">Non puoi creare la cartella media \'%s\'.</string>
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>
   <string name="survey_multiple_forms_error">Hai scaricato due diversi Moduli ma con lo stesso nome ID e versione. Potrebbe essere lo stesso Modulo scaricato in momenti diversi o con Server diversi. In ogni caso devi cancellarne uno.</string>
-  <string name="cannot_create_directory">Impossibile creare la cartella: %s</string>
-  <string name="not_a_directory">%sesiste, ma non è una cartella</string>
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
 </resources>

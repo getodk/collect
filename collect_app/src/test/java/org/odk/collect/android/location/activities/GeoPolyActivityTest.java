@@ -27,6 +27,7 @@ import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
@@ -39,15 +40,21 @@ import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTest extends BaseGeoActivityTest {
-    @Rule public MockitoRule rule = MockitoJUnit.rule();
+    
+    @Rule
+    public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPolyActivity> controller;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
+
+        CollectHelpers.setupDemoProject();
         controller = Robolectric.buildActivity(GeoPolyActivity.class, intent);
     }
 
-    @Test public void testLocationClientLifecycle() {
+    @Test
+    public void testLocationClientLifecycle() {
         // Starting the activity should start the location client.
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
         assertTrue(fakeLocationClient.isRunning());
@@ -65,14 +72,16 @@ public class GeoPolyActivityTest extends BaseGeoActivityTest {
         assertFalse(fakeLocationClient.isRunning());
     }
 
-    @Test public void recordButton_should_beHiddenForAutomaticMode() {
+    @Test
+    public void recordButton_should_beHiddenForAutomaticMode() {
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
         activity.updateRecordingMode(R.id.automatic_mode);
         activity.startInput();
         assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
     }
 
-    @Test public void recordButton_should_beVisibleForManualMode() {
+    @Test
+    public void recordButton_should_beVisibleForManualMode() {
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
         activity.updateRecordingMode(R.id.manual_mode);
         activity.startInput();

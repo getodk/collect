@@ -2,7 +2,6 @@ package org.odk.collect.android.external;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Environment;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -10,14 +9,13 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.SQLiteUtils;
 import org.odk.collect.shared.Md5;
-import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,7 +44,7 @@ public class ExternalDataReaderTest {
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME = "simple-search-external-csv-fruits.csv";
     private static final String SIMPLE_SEARCH_EXTERNAL_DB_FILENAME = "simple-search-external-csv-fruits.db";
 
-    private static final String SELECT_ALL_DATA_QUERY =  "SELECT * FROM " + EXTERNAL_DATA_TABLE_NAME;
+    private static final String SELECT_ALL_DATA_QUERY = "SELECT * FROM " + EXTERNAL_DATA_TABLE_NAME;
 
     private static File csvFile;
     private static File dbFile;
@@ -55,8 +53,7 @@ public class ExternalDataReaderTest {
 
     @Before
     public void setUp() throws IOException {
-        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-        new StorageInitializer().createOdkDirsOnStorage();
+        CollectHelpers.setupDemoProject();
 
         File formFile = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM_FILENAME);
         File mediaDir = FileUtils.getFormMediaDir(formFile);
@@ -71,7 +68,7 @@ public class ExternalDataReaderTest {
         }
 
         try (InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("media" + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FILENAME);
-            OutputStream output = new FileOutputStream(csvFile)) {
+             OutputStream output = new FileOutputStream(csvFile)) {
             IOUtils.copy(input, output);
         }
     }

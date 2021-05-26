@@ -26,11 +26,11 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
@@ -89,28 +89,18 @@ public class Collect extends Application implements
     }
 
     /**
-     * Predicate that tests whether a directory path might refer to an
-     * ODK Tables instance data directory (e.g., for media attachments).
-     */
-    public static boolean isODKTablesInstanceDataDirectory(File directory) {
-        /*
-         * Special check to prevent deletion of files that
-         * could be in use by ODK Tables.
-         */
-        String dirPath = directory.getAbsolutePath();
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-        if (dirPath.startsWith(storagePathProvider.getOdkRootDirPath())) {
-            dirPath = dirPath.substring(storagePathProvider.getOdkRootDirPath().length());
-            String[] parts = dirPath.split(File.separatorChar == '\\' ? "\\\\" : File.separator);
-            // [appName, instances, tableId, instanceId ]
-            if (parts.length == 4 && parts[1].equals("instances")) {
-                return true;
-            }
-        }
-        return false;
+      @deprecated Only here temporarily to allow us to reset database connections without restructuring the
+      way they work. Right now we can only talk to one project's DBs at a time but will need to
+      change that.
+     **/
+    @Deprecated
+    public static void resetDatabaseConnections() {
+        DaggerUtils.getComponent(getInstance()).formsDatabaseProvider().releaseDatabaseHelper();
+        DaggerUtils.getComponent(getInstance()).instancesDatabaseProvider().releaseDatabaseHelper();
     }
 
     @Nullable
+
     public FormController getFormController() {
         return formController;
     }

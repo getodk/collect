@@ -22,7 +22,7 @@ public class QuickSaveTest {
 
     @Test
     public void whenFillingOutNewForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswer() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .inputText("123")
@@ -38,7 +38,7 @@ public class QuickSaveTest {
 
     @Test
     public void whenFillingOutNewForm_clickingSaveIcon_makingChangesAndSaveAndExiting_savesLatestAnswer() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .inputText("123")
@@ -54,7 +54,7 @@ public class QuickSaveTest {
 
     @Test
     public void whenEditingForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswers() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .inputText("123")
@@ -77,7 +77,7 @@ public class QuickSaveTest {
 
     @Test
     public void whenEditingForm_clickingSaveIcon_andMakingChanges_andIgnoringChanges_savesFirstEdits() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .startBlankForm("One Question")
                 .inputText("123")

@@ -717,7 +717,5 @@
   <string name="fs_create_media_folder_error">Ne mogu da kreiram medija folder \'%s\'.</string>
   <string name="fs_file_copy_error">Nisam mogao da prekopiram \'%1$s\' preko \'%2$s\'. Razlog: %3$s</string>
   <string name="survey_multiple_forms_error">Preuzeli ste dva drugačija formulara sa istim ID-jem i verzijom. Možda su to isti formulari učitani u različito vrijeme ili sa različitih servera. U svakom slučaju, treba da obrišete jedan.</string>
-  <string name="cannot_create_directory">Ne mogu da kreiram direktorij: %s</string>
-  <string name="not_a_directory">%s postoji, ali nije direktorij</string>
   <string name="select_odk_shortcut">Odaberi ODK prečicu</string>
 </resources>

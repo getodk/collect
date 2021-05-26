@@ -14,17 +14,20 @@
 
 package org.odk.collect.android.database;
 
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
-import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.testshared.RobolectricHelpers;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.InstancesRepositoryTest;
 
@@ -32,24 +35,30 @@ import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
+
+    private StoragePathProvider storagePathProvider;
+    private InstancesDatabaseProvider instancesDatabaseProvider;
+
     @Before
     public void setup() {
-        RobolectricHelpers.mountExternalStorage();
-        new StorageInitializer().createOdkDirsOnStorage();
+        CollectHelpers.setupDemoProject();
+        AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
+        storagePathProvider = component.storagePathProvider();
+        instancesDatabaseProvider = component.instancesDatabaseProvider();
     }
 
     @Override
     public InstancesRepository buildSubject() {
-        return new InstancesRepositoryProvider().get();
+        return new DatabaseInstancesRepository(instancesDatabaseProvider, storagePathProvider, System::currentTimeMillis);
     }
 
     @Override
     public InstancesRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), new StoragePathProvider(), clock);
+        return new DatabaseInstancesRepository(instancesDatabaseProvider, storagePathProvider, clock);
     }
 
     @Override
     public String getInstancesDir() {
-        return new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES);
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES);
     }
 }

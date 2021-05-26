@@ -35,7 +35,7 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
-        FillBlankFormPage page = rule.mainMenu()
+        FillBlankFormPage page = rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
@@ -55,7 +55,7 @@ public class MatchExactlyTest {
     public void whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingNotification_returnsToFillBlankForms() throws Exception {
         testDependencies.server.alwaysReturnError();
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
@@ -76,7 +76,7 @@ public class MatchExactlyTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.server.setCredentials("Klay", "Thompson");
 
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .clickFillBlankForm()
@@ -90,7 +90,7 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() throws Exception {
-        MainMenuPage page = rule.mainMenu()
+        MainMenuPage page = rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly();
 
@@ -115,7 +115,7 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyEnabled_hidesGetBlankFormsAndDeleteBlankForms() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .enableMatchExactly()
                 .assertTextNotDisplayed(R.string.get_forms)
                 .clickDeleteSavedForm()
@@ -124,7 +124,7 @@ public class MatchExactlyTest {
 
     @Test
     public void whenMatchExactlyDisabled_stopsSyncingAutomatically() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .enableMatchExactly()
                 .enableManualUpdates();

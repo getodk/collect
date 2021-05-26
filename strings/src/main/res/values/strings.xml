@@ -975,9 +975,6 @@
     <string name="fs_file_copy_error">Could not copy \'%1$s\' over \'%2$s\'. Reason: %3$s</string>
     <string name="survey_multiple_forms_error">You have downloaded two different forms with the same form ID and version. Maybe they were the same form uploaded at different times or to different servers. In any case, you should delete one.</string>
 
-    <string name="cannot_create_directory">Cannot create directory: %s</string>
-    <string name="not_a_directory">%s exists, but is not a directory</string>
-
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
     <string name="background_audio_help">This form records the audio from your device\'s microphone.\n\nYou can use the volume indicator to make sure the microphone is close enough to the sound you need to record.\n\nTo stop the recording please exit this form.\n\nFor more information please contact the person who asked you to collect data.</string>
 

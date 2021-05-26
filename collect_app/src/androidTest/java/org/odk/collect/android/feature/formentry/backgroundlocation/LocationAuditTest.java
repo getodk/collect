@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.FormLoadingUtils;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -25,7 +25,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class LocationAuditTest {
     private static final String LOCATION_AUDIT_FORM = "location-audit.xml";
 
-    public FormActivityTestRule rule = FormLoadingUtils.getFormActivityTestRuleFor(LOCATION_AUDIT_FORM);
+    public FormActivityTestRule rule = AdbFormLoadingUtils.getFormActivityTestRuleFor(LOCATION_AUDIT_FORM);
 
     @Rule
     public RuleChain copyFormChain = RuleChain

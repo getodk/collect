@@ -8,10 +8,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
 
 class CurrentProjectViewModelTest {
+
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -21,20 +23,20 @@ class CurrentProjectViewModelTest {
     @Before
     fun setup() {
         currentProjectProvider = mock(CurrentProjectProvider::class.java)
-        `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project("Project X", "X", "#cccccc"))
+        `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project.Saved("123", "Project X", "X", "#cccccc"))
         currentProjectViewModel = CurrentProjectViewModel(currentProjectProvider)
     }
 
     @Test
     fun `Initial current project should be set`() {
-        assertThat(currentProjectViewModel.currentProject.value!!, `is`(Project("Project X", "X", "#cccccc")))
+        assertThat(currentProjectViewModel.currentProject.value, `is`(Project.Saved("123", "Project X", "X", "#cccccc")))
     }
 
     @Test
-    fun `setCurrentProject() should add new project to live data`() {
-        val project = Project("Project Y", "Y", "#ffffff")
+    fun `setCurrentProject() sets current project`() {
+        val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
 
         currentProjectViewModel.setCurrentProject(project)
-        assertThat(currentProjectViewModel.currentProject.value, `is`(project))
+        verify(currentProjectProvider).setCurrentProject("456")
     }
 }

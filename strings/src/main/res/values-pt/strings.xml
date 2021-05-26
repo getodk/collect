@@ -803,7 +803,5 @@ Escolher Imagem</string>
   <string name="fs_create_media_folder_error">Não foi possível criar a pasta de mídia \'%s\'.</string>
   <string name="fs_file_copy_error">Não foi possível copiar os dados de \'%1$s\' para \'%2$s\'.. Motivo: %3$s</string>
   <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
-  <string name="cannot_create_directory">Não foi possível criar a pasta: %s</string>
-  <string name="not_a_directory">%s existe, mas não é uma pasta</string>
   <string name="select_odk_shortcut">Selecionar o Atalho ODK</string>
 </resources>

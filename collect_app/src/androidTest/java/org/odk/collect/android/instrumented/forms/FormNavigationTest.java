@@ -16,17 +16,28 @@
 
 package org.odk.collect.android.instrumented.forms;
 
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
+
 import org.javarosa.core.model.FormDef;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
-import org.odk.collect.android.support.FormLoadingUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +58,16 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(Parameterized.class)
 public class FormNavigationTest {
+
+    @Rule
+    public RuleChain copyFormChain = RuleChain
+            .outerRule(new ResetStateRule())
+            .around(new RunnableRule(() -> {
+                // Set up demo project
+                AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
+                component.projectImporter().importDemoProject();
+                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+            }));
 
     @Parameters(name = "{0}")
     public static Iterable<Object[]> data() {
@@ -73,9 +94,11 @@ public class FormNavigationTest {
                         "-1, ", "0, ", "-1, ", "0, "));
     }
 
-    /** Expected indices for each form */
+    /**
+     * Expected indices for each form
+     */
     private static Object[] ei(String formName, String... expectedIndices) {
-        return new Object[] {formName, expectedIndices};
+        return new Object[]{formName, expectedIndices};
     }
 
     private final String formName;
@@ -97,6 +120,7 @@ public class FormNavigationTest {
         } catch (IOException e) {
             Timber.i(e);
         }
+
         FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
@@ -137,7 +161,7 @@ public class FormNavigationTest {
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
     private void copyToStorage(String formName) throws IOException {
-        FormLoadingUtils.copyFormToStorage(formName);
+        AdbFormLoadingUtils.copyFormToStorage(formName);
     }
 
     private static String formPath(String formName) {

@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Environment;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -15,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.shared.Md5;
-import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -50,12 +49,10 @@ public class FormsProviderTest {
 
     @Before
     public void setup() {
-        // Fake that external storage is mounted (it isn't by default in Robolectric)
-        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-        new StorageInitializer().createOdkDirsOnStorage();
+        CollectHelpers.setupDemoProject();
 
         Context context = ApplicationProvider.getApplicationContext();
-        externalFilesDir = context.getExternalFilesDir(null);
+        externalFilesDir = new File(DaggerUtils.getComponent(context).storagePathProvider().getProjectRootDirPath());
         contentResolver = context.getContentResolver();
     }
 

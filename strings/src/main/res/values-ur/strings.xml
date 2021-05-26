@@ -678,7 +678,5 @@
   <string name="fs_create_media_folder_error">میڈیا فولڈر نہیں بن سکا\'%s\'.</string>
   <string name="fs_file_copy_error">کاپی نہیں کر سکا \'%1$s\' اوور \'%2$s\'. وجہ:%3$s</string>
   <string name="survey_multiple_forms_error">آپ نے ایک ہی  ID اور ورژن کے ساتھ دو مختلف فارم ڈاؤن لوڈ کیے ہیں. شاید وہ وہی وقت تھے جو مختلف اوقات میں یا مختلف سرورز میں اپ لوڈ کیے گئے ہیں. کسی بھی صورت میں، آپ کو ایک کو ڈیلیٹ کرنا چاہئے.</string>
-  <string name="cannot_create_directory">ڈائرکٹری نہیں بنا سکتے ہیں: %s</string>
-  <string name="not_a_directory">%sموجود ہے، لیکن ڈائریکٹری نہیں ہے</string>
   <string name="select_odk_shortcut">او ڈی کے شارٹ کٹ منتخب کریں</string>
 </resources>

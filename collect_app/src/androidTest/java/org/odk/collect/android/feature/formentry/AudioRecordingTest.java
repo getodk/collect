@@ -57,7 +57,7 @@ public class AudioRecordingTest {
 
     @Test
     public void onAudioQuestion_withQualitySpecified_canRecordAudioInApp() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
@@ -70,7 +70,7 @@ public class AudioRecordingTest {
 
     @Test
     public void whileRecording_pressingBack_showsWarning_andStaysOnSameScreen() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
@@ -81,7 +81,7 @@ public class AudioRecordingTest {
 
     @Test
     public void whileRecording_swipingToADifferentScreen_showsWarning_andStaysOnSameScreen() {
-        rule.mainMenu()
+        rule.startAtMainMenu()
                 .copyForm("internal-audio-question.xml")
                 .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)

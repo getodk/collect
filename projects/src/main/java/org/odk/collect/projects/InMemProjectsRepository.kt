@@ -3,21 +3,29 @@ package org.odk.collect.projects
 import org.odk.collect.shared.UUIDGenerator
 
 class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : ProjectsRepository {
-    val projects = mutableListOf<Project>()
+    val projects = mutableListOf<Project.Saved>()
 
     override fun get(uuid: String) = projects.find { it.uuid == uuid }
 
     override fun getAll() = projects
 
-    override fun save(project: Project) {
-        if (project.uuid == NOT_SPECIFIED_UUID) {
-            projects.add(project.copy(uuid = uuidGenerator.generateUUID()))
-        } else {
-            val projectIndex = projects.indexOf(get(project.uuid))
-            if (projectIndex == -1) {
-                projects.add(project)
-            } else {
-                projects.set(projectIndex, project)
+    override fun save(project: Project): Project.Saved {
+        when (project) {
+            is Project.New -> {
+                val projectToSave = Project.Saved(uuidGenerator.generateUUID(), project)
+                projects.add(projectToSave)
+                return projectToSave
+            }
+
+            is Project.Saved -> {
+                val projectIndex = projects.indexOf(get(project.uuid))
+                if (projectIndex == -1) {
+                    projects.add(project)
+                } else {
+                    projects[projectIndex] = project
+                }
+
+                return project
             }
         }
     }

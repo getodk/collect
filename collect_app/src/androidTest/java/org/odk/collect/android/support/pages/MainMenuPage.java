@@ -32,7 +32,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public ProjectSettingsDialogPage openProjectSettingsDialog() {
+    public ProjectSettingsDialogPage openProjectSettings() {
         assertOnPage(); // Make sure we've waited for the application load correctly
 
         onView(withId(R.id.projects)).perform(click());
@@ -112,7 +112,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage setServer(String url) {
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnURL()
@@ -123,7 +123,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableManualUpdates() {
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -133,7 +133,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enablePreviouslyDownloadedOnlyUpdates() {
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -143,7 +143,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableMatchExactly() {
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
@@ -153,7 +153,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableAutoSend() {
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
@@ -168,7 +168,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
         intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult);
 
-        return openProjectSettingsDialog()
+        return openProjectSettings()
                 .clickGeneralSettings()
                 .clickServerSettings()
                 .clickOnServerType()

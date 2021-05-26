@@ -700,7 +700,5 @@
   <string name="fs_create_media_folder_error">Imeshindwa tengeneza kabrasha la midia\'%s\'.</string>
   <string name="fs_file_copy_error">Haiwezi nakili  \'%1$s\' zidi ya \'%2$s\'. Sababu:%3$s</string>
   <string name="survey_multiple_forms_error">Unepakua fomu mbili tofauti  zenye  fomu ya utambulisho sawa na toleo sawa. Labda ilikuwa ni fomu moja iliyoekwa muda tofauti au seva tofauti. Kama ni hivyo futa mojawapo. </string>
-  <string name="cannot_create_directory">Haiwezi tengenenza saraka \"directory\": %s</string>
-  <string name="not_a_directory">%s ipo, lakini  si saraka \"directory\"</string>
   <string name="select_odk_shortcut">Chagua njia fupi ya ODK </string>
 </resources>

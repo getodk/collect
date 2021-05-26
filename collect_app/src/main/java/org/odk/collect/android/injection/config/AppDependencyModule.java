@@ -222,8 +222,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public StorageInitializer providesStorageInitializer() {
-        return new StorageInitializer();
+    public StorageInitializer providesStorageInitializer(StoragePathProvider storagePathProvider) {
+        return new StorageInitializer(storagePathProvider);
     }
 
     @Provides
@@ -318,10 +318,10 @@ public class AppDependencyModule {
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
                                                                  Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                                                 AppStateProvider appStateProvider, ProjectImporter projectImporter) {
+                                                                 AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
                 propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter);
+                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter, currentProjectProvider);
     }
 
     @Provides
@@ -490,14 +490,12 @@ public class AppDependencyModule {
 
     @Provides
     @Named("GENERAL_SETTINGS_STORE")
-    @Singleton
     public SettingsStore providesGeneralSettingsStore(SettingsProvider settingsProvider) {
         return new SettingsStore(settingsProvider.getGeneralSettings());
     }
 
     @Provides
     @Named("ADMIN_SETTINGS_STORE")
-    @Singleton
     public SettingsStore providesAdminSettingsStore(SettingsProvider settingsProvider) {
         return new SettingsStore(settingsProvider.getAdminSettings());
     }
@@ -568,8 +566,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
-        return new ProjectImporter(projectsRepository, settingsProvider.getMetaSettings());
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
+        return new ProjectImporter(context, storagePathProvider, projectsRepository, settingsProvider);
     }
 
     @Provides
