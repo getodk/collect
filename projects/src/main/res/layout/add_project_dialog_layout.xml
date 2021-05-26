@@ -116,6 +116,8 @@
         android:layout_margin="@dimen/margin_extra_small"
         android:text="@string/add"
         android:textColor="?colorSecondary"
+        android:enabled="false"
+        android:alpha="0.3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.widget.doOnTextChanged
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
+import org.odk.collect.shared.Validator
 import javax.inject.Inject
 
 class AddProjectDialog : MaterialFullScreenDialogFragment() {
@@ -37,6 +39,18 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
+
+        binding.urlInputText.doOnTextChanged { text, _, _, _ ->
+            if (Validator.isUrlValid(text.toString())) {
+                binding.urlInputText.error = null
+                binding.addButton.isEnabled = true
+                binding.addButton.alpha = 1f
+            } else {
+                binding.urlInputText.error = getString(R.string.url_error)
+                binding.addButton.isEnabled = false
+                binding.addButton.alpha = 0.3f
+            }
+        }
 
         binding.cancelButton.setOnClickListener {
             dismiss()
