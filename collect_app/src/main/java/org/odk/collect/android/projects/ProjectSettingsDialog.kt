@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
@@ -50,6 +52,10 @@ class ProjectSettingsDialog : DialogFragment() {
             requireActivity(),
             currentProjectViewModelFactory
         )[CurrentProjectViewModel::class.java]
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return AlertDialog.Builder(requireContext()).create()
     }
 
     override fun onCreateView(
@@ -108,6 +114,10 @@ class ProjectSettingsDialog : DialogFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (requireDialog() as AlertDialog).setView(view)
     }
 
     private fun inflateListOfInActiveProjects(context: Context, currentProject: Project.Saved) {
