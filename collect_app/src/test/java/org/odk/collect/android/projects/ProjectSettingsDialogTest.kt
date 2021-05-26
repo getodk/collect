@@ -1,17 +1,16 @@
 package org.odk.collect.android.projects
 
+import androidx.core.view.children
 import androidx.lifecycle.ViewModel
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -55,11 +54,12 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'X' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
-            assertThat(it.isVisible, `is`(true))
-            onView(withId(R.id.close_icon)).perform(click())
-            assertThat(it.isVisible, `is`(false))
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            it.binding.closeIcon.performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(nullValue()))
         }
     }
 
@@ -67,20 +67,22 @@ class ProjectSettingsDialogTest {
     fun `The dialog should be dismissed after clicking on a device back button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
-            assertThat(it.isVisible, `is`(true))
+            assertThat(it.dialog!!.isShowing, `is`(true))
             onView(isRoot()).perform(pressBack())
-            assertThat(it.isVisible, `is`(false))
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(nullValue()))
         }
     }
 
     @Test
     fun `General settings should be started after clicking on the 'General Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
-            assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.general_preferences)).perform(click())
-            assertThat(it.isVisible, `is`(false))
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            it.binding.generalSettingsButton.performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(nullValue()))
             assertThat(Intents.getIntents()[0], hasComponent(GeneralPreferencesActivity::class.java.name))
             Intents.release()
         }
@@ -88,12 +90,13 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `Admin settings should be started after clicking on the 'Admin Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
-            assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.admin_preferences)).perform(click())
-            assertThat(it.isVisible, `is`(false))
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            it.binding.adminSettingsButton.performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(nullValue()))
             assertThat(Intents.getIntents()[0], hasComponent(AdminPreferencesActivity::class.java.name))
             Intents.release()
         }
@@ -101,12 +104,13 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `About section should be started after clicking on the 'About' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
-            assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.about_preferences)).perform(click())
-            assertThat(it.isVisible, `is`(false))
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            it.binding.aboutButton.performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(nullValue()))
             assertThat(Intents.getIntents()[0], hasComponent(AboutActivity::class.java.name))
             Intents.release()
         }
@@ -118,9 +122,9 @@ class ProjectSettingsDialogTest {
         appDependencyComponent.projectsRepository().save(Project("Project Y", "Y", "#ffffff", "2"))
         appDependencyComponent.currentProjectProvider().setCurrentProject("1")
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
+        val scenario = RobolectricHelpers.launchDialogFragment(ProjectSettingsDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
-            onView(withText("Project Y")).perform(click())
+            it.binding.projectList.children.iterator().asSequence().first().performClick()
             verify(currentProjectViewModel).setCurrentProject(Project("Project Y", "Y", "#ffffff", "2"))
         }
     }

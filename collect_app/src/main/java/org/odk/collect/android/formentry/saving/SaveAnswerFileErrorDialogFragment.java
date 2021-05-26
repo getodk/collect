@@ -7,10 +7,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -35,7 +34,7 @@ public class SaveAnswerFileErrorDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return new MaterialAlertDialogBuilder(requireContext())
+        return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.error_occured)
                 .setMessage(getString(R.string.answer_file_copy_failed_message, formSaveViewModel.getAnswerFileError().getValue()))
                 .setPositiveButton(R.string.ok, null)

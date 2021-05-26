@@ -6,9 +6,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -148,14 +147,14 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             boolean enabled = !item.isChecked();
 
             if (!enabled) {
-                new MaterialAlertDialogBuilder(activity)
+                new AlertDialog.Builder(activity)
                         .setMessage(R.string.stop_recording_confirmation)
                         .setPositiveButton(R.string.disable_recording, (dialog, which) -> backgroundAudioViewModel.setBackgroundRecordingEnabled(false))
                         .setNegativeButton(R.string.cancel, null)
                         .create()
                         .show();
             } else {
-                new MaterialAlertDialogBuilder(activity)
+                new AlertDialog.Builder(activity)
                         .setMessage(R.string.background_audio_recording_enabled_explanation)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, null)

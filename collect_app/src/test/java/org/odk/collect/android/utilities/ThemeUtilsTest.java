@@ -77,8 +77,8 @@ public class ThemeUtilsTest {
         assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Light);
         assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Light);
         assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Light);
-        assertEquals(themeUtils.getMaterialDialogTheme(), R.style.Theme_Collect_Light_Dialog);
-        assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Light_Dialog);
+        assertEquals(themeUtils.getCalendarDatePickerDialogTheme(), R.style.Theme_Collect_Light_Calendar_DatePicker_Dialog);
+        assertEquals(themeUtils.getSpinnerDatePickerDialogTheme(), R.style.Theme_Collect_Light_Spinner_DatePicker_Dialog);
     }
 
     @Test
@@ -87,8 +87,8 @@ public class ThemeUtilsTest {
         assertEquals(themeUtils.getAppTheme(), R.style.Theme_Collect_Dark);
         assertEquals(themeUtils.getSettingsTheme(), R.style.Theme_Collect_Settings_Dark);
         assertEquals(themeUtils.getBottomDialogTheme(), R.style.Theme_Collect_MaterialDialogSheet_Dark);
-        assertEquals(themeUtils.getMaterialDialogTheme(), R.style.Theme_Collect_Dark_Dialog);
-        assertEquals(themeUtils.getHoloDialogTheme(), android.R.style.Theme_Holo_Dialog);
+        assertEquals(themeUtils.getCalendarDatePickerDialogTheme(), R.style.Theme_Collect_Dark_Calendar_DatePicker_Dialog);
+        assertEquals(themeUtils.getSpinnerDatePickerDialogTheme(), R.style.Theme_Collect_Dark_Spinner_DatePicker_Dialog);
     }
 
     private void assertCurrentTheme(Resources.Theme expectedTheme, Resources.Theme actualTheme, boolean assertTrue) {

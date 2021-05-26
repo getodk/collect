@@ -50,22 +50,35 @@
         <item name="colorAccent">@color/blue_500</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
-        <item name="alertDialogTheme">@style/Theme.Collect.BaseLight.Dialog.Alert</item>
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Light</item>
+        <item name="alertDialogTheme">@style/Theme.Collect.Light.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.Collect.Light.Dialog.Alert</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
         <item name="iconColor">#000000</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
     </style>
 
-    <style name="Theme.Collect.BaseLight.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="Theme.Collect.Light.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 
-    <style name="Widget.Collect.SearchView.Light" parent="Widget.AppCompat.Light.SearchView">
-        <item name="searchHintIcon">@null</item>
+    <style name="Theme.Collect.Light.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 
-    <style name="Theme.Collect.Light.Dialog" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorAccent">?attr/colorSecondary</item>
+    <style name="Theme.Collect.Light.Spinner.DatePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/Theme.Collect.Light.Spinner.TimePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
     </style>
 </resources>

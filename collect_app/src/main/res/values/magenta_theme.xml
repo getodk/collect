@@ -49,7 +49,7 @@
         <!-- Used as divider in many places. Not sure why. -->
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
 
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Magenta.Theme</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
 
         <!-- Always show scrollbars for a11y reasons -->
         <item name="android:fadeScrollbars">false</item>
@@ -57,9 +57,4 @@
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
     </style>
-
-    <style name="Widget.Collect.SearchView.Magenta.Theme" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@null</item>
-    </style>
-
 </resources>

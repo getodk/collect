@@ -193,7 +193,7 @@ public class DateTimeWidgetUtils {
         ThemeUtils themeUtils = new ThemeUtils(context);
 
         Bundle bundle = new Bundle();
-        bundle.putInt(DIALOG_THEME, themeUtils.getHoloDialogTheme());
+        bundle.putInt(DIALOG_THEME, themeUtils.getSpinnerTimePickerDialogTheme());
         bundle.putSerializable(TIME, dateTime);
 
         DialogUtils.showIfNotShowing(CustomTimePickerDialog.class, bundle, ((FragmentActivity) context).getSupportFragmentManager());
@@ -232,10 +232,10 @@ public class DateTimeWidgetUtils {
     private static int getDatePickerTheme(ThemeUtils themeUtils, DatePickerDetails datePickerDetails) {
         int theme = 0;
         if (!isBrokenSamsungDevice()) {
-            theme = themeUtils.getMaterialDialogTheme();
+            theme = themeUtils.getCalendarDatePickerDialogTheme();
         }
         if (!datePickerDetails.isCalendarMode() || isBrokenSamsungDevice()) {
-            theme = themeUtils.getHoloDialogTheme();
+            theme = themeUtils.getSpinnerDatePickerDialogTheme();
         }
 
         return theme;

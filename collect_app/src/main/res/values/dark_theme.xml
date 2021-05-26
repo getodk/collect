@@ -48,7 +48,9 @@
         <item name="android:fadeScrollbars">false</item>
         <item name="android:fontFamily">@string/font_family_regular</item>
         <item name="android:panelBackground">@android:color/white</item>
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView.Dark</item>
+        <item name="alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.Collect.Dark.Dialog.Alert</item>
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
         <item name="iconColor">#ffffff</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>
         <!--
@@ -62,11 +64,29 @@
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
     </style>
 
-    <style name="Widget.Collect.SearchView.Dark" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@null</item>
+    <style name="Theme.Collect.Dark.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 
-    <style name="Theme.Collect.Dark.Dialog" parent="android:Theme.Material.Dialog">
-        <item name="android:colorAccent">?attr/colorSecondary</item>
+    <style name="Theme.Collect.Dark.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.DatePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.TimePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/Theme.Collect.Dark.Spinner.TimePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.TimePicker" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
     </style>
 </resources>

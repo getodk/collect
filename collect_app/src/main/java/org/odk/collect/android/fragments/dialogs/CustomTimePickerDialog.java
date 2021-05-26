@@ -4,13 +4,10 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.view.Window;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
@@ -64,10 +61,6 @@ public class CustomTimePickerDialog extends DialogFragment {
         fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getHourOfDay(),
                 viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
         return dialog;
     }
 
