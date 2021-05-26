@@ -36,16 +36,17 @@
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_name"
+                android:id="@+id/url"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_name"
+                android:hint="@string/server_url"
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/url_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
@@ -53,17 +54,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_icon"
+                android:id="@+id/username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_icon"
+                android:hint="@string/username"
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
-                app:layout_constraintTop_toBottomOf="@+id/project_name">
+                app:layout_constraintTop_toBottomOf="@+id/url">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/project_icon_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
@@ -71,19 +71,20 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_color"
+                android:id="@+id/password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_color"
+                android:hint="@string/password"
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
-                app:layout_constraintTop_toBottomOf="@+id/project_icon">
+                app:layout_constraintTop_toBottomOf="@+id/username">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
