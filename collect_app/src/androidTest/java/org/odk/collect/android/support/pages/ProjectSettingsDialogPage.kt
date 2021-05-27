@@ -44,13 +44,13 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         return AddProjectDialogPage().assertOnPage()
     }
 
-    fun assertCurrentProject(projectName: String): ProjectSettingsDialogPage {
-        onView(allOf(hasDescendant(withText(projectName)), withContentDescription(getTranslatedString(R.string.using_project, projectName)))).check(matches(isDisplayed()))
+    fun assertCurrentProject(projectName: String, subtext: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(projectName)), hasDescendant(withText(subtext)), withContentDescription(getTranslatedString(R.string.using_project, projectName)))).check(matches(isDisplayed()))
         return this
     }
 
-    fun assertInactiveProject(projectName: String): ProjectSettingsDialogPage {
-        onView(allOf(hasDescendant(withText(projectName)), withContentDescription(getTranslatedString(R.string.switch_to_project, projectName)))).check(matches(isDisplayed()))
+    fun assertInactiveProject(projectName: String, subtext: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(projectName)), hasDescendant(withText(subtext)), withContentDescription(getTranslatedString(R.string.switch_to_project, projectName)))).check(matches(isDisplayed()))
         return this
     }
 

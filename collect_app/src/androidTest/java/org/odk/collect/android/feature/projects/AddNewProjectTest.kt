@@ -23,6 +23,6 @@ class AddNewProjectTest {
             .addProject()
 
             .openProjectSettings()
-            .assertInactiveProject("my-server.com")
+            .assertInactiveProject("my-server.com", "John / https://my-server.com")
     }
 }

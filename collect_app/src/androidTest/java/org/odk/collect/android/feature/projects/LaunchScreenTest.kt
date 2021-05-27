@@ -22,7 +22,7 @@ class LaunchScreenTest {
         rule.startAtFirstLaunch()
             .clickTryCollect()
             .openProjectSettings()
-            .assertCurrentProject("Demo project")
+            .assertCurrentProject("Demo project", "https://demo.getodk.org")
             .clickGeneralSettings()
             .clickServerSettings()
             .clickOnURL()
@@ -38,6 +38,6 @@ class LaunchScreenTest {
             .addProject()
             .assertProjectIcon("M", "#3e9fcc")
             .openProjectSettings()
-            .assertCurrentProject("my-server.com")
+            .assertCurrentProject("my-server.com", "John / https://my-server.com")
     }
 }
