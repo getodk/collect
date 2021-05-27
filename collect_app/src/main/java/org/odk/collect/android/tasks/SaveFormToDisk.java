@@ -207,7 +207,7 @@ public class SaveFormToDisk {
             uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
-            Form form = new FormsRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
+            Form form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             // add missing fields into values
             instanceBuilder.instanceFilePath(instancePath);
@@ -447,7 +447,7 @@ public class SaveFormToDisk {
      * that the instance with the given uri is an instance of.
      */
     private static String getGeometryXpathForInstance(Instance instance) {
-        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
         if (form != null) {
             return form.getGeometryXpath();
         } else {

@@ -5,8 +5,10 @@ import android.app.Application;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.database.forms.FormsDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -16,13 +18,16 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.FormsRepositoryTest;
+import org.odk.collect.shared.TempFiles;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     private StoragePathProvider storagePathProvider;
+    private final File tempDir = TempFiles.createTempDir();
 
     @Before
     public void setup() {
@@ -33,12 +38,12 @@ public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     @Override
     public FormsRepository buildSubject() {
-        return new DatabaseFormsRepository(System::currentTimeMillis, storagePathProvider, new FormsDatabaseProvider());
+        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), tempDir.getAbsolutePath(), System::currentTimeMillis, storagePathProvider);
     }
 
     @Override
     public FormsRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseFormsRepository(clock, storagePathProvider, new FormsDatabaseProvider());
+        return new DatabaseFormsRepository(ApplicationProvider.getApplicationContext(), tempDir.getAbsolutePath(), clock, storagePathProvider);
     }
 
     @Override

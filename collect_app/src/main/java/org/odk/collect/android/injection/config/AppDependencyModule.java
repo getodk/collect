@@ -537,8 +537,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsRepositoryProvider providesFormsRepositoryProvider() {
-        return new FormsRepositoryProvider();
+    public FormsRepositoryProvider providesFormsRepositoryProvider(Application application) {
+        return new FormsRepositoryProvider(application);
     }
 
     @Provides

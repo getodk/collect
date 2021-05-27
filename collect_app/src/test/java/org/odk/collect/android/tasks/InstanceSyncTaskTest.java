@@ -1,11 +1,13 @@
 package org.odk.collect.android.tasks;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
@@ -49,7 +51,7 @@ public class InstanceSyncTaskTest {
     @Test
     public void whenAnInstanceFileExistsOnDisk_andNotInDatabase_addsToDatabase() {
         createInstanceOnDisk(ONE_QUESTION_INSTANCE);
-        new FormsRepositoryProvider().get().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
+        new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(FormUtils.buildForm("one_question", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS))
                 .build()
         );
 

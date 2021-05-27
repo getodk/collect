@@ -92,7 +92,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         }
 
         // Get corresponding blank form and verify there is exactly 1
-        List<Form> forms = new FormsRepositoryProvider().get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+        List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
         try {
             if (forms.size() != 1) {

@@ -1,6 +1,7 @@
 package org.odk.collect.android.database.forms;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -41,10 +42,10 @@ public class DatabaseFormsRepository implements FormsRepository {
     private final Supplier<Long> clock;
     private final FormsDatabaseProvider formsDatabaseProvider;
 
-    public DatabaseFormsRepository(Supplier<Long> clock, StoragePathProvider storagePathProvider, FormsDatabaseProvider formsDatabaseProvider) {
+    public DatabaseFormsRepository(Context context, String dbPath, Supplier<Long> clock, StoragePathProvider storagePathProvider) {
         this.clock = clock;
         this.storagePathProvider = storagePathProvider;
-        this.formsDatabaseProvider = formsDatabaseProvider;
+        this.formsDatabaseProvider = new FormsDatabaseProvider(context, dbPath);
     }
 
     @Nullable

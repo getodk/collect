@@ -67,7 +67,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
         String formId = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.JR_FORM_ID));
         String formVersion = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.JR_VERSION));
-        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(context.getApplicationContext()).get().getLatestByFormIdAndVersion(formId, formVersion);
 
         if (form != null) {
             String base64RSAPublicKey = form.getBASE64RSAPublicKey();

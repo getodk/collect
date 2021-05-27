@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -47,12 +48,12 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
 
     @Override
     public InstancesRepository buildSubject() {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), storagePathProvider, System::currentTimeMillis);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider, System::currentTimeMillis);
     }
 
     @Override
     public InstancesRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), storagePathProvider, clock);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider, clock);
     }
 
     @Override
