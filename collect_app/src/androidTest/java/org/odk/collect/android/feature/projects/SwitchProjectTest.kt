@@ -26,18 +26,17 @@ class SwitchProjectTest {
             .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettings()
             .clickAddProject()
-            .inputUrl("Turtle nesting")
-            .inputUsername("T")
-            .inputPassword("#0000FF")
+            .inputUrl("https://my-server.com")
+            .inputUsername("John")
             .addProject()
 
             // Switch to Turtle nesting
             .openProjectSettings()
             .assertCurrentProject("Demo project")
-            .assertInactiveProject("Turtle nesting")
-            .selectProject("Turtle nesting")
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
-            .assertProjectIcon("T", "#0000FF")
+            .assertInactiveProject("my-server.com")
+            .selectProject("my-server.com")
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
+            .assertProjectIcon("M", "#3e9fcc")
     }
 
     @Test
@@ -57,12 +56,11 @@ class SwitchProjectTest {
             .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettings()
             .clickAddProject()
-            .inputUrl("Turtle nesting")
-            .inputUsername("T")
-            .inputPassword("#0000FF")
+            .inputUrl("https://my-server.com")
+            .inputUsername("John")
             .addProject()
             .openProjectSettings()
-            .selectProject("Turtle nesting")
+            .selectProject("my-server.com")
 
             // Set server and download form
             .setServer(testDependencies.server.url)
