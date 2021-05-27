@@ -11,18 +11,18 @@ class AddProjectDialogPage : Page<AddProjectDialogPage>() {
         return this
     }
 
-    fun inputProjectName(projectName: String): AddProjectDialogPage {
-        inputText(R.string.project_name, projectName)
+    fun inputUrl(url: String): AddProjectDialogPage {
+        inputText(R.string.server_url, url)
         return this
     }
 
-    fun inputProjectIcon(projectIcon: String): AddProjectDialogPage {
-        inputText(R.string.project_icon, projectIcon)
+    fun inputUsername(username: String): AddProjectDialogPage {
+        inputText(R.string.username, username)
         return this
     }
 
-    fun inputProjectColor(projectColor: String): AddProjectDialogPage {
-        inputText(R.string.project_color, projectColor)
+    fun inputPassword(password: String): AddProjectDialogPage {
+        inputText(R.string.password, password)
         return this
     }
 

@@ -33,9 +33,9 @@ class LaunchScreenTest {
     fun clickingManuallyEnter_andAddingProjectDetails_setsAppUpWithProjectDetails() {
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputProjectName("Strange Days")
-            .inputProjectIcon("S")
-            .inputProjectColor("#FA8072")
+            .inputUrl("Strange Days")
+            .inputUsername("S")
+            .inputPassword("#FA8072")
             .addProject()
             .assertProjectIcon("S", "#FA8072")
             .openProjectSettings()

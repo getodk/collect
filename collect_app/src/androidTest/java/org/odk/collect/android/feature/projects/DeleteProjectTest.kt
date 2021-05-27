@@ -22,9 +22,9 @@ class DeleteProjectTest {
         rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
-            .inputProjectName("Turtle nesting")
-            .inputProjectIcon("T")
-            .inputProjectColor("#0000FF")
+            .inputUrl("Turtle nesting")
+            .inputUsername("T")
+            .inputPassword("#0000FF")
             .addProject()
 
             // Delete Demo project
