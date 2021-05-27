@@ -44,17 +44,8 @@ public class JsonPreferencesGenerator {
                 continue;
             }
 
-            Object defaultValue = defaultSettings.get(key);
             Object value = generalSettings.get(key);
-
-            if (value == null) {
-                value = "";
-            }
-            if (defaultValue == null) {
-                defaultValue = "";
-            }
-
-            if (!defaultValue.equals(value)) {
+            if (value != null && !value.equals(defaultSettings.get(key))) {
                 generalPrefs.put(key, value);
             }
         }
@@ -71,10 +62,8 @@ public class JsonPreferencesGenerator {
                 continue;
             }
 
-            Object defaultValue = defaultSettings.get(key);
             Object value = adminSettings.get(key);
-
-            if (defaultValue != value) {
+            if (value != null && !value.equals(defaultSettings.get(key))) {
                 adminPrefs.put(key, value);
             }
         }
