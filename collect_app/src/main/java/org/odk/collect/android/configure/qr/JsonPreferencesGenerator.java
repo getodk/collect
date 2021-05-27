@@ -3,6 +3,7 @@ package org.odk.collect.android.configure.qr;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Collection;
@@ -12,7 +13,6 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.keys.AdminKeys.ALL_KEYS;
 import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.DEFAULTS;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
 
 public class JsonPreferencesGenerator {
@@ -38,7 +38,7 @@ public class JsonPreferencesGenerator {
         JSONObject generalPrefs = new JSONObject();
 
         Map<String, ?> generalSettings = settingsProvider.getGeneralSettings().getAll();
-        Map<String, ?> defaultSettings = DEFAULTS;
+        Map<String, ?> defaultSettings = GeneralKeys.getDefaults();
         for (String key : defaultSettings.keySet()) {
             if (key.equals(KEY_PASSWORD) && !includedPasswordKeys.contains(KEY_PASSWORD)) {
                 continue;

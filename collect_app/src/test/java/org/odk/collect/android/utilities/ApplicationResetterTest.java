@@ -68,8 +68,8 @@ public class ApplicationResetterTest {
         setupTestSettings();
         resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
 
-        assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), is(GeneralKeys.DEFAULTS.get(GeneralKeys.KEY_USERNAME)));
-        assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), is(GeneralKeys.DEFAULTS.get(GeneralKeys.KEY_PASSWORD)));
+        assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), is(GeneralKeys.getDefaults().get(GeneralKeys.KEY_USERNAME)));
+        assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), is(GeneralKeys.getDefaults().get(GeneralKeys.KEY_PASSWORD)));
         assertThat(adminSettings.getBoolean(AdminKeys.KEY_VIEW_SENT), is(AdminKeys.getDefaults().get(AdminKeys.KEY_VIEW_SENT)));
 
         assertEquals(0, getFormsCount());
