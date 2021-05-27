@@ -48,8 +48,6 @@ import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
-import org.odk.collect.android.database.forms.FormsDatabaseProvider;
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
@@ -529,20 +527,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public FormsDatabaseProvider providesFormsDatabaseProvider() {
-        return new FormsDatabaseProvider();
-    }
-
-    @Provides
     public FastExternalItemsetsRepository providesItemsetsRepository() {
         return new DatabaseFastExternalItemsetsRepository();
-    }
-
-    @Provides
-    @Singleton
-    public InstancesDatabaseProvider providesInstanceDatabaseProvider() {
-        return new InstancesDatabaseProvider();
     }
 
     @Provides

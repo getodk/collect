@@ -37,24 +37,22 @@ import java.util.function.Supplier;
 public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
 
     private StoragePathProvider storagePathProvider;
-    private InstancesDatabaseProvider instancesDatabaseProvider;
 
     @Before
     public void setup() {
         CollectHelpers.setupDemoProject();
         AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
         storagePathProvider = component.storagePathProvider();
-        instancesDatabaseProvider = component.instancesDatabaseProvider();
     }
 
     @Override
     public InstancesRepository buildSubject() {
-        return new DatabaseInstancesRepository(instancesDatabaseProvider, storagePathProvider, System::currentTimeMillis);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), storagePathProvider, System::currentTimeMillis);
     }
 
     @Override
     public InstancesRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseInstancesRepository(instancesDatabaseProvider, storagePathProvider, clock);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(), storagePathProvider, clock);
     }
 
     @Override

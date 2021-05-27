@@ -88,6 +88,5 @@ public final class CollectHelpers {
     public static void setupDemoProject() {
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectImporter().importDemoProject();
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
-        Collect.resetDatabaseConnections();
     }
 }

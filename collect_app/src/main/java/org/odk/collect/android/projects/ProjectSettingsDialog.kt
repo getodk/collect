@@ -15,7 +15,6 @@ import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
@@ -137,7 +136,6 @@ class ProjectSettingsDialog : DialogFragment() {
     }
 
     private fun switchProject(project: Project.Saved) {
-        Collect.resetDatabaseConnections()
         currentProjectViewModel.setCurrentProject(project)
 
         ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)

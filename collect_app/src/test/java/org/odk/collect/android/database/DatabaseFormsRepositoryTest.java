@@ -23,24 +23,22 @@ import java.util.function.Supplier;
 public class DatabaseFormsRepositoryTest extends FormsRepositoryTest {
 
     private StoragePathProvider storagePathProvider;
-    private FormsDatabaseProvider formsDatabaseProvider;
 
     @Before
     public void setup() {
         CollectHelpers.setupDemoProject();
         AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
         storagePathProvider = component.storagePathProvider();
-        formsDatabaseProvider = component.formsDatabaseProvider();
     }
 
     @Override
     public FormsRepository buildSubject() {
-        return new DatabaseFormsRepository(System::currentTimeMillis, storagePathProvider, formsDatabaseProvider);
+        return new DatabaseFormsRepository(System::currentTimeMillis, storagePathProvider, new FormsDatabaseProvider());
     }
 
     @Override
     public FormsRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseFormsRepository(clock, storagePathProvider, formsDatabaseProvider);
+        return new DatabaseFormsRepository(clock, storagePathProvider, new FormsDatabaseProvider());
     }
 
     @Override

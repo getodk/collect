@@ -21,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
@@ -95,7 +94,6 @@ class SplashScreenActivity : AppCompatActivity(), AddProjectDialog.AddProjectDia
     override fun onProjectAdded(project: Project.Saved, url: String, username: String, password: String) {
         projectImporter.setupProject(project)
         currentProjectProvider.setCurrentProject(project.uuid)
-        Collect.resetDatabaseConnections()
 
         settingsProvider.getGeneralSettings(project.uuid).save(GeneralKeys.KEY_SERVER_URL, url)
         settingsProvider.getGeneralSettings(project.uuid).save(GeneralKeys.KEY_USERNAME, username)
