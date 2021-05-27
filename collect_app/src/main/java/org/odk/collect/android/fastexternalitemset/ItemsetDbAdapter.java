@@ -6,7 +6,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.AltDatabasePathContext;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 
@@ -41,7 +42,7 @@ public class ItemsetDbAdapter implements Closeable {
      */
     private static class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper() {
-            super(new DatabaseContext(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), DATABASE_NAME, null, DATABASE_VERSION);
+            super(new AltDatabasePathContext(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA), Collect.getInstance()), DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override

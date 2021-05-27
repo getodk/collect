@@ -25,7 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.DatabaseContext;
+import org.odk.collect.android.database.AltDatabasePathContext;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
@@ -63,7 +63,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     private FormLoaderTask formLoaderTask;
 
     ExternalSQLiteOpenHelper(File dbFile) {
-        super(new DatabaseContext(dbFile.getParentFile().getAbsolutePath()), dbFile.getName(), null, VERSION);
+        super(new AltDatabasePathContext(dbFile.getParentFile().getAbsolutePath(), Collect.getInstance()), dbFile.getName(), null, VERSION);
     }
 
     void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,

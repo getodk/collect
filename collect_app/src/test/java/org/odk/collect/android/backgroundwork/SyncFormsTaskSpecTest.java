@@ -79,6 +79,8 @@ public class SyncFormsTaskSpecTest {
                 return analytics;
             }
         });
+
+        CollectHelpers.setupDemoProject();
     }
 
     @Test

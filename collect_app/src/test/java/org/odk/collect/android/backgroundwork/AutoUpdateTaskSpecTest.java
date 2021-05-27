@@ -53,7 +53,7 @@ public class AutoUpdateTaskSpecTest {
     private final FormDownloader formDownloader = mock(FormDownloader.class);
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
     private final Notifier notifier = mock(Notifier.class);
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private Settings generalSettings;
 
     @Before
     public void setup() {
@@ -79,8 +79,8 @@ public class AutoUpdateTaskSpecTest {
             }
         });
 
-        generalSettings.clear();
-        generalSettings.setDefaultForAllSettingsWithoutValues();
+        CollectHelpers.setupDemoProject();
+        generalSettings = TestSettingsProvider.getGeneralSettings();
     }
 
     @Test
