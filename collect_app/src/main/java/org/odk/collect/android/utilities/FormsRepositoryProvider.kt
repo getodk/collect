@@ -8,9 +8,10 @@ import org.odk.collect.forms.FormsRepository
 
 class FormsRepositoryProvider(private val context: Context) {
 
+    private val clock = { System.currentTimeMillis() }
+    private val storagePathProvider = StoragePathProvider()
+
     fun get(): FormsRepository {
-        val clock = { System.currentTimeMillis() }
-        val storagePathProvider = StoragePathProvider()
         val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)
         return DatabaseFormsRepository(context, dbPath, clock, storagePathProvider)
     }

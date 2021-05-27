@@ -37,8 +37,8 @@ class ProjectImporter(
             File(rootDir, "settings")
         ).forEach {
             try {
-                val projectDir = File(storagePathProvider.getProjectRootDirPath(project))
-                moveDirectoryToDirectory(it, projectDir, true)
+                val rootPath = storagePathProvider.getProjectRootDirPath(project.uuid)
+                moveDirectoryToDirectory(it, File(rootPath), true)
             } catch (_: FileNotFoundException) {
                 // Original dir doesn't exist - no  need to copy
             }
@@ -58,7 +58,7 @@ class ProjectImporter(
     }
 
     private fun createProjectDirs(project: Saved) {
-        storagePathProvider.getProjectDirPaths(project).forEach { FileUtils.createDir(it) }
+        storagePathProvider.getProjectDirPaths(project.uuid).forEach { FileUtils.createDir(it) }
     }
 
     companion object {

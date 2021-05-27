@@ -50,7 +50,7 @@ class ProjectImporterTest {
         projectImporter.importDemoProject()
 
         val demoProject = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
-        storagePathProvider.getProjectDirPaths(demoProject).forEach {
+        storagePathProvider.getProjectDirPaths(project.uuid).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
@@ -85,7 +85,7 @@ class ProjectImporterTest {
             assertThat(it.exists(), `is`(false))
         }
 
-        storagePathProvider.getProjectDirPaths(existingProject).forEach {
+        storagePathProvider.getProjectDirPaths(project.uuid).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
@@ -110,7 +110,7 @@ class ProjectImporterTest {
 
         val existingProject = projectImporter.importExistingProject()
 
-        storagePathProvider.getProjectDirPaths(existingProject).forEach {
+        storagePathProvider.getProjectDirPaths(project.uuid).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))

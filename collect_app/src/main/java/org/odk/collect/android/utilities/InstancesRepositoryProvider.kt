@@ -13,7 +13,8 @@ class InstancesRepositoryProvider {
             InstancesDatabaseProvider(
                 Collect.getInstance(),
                 StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)
-            ), StoragePathProvider(), System::currentTimeMillis
+            ),
+            StoragePathProvider(), System::currentTimeMillis
         )
     }
 }
