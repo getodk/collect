@@ -16,8 +16,9 @@ object TestSettingsProvider {
     }
 
     @JvmStatic
-    fun getGeneralSettings(): Settings {
-        return getSettingsProvider().getGeneralSettings()
+    @JvmOverloads
+    fun getGeneralSettings(uuid: String? = null): Settings {
+        return getSettingsProvider().getGeneralSettings(uuid)
     }
 
     @JvmStatic
