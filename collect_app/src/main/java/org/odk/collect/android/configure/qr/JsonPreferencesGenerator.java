@@ -6,6 +6,7 @@ import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import java.util.Collection;
+import java.util.Map;
 
 import timber.log.Timber;
 
@@ -36,13 +37,15 @@ public class JsonPreferencesGenerator {
     private JSONObject getGeneralPrefsAsJson(Collection<String> includedPasswordKeys) throws JSONException {
         JSONObject generalPrefs = new JSONObject();
 
-        for (String key : DEFAULTS.keySet()) {
+        Map<String, ?> generalSettings = settingsProvider.getGeneralSettings().getAll();
+        Map<String, ?> defaultSettings = DEFAULTS;
+        for (String key : defaultSettings.keySet()) {
             if (key.equals(KEY_PASSWORD) && !includedPasswordKeys.contains(KEY_PASSWORD)) {
                 continue;
             }
 
-            Object defaultValue = DEFAULTS.get(key);
-            Object value = settingsProvider.getGeneralSettings().getAll().get(key);
+            Object defaultValue = defaultSettings.get(key);
+            Object value = generalSettings.get(key);
 
             if (value == null) {
                 value = "";
@@ -61,13 +64,15 @@ public class JsonPreferencesGenerator {
     private JSONObject getAdminPrefsAsJson(Collection<String> includedPasswordKeys) throws JSONException {
         JSONObject adminPrefs = new JSONObject();
 
+        Map<String, ?> adminSettings = settingsProvider.getAdminSettings().getAll();
+        Map<String, ?> defaultSettings = AdminKeys.getDefaults();
         for (String key : ALL_KEYS) {
             if (key.equals(KEY_ADMIN_PW) && !includedPasswordKeys.contains(KEY_ADMIN_PW)) {
                 continue;
             }
 
-            Object defaultValue = AdminKeys.getDefaults().get(key);
-            Object value = settingsProvider.getAdminSettings().getAll().get(key);
+            Object defaultValue = defaultSettings.get(key);
+            Object value = adminSettings.get(key);
 
             if (defaultValue != value) {
                 adminPrefs.put(key, value);
