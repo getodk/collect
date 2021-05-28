@@ -17,7 +17,6 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -61,7 +60,7 @@ class ProjectSettingsDialog : DialogFragment() {
         binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
         currentProjectViewModel.currentProject.observe(this) { project ->
-            binding.currentProject.setupView(project, getUsernameForProject(), getUrlForProject())
+            binding.currentProject.setupView(project, settingsProvider.getGeneralSettings())
             binding.currentProject.contentDescription =
                 getString(R.string.using_project, project.name)
             inflateListOfInActiveProjects(requireContext(), project)
@@ -129,7 +128,7 @@ class ProjectSettingsDialog : DialogFragment() {
                 switchProject(project)
             }
 
-            projectView.setupView(project, getUsernameForProject(project.uuid), getUrlForProject(project.uuid))
+            projectView.setupView(project, settingsProvider.getGeneralSettings(project.uuid))
             projectView.contentDescription = getString(R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }
@@ -142,8 +141,4 @@ class ProjectSettingsDialog : DialogFragment() {
         ToastUtils.showLongToast(getString(R.string.switched_project, project.name))
         dismiss()
     }
-
-    private fun getUsernameForProject(projectId: String? = null) = settingsProvider.getGeneralSettings(projectId).getString(GeneralKeys.KEY_USERNAME) ?: ""
-
-    private fun getUrlForProject(projectId: String? = null) = settingsProvider.getGeneralSettings(projectId).getString(GeneralKeys.KEY_SERVER_URL) ?: ""
 }
