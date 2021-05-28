@@ -27,6 +27,7 @@ import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -207,9 +208,9 @@ public class FormsProvider extends ContentProvider {
             case FORMS:
                 try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
-                        Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
+                        Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
 
-                        ContentValues existingValues = getValuesFromForm(form, storagePathProvider);
+                        ContentValues existingValues = getValuesFromForm(form, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
                         existingValues.putAll(values);
 
                         formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
@@ -222,7 +223,7 @@ public class FormsProvider extends ContentProvider {
             case FORM_ID:
                 Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
                 if (form != null) {
-                    ContentValues existingValues = getValuesFromForm(form, storagePathProvider);
+                    ContentValues existingValues = getValuesFromForm(form, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
                     existingValues.putAll(values);
 
                     formsRepository.save(getFormFromValues(existingValues, storagePathProvider));

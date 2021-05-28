@@ -6,13 +6,18 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.FormsRepository
 
-class FormsRepositoryProvider(private val context: Context) {
+class FormsRepositoryProvider @JvmOverloads constructor(
+    private val context: Context,
+    private val storagePathProvider: StoragePathProvider = StoragePathProvider()
+) {
 
     private val clock = { System.currentTimeMillis() }
-    private val storagePathProvider = StoragePathProvider()
 
-    fun get(): FormsRepository {
-        val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)
-        return DatabaseFormsRepository(context, dbPath, clock, storagePathProvider)
+    @JvmOverloads
+    fun get(projectId: String? = null): FormsRepository {
+        val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId)
+        val formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
+        val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+        return DatabaseFormsRepository(context, dbPath, formsPath, cachePath, clock)
     }
 }
