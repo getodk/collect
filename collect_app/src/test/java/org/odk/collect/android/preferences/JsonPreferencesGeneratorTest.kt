@@ -1,10 +1,8 @@
 package org.odk.collect.android.preferences
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import junit.framework.TestCase
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.*
-import org.json.JSONException
+import org.hamcrest.Matchers.`is`
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +14,7 @@ import org.odk.collect.android.preferences.keys.GeneralKeys
 
 @ExperimentalStdlibApi
 @RunWith(AndroidJUnit4::class)
-class JsonPreferencesGeneratorTest : TestCase() {
+class JsonPreferencesGeneratorTest {
     private val settingsProvider = TestSettingsProvider.getSettingsProvider()
     private lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
 
@@ -29,43 +27,51 @@ class JsonPreferencesGeneratorTest : TestCase() {
     }
 
     @Test
-    fun whenAdminPasswordIncluded_shouldBePresentInJson() {
-        settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "123456")
+    fun `When admin password included, should be present in json`() {
+        val adminPrefs = buildMap<String, Any> {
+            put(AdminKeys.KEY_ADMIN_PW, "123456")
+        }
+
+        settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(AdminKeys.KEY_ADMIN_PW))
-        assertThat(jsonPrefs, containsString("admin_pw"))
-        assertThat(jsonPrefs, containsString("123456"))
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs)
     }
 
     @Test
-    fun whenAdminPasswordExcluded_shouldNotBePresentInJson() {
-        settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "123456")
+    fun `When admin password excluded, should not be present in json`() {
+        val adminPrefs = buildMap<String, Any> {
+            put(AdminKeys.KEY_ADMIN_PW, "123456")
+        }
+
+        settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
-
-        assertThat(jsonPrefs, not(containsString("admin_pw")))
-        assertThat(jsonPrefs, not(containsString("123456")))
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
     }
 
     @Test
-    @Throws(JSONException::class)
-    fun whenUserPasswordIncluded_shouldBePresentInJson() {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, "123456")
+    fun `When user password included, should be present in json`() {
+        val generalPrefs = buildMap<String, Any> {
+            put(GeneralKeys.KEY_PASSWORD, "123456")
+        }
+
+        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(GeneralKeys.KEY_PASSWORD))
-
-        assertThat(jsonPrefs, containsString("password"))
-        assertThat(jsonPrefs, containsString("123456"))
+        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>())
     }
 
     @Test
-    fun whenUserPasswordExcluded_shouldNotBePresentInJson() {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_PASSWORD, "123456")
+    fun `When user password excluded, should not be present in json`() {
+        val generalPrefs = buildMap<String, Any> {
+            put(GeneralKeys.KEY_PASSWORD, "123456")
+        }
+
+        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
-
-        assertThat(jsonPrefs, not(containsString("password")))
-        assertThat(jsonPrefs, not(containsString("123456")))
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
     }
 
     @Test
