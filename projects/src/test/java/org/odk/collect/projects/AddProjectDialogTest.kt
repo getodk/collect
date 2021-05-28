@@ -17,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.odk.collect.projects.support.Matchers.hasTextInputEditTextError
 import org.odk.collect.projects.support.Matchers.isPasswordHidden
 import org.odk.collect.projects.support.RobolectricApplication
 import org.odk.collect.testshared.RobolectricHelpers
@@ -72,7 +71,7 @@ class AddProjectDialogTest {
     }
 
     @Test
-    fun `The 'Add' button should be disabled when url is invalid`() {
+    fun `The 'Add' button should be disabled when url is blank`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
@@ -80,21 +79,9 @@ class AddProjectDialogTest {
             onView(withText(R.string.add)).perform(click())
             assertThat(it.isVisible, `is`(true))
 
-            onView(withHint(R.string.server_url)).perform(replaceText("htt://my-server.com"))
+            onView(withHint(R.string.server_url)).perform(replaceText(" "))
             onView(withText(R.string.add)).perform(click())
             assertThat(it.isVisible, `is`(true))
-        }
-    }
-
-    @Test
-    fun `Error should be displayed when url is invalid`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
-        scenario.onFragment {
-            onView(withHint(R.string.server_url)).perform(replaceText("htt://my-server.com"))
-            onView(withHint(R.string.server_url)).check(matches(hasTextInputEditTextError(it.getString(R.string.url_error))))
-
-            onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
-            onView(withHint(R.string.server_url)).check(matches(not(hasTextInputEditTextError(it.getString(R.string.url_error)))))
         }
     }
 

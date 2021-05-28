@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
-import org.odk.collect.shared.Validator
 import javax.inject.Inject
 
 class AddProjectDialog : MaterialFullScreenDialogFragment() {
@@ -41,14 +40,12 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         setUpToolbar()
 
         binding.urlInputText.doOnTextChanged { text, _, _, _ ->
-            if (Validator.isUrlValid(text.toString())) {
-                binding.urlInputText.error = null
-                binding.addButton.isEnabled = true
-                binding.addButton.alpha = 1f
-            } else {
-                binding.urlInputText.error = getString(R.string.url_error)
+            if (text!!.isBlank()) {
                 binding.addButton.isEnabled = false
                 binding.addButton.alpha = 0.3f
+            } else {
+                binding.addButton.isEnabled = true
+                binding.addButton.alpha = 1f
             }
         }
 
