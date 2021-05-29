@@ -56,7 +56,6 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
-import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.InstancesAppState;
@@ -116,6 +115,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.shared.UUIDGenerator;
@@ -377,19 +377,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public DiskFormsSynchronizer providesDiskFormSynchronizer() {
-        return new FormsDirDiskFormsSynchronizer();
-    }
-
-    @Provides
     @Singleton
     public SyncStatusAppState providesServerFormSyncRepository(Context context) {
         return new SyncStatusAppState(context);
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formsRepositoryProvider.get(), formSource, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSource formSource) {
+        FormsRepository formsRepository = formsRepositoryProvider.get();
+        return new ServerFormsDetailsFetcher(formsRepository, formSource, new FormsDirDiskFormsSynchronizer(formsRepository));
     }
 
     @Provides

@@ -20,16 +20,27 @@ import android.content.Context;
 
 import androidx.work.WorkerParameters;
 
+import org.javarosa.core.reference.ReferenceManager;
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
+import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormsRepository;
 
+import java.io.File;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
@@ -38,10 +49,10 @@ import javax.inject.Named;
 public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
-    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    FormDownloader formDownloader;
+    FormSource formSource;
 
     @Inject
     Notifier notifier;
@@ -50,13 +61,33 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     SettingsProvider settingsProvider;
 
     @Inject
+    StoragePathProvider storagePathProvider;
+
+    @Inject
     @Named("FORMS")
     ChangeLock changeLock;
+
+    @Inject
+    Analytics analytics;
 
     @NotNull
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
+
+        FormsRepository formsRepository = formsRepositoryProvider.get();
+        DiskFormsSynchronizer diskFormsSynchronizer = new FormsDirDiskFormsSynchronizer(formsRepository);
+
+        ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(
+                formsRepository,
+                formSource,
+                diskFormsSynchronizer
+        );
+
+        String formsDirPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
+        String cacheDirPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
+        ServerFormDownloader formDownloader = new ServerFormDownloader(formSource, formsRepository, new File(cacheDirPath), formsDirPath, new FormMetadataParser(ReferenceManager.instance()), analytics);
+
         FormUpdateChecker formUpdateChecker = new FormUpdateChecker(context, changeLock, notifier, settingsProvider);
         return () -> formUpdateChecker.checkForUpdates(serverFormsDetailsFetcher, formDownloader);
     }

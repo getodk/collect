@@ -31,7 +31,11 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
     private final FormsRepository formsRepository;
 
     public FormsDirDiskFormsSynchronizer() {
-        formsRepository = new FormsRepositoryProvider(Collect.getInstance()).get();
+        this(new FormsRepositoryProvider(Collect.getInstance()).get());
+    }
+
+    public FormsDirDiskFormsSynchronizer(FormsRepository formsRepository) {
+        this.formsRepository = formsRepository;
     }
 
     @Override
