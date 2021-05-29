@@ -15,14 +15,13 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.preferences.keys.MetaKeys;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.shared.Settings;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +87,7 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onUpdatesDownloaded(HashMap<ServerFormDetails, String> result) {
+    public void onUpdatesDownloaded(Map<ServerFormDetails, String> result) {
         Intent intent = new Intent(application, NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.download_forms_result));
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
@@ -151,7 +150,7 @@ public class NotificationManagerNotifier implements Notifier {
         notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
     }
 
-    private boolean allFormsDownloadedSuccessfully(HashMap<ServerFormDetails, String> result) {
+    private boolean allFormsDownloadedSuccessfully(Map<ServerFormDetails, String> result) {
         for (Map.Entry<ServerFormDetails, String> item : result.entrySet()) {
             if (!item.getValue().equals(TranslationHandler.getString(application, R.string.success))) {
                 return false;

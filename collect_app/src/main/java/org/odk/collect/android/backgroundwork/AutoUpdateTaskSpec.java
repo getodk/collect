@@ -21,29 +21,19 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
-import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.forms.FormSourceException;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
@@ -67,44 +57,8 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context) {
         DaggerUtils.getComponent(context).inject(this);
-
-        return () -> {
-            try {
-                List<ServerFormDetails> serverForms = serverFormsDetailsFetcher.fetchFormDetails();
-                List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
-
-                if (!updatedForms.isEmpty()) {
-                    if (settingsProvider.getGeneralSettings().getBoolean(KEY_AUTOMATIC_UPDATE)) {
-                        changeLock.withLock(acquiredLock -> {
-                            if (acquiredLock) {
-                                HashMap<ServerFormDetails, String> results = new HashMap<>();
-                                for (ServerFormDetails serverFormDetails : updatedForms) {
-                                    try {
-                                        formDownloader.downloadForm(serverFormDetails, null, null);
-                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.success));
-                                    } catch (FormDownloadException e) {
-                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.failure));
-                                    } catch (InterruptedException e) {
-                                        break;
-                                    }
-                                }
-
-                                notifier.onUpdatesDownloaded(results);
-                            }
-
-                            return null;
-                        });
-                    } else {
-                        notifier.onUpdatesAvailable(updatedForms);
-                    }
-                }
-
-                context.getContentResolver().notifyChange(FormsProviderAPI.CONTENT_URI, null);
-                return true;
-            } catch (FormSourceException e) {
-                return true;
-            }
-        };
+        FormUpdateChecker formUpdateChecker = new FormUpdateChecker(context, changeLock, notifier, settingsProvider);
+        return () -> formUpdateChecker.checkForUpdates(serverFormsDetailsFetcher, formDownloader);
     }
 
     @NotNull
