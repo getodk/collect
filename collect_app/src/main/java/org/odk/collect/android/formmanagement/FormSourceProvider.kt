@@ -15,8 +15,9 @@ class FormSourceProvider(
     private val analytics: Analytics
 ) {
 
-    fun get(): FormSource {
-        val generalSettings = settingsProvider.getGeneralSettings()
+    @JvmOverloads
+    fun get(projectId: String? = null): FormSource {
+        val generalSettings = settingsProvider.getGeneralSettings(projectId)
 
         val serverURL = generalSettings.getString(GeneralKeys.KEY_SERVER_URL)
         val formListPath = generalSettings.getString(GeneralKeys.KEY_FORMLIST_URL)
