@@ -13,6 +13,7 @@ import org.mockito.InOrder;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -25,7 +26,6 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.function.Supplier;
@@ -50,7 +50,7 @@ public class SyncFormsTaskSpecTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public FormDownloader providesFormDownloader(FormSource formSource, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
+            public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
                 return mock(FormDownloader.class); // We don't want to build this dependency for `ServerFormsSynchronizer`
             }
 

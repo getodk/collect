@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -52,7 +53,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    FormSource formSource;
+    FormSourceProvider formSourceProvider;
 
     @Inject
     Notifier notifier;
@@ -76,6 +77,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         FormsRepository formsRepository = formsRepositoryProvider.get();
+        FormSource formSource = formSourceProvider.get();
         DiskFormsSynchronizer diskFormsSynchronizer = new FormsDirDiskFormsSynchronizer(formsRepository);
 
         ServerFormsDetailsFetcher serverFormsDetailsFetcher = new ServerFormsDetailsFetcher(
@@ -85,7 +87,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         );
 
         String formsDirPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
-        String cacheDirPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
+        String cacheDirPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE);
         ServerFormDownloader formDownloader = new ServerFormDownloader(formSource, formsRepository, new File(cacheDirPath), formsDirPath, new FormMetadataParser(ReferenceManager.instance()), analytics);
 
         FormUpdateChecker formUpdateChecker = new FormUpdateChecker(context, changeLock, notifier, settingsProvider);
