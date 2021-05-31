@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/server_url"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/username"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/url">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -77,14 +77,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/password"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/username">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:textColor="?colorSecondary"
+        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="@+id/add_button"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintTop_toTopOf="@+id/add_button" />
@@ -114,10 +114,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_extra_small"
-        android:text="@string/add"
-        android:textColor="?colorSecondary"
         android:enabled="false"
-        android:alpha="0.3"
+        android:text="@string/add"
+        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

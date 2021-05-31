@@ -8,11 +8,14 @@
 
 <resources>
 
-    <!-- Fixes problems with colors when colorPrimary and colorSurface match for the theme -->
-    <style name="Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill" parent="">
+    <style name="Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout" parent="">
         <item name="colorPrimary">?attr/colorOnSurface</item>
         <item name="boxStrokeColor">?colorOnSurface</item>
         <item name="hintTextColor">?colorOnSurface</item>
+    </style>
+
+    <style name="Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton" parent="">
+        <item name="colorPrimary">?attr/colorSecondary</item>
     </style>
 
 </resources>

@@ -40,13 +40,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         setUpToolbar()
 
         binding.urlInputText.doOnTextChanged { text, _, _, _ ->
-            if (text!!.isBlank()) {
-                binding.addButton.isEnabled = false
-                binding.addButton.alpha = 0.3f
-            } else {
-                binding.addButton.isEnabled = true
-                binding.addButton.alpha = 1f
-            }
+            binding.addButton.isEnabled = !text.isNullOrBlank()
         }
 
         binding.cancelButton.setOnClickListener {
