@@ -270,12 +270,12 @@ public class AppDependencyModule {
 
     @Provides
     public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
     }
 
     @Provides
     public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
     }
 
     @Provides
