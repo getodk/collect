@@ -46,7 +46,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
+        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
     }
 
@@ -70,7 +70,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
+        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
     }
 
@@ -89,7 +89,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
+        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
 
         verifyJsonContent(jsonPrefs, generalPrefs, adminPrefs)
     }
@@ -109,7 +109,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(ArrayList())
+        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
 
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
     }

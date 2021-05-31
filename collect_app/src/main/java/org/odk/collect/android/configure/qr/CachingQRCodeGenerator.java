@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import com.google.zxing.WriterException;
 
-import org.json.JSONException;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
@@ -23,7 +22,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
     @Override
-    public String generateQRCode(Collection<String> includedPasswordKeys, JsonPreferencesGenerator jsonPreferencesGenerator) throws JSONException, NoSuchAlgorithmException, IOException, WriterException {
+    public String generateQRCode(Collection<String> includedPasswordKeys, JsonPreferencesGenerator jsonPreferencesGenerator) throws NoSuchAlgorithmException, IOException, WriterException {
         String preferencesString = jsonPreferencesGenerator.getJSONFromPreferences(includedPasswordKeys);
 
         MessageDigest md = MessageDigest.getInstance("MD5");
