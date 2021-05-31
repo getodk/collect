@@ -32,8 +32,8 @@ class SwitchProjectTest {
 
             // Switch to Turtle nesting
             .openProjectSettings()
-            .assertCurrentProject("Demo project", "https://demo.getodk.org")
-            .assertInactiveProject("my-server.com", "John / https://my-server.com")
+            .assertCurrentProject("Demo project", "demo.getodk.org")
+            .assertInactiveProject("my-server.com", "John / my-server.com")
             .selectProject("my-server.com")
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
             .assertProjectIcon("M", "#3e9fcc")

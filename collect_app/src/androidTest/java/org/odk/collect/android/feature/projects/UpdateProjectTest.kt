@@ -22,7 +22,7 @@ class UpdateProjectTest {
         rule.startAtMainMenu()
             .assertProjectIcon("D", "#3e9fcc")
             .openProjectSettings()
-            .assertCurrentProject("Demo project", "https://demo.getodk.org")
+            .assertCurrentProject("Demo project", "demo.getodk.org")
             .clickAdminSettings()
             .setProjectName("Project X")
             .setProjectIcon("X")
@@ -39,6 +39,6 @@ class UpdateProjectTest {
 
             .assertProjectIcon("X", "#cccccc")
             .openProjectSettings()
-            .assertCurrentProject("Project X", "Anna / https://demo.getodk.org")
+            .assertCurrentProject("Project X", "Anna / demo.getodk.org")
     }
 }
