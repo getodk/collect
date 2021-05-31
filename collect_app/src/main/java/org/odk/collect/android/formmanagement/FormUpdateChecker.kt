@@ -14,9 +14,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
-import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.forms.FormsRepository
 import java.io.File
 import java.util.stream.Collectors
 
@@ -32,10 +30,13 @@ class FormUpdateChecker(
 ) {
 
     fun checkForUpdates(projectId: String): Boolean {
-        val formsRepository: FormsRepository = formsRepositoryProvider.get()
-        val formSource: FormSource = formSourceProvider.get()
-        val diskFormsSynchronizer: DiskFormsSynchronizer =
-            FormsDirDiskFormsSynchronizer(formsRepository)
+        val formsDirPath = formsDir(projectId)
+        val formsRepository = formsRepository(projectId)
+        val formSource = formSource(projectId)
+        val diskFormsSynchronizer: DiskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
+            formsRepository,
+            formsDirPath
+        )
 
         val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
             formsRepository,
@@ -43,8 +44,7 @@ class FormUpdateChecker(
             diskFormsSynchronizer
         )
 
-        val formsDirPath: String = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS)
-        val cacheDirPath: String = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
+        val cacheDirPath: String = formsCacheDir(projectId)
         val formDownloader = ServerFormDownloader(
             formSource,
             formsRepository,
@@ -54,13 +54,14 @@ class FormUpdateChecker(
             analytics
         )
 
+        val generalSettings = generalSettings(projectId)
+
         return try {
             val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
             val updatedForms =
                 serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
                     .collect(Collectors.toList())
             if (updatedForms.isNotEmpty()) {
-                val generalSettings = settingsProvider.getGeneralSettings()
                 if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
                     val formUpdateDownloader = FormUpdateDownloader()
                     val results = formUpdateDownloader.downloadUpdates(
@@ -83,4 +84,17 @@ class FormUpdateChecker(
             true
         }
     }
+
+    private fun generalSettings(projectId: String) =
+        settingsProvider.getGeneralSettings(projectId)
+
+    private fun formsDir(projectId: String) =
+        storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
+
+    private fun formsCacheDir(projectId: String) =
+        storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+
+    private fun formSource(projectId: String) = formSourceProvider.get(projectId)
+
+    private fun formsRepository(projectId: String) = formsRepositoryProvider.get(projectId)
 }
