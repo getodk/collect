@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -8,9 +9,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.projects.Project
 
 @ExperimentalStdlibApi
 @RunWith(AndroidJUnit4::class)
@@ -112,6 +116,46 @@ class JsonPreferencesGeneratorTest {
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
 
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
+    }
+
+    @Test
+    fun `Only preferences from the current project should be included in json`() {
+        // Setup settings for the demo project
+        val generalPrefsForDemoProject = buildMap<String, Any> {
+            put(GeneralKeys.KEY_DELETE_AFTER_SEND, true)
+            put(GeneralKeys.KEY_APP_THEME, "dark_theme")
+        }
+
+        val adminPrefsForDemoProject = buildMap<String, Any> {
+            put(AdminKeys.KEY_GET_BLANK, false)
+            put(AdminKeys.KEY_DELETE_SAVED, false)
+        }
+
+        settingsProvider.getGeneralSettings().saveAll(generalPrefsForDemoProject)
+        settingsProvider.getAdminSettings().saveAll(adminPrefsForDemoProject)
+
+        // Setup settings for another project
+        DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).projectsRepository().save(Project.Saved("2", "Project X", "x", "#cccccc"))
+
+        val generalPrefsForProjectX = buildMap<String, Any> {
+            put(GeneralKeys.KEY_COMPLETED_DEFAULT, false)
+            put(GeneralKeys.KEY_IMAGE_SIZE, "large")
+        }
+
+        val adminPrefsForProjectX = buildMap<String, Any> {
+            put(AdminKeys.KEY_SEND_FINALIZED, false)
+            put(AdminKeys.KEY_VIEW_SENT, false)
+        }
+
+        settingsProvider.getGeneralSettings("2").saveAll(generalPrefsForProjectX)
+        settingsProvider.getAdminSettings("2").saveAll(adminPrefsForProjectX)
+
+        // Verify the demo project
+        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForDemoProject, adminPrefsForDemoProject)
+
+        // Verify the 'Project X' project
+        DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).currentProjectProvider().setCurrentProject("2")
+        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForProjectX, adminPrefsForProjectX)
     }
 
     private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>) {
