@@ -18,12 +18,11 @@ class AddNewProjectTest {
         rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
-            .inputProjectName("Project 1")
-            .inputProjectIcon("X")
-            .inputProjectColor("#0000FF")
+            .inputUrl("https://my-server.com")
+            .inputUsername("John")
             .addProject()
 
             .openProjectSettings()
-            .assertInactiveProject("Project 1")
+            .assertInactiveProject("my-server.com", "John / https://my-server.com")
     }
 }

@@ -289,7 +289,11 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     }
 
     @Override
-    public void onProjectAdded(@NotNull Project.Saved project) {
+    public void onProjectAdded(@NotNull Project.Saved project, @NotNull String url, @NotNull String username, @NotNull String password) {
         projectImporter.setupProject(project);
+
+        settingsProvider.getGeneralSettings(project.getUuid()).save(GeneralKeys.KEY_SERVER_URL, url);
+        settingsProvider.getGeneralSettings(project.getUuid()).save(GeneralKeys.KEY_USERNAME, username);
+        settingsProvider.getGeneralSettings(project.getUuid()).save(GeneralKeys.KEY_PASSWORD, password);
     }
 }

@@ -11,14 +11,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/project_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
-        android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/project_icon"
         app:layout_constraintStart_toEndOf="@+id/project_icon"
-        app:layout_constraintTop_toTopOf="@+id/project_icon" />
+        app:layout_constraintTop_toTopOf="@+id/project_icon">
 
+        <TextView
+            android:id="@+id/project_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:textAppearance="@style/TextAppearance.Collect.Subtitle1" />
+
+        <TextView
+            android:id="@+id/project_subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

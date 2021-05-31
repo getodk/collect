@@ -10,8 +10,12 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.odk.collect.android.R
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.projects.Project
+import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)
 class ProjectListItemViewTest {
@@ -20,18 +24,52 @@ class ProjectListItemViewTest {
 
     @Test
     fun `shows project name`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn ""
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn ""
+        }
+
         val view = ProjectListItemView(context)
-        view.project = Project.New("SOM", "S", "#ffffff")
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
         assertThat(view.findViewById<TextView>(R.id.project_name).text, equalTo("SOM"))
     }
 
     @Test
     fun `shows project icon with color as background`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn ""
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn ""
+        }
+
         val view = ProjectListItemView(context)
-        view.project = Project.New("SOM", "S", "#ffffff")
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
         assertThat(view.findViewById<TextView>(R.id.project_icon_text).text, equalTo("S"))
 
         val background = view.findViewById<TextView>(R.id.project_icon_text).background as GradientDrawable
         assertThat(background.color!!.defaultColor, equalTo(Color.parseColor("#ffffff")))
+    }
+
+    @Test
+    fun `shows project username and url`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn "Adam"
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn "https://my-project.com"
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("Adam / my-project.com"))
+    }
+
+    @Test
+    fun `shows project only url if username is not set`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn ""
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn "https://my-project.com"
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("my-project.com"))
     }
 }

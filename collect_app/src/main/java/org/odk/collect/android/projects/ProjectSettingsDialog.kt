@@ -19,6 +19,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -38,6 +39,9 @@ class ProjectSettingsDialog : DialogFragment() {
     @Inject
     lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
 
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     lateinit var binding: ProjectSettingsDialogLayoutBinding
 
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
@@ -56,7 +60,7 @@ class ProjectSettingsDialog : DialogFragment() {
         binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
         currentProjectViewModel.currentProject.observe(this) { project ->
-            binding.currentProject.project = project
+            binding.currentProject.setupView(project, settingsProvider.getGeneralSettings())
             binding.currentProject.contentDescription =
                 getString(R.string.using_project, project.name)
             inflateListOfInActiveProjects(requireContext(), project)
@@ -124,7 +128,7 @@ class ProjectSettingsDialog : DialogFragment() {
                 switchProject(project)
             }
 
-            projectView.project = project
+            projectView.setupView(project, settingsProvider.getGeneralSettings(project.uuid))
             projectView.contentDescription = getString(R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }

@@ -36,16 +36,17 @@
             app:layout_constraintBottom_toTopOf="@+id/constraintLayout">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_name"
+                android:id="@+id/url"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_name"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
+                android:hint="@string/server_url"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/url_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
@@ -53,17 +54,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_icon"
+                android:id="@+id/username"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_icon"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
-                app:layout_constraintTop_toBottomOf="@+id/project_name">
+                android:hint="@string/username"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/url">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/project_icon_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
@@ -71,18 +71,19 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/project_color"
+                android:id="@+id/password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                android:hint="@string/project_color"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.MatchingPrimarySurfacePolyfill"
-                app:layout_constraintTop_toBottomOf="@+id/project_icon">
+                android:hint="@string/password"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/username">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textPassword"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -102,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:textColor="?colorSecondary"
+        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="@+id/add_button"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintTop_toTopOf="@+id/add_button" />
@@ -113,8 +114,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_extra_small"
+        android:enabled="false"
         android:text="@string/add"
-        android:textColor="?colorSecondary"
+        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

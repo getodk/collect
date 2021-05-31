@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.odk.collect.shared
 
-package org.odk.collect.android.utilities;
+import java.util.regex.Pattern
 
-import java.util.regex.Pattern;
-
-public class Validator {
-
-    private Validator() {
-
-    }
-
+object Validator {
     /*
     There are lots of ways to validate email addresses and it's hard to find one perfect.
     That's why we use here a very simple approach just to confirm that passed string contains:
@@ -31,17 +25,19 @@ public class Validator {
         *one @ char
         *any number of characters after @ (at least one)
      */
-    public static boolean isEmailAddressValid(String emailAddress) {
+    @JvmStatic
+    fun isEmailAddressValid(emailAddress: String): Boolean {
         return Pattern
-                .compile(".+@.+")
-                .matcher(emailAddress)
-                .matches();
+            .compile(".+@.+")
+            .matcher(emailAddress)
+            .matches()
     }
 
-    public static boolean isUrlValid(String url) {
+    @JvmStatic
+    fun isUrlValid(url: String): Boolean {
         return Pattern
-                .compile("^https?://.+$", Pattern.CASE_INSENSITIVE)
-                .matcher(url)
-                .matches();
+            .compile("^https?://.+$", Pattern.CASE_INSENSITIVE)
+            .matcher(url)
+            .matches()
     }
 }

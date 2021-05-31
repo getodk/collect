@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import org.odk.collect.androidshared.OneSignTextWatcher
+import androidx.core.widget.doOnTextChanged
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
 import javax.inject.Inject
@@ -39,17 +39,19 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
 
-        binding.projectIconInputText.addTextChangedListener(OneSignTextWatcher(binding.projectIconInputText))
+        binding.urlInputText.doOnTextChanged { text, _, _, _ ->
+            binding.addButton.isEnabled = !text.isNullOrBlank()
+        }
 
         binding.cancelButton.setOnClickListener {
             dismiss()
         }
 
         binding.addButton.setOnClickListener {
-            val newProject = Project.New(getProjectName(), getProjectIcon(), getProjectColor())
+            val newProject = ProjectGenerator.generateProject(getUrl())
             val savedProject = projectsRepository.save(newProject)
 
-            listener?.onProjectAdded(savedProject)
+            listener?.onProjectAdded(savedProject, getUrl(), getUsername(), getPassword())
             dismiss()
         }
     }
@@ -70,13 +72,13 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         toolbar?.navigationIcon = null
     }
 
-    private fun getProjectName() = binding.projectName.editText?.text?.trim().toString()
+    private fun getUrl() = binding.url.editText?.text?.trim().toString()
 
-    private fun getProjectIcon() = binding.projectIcon.editText?.text?.trim().toString()
+    private fun getUsername() = binding.username.editText?.text?.trim().toString()
 
-    private fun getProjectColor() = binding.projectColor.editText?.text?.trim().toString()
+    private fun getPassword() = binding.password.editText?.text?.trim().toString()
 
     interface AddProjectDialogListener {
-        fun onProjectAdded(project: Project.Saved)
+        fun onProjectAdded(project: Project.Saved, url: String, username: String, password: String)
     }
 }

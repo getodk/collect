@@ -22,9 +22,8 @@ class DeleteProjectTest {
         rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
-            .inputProjectName("Turtle nesting")
-            .inputProjectIcon("T")
-            .inputProjectColor("#0000FF")
+            .inputUrl("https://my-server.com")
+            .inputUsername("John")
             .addProject()
 
             // Delete Demo project
@@ -33,8 +32,8 @@ class DeleteProjectTest {
             .deleteProject()
 
             // Assert switching to Turtle nesting
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Turtle nesting")
-            .assertProjectIcon("T", "#0000FF")
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
+            .assertProjectIcon("M", "#3e9fcc")
 
             // Delete Turtle nesting project
             .openProjectSettings()
