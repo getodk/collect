@@ -18,7 +18,7 @@ class FormUpdateCheckerTest {
         }
 
         val service = FormUpdateChecker(context, mock(), mock(), mock())
-        service.checkForUpdates(mock(), mock())
+        service.checkForUpdates()
 
         verify(contentResolver).notifyChange(FormsProviderAPI.CONTENT_URI, null)
     }
