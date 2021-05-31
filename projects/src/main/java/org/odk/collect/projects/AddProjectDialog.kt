@@ -54,8 +54,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val generatedProjectDetails = ProjectDetailsGenerator.generateProjectDetails(getUrl())
-            val newProject = Project.New(generatedProjectDetails.projectName, generatedProjectDetails.projectIcon, generatedProjectDetails.projectColor)
+            val newProject = ProjectGenerator.generateProject(getUrl())
             val savedProject = projectsRepository.save(newProject)
 
             listener?.onProjectAdded(savedProject, getUrl(), getUsername(), getPassword())
