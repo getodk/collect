@@ -42,7 +42,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
 
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, String tag) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {

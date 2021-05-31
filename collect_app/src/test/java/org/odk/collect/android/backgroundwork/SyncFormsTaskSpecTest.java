@@ -88,7 +88,7 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         inOrder.verify(syncStatusAppState).startSync();
@@ -101,7 +101,7 @@ public class SyncFormsTaskSpecTest {
     @Test
     public void logsAnalytics() {
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
@@ -114,7 +114,7 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         inOrder.verify(syncStatusAppState).startSync();
@@ -130,7 +130,7 @@ public class SyncFormsTaskSpecTest {
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "FETCH_ERROR");
@@ -141,7 +141,7 @@ public class SyncFormsTaskSpecTest {
         changeLock.lock();
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verifyNoInteractions(serverFormsSynchronizer);

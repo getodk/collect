@@ -31,7 +31,7 @@ class FormUpdateChecker(
     private val formSourceProvider: FormSourceProvider
 ) {
 
-    fun checkForUpdates(): Boolean {
+    fun checkForUpdates(projectId: String): Boolean {
         val formsRepository: FormsRepository = formsRepositoryProvider.get()
         val formSource: FormSource = formSourceProvider.get()
         val diskFormsSynchronizer: DiskFormsSynchronizer =

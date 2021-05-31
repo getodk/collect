@@ -86,7 +86,7 @@ public class TestScheduler implements Scheduler {
         Context applicationContext = ApplicationProvider.getApplicationContext();
 
         for (DeferredTask deferredTask : deferredTasks) {
-            deferredTask.getSpec().getTask(applicationContext).get();
+            deferredTask.getSpec().getTask(applicationContext, deferredTask.tag).get();
         }
 
         // Remove non repeating tasks

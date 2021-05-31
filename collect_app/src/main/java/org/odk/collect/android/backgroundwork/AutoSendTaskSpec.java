@@ -98,7 +98,7 @@ public class AutoSendTaskSpec implements TaskSpec {
      */
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, String tag) {
         return () -> {
             Collect.getInstance().getComponent().inject(this);
 

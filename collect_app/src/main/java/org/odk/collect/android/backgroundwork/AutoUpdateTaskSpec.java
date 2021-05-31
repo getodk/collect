@@ -21,62 +21,25 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
     @Inject
-    FormsRepositoryProvider formsRepositoryProvider;
-
-    @Inject
-    FormSourceProvider formSourceProvider;
-
-    @Inject
-    Notifier notifier;
-
-    @Inject
-    SettingsProvider settingsProvider;
-
-    @Inject
-    StoragePathProvider storagePathProvider;
-
-    @Inject
-    @Named("FORMS")
-    ChangeLock changeLock;
-
-    @Inject
-    Analytics analytics;
+    FormUpdateChecker formUpdateChecker;
 
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, String tag) {
         DaggerUtils.getComponent(context).inject(this);
-        FormUpdateChecker formUpdateChecker = new FormUpdateChecker(
-                context,
-                notifier,
-                analytics,
-                changeLock,
-                storagePathProvider,
-                settingsProvider,
-                formsRepositoryProvider,
-                formSourceProvider
-        );
-
-        return formUpdateChecker::checkForUpdates;
+        return () -> formUpdateChecker.checkForUpdates(tag.split(":")[1]);
     }
 
     @NotNull
