@@ -347,7 +347,7 @@ public class AppDependencyModule {
 
     @Provides
     public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
-        HashMap<String, Object> generalDefaults = GeneralKeys.DEFAULTS;
+        HashMap<String, Object> generalDefaults = GeneralKeys.getDefaults();
         Map<String, Object> adminDefaults = AdminKeys.getDefaults();
         return new SettingsImporter(
                 settingsProvider.getGeneralSettings(),

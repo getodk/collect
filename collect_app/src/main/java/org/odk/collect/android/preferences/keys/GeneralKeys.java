@@ -95,7 +95,7 @@ public final class GeneralKeys {
     public static final String KEY_MAGENTA_THEME = "magenta";
     public static final String KEY_EXTERNAL_APP_RECORDING = "external_app_recording";
 
-    private static HashMap<String, Object> getHashMap() {
+    public static HashMap<String, Object> getDefaults() {
         HashMap<String, Object> hashMap = new HashMap<>();
         // odk_server_preferences.xmll
         hashMap.put(KEY_SERVER_URL, Collect.getInstance().getString(R.string.default_server_url));
@@ -147,8 +147,6 @@ public final class GeneralKeys {
         hashMap.put(KEY_MAPBOX_MAP_STYLE, Style.MAPBOX_STREETS);
         return hashMap;
     }
-
-    public static final HashMap<String, Object> DEFAULTS = getHashMap();
 
     private GeneralKeys() {
 
