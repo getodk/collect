@@ -16,7 +16,6 @@ import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.projects.Project
 
-@ExperimentalStdlibApi
 @RunWith(AndroidJUnit4::class)
 class JsonPreferencesGeneratorTest {
     private val settingsProvider = TestSettingsProvider.getSettingsProvider()
@@ -32,9 +31,7 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `When admin password included, should be present in json`() {
-        val adminPrefs = buildMap<String, Any> {
-            put(AdminKeys.KEY_ADMIN_PW, "123456")
-        }
+        val adminPrefs = mapOf<String, Any> (AdminKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
@@ -44,9 +41,7 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `When admin password excluded, should not be present in json`() {
-        val adminPrefs = buildMap<String, Any> {
-            put(AdminKeys.KEY_ADMIN_PW, "123456")
-        }
+        val adminPrefs = mapOf<String, Any> (AdminKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
@@ -56,9 +51,7 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `When user password included, should be present in json`() {
-        val generalPrefs = buildMap<String, Any> {
-            put(GeneralKeys.KEY_PASSWORD, "123456")
-        }
+        val generalPrefs = mapOf<String, Any> (GeneralKeys.KEY_PASSWORD to "123456")
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
@@ -68,9 +61,7 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `When user password excluded, should not be present in json`() {
-        val generalPrefs = buildMap<String, Any> {
-            put(GeneralKeys.KEY_PASSWORD, "123456")
-        }
+        val generalPrefs = mapOf<String, Any> (GeneralKeys.KEY_PASSWORD to "123456")
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
@@ -80,15 +71,15 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `Only saved settings should be included in json`() {
-        val generalPrefs = buildMap<String, Any> {
-            put(GeneralKeys.KEY_DELETE_AFTER_SEND, true)
-            put(GeneralKeys.KEY_APP_THEME, "dark_theme")
-        }
+        val generalPrefs = mapOf<String, Any> (
+            GeneralKeys.KEY_DELETE_AFTER_SEND to true,
+            GeneralKeys.KEY_APP_THEME to "dark_theme"
+        )
 
-        val adminPrefs = buildMap<String, Any> {
-            put(AdminKeys.KEY_GET_BLANK, false)
-            put(AdminKeys.KEY_DELETE_SAVED, false)
-        }
+        val adminPrefs = mapOf<String, Any> (
+            AdminKeys.KEY_GET_BLANK to false,
+            AdminKeys.KEY_DELETE_SAVED to false
+        )
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
@@ -100,15 +91,15 @@ class JsonPreferencesGeneratorTest {
 
     @Test
     fun `Saved but default settings should not be included in json`() {
-        val generalPrefs = buildMap<String, Any> {
-            put(GeneralKeys.KEY_DELETE_AFTER_SEND, false)
-            put(GeneralKeys.KEY_APP_THEME, "light_theme")
-        }
+        val generalPrefs = mapOf<String, Any> (
+            GeneralKeys.KEY_DELETE_AFTER_SEND to false,
+            GeneralKeys.KEY_APP_THEME to "light_theme"
+        )
 
-        val adminPrefs = buildMap<String, Any> {
-            put(AdminKeys.KEY_GET_BLANK, true)
-            put(AdminKeys.KEY_DELETE_SAVED, true)
-        }
+        val adminPrefs = mapOf<String, Any> (
+            AdminKeys.KEY_GET_BLANK to true,
+            AdminKeys.KEY_DELETE_SAVED to true
+        )
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
@@ -121,15 +112,15 @@ class JsonPreferencesGeneratorTest {
     @Test
     fun `Only preferences from the current project should be included in json`() {
         // Setup settings for the demo project
-        val generalPrefsForDemoProject = buildMap<String, Any> {
-            put(GeneralKeys.KEY_DELETE_AFTER_SEND, true)
-            put(GeneralKeys.KEY_APP_THEME, "dark_theme")
-        }
+        val generalPrefsForDemoProject = mapOf<String, Any> (
+            GeneralKeys.KEY_DELETE_AFTER_SEND to true,
+            GeneralKeys.KEY_APP_THEME to "dark_theme"
+        )
 
-        val adminPrefsForDemoProject = buildMap<String, Any> {
-            put(AdminKeys.KEY_GET_BLANK, false)
-            put(AdminKeys.KEY_DELETE_SAVED, false)
-        }
+        val adminPrefsForDemoProject = mapOf<String, Any> (
+            AdminKeys.KEY_GET_BLANK to false,
+            AdminKeys.KEY_DELETE_SAVED to false
+        )
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefsForDemoProject)
         settingsProvider.getAdminSettings().saveAll(adminPrefsForDemoProject)
@@ -137,15 +128,15 @@ class JsonPreferencesGeneratorTest {
         // Setup settings for another project
         DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).projectsRepository().save(Project.Saved("2", "Project X", "x", "#cccccc"))
 
-        val generalPrefsForProjectX = buildMap<String, Any> {
-            put(GeneralKeys.KEY_COMPLETED_DEFAULT, false)
-            put(GeneralKeys.KEY_IMAGE_SIZE, "large")
-        }
+        val generalPrefsForProjectX = mapOf<String, Any> (
+            GeneralKeys.KEY_COMPLETED_DEFAULT to false,
+            GeneralKeys.KEY_IMAGE_SIZE to "large"
+        )
 
-        val adminPrefsForProjectX = buildMap<String, Any> {
-            put(AdminKeys.KEY_SEND_FINALIZED, false)
-            put(AdminKeys.KEY_VIEW_SENT, false)
-        }
+        val adminPrefsForProjectX = mapOf<String, Any> (
+            AdminKeys.KEY_SEND_FINALIZED to false,
+            AdminKeys.KEY_VIEW_SENT to false
+        )
 
         settingsProvider.getGeneralSettings("2").saveAll(generalPrefsForProjectX)
         settingsProvider.getAdminSettings("2").saveAll(adminPrefsForProjectX)
