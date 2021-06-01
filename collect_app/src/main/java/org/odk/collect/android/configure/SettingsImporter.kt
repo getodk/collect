@@ -3,11 +3,11 @@ package org.odk.collect.android.configure
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.shared.Settings
 
 class SettingsImporter(
-    private val generalSettings: Settings,
-    private val adminSettings: Settings,
+    private val settingsProvider: SettingsProvider,
     private val preferenceMigrator: SettingsPreferenceMigrator,
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
@@ -18,6 +18,10 @@ class SettingsImporter(
         if (!settingsValidator.isValid(json)) {
             return false
         }
+
+        val generalSettings = settingsProvider.getGeneralSettings()
+        val adminSettings = settingsProvider.getAdminSettings()
+
         generalSettings.clear()
         adminSettings.clear()
 

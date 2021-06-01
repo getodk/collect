@@ -344,8 +344,7 @@ public class AppDependencyModule {
     @Provides
     public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler) {
         return new SettingsImporter(
-                settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(),
+                settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
                 GeneralKeys.getDefaults(),
