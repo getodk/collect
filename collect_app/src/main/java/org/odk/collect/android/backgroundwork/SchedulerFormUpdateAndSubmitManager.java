@@ -9,6 +9,9 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
 
+import java.util.HashMap;
+
+import static java.util.Collections.emptyMap;
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
@@ -50,11 +53,14 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
                 break;
             case PREVIOUSLY_DOWNLOADED_ONLY:
                 scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
-                scheduler.networkDeferred(getAutoUpdateTag(), new AutoUpdateTaskSpec(), periodInMilliseconds);
+
+                HashMap<String, String> inputData = new HashMap<>();
+                inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, currentProjectId());
+                scheduler.networkDeferred(getAutoUpdateTag(), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
                 break;
             case MATCH_EXACTLY:
                 scheduler.cancelDeferred(getAutoUpdateTag());
-                scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), periodInMilliseconds);
+                scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), periodInMilliseconds, emptyMap());
                 break;
         }
     }
@@ -66,6 +72,10 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
     @NotNull
     private String getAutoUpdateTag() {
-        return "serverPollingJob:" + settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID);
+        return "serverPollingJob:" + currentProjectId();
+    }
+
+    private String currentProjectId() {
+        return settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID);
     }
 }

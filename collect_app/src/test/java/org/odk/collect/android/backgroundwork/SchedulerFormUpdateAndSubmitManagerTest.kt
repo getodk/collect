@@ -35,7 +35,7 @@ class SchedulerFormUpdateAndSubmitManagerTest {
     }
 
     @Test
-    fun `scheduleUpdates uses current project for tag when scheduling previously downloaded only`() {
+    fun `scheduleUpdates passed current project id when scheduling previously downloaded only`() {
         val generalSettings = settingsProvider.getGeneralSettings()
 
         generalSettings.save(KEY_PROTOCOL, Protocol.ODK.getValue(application))
@@ -52,7 +52,8 @@ class SchedulerFormUpdateAndSubmitManagerTest {
         verify(scheduler).networkDeferred(
             eq("serverPollingJob:$projectId"),
             any<AutoUpdateTaskSpec>(),
-            eq(3600000)
+            eq(3600000),
+            eq(mapOf(AutoUpdateTaskSpec.DATA_PROJECT_ID to projectId))
         )
     }
 }

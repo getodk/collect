@@ -41,7 +41,7 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         throw UnsupportedOperationException()
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long) {
+    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
         throw UnsupportedOperationException()
     }
 

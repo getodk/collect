@@ -26,20 +26,31 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
+    public static final String DATA_PROJECT_ID = "projectId";
+
     @Inject
     FormUpdateChecker formUpdateChecker;
 
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context, String tag) {
+    public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         DaggerUtils.getComponent(context).inject(this);
-        return () -> formUpdateChecker.checkForUpdates(tag.split(":")[1]);
+
+        return () -> {
+            String projectId = inputData.get(DATA_PROJECT_ID);
+            if (projectId != null) {
+                return formUpdateChecker.checkForUpdates(projectId);
+            } else {
+                throw new IllegalArgumentException("No project ID provided!");
+            }
+        };
     }
 
     @NotNull
@@ -54,5 +65,4 @@ public class AutoUpdateTaskSpec implements TaskSpec {
             super(new AutoUpdateTaskSpec(), context, workerParams);
         }
     }
-
 }
