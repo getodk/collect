@@ -41,6 +41,7 @@ import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManage
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -123,8 +124,6 @@ import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -343,18 +342,21 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
-        HashMap<String, Object> generalDefaults = GeneralKeys.getDefaults();
-        Map<String, Object> adminDefaults = AdminKeys.getDefaults();
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler) {
         return new SettingsImporter(
                 settingsProvider.getGeneralSettings(),
                 settingsProvider.getAdminSettings(),
                 preferenceMigrator,
-                new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
-                generalDefaults,
-                adminDefaults,
+                settingsValidator,
+                GeneralKeys.getDefaults(),
+                AdminKeys.getDefaults(),
                 settingsChangeHandler
         );
+    }
+
+    @Provides
+    public SettingsValidator providesSettingsValidator() {
+        return new StructureAndTypeSettingsValidator(GeneralKeys.getDefaults(), AdminKeys.getDefaults());
     }
 
     @Provides
