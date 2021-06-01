@@ -999,4 +999,6 @@
     <string name="delete_project_confirm_message">Are you sure you want to delete the current project?</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
+    <string name="scan_configuration_qr_code">Scan configuration QR code</string>
+    <string name="or">OR</string>
 </resources>

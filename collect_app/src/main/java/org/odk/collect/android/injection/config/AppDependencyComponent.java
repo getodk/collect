@@ -68,6 +68,7 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.projects.AddNewProjectDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -263,6 +264,8 @@ public interface AppDependencyComponent {
     void inject(ProjectSettingsDialog projectSettingsDialog);
 
     void inject(AddProjectDialog addProjectDialog);
+
+    void inject(AddNewProjectDialog addNewProjectDialog);
 
     void inject(FirstLaunchDialog firstLaunchDialog);
 
