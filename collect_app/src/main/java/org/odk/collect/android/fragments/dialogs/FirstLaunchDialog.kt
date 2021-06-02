@@ -13,11 +13,11 @@ import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.ManualProjectCreatorDialog
 import javax.inject.Inject
 
 class FirstLaunchDialog : MaterialFullScreenDialogFragment() {

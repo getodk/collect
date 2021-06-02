@@ -85,7 +85,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.projects.ManualProjectCreatorDialog;
+import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Singleton;

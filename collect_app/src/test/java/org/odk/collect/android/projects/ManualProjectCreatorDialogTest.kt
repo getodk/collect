@@ -1,6 +1,5 @@
-package org.odk.collect.projects
+package org.odk.collect.android.projects
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -10,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
@@ -17,8 +17,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.odk.collect.android.R
+import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.support.Matchers.isPasswordHidden
-import org.odk.collect.projects.support.RobolectricApplication
+import org.odk.collect.shared.UUIDGenerator
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -88,14 +94,12 @@ class ManualProjectCreatorDialogTest {
     @Test
     fun `A new project should be added with generated details after clicking on the 'Add' button`() {
         val projectsRepository = mock(ProjectsRepository::class.java)
-        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
-        application.projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
-            .projectsDependencyModule(object : ProjectsDependencyModule() {
-                override fun providesProjectsRepository(): ProjectsRepository {
-                    return projectsRepository
-                }
-            })
-            .build()
+
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {
+                return projectsRepository
+            }
+        })
 
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {

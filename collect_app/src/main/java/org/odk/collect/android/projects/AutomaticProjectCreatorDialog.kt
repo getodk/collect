@@ -24,7 +24,6 @@ import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.ProjectGenerator
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R

@@ -33,7 +33,7 @@ import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.testshared.RobolectricHelpers

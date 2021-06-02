@@ -29,7 +29,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
-import org.odk.collect.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject

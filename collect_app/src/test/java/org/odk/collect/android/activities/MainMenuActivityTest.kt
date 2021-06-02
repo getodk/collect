@@ -37,7 +37,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 

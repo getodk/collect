@@ -1,4 +1,4 @@
-package org.odk.collect.projects
+package org.odk.collect.android.projects
 
 import android.content.Context
 import android.os.Bundle
@@ -7,8 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
+import org.odk.collect.android.R
+import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.databinding.ManualProjectCreatorDialogLayoutBinding
+import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectGenerator
+import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
@@ -22,8 +27,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val provider = context.applicationContext as ProjectsDependencyComponentProvider
-        provider.projectsDependencyComponent.inject(this)
+        DaggerUtils.getComponent(context).inject(this)
 
         if (context is AddProjectDialogListener) {
             listener = context

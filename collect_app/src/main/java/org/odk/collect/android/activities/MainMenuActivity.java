@@ -46,7 +46,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.projects.ManualProjectCreatorDialog;
+import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.projects.Project;
 
 import javax.inject.Inject;
