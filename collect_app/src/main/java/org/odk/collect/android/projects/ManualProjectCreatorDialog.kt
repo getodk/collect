@@ -11,6 +11,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
@@ -73,15 +74,15 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         toolbar.navigationIcon = null
     }
 
-    private fun getUrl() = binding.url.editText?.text?.trim().toString()
-
-    private fun getUsername() = binding.username.editText?.text?.trim().toString()
-
-    private fun getPassword() = binding.password.editText?.text?.trim().toString()
-
     private fun handleAddingNewProject() {
-        projectCreator.createNewProject(jsonPreferencesGenerator.getProjectDetailsAsJson(getUrl(), getUsername(), getPassword()))
+        val settingsJson = jsonPreferencesGenerator.getProjectDetailsAsJson(
+            binding.urlInputText.text?.trim().toString(),
+            binding.usernameInputText.text?.trim().toString(),
+            binding.passwordInputText.text?.trim().toString()
+        )
 
+        projectCreator.createNewProject(settingsJson)
+        ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.new_project_created))
         listener?.onProjectAdded()
         dismiss()
     }
