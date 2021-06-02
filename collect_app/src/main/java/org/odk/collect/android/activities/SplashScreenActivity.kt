@@ -24,11 +24,11 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.databinding.SplashScreenBinding
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ProjectAddedListener
 import org.odk.collect.android.utilities.DialogUtils
 import javax.inject.Inject
 
-class SplashScreenActivity : AppCompatActivity(), ManualProjectCreatorDialog.AddProjectDialogListener {
+class SplashScreenActivity : AppCompatActivity(), ProjectAddedListener {
 
     @Inject
     lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.Factory

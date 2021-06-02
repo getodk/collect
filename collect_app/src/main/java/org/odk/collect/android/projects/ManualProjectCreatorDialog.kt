@@ -24,13 +24,13 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
-    private var listener: AddProjectDialogListener? = null
+    private var listener: ProjectAddedListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
 
-        if (context is AddProjectDialogListener) {
+        if (context is ProjectAddedListener) {
             listener = context
         }
     }
@@ -84,9 +84,5 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
         listener?.onProjectAdded()
         dismiss()
-    }
-
-    interface AddProjectDialogListener {
-        fun onProjectAdded()
     }
 }

@@ -25,7 +25,7 @@ import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ProjectAddedListener
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
@@ -68,12 +68,12 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun `SplashScreenActivity should implement AddProjectDialogListener`() {
+    fun `SplashScreenActivity should implement ProjectAddedListener`() {
         doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity is ManualProjectCreatorDialog.AddProjectDialogListener, `is`(true))
+            assertThat(activity is ProjectAddedListener, `is`(true))
         }
     }
 

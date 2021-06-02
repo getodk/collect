@@ -14,8 +14,6 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.odk.collect.android.activities.ActivityUtils
-import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsValidator
 import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -48,9 +46,15 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     private lateinit var beepManager: BeepManager
     private lateinit var binding: AutomaticProjectCreatorDialogLayoutBinding
 
+    private var listener: ProjectAddedListener? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+
+        if (context is ProjectAddedListener) {
+            listener = context
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -151,9 +155,14 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         if (settingsValidator.isValid(json)) {
             projectCreator.createNewProject(json)
 
-            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
+            listener?.onProjectAdded()
+            dismiss()
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
         }
+    }
+
+    interface AddProjectDialogListener {
+        fun onProjectAdded()
     }
 }
