@@ -6,8 +6,9 @@ import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.database.forms.FormsDatabaseProvider
 import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.projects.ProjectGenerator
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import java.net.URL
 
 class ProjectCreator(
     private val projectImporter: ProjectImporter,
@@ -19,7 +20,7 @@ class ProjectCreator(
 ) {
 
     fun createNewProject(settingsJson: String) {
-        val newProject = ProjectGenerator.generateProject(getUrl(settingsJson))
+        val newProject = getNewProject(settingsJson)
         val savedProject = projectImporter.importNewProject(newProject)
 
         if (projectsRepository.getAll().size == 1) {
@@ -31,13 +32,23 @@ class ProjectCreator(
         settingsImporter.fromJSON(settingsJson, savedProject.uuid)
     }
 
-    private fun getUrl(json: String): String {
-        return try {
-            JSONObject(json)
+    private fun getNewProject(settingsJson: String): Project.New {
+        val urlString = try {
+            JSONObject(settingsJson)
                 .getJSONObject("general")
                 .getString(GeneralKeys.KEY_SERVER_URL)
         } catch (e: JSONException) {
             ""
         }
+
+        var projectName = ""
+        var projectIcon = ""
+        try {
+            val url = URL(urlString)
+            projectName = url.host
+            projectIcon = projectName.first().toUpperCase().toString()
+        } catch (e: Exception) {
+        }
+        return Project.New(projectName, projectIcon, "#3e9fcc")
     }
 }
