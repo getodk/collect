@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.lifecycleScope
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
@@ -67,7 +70,10 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         setUpToolbar()
         binding.configureManuallyButton.setOnClickListener {
             DialogUtils.showIfNotShowing(ManualProjectCreatorDialog::class.java, requireActivity().supportFragmentManager)
-            dismiss()
+            lifecycleScope.launch {
+                delay(1000)
+                dismiss()
+            }
         }
         binding.cancelButton.setOnClickListener {
             dismiss()
