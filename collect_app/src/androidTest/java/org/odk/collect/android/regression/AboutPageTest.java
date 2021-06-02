@@ -2,8 +2,8 @@ package org.odk.collect.android.regression;
 
 import android.Manifest;
 
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,8 +11,8 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.AboutPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -27,14 +27,14 @@ public class AboutPageTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain ruleChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
+    public RuleChain ruleChain = TestRuleChain.chain()
+            .around(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(rule);
 
     @Test
     public void when_rotateScreenOnAboutPage_should_notCrash() {
         //TestCase1
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAbout()
                 .rotateToLandscape(new AboutPage())
@@ -45,7 +45,7 @@ public class AboutPageTest {
     @Test
     public void when_openAboutPage_should_iconsBeVisible() {
         //TestCase2
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAbout()
                 .assertOnPage();
@@ -114,7 +114,7 @@ public class AboutPageTest {
     @Test
     public void when_OpenSourcesLibrariesLicenses_should_openSourceLicensesTitleBeDisplayed() {
         //TestCase3
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettings()
                 .clickAbout()
                 .clickOnOpenSourceLibrariesLicenses();
