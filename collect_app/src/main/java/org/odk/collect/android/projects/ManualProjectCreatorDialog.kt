@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectGenerator
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -20,6 +22,15 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var projectImporter: ProjectImporter
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
@@ -52,11 +63,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.addButton.setOnClickListener {
-            val newProject = ProjectGenerator.generateProject(getUrl())
-            val savedProject = projectsRepository.save(newProject)
-
-            listener?.onProjectAdded(savedProject, getUrl(), getUsername(), getPassword())
-            dismiss()
+            handleAddingNewProject()
         }
     }
 
@@ -82,7 +89,26 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     private fun getPassword() = binding.password.editText?.text?.trim().toString()
 
+    private fun handleAddingNewProject() {
+        val newProject = ProjectGenerator.generateProject(getUrl())
+        val savedProject = projectsRepository.save(newProject)
+
+        projectImporter.setupProject(savedProject)
+
+        if (projectsRepository.getAll().size == 1) {
+            currentProjectProvider.setCurrentProject(savedProject.uuid)
+            Collect.resetDatabaseConnections()
+        }
+
+        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_SERVER_URL, getUrl())
+        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_USERNAME, getUsername())
+        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_PASSWORD, getPassword())
+
+        listener?.onProjectAdded()
+        dismiss()
+    }
+
     interface AddProjectDialogListener {
-        fun onProjectAdded(project: Project.Saved, url: String, username: String, password: String)
+        fun onProjectAdded()
     }
 }
