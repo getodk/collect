@@ -1,4 +1,4 @@
-package org.odk.collect.projects.support
+package org.odk.collect.android.support
 
 import android.text.method.PasswordTransformationMethod
 import android.view.View
