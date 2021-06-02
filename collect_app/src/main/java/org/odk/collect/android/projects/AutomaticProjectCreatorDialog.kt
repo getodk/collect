@@ -18,6 +18,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.SettingsValidator
 import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
@@ -169,6 +170,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
             if (projectsRepository.getAll().size == 1) {
                 currentProjectProvider.setCurrentProject(savedProject.uuid)
+                Collect.resetDatabaseConnections()
             }
 
             settingsImporter.fromJSON(json, savedProject.uuid)
