@@ -11,15 +11,22 @@ import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.configure.SettingsValidator
 import org.odk.collect.android.databinding.AddNewProjectDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.ProjectGenerator
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
@@ -30,6 +37,21 @@ class AddNewProjectDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
+
+    @Inject
+    lateinit var settingsImporter: SettingsImporter
+
+    @Inject
+    lateinit var settingsValidator: SettingsValidator
+
+    @Inject
+    lateinit var projectImporter: ProjectImporter
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
+
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
 
     private var capture: CaptureManager? = null
 
@@ -131,5 +153,23 @@ class AddNewProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun handleScanningResult(result: BarcodeResult) {
+        val json = CompressionUtils.decompress(result.text)
+
+        if (settingsValidator.isValid(json)) {
+            val newProject = ProjectGenerator.generateProject(settingsImporter.getUrl(json))
+            val savedProject = projectsRepository.save(newProject)
+            projectImporter.setupProject(savedProject)
+
+            if (projectsRepository.getAll().size == 1) {
+                currentProjectProvider.setCurrentProject(savedProject.uuid)
+            }
+
+            settingsImporter.fromJSON(json, savedProject.uuid)
+
+            ToastUtils.showLongToast(getString(R.string.successfully_imported_settings))
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
+        } else {
+            ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
+        }
     }
 }
