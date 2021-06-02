@@ -38,13 +38,13 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 public final class DatabaseInstancesRepository implements InstancesRepository {
 
     private final InstancesDatabaseProvider instancesDatabaseProvider;
-    private final StoragePathProvider storagePathProvider;
     private final Supplier<Long> clock;
+    private final String instancesPath;
 
-    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, StoragePathProvider storagePathProvider, Supplier<Long> clock) {
+    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, String instancesPath, Supplier<Long> clock) {
         this.instancesDatabaseProvider = instancesDatabaseProvider;
-        this.storagePathProvider = storagePathProvider;
         this.clock = clock;
+        this.instancesPath = instancesPath;
     }
 
     @Override
@@ -61,7 +61,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public Instance getOneByPath(String instancePath) {
         String selection = INSTANCE_FILE_PATH + "=?";
-        String[] args = {storagePathProvider.getRelativeInstancePath(instancePath)};
+        String[] args = {StoragePathProvider.getRelativeFilePath(instancesPath, instancePath)};
         try (Cursor cursor = query(null, selection, args, null)) {
             List<Instance> instances = getInstancesFromCursor(cursor);
             if (instances.size() == 1) {

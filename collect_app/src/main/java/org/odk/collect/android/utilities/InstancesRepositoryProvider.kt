@@ -9,12 +9,15 @@ import org.odk.collect.forms.instances.InstancesRepository
 
 class InstancesRepositoryProvider {
     fun get(): InstancesRepository {
+        val storagePathProvider = StoragePathProvider()
+
         return DatabaseInstancesRepository(
             InstancesDatabaseProvider(
                 Collect.getInstance(),
-                StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)
             ),
-            StoragePathProvider(), System::currentTimeMillis
+            storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES),
+            System::currentTimeMillis
         )
     }
 }

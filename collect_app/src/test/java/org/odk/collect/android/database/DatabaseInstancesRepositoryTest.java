@@ -48,12 +48,12 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
 
     @Override
     public InstancesRepository buildSubject() {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider, System::currentTimeMillis);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), System::currentTimeMillis);
     }
 
     @Override
     public InstancesRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider, clock);
+        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), clock);
     }
 
     @Override
