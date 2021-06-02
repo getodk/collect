@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
@@ -41,13 +43,19 @@ public class DatabaseFormsRepository implements FormsRepository {
     private final String formsPath;
     private final String cachePath;
     private final Supplier<Long> clock;
-    private final FormsDatabaseProvider formsDatabaseProvider;
+    private final DatabaseConnection formsDatabaseProvider;
 
     public DatabaseFormsRepository(Context context, String dbPath, String formsPath, String cachePath, Supplier<Long> clock) {
         this.formsPath = formsPath;
         this.cachePath = cachePath;
         this.clock = clock;
-        this.formsDatabaseProvider = new FormsDatabaseProvider(context, dbPath);
+        this.formsDatabaseProvider = new DatabaseConnection(
+                context,
+                dbPath,
+                DatabaseConstants.FORMS_DATABASE_NAME,
+                new FormDatabaseMigrator(),
+                DatabaseConstants.FORMS_DATABASE_VERSION
+        );
     }
 
     @Nullable
