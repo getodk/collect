@@ -14,7 +14,6 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.odk.collect.android.configure.SettingsValidator
 import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
@@ -34,9 +33,6 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
-
-    @Inject
-    lateinit var settingsValidator: SettingsValidator
 
     @Inject
     lateinit var projectCreator: ProjectCreator
@@ -150,11 +146,10 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun handleScanningResult(result: BarcodeResult) {
-        val json = CompressionUtils.decompress(result.text)
+        val projectCreatedSuccessfully = projectCreator.createNewProject(CompressionUtils.decompress(result.text))
 
-        if (settingsValidator.isValid(json)) {
-            projectCreator.createNewProject(json)
-
+        if (projectCreatedSuccessfully) {
+            ToastUtils.showLongToast(getString(R.string.new_project_created))
             listener?.onProjectAdded()
             dismiss()
         } else {

@@ -19,17 +19,23 @@ class ProjectCreator(
     private val instancesDatabaseProvider: InstancesDatabaseProvider
 ) {
 
-    fun createNewProject(settingsJson: String) {
+    fun createNewProject(settingsJson: String): Boolean {
         val newProject = getNewProject(settingsJson)
         val savedProject = projectImporter.importNewProject(newProject)
 
-        if (projectsRepository.getAll().size == 1) {
-            currentProjectProvider.setCurrentProject(savedProject.uuid)
-            formsDatabaseProvider.releaseDatabaseHelper()
-            instancesDatabaseProvider.releaseDatabaseHelper()
-        }
+        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject.uuid)
 
-        settingsImporter.fromJSON(settingsJson, savedProject.uuid)
+        return if (settingsImportedSuccessfully) {
+            if (projectsRepository.getAll().size == 1) {
+                currentProjectProvider.setCurrentProject(savedProject.uuid)
+                formsDatabaseProvider.releaseDatabaseHelper()
+                instancesDatabaseProvider.releaseDatabaseHelper()
+            }
+            true
+        } else {
+            projectsRepository.delete(savedProject.uuid)
+            false
+        }
     }
 
     private fun getNewProject(settingsJson: String): Project.New {
