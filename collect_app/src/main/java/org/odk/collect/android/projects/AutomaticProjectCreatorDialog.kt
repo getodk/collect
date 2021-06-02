@@ -162,8 +162,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
         if (settingsValidator.isValid(json)) {
             val newProject = ProjectGenerator.generateProject(settingsImporter.getUrl(json))
-            val savedProject = projectsRepository.save(newProject)
-            projectImporter.setupProject(savedProject)
+            val savedProject = projectImporter.importNewProject(newProject)
 
             if (projectsRepository.getAll().size == 1) {
                 currentProjectProvider.setCurrentProject(savedProject.uuid)
