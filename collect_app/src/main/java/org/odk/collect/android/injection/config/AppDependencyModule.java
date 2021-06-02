@@ -499,7 +499,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectCreator providesNewProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
+    public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
                                                     CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter,
                                                     FormsDatabaseProvider formsDatabaseProvider, InstancesDatabaseProvider instancesDatabaseProvider) {
         return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, formsDatabaseProvider, instancesDatabaseProvider);

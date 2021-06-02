@@ -9,22 +9,21 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.odk.collect.android.R
+import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.database.forms.FormsDatabaseProvider
+import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
-import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.UUIDGenerator
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -92,21 +91,30 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `A new project should be added with generated details after clicking on the 'Add' button`() {
-        val projectsRepository = mock(ProjectsRepository::class.java)
+    fun `Project creation should be triggered after clicking on the 'Add' button`() {
+        val projectCreator = mock<ProjectCreator> {}
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {
-                return projectsRepository
+            override fun providesProjectCreator(
+                projectImporter: ProjectImporter?,
+                projectsRepository: ProjectsRepository?,
+                currentProjectProvider: CurrentProjectProvider?,
+                settingsImporter: SettingsImporter?,
+                formsDatabaseProvider: FormsDatabaseProvider?,
+                instancesDatabaseProvider: InstancesDatabaseProvider?
+            ): ProjectCreator {
+                return projectCreator
             }
         })
 
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
+            onView(withHint(R.string.username)).perform(replaceText("adam"))
+            onView(withHint(R.string.password)).perform(replaceText("1234"))
 
             onView(withText(R.string.add)).perform(click())
-            verify(projectsRepository).save(Project.New("my-server.com", "M", "#3e9fcc"))
+            verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
         }
     }
 }
