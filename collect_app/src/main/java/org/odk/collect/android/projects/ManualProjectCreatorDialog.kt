@@ -34,7 +34,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = ManualProjectCreatorDialogLayoutBinding.inflate(inflater)
         return binding.root
     }
@@ -67,13 +67,13 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         dismiss()
     }
 
-    override fun getToolbar(): Toolbar? {
+    override fun getToolbar(): Toolbar {
         return binding.toolbar
     }
 
     private fun setUpToolbar() {
-        toolbar?.setTitle(R.string.add_project)
-        toolbar?.navigationIcon = null
+        toolbar.setTitle(R.string.add_project)
+        toolbar.navigationIcon = null
     }
 
     private fun getUrl() = binding.url.editText?.text?.trim().toString()
