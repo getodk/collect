@@ -14,25 +14,18 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
-import org.odk.collect.android.application.Collect
-import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.SettingsValidator
 import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.ProjectGenerator
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
@@ -45,19 +38,10 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     lateinit var permissionsProvider: PermissionsProvider
 
     @Inject
-    lateinit var settingsImporter: SettingsImporter
-
-    @Inject
     lateinit var settingsValidator: SettingsValidator
 
     @Inject
-    lateinit var projectImporter: ProjectImporter
-
-    @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
-
-    @Inject
-    lateinit var projectsRepository: ProjectsRepository
+    lateinit var projectCreator: ProjectCreator
 
     private var capture: CaptureManager? = null
 
@@ -165,30 +149,11 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         val json = CompressionUtils.decompress(result.text)
 
         if (settingsValidator.isValid(json)) {
-            val newProject = ProjectGenerator.generateProject(getUrl(json))
-            val savedProject = projectImporter.importNewProject(newProject)
+            projectCreator.createNewProject(json)
 
-            if (projectsRepository.getAll().size == 1) {
-                currentProjectProvider.setCurrentProject(savedProject.uuid)
-                Collect.resetDatabaseConnections()
-            }
-
-            settingsImporter.fromJSON(json, savedProject.uuid)
-
-            ToastUtils.showLongToast(getString(R.string.successfully_imported_settings))
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
-        }
-    }
-
-    private fun getUrl(json: String): String {
-        return try {
-            JSONObject(json)
-                .getJSONObject("general")
-                .getString(GeneralKeys.KEY_SERVER_URL)
-        } catch (e: JSONException) {
-            ""
         }
     }
 }

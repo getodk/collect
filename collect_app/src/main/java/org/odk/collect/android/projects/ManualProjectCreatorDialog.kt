@@ -8,29 +8,19 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
-import org.odk.collect.android.application.Collect
+import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.ProjectGenerator
-import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
-    lateinit var projectsRepository: ProjectsRepository
+    lateinit var projectCreator: ProjectCreator
 
     @Inject
-    lateinit var projectImporter: ProjectImporter
-
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
-
-    @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
@@ -90,17 +80,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     private fun getPassword() = binding.password.editText?.text?.trim().toString()
 
     private fun handleAddingNewProject() {
-        val newProject = ProjectGenerator.generateProject(getUrl())
-        val savedProject = projectImporter.importNewProject(newProject)
-
-        if (projectsRepository.getAll().size == 1) {
-            currentProjectProvider.setCurrentProject(savedProject.uuid)
-            Collect.resetDatabaseConnections()
-        }
-
-        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_SERVER_URL, getUrl())
-        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_USERNAME, getUsername())
-        settingsProvider.getGeneralSettings(savedProject.uuid).save(GeneralKeys.KEY_PASSWORD, getPassword())
+        projectCreator.createNewProject(jsonPreferencesGenerator.getProjectDetailsAsJson(getUrl(), getUsername(), getPassword()))
 
         listener?.onProjectAdded()
         dismiss()
