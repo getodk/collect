@@ -22,11 +22,11 @@ import org.odk.collect.projects.support.RobolectricApplication
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
-class AddProjectDialogTest {
+class ManualProjectCreatorDialogTest {
 
     @Test
     fun `Password should be protected`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withHint(R.string.server_url)).perform(replaceText("123456789"))
             onView(withHint(R.string.server_url)).check(matches(not(isPasswordHidden())))
@@ -41,7 +41,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(withText(R.string.cancel)).perform(click())
@@ -51,7 +51,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragment(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -61,7 +61,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking the 'Add' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
@@ -72,7 +72,7 @@ class AddProjectDialogTest {
 
     @Test
     fun `The 'Add' button should be disabled when url is blank`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
 
@@ -97,7 +97,7 @@ class AddProjectDialogTest {
             })
             .build()
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AddProjectDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {
             onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
 

@@ -37,7 +37,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
@@ -87,7 +87,7 @@ class MainMenuActivityTest {
     fun `MainMenuActivity should implement AddProjectDialogListener`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
+            assertThat(activity is ManualProjectCreatorDialog.AddProjectDialogListener, `is`(true))
         }
     }
 

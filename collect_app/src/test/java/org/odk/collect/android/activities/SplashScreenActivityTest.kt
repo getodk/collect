@@ -33,7 +33,7 @@ import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.testshared.RobolectricHelpers
@@ -77,7 +77,7 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
+            assertThat(activity is ManualProjectCreatorDialog.AddProjectDialogListener, `is`(true))
         }
     }
 

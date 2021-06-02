@@ -46,7 +46,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.projects.AddProjectDialog;
+import org.odk.collect.projects.ManualProjectCreatorDialog;
 import org.odk.collect.projects.Project;
 
 import javax.inject.Inject;
@@ -60,7 +60,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback, AddProjectDialog.AddProjectDialogListener {
+public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback, ManualProjectCreatorDialog.AddProjectDialogListener {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;

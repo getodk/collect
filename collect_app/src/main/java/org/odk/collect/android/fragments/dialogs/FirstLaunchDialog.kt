@@ -11,13 +11,13 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.databinding.FirstLaunchDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.AddNewProjectDialog
+import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.ManualProjectCreatorDialog
 import javax.inject.Inject
 
 class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
@@ -58,14 +58,14 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
 
         binding.configureViaQrButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
-                AddNewProjectDialog::class.java,
+                AutomaticProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
         }
 
         binding.configureManuallyButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
-                AddProjectDialog::class.java,
+                ManualProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
         }

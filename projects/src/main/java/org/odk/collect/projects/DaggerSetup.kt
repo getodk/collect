@@ -14,7 +14,7 @@ interface ProjectsDependencyComponentProvider {
 @Singleton
 interface ProjectsDependencyComponent {
 
-    fun inject(addProjectDialog: AddProjectDialog)
+    fun inject(manualProjectCreatorDialog: ManualProjectCreatorDialog)
 }
 
 @Module

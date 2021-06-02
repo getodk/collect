@@ -15,7 +15,7 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.SettingsValidator
-import org.odk.collect.android.databinding.AddNewProjectDialogLayoutBinding
+import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
@@ -24,13 +24,13 @@ import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.AddProjectDialog
+import org.odk.collect.projects.ManualProjectCreatorDialog
 import org.odk.collect.projects.ProjectGenerator
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
-class AddNewProjectDialog : MaterialFullScreenDialogFragment() {
+class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var barcodeViewDecoder: BarcodeViewDecoder
@@ -56,7 +56,7 @@ class AddNewProjectDialog : MaterialFullScreenDialogFragment() {
     private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
-    private lateinit var binding: AddNewProjectDialogLayoutBinding
+    private lateinit var binding: AutomaticProjectCreatorDialogLayoutBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,10 +64,10 @@ class AddNewProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = AddNewProjectDialogLayoutBinding.inflate(inflater)
+        binding = AutomaticProjectCreatorDialogLayoutBinding.inflate(inflater)
         setUpToolbar()
         binding.configureManuallyButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(AddProjectDialog::class.java, requireActivity().supportFragmentManager)
+            DialogUtils.showIfNotShowing(ManualProjectCreatorDialog::class.java, requireActivity().supportFragmentManager)
             dismiss()
         }
         binding.cancelButton.setOnClickListener {

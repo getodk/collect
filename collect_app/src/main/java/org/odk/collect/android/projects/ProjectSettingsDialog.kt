@@ -96,7 +96,7 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.addProjectButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
-                AddNewProjectDialog::class.java,
+                AutomaticProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
             dismiss()

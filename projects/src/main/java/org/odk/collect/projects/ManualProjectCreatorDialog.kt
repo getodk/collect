@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.projects.databinding.AddProjectDialogLayoutBinding
+import org.odk.collect.projects.databinding.ManualProjectCreatorDialogLayoutBinding
 import javax.inject.Inject
 
-class AddProjectDialog : MaterialFullScreenDialogFragment() {
+class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
 
-    private lateinit var binding: AddProjectDialogLayoutBinding
+    private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
     private var listener: AddProjectDialogListener? = null
 
@@ -31,7 +31,7 @@ class AddProjectDialog : MaterialFullScreenDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = AddProjectDialogLayoutBinding.inflate(inflater)
+        binding = ManualProjectCreatorDialogLayoutBinding.inflate(inflater)
         return binding.root
     }
 
