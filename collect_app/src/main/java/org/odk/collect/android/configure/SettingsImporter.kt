@@ -3,7 +3,6 @@ package org.odk.collect.android.configure
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.shared.Settings
 
@@ -75,16 +74,6 @@ class SettingsImporter(
             if (!defaults.containsKey(key)) {
                 preferences.remove(key)
             }
-        }
-    }
-
-    fun getUrl(json: String): String {
-        return try {
-            JSONObject(json)
-                .getJSONObject("general")
-                .getString(GeneralKeys.KEY_SERVER_URL)
-        } catch (e: JSONException) {
-            ""
         }
     }
 }

@@ -14,6 +14,8 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.json.JSONException
+import org.json.JSONObject
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
@@ -22,6 +24,7 @@ import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBi
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -161,7 +164,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         val json = CompressionUtils.decompress(result.text)
 
         if (settingsValidator.isValid(json)) {
-            val newProject = ProjectGenerator.generateProject(settingsImporter.getUrl(json))
+            val newProject = ProjectGenerator.generateProject(getUrl(json))
             val savedProject = projectImporter.importNewProject(newProject)
 
             if (projectsRepository.getAll().size == 1) {
@@ -174,6 +177,16 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
+        }
+    }
+
+    private fun getUrl(json: String): String {
+        return try {
+            JSONObject(json)
+                .getJSONObject("general")
+                .getString(GeneralKeys.KEY_SERVER_URL)
+        } catch (e: JSONException) {
+            ""
         }
     }
 }
