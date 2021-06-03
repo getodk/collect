@@ -58,6 +58,8 @@ import java.util.Set;
 
 import timber.log.Timber;
 
+import static java.util.Arrays.asList;
+
 /**
  * Static methods used for common file operations.
  *
@@ -576,6 +578,18 @@ public class FileUtils {
                 Timber.w(message);
                 throw new RuntimeException(message);
             }
+        }
+    }
+
+    public static File getFileAtPath(String path) {
+        return new File(path);
+    }
+
+    public static List<File> listFiles(File file) {
+        if (file != null && file.exists()) {
+            return asList(file.listFiles());
+        } else {
+            return new ArrayList<>();
         }
     }
 
