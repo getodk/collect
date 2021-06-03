@@ -6,6 +6,8 @@ import android.provider.BaseColumns
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StoragePathProvider.Companion.getAbsoluteFilePath
+import org.odk.collect.android.storage.StoragePathProvider.Companion.getRelativeFilePath
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import java.lang.Boolean
@@ -20,11 +22,17 @@ object DatabaseObjectMapper {
         values.put(DatabaseFormColumns.DESCRIPTION, form.description)
         values.put(DatabaseFormColumns.JR_FORM_ID, form.formId)
         values.put(DatabaseFormColumns.JR_VERSION, form.version)
-        values.put(DatabaseFormColumns.FORM_FILE_PATH, StoragePathProvider.getRelativeFilePath(formsPath, form.formFilePath))
+        values.put(
+            DatabaseFormColumns.FORM_FILE_PATH,
+            StoragePathProvider.getRelativeFilePath(formsPath, form.formFilePath)
+        )
         values.put(DatabaseFormColumns.SUBMISSION_URI, form.submissionUri)
         values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.basE64RSAPublicKey)
         values.put(DatabaseFormColumns.MD5_HASH, form.mD5Hash)
-        values.put(DatabaseFormColumns.FORM_MEDIA_PATH, StoragePathProvider.getRelativeFilePath(formsPath, form.formMediaPath))
+        values.put(
+            DatabaseFormColumns.FORM_MEDIA_PATH,
+            StoragePathProvider.getRelativeFilePath(formsPath, form.formMediaPath)
+        )
         values.put(DatabaseFormColumns.LANGUAGE, form.language)
         values.put(DatabaseFormColumns.AUTO_SEND, form.autoSend)
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
@@ -40,13 +48,31 @@ object DatabaseObjectMapper {
             .description(values.getAsString(DatabaseFormColumns.DESCRIPTION))
             .formId(values.getAsString(DatabaseFormColumns.JR_FORM_ID))
             .version(values.getAsString(DatabaseFormColumns.JR_VERSION))
-            .formFilePath(storagePathProvider.getAbsoluteFormFilePath(values.getAsString(DatabaseFormColumns.FORM_FILE_PATH)))
+            .formFilePath(
+                storagePathProvider.getAbsoluteFormFilePath(
+                    values.getAsString(
+                        DatabaseFormColumns.FORM_FILE_PATH
+                    )
+                )
+            )
             .submissionUri(values.getAsString(DatabaseFormColumns.SUBMISSION_URI))
             .base64RSAPublicKey(values.getAsString(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY))
             .md5Hash(values.getAsString(DatabaseFormColumns.MD5_HASH))
             .date(values.getAsLong(DatabaseFormColumns.DATE))
-            .jrCacheFilePath(storagePathProvider.getAbsoluteCacheFilePath(values.getAsString(DatabaseFormColumns.JRCACHE_FILE_PATH)))
-            .formMediaPath(storagePathProvider.getAbsoluteFormFilePath(values.getAsString(DatabaseFormColumns.FORM_MEDIA_PATH)))
+            .jrCacheFilePath(
+                storagePathProvider.getAbsoluteCacheFilePath(
+                    values.getAsString(
+                        DatabaseFormColumns.JRCACHE_FILE_PATH
+                    )
+                )
+            )
+            .formMediaPath(
+                storagePathProvider.getAbsoluteFormFilePath(
+                    values.getAsString(
+                        DatabaseFormColumns.FORM_MEDIA_PATH
+                    )
+                )
+            )
             .language(values.getAsString(DatabaseFormColumns.LANGUAGE))
             .autoSend(values.getAsString(DatabaseFormColumns.AUTO_SEND))
             .autoDelete(values.getAsString(DatabaseFormColumns.AUTO_DELETE))
@@ -56,7 +82,11 @@ object DatabaseObjectMapper {
     }
 
     @JvmStatic
-    fun getFormFromCurrentCursorPosition(cursor: Cursor, formsPath: String, cachePath: String): Form? {
+    fun getFormFromCurrentCursorPosition(
+        cursor: Cursor,
+        formsPath: String,
+        cachePath: String
+    ): Form? {
         val idColumnIndex = cursor.getColumnIndex(BaseColumns._ID)
         val displayNameColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DISPLAY_NAME)
         val descriptionColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DESCRIPTION)
@@ -64,10 +94,12 @@ object DatabaseObjectMapper {
         val jrVersionColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.JR_VERSION)
         val formFilePathColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.FORM_FILE_PATH)
         val submissionUriColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.SUBMISSION_URI)
-        val base64RSAPublicKeyColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY)
+        val base64RSAPublicKeyColumnIndex =
+            cursor.getColumnIndex(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY)
         val md5HashColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.MD5_HASH)
         val dateColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DATE)
-        val jrCacheFilePathColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.JRCACHE_FILE_PATH)
+        val jrCacheFilePathColumnIndex =
+            cursor.getColumnIndex(DatabaseFormColumns.JRCACHE_FILE_PATH)
         val formMediaPathColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.FORM_MEDIA_PATH)
         val languageColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.LANGUAGE)
         val autoSendColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.AUTO_SEND)
@@ -80,13 +112,28 @@ object DatabaseObjectMapper {
             .description(cursor.getString(descriptionColumnIndex))
             .formId(cursor.getString(jrFormIdColumnIndex))
             .version(cursor.getString(jrVersionColumnIndex))
-            .formFilePath(StoragePathProvider.getAbsoluteFilePath(formsPath, cursor.getString(formFilePathColumnIndex)))
+            .formFilePath(
+                StoragePathProvider.getAbsoluteFilePath(
+                    formsPath,
+                    cursor.getString(formFilePathColumnIndex)
+                )
+            )
             .submissionUri(cursor.getString(submissionUriColumnIndex))
             .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
             .md5Hash(cursor.getString(md5HashColumnIndex))
             .date(cursor.getLong(dateColumnIndex))
-            .jrCacheFilePath(StoragePathProvider.getAbsoluteFilePath(cachePath, cursor.getString(jrCacheFilePathColumnIndex)))
-            .formMediaPath(StoragePathProvider.getAbsoluteFilePath(formsPath, cursor.getString(formMediaPathColumnIndex)))
+            .jrCacheFilePath(
+                StoragePathProvider.getAbsoluteFilePath(
+                    cachePath,
+                    cursor.getString(jrCacheFilePathColumnIndex)
+                )
+            )
+            .formMediaPath(
+                StoragePathProvider.getAbsoluteFilePath(
+                    formsPath,
+                    cursor.getString(formMediaPathColumnIndex)
+                )
+            )
             .language(cursor.getString(languageColumnIndex))
             .autoSend(cursor.getString(autoSendColumnIndex))
             .autoDelete(cursor.getString(autoDeleteColumnIndex))
@@ -114,16 +161,19 @@ object DatabaseObjectMapper {
     }
 
     @JvmStatic
-    fun getInstanceFromCurrentCursorPosition(cursor: Cursor): Instance? {
+    fun getInstanceFromCurrentCursorPosition(cursor: Cursor, instancesPath: String): Instance? {
         val dbId = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
         val displayNameColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.DISPLAY_NAME)
         val submissionUriColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.SUBMISSION_URI)
-        val canEditWhenCompleteIndex = cursor.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE)
-        val instanceFilePathIndex = cursor.getColumnIndex(DatabaseInstanceColumns.INSTANCE_FILE_PATH)
+        val canEditWhenCompleteIndex =
+            cursor.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE)
+        val instanceFilePathIndex =
+            cursor.getColumnIndex(DatabaseInstanceColumns.INSTANCE_FILE_PATH)
         val jrFormIdColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.JR_FORM_ID)
         val jrVersionColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.JR_VERSION)
         val statusColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.STATUS)
-        val lastStatusChangeDateColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE)
+        val lastStatusChangeDateColumnIndex =
+            cursor.getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE)
         val deletedDateColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.DELETED_DATE)
         val geometryTypeColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY_TYPE)
         val geometryColumnIndex = cursor.getColumnIndex(DatabaseInstanceColumns.GEOMETRY)
@@ -133,12 +183,21 @@ object DatabaseObjectMapper {
             .displayName(cursor.getString(displayNameColumnIndex))
             .submissionUri(cursor.getString(submissionUriColumnIndex))
             .canEditWhenComplete(Boolean.valueOf(cursor.getString(canEditWhenCompleteIndex)))
-            .instanceFilePath(StoragePathProvider().getAbsoluteInstanceFilePath(cursor.getString(instanceFilePathIndex)))
+            .instanceFilePath(
+                getAbsoluteFilePath(
+                    instancesPath,
+                    cursor.getString(instanceFilePathIndex)
+                )
+            )
             .formId(cursor.getString(jrFormIdColumnIndex))
             .formVersion(cursor.getString(jrVersionColumnIndex))
             .status(cursor.getString(statusColumnIndex))
             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
-            .deletedDate(if (cursor.isNull(deletedDateColumnIndex)) null else cursor.getLong(deletedDateColumnIndex))
+            .deletedDate(
+                if (cursor.isNull(deletedDateColumnIndex)) null else cursor.getLong(
+                    deletedDateColumnIndex
+                )
+            )
             .geometryType(cursor.getString(geometryTypeColumnIndex))
             .geometry(cursor.getString(geometryColumnIndex))
             .dbId(cursor.getLong(databaseIdIndex))
@@ -146,13 +205,19 @@ object DatabaseObjectMapper {
     }
 
     @JvmStatic
-    fun getValuesFromInstance(instance: Instance): ContentValues? {
+    fun getValuesFromInstance(instance: Instance, instancesPath: String): ContentValues {
         val values = ContentValues()
         values.put(BaseColumns._ID, instance.dbId)
         values.put(DatabaseInstanceColumns.DISPLAY_NAME, instance.displayName)
         values.put(DatabaseInstanceColumns.SUBMISSION_URI, instance.submissionUri)
-        values.put(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE, Boolean.toString(instance.canEditWhenComplete()))
-        values.put(DatabaseInstanceColumns.INSTANCE_FILE_PATH, StoragePathProvider().getRelativeInstancePath(instance.instanceFilePath))
+        values.put(
+            DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE,
+            Boolean.toString(instance.canEditWhenComplete())
+        )
+        values.put(
+            DatabaseInstanceColumns.INSTANCE_FILE_PATH,
+            getRelativeFilePath(instancesPath, instance.instanceFilePath)
+        )
         values.put(DatabaseInstanceColumns.JR_FORM_ID, instance.formId)
         values.put(DatabaseInstanceColumns.JR_VERSION, instance.formVersion)
         values.put(DatabaseInstanceColumns.STATUS, instance.status)

@@ -63,7 +63,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         String[] selectionArgs = {Long.toString(databaseId)};
 
         try (Cursor cursor = query(null, selection, selectionArgs, null)) {
-            List<Instance> result = getInstancesFromCursor(cursor);
+            List<Instance> result = getInstancesFromCursor(cursor, instancesPath);
             return !result.isEmpty() ? result.get(0) : null;
         }
     }
@@ -73,7 +73,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         String selection = INSTANCE_FILE_PATH + "=?";
         String[] args = {StoragePathProvider.getRelativeFilePath(instancesPath, instancePath)};
         try (Cursor cursor = query(null, selection, args, null)) {
-            List<Instance> instances = getInstancesFromCursor(cursor);
+            List<Instance> instances = getInstancesFromCursor(cursor, instancesPath);
             if (instances.size() == 1) {
                 return instances.get(0);
             } else {
@@ -85,21 +85,21 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public List<Instance> getAll() {
         try (Cursor cursor = query(null, null, null, null)) {
-            return getInstancesFromCursor(cursor);
+            return getInstancesFromCursor(cursor, instancesPath);
         }
     }
 
     @Override
     public List<Instance> getAllNotDeleted() {
         try (Cursor cursor = query(null, DELETED_DATE + " IS NULL ", null, null)) {
-            return getInstancesFromCursor(cursor);
+            return getInstancesFromCursor(cursor, instancesPath);
         }
     }
 
     @Override
     public List<Instance> getAllByStatus(String... status) {
         try (Cursor instancesCursor = getCursorForAllByStatus(status)) {
-            return getInstancesFromCursor(instancesCursor);
+            return getInstancesFromCursor(instancesCursor, instancesPath);
         }
     }
 
@@ -114,7 +114,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public List<Instance> getAllByFormId(String formId) {
         try (Cursor c = query(null, JR_FORM_ID + " = ?", new String[]{formId}, null)) {
-            return getInstancesFromCursor(c);
+            return getInstancesFromCursor(c, instancesPath);
         }
     }
 
@@ -122,11 +122,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
         if (jrVersion != null) {
             try (Cursor cursor = query(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}, null)) {
-                return getInstancesFromCursor(cursor);
+                return getInstancesFromCursor(cursor, instancesPath);
             }
         } else {
             try (Cursor cursor = query(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " IS NULL AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId}, null)) {
-                return getInstancesFromCursor(cursor);
+                return getInstancesFromCursor(cursor, instancesPath);
             }
         }
     }
@@ -174,7 +174,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                         .build();
             }
 
-            long insertId = insert(getValuesFromInstance(instance));
+            long insertId = insert(getValuesFromInstance(instance, instancesPath));
             return get(insertId);
         } else {
             if (instance.getDeletedDate() == null) {
@@ -183,7 +183,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
                         .build();
             }
 
-            update(instance.getDbId(), getValuesFromInstance(instance));
+            update(instance.getDbId(), getValuesFromInstance(instance, instancesPath));
             return get(instance.getDbId());
         }
     }
@@ -267,11 +267,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
         }
     }
 
-    public static List<Instance> getInstancesFromCursor(Cursor cursor) {
+    private static List<Instance> getInstancesFromCursor(Cursor cursor, String instancesPath) {
         List<Instance> instances = new ArrayList<>();
         cursor.moveToPosition(-1);
         while (cursor.moveToNext()) {
-            Instance instance = getInstanceFromCurrentCursorPosition(cursor);
+            Instance instance = getInstanceFromCurrentCursorPosition(cursor, instancesPath);
             instances.add(instance);
         }
 
