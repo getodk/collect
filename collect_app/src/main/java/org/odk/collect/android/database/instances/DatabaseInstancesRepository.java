@@ -1,11 +1,14 @@
 package org.odk.collect.android.database.instances;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.apache.commons.io.FileUtils;
+import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -37,12 +40,19 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
  */
 public final class DatabaseInstancesRepository implements InstancesRepository {
 
-    private final InstancesDatabaseProvider instancesDatabaseProvider;
+    private final DatabaseConnection databaseConnection;
     private final Supplier<Long> clock;
     private final String instancesPath;
 
-    public DatabaseInstancesRepository(InstancesDatabaseProvider instancesDatabaseProvider, String instancesPath, Supplier<Long> clock) {
-        this.instancesDatabaseProvider = instancesDatabaseProvider;
+    public DatabaseInstancesRepository(Context context, String dbPath, String instancesPath, Supplier<Long> clock) {
+        this.databaseConnection = new DatabaseConnection(
+                context,
+                dbPath,
+                DatabaseConstants.INSTANCES_DATABASE_NAME,
+                new InstanceDatabaseMigrator(),
+                DatabaseConstants.INSTANCES_DATABASE_VERSION
+        );
+
         this.clock = clock;
         this.instancesPath = instancesPath;
     }
@@ -125,7 +135,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void delete(Long id) {
         Instance instance = get(id);
 
-        instancesDatabaseProvider.getWriteableDatabase().delete(
+        databaseConnection.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 _ID + "=?",
                 new String[]{String.valueOf(id)}
@@ -138,7 +148,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     public void deleteAll() {
         List<Instance> instances = getAll();
 
-        instancesDatabaseProvider.getWriteableDatabase().delete(
+        databaseConnection.getWriteableDatabase().delete(
                 INSTANCES_TABLE_NAME,
                 null,
                 null
@@ -204,7 +214,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase readableDatabase = instancesDatabaseProvider.getReadableDatabase();
+        SQLiteDatabase readableDatabase = databaseConnection.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(INSTANCES_TABLE_NAME);
 
@@ -233,7 +243,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private long insert(ContentValues values) {
-        return instancesDatabaseProvider.getWriteableDatabase().insertOrThrow(
+        return databaseConnection.getWriteableDatabase().insertOrThrow(
                 INSTANCES_TABLE_NAME,
                 null,
                 values
@@ -241,7 +251,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private void update(Long instanceId, ContentValues values) {
-        instancesDatabaseProvider.getWriteableDatabase().update(
+        databaseConnection.getWriteableDatabase().update(
                 INSTANCES_TABLE_NAME,
                 values,
                 _ID + "=?",

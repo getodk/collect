@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import timber.log.Timber
 
 /**
- * Allows access to a database file. The actual underlying connecting to this database will be
- * reused for different instances of [DatabaseConnection] that refer to the same file.
+ * Allows access to a database file. The actual underlying connection (an instance of
+ * [SQLiteOpenHelper] to this database will be reused for different instances of
+ * [DatabaseConnection] that refer to the same file.
  *
  * @param migrator used to migrate or create the database automatically before access
  */

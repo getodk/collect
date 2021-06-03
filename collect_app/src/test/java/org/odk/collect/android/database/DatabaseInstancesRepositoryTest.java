@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -48,12 +47,12 @@ public class DatabaseInstancesRepositoryTest extends InstancesRepositoryTest {
 
     @Override
     public InstancesRepository buildSubject() {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), System::currentTimeMillis);
+        return new DatabaseInstancesRepository(Collect.getInstance(), storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), System::currentTimeMillis);
     }
 
     @Override
     public InstancesRepository buildSubject(Supplier<Long> clock) {
-        return new DatabaseInstancesRepository(new InstancesDatabaseProvider(Collect.getInstance(), new StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), clock);
+        return new DatabaseInstancesRepository(Collect.getInstance(), storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), clock);
     }
 
     @Override
