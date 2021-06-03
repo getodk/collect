@@ -46,7 +46,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         return () -> {
             String projectId = inputData.get(DATA_PROJECT_ID);
             if (projectId != null) {
-                return formUpdateChecker.checkForUpdates(projectId);
+                return formUpdateChecker.downloadUpdates(projectId);
             } else {
                 throw new IllegalArgumentException("No project ID provided!");
             }

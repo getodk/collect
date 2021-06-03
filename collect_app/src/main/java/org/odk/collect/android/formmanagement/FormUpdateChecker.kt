@@ -29,7 +29,11 @@ class FormUpdateChecker(
     private val formSourceProvider: FormSourceProvider
 ) {
 
-    fun checkForUpdates(projectId: String): Boolean {
+    /**
+     * Downloads updates for the project's already downloaded forms. If Automatic download is
+     * disabled the user will just be notified that there are updates available.
+     */
+    fun downloadUpdates(projectId: String): Boolean {
         val formsDirPath = formsDir(projectId)
         val formsRepository = formsRepository(projectId)
         val formSource = formSource(projectId)

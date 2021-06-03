@@ -59,24 +59,24 @@ class FormUpdateCheckerTest {
     }
 
     @Test
-    fun `checkForUpdates() notifies Forms content resolver`() {
+    fun `downloadUpdates() notifies Forms content resolver`() {
         val contentObserver = mock<ContentObserver>()
         application.contentResolver.registerContentObserver(CONTENT_URI, false, contentObserver)
 
         val project = setupProject()
-        updateChecker.checkForUpdates(project.uuid)
+        updateChecker.downloadUpdates(project.uuid)
 
         verify(contentObserver).dispatchChange(false, CONTENT_URI)
     }
 
     @Test
-    fun `checkForUpdates() uses projectId`() {
+    fun `downloadUpdates() uses projectId`() {
         val project = setupProject()
-        assertThat(updateChecker.checkForUpdates(project.uuid), `is`(true))
+        assertThat(updateChecker.downloadUpdates(project.uuid), `is`(true))
     }
 
     @Test
-    fun `checkForUpdates() downloads updates when auto download is enabled`() {
+    fun `downloadUpdates() downloads updates when auto download is enabled`() {
         val project = setupProject()
         addFormLocally(project, "formId", "1")
 
@@ -86,7 +86,7 @@ class FormUpdateCheckerTest {
         settingsProvider.getGeneralSettings(project.uuid)
             .save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true)
 
-        updateChecker.checkForUpdates(project.uuid)
+        updateChecker.downloadUpdates(project.uuid)
         assertThat(
             formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
             `is`(1)

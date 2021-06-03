@@ -50,6 +50,6 @@ class AutoUpdateTaskSpecTest {
         val task = autoUpdateTaskSpec.getTask(context, mapOf(DATA_PROJECT_ID to "projectId"))
 
         task.get()
-        verify(formUpdateChecker).checkForUpdates("projectId")
+        verify(formUpdateChecker).downloadUpdates("projectId")
     }
 }
