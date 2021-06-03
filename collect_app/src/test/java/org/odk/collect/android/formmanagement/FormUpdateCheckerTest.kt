@@ -70,12 +70,6 @@ class FormUpdateCheckerTest {
     }
 
     @Test
-    fun `downloadUpdates() uses projectId`() {
-        val project = setupProject()
-        assertThat(updateChecker.downloadUpdates(project.uuid), `is`(true))
-    }
-
-    @Test
     fun `downloadUpdates() downloads updates when auto download is enabled`() {
         val project = setupProject()
         addFormLocally(project, "formId", "1")

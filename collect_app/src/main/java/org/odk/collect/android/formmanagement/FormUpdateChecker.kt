@@ -33,7 +33,7 @@ class FormUpdateChecker(
      * Downloads updates for the project's already downloaded forms. If Automatic download is
      * disabled the user will just be notified that there are updates available.
      */
-    fun downloadUpdates(projectId: String): Boolean {
+    fun downloadUpdates(projectId: String) {
         val formsDirPath = formsDir(projectId)
         val formsRepository = formsRepository(projectId)
         val formSource = formSource(projectId)
@@ -83,9 +83,8 @@ class FormUpdateChecker(
             }
 
             context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
-            true
-        } catch (e: FormSourceException) {
-            true
+        } catch (_: FormSourceException) {
+            // Ignored
         }
     }
 
