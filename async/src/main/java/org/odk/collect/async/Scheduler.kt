@@ -43,8 +43,9 @@ interface Scheduler {
      * tag will be replaced
      * @param spec defines the task to be run
      * @param repeatPeriod the period between each run of the task
+     * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long)
+    fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>)
 
     /**
      * Cancel deferred task scheduled with tag

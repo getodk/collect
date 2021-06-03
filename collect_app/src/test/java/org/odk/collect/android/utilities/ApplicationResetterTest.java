@@ -137,7 +137,7 @@ public class ApplicationResetterTest {
     }
 
     private void setupTestFormsDatabase() {
-        new FormsRepositoryProvider().get().save(new Form.Builder()
+        new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(new Form.Builder()
                 .formId("jrFormId")
                 .displayName("displayName")
                 .formFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml")
@@ -200,7 +200,7 @@ public class ApplicationResetterTest {
     }
 
     private int getFormsCount() {
-        return new FormsRepositoryProvider().get().getAll().size();
+        return new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getAll().size();
     }
 
     private int getInstancesCount() {

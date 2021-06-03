@@ -21,88 +21,35 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
-import org.odk.collect.android.formmanagement.FormDownloadException;
-import org.odk.collect.android.formmanagement.FormDownloader;
-import org.odk.collect.android.formmanagement.ServerFormDetails;
-import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.forms.FormSourceException;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.inject.Named;
-
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 
 public class AutoUpdateTaskSpec implements TaskSpec {
 
-    @Inject
-    ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+    public static final String DATA_PROJECT_ID = "projectId";
 
     @Inject
-    FormDownloader formDownloader;
-
-    @Inject
-    Notifier notifier;
-
-    @Inject
-    SettingsProvider settingsProvider;
-
-    @Inject
-    @Named("FORMS")
-    ChangeLock changeLock;
+    FormUpdateChecker formUpdateChecker;
 
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            try {
-                List<ServerFormDetails> serverForms = serverFormsDetailsFetcher.fetchFormDetails();
-                List<ServerFormDetails> updatedForms = serverForms.stream().filter(ServerFormDetails::isUpdated).collect(Collectors.toList());
-
-                if (!updatedForms.isEmpty()) {
-                    if (settingsProvider.getGeneralSettings().getBoolean(KEY_AUTOMATIC_UPDATE)) {
-                        changeLock.withLock(acquiredLock -> {
-                            if (acquiredLock) {
-                                HashMap<ServerFormDetails, String> results = new HashMap<>();
-                                for (ServerFormDetails serverFormDetails : updatedForms) {
-                                    try {
-                                        formDownloader.downloadForm(serverFormDetails, null, null);
-                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.success));
-                                    } catch (FormDownloadException e) {
-                                        results.put(serverFormDetails, TranslationHandler.getString(context, R.string.failure));
-                                    } catch (InterruptedException e) {
-                                        break;
-                                    }
-                                }
-
-                                notifier.onUpdatesDownloaded(results);
-                            }
-
-                            return null;
-                        });
-                    } else {
-                        notifier.onUpdatesAvailable(updatedForms);
-                    }
-                }
-
-                context.getContentResolver().notifyChange(FormsProviderAPI.CONTENT_URI, null);
+            String projectId = inputData.get(DATA_PROJECT_ID);
+            if (projectId != null) {
+                formUpdateChecker.downloadUpdates(projectId);
                 return true;
-            } catch (FormSourceException e) {
-                return true;
+            } else {
+                throw new IllegalArgumentException("No project ID provided!");
             }
         };
     }
@@ -119,5 +66,4 @@ public class AutoUpdateTaskSpec implements TaskSpec {
             super(new AutoUpdateTaskSpec(), context, workerParams);
         }
     }
-
 }

@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -70,9 +69,6 @@ public class InstanceProvider extends ContentProvider {
     private static final int INSTANCE_ID = 2;
 
     private static final UriMatcher URI_MATCHER;
-
-    @Inject
-    InstancesDatabaseProvider instancesDatabaseProvider;
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;

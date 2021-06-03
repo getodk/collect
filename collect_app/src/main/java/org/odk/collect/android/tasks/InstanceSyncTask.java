@@ -128,7 +128,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider().get()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
@@ -142,7 +142,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         try {
                             // TODO: optimize this by caching the previously found form definition
                             // TODO: optimize this by caching unavailable form definition to skip
-                            List<Form> forms = new FormsRepositoryProvider().get().getAllByFormId(instanceFormId);
+                            List<Form> forms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormId(instanceFormId);
 
                             if (!forms.isEmpty()) {
                                 Form form = forms.get(0);

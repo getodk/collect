@@ -790,7 +790,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     private void checkFormUpdates() {
         for (DriveListItem item : driveList) {
             if (item.getType() == DriveListItem.FILE) {
-                Form form = new FormsRepositoryProvider().get().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
+                Form form = new FormsRepositoryProvider(getApplicationContext()).get().getOneByPath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + item.getName());
                 if (form != null && (isNewerFormVersionAvailable(item) || areNewerMediaFilesAvailable(item))) {
                     item.setNewerVersion(true);
                 }

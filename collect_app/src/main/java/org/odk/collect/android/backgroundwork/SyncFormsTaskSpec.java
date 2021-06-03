@@ -14,6 +14,7 @@ import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 import org.odk.collect.forms.FormSourceException;
 
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -42,7 +43,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
 
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {

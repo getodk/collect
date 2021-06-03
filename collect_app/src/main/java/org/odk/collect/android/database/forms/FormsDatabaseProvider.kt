@@ -1,38 +1,17 @@
 package org.odk.collect.android.database.forms
 
-import android.database.sqlite.SQLiteDatabase
-import org.odk.collect.android.storage.StoragePathProvider
-import javax.inject.Singleton
+import android.content.Context
+import org.odk.collect.android.database.DatabaseConnection
+import org.odk.collect.android.database.DatabaseConstants
 
 /**
  * Holds "connection" (in this case an instance of [android.database.sqlite.SQLiteOpenHelper]
- * to the Forms database. According to the Android team these should be kept open for the whole apps
- * lifecycle.
- *
- * @see [https://stackoverflow.com/questions/6608498/best-place-to-close-database-connection](https://stackoverflow.com/questions/6608498/best-place-to-close-database-connection)
+ * to the Forms database.
  */
-@Singleton
-class FormsDatabaseProvider {
-
-    val writeableDatabase: SQLiteDatabase
-        get() = dbHelper.writableDatabase
-    val readableDatabase: SQLiteDatabase
-        get() = dbHelper.readableDatabase
-
-    private var _dbHelper: FormsDatabaseHelper? = null
-    private val dbHelper: FormsDatabaseHelper
-        get() = synchronized(this) {
-            return _dbHelper ?: recreateDatabaseHelper()
-        }
-
-    fun releaseDatabaseHelper() {
-        _dbHelper?.close()
-        _dbHelper = null
-    }
-
-    private fun recreateDatabaseHelper(): FormsDatabaseHelper {
-        return FormsDatabaseHelper(FormDatabaseMigrator(), StoragePathProvider()).also {
-            _dbHelper = it
-        }
-    }
-}
+class FormsDatabaseProvider(val context: Context, val path: String) : DatabaseConnection(
+    context,
+    path,
+    DatabaseConstants.FORMS_DATABASE_NAME,
+    FormDatabaseMigrator(),
+    DatabaseConstants.FORMS_DATABASE_VERSION
+)

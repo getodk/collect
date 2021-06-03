@@ -13,8 +13,11 @@ import org.odk.collect.async.TaskSpec;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static java.util.Collections.emptyMap;
 
 public class TestScheduler implements Scheduler {
 
@@ -63,13 +66,13 @@ public class TestScheduler implements Scheduler {
 
     @Override
     public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec) {
-        deferredTasks.add(new DeferredTask(tag, spec, null));
+        deferredTasks.add(new DeferredTask(tag, spec, null, emptyMap()));
     }
 
     @Override
-    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod) {
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod, Map<String, String> inputData) {
         cancelDeferred(tag);
-        deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod));
+        deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod, inputData));
     }
 
     @Override
@@ -86,7 +89,7 @@ public class TestScheduler implements Scheduler {
         Context applicationContext = ApplicationProvider.getApplicationContext();
 
         for (DeferredTask deferredTask : deferredTasks) {
-            deferredTask.getSpec().getTask(applicationContext).get();
+            deferredTask.getSpec().getTask(applicationContext, deferredTask.getInputData()).get();
         }
 
         // Remove non repeating tasks
@@ -128,11 +131,13 @@ public class TestScheduler implements Scheduler {
         private final String tag;
         private final TaskSpec spec;
         private final Long repeatPeriod;
+        private final Map<String, String> inputData;
 
-        public DeferredTask(String tag, TaskSpec spec, Long repeatPeriod) {
+        public DeferredTask(String tag, TaskSpec spec, Long repeatPeriod, Map<String, String> inputData) {
             this.tag = tag;
             this.spec = spec;
             this.repeatPeriod = repeatPeriod;
+            this.inputData = inputData;
         }
 
         public String getTag() {
@@ -145,6 +150,10 @@ public class TestScheduler implements Scheduler {
 
         public long getRepeatPeriod() {
             return repeatPeriod;
+        }
+
+        public Map<String, String> getInputData() {
+            return inputData;
         }
     }
 }

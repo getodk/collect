@@ -13,18 +13,18 @@ import java.lang.Boolean
 object DatabaseObjectMapper {
 
     @JvmStatic
-    fun getValuesFromForm(form: Form, storagePathProvider: StoragePathProvider): ContentValues? {
+    fun getValuesFromForm(form: Form, formsPath: String): ContentValues? {
         val values = ContentValues()
         values.put(BaseColumns._ID, form.dbId)
         values.put(DatabaseFormColumns.DISPLAY_NAME, form.displayName)
         values.put(DatabaseFormColumns.DESCRIPTION, form.description)
         values.put(DatabaseFormColumns.JR_FORM_ID, form.formId)
         values.put(DatabaseFormColumns.JR_VERSION, form.version)
-        values.put(DatabaseFormColumns.FORM_FILE_PATH, storagePathProvider.getRelativeFormPath(form.formFilePath))
+        values.put(DatabaseFormColumns.FORM_FILE_PATH, StoragePathProvider.getRelativeFilePath(formsPath, form.formFilePath))
         values.put(DatabaseFormColumns.SUBMISSION_URI, form.submissionUri)
         values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.basE64RSAPublicKey)
         values.put(DatabaseFormColumns.MD5_HASH, form.mD5Hash)
-        values.put(DatabaseFormColumns.FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(form.formMediaPath))
+        values.put(DatabaseFormColumns.FORM_MEDIA_PATH, StoragePathProvider.getRelativeFilePath(formsPath, form.formMediaPath))
         values.put(DatabaseFormColumns.LANGUAGE, form.language)
         values.put(DatabaseFormColumns.AUTO_SEND, form.autoSend)
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
@@ -56,7 +56,7 @@ object DatabaseObjectMapper {
     }
 
     @JvmStatic
-    fun getFormFromCurrentCursorPosition(cursor: Cursor, storagePathProvider: StoragePathProvider): Form? {
+    fun getFormFromCurrentCursorPosition(cursor: Cursor, formsPath: String, cachePath: String): Form? {
         val idColumnIndex = cursor.getColumnIndex(BaseColumns._ID)
         val displayNameColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DISPLAY_NAME)
         val descriptionColumnIndex = cursor.getColumnIndex(DatabaseFormColumns.DESCRIPTION)
@@ -80,13 +80,13 @@ object DatabaseObjectMapper {
             .description(cursor.getString(descriptionColumnIndex))
             .formId(cursor.getString(jrFormIdColumnIndex))
             .version(cursor.getString(jrVersionColumnIndex))
-            .formFilePath(storagePathProvider.getAbsoluteFormFilePath(cursor.getString(formFilePathColumnIndex)))
+            .formFilePath(StoragePathProvider.getAbsoluteFilePath(formsPath, cursor.getString(formFilePathColumnIndex)))
             .submissionUri(cursor.getString(submissionUriColumnIndex))
             .base64RSAPublicKey(cursor.getString(base64RSAPublicKeyColumnIndex))
             .md5Hash(cursor.getString(md5HashColumnIndex))
             .date(cursor.getLong(dateColumnIndex))
-            .jrCacheFilePath(storagePathProvider.getAbsoluteCacheFilePath(cursor.getString(jrCacheFilePathColumnIndex)))
-            .formMediaPath(storagePathProvider.getAbsoluteFormFilePath(cursor.getString(formMediaPathColumnIndex)))
+            .jrCacheFilePath(StoragePathProvider.getAbsoluteFilePath(cachePath, cursor.getString(jrCacheFilePathColumnIndex)))
+            .formMediaPath(StoragePathProvider.getAbsoluteFilePath(formsPath, cursor.getString(formMediaPathColumnIndex)))
             .language(cursor.getString(languageColumnIndex))
             .autoSend(cursor.getString(autoSendColumnIndex))
             .autoDelete(cursor.getString(autoDeleteColumnIndex))

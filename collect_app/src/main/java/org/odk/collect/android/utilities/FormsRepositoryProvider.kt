@@ -1,14 +1,23 @@
 package org.odk.collect.android.utilities
 
-import org.odk.collect.android.application.Collect
+import android.content.Context
 import org.odk.collect.android.database.forms.DatabaseFormsRepository
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.FormsRepository
 
-class FormsRepositoryProvider {
+class FormsRepositoryProvider @JvmOverloads constructor(
+    private val context: Context,
+    private val storagePathProvider: StoragePathProvider = StoragePathProvider()
+) {
 
-    fun get(): FormsRepository {
-        return DatabaseFormsRepository({ System.currentTimeMillis() }, StoragePathProvider(), DaggerUtils.getComponent(Collect.getInstance()).formsDatabaseProvider())
+    private val clock = { System.currentTimeMillis() }
+
+    @JvmOverloads
+    fun get(projectId: String? = null): FormsRepository {
+        val dbPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId)
+        val formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
+        val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+        return DatabaseFormsRepository(context, dbPath, formsPath, cachePath, clock)
     }
 }

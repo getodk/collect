@@ -31,6 +31,8 @@ public class OpenRosaFormSource implements FormSource {
 
     private final OpenRosaXmlFetcher openRosaXMLFetcher;
     private final OpenRosaResponseParser openRosaResponseParser;
+    private final WebCredentialsUtils webCredentialsUtils;
+
     private String serverURL;
     private final String formListPath;
 
@@ -38,7 +40,8 @@ public class OpenRosaFormSource implements FormSource {
 
     public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics, OpenRosaResponseParser openRosaResponseParser) {
         this.openRosaResponseParser = openRosaResponseParser;
-        this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, webCredentialsUtils);
+        this.webCredentialsUtils = webCredentialsUtils;
+        this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
 
@@ -208,5 +211,17 @@ public class OpenRosaFormSource implements FormSource {
 
         downloadListUrl += formListPath;
         return downloadListUrl;
+    }
+
+    public String getServerURL() {
+        return serverURL;
+    }
+
+    public String getFormListPath() {
+        return formListPath;
+    }
+
+    public WebCredentialsUtils getWebCredentialsUtils() {
+        return webCredentialsUtils;
     }
 }

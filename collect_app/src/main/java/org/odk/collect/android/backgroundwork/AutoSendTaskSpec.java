@@ -41,6 +41,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
@@ -98,7 +99,7 @@ public class AutoSendTaskSpec implements TaskSpec {
      */
     @NotNull
     @Override
-    public Supplier<Boolean> getTask(@NotNull Context context) {
+    public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         return () -> {
             Collect.getInstance().getComponent().inject(this);
 

@@ -48,8 +48,6 @@ import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
-import org.odk.collect.android.database.forms.FormsDatabaseProvider;
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
@@ -58,9 +56,10 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
-import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
+import org.odk.collect.android.formmanagement.FormSourceProvider;
+import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -79,9 +78,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
-import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.openrosa.OpenRosaResponseParserImpl;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
@@ -117,7 +114,7 @@ import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
-import org.odk.collect.forms.FormSource;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.shared.UUIDGenerator;
@@ -185,8 +182,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormSource formSource, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
-        return new ServerFormDownloader(formSource, formsRepositoryProvider.get(), new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
+    public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
+        return new ServerFormDownloader(formSourceProvider.get(), formsRepositoryProvider.get(), new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(ReferenceManager.instance()), analytics);
     }
 
     @Provides
@@ -274,12 +271,12 @@ public class AppDependencyModule {
 
     @Provides
     public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
     }
 
     @Provides
     public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider.getGeneralSettings(), application);
+        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
     }
 
     @Provides
@@ -371,27 +368,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSource providesFormSource(SettingsProvider settingsProvider, Context context, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics) {
-        String serverURL = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL);
-        String formListPath = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_FORMLIST_URL);
-
-        return new OpenRosaFormSource(serverURL, formListPath, openRosaHttpInterface, webCredentialsUtils, analytics, new OpenRosaResponseParserImpl());
-    }
-
-    @Provides
-    public DiskFormsSynchronizer providesDiskFormSynchronizer() {
-        return new FormsDirDiskFormsSynchronizer();
-    }
-
-    @Provides
     @Singleton
     public SyncStatusAppState providesServerFormSyncRepository(Context context) {
         return new SyncStatusAppState(context);
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSource formSource, DiskFormsSynchronizer diskFormsSynchronizer) {
-        return new ServerFormsDetailsFetcher(formsRepositoryProvider.get(), formSource, diskFormsSynchronizer);
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, StoragePathProvider storagePathProvider) {
+        FormsRepository formsRepository = formsRepositoryProvider.get();
+        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.get(), new FormsDirDiskFormsSynchronizer(formsRepository, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS)));
     }
 
     @Provides
@@ -529,20 +514,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public FormsDatabaseProvider providesFormsDatabaseProvider() {
-        return new FormsDatabaseProvider();
-    }
-
-    @Provides
     public FastExternalItemsetsRepository providesItemsetsRepository() {
         return new DatabaseFastExternalItemsetsRepository();
-    }
-
-    @Provides
-    @Singleton
-    public InstancesDatabaseProvider providesInstanceDatabaseProvider() {
-        return new InstancesDatabaseProvider();
     }
 
     @Provides
@@ -551,8 +524,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsRepositoryProvider providesFormsRepositoryProvider() {
-        return new FormsRepositoryProvider();
+    public FormsRepositoryProvider providesFormsRepositoryProvider(Application application) {
+        return new FormsRepositoryProvider(application);
     }
 
     @Provides
@@ -591,5 +564,15 @@ public class AppDependencyModule {
     @Provides
     public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider) {
         return new CurrentProjectViewModel.Factory(currentProjectProvider);
+    }
+
+    @Provides
+    public FormSourceProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface, Analytics analytics) {
+        return new FormSourceProvider(settingsProvider, openRosaHttpInterface, analytics);
+    }
+
+    @Provides
+    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
+        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider);
     }
 }

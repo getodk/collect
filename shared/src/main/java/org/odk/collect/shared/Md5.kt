@@ -13,6 +13,12 @@ object Md5 {
 
     @JvmStatic
     @JvmOverloads
+    fun getMd5Hash(string: String, bufSize: Int = 16 * 1024): String? {
+        return getMd5Hash(string.byteInputStream(), bufSize)
+    }
+
+    @JvmStatic
+    @JvmOverloads
     fun getMd5Hash(file: File, bufSize: Int = 16 * 1024): String? {
         val inputStream: InputStream = try {
             FileInputStream(file)

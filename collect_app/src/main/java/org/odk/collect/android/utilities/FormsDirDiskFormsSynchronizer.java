@@ -6,10 +6,10 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.shared.Md5;
 import org.odk.collect.shared.Validator;
 
@@ -29,9 +29,15 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
     private static int counter;
 
     private final FormsRepository formsRepository;
+    private final String formsDir;
 
     public FormsDirDiskFormsSynchronizer() {
-        formsRepository = new FormsRepositoryProvider().get();
+        this(DaggerUtils.getComponent(Collect.getInstance()).formsRepositoryProvider().get(), DaggerUtils.getComponent(Collect.getInstance()).storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS));
+    }
+
+    public FormsDirDiskFormsSynchronizer(FormsRepository formsRepository, String formsDir) {
+        this.formsRepository = formsRepository;
+        this.formsDir = formsDir;
     }
 
     @Override
@@ -51,8 +57,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             // Process everything then report what didn't work.
             StringBuilder errors = new StringBuilder();
 
-            StoragePathProvider storagePathProvider = new StoragePathProvider();
-            File formDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
+            File formDir = new File(formsDir);
             if (formDir.exists() && formDir.isDirectory()) {
                 // Get all the files in the /odk/foms directory
                 File[] formDefs = formDir.listFiles();

@@ -1,6 +1,7 @@
 package org.odk.collect.android.database.forms;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -37,14 +38,16 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HAS
 
 public class DatabaseFormsRepository implements FormsRepository {
 
-    private final StoragePathProvider storagePathProvider;
+    private final String formsPath;
+    private final String cachePath;
     private final Supplier<Long> clock;
     private final FormsDatabaseProvider formsDatabaseProvider;
 
-    public DatabaseFormsRepository(Supplier<Long> clock, StoragePathProvider storagePathProvider, FormsDatabaseProvider formsDatabaseProvider) {
+    public DatabaseFormsRepository(Context context, String dbPath, String formsPath, String cachePath, Supplier<Long> clock) {
+        this.formsPath = formsPath;
+        this.cachePath = cachePath;
         this.clock = clock;
-        this.storagePathProvider = storagePathProvider;
-        this.formsDatabaseProvider = formsDatabaseProvider;
+        this.formsDatabaseProvider = new FormsDatabaseProvider(context, dbPath);
     }
 
     @Nullable
@@ -68,7 +71,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form getOneByPath(String path) {
         String selection = FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {new StoragePathProvider().getRelativeFormPath(path)};
+        String[] selectionArgs = {StoragePathProvider.getRelativeFilePath(formsPath, path)};
         return queryForForm(selection, selectionArgs);
     }
 
@@ -120,11 +123,11 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public Form save(@NotNull Form form) {
-        final ContentValues values = getValuesFromForm(form, storagePathProvider);
+        final ContentValues values = getValuesFromForm(form, formsPath);
 
         String md5Hash = Md5.getMd5Hash(new File(form.getFormFilePath()));
         values.put(MD5_HASH, md5Hash);
-        values.put(FORM_MEDIA_PATH, storagePathProvider.getRelativeFormPath(FileUtils.constructMediaPath(form.getFormFilePath())));
+        values.put(FORM_MEDIA_PATH, StoragePathProvider.getRelativeFilePath(formsPath, FileUtils.constructMediaPath(form.getFormFilePath())));
         values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");
 
         if (form.isDeleted()) {
@@ -191,7 +194,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
         try (Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null, null)) {
-            return getFormsFromCursor(cursor, storagePathProvider);
+            return getFormsFromCursor(cursor, formsPath, cachePath);
         }
     }
 
@@ -223,12 +226,12 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     @NotNull
-    private static List<Form> getFormsFromCursor(Cursor cursor, StoragePathProvider storagePathProvider) {
+    private static List<Form> getFormsFromCursor(Cursor cursor, String formsPath, String cachePath) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
             cursor.moveToPosition(-1);
             while (cursor.moveToNext()) {
-                Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider);
+                Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
 
                 forms.add(form);
             }

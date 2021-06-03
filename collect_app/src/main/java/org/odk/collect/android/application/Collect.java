@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -87,19 +86,6 @@ public class Collect extends Application implements
     public static Collect getInstance() {
         return singleton;
     }
-
-    /**
-      @deprecated Only here temporarily to allow us to reset database connections without restructuring the
-      way they work. Right now we can only talk to one project's DBs at a time but will need to
-      change that.
-     **/
-    @Deprecated
-    public static void resetDatabaseConnections() {
-        DaggerUtils.getComponent(getInstance()).formsDatabaseProvider().releaseDatabaseHelper();
-        DaggerUtils.getComponent(getInstance()).instancesDatabaseProvider().releaseDatabaseHelper();
-    }
-
-    @Nullable
 
     public FormController getFormController() {
         return formController;
@@ -231,7 +217,7 @@ public class Collect extends Application implements
      * @return md5 hash of the form title, a space, the form ID
      */
     public static String getFormIdentifierHash(String formId, String formVersion) {
-        Form form = new FormsRepositoryProvider().get().getLatestByFormIdAndVersion(formId, formVersion);
+        Form form = new FormsRepositoryProvider(Collect.getInstance()).get().getLatestByFormIdAndVersion(formId, formVersion);
 
         String formTitle = form != null ? form.getDisplayName() : "";
 

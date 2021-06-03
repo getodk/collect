@@ -13,6 +13,7 @@ import org.mockito.InOrder;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -25,7 +26,6 @@ import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.function.Supplier;
@@ -50,7 +50,7 @@ public class SyncFormsTaskSpecTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public FormDownloader providesFormDownloader(FormSource formSource, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
+            public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
                 return mock(FormDownloader.class); // We don't want to build this dependency for `ServerFormsSynchronizer`
             }
 
@@ -79,6 +79,8 @@ public class SyncFormsTaskSpecTest {
                 return analytics;
             }
         });
+
+        CollectHelpers.setupDemoProject();
     }
 
     @Test
@@ -86,7 +88,7 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         inOrder.verify(syncStatusAppState).startSync();
@@ -99,7 +101,7 @@ public class SyncFormsTaskSpecTest {
     @Test
     public void logsAnalytics() {
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "Success");
@@ -112,7 +114,7 @@ public class SyncFormsTaskSpecTest {
         InOrder inOrder = inOrder(syncStatusAppState, serverFormsSynchronizer);
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         inOrder.verify(syncStatusAppState).startSync();
@@ -128,7 +130,7 @@ public class SyncFormsTaskSpecTest {
         doThrow(exception).when(serverFormsSynchronizer).synchronize();
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verify(analytics).logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, "FETCH_ERROR");
@@ -139,7 +141,7 @@ public class SyncFormsTaskSpecTest {
         changeLock.lock();
 
         SyncFormsTaskSpec taskSpec = new SyncFormsTaskSpec();
-        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext());
+        Supplier<Boolean> task = taskSpec.getTask(ApplicationProvider.getApplicationContext(), null);
         task.get();
 
         verifyNoInteractions(serverFormsSynchronizer);
