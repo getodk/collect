@@ -6,10 +6,10 @@ import android.provider.BaseColumns
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StoragePathProvider.Companion.getAbsoluteFilePath
-import org.odk.collect.android.storage.StoragePathProvider.Companion.getRelativeFilePath
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
+import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.lang.Boolean
 
 object DatabaseObjectMapper {
@@ -24,14 +24,14 @@ object DatabaseObjectMapper {
         values.put(DatabaseFormColumns.JR_VERSION, form.version)
         values.put(
             DatabaseFormColumns.FORM_FILE_PATH,
-            StoragePathProvider.getRelativeFilePath(formsPath, form.formFilePath)
+            getRelativeFilePath(formsPath, form.formFilePath)
         )
         values.put(DatabaseFormColumns.SUBMISSION_URI, form.submissionUri)
         values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.basE64RSAPublicKey)
         values.put(DatabaseFormColumns.MD5_HASH, form.mD5Hash)
         values.put(
             DatabaseFormColumns.FORM_MEDIA_PATH,
-            StoragePathProvider.getRelativeFilePath(formsPath, form.formMediaPath)
+            getRelativeFilePath(formsPath, form.formMediaPath)
         )
         values.put(DatabaseFormColumns.LANGUAGE, form.language)
         values.put(DatabaseFormColumns.AUTO_SEND, form.autoSend)
@@ -113,7 +113,7 @@ object DatabaseObjectMapper {
             .formId(cursor.getString(jrFormIdColumnIndex))
             .version(cursor.getString(jrVersionColumnIndex))
             .formFilePath(
-                StoragePathProvider.getAbsoluteFilePath(
+                getAbsoluteFilePath(
                     formsPath,
                     cursor.getString(formFilePathColumnIndex)
                 )
@@ -123,13 +123,13 @@ object DatabaseObjectMapper {
             .md5Hash(cursor.getString(md5HashColumnIndex))
             .date(cursor.getLong(dateColumnIndex))
             .jrCacheFilePath(
-                StoragePathProvider.getAbsoluteFilePath(
+                getAbsoluteFilePath(
                     cachePath,
                     cursor.getString(jrCacheFilePathColumnIndex)
                 )
             )
             .formMediaPath(
-                StoragePathProvider.getAbsoluteFilePath(
+                getAbsoluteFilePath(
                     formsPath,
                     cursor.getString(formMediaPathColumnIndex)
                 )

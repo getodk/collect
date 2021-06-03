@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -34,6 +33,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
+import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
 /**
  * Mediates between {@link Instance} objects and the underlying SQLite database that stores them.
@@ -71,7 +71,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     @Override
     public Instance getOneByPath(String instancePath) {
         String selection = INSTANCE_FILE_PATH + "=?";
-        String[] args = {StoragePathProvider.getRelativeFilePath(instancesPath, instancePath)};
+        String[] args = {getRelativeFilePath(instancesPath, instancePath)};
         try (Cursor cursor = query(null, selection, args, null)) {
             List<Instance> instances = getInstancesFromCursor(cursor, instancesPath);
             if (instances.size() == 1) {

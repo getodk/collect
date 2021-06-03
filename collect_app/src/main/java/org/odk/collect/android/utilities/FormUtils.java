@@ -20,7 +20,7 @@ public class FormUtils {
         String formMediaPath = form.getFormMediaPath();
         return formMediaPath == null
                 ? new ArrayList<>()
-                : FileUtils.listFiles(FileUtils.getFileAtPath(formMediaPath));
+                : FileUtils.listFiles(new File(formMediaPath));
     }
 
     /**

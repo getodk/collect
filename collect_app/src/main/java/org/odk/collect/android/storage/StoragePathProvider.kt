@@ -3,6 +3,8 @@ package org.odk.collect.android.storage
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
+import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.io.File
 
 class StoragePathProvider {
@@ -100,24 +102,5 @@ class StoragePathProvider {
 
     fun getAbsoluteOfflineMapLayerPath(filePath: String?): String? {
         return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.LAYERS), filePath)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun getRelativeFilePath(dirPath: String, filePath: String?): String? {
-            if (filePath == null || filePath.isEmpty()) {
-                return null
-            }
-            return if (filePath.startsWith(dirPath)) filePath.substring(dirPath.length + 1) else filePath
-        }
-
-        @JvmStatic
-        fun getAbsoluteFilePath(dirPath: String, filePath: String?): String? {
-            if (filePath == null || filePath.isEmpty()) {
-                return null
-            }
-            return if (filePath.startsWith(dirPath)) filePath else dirPath + File.separator + filePath
-        }
     }
 }

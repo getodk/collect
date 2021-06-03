@@ -581,10 +581,6 @@ public class FileUtils {
         }
     }
 
-    public static File getFileAtPath(String path) {
-        return new File(path);
-    }
-
     public static List<File> listFiles(File file) {
         if (file != null && file.exists()) {
             return asList(file.listFiles());

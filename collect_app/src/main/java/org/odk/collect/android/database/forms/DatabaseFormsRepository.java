@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
@@ -37,6 +36,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
@@ -79,7 +79,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form getOneByPath(String path) {
         String selection = FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {StoragePathProvider.getRelativeFilePath(formsPath, path)};
+        String[] selectionArgs = {getRelativeFilePath(formsPath, path)};
         return queryForForm(selection, selectionArgs);
     }
 
@@ -135,7 +135,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
         String md5Hash = Md5.getMd5Hash(new File(form.getFormFilePath()));
         values.put(MD5_HASH, md5Hash);
-        values.put(FORM_MEDIA_PATH, StoragePathProvider.getRelativeFilePath(formsPath, FileUtils.constructMediaPath(form.getFormFilePath())));
+        values.put(FORM_MEDIA_PATH, getRelativeFilePath(formsPath, FileUtils.constructMediaPath(form.getFormFilePath())));
         values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");
 
         if (form.isDeleted()) {
