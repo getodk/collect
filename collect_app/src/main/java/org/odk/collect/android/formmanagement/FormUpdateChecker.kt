@@ -8,7 +8,6 @@ import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.backgroundwork.ChangeLock
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -96,10 +95,7 @@ class FormUpdateChecker(
     }
 
     @JvmOverloads
-    fun synchronizeWithServer(
-        projectId: String = DaggerUtils.getComponent(context).currentProjectProvider()
-            .getCurrentProject().uuid
-    ): Boolean {
+    fun synchronizeWithServer(projectId: String): Boolean {
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 val formsDirPath = formsDir(projectId)
