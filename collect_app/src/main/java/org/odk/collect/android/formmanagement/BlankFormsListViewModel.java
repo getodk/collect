@@ -12,10 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.backgroundwork.ChangeLock;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -28,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Objects;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 
@@ -76,7 +72,7 @@ public class BlankFormsListViewModel extends ViewModel {
         logManualSync();
 
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        scheduler.immediate(() -> formUpdateChecker.synchronizeWithServer("projectId"), result::setValue);
+        scheduler.immediate(formUpdateChecker::synchronizeWithServer, result::setValue);
         return result;
     }
 
@@ -92,22 +88,16 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Application application;
         private final Scheduler scheduler;
         private final SyncStatusAppState syncRepository;
-        private final ServerFormsSynchronizer serverFormsSynchronizer;
         private final SettingsProvider settingsProvider;
-        private final Notifier notifier;
-        private final ChangeLock changeLock;
         private final Analytics analytics;
         private final FormUpdateChecker formUpdateChecker;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics, FormUpdateChecker formUpdateChecker) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormUpdateChecker formUpdateChecker) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
-            this.serverFormsSynchronizer = serverFormsSynchronizer;
             this.settingsProvider = settingsProvider;
-            this.notifier = notifier;
-            this.changeLock = changeLock;
             this.analytics = analytics;
             this.formUpdateChecker = formUpdateChecker;
         }

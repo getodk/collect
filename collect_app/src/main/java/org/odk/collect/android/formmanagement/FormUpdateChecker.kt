@@ -96,13 +96,12 @@ class FormUpdateChecker(
     }
 
     @JvmOverloads
-    fun synchronizeWithServer(projectId: String? = null): Boolean {
+    fun synchronizeWithServer(
+        projectId: String = DaggerUtils.getComponent(context).currentProjectProvider()
+            .getCurrentProject().uuid
+    ): Boolean {
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                val projectId =
-                    DaggerUtils.getComponent(context).currentProjectProvider()
-                        .getCurrentProject().uuid
-
                 val formsDirPath = formsDir(projectId)
                 val cacheDirPath = formsCacheDir(projectId)
                 val formsRepository = formsRepository(projectId)
@@ -152,7 +151,6 @@ class FormUpdateChecker(
                 AnalyticsUtils.logMatchExactlyCompleted(analytics, exception)
                 exception == null
             } else {
-                // TODO: test this path
                 false
             }
         }

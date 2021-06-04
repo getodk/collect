@@ -26,6 +26,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.BooleanChangeLock
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
+import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.Md5.getMd5Hash
@@ -99,12 +100,34 @@ class FormUpdateCheckerTest {
 
     @Test
     fun `synchronizeWithServer() does nothing when change lock is locked`() {
+        val project = setupProject()
+
         changeLock.lock()
-        updateChecker.synchronizeWithServer("projectId")
+        updateChecker.synchronizeWithServer(project.uuid)
         verifyNoInteractions(syncStatusAppState)
         verifyNoInteractions(formSource)
         verifyNoInteractions(notifier)
         verifyNoInteractions(analytics)
+    }
+
+    /**
+     * We don't count calls where we can't acquire the lock as a "success". The front end should
+     * protect against this actually coming up by not letting the user sync while a sync is running.
+     */
+    @Test
+    fun `synchronizeWithServer() returns false when change lock is locked`() {
+        val project = setupProject()
+
+        changeLock.lock()
+        assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))
+    }
+
+    @Test
+    fun `synchronizeWithServer() returns false when there is an error communicating with the server`() {
+        val project = setupProject()
+
+        whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
+        assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {
