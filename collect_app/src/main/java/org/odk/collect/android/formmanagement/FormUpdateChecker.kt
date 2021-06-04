@@ -4,7 +4,11 @@ import android.content.Context
 import org.javarosa.core.reference.ReferenceManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.backgroundwork.ChangeLock
+import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -16,6 +20,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
 import java.io.File
+import java.lang.IllegalStateException
 import java.util.stream.Collectors
 
 class FormUpdateChecker(
@@ -26,7 +31,9 @@ class FormUpdateChecker(
     private val storagePathProvider: StoragePathProvider,
     private val settingsProvider: SettingsProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val formSourceProvider: FormSourceProvider
+    private val formSourceProvider: FormSourceProvider,
+    private val serverFormsSynchronizer: ServerFormsSynchronizer,
+    private val syncStatusAppState: SyncStatusAppState
 ) {
 
     /**
@@ -85,6 +92,31 @@ class FormUpdateChecker(
             context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
         } catch (_: FormSourceException) {
             // Ignored
+        }
+    }
+
+    fun synchronize(): Boolean {
+        return changeLock.withLock { acquiredLock ->
+            if (acquiredLock) {
+                syncStatusAppState.startSync()
+
+                val exception = try {
+                    serverFormsSynchronizer.synchronize()
+                    syncStatusAppState.finishSync(null)
+                    notifier.onSync(null)
+                    null
+                } catch (e: FormSourceException) {
+                    syncStatusAppState.finishSync(e);
+                    notifier.onSync(e);
+                    e
+                }
+
+                AnalyticsUtils.logMatchExactlyCompleted(analytics, exception)
+                exception == null
+            } else {
+                // TODO: test this path
+                false
+            }
         }
     }
 

@@ -6,27 +6,20 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
+import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.forms.FormSourceException;
 
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static org.odk.collect.android.analytics.AnalyticsUtils.logMatchExactlyCompleted;
-
 public class SyncFormsTaskSpec implements TaskSpec {
-
-    @Inject
-    ServerFormsSynchronizer serverFormsSynchronizer;
 
     @Inject
     SyncStatusAppState syncStatusAppState;
@@ -41,33 +34,16 @@ public class SyncFormsTaskSpec implements TaskSpec {
     @Inject
     Analytics analytics;
 
+    @Inject
+    FormUpdateChecker formUpdateChecker;
+
     @NotNull
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            changeLock.withLock((Function<Boolean, Void>) acquiredLock -> {
-                if (acquiredLock) {
-                    syncStatusAppState.startSync();
-
-                    FormSourceException exception = null;
-                    try {
-                        serverFormsSynchronizer.synchronize();
-                        syncStatusAppState.finishSync(null);
-                        notifier.onSync(null);
-                    } catch (FormSourceException e) {
-                        exception = e;
-                        syncStatusAppState.finishSync(e);
-                        notifier.onSync(e);
-                    }
-
-                    logMatchExactlyCompleted(analytics, exception);
-                }
-
-                return null;
-            });
-
+            formUpdateChecker.synchronize();
             return true;
         };
     }

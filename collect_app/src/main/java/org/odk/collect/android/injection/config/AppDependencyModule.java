@@ -581,8 +581,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
-        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider);
+    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, ServerFormsSynchronizer serverFormsSynchronizer, SyncStatusAppState syncStatusAppState) {
+        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, serverFormsSynchronizer, syncStatusAppState);
     }
 
     @Provides

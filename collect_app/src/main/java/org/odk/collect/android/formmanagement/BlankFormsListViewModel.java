@@ -12,18 +12,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.Settings;
 
 import java.io.ByteArrayInputStream;
 import java.util.Objects;
@@ -31,30 +30,24 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import static org.odk.collect.android.analytics.AnalyticsUtils.logMatchExactlyCompleted;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class BlankFormsListViewModel extends ViewModel {
 
     private final Application application;
     private final Scheduler scheduler;
     private final SyncStatusAppState syncRepository;
-    private final ServerFormsSynchronizer serverFormsSynchronizer;
     private final Settings generalSettings;
-    private final Notifier notifier;
-    private final ChangeLock changeLock;
     private final Analytics analytics;
+    private final FormUpdateChecker formUpdateChecker;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, ChangeLock changeLock, Analytics analytics) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormUpdateChecker formUpdateChecker) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
-        this.serverFormsSynchronizer = serverFormsSynchronizer;
         this.generalSettings = settingsProvider.getGeneralSettings();
-        this.notifier = notifier;
-        this.changeLock = changeLock;
         this.analytics = analytics;
+        this.formUpdateChecker = formUpdateChecker;
     }
 
     public boolean isMatchExactlyEnabled() {
@@ -83,41 +76,7 @@ public class BlankFormsListViewModel extends ViewModel {
         logManualSync();
 
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-
-        changeLock.withLock(acquiredLock -> {
-            if (acquiredLock) {
-                syncRepository.startSync();
-
-                scheduler.immediate(() -> {
-                    FormSourceException exception = null;
-
-                    try {
-                        serverFormsSynchronizer.synchronize();
-                    } catch (FormSourceException e) {
-                        exception = e;
-                    }
-
-                    return exception;
-                }, exception -> {
-                    if (exception == null) {
-                        syncRepository.finishSync(null);
-                        notifier.onSync(null);
-                        result.setValue(true);
-                    } else {
-                        syncRepository.finishSync(exception);
-                        notifier.onSync(exception);
-                        result.setValue(false);
-                    }
-
-                    // Make sure content observers (CursorLoaders for instance) are notified of change
-                    Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
-                    logMatchExactlyCompleted(analytics, exception);
-                });
-            }
-
-            return null;
-        });
-
+        scheduler.immediate(formUpdateChecker::synchronize, result::setValue);
         return result;
     }
 
@@ -138,9 +97,10 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Notifier notifier;
         private final ChangeLock changeLock;
         private final Analytics analytics;
+        private final FormUpdateChecker formUpdateChecker;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, ServerFormsSynchronizer serverFormsSynchronizer, SettingsProvider settingsProvider, Notifier notifier, @Named("FORMS") ChangeLock changeLock, Analytics analytics, FormUpdateChecker formUpdateChecker) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
@@ -149,12 +109,13 @@ public class BlankFormsListViewModel extends ViewModel {
             this.notifier = notifier;
             this.changeLock = changeLock;
             this.analytics = analytics;
+            this.formUpdateChecker = formUpdateChecker;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, serverFormsSynchronizer, settingsProvider, notifier, changeLock, analytics);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, settingsProvider, analytics, formUpdateChecker);
         }
     }
 }

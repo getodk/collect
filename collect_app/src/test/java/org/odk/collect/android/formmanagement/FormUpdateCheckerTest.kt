@@ -54,7 +54,9 @@ class FormUpdateCheckerTest {
             storagePathProvider = storagePathProvider,
             settingsProvider = settingsProvider,
             formsRepositoryProvider = formsRepositoryProvider,
-            formSourceProvider = formSourceProvider
+            formSourceProvider = formSourceProvider,
+            mock(),
+            mock()
         )
     }
 
