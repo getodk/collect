@@ -187,13 +187,6 @@ public class FormsProviderTest {
             assertThat(formFile.exists(), is(false));
             assertThat(mediaDir.exists(), is(false));
             assertThat(cacheFile.exists(), is(false));
-
-            itemsetDbAdapter = new ItemsetDbAdapter().open();
-            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
-                assertThat(itemsets.getCount(), is(0));
-            } finally {
-                itemsetDbAdapter.close();
-            }
         }
     }
 

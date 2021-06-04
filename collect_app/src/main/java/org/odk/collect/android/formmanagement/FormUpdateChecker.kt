@@ -9,7 +9,6 @@ import org.odk.collect.android.backgroundwork.ChangeLock
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -34,8 +33,7 @@ class FormUpdateChecker(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val formSourceProvider: FormSourceProvider,
     private val syncStatusAppState: SyncStatusAppState,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val fastExternalItemsetsRepository: FastExternalItemsetsRepository
+    private val instancesRepositoryProvider: InstancesRepositoryProvider
 ) {
 
     /**
@@ -101,7 +99,8 @@ class FormUpdateChecker(
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 val projectId =
-                    DaggerUtils.getComponent(context).currentProjectProvider().getCurrentProject().uuid
+                    DaggerUtils.getComponent(context).currentProjectProvider()
+                        .getCurrentProject().uuid
 
                 val formsDirPath = formsDir(projectId)
                 val cacheDirPath = formsCacheDir(projectId)
@@ -133,8 +132,7 @@ class FormUpdateChecker(
                     serverFormsDetailsFetcher,
                     formsRepository,
                     instancesRepository,
-                    formDownloader,
-                    fastExternalItemsetsRepository
+                    formDownloader
                 )
 
                 syncStatusAppState.startSync()

@@ -15,7 +15,6 @@ import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormUpdateChecker
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
@@ -42,8 +41,7 @@ class AutoUpdateTaskSpecTest {
                 formsRepositoryProvider: FormsRepositoryProvider,
                 formSourceProvider: FormSourceProvider,
                 syncStatusAppState: SyncStatusAppState,
-                instancesRepositoryProvider: InstancesRepositoryProvider,
-                fastExternalItemsetsRepository: FastExternalItemsetsRepository
+                instancesRepositoryProvider: InstancesRepositoryProvider
             ): FormUpdateChecker? {
                 return formUpdateChecker
             }

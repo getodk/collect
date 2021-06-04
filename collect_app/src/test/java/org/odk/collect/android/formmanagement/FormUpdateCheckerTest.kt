@@ -64,8 +64,7 @@ class FormUpdateCheckerTest {
             formsRepositoryProvider = formsRepositoryProvider,
             formSourceProvider = formSourceProvider,
             syncStatusAppState = syncStatusAppState,
-            instancesRepositoryProvider = mock(),
-            fastExternalItemsetsRepository = mock()
+            instancesRepositoryProvider = mock()
         )
     }
 

@@ -383,8 +383,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepositoryProvider formsRepositoryProvider, FormDownloader formDownloader, InstancesRepositoryProvider instancesRepositoryProvider, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), formDownloader, fastExternalItemsetsRepository);
+    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepositoryProvider formsRepositoryProvider, FormDownloader formDownloader, InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), formDownloader);
     }
 
     @Provides
@@ -581,8 +581,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
-        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, syncStatusAppState, instancesRepositoryProvider, fastExternalItemsetsRepository);
+    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, syncStatusAppState, instancesRepositoryProvider);
     }
 
     @Provides

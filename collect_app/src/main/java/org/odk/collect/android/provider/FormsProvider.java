@@ -171,7 +171,7 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
-        FormDeleter formDeleter = new FormDeleter(formsRepositoryProvider.get(), instancesRepositoryProvider.get(), fastExternalItemsetsRepository);
+        FormDeleter formDeleter = new FormDeleter(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:

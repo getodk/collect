@@ -13,7 +13,6 @@ import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -35,7 +34,7 @@ public class SyncFormsTaskSpecTest {
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
+            public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider) {
                 return formUpdateChecker;
             }
         });

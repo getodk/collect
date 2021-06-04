@@ -202,7 +202,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
             DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
-            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get(), fastExternalItemsetsRepository);
+            backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
             backgroundTasks.deleteFormsTask.execute(getCheckedIdObjects());
         } else {
