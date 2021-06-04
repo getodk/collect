@@ -13,10 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.async.Scheduler;
@@ -25,6 +23,7 @@ import org.odk.collect.testshared.LiveDataTester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -82,7 +81,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formUpdateChecker);
 
-        doReturn(true).when(formUpdateChecker).synchronize();
+        doReturn(true).when(formUpdateChecker).synchronizeWithServer();
         LiveData<Boolean> result = viewModel.syncWithServer();
         fakeScheduler.runBackground();
 
@@ -96,7 +95,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formUpdateChecker);
 
-        doReturn(false).when(formUpdateChecker).synchronize();
+        doReturn(false).when(formUpdateChecker).synchronizeWithServer();
         LiveData<Boolean> result = viewModel.syncWithServer();
         fakeScheduler.runBackground();
 

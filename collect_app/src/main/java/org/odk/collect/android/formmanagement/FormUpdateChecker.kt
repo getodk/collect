@@ -9,6 +9,7 @@ import org.odk.collect.android.backgroundwork.ChangeLock
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -17,10 +18,10 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
 import java.io.File
-import java.lang.IllegalStateException
 import java.util.stream.Collectors
 
 class FormUpdateChecker(
@@ -32,8 +33,9 @@ class FormUpdateChecker(
     private val settingsProvider: SettingsProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val formSourceProvider: FormSourceProvider,
-    private val serverFormsSynchronizer: ServerFormsSynchronizer,
-    private val syncStatusAppState: SyncStatusAppState
+    private val syncStatusAppState: SyncStatusAppState,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val fastExternalItemsetsRepository: FastExternalItemsetsRepository
 ) {
 
     /**
@@ -95,9 +97,46 @@ class FormUpdateChecker(
         }
     }
 
-    fun synchronize(): Boolean {
+    fun synchronizeWithServer(): Boolean {
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
+                val projectId =
+                    DaggerUtils.getComponent(context).currentProjectProvider().getCurrentProject().uuid
+
+                val formsDirPath = formsDir(projectId)
+                val cacheDirPath = formsCacheDir(projectId)
+                val formsRepository = formsRepository(projectId)
+                val formSource = formSource(projectId)
+
+                val diskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
+                    formsRepository,
+                    formsDirPath
+                )
+
+                val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
+                    formsRepository,
+                    formSource,
+                    diskFormsSynchronizer
+                )
+
+                val instancesRepository = instancesRepositoryProvider.get(projectId)
+                val formDownloader = ServerFormDownloader(
+                    formSource,
+                    formsRepository,
+                    File(cacheDirPath),
+                    formsDirPath,
+                    FormMetadataParser(ReferenceManager.instance()),
+                    analytics
+                )
+
+                val serverFormsSynchronizer = ServerFormsSynchronizer(
+                    serverFormsDetailsFetcher,
+                    formsRepository,
+                    instancesRepository,
+                    formDownloader,
+                    fastExternalItemsetsRepository
+                )
+
                 syncStatusAppState.startSync()
 
                 val exception = try {

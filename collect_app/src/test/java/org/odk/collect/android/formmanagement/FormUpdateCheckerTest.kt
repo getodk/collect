@@ -9,13 +9,17 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -35,6 +39,10 @@ class FormUpdateCheckerTest {
     private val formsRepositoryProvider = component.formsRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
+    private val changeLock = BooleanChangeLock()
+    private val syncStatusAppState = mock<SyncStatusAppState>()
+    private val notifier = mock<Notifier>()
+    private val analytics = mock<Analytics>()
 
     private val formSource = mock<FormSource> {
         on { fetchFormList() } doReturn emptyList()
@@ -50,13 +58,14 @@ class FormUpdateCheckerTest {
             context = application,
             notifier = mock(),
             analytics = mock(),
-            changeLock = BooleanChangeLock(),
+            changeLock = changeLock,
             storagePathProvider = storagePathProvider,
             settingsProvider = settingsProvider,
             formsRepositoryProvider = formsRepositoryProvider,
             formSourceProvider = formSourceProvider,
-            mock(),
-            mock()
+            syncStatusAppState = syncStatusAppState,
+            instancesRepositoryProvider = mock(),
+            fastExternalItemsetsRepository = mock()
         )
     }
 
@@ -87,6 +96,16 @@ class FormUpdateCheckerTest {
             formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
             `is`(1)
         )
+    }
+
+    @Test
+    fun `synchronizeWithServer() does nothing when change lock is locked`() {
+        changeLock.lock()
+        updateChecker.synchronizeWithServer()
+        verifyNoInteractions(syncStatusAppState)
+        verifyNoInteractions(formSource)
+        verifyNoInteractions(notifier)
+        verifyNoInteractions(analytics)
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

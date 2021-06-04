@@ -13,14 +13,15 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.DATA_PROJECT_ID
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormUpdateChecker
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 
 @RunWith(AndroidJUnit4::class)
 class AutoUpdateTaskSpecTest {
@@ -32,17 +33,18 @@ class AutoUpdateTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormUpdateChecker(
-                context: Context?,
-                notifier: Notifier?,
-                analytics: Analytics?,
-                changeLock: ChangeLock?,
-                storagePathProvider: StoragePathProvider?,
-                settingsProvider: SettingsProvider?,
-                formsRepositoryProvider: FormsRepositoryProvider?,
-                formSourceProvider: FormSourceProvider?,
-                serverFormsSynchronizer: ServerFormsSynchronizer?,
-                syncStatusAppState: SyncStatusAppState?
-            ): FormUpdateChecker {
+                context: Context,
+                notifier: Notifier,
+                analytics: Analytics,
+                changeLock: ChangeLock,
+                storagePathProvider: StoragePathProvider,
+                settingsProvider: SettingsProvider,
+                formsRepositoryProvider: FormsRepositoryProvider,
+                formSourceProvider: FormSourceProvider,
+                syncStatusAppState: SyncStatusAppState,
+                instancesRepositoryProvider: InstancesRepositoryProvider,
+                fastExternalItemsetsRepository: FastExternalItemsetsRepository
+            ): FormUpdateChecker? {
                 return formUpdateChecker
             }
         })
