@@ -2,6 +2,7 @@ package org.odk.collect.android.support;
 
 import android.view.View;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.PerformException;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -10,10 +11,10 @@ import androidx.test.espresso.util.TreeIterables;
 
 import org.hamcrest.Matcher;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.shared.Settings;
 
 import java.io.Closeable;
 import java.io.File;
@@ -94,7 +95,7 @@ public final class TestUtils {
     }
 
     public static void resetInstances() {
-        new InstancesRepositoryProvider().get().deleteAll();
+        new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().deleteAll();
     }
 
     public static void assertMatches(String expectedPattern, Object actual) {

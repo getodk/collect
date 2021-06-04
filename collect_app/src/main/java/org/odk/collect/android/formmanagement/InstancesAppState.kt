@@ -14,7 +14,10 @@ import javax.inject.Singleton
  * different parts of the app without needing reactive data in the [InstancesRepository].
  */
 @Singleton
-class InstancesAppState(private val context: Context) {
+class InstancesAppState(
+    private val context: Context,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider
+) {
 
     private val _unsent = MutableLiveData(0)
     val unsentCount: LiveData<Int> = _unsent
@@ -26,7 +29,7 @@ class InstancesAppState(private val context: Context) {
     val sentCount: LiveData<Int> = _sent
 
     fun update() {
-        val instancesRepository: InstancesRepository = InstancesRepositoryProvider().get()
+        val instancesRepository = instancesRepositoryProvider.get()
         val finalizedInstances = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
         val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
         val unsentInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)

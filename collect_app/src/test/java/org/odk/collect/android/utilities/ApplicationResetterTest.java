@@ -148,7 +148,7 @@ public class ApplicationResetterTest {
     }
 
     private void setupTestInstancesDatabase() {
-        new InstancesRepositoryProvider().get().save(new Instance.Builder()
+        new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(new Instance.Builder()
                 .instanceFilePath("testDir1/testFile1")
                 .submissionUri("submissionUri")
                 .displayName("formName")
@@ -204,7 +204,7 @@ public class ApplicationResetterTest {
     }
 
     private int getInstancesCount() {
-        return new InstancesRepositoryProvider().get().getAll().size();
+        return new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getAll().size();
     }
 
     private void assertFolderEmpty(String folder) {

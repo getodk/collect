@@ -595,7 +595,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
-            Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
@@ -1213,7 +1213,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             if (saveName == null && uriMimeType != null
                     && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
-                Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(instanceUri));
+                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();
                 }

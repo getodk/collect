@@ -80,6 +80,9 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
 
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
+
     private MapFragment map;
 
     public BottomSheetBehavior summarySheet;
@@ -111,7 +114,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
         if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, new InstancesRepositoryProvider().get());
+            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, instancesRepositoryProvider.get());
         }
 
         viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);

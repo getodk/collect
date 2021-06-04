@@ -518,8 +518,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public InstancesAppState providesInstancesAppState(Application application) {
-        return new InstancesAppState(application);
+    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new InstancesAppState(application, instancesRepositoryProvider);
     }
 
     @Provides
@@ -538,8 +538,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesRepositoryProvider providesInstancesRepositoryProvider() {
-        return new InstancesRepositoryProvider();
+    public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
+        return new InstancesRepositoryProvider(context, storagePathProvider);
     }
 
     @Provides
