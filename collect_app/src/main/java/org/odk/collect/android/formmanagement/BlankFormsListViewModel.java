@@ -76,7 +76,7 @@ public class BlankFormsListViewModel extends ViewModel {
         logManualSync();
 
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        scheduler.immediate(() -> formUpdateChecker.synchronizeWithServer(), result::setValue);
+        scheduler.immediate(() -> formUpdateChecker.synchronizeWithServer("projectId"), result::setValue);
         return result;
     }
 

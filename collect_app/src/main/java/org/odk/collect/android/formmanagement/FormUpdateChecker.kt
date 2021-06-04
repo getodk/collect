@@ -95,7 +95,8 @@ class FormUpdateChecker(
         }
     }
 
-    fun synchronizeWithServer(): Boolean {
+    @JvmOverloads
+    fun synchronizeWithServer(projectId: String? = null): Boolean {
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 val projectId =

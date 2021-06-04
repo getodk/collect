@@ -90,7 +90,7 @@ public class BlankFormsListViewModelTest {
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formUpdateChecker);
 
-        doReturn(false).when(formUpdateChecker).synchronizeWithServer();
+        doReturn(false).when(formUpdateChecker).synchronizeWithServer("projectId");
         LiveData<Boolean> result = viewModel.syncWithServer();
         fakeScheduler.runBackground();
 

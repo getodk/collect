@@ -100,7 +100,7 @@ class FormUpdateCheckerTest {
     @Test
     fun `synchronizeWithServer() does nothing when change lock is locked`() {
         changeLock.lock()
-        updateChecker.synchronizeWithServer()
+        updateChecker.synchronizeWithServer("projectId")
         verifyNoInteractions(syncStatusAppState)
         verifyNoInteractions(formSource)
         verifyNoInteractions(notifier)

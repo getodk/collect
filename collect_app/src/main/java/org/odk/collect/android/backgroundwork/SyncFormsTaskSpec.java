@@ -5,12 +5,8 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
 
@@ -18,28 +14,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class SyncFormsTaskSpec implements TaskSpec {
 
-    @Inject
-    SyncStatusAppState syncStatusAppState;
-
-    @Inject
-    Notifier notifier;
-
-    @Inject
-    @Named("FORMS")
-    ChangeLock changeLock;
-
-    @Inject
-    Analytics analytics;
+    public static final String DATA_PROJECT_ID = "projectId";
 
     @Inject
     FormUpdateChecker formUpdateChecker;
-
-    @Inject
-    CurrentProjectProvider currentProjectProvider;
 
     @NotNull
     @Override
@@ -47,7 +28,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            formUpdateChecker.synchronizeWithServer();
+            formUpdateChecker.synchronizeWithServer(inputData.get(DATA_PROJECT_ID));
             return true;
         };
     }

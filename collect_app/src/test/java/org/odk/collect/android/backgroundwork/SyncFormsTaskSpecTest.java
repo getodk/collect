@@ -41,8 +41,11 @@ public class SyncFormsTaskSpecTest {
     }
 
     @Test
-    public void callsSynchronize() {
-        new SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), new HashMap<>()).get();
-        verify(formUpdateChecker).synchronizeWithServer();
+    public void callsSynchronizeWithProjectId() {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(SyncFormsTaskSpec.DATA_PROJECT_ID, "projectId");
+
+        new SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get();
+        verify(formUpdateChecker).synchronizeWithServer("projectId");
     }
 }
