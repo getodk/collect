@@ -145,8 +145,8 @@ class FormUpdateChecker(
                     notifier.onSync(null)
                     null
                 } catch (e: FormSourceException) {
-                    syncStatusAppState.finishSync(e);
-                    notifier.onSync(e);
+                    syncStatusAppState.finishSync(e)
+                    notifier.onSync(e)
                     e
                 }
 

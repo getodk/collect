@@ -14,20 +14,16 @@ import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.support.BooleanChangeLock;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
@@ -39,7 +35,6 @@ public class BlankFormsListViewModelTest {
     private final LiveDataTester liveDataTester = new LiveDataTester();
 
     private final SyncStatusAppState syncRepository = mock(SyncStatusAppState.class);
-    private final BooleanChangeLock changeLock = new BooleanChangeLock();
     private final Analytics analytics = mock(Analytics.class);
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
 

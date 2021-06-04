@@ -92,6 +92,7 @@
         <exclude name="TooManyMethods" />
         <exclude name="UseObjectForClearerAPI" />
         <exclude name="AvoidUncheckedExceptionsInSignatures" />
+        <exclude name="ExcessiveParameterList" />
     </rule>
 
     <rule ref="category/java/documentation.xml">

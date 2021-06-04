@@ -12,11 +12,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.ChangeLock;
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
