@@ -18,6 +18,7 @@ class AddNewProjectTest {
         rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
+            .switchToManualMode()
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()

@@ -39,9 +39,9 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         return AboutPage().assertOnPage()
     }
 
-    fun clickAddProject(): AddProjectDialogPage {
+    fun clickAddProject(): AutomaticProjectCreatorDialogPage {
         onView(withId(R.id.add_project_button)).perform(ViewActions.click())
-        return AddProjectDialogPage().assertOnPage()
+        return AutomaticProjectCreatorDialogPage().assertOnPage()
     }
 
     fun assertCurrentProject(projectName: String, subtext: String): ProjectSettingsDialogPage {
