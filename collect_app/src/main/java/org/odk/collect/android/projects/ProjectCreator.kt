@@ -3,8 +3,6 @@ package org.odk.collect.android.projects
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.configure.SettingsImporter
-import org.odk.collect.android.database.forms.FormsDatabaseProvider
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -15,8 +13,6 @@ class ProjectCreator(
     private val projectsRepository: ProjectsRepository,
     private val currentProjectProvider: CurrentProjectProvider,
     private val settingsImporter: SettingsImporter,
-    private val formsDatabaseProvider: FormsDatabaseProvider,
-    private val instancesDatabaseProvider: InstancesDatabaseProvider
 ) {
 
     fun createNewProject(settingsJson: String): Boolean {
@@ -28,8 +24,6 @@ class ProjectCreator(
         return if (settingsImportedSuccessfully) {
             if (projectsRepository.getAll().size == 1) {
                 currentProjectProvider.setCurrentProject(savedProject.uuid)
-                formsDatabaseProvider.releaseDatabaseHelper()
-                instancesDatabaseProvider.releaseDatabaseHelper()
             }
             true
         } else {

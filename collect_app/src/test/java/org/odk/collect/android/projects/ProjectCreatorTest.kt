@@ -11,8 +11,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.configure.SettingsImporter
-import org.odk.collect.android.database.forms.FormsDatabaseProvider
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
@@ -31,14 +29,12 @@ class ProjectCreatorTest {
 
     private var currentProjectProvider = mock<CurrentProjectProvider> {}
     private var settingsImporter = mock<SettingsImporter> {}
-    private var formsDatabaseProvider = mock<FormsDatabaseProvider> {}
-    private var instancesDatabaseProvider = mock<InstancesDatabaseProvider> {}
 
     private lateinit var projectCreator: ProjectCreator
 
     @Before
     fun setup() {
-        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, formsDatabaseProvider, instancesDatabaseProvider)
+        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter)
     }
 
     @Test
@@ -87,14 +83,5 @@ class ProjectCreatorTest {
         whenever(projectsRepository.getAll()).thenReturn(listOf(savedProject, Project.Saved("2", "Project X", "X", "#cccccc")))
         projectCreator.createNewProject(json)
         verifyNoMoreInteractions(currentProjectProvider)
-    }
-
-    @Test
-    fun `Databases should be released if new project has been set`() {
-        whenever(settingsImporter.fromJSON(anyString(), anyString())).thenReturn(true)
-
-        projectCreator.createNewProject(json)
-        verify(formsDatabaseProvider).releaseDatabaseHelper()
-        verify(instancesDatabaseProvider).releaseDatabaseHelper()
     }
 }

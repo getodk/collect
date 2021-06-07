@@ -18,8 +18,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.configure.SettingsImporter
-import org.odk.collect.android.database.forms.FormsDatabaseProvider
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
@@ -99,9 +97,7 @@ class ManualProjectCreatorDialogTest {
                 projectImporter: ProjectImporter?,
                 projectsRepository: ProjectsRepository?,
                 currentProjectProvider: CurrentProjectProvider?,
-                settingsImporter: SettingsImporter?,
-                formsDatabaseProvider: FormsDatabaseProvider?,
-                instancesDatabaseProvider: InstancesDatabaseProvider?
+                settingsImporter: SettingsImporter?
             ): ProjectCreator {
                 return projectCreator
             }
