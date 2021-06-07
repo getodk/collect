@@ -26,7 +26,6 @@ import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -52,21 +51,21 @@ public class InstanceServerUploader extends InstanceUploader {
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
     private final Map<Uri, Uri> uriRemap;
-    private final SettingsProvider settingsProvider;
+    private final Settings generalSettings;
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Map<Uri, Uri> uriRemap, SettingsProvider settingsProvider) {
+                                  Map<Uri, Uri> uriRemap, Settings generalSettings) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
         this.uriRemap = uriRemap;
-        this.settingsProvider = settingsProvider;
+        this.generalSettings = generalSettings;
     }
 
     /**
      * Uploads all files associated with an instance to the specified URL. Writes fail/success
      * status to database.
-     *
+     * <p>
      * Returns a custom success message if one is provided by the server.
      */
     @Override
@@ -264,7 +263,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
     /**
      * Returns the URL this instance should be submitted to with appended deviceId.
-     *
+     * <p>
      * If the upload was triggered by an external app and specified an override URL, use that one.
      * Otherwise, use the submission URL configured in the form
      * (https://getodk.github.io/xforms-spec/#submission-attributes). Finally, default to the
@@ -294,7 +293,6 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     private String getServerSubmissionURL() {
-        Settings generalSettings = settingsProvider.getGeneralSettings();
         String serverBase = generalSettings.getString(GeneralKeys.KEY_SERVER_URL);
 
         if (serverBase.endsWith(URL_PATH_SEP)) {

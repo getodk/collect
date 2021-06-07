@@ -13,6 +13,9 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.locks.ChangeLock;
 
 public class InstanceAutoSender {
@@ -44,10 +47,15 @@ public class InstanceAutoSender {
     }
 
     public boolean autoSendInstances() {
+        FormsRepository formsRepository = formsRepositoryProvider.get();
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
+        Settings generalSettings = settingsProvider.getGeneralSettings();
+        InstanceSubmitter instanceSubmitter = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider, permissionsProvider, generalSettings);
+
         return changeLock.withLock(acquiredLock -> {
             if (acquiredLock) {
                 try {
-                    Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider).submitUnsubmittedInstances();
+                    Pair<Boolean, String> results = instanceSubmitter.submitUnsubmittedInstances();
                     notifier.onSubmission(results.first, results.second);
                 } catch (SubmitException e) {
                     switch (e.getType()) {
