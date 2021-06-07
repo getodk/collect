@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import android.os.Bundle
 import androidx.core.view.children
 import androidx.lifecycle.ViewModel
 import androidx.test.espresso.Espresso.onView
@@ -12,20 +13,25 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
+import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -49,6 +55,8 @@ class ProjectSettingsDialogTest {
 
     val projectsRepository = InMemProjectsRepository(UUIDGenerator())
 
+    val adminPasswordProvider: AdminPasswordProvider = mock {}
+
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
@@ -66,6 +74,10 @@ class ProjectSettingsDialogTest {
                 settingsProvider: SettingsProvider?
             ): ProjectsRepository {
                 return projectsRepository
+            }
+
+            override fun providesAdminPasswordProvider(settingsProvider: SettingsProvider?): AdminPasswordProvider {
+                return adminPasswordProvider
             }
         })
     }
@@ -139,6 +151,23 @@ class ProjectSettingsDialogTest {
     }
 
     @Test
+    fun `A user should be asked for password if set when opening Admin settings`() {
+        val args = Bundle()
+        args.putBoolean(ProgressDialogFragment.CANCELABLE, false)
+
+        whenever(adminPasswordProvider.isAdminPasswordSet).thenReturn(true)
+
+        val scenario = RobolectricHelpers.launchDialogFragment(
+            ProjectSettingsDialog::class.java,
+            R.style.Theme_Collect_Light
+        )
+        scenario.onFragment {
+            it.binding.adminSettingsButton.performClick()
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(AdminPasswordDialogFragment::class.java.name), `is`(notNullValue()))
+        }
+    }
+
+    @Test
     fun `About section should be started after clicking on the 'About' button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(
             ProjectSettingsDialog::class.java,
@@ -152,6 +181,18 @@ class ProjectSettingsDialogTest {
             assertThat(it.dialog, `is`(nullValue()))
             assertThat(Intents.getIntents()[0], hasComponent(AboutActivity::class.java.name))
             Intents.release()
+        }
+    }
+
+    @Test
+    fun `AutomaticProjectCreatorDialog should be displayed after clicking on the 'Add project' button`() {
+        val scenario = RobolectricHelpers.launchDialogFragment(
+            ProjectSettingsDialog::class.java,
+            R.style.Theme_Collect_Light
+        )
+        scenario.onFragment {
+            it.binding.addProjectButton.performClick()
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(AutomaticProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
 
