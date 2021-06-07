@@ -38,7 +38,6 @@ import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
@@ -303,8 +302,6 @@ public interface AppDependencyComponent {
     FormUpdateChecker formUpdateChecker();
 
     FormsRepositoryProvider formsRepositoryProvider();
-
-    ServerFormsSynchronizer serverFormsSynchronizer();
 
     SyncStatusAppState syncStatusAppState();
 

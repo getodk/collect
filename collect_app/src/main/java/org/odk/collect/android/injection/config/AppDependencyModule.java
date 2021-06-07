@@ -62,7 +62,6 @@ import org.odk.collect.android.formmanagement.FormUpdateChecker;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
@@ -381,11 +380,6 @@ public class AppDependencyModule {
     public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, StoragePathProvider storagePathProvider) {
         FormsRepository formsRepository = formsRepositoryProvider.get();
         return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.get(), new FormsDirDiskFormsSynchronizer(formsRepository, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS)));
-    }
-
-    @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepositoryProvider formsRepositoryProvider, FormDownloader formDownloader, InstancesRepositoryProvider instancesRepositoryProvider) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), formDownloader);
     }
 
     @Provides
