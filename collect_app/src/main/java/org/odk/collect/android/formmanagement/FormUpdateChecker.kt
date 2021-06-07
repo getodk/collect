@@ -19,6 +19,8 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.shared.Settings
+import org.odk.collect.shared.locks.ChangeLock
 import java.io.File
 import java.util.stream.Collectors
 
@@ -65,74 +67,55 @@ class FormUpdateChecker(
         )
 
         val generalSettings = generalSettings(projectId)
+        val changeLock = changeLockProvider.getFormLock(projectId)
 
-        return try {
-            val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
-            val updatedForms =
-                serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
-                    .collect(Collectors.toList())
-            if (updatedForms.isNotEmpty()) {
-                if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
-                    val formUpdateDownloader = FormUpdateDownloader()
-                    val changeLock = changeLockProvider.getFormLock(projectId)
-                    val results = formUpdateDownloader.downloadUpdates(
-                        updatedForms,
-                        changeLock,
-                        formDownloader,
-                        TranslationHandler.getString(context, R.string.success),
-                        TranslationHandler.getString(context, R.string.failure)
-                    )
-
-                    notifier.onUpdatesDownloaded(results)
-                } else {
-                    notifier.onUpdatesAvailable(updatedForms)
-                }
-            }
-
-            context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
-        } catch (_: FormSourceException) {
-            // Ignored
-        }
+        downloadUpdates(serverFormsDetailsFetcher, generalSettings, changeLock, formDownloader)
     }
 
-    @JvmOverloads
     fun synchronizeWithServer(projectId: String): Boolean {
-        val changeLock = changeLockProvider.getFormLock(projectId)
-        return changeLock.withLock { acquiredLock ->
+        val formsDirPath = formsDir(projectId)
+        val cacheDirPath = formsCacheDir(projectId)
+        val formsRepository = formsRepository(projectId)
+        val formSource = formSource(projectId)
+
+        val diskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
+            formsRepository,
+            formsDirPath
+        )
+
+        val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
+            formsRepository,
+            formSource,
+            diskFormsSynchronizer
+        )
+
+        val instancesRepository = instancesRepositoryProvider.get(projectId)
+        val formDownloader = ServerFormDownloader(
+            formSource,
+            formsRepository,
+            File(cacheDirPath),
+            formsDirPath,
+            FormMetadataParser(ReferenceManager.instance()),
+            analytics
+        )
+
+        val serverFormsSynchronizer = ServerFormsSynchronizer(
+            serverFormsDetailsFetcher,
+            formsRepository,
+            instancesRepository,
+            formDownloader
+        )
+
+        val formLock = changeLockProvider.getFormLock(projectId)
+        return synchronizeWithServer(formLock, serverFormsSynchronizer)
+    }
+
+    private fun synchronizeWithServer(
+        formLock: ChangeLock,
+        serverFormsSynchronizer: ServerFormsSynchronizer
+    ): Boolean {
+        return formLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                val formsDirPath = formsDir(projectId)
-                val cacheDirPath = formsCacheDir(projectId)
-                val formsRepository = formsRepository(projectId)
-                val formSource = formSource(projectId)
-
-                val diskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
-                    formsRepository,
-                    formsDirPath
-                )
-
-                val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
-                    formsRepository,
-                    formSource,
-                    diskFormsSynchronizer
-                )
-
-                val instancesRepository = instancesRepositoryProvider.get(projectId)
-                val formDownloader = ServerFormDownloader(
-                    formSource,
-                    formsRepository,
-                    File(cacheDirPath),
-                    formsDirPath,
-                    FormMetadataParser(ReferenceManager.instance()),
-                    analytics
-                )
-
-                val serverFormsSynchronizer = ServerFormsSynchronizer(
-                    serverFormsDetailsFetcher,
-                    formsRepository,
-                    instancesRepository,
-                    formDownloader
-                )
-
                 syncStatusAppState.startSync()
 
                 val exception = try {
@@ -151,6 +134,40 @@ class FormUpdateChecker(
             } else {
                 false
             }
+        }
+    }
+
+    private fun downloadUpdates(
+        serverFormsDetailsFetcher: ServerFormsDetailsFetcher,
+        generalSettings: Settings,
+        changeLock: ChangeLock,
+        formDownloader: ServerFormDownloader
+    ) {
+        try {
+            val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
+            val updatedForms =
+                serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
+                    .collect(Collectors.toList())
+            if (updatedForms.isNotEmpty()) {
+                if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
+                    val formUpdateDownloader = FormUpdateDownloader()
+                    val results = formUpdateDownloader.downloadUpdates(
+                        updatedForms,
+                        changeLock,
+                        formDownloader,
+                        TranslationHandler.getString(context, R.string.success),
+                        TranslationHandler.getString(context, R.string.failure)
+                    )
+
+                    notifier.onUpdatesDownloaded(results)
+                } else {
+                    notifier.onUpdatesAvailable(updatedForms)
+                }
+            }
+
+            context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
+        } catch (_: FormSourceException) {
+            // Ignored
         }
     }
 
