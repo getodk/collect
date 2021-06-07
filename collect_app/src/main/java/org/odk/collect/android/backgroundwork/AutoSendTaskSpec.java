@@ -18,19 +18,16 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.util.Pair;
 
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
-import org.odk.collect.android.instancemanagement.InstanceSubmitter;
-import org.odk.collect.android.instancemanagement.SubmitException;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;
@@ -102,7 +99,7 @@ public class AutoSendTaskSpec implements TaskSpec {
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         return () -> {
-            Collect.getInstance().getComponent().inject(this);
+            DaggerUtils.getComponent(context).inject(this);
 
             NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
             if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
@@ -113,30 +110,8 @@ public class AutoSendTaskSpec implements TaskSpec {
                 return true;
             }
 
-            return changeLock.withLock(acquiredLock -> {
-                if (acquiredLock) {
-                    try {
-                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider).submitUnsubmittedInstances();
-                        notifier.onSubmission(results.first, results.second);
-                    } catch (SubmitException e) {
-                        switch (e.getType()) {
-                            case GOOGLE_ACCOUNT_NOT_SET:
-                                notifier.onSubmission(true, context.getString(R.string.google_set_account));
-                                break;
-                            case GOOGLE_ACCOUNT_NOT_PERMITTED:
-                                notifier.onSubmission(true, context.getString(R.string.odk_permissions_fail));
-                                break;
-                            case NOTHING_TO_SUBMIT:
-                                break;
-                        }
-                    }
-
-                    instancesAppState.update();
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+            InstanceAutoSender instanceAutoSender = new InstanceAutoSender(context, changeLock, notifier, analytics, formsRepositoryProvider, instancesRepositoryProvider, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider, instancesAppState);
+            return instanceAutoSender.autoSendInstances();
         };
     }
 
