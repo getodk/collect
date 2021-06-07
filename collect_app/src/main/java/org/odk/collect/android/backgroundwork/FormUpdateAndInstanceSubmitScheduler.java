@@ -75,6 +75,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @Override
     public void cancelUpdates() {
         scheduler.cancelDeferred(getAutoUpdateTag());
+        scheduler.cancelDeferred(getMatchExactlyTag());
     }
 
     @Override

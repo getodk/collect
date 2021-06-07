@@ -72,6 +72,15 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     }
 
     @Test
+    fun `cancelUpdates cancels match exactly update for current project`() {
+        val manager =
+            FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.cancelUpdates()
+        verify(scheduler).cancelDeferred("match_exactly:$projectId")
+    }
+
+    @Test
     fun `scheduleUpdates passes current project id when scheduling match exactly`() {
         val generalSettings = settingsProvider.getGeneralSettings()
 
