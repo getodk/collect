@@ -19,8 +19,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.shared.Settings
-import org.odk.collect.shared.locks.ChangeLock
 import java.io.File
 import java.util.stream.Collectors
 
@@ -42,79 +40,55 @@ class FormUpdateChecker(
      * disabled the user will just be notified that there are updates available.
      */
     fun downloadUpdates(projectId: String) {
-        val formsDirPath = formsDir(projectId)
-        val formsRepository = formsRepository(projectId)
-        val formSource = formSource(projectId)
-        val diskFormsSynchronizer: DiskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
-            formsRepository,
-            formsDirPath
-        )
+        val sandbox = getProjectSandbox(projectId)
 
-        val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
-            formsRepository,
-            formSource,
-            diskFormsSynchronizer
-        )
+        val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
+        val formDownloader = formDownloader(sandbox)
 
-        val cacheDirPath: String = formsCacheDir(projectId)
-        val formDownloader = ServerFormDownloader(
-            formSource,
-            formsRepository,
-            File(cacheDirPath),
-            formsDirPath,
-            FormMetadataParser(ReferenceManager.instance()),
-            analytics
-        )
+        try {
+            val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
+            val updatedForms =
+                serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
+                    .collect(Collectors.toList())
+            if (updatedForms.isNotEmpty()) {
+                if (sandbox.generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
+                    val formUpdateDownloader = FormUpdateDownloader()
+                    val results = formUpdateDownloader.downloadUpdates(
+                        updatedForms,
+                        sandbox.formsLock,
+                        formDownloader,
+                        TranslationHandler.getString(context, R.string.success),
+                        TranslationHandler.getString(context, R.string.failure)
+                    )
 
-        val generalSettings = generalSettings(projectId)
-        val changeLock = changeLockProvider.getFormLock(projectId)
+                    notifier.onUpdatesDownloaded(results)
+                } else {
+                    notifier.onUpdatesAvailable(updatedForms)
+                }
+            }
 
-        downloadUpdates(serverFormsDetailsFetcher, generalSettings, changeLock, formDownloader)
+            context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
+        } catch (_: FormSourceException) {
+            // Ignored
+        }
     }
 
     fun synchronizeWithServer(projectId: String): Boolean {
-        val formsDirPath = formsDir(projectId)
-        val cacheDirPath = formsCacheDir(projectId)
-        val formsRepository = formsRepository(projectId)
-        val formSource = formSource(projectId)
+        val sandbox = getProjectSandbox(projectId)
 
-        val diskFormsSynchronizer = FormsDirDiskFormsSynchronizer(
-            formsRepository,
-            formsDirPath
-        )
-
-        val serverFormsDetailsFetcher = ServerFormsDetailsFetcher(
-            formsRepository,
-            formSource,
-            diskFormsSynchronizer
-        )
-
-        val instancesRepository = instancesRepositoryProvider.get(projectId)
-        val formDownloader = ServerFormDownloader(
-            formSource,
-            formsRepository,
-            File(cacheDirPath),
-            formsDirPath,
-            FormMetadataParser(ReferenceManager.instance()),
-            analytics
-        )
+        val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
+        val formDownloader = formDownloader(sandbox)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
             serverFormsDetailsFetcher,
-            formsRepository,
-            instancesRepository,
+            sandbox.formsRepository,
+            sandbox.instancesRepository,
             formDownloader
         )
 
-        val formLock = changeLockProvider.getFormLock(projectId)
-        return synchronizeWithServer(formLock, serverFormsSynchronizer)
-    }
-
-    private fun synchronizeWithServer(
-        formLock: ChangeLock,
-        serverFormsSynchronizer: ServerFormsSynchronizer
-    ): Boolean {
-        return formLock.withLock { acquiredLock ->
+        return sandbox.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 syncStatusAppState.startSync()
 
@@ -137,50 +111,66 @@ class FormUpdateChecker(
         }
     }
 
-    private fun downloadUpdates(
-        serverFormsDetailsFetcher: ServerFormsDetailsFetcher,
-        generalSettings: Settings,
-        changeLock: ChangeLock,
-        formDownloader: ServerFormDownloader
-    ) {
-        try {
-            val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
-            val updatedForms =
-                serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
-                    .collect(Collectors.toList())
-            if (updatedForms.isNotEmpty()) {
-                if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
-                    val formUpdateDownloader = FormUpdateDownloader()
-                    val results = formUpdateDownloader.downloadUpdates(
-                        updatedForms,
-                        changeLock,
-                        formDownloader,
-                        TranslationHandler.getString(context, R.string.success),
-                        TranslationHandler.getString(context, R.string.failure)
-                    )
+    private fun getProjectSandbox(projectId: String) = ProjectSandbox(
+        projectId,
+        settingsProvider,
+        formsRepositoryProvider,
+        instancesRepositoryProvider,
+        storagePathProvider,
+        changeLockProvider,
+        formSourceProvider
+    )
 
-                    notifier.onUpdatesDownloaded(results)
-                } else {
-                    notifier.onUpdatesAvailable(updatedForms)
-                }
-            }
-
-            context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
-        } catch (_: FormSourceException) {
-            // Ignored
-        }
+    private fun formDownloader(projectSandbox: ProjectSandbox): ServerFormDownloader {
+        return ServerFormDownloader(
+            projectSandbox.formSource,
+            projectSandbox.formsRepository,
+            File(projectSandbox.cacheDir),
+            projectSandbox.formsDir,
+            FormMetadataParser(ReferenceManager.instance()),
+            analytics
+        )
     }
 
-    private fun generalSettings(projectId: String) =
-        settingsProvider.getGeneralSettings(projectId)
+    private fun serverFormsDetailsFetcher(
+        projectSandbox: ProjectSandbox,
+        diskFormsSynchronizer: FormsDirDiskFormsSynchronizer
+    ): ServerFormsDetailsFetcher {
+        return ServerFormsDetailsFetcher(
+            projectSandbox.formsRepository,
+            projectSandbox.formSource,
+            diskFormsSynchronizer
+        )
+    }
 
-    private fun formsDir(projectId: String) =
-        storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId)
+    private fun diskFormsSynchronizer(projectSandbox: ProjectSandbox): FormsDirDiskFormsSynchronizer {
+        return FormsDirDiskFormsSynchronizer(
+            projectSandbox.formsRepository,
+            projectSandbox.formsDir
+        )
+    }
 
-    private fun formsCacheDir(projectId: String) =
-        storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
+}
 
-    private fun formSource(projectId: String) = formSourceProvider.get(projectId)
+/**
+ * Provides all the basic/building block dependencies needed when performing logic inside a
+ * project.
+ */
+private class ProjectSandbox(
+    private val projectId: String,
+    private val settingsProvider: SettingsProvider,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val storagePathProvider: StoragePathProvider,
+    private val changeLockProvider: ChangeLockProvider,
+    private val formSourceProvider: FormSourceProvider
+) {
 
-    private fun formsRepository(projectId: String) = formsRepositoryProvider.get(projectId)
+    val generalSettings by lazy { settingsProvider.getGeneralSettings(projectId) }
+    val formsRepository by lazy { formsRepositoryProvider.get(projectId) }
+    val instancesRepository by lazy { instancesRepositoryProvider.get(projectId) }
+    val formSource by lazy { formSourceProvider.get(projectId) }
+    val formsLock by lazy { changeLockProvider.getFormLock(projectId) }
+    val formsDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) }
+    val cacheDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) }
 }
