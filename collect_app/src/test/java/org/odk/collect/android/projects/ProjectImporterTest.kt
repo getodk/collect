@@ -50,7 +50,7 @@ class ProjectImporterTest {
         val newProject = Project.New("Project X", "X", "#cccccc")
         val savedProject = projectImporter.importNewProject(newProject)
 
-        storagePathProvider.getProjectDirPaths(savedProject).forEach {
+        storagePathProvider.getProjectDirPaths(savedProject.uuid).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))

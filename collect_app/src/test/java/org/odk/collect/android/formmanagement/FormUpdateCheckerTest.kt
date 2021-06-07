@@ -115,7 +115,7 @@ class FormUpdateCheckerTest {
         val projectImporter = component.projectImporter()
         val projectsRepository = component.projectsRepository()
         val project = projectsRepository.save(Project.New("blah", "B", "#ffffff"))
-        projectImporter.setupProject(project)
+        projectImporter.createProjectDirs(project)
         return project
     }
 }
