@@ -44,7 +44,7 @@ class FormUpdateChecker(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox)
+        val formDownloader = formDownloader(sandbox, analytics)
 
         try {
             val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
@@ -79,7 +79,7 @@ class FormUpdateChecker(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox)
+        val formDownloader = formDownloader(sandbox, analytics)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
             serverFormsDetailsFetcher,
@@ -120,36 +120,6 @@ class FormUpdateChecker(
         changeLockProvider,
         formSourceProvider
     )
-
-    private fun formDownloader(projectSandbox: ProjectSandbox): ServerFormDownloader {
-        return ServerFormDownloader(
-            projectSandbox.formSource,
-            projectSandbox.formsRepository,
-            File(projectSandbox.cacheDir),
-            projectSandbox.formsDir,
-            FormMetadataParser(ReferenceManager.instance()),
-            analytics
-        )
-    }
-
-    private fun serverFormsDetailsFetcher(
-        projectSandbox: ProjectSandbox,
-        diskFormsSynchronizer: FormsDirDiskFormsSynchronizer
-    ): ServerFormsDetailsFetcher {
-        return ServerFormsDetailsFetcher(
-            projectSandbox.formsRepository,
-            projectSandbox.formSource,
-            diskFormsSynchronizer
-        )
-    }
-
-    private fun diskFormsSynchronizer(projectSandbox: ProjectSandbox): FormsDirDiskFormsSynchronizer {
-        return FormsDirDiskFormsSynchronizer(
-            projectSandbox.formsRepository,
-            projectSandbox.formsDir
-        )
-    }
-
 }
 
 /**
@@ -173,4 +143,36 @@ private class ProjectSandbox(
     val formsLock by lazy { changeLockProvider.getFormLock(projectId) }
     val formsDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) }
     val cacheDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) }
+}
+
+private fun formDownloader(
+    projectSandbox: ProjectSandbox,
+    analytics: Analytics
+): ServerFormDownloader {
+    return ServerFormDownloader(
+        projectSandbox.formSource,
+        projectSandbox.formsRepository,
+        File(projectSandbox.cacheDir),
+        projectSandbox.formsDir,
+        FormMetadataParser(ReferenceManager.instance()),
+        analytics
+    )
+}
+
+private fun serverFormsDetailsFetcher(
+    projectSandbox: ProjectSandbox,
+    diskFormsSynchronizer: FormsDirDiskFormsSynchronizer
+): ServerFormsDetailsFetcher {
+    return ServerFormsDetailsFetcher(
+        projectSandbox.formsRepository,
+        projectSandbox.formSource,
+        diskFormsSynchronizer
+    )
+}
+
+private fun diskFormsSynchronizer(projectSandbox: ProjectSandbox): FormsDirDiskFormsSynchronizer {
+    return FormsDirDiskFormsSynchronizer(
+        projectSandbox.formsRepository,
+        projectSandbox.formsDir
+    )
 }
