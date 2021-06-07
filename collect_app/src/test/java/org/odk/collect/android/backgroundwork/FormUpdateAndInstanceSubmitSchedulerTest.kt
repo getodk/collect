@@ -22,7 +22,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.async.Scheduler
 
 @RunWith(AndroidJUnit4::class)
-class SchedulerFormUpdateAndSubmitManagerTest {
+class FormUpdateAndInstanceSubmitSchedulerTest {
 
     private val application by lazy { ApplicationProvider.getApplicationContext<Application>() }
     private val settingsProvider by lazy { TestSettingsProvider.getSettingsProvider() }
@@ -47,7 +47,11 @@ class SchedulerFormUpdateAndSubmitManagerTest {
         )
 
         val manager =
-            SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application)
+            FormUpdateAndInstanceSubmitScheduler(
+                scheduler,
+                settingsProvider,
+                application
+            )
 
         manager.scheduleUpdates()
         verify(scheduler).networkDeferred(
@@ -61,7 +65,7 @@ class SchedulerFormUpdateAndSubmitManagerTest {
     @Test
     fun `cancelUpdates cancels auto update for current project`() {
         val manager =
-            SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application)
+            FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.cancelUpdates()
         verify(scheduler).cancelDeferred("serverPollingJob:$projectId")
@@ -79,7 +83,11 @@ class SchedulerFormUpdateAndSubmitManagerTest {
         )
 
         val manager =
-            SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application)
+            FormUpdateAndInstanceSubmitScheduler(
+                scheduler,
+                settingsProvider,
+                application
+            )
 
         manager.scheduleUpdates()
         verify(scheduler).networkDeferred(

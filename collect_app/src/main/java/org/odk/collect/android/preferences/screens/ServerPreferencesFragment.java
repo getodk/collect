@@ -37,7 +37,7 @@ import androidx.preference.Preference;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -83,7 +83,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
     Analytics analytics;
 
     @Inject
-    FormUpdateManager formUpdateManager;
+    FormUpdateScheduler formUpdateScheduler;
 
     @Inject
     ServerRepository serverRepository;

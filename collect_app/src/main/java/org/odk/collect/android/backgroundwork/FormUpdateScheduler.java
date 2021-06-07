@@ -1,6 +1,6 @@
 package org.odk.collect.android.backgroundwork;
 
-public interface FormUpdateManager {
+public interface FormUpdateScheduler {
 
     void scheduleUpdates();
 

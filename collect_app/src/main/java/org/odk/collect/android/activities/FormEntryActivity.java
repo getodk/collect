@@ -68,7 +68,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
-import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
@@ -312,7 +312,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PropertyManager propertyManager;
 
     @Inject
-    FormSubmitManager formSubmitManager;
+    InstanceSubmitScheduler instanceSubmitScheduler;
 
     @Inject
     Scheduler scheduler;
@@ -1696,7 +1696,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        formSubmitManager.scheduleSubmit();
+                        instanceSubmitScheduler.scheduleSubmit();
                     }
 
                     finishAndReturnInstance();

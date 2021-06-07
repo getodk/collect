@@ -33,9 +33,9 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -271,13 +271,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
+    public FormUpdateScheduler providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application);
     }
 
     @Provides
-    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
+    public InstanceSubmitScheduler providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application);
     }
 
     @Provides
@@ -339,8 +339,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, settingsProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, serverRepository, analytics, settingsProvider);
     }
 
     @Provides

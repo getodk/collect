@@ -16,7 +16,7 @@ import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
-public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, FormSubmitManager {
+public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler, InstanceSubmitScheduler {
 
     public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
@@ -24,7 +24,7 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     private final SettingsProvider settingsProvider;
     private final Application application;
 
-    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+    public FormUpdateAndInstanceSubmitScheduler(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
         this.scheduler = scheduler;
         this.settingsProvider = settingsProvider;
         this.application = application;

@@ -2,7 +2,7 @@ package org.odk.collect.android.application;
 
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -15,10 +15,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 public class CollectSettingsChangeHandlerTest {
 
     private final PropertyManager propertyManager = mock(PropertyManager.class);
-    private final FormUpdateManager formUpdateManager = mock(FormUpdateManager.class);
+    private final FormUpdateScheduler formUpdateScheduler = mock(FormUpdateScheduler.class);
     private final ServerRepository serverRepository = mock(ServerRepository.class);
 
-    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, mock(Analytics.class), mock(SettingsProvider.class));
+    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, serverRepository, mock(Analytics.class), mock(SettingsProvider.class));
 
     @Test
     public void updatesPropertyManager() {
@@ -29,26 +29,26 @@ public class CollectSettingsChangeHandlerTest {
     @Test
     public void doesNotDoAnythingElse() {
         handler.onSettingChanged("blah", "anything");
-        verifyNoInteractions(formUpdateManager);
+        verifyNoInteractions(formUpdateScheduler);
         verifyNoInteractions(serverRepository);
     }
 
     @Test
     public void whenChangedKeyIsFormUpdateMode_schedulesUpdates() {
         handler.onSettingChanged(GeneralKeys.KEY_FORM_UPDATE_MODE, "anything");
-        verify(formUpdateManager).scheduleUpdates();
+        verify(formUpdateScheduler).scheduleUpdates();
     }
 
     @Test
     public void whenChangedKeyIsPeriodicUpdatesCheck_schedulesUpdates() {
         handler.onSettingChanged(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, "anything");
-        verify(formUpdateManager).scheduleUpdates();
+        verify(formUpdateScheduler).scheduleUpdates();
     }
 
     @Test
     public void whenChangedKeyIsProtocol_schedulesUpdates() {
         handler.onSettingChanged(GeneralKeys.KEY_PROTOCOL, "anything");
-        verify(formUpdateManager).scheduleUpdates();
+        verify(formUpdateScheduler).scheduleUpdates();
     }
 
     @Test
