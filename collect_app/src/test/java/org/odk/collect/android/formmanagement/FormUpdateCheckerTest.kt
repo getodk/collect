@@ -23,6 +23,7 @@ import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -40,10 +41,13 @@ class FormUpdateCheckerTest {
     private val formsRepositoryProvider = component.formsRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
-    private val changeLock = BooleanChangeLock()
     private val syncStatusAppState = mock<SyncStatusAppState>()
     private val notifier = mock<Notifier>()
     private val analytics = mock<Analytics>()
+
+    private val changeLockProvider = mock<ChangeLockProvider> {
+        on { getFormLock() } doReturn BooleanChangeLock()
+    }
 
     private val formSource = mock<FormSource> {
         on { fetchFormList() } doReturn emptyList()
@@ -59,13 +63,13 @@ class FormUpdateCheckerTest {
             context = application,
             notifier = mock(),
             analytics = mock(),
-            changeLock = changeLock,
             storagePathProvider = storagePathProvider,
             settingsProvider = settingsProvider,
             formsRepositoryProvider = formsRepositoryProvider,
             formSourceProvider = formSourceProvider,
             syncStatusAppState = syncStatusAppState,
-            instancesRepositoryProvider = mock()
+            instancesRepositoryProvider = mock(),
+            changeLockProvider
         )
     }
 
@@ -102,7 +106,10 @@ class FormUpdateCheckerTest {
     fun `synchronizeWithServer() does nothing when change lock is locked`() {
         val project = setupProject()
 
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock()).thenReturn(changeLock)
         changeLock.lock()
+
         updateChecker.synchronizeWithServer(project.uuid)
         verifyNoInteractions(syncStatusAppState)
         verifyNoInteractions(formSource)
@@ -118,7 +125,10 @@ class FormUpdateCheckerTest {
     fun `synchronizeWithServer() returns false when change lock is locked`() {
         val project = setupProject()
 
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock()).thenReturn(changeLock)
         changeLock.lock()
+
         assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))
     }
 

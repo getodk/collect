@@ -19,9 +19,9 @@ import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.shared.locks.ChangeLock
 
 @RunWith(AndroidJUnit4::class)
 class AutoUpdateTaskSpecTest {
@@ -36,13 +36,13 @@ class AutoUpdateTaskSpecTest {
                 context: Context,
                 notifier: Notifier,
                 analytics: Analytics,
-                changeLock: ChangeLock,
                 storagePathProvider: StoragePathProvider,
                 settingsProvider: SettingsProvider,
                 formsRepositoryProvider: FormsRepositoryProvider,
                 formSourceProvider: FormSourceProvider,
                 syncStatusAppState: SyncStatusAppState,
-                instancesRepositoryProvider: InstancesRepositoryProvider
+                instancesRepositoryProvider: InstancesRepositoryProvider,
+                changeLockProvider: ChangeLockProvider
             ): FormUpdateChecker? {
                 return formUpdateChecker
             }

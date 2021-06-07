@@ -13,12 +13,12 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.provider.FormsProviderAPI
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.shared.locks.ChangeLock
 import java.io.File
 import java.util.stream.Collectors
 
@@ -26,13 +26,13 @@ class FormUpdateChecker(
     private val context: Context,
     private val notifier: Notifier,
     private val analytics: Analytics,
-    private val changeLock: ChangeLock,
     private val storagePathProvider: StoragePathProvider,
     private val settingsProvider: SettingsProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val formSourceProvider: FormSourceProvider,
     private val syncStatusAppState: SyncStatusAppState,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val changeLockProvider: ChangeLockProvider
 ) {
 
     /**
@@ -74,6 +74,7 @@ class FormUpdateChecker(
             if (updatedForms.isNotEmpty()) {
                 if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
                     val formUpdateDownloader = FormUpdateDownloader()
+                    val changeLock = changeLockProvider.getFormLock()
                     val results = formUpdateDownloader.downloadUpdates(
                         updatedForms,
                         changeLock,
@@ -96,6 +97,7 @@ class FormUpdateChecker(
 
     @JvmOverloads
     fun synchronizeWithServer(projectId: String): Boolean {
+        val changeLock = changeLockProvider.getFormLock()
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 val formsDirPath = formsDir(projectId)
