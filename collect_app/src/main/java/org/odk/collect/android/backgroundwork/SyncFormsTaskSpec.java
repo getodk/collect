@@ -5,7 +5,7 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.FormUpdateChecker;
+import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -20,7 +20,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
     public static final String DATA_PROJECT_ID = "projectId";
 
     @Inject
-    FormUpdateChecker formUpdateChecker;
+    FormsUpdater formsUpdater;
 
     @NotNull
     @Override
@@ -28,7 +28,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
         DaggerUtils.getComponent(context).inject(this);
 
         return () -> {
-            formUpdateChecker.synchronizeWithServer(inputData.get(DATA_PROJECT_ID));
+            formsUpdater.matchFormsWithServer(inputData.get(DATA_PROJECT_ID));
             return true;
         };
     }

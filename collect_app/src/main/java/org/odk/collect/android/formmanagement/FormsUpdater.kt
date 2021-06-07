@@ -22,7 +22,7 @@ import org.odk.collect.forms.FormSourceException
 import java.io.File
 import java.util.stream.Collectors
 
-class FormUpdateChecker(
+class FormsUpdater(
     private val context: Context,
     private val notifier: Notifier,
     private val analytics: Analytics,
@@ -74,7 +74,11 @@ class FormUpdateChecker(
         }
     }
 
-    fun synchronizeWithServer(projectId: String): Boolean {
+    /**
+     * Downloads new forms, updates existing forms and deletes forms that are no longer part of
+     * the project's form list.
+     */
+    fun matchFormsWithServer(projectId: String): Boolean {
         val sandbox = getProjectSandbox(projectId)
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)

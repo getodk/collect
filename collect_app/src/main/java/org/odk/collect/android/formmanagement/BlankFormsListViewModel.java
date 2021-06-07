@@ -36,16 +36,16 @@ public class BlankFormsListViewModel extends ViewModel {
     private final SyncStatusAppState syncRepository;
     private final Settings generalSettings;
     private final Analytics analytics;
-    private final FormUpdateChecker formUpdateChecker;
+    private final FormsUpdater formsUpdater;
     private final CurrentProjectProvider currentProjectProvider;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormUpdateChecker formUpdateChecker, CurrentProjectProvider currentProjectProvider) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
         this.generalSettings = settingsProvider.getGeneralSettings();
         this.analytics = analytics;
-        this.formUpdateChecker = formUpdateChecker;
+        this.formsUpdater = formsUpdater;
         this.currentProjectProvider = currentProjectProvider;
     }
 
@@ -75,7 +75,7 @@ public class BlankFormsListViewModel extends ViewModel {
         logManualSync();
 
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        scheduler.immediate(() -> formUpdateChecker.synchronizeWithServer(currentProjectProvider.getCurrentProject().getUuid()), result::setValue);
+        scheduler.immediate(() -> formsUpdater.matchFormsWithServer(currentProjectProvider.getCurrentProject().getUuid()), result::setValue);
         return result;
     }
 
@@ -93,24 +93,24 @@ public class BlankFormsListViewModel extends ViewModel {
         private final SyncStatusAppState syncRepository;
         private final SettingsProvider settingsProvider;
         private final Analytics analytics;
-        private final FormUpdateChecker formUpdateChecker;
+        private final FormsUpdater formsUpdater;
         private final CurrentProjectProvider currentProjectProvider;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormUpdateChecker formUpdateChecker, CurrentProjectProvider currentProjectProvider) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
             this.settingsProvider = settingsProvider;
             this.analytics = analytics;
-            this.formUpdateChecker = formUpdateChecker;
+            this.formsUpdater = formsUpdater;
             this.currentProjectProvider = currentProjectProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, settingsProvider, analytics, formUpdateChecker, currentProjectProvider);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider);
         }
     }
 }

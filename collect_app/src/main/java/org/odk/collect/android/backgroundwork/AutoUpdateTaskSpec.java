@@ -21,7 +21,7 @@ import android.content.Context;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.formmanagement.FormUpdateChecker;
+import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -36,7 +36,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     public static final String DATA_PROJECT_ID = "projectId";
 
     @Inject
-    FormUpdateChecker formUpdateChecker;
+    FormsUpdater formsUpdater;
 
     @NotNull
     @Override
@@ -46,7 +46,7 @@ public class AutoUpdateTaskSpec implements TaskSpec {
         return () -> {
             String projectId = inputData.get(DATA_PROJECT_ID);
             if (projectId != null) {
-                formUpdateChecker.downloadUpdates(projectId);
+                formsUpdater.downloadUpdates(projectId);
                 return true;
             } else {
                 throw new IllegalArgumentException("No project ID provided!");

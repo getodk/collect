@@ -12,7 +12,7 @@ import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.DATA_PROJECT_ID
 import org.odk.collect.android.formmanagement.FormSourceProvider
-import org.odk.collect.android.formmanagement.FormUpdateChecker
+import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
@@ -27,7 +27,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 class AutoUpdateTaskSpecTest {
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val formUpdateChecker = mock<FormUpdateChecker>()
+    private val formUpdateChecker = mock<FormsUpdater>()
 
     @Before
     fun setup() {
@@ -43,7 +43,7 @@ class AutoUpdateTaskSpecTest {
                 syncStatusAppState: SyncStatusAppState,
                 instancesRepositoryProvider: InstancesRepositoryProvider,
                 changeLockProvider: ChangeLockProvider
-            ): FormUpdateChecker? {
+            ): FormsUpdater? {
                 return formUpdateChecker
             }
         })

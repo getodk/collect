@@ -33,7 +33,7 @@ import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
-class FormUpdateCheckerTest {
+class FormsUpdaterTest {
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val component = DaggerUtils.getComponent(application)
@@ -53,13 +53,13 @@ class FormUpdateCheckerTest {
         on { fetchFormList() } doReturn emptyList()
     }
 
-    private lateinit var updateChecker: FormUpdateChecker
+    private lateinit var updateManager: FormsUpdater
 
     @Before
     fun setup() {
         val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
 
-        updateChecker = FormUpdateChecker(
+        updateManager = FormsUpdater(
             context = application,
             notifier = mock(),
             analytics = mock(),
@@ -79,7 +79,7 @@ class FormUpdateCheckerTest {
         application.contentResolver.registerContentObserver(CONTENT_URI, false, contentObserver)
 
         val project = setupProject()
-        updateChecker.downloadUpdates(project.uuid)
+        updateManager.downloadUpdates(project.uuid)
 
         verify(contentObserver).dispatchChange(false, CONTENT_URI)
     }
@@ -95,7 +95,7 @@ class FormUpdateCheckerTest {
         settingsProvider.getGeneralSettings(project.uuid)
             .save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true)
 
-        updateChecker.downloadUpdates(project.uuid)
+        updateManager.downloadUpdates(project.uuid)
         assertThat(
             formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
             `is`(1)
@@ -110,7 +110,7 @@ class FormUpdateCheckerTest {
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
-        updateChecker.synchronizeWithServer(project.uuid)
+        updateManager.matchFormsWithServer(project.uuid)
         verifyNoInteractions(syncStatusAppState)
         verifyNoInteractions(formSource)
         verifyNoInteractions(notifier)
@@ -129,7 +129,7 @@ class FormUpdateCheckerTest {
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
-        assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))
+        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
     }
 
     @Test
@@ -137,7 +137,7 @@ class FormUpdateCheckerTest {
         val project = setupProject()
 
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
-        assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))
+        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {
