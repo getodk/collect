@@ -74,7 +74,7 @@ class FormUpdateChecker(
             if (updatedForms.isNotEmpty()) {
                 if (generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
                     val formUpdateDownloader = FormUpdateDownloader()
-                    val changeLock = changeLockProvider.getFormLock()
+                    val changeLock = changeLockProvider.getFormLock(projectId)
                     val results = formUpdateDownloader.downloadUpdates(
                         updatedForms,
                         changeLock,
@@ -97,7 +97,7 @@ class FormUpdateChecker(
 
     @JvmOverloads
     fun synchronizeWithServer(projectId: String): Boolean {
-        val changeLock = changeLockProvider.getFormLock()
+        val changeLock = changeLockProvider.getFormLock(projectId)
         return changeLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 val formsDirPath = formsDir(projectId)

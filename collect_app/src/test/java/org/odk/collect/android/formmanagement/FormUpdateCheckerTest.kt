@@ -46,7 +46,7 @@ class FormUpdateCheckerTest {
     private val analytics = mock<Analytics>()
 
     private val changeLockProvider = mock<ChangeLockProvider> {
-        on { getFormLock() } doReturn BooleanChangeLock()
+        on { getFormLock(any()) } doReturn BooleanChangeLock()
     }
 
     private val formSource = mock<FormSource> {
@@ -107,7 +107,7 @@ class FormUpdateCheckerTest {
         val project = setupProject()
 
         val changeLock = BooleanChangeLock()
-        whenever(changeLockProvider.getFormLock()).thenReturn(changeLock)
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
         updateChecker.synchronizeWithServer(project.uuid)
@@ -126,7 +126,7 @@ class FormUpdateCheckerTest {
         val project = setupProject()
 
         val changeLock = BooleanChangeLock()
-        whenever(changeLockProvider.getFormLock()).thenReturn(changeLock)
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
         assertThat(updateChecker.synchronizeWithServer(project.uuid), `is`(false))

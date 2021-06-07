@@ -7,9 +7,9 @@ import javax.inject.Singleton
 @Singleton
 class ChangeLockProvider {
 
-    private val formLock: ChangeLock = ReentrantLockChangeLock()
+    private val locks: MutableMap<String, ChangeLock> = mutableMapOf()
 
-    fun getFormLock(): ChangeLock {
-        return formLock
+    fun getFormLock(projectId: String): ChangeLock {
+        return locks.getOrPut(projectId) { ReentrantLockChangeLock() }
     }
 }
