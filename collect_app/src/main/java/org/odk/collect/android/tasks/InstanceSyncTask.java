@@ -37,7 +37,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

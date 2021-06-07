@@ -13,7 +13,7 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

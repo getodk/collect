@@ -35,7 +35,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.Result;
 

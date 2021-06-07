@@ -1,5 +1,6 @@
 package org.odk.collect.shared
 
+import org.odk.collect.shared.strings.RandomString
 import java.io.File
 
 object TempFiles {

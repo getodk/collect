@@ -12,7 +12,7 @@ import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;

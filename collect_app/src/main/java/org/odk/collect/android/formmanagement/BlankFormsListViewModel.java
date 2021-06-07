@@ -19,7 +19,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.Settings;
 
 import java.io.ByteArrayInputStream;

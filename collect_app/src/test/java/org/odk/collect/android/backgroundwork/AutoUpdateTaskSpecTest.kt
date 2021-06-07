@@ -21,6 +21,7 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.shared.locks.ChangeLock
 
 @RunWith(AndroidJUnit4::class)
 class AutoUpdateTaskSpecTest {

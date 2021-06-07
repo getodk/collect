@@ -17,7 +17,7 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)

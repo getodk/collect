@@ -53,8 +53,8 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.shared.Validator;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Validator;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.util.Locale;

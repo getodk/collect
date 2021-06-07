@@ -12,8 +12,8 @@ import org.odk.collect.forms.MediaFile;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.shared.Validator;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Validator;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

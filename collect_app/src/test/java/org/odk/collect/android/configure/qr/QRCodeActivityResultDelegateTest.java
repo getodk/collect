@@ -16,7 +16,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.robolectric.Robolectric;
 
 import java.io.ByteArrayInputStream;

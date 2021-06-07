@@ -5,7 +5,6 @@ import org.javarosa.core.reference.ReferenceManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsUtils
-import org.odk.collect.android.backgroundwork.ChangeLock
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.notifications.Notifier
@@ -19,6 +18,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.shared.locks.ChangeLock
 import java.io.File
 import java.util.stream.Collectors
 

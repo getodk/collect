@@ -18,6 +18,7 @@ package org.odk.collect.shared
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
+import org.odk.collect.shared.strings.Validator
 
 class ValidatorTest {
     @Test

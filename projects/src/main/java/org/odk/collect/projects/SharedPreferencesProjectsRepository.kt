@@ -3,7 +3,7 @@ package org.odk.collect.projects
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.odk.collect.shared.Settings
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 
 class SharedPreferencesProjectsRepository(
     private val uuidGenerator: UUIDGenerator,

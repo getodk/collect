@@ -20,7 +20,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)

@@ -10,7 +10,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
 import org.odk.collect.formstest.FormUtils;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.BufferedWriter;

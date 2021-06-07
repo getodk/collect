@@ -1,4 +1,4 @@
-package org.odk.collect.android.backgroundwork;
+package org.odk.collect.shared.locks;
 
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;

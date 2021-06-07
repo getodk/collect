@@ -32,7 +32,7 @@ import org.odk.collect.android.utilities.CustomSQLiteQueryBuilder;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 import org.odk.collect.android.utilities.SQLiteUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.FileInputStream;
