@@ -66,6 +66,11 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     }
 
     @Override
+    public void cancelUpdates() {
+        scheduler.cancelDeferred(getAutoUpdateTag());
+    }
+
+    @Override
     public void scheduleSubmit() {
         scheduler.networkDeferred(AUTO_SEND_TAG, new AutoSendTaskSpec());
     }

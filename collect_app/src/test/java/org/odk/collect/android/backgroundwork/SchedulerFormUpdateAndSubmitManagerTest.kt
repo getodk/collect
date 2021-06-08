@@ -56,4 +56,13 @@ class SchedulerFormUpdateAndSubmitManagerTest {
             eq(mapOf(AutoUpdateTaskSpec.DATA_PROJECT_ID to projectId))
         )
     }
+
+    @Test
+    fun `cancelUpdates cancels auto update for current project`() {
+        val manager =
+            SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application)
+
+        manager.cancelUpdates()
+        verify(scheduler).cancelDeferred("serverPollingJob:$projectId")
+    }
 }

@@ -32,12 +32,14 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
+import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -64,6 +66,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
     @Inject
     ProjectsRepository projectsRepository;
+
+    @Inject
+    FormUpdateManager formUpdateManager;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -216,13 +221,14 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     }
 
     public void deleteProject() {
-        projectsRepository.delete(currentProjectProvider.getCurrentProject().getUuid());
-        if (projectsRepository.getAll().isEmpty()) {
-            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
-        } else {
-            currentProjectProvider.setCurrentProject(projectsRepository.getAll().get(0).getUuid());
+        ProjectDeleter projectDeleter = new ProjectDeleter(projectsRepository, currentProjectProvider, formUpdateManager);
+        Project.Saved newProject = projectDeleter.deleteCurrentProject();
+
+        if (newProject != null) {
             ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
-            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().getName()));
+            ToastUtils.showLongToast(getString(R.string.switched_project, newProject.getName()));
+        } else {
+            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
         }
     }
 }
