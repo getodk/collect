@@ -121,8 +121,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
-import org.odk.collect.shared.locks.ChangeLock;
-import org.odk.collect.shared.locks.ReentrantLockChangeLock;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -396,13 +394,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Named("INSTANCES")
-    @Singleton
-    public ChangeLock providesInstancesChangeLock() {
-        return new ReentrantLockChangeLock();
-    }
-
-    @Provides
     public GoogleApiProvider providesGoogleApiProvider(Context context) {
         return new GoogleApiProvider(context);
     }
@@ -582,8 +573,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(Context context, @Named("INSTANCES") ChangeLock changeLock, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
-        return new InstanceAutoSender(context, changeLock, notifier, analytics, formsRepositoryProvider, instancesRepositoryProvider, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider, instancesAppState);
+    public InstanceAutoSender providesInstanceAutoSender(Context context, ChangeLockProvider changeLockProvider, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+        return new InstanceAutoSender(context, changeLockProvider, notifier, analytics, formsRepositoryProvider, instancesRepositoryProvider, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider, instancesAppState);
     }
 
     @Provides

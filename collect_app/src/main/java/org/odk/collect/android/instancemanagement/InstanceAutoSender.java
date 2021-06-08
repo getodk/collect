@@ -11,17 +11,17 @@ import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.shared.locks.ChangeLock;
 
 public class InstanceAutoSender {
 
     private final Context context;
-    private final ChangeLock changeLock;
+    private final ChangeLockProvider changeLockProvider;
     private final Notifier notifier;
     private final Analytics analytics;
     private final FormsRepositoryProvider formsRepositoryProvider;
@@ -32,9 +32,9 @@ public class InstanceAutoSender {
     private final SettingsProvider settingsProvider;
     private final InstancesAppState instancesAppState;
 
-    public InstanceAutoSender(Context context, ChangeLock changeLock, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+    public InstanceAutoSender(Context context, ChangeLockProvider changeLockProvider, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
         this.context = context;
-        this.changeLock = changeLock;
+        this.changeLockProvider = changeLockProvider;
         this.notifier = notifier;
         this.analytics = analytics;
         this.formsRepositoryProvider = formsRepositoryProvider;
@@ -52,7 +52,7 @@ public class InstanceAutoSender {
         Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
         InstanceSubmitter instanceSubmitter = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider, permissionsProvider, generalSettings);
 
-        return changeLock.withLock(acquiredLock -> {
+        return changeLockProvider.getInstanceLock(projectId).withLock(acquiredLock -> {
             if (acquiredLock) {
                 try {
                     Pair<Boolean, String> results = instanceSubmitter.submitUnsubmittedInstances();
