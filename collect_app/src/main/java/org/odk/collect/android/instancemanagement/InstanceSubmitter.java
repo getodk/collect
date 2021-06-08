@@ -23,7 +23,6 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -41,6 +40,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
 
 public class InstanceSubmitter {
 
@@ -153,24 +153,5 @@ public class InstanceSubmitter {
         }
 
         return toUpload;
-    }
-
-    /**
-     * Returns whether a form with the specified form_id should be auto-sent given the current
-     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
-     * <p>
-     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
-     * auto-send settings OR if auto-send is on at the form-level.
-     *
-     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
-     * @deprecated should be private what requires refactoring the whole class to make it testable
-     */
-    @Deprecated
-    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
-        Form form = formsRepository.getLatestByFormIdAndVersion(jrFormId, jrFormVersion);
-        if (form == null) {
-            return false;
-        }
-        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
     }
 }
