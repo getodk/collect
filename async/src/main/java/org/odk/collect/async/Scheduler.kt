@@ -30,7 +30,8 @@ interface Scheduler {
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *
-     * @param tag used to identify this task in future
+     * @param tag used to identify this task in future. Previously scheduled tasks using the same
+     * tag will not be replaced and will still run
      * @param spec defines the task to be run
      */
     fun networkDeferred(tag: String, spec: TaskSpec)
