@@ -40,7 +40,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
-    private lateinit var binding: AutomaticProjectCreatorDialogLayoutBinding
+    lateinit var binding: AutomaticProjectCreatorDialogLayoutBinding
 
     private var listener: ProjectAddedListener? = null
 
