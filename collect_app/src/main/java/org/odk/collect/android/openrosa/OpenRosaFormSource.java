@@ -1,7 +1,6 @@
 package org.odk.collect.android.openrosa;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormListItem;
@@ -9,9 +8,7 @@ import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.shared.strings.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
@@ -22,7 +19,6 @@ import javax.net.ssl.SSLException;
 
 import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
 import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
-import static org.odk.collect.android.analytics.AnalyticsEvents.LEGACY_FORM_LIST;
 
 public class OpenRosaFormSource implements FormSource {
 
@@ -33,16 +29,12 @@ public class OpenRosaFormSource implements FormSource {
     private String serverURL;
     private final String formListPath;
 
-    private final Analytics analytics;
-
-    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, Analytics analytics, OpenRosaResponseParser openRosaResponseParser) {
+    public OpenRosaFormSource(String serverURL, String formListPath, OpenRosaHttpInterface openRosaHttpInterface, WebCredentialsUtils webCredentialsUtils, OpenRosaResponseParser openRosaResponseParser) {
         this.openRosaResponseParser = openRosaResponseParser;
         this.webCredentialsUtils = webCredentialsUtils;
         this.openRosaXMLFetcher = new OpenRosaXmlFetcher(openRosaHttpInterface, this.webCredentialsUtils);
         this.serverURL = serverURL;
         this.formListPath = formListPath;
-
-        this.analytics = analytics;
     }
 
     @Override
@@ -68,8 +60,6 @@ public class OpenRosaFormSource implements FormSource {
                 throw new FormSourceException.ParseError(serverURL);
             }
         } else {
-            String serverHash = Md5.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
-            analytics.logServerEvent(LEGACY_FORM_LIST, serverHash);
             throw new FormSourceException.ServerNotOpenRosaError();
         }
     }

@@ -563,8 +563,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSourceProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface, Analytics analytics) {
-        return new FormSourceProvider(settingsProvider, openRosaHttpInterface, analytics);
+    public FormSourceProvider providesFormSourceProvider(SettingsProvider settingsProvider, OpenRosaHttpInterface openRosaHttpInterface) {
+        return new FormSourceProvider(settingsProvider, openRosaHttpInterface);
     }
 
     @Provides
