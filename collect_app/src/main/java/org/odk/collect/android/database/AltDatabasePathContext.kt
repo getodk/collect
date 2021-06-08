@@ -19,7 +19,7 @@ class AltDatabasePathContext(private val path: String, context: Context) : Conte
     override fun openOrCreateDatabase(
         name: String,
         mode: Int,
-        factory: SQLiteDatabase.CursorFactory,
+        factory: SQLiteDatabase.CursorFactory?,
         errorHandler: DatabaseErrorHandler?
     ): SQLiteDatabase {
         return openOrCreateDatabase(name, mode, factory)
@@ -28,7 +28,7 @@ class AltDatabasePathContext(private val path: String, context: Context) : Conte
     override fun openOrCreateDatabase(
         name: String,
         mode: Int,
-        factory: SQLiteDatabase.CursorFactory
+        factory: SQLiteDatabase.CursorFactory?
     ): SQLiteDatabase {
         return SQLiteDatabase.openOrCreateDatabase(getDatabasePath(name), null)
     }
