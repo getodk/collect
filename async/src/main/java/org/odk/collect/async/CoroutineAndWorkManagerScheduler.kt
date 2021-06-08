@@ -17,7 +17,7 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
 
     constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
 
-    override fun networkDeferred(tag: String, spec: TaskSpec) {
+    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()

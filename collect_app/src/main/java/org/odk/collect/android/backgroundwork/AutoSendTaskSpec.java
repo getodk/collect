@@ -49,6 +49,8 @@ import static java.lang.Boolean.parseBoolean;
 
 public class AutoSendTaskSpec implements TaskSpec {
 
+    public static final String DATA_PROJECT_ID = "projectId";
+
     @Inject
     NetworkStateProvider connectivityProvider;
 

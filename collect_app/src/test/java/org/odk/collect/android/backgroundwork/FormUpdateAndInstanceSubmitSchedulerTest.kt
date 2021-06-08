@@ -46,12 +46,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             application.getString(R.string.every_one_hour_value)
         )
 
-        val manager =
-            FormUpdateAndInstanceSubmitScheduler(
-                scheduler,
-                settingsProvider,
-                application
-            )
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates()
         verify(scheduler).networkDeferred(
@@ -64,8 +59,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `cancelUpdates cancels auto update for current project`() {
-        val manager =
-            FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.cancelUpdates()
         verify(scheduler).cancelDeferred("serverPollingJob:$projectId")
@@ -73,8 +67,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `cancelUpdates cancels match exactly update for current project`() {
-        val manager =
-            FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.cancelUpdates()
         verify(scheduler).cancelDeferred("match_exactly:$projectId")
@@ -91,12 +84,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             application.getString(R.string.every_one_hour_value)
         )
 
-        val manager =
-            FormUpdateAndInstanceSubmitScheduler(
-                scheduler,
-                settingsProvider,
-                application
-            )
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
         manager.scheduleUpdates()
         verify(scheduler).networkDeferred(
@@ -104,6 +92,18 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             any<SyncFormsTaskSpec>(),
             eq(3600000),
             eq(mapOf(SyncFormsTaskSpec.DATA_PROJECT_ID to projectId))
+        )
+    }
+
+    @Test
+    fun `scheduleSubmit passes current project ID`() {
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.scheduleSubmit()
+        verify(scheduler).networkDeferred(
+            eq("AutoSendWorker:$projectId"),
+            any<AutoSendTaskSpec>(),
+            eq(mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to projectId))
         )
     }
 }

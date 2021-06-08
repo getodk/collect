@@ -34,11 +34,10 @@ import androidx.loader.content.Loader;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
-import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;

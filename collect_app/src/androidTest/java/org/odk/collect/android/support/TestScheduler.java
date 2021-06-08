@@ -17,8 +17,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static java.util.Collections.emptyMap;
-
 public class TestScheduler implements Scheduler {
 
     private final Scheduler wrappedScheduler;
@@ -65,12 +63,12 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec) {
-        deferredTasks.add(new DeferredTask(tag, spec, null, emptyMap()));
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, @NotNull Map<String, String> inputData) {
+        deferredTasks.add(new DeferredTask(tag, spec, null, inputData));
     }
 
     @Override
-    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod, Map<String, String> inputData) {
+    public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod, @NotNull Map<String, String> inputData) {
         cancelDeferred(tag);
         deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod, inputData));
     }

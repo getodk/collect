@@ -78,12 +78,14 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleSubmit() {
-        scheduler.networkDeferred(getAutoSendTag(), new AutoSendTaskSpec());
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(AutoSendTaskSpec.DATA_PROJECT_ID, currentProjectId());
+        scheduler.networkDeferred(getAutoSendTag(), new AutoSendTaskSpec(), inputData);
     }
 
     @NotNull
     public String getAutoSendTag() {
-        return "AutoSendWorker";
+        return "AutoSendWorker:" + currentProjectId();
     }
 
     @NotNull
