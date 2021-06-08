@@ -22,6 +22,7 @@ import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +71,7 @@ public class DownloadFormsTask extends
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, Collect.getInstance().getString(R.string.failure));
+                results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getInstance(), R.string.failure));
             } catch (InterruptedException e) {
                 return emptyMap();
             }
