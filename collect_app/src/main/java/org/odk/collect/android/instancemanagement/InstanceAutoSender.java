@@ -46,10 +46,10 @@ public class InstanceAutoSender {
         this.instancesAppState = instancesAppState;
     }
 
-    public boolean autoSendInstances() {
-        FormsRepository formsRepository = formsRepositoryProvider.get();
-        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
-        Settings generalSettings = settingsProvider.getGeneralSettings();
+    public boolean autoSendInstances(String projectId) {
+        FormsRepository formsRepository = formsRepositoryProvider.get(projectId);
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
+        Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
         InstanceSubmitter instanceSubmitter = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider, permissionsProvider, generalSettings);
 
         return changeLock.withLock(acquiredLock -> {

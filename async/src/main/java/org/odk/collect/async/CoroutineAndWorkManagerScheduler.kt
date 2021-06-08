@@ -22,9 +22,13 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val workRequest = OneTimeWorkRequest.Builder(spec.getWorkManagerAdapter())
+        val workManagerInputData = Data.Builder().putAll(inputData).build()
+
+        val worker = spec.getWorkManagerAdapter()
+        val workRequest = OneTimeWorkRequest.Builder(worker)
             .addTag(tag)
             .setConstraints(constraints)
+            .setInputData(workManagerInputData)
             .build()
 
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.KEEP, workRequest).enqueue()

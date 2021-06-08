@@ -33,9 +33,9 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -65,8 +65,10 @@ import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
+import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -98,6 +100,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -105,7 +108,6 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -495,7 +497,7 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
-                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
+                                                 CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
         return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, new ProjectDetailsCreator(context));
     }
 
@@ -577,6 +579,11 @@ public class AppDependencyModule {
     @Provides
     public FormsUpdater providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider, ChangeLockProvider changeLockProvider) {
         return new FormsUpdater(context, notifier, analytics, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, syncStatusAppState, instancesRepositoryProvider, changeLockProvider);
+    }
+
+    @Provides
+    public InstanceAutoSender providesInstanceAutoSender(Context context, @Named("INSTANCES") ChangeLock changeLock, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+        return new InstanceAutoSender(context, changeLock, notifier, analytics, formsRepositoryProvider, instancesRepositoryProvider, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider, instancesAppState);
     }
 
     @Provides
