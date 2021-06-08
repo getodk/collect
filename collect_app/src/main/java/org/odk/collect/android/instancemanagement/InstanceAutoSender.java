@@ -3,6 +3,7 @@ package org.odk.collect.android.instancemanagement;
 import android.content.Context;
 import android.util.Pair;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formmanagement.InstancesAppState;
@@ -10,13 +11,20 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.Settings;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
 
 public class InstanceAutoSender {
 
@@ -55,7 +63,8 @@ public class InstanceAutoSender {
         return changeLockProvider.getInstanceLock(projectId).withLock(acquiredLock -> {
             if (acquiredLock) {
                 try {
-                    Pair<Boolean, String> results = instanceSubmitter.submitUnsubmittedInstances();
+                    List<Instance> toUpload = getInstancesToAutoSend(formsRepository, instancesRepository, generalSettings);
+                    Pair<Boolean, String> results = instanceSubmitter.submitInstances(toUpload);
                     notifier.onSubmission(results.first, results.second);
                 } catch (SubmitException e) {
                     switch (e.getType()) {
@@ -76,5 +85,18 @@ public class InstanceAutoSender {
                 return false;
             }
         });
+    }
+
+    @NotNull
+    private List<Instance> getInstancesToAutoSend(FormsRepository formsRepository, InstancesRepository instancesRepository, Settings generalSettings) {
+        boolean isAutoSendAppSettingEnabled = !generalSettings.getString(GeneralKeys.KEY_AUTOSEND).equals("off");
+        List<Instance> toUpload = new ArrayList<>();
+        for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
+            if (shouldFormBeSent(formsRepository, instance.getFormId(), instance.getFormVersion(), isAutoSendAppSettingEnabled)) {
+                toUpload.add(instance);
+            }
+        }
+
+        return toUpload;
     }
 }

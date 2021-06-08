@@ -63,12 +63,7 @@ public class InstanceSubmitter {
         this.generalSettings = generalSettings;
     }
 
-    public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
-        List<Instance> toUpload = getInstancesToAutoSend(!generalSettings.getString(GeneralKeys.KEY_AUTOSEND).equals("off"));
-        return submitInstances(toUpload);
-    }
-
-    private Pair<Boolean, String> submitInstances(List<Instance> toUpload) throws SubmitException {
+    public Pair<Boolean, String> submitInstances(List<Instance> toUpload) throws SubmitException {
         if (toUpload.isEmpty()) {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
