@@ -2,8 +2,6 @@ package org.odk.collect.android.instancemanagement;
 
 import android.util.Pair;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -30,7 +28,6 @@ import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +37,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
 
 public class InstanceSubmitter {
 
@@ -133,20 +129,5 @@ public class InstanceSubmitter {
         }
 
         return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getInstance(), resultMessagesByInstanceId));
-    }
-
-    /**
-     * Returns instances that need to be auto-sent.
-     */
-    @NonNull
-    private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
-        List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
-            if (shouldFormBeSent(formsRepository, instance.getFormId(), instance.getFormVersion(), isAutoSendAppSettingEnabled)) {
-                toUpload.add(instance);
-            }
-        }
-
-        return toUpload;
     }
 }
