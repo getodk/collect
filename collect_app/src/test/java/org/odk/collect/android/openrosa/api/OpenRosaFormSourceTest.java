@@ -140,6 +140,26 @@ public class OpenRosaFormSourceTest {
     }
 
     @Test
+    public void fetchFormList_whenResponseHasNoOpenRosaHeader_throwsServerNotOpenRosaError() throws Exception {
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com///", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+
+        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
+                new ByteArrayInputStream(RESPONSE.getBytes()),
+                new HashMap<String, String>() {{
+                    // No OpenRosa header
+                }},
+                "", 200
+        ));
+
+        try {
+            formListApi.fetchFormList();
+            fail("Expected exception because server is not OpenRosa server.");
+        } catch (FormSourceException.ServerNotOpenRosaError e) {
+            // pass
+        }
+    }
+
+    @Test
     public void fetchManifest_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
         OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
 

@@ -1,8 +1,6 @@
 package org.odk.collect.android.openrosa;
 
-import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
-import org.kxml2.kdom.Element;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -17,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -73,7 +70,7 @@ public class OpenRosaFormSource implements FormSource {
         } else {
             String serverHash = Md5.getMd5Hash(new ByteArrayInputStream(serverURL.getBytes()));
             analytics.logServerEvent(LEGACY_FORM_LIST, serverHash);
-            return parseLegacyFormList(result);
+            throw new FormSourceException.ServerNotOpenRosaError();
         }
     }
 
@@ -135,51 +132,6 @@ public class OpenRosaFormSource implements FormSource {
 
     public void updateWebCredentialsUtils(WebCredentialsUtils webCredentialsUtils) {
         this.openRosaXMLFetcher.updateWebCredentialsUtils(webCredentialsUtils);
-    }
-
-    private List<FormListItem> parseLegacyFormList(DocumentFetchResult result) throws FormSourceException {
-        // Aggregate 0.9.x mode...
-        // populate HashMap with form names and urls
-        Element formsElement = result.doc.getRootElement();
-        int formsCount = formsElement.getChildCount();
-        String formId = null;
-
-        List<FormListItem> formList = new ArrayList<>();
-
-        for (int i = 0; i < formsCount; ++i) {
-            if (formsElement.getType(i) != Element.ELEMENT) {
-                // whitespace
-                continue;
-            }
-            Element child = formsElement.getElement(i);
-            String tag = child.getName();
-            if (tag.equals("formID")) {
-                formId = XFormParser.getXMLText(child, true);
-                if (formId != null && formId.length() == 0) {
-                    formId = null;
-                }
-            }
-            if (tag.equalsIgnoreCase("form")) {
-                String formName = XFormParser.getXMLText(child, true);
-                if (formName != null && formName.length() == 0) {
-                    formName = null;
-                }
-                String downloadUrl = child.getAttributeValue(null, "url");
-                downloadUrl = downloadUrl.trim();
-                if (downloadUrl.length() == 0) {
-                    downloadUrl = null;
-                }
-                if (formName == null) {
-                    formList.clear();
-                    throw new FormSourceException.FetchError();
-                }
-
-                formList.add(new FormListItem(downloadUrl, formId, null, null, formName, null));
-                formId = null;
-            }
-        }
-
-        return formList;
     }
 
     @NotNull
