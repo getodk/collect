@@ -65,24 +65,24 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToLatestVersion(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, GEOMETRY, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, GEOMETRY_TYPE, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_IS_SYNC, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_ASS_ID, "long");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_TASK_STATUS, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_TASK_COMMENT, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_REPEAT, "integer");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, GEOMETRY, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, GEOMETRY_TYPE, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_IS_SYNC, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ASS_ID, "long");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_TASK_STATUS, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_TASK_COMMENT, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_REPEAT, "integer");
 
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_UPDATEID, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_LOCATION_TRIGGER, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_SURVEY_NOTES, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, UUID, "text");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_UPDATED, "integer");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_UPDATEID, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_LOCATION_TRIGGER, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_SURVEY_NOTES, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, UUID, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_UPDATED, "integer");
 
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_SHOW_DIST, "integer");
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, T_HIDE, "integer");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_SHOW_DIST, "integer");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_HIDE, "integer");
 
-        SQLiteUtils.addColumn(db, INSTANCES_DATABASE_NAME, "displaySubtext", "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, "displaySubtext", "text");
     }
 
 
