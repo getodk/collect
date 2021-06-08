@@ -18,8 +18,6 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
 public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler, InstanceSubmitScheduler {
 
-    public static final String AUTO_SEND_TAG = "AutoSendWorker";
-
     private final Scheduler scheduler;
     private final SettingsProvider settingsProvider;
     private final Application application;
@@ -80,7 +78,12 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleSubmit() {
-        scheduler.networkDeferred(AUTO_SEND_TAG, new AutoSendTaskSpec());
+        scheduler.networkDeferred(getAutoSendTag(), new AutoSendTaskSpec());
+    }
+
+    @NotNull
+    public String getAutoSendTag() {
+        return "AutoSendWorker";
     }
 
     @NotNull

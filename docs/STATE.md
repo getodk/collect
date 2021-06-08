@@ -45,6 +45,6 @@ and update this document as the code evolves.
 * Favoring domain objects (instance, form) with related logic where possible to more explicitly link data and logic
 * Moving code to packages based on domain slices (`audio` or `formentry` for instance) to make it easier to work on isolated features and navigate code
 * `QuestionWiget` implementations are moving from defining their "answer" view programmatically to [implementing `onCreateAnswerView`](WIDGETS.md)
-* Replacing Rx (and other async work) with LiveData + Scheduler abstraction
+* Replacing Rx (and other async work such as `AsyncTask`) with LiveData + Scheduler abstraction
 * Moving away from custom `SharedPreferences` abstractions (`GeneralSharedPreferences` and `AdminSharedPreferences`) to just using `SharedPreferences` interface
 * Replacing `..Factory` and `..Provider` objects with the new Java `Supplier` interface as much as possible
