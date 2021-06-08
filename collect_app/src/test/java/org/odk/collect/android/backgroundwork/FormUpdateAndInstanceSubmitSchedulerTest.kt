@@ -106,4 +106,12 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq(mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to projectId))
         )
     }
+
+    @Test
+    fun `cancelSubmit cancels auto send for current project`() {
+        val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
+
+        manager.cancelSubmit()
+        verify(scheduler).cancelDeferred("AutoSendWorker:$projectId")
+    }
 }

@@ -30,8 +30,8 @@ interface Scheduler {
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *
-     * @param tag used to identify this task in future. Previously scheduled tasks using the same
-     * tag will not be replaced and will still run
+     * @param tag used to identify this task in future. If there is a previously scheduled task
+     * with the same tag then that task then nothing new will be scheduled (this becomes  no-op)
      * @param spec defines the task to be run
      * @param inputData a map of input data that can be accessed by the task
      */

@@ -34,6 +34,7 @@ import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.androidshared.ColorPickerViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -72,6 +73,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
     @Inject
     FormUpdateScheduler formUpdateManager;
+
+    @Inject
+    InstanceSubmitScheduler instanceSubmitScheduler;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -232,7 +236,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     }
 
     public void deleteProject() {
-        ProjectDeleter projectDeleter = new ProjectDeleter(projectsRepository, currentProjectProvider, formUpdateManager);
+        ProjectDeleter projectDeleter = new ProjectDeleter(projectsRepository, currentProjectProvider, formUpdateManager, instanceSubmitScheduler);
         Project.Saved newProject = projectDeleter.deleteCurrentProject();
 
         if (newProject != null) {

@@ -83,6 +83,11 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         scheduler.networkDeferred(getAutoSendTag(), new AutoSendTaskSpec(), inputData);
     }
 
+    @Override
+    public void cancelSubmit() {
+        scheduler.cancelDeferred(getAutoSendTag());
+    }
+
     @NotNull
     public String getAutoSendTag() {
         return "AutoSendWorker:" + currentProjectId();
