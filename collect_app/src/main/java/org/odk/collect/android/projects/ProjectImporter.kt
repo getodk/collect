@@ -59,7 +59,7 @@ class ProjectImporter(
         return project
     }
 
-    fun createProjectDirs(project: Saved) {
+    private fun createProjectDirs(project: Saved) {
         storagePathProvider.getProjectDirPaths(project.uuid).forEach { FileUtils.createDir(it) }
     }
 
