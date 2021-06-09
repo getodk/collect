@@ -177,6 +177,7 @@ import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RESPONSE;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
@@ -785,6 +786,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
+                analytics.logFormEvent(OPEN_MAP_KIT_RESPONSE, Collect.getCurrentFormIdentifierHash());
                 setWidgetData(intent.getStringExtra("OSM_FILE_NAME"));
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
