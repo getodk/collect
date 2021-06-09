@@ -54,6 +54,7 @@ class AddNewProjectTest {
         page.checkIsToastWithMessageDisplayed(R.string.new_project_created)
 
         MainMenuPage()
+            .assertOnPage()
             .openProjectSettings()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertInactiveProject("my-server.com", "adam / my-server.com")

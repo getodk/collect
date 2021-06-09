@@ -65,6 +65,7 @@ class LaunchScreenTest {
         page.checkIsToastWithMessageDisplayed(R.string.new_project_created)
 
         MainMenuPage()
+            .assertOnPage()
             .openProjectSettings()
             .assertCurrentProject("my-server.com", "adam / my-server.com")
     }
