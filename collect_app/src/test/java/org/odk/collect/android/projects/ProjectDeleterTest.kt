@@ -18,10 +18,15 @@ class ProjectDeleterTest {
 
         val formUpdateManager = mock<FormUpdateScheduler>()
         val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
-        val deleter = ProjectDeleter(mock(), currentProjectProvider, formUpdateManager, instanceSubmitScheduler)
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            formUpdateManager,
+            instanceSubmitScheduler
+        )
 
         deleter.deleteCurrentProject()
-        verify(formUpdateManager).cancelUpdates()
+        verify(formUpdateManager).cancelUpdates("id")
         verify(instanceSubmitScheduler).cancelSubmit()
     }
 }

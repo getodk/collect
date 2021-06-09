@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,6 +17,9 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Inject
     @Named("ADMIN_SETTINGS_STORE")
     SettingsStore adminSettingsStore;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -42,6 +46,6 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(key, settingsProvider.getAdminSettings().getAll().get(key));
+        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getAdminSettings().getAll().get(key), key);
     }
 }

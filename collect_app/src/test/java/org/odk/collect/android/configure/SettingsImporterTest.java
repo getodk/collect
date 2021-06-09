@@ -48,7 +48,7 @@ public class SettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
     }
 
     @Test
@@ -109,7 +109,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
         assertThat(importer.fromJSON(emptySettings()), is(true));
     }
 
@@ -125,7 +125,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
         assertThat(importer.fromJSON(json.toString()), is(true));
     }
 
@@ -157,7 +157,7 @@ public class SettingsImporterTest {
         public List<Pair<String, Object>> changes = new ArrayList<>();
 
         @Override
-        public void onSettingChanged(String changedKey, Object newValue) {
+        public void onSettingChanged(String projectId, Object newValue, String changedKey) {
             changes.add(new Pair<>(changedKey, newValue));
         }
     }
