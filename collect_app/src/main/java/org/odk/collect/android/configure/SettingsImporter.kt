@@ -16,13 +16,13 @@ class SettingsImporter(
 ) {
 
     @JvmOverloads
-    fun fromJSON(json: String, uuid: String? = null): Boolean {
+    fun fromJSON(json: String, projectId: String? = null): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
         }
 
-        val generalSettings = settingsProvider.getGeneralSettings(uuid)
-        val adminSettings = settingsProvider.getAdminSettings(uuid)
+        val generalSettings = settingsProvider.getGeneralSettings(projectId)
+        val adminSettings = settingsProvider.getAdminSettings(projectId)
 
         generalSettings.clear()
         adminSettings.clear()
