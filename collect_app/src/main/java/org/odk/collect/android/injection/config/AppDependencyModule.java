@@ -106,6 +106,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.ZxingCaptureManagerFactory;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -582,5 +583,10 @@ public class AppDependencyModule {
     @Provides
     public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
         return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider);
+    }
+
+    @Provides
+    public ZxingCaptureManagerFactory providesZxingCaptureManagerFactory() {
+        return ZxingCaptureManagerFactory.INSTANCE;
     }
 }

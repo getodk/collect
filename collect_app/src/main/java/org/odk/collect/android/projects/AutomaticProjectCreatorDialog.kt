@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.lifecycleScope
 import com.google.zxing.client.android.BeepManager
-import com.google.zxing.client.android.Intents
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
@@ -21,12 +20,16 @@ import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
+import org.odk.collect.android.utilities.ZxingCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
 class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+
+    @Inject
+    lateinit var zxingCaptureManagerFactory: ZxingCaptureManagerFactory
 
     @Inject
     lateinit var barcodeViewDecoder: BarcodeViewDecoder
@@ -121,16 +124,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun startScanning(savedInstanceState: Bundle?) {
-        val intent = IntentIntegrator(requireActivity())
-            .setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES)
-            .setPrompt("")
-            .createScanIntent().apply {
-                putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
-            }
-
-        capture = CaptureManager(requireActivity(), binding.barcodeView)
-        capture!!.initializeFromIntent(intent, savedInstanceState)
-        capture!!.decode()
+        capture = zxingCaptureManagerFactory.getCaptureManager(requireActivity(), binding.barcodeView, savedInstanceState, listOf(IntentIntegrator.QR_CODE))
 
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner,
