@@ -17,19 +17,19 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.ZxingCaptureManagerFactory
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class AutomaticProjectCreatorDialogTest {
 
-    private val zxingCaptureManagerFactory: ZxingCaptureManagerFactory = mock {}
+    private val codeCaptureManagerFactory: CodeCaptureManagerFactory = mock {}
 
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesZxingCaptureManagerFactory(): ZxingCaptureManagerFactory {
-                return zxingCaptureManagerFactory
+            override fun providesCodeCaptureManagerFactory(): CodeCaptureManagerFactory {
+                return codeCaptureManagerFactory
             }
         })
     }

@@ -35,7 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.ZxingCaptureManagerFactory;
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -57,7 +57,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
     private BeepManager beepManager;
 
     @Inject
-    ZxingCaptureManagerFactory zxingCaptureManagerFactory;
+    CodeCaptureManagerFactory codeCaptureManagerFactory;
 
     @Inject
     BarcodeViewDecoder barcodeViewDecoder;
@@ -91,7 +91,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
     }
 
     private void startScanning(Bundle savedInstanceState) {
-        capture = zxingCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(R.string.barcode_scanner_prompt));
+        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(R.string.barcode_scanner_prompt));
 
         // Must be called after setting up CaptureManager
         if (frontCameraUsed()) {

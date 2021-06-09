@@ -106,7 +106,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.ZxingCaptureManagerFactory;
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -586,7 +586,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ZxingCaptureManagerFactory providesZxingCaptureManagerFactory() {
-        return ZxingCaptureManagerFactory.INSTANCE;
+    public CodeCaptureManagerFactory providesCodeCaptureManagerFactory() {
+        return CodeCaptureManagerFactory.INSTANCE;
     }
 }

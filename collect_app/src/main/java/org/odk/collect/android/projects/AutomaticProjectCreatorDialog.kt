@@ -17,10 +17,10 @@ import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBi
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
-import org.odk.collect.android.utilities.ZxingCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.R
@@ -29,7 +29,7 @@ import javax.inject.Inject
 class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
-    lateinit var zxingCaptureManagerFactory: ZxingCaptureManagerFactory
+    lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
 
     @Inject
     lateinit var barcodeViewDecoder: BarcodeViewDecoder
@@ -124,7 +124,7 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun startScanning(savedInstanceState: Bundle?) {
-        capture = zxingCaptureManagerFactory.getCaptureManager(requireActivity(), binding.barcodeView, savedInstanceState, listOf(IntentIntegrator.QR_CODE))
+        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), binding.barcodeView, savedInstanceState, listOf(IntentIntegrator.QR_CODE))
 
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner,
