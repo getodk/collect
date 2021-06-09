@@ -62,7 +62,7 @@ interface Scheduler {
     /**
      * Returns true if a deferred task scheduled with tag is currently running
      */
-    fun isRunning(tag: String): Boolean
+    fun isDeferredRunning(tag: String): Boolean
 
     /**
      * Run a task and then repeat in the foreground
@@ -72,4 +72,6 @@ interface Scheduler {
      * @return object that allows task to be cancelled
      */
     fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable
+
+    fun cancelAllDeferred()
 }
