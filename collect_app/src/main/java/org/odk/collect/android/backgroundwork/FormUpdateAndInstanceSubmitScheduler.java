@@ -4,7 +4,6 @@ import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
@@ -77,20 +76,20 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleSubmit() {
+    public void scheduleSubmit(String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(AutoSendTaskSpec.DATA_PROJECT_ID, currentProjectId());
-        scheduler.networkDeferred(getAutoSendTag(), new AutoSendTaskSpec(), inputData);
+        inputData.put(AutoSendTaskSpec.DATA_PROJECT_ID, projectId);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData);
     }
 
     @Override
-    public void cancelSubmit() {
-        scheduler.cancelDeferred(getAutoSendTag());
+    public void cancelSubmit(String projectId) {
+        scheduler.cancelDeferred(getAutoSendTag(projectId));
     }
 
     @NotNull
-    public String getAutoSendTag() {
-        return "AutoSendWorker:" + currentProjectId();
+    public String getAutoSendTag(String projectId) {
+        return "AutoSendWorker:" + projectId;
     }
 
     @NotNull
@@ -98,11 +97,8 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         return "match_exactly:" + projectId;
     }
 
+    @NotNull
     private String getAutoUpdateTag(String projectId) {
         return "serverPollingJob:" + projectId;
-    }
-
-    private String currentProjectId() {
-        return settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID);
     }
 }

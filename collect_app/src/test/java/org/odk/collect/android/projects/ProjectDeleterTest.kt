@@ -27,6 +27,6 @@ class ProjectDeleterTest {
 
         deleter.deleteCurrentProject()
         verify(formUpdateManager).cancelUpdates("id")
-        verify(instanceSubmitScheduler).cancelSubmit()
+        verify(instanceSubmitScheduler).cancelSubmit("id")
     }
 }

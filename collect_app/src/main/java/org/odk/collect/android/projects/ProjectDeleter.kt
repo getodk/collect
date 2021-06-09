@@ -15,7 +15,7 @@ class ProjectDeleter(
         val currentProject = currentProjectProvider.getCurrentProject()
 
         formUpdateScheduler.cancelUpdates(currentProject.uuid)
-        instanceSubmitScheduler.cancelSubmit()
+        instanceSubmitScheduler.cancelSubmit(currentProject.uuid)
 
         projectsRepository.delete(currentProject.uuid)
 

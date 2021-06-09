@@ -17,7 +17,6 @@ import org.odk.collect.android.preferences.Protocol.ODK
 import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE
 import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
 import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.async.Scheduler
 
 @RunWith(AndroidJUnit4::class)
@@ -89,23 +88,21 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `scheduleSubmit passes current project ID`() {
-        val projectId = CollectHelpers.setupDemoProject()
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.scheduleSubmit()
+        manager.scheduleSubmit("myProject")
         verify(scheduler).networkDeferred(
-            eq("AutoSendWorker:$projectId"),
+            eq("AutoSendWorker:myProject"),
             any<AutoSendTaskSpec>(),
-            eq(mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to projectId))
+            eq(mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to "myProject"))
         )
     }
 
     @Test
     fun `cancelSubmit cancels auto send for current project`() {
-        val projectId = CollectHelpers.setupDemoProject()
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
 
-        manager.cancelSubmit()
-        verify(scheduler).cancelDeferred("AutoSendWorker:$projectId")
+        manager.cancelSubmit("myProject")
+        verify(scheduler).cancelDeferred("AutoSendWorker:myProject")
     }
 }

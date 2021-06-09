@@ -45,6 +45,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -81,6 +82,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @BindView(R.id.toggle_button)
     Button toggleSelsButton;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     private InstanceSyncTask instanceSyncTask;
 
@@ -193,7 +197,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private void updateAutoSendStatus() {
         // This shouldn't use WorkManager directly but it's likely this code will be removed when
         // we eventually move sending forms to a Foreground Service (rather than a blocking AsyncTask)
-        String tag = ((FormUpdateAndInstanceSubmitScheduler) instanceSubmitScheduler).getAutoSendTag();
+        String tag = ((FormUpdateAndInstanceSubmitScheduler) instanceSubmitScheduler).getAutoSendTag(currentProjectProvider.getCurrentProject().getUuid());
         LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(tag);
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
