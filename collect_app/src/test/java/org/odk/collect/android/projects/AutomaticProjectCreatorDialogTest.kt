@@ -1,54 +1,65 @@
 package org.odk.collect.android.projects
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressBack
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.fragments.support.DialogFragmentHelpers
+import org.mockito.kotlin.mock
+import org.odk.collect.android.R
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.support.TestScreenContextActivity
-import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.ZxingCaptureManagerFactory
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class AutomaticProjectCreatorDialogTest {
 
-    lateinit var activity: TestScreenContextActivity
-    lateinit var dialog: AutomaticProjectCreatorDialog
+    private val zxingCaptureManagerFactory: ZxingCaptureManagerFactory = mock {}
 
     @Before
     fun setup() {
-        activity = CollectHelpers.createThemedActivity(TestScreenContextActivity::class.java)
-        dialog = AutomaticProjectCreatorDialog()
-    }
-
-    @Test
-    fun `The dialog should be dismissed after clicking on a device back button`() {
-        DialogUtils.showIfNotShowing(AutomaticProjectCreatorDialog::class.java, activity.supportFragmentManager)
-        RobolectricHelpers.runLooper()
-        DialogFragmentHelpers.assertDialogIsCancellable(true)
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesZxingCaptureManagerFactory(): ZxingCaptureManagerFactory {
+                return zxingCaptureManagerFactory
+            }
+        })
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        dialog.show(activity.supportFragmentManager, "TAG")
-        RobolectricHelpers.runLooper()
-        assertThat(dialog.isVisible, `is`(true))
-        dialog.binding.cancelButton.performClick()
-        RobolectricHelpers.runLooper()
-        assertThat(dialog.isVisible, `is`(false))
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AutomaticProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            assertThat(it.isVisible, `is`(true))
+            onView(withText(R.string.cancel)).perform(click())
+            assertThat(it.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `The dialog should be dismissed after clicking on a device back button`() {
+        val scenario = RobolectricHelpers.launchDialogFragment(AutomaticProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            assertThat(it.isVisible, `is`(true))
+            onView(isRoot()).perform(pressBack())
+            assertThat(it.isVisible, `is`(false))
+        }
     }
 
     @Test
     fun `The ManualProjectCreatorDialog should be displayed after switching to the manual mode`() {
-        dialog.show(activity.supportFragmentManager, "TAG")
-        RobolectricHelpers.runLooper()
-        assertThat(dialog.isVisible, `is`(true))
-        dialog.binding.configureManuallyButton.performClick()
-        RobolectricHelpers.runLooper()
-        assertThat(activity.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(AutomaticProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withText(R.string.configure_manually)).perform(scrollTo(), click())
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+        }
     }
 }
