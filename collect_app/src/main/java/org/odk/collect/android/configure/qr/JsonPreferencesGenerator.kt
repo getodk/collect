@@ -7,6 +7,19 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 
 class JsonPreferencesGenerator(private val settingsProvider: SettingsProvider) {
 
+    fun getProjectDetailsAsJson(url: String, username: String, password: String): String {
+        val generalSettings = JSONObject().apply {
+            put(GeneralKeys.KEY_SERVER_URL, url)
+            put(GeneralKeys.KEY_USERNAME, username)
+            put(GeneralKeys.KEY_PASSWORD, password)
+        }
+
+        return JSONObject().apply {
+            put("general", generalSettings)
+            put("admin", getAdminPrefsAsJson(emptyList()))
+        }.toString()
+    }
+
     fun getJSONFromPreferences(includedPasswordKeys: Collection<String> = emptyList()): String {
         return JSONObject().apply {
             put("general", getGeneralPrefsAsJson(includedPasswordKeys))

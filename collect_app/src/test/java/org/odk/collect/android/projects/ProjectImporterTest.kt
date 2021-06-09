@@ -38,6 +38,26 @@ class ProjectImporterTest {
     )
 
     @Test
+    fun `importNewProject() creates new project`() {
+        val newProject = Project.New("Project X", "X", "#cccccc")
+        val savedProject = projectImporter.importNewProject(newProject)
+
+        assertThat(projectsRepository.getAll(), contains(savedProject))
+    }
+
+    @Test
+    fun `importNewProject() creates storage for project`() {
+        val newProject = Project.New("Project X", "X", "#cccccc")
+        val savedProject = projectImporter.importNewProject(newProject)
+
+        storagePathProvider.getProjectDirPaths(savedProject.uuid).forEach {
+            val dir = File(it)
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+        }
+    }
+
+    @Test
     fun `importDemoProject() creates demo project`() {
         projectImporter.importDemoProject()
 

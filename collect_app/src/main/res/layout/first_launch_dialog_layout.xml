@@ -58,7 +58,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:text="@string/configure_manually"
-            android:textColor="?colorOnSurface"
             app:icon="@drawable/ic_edit"
             app:iconTint="?colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"

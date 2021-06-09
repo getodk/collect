@@ -149,6 +149,19 @@ class JsonPreferencesGeneratorTest {
         verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForProjectX, adminPrefsForProjectX)
     }
 
+    @Test
+    fun `When project details provided should getProjectDetailsAsJson() generate proper json`() {
+        val generalPrefs = mapOf<String, Any> (
+            GeneralKeys.KEY_SERVER_URL to "https://my-server.com",
+            GeneralKeys.KEY_USERNAME to "adam",
+            GeneralKeys.KEY_PASSWORD to "1234"
+        )
+
+        val jsonPrefs = jsonPreferencesGenerator.getProjectDetailsAsJson("https://my-server.com", "adam", "1234")
+
+        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>())
+    }
+
     private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>) {
         val jsonPrefs = JSONObject(jsonPrefsString)
         assertThat(jsonPrefs.length(), `is`(2))

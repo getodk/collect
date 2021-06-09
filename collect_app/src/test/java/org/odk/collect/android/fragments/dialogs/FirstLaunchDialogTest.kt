@@ -17,7 +17,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
@@ -28,6 +27,8 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
+import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
@@ -43,9 +44,9 @@ class FirstLaunchDialogTest {
     fun `The dialog should not be dismissed after clicking on a device back button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
-            MatcherAssert.assertThat(it.isVisible, `is`(true))
+            assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
-            MatcherAssert.assertThat(it.isVisible, `is`(true))
+            assertThat(it.isVisible, `is`(true))
         }
     }
 
@@ -82,11 +83,38 @@ class FirstLaunchDialogTest {
     }
 
     @Test
+    fun `The FirstLaunchDialog should not be dismissed after clicking on the 'Configure with QR code' button`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
+        scenario.onFragment {
+            onView(withText(R.string.configure_with_qr_code)).perform(click())
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(it.tag), `is`(notNullValue()))
+        }
+    }
+
+    @Test
     fun `The FirstLaunchDialog should not be dismissed after clicking on the 'Configure manually' button`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withText(R.string.configure_manually)).perform(click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(it.tag), `is`(notNullValue()))
+        }
+    }
+
+    @Test
+    fun `The AutomaticProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
+        scenario.onFragment {
+            onView(withText(R.string.configure_with_qr_code)).perform(click())
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(AutomaticProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+        }
+    }
+
+    @Test
+    fun `The ManualProjectCreatorDialog should be displayed after clicking on the 'Configure manually' button`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
+        scenario.onFragment {
+            onView(withText(R.string.configure_manually)).perform(click())
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
 

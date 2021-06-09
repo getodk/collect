@@ -24,7 +24,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
-import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -97,7 +96,7 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.addProjectButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
-                AddProjectDialog::class.java,
+                AutomaticProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
             dismiss()

@@ -5,16 +5,31 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.ResetStateRule
+import org.odk.collect.android.support.StubBarcodeViewDecoder
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.views.BarcodeViewDecoder
 
 @RunWith(AndroidJUnit4::class)
 class LaunchScreenTest {
 
     private val rule = CollectTestRule(false)
 
+    private val stubBarcodeViewDecoder = StubBarcodeViewDecoder()
+
     @get:Rule
     val chain: RuleChain = TestRuleChain.chain()
+        .around(
+            ResetStateRule(object : AppDependencyModule() {
+                override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
+                    return stubBarcodeViewDecoder
+                }
+            })
+        )
         .around(rule)
 
     @Test
@@ -30,7 +45,7 @@ class LaunchScreenTest {
     }
 
     @Test
-    fun clickingManuallyEnter_andAddingProjectDetails_setsAppUpWithProjectDetails() {
+    fun clickingManuallyEnterProjectDetails_andAddingProjectDetails_setsAppUpWithProjectDetails() {
         rule.startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
             .inputUrl("https://my-server.com")
@@ -39,5 +54,19 @@ class LaunchScreenTest {
             .assertProjectIcon("M", "#3e9fcc")
             .openProjectSettings()
             .assertCurrentProject("my-server.com", "John / my-server.com")
+    }
+
+    @Test
+    fun clickingAutomaticallyEnterProjectDetails_andScanningQRCode_setsAppUpWithProjectDetails() {
+        val page = rule.startAtFirstLaunch()
+            .clickAutomaticallyEnterProjectDetails()
+
+        stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
+        page.checkIsToastWithMessageDisplayed(R.string.new_project_created)
+
+        MainMenuPage()
+            .assertOnPage()
+            .openProjectSettings()
+            .assertCurrentProject("my-server.com", "adam / my-server.com")
     }
 }

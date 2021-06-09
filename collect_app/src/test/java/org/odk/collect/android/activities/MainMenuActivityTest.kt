@@ -21,14 +21,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.odk.collect.android.R
-import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectImporter
@@ -37,7 +34,6 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.projects.AddProjectDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
@@ -81,47 +77,6 @@ class MainMenuActivityTest {
                 return projectImporter
             }
         })
-    }
-
-    @Test
-    fun `MainMenuActivity should implement AddProjectDialogListener`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
-        scenario.onActivity { activity: MainMenuActivity ->
-            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
-        }
-    }
-
-    @Test
-    fun `New project should be set up when onProjectAdded() is called`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
-        scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
-
-            verify(projectImporter).setupProject(newProject)
-        }
-    }
-
-    @Test
-    fun `New settings should be saved when onProjectAdded() is called`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
-        scenario.onActivity { activity: MainMenuActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
-
-            var generalSettings = TestSettingsProvider.getGeneralSettings("456")
-
-            assertThat(generalSettings.getString(GeneralKeys.KEY_SERVER_URL), `is`("https://my-project.com"))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), `is`("John"))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
-
-            generalSettings = TestSettingsProvider.getGeneralSettings(project.uuid)
-
-            assertThat(generalSettings.getString(GeneralKeys.KEY_SERVER_URL), `is`("https://demo.getodk.org"))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), `is`(""))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), `is`(""))
-        }
     }
 
     @Test

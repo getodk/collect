@@ -14,7 +14,6 @@
 package org.odk.collect.android.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,8 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.zxing.client.android.BeepManager;
-import com.google.zxing.client.android.Intents;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
@@ -38,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -57,6 +55,9 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     private Button switchFlashlightButton;
     private BeepManager beepManager;
+
+    @Inject
+    CodeCaptureManagerFactory codeCaptureManagerFactory;
 
     @Inject
     BarcodeViewDecoder barcodeViewDecoder;
@@ -90,9 +91,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
     }
 
     private void startScanning(Bundle savedInstanceState) {
-        capture = new CaptureManager(getActivity(), barcodeScannerView);
-        capture.initializeFromIntent(getIntent(), savedInstanceState);
-        capture.decode();
+        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(R.string.barcode_scanner_prompt));
 
         // Must be called after setting up CaptureManager
         if (frontCameraUsed()) {
@@ -115,15 +114,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
         CameraSettings cameraSettings = new CameraSettings();
         cameraSettings.setRequestedCameraId(CameraUtils.getFrontCameraId());
         barcodeScannerView.getBarcodeView().setCameraSettings(cameraSettings);
-    }
-
-    private Intent getIntent() {
-        Intent intent = new IntentIntegrator(getActivity())
-                .setDesiredBarcodeFormats(getSupportedCodeFormats())
-                .setPrompt(getContext().getString(R.string.barcode_scanner_prompt))
-                .createScanIntent();
-        intent.putExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN);
-        return intent;
     }
 
     @Override

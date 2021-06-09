@@ -7,34 +7,30 @@ import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.odk.collect.android.R
-import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectAddedListener
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.AddProjectDialog
-import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -72,12 +68,12 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun `SplashScreenActivity should implement AddProjectDialogListener`() {
+    fun `SplashScreenActivity should implement ProjectAddedListener`() {
         doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity is AddProjectDialog.AddProjectDialogListener, `is`(true))
+            assertThat(activity is ProjectAddedListener, `is`(true))
         }
     }
 
@@ -87,56 +83,10 @@ class SplashScreenActivityTest {
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-
             Intents.init()
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
+            activity.onProjectAdded()
             Intents.intended(hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
-        }
-    }
-
-    @Test
-    fun `New project should be set up when onProjectAdded() is called`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
-
-            verify(projectImporter).setupProject(newProject)
-        }
-    }
-
-    @Test
-    fun `Current project should be set when onProjectAdded() is called`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
-
-            verify(currentProjectProvider).setCurrentProject("456")
-        }
-    }
-
-    @Test
-    fun `New settings should be saved when onProjectAdded() is called`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            val newProject = Project.Saved("456", "Project2", "V", "#cccccc")
-
-            activity.onProjectAdded(newProject, "https://my-project.com", "John", "1234")
-
-            val generalSettings = TestSettingsProvider.getGeneralSettings("456")
-
-            assertThat(generalSettings.getString(GeneralKeys.KEY_SERVER_URL), `is`("https://my-project.com"))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), `is`("John"))
-            assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), `is`("1234"))
         }
     }
 

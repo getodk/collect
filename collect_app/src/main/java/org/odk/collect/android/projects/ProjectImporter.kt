@@ -18,10 +18,16 @@ class ProjectImporter(
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider
 ) {
+    fun importNewProject(project: Project.New): Saved {
+        val savedProject = projectsRepository.save(project)
+        createProjectDirs(savedProject)
+        return savedProject
+    }
+
     fun importDemoProject() {
         val project = Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         projectsRepository.save(project)
-        setupProject(project)
+        createProjectDirs(project)
     }
 
     fun importExistingProject(): Saved {
@@ -49,12 +55,8 @@ class ProjectImporter(
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
-        setupProject(project)
-        return project
-    }
-
-    fun setupProject(project: Saved) {
         createProjectDirs(project)
+        return project
     }
 
     private fun createProjectDirs(project: Saved) {

@@ -41,6 +41,7 @@ import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManage
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -89,6 +90,7 @@ import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -104,6 +106,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -123,8 +126,6 @@ import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -343,18 +344,20 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsChangeHandler settingsChangeHandler) {
-        HashMap<String, Object> generalDefaults = GeneralKeys.getDefaults();
-        Map<String, Object> adminDefaults = AdminKeys.getDefaults();
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler) {
         return new SettingsImporter(
-                settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(),
+                settingsProvider,
                 preferenceMigrator,
-                new StructureAndTypeSettingsValidator(generalDefaults, adminDefaults),
-                generalDefaults,
-                adminDefaults,
+                settingsValidator,
+                GeneralKeys.getDefaults(),
+                AdminKeys.getDefaults(),
                 settingsChangeHandler
         );
+    }
+
+    @Provides
+    public SettingsValidator providesSettingsValidator() {
+        return new StructureAndTypeSettingsValidator(GeneralKeys.getDefaults(), AdminKeys.getDefaults());
     }
 
     @Provides
@@ -497,6 +500,12 @@ public class AppDependencyModule {
     }
 
     @Provides
+    public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
+                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter) {
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
+    }
+
+    @Provides
     public Gson providesGson() {
         return new Gson();
     }
@@ -574,5 +583,10 @@ public class AppDependencyModule {
     @Provides
     public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
         return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider);
+    }
+
+    @Provides
+    public CodeCaptureManagerFactory providesCodeCaptureManagerFactory() {
+        return CodeCaptureManagerFactory.INSTANCE;
     }
 }

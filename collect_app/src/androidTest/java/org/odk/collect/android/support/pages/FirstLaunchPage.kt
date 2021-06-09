@@ -14,8 +14,13 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
         return MainMenuPage().assertOnPage()
     }
 
-    fun clickManuallyEnterProjectDetails(): AddProjectDialogPage {
+    fun clickManuallyEnterProjectDetails(): ManualProjectCreatorDialogPage {
         clickOnString(R.string.configure_manually)
-        return AddProjectDialogPage().assertOnPage()
+        return ManualProjectCreatorDialogPage().assertOnPage()
+    }
+
+    fun clickAutomaticallyEnterProjectDetails(): AutomaticProjectCreatorDialogPage {
+        clickOnString(R.string.configure_with_qr_code)
+        return AutomaticProjectCreatorDialogPage().assertOnPage()
     }
 }

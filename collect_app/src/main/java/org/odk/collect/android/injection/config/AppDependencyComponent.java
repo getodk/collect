@@ -68,6 +68,7 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.projects.AutomaticProjectCreatorDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -84,7 +85,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.projects.AddProjectDialog;
+import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Singleton;
@@ -262,7 +263,9 @@ public interface AppDependencyComponent {
 
     void inject(ProjectSettingsDialog projectSettingsDialog);
 
-    void inject(AddProjectDialog addProjectDialog);
+    void inject(ManualProjectCreatorDialog manualProjectCreatorDialog);
+
+    void inject(AutomaticProjectCreatorDialog automaticProjectCreatorDialog);
 
     void inject(FirstLaunchDialog firstLaunchDialog);
 
