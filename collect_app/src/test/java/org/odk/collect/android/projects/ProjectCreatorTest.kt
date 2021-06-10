@@ -29,7 +29,9 @@ class ProjectCreatorTest {
 
     private var currentProjectProvider = mock<CurrentProjectProvider> {}
     private var settingsImporter = mock<SettingsImporter> {}
-    private var projectDetailsCreator = mock<ProjectDetailsCreator> {}
+    private var projectDetailsCreator = mock<ProjectDetailsCreator> {
+        on { getProject("https://my-server.com") } doReturn newProject
+    }
 
     private lateinit var projectCreator: ProjectCreator
 
