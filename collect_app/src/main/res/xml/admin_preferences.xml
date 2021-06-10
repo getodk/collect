@@ -32,7 +32,7 @@
             app:iconSpaceReserved="false"
             app:persistent="false"/>
 
-        <EditTextPreference
+        <Preference
             android:key="project_color"
             android:title="@string/project_color"
             app:iconSpaceReserved="false"
