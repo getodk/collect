@@ -1,5 +1,7 @@
 package org.odk.collect.android.projects
 
+import android.content.Context
+import androidx.core.content.ContextCompat
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.configure.SettingsImporter
@@ -13,6 +15,7 @@ class ProjectCreator(
     private val projectsRepository: ProjectsRepository,
     private val currentProjectProvider: CurrentProjectProvider,
     private val settingsImporter: SettingsImporter,
+    private val context: Context
 ) {
 
     fun createNewProject(settingsJson: String): Boolean {
@@ -43,12 +46,22 @@ class ProjectCreator(
 
         var projectName = ""
         var projectIcon = ""
+        var projectColor = "#3e9fcc"
         try {
             val url = URL(urlString)
             projectName = url.host
             projectIcon = projectName.first().toUpperCase().toString()
+            projectColor = getProjectColorForProjectName(projectName)
         } catch (e: Exception) {
         }
-        return Project.New(projectName, projectIcon, "#3e9fcc")
+        return Project.New(projectName, projectIcon, projectColor)
+    }
+
+    private fun getProjectColorForProjectName(projectName: String): String {
+        val colorId = (projectName.hashCode() % 15) + 1
+        val colorName = "color$colorId"
+        val colorValue = context.resources.getIdentifier(colorName, "color", context.packageName)
+
+        return "#${Integer.toHexString(ContextCompat.getColor(context, colorValue)).substring(2)}"
     }
 }
