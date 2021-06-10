@@ -45,7 +45,6 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     private final List<Selection> selectedItems;
     protected SelectItemClickListener listener;
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public SelectMultipleListAdapter(List<Selection> selectedItems, SelectItemClickListener listener,
                                      Context context, List<SelectChoice> items,
                                      FormEntryPrompt prompt, ReferenceManager referenceManager, AudioHelper audioHelper,

@@ -51,12 +51,11 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
-import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.ExternalAppsUtils;
@@ -69,6 +68,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -148,7 +148,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();

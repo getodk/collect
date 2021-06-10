@@ -310,7 +310,6 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     @Singleton
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
