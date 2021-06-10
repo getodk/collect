@@ -20,13 +20,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,13 +37,11 @@
             app:layout_constraintStart_toEndOf="@id/color1"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color2" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,13 +54,11 @@
             app:layout_constraintStart_toEndOf="@id/color2"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color3"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,13 +71,11 @@
             app:layout_constraintStart_toEndOf="@id/color3"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,13 +88,11 @@
             app:layout_constraintStart_toEndOf="@id/color4"
             app:layout_constraintTop_toTopOf="parent" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color5" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 2nd row -->
@@ -116,13 +106,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/color1" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color6"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color6" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,13 +123,11 @@
             app:layout_constraintStart_toEndOf="@id/color6"
             app:layout_constraintTop_toBottomOf="@id/color2" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color7"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color7" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -154,13 +140,11 @@
             app:layout_constraintStart_toEndOf="@id/color7"
             app:layout_constraintTop_toBottomOf="@id/color3" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color8"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color8" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -173,13 +157,11 @@
             app:layout_constraintStart_toEndOf="@id/color8"
             app:layout_constraintTop_toBottomOf="@id/color4" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color9"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color9"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -192,13 +174,11 @@
             app:layout_constraintStart_toEndOf="@id/color9"
             app:layout_constraintTop_toBottomOf="@id/color5" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color10"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color10" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 3rd row -->
@@ -212,13 +192,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/color6" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color11"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color11"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -231,13 +209,11 @@
             app:layout_constraintStart_toEndOf="@id/color11"
             app:layout_constraintTop_toBottomOf="@id/color7" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color12"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color12" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -250,13 +226,11 @@
             app:layout_constraintStart_toEndOf="@id/color12"
             app:layout_constraintTop_toBottomOf="@id/color8" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color13"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color13" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -269,13 +243,11 @@
             app:layout_constraintStart_toEndOf="@id/color13"
             app:layout_constraintTop_toBottomOf="@id/color9" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color14"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color14" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -288,13 +260,11 @@
             app:layout_constraintStart_toEndOf="@id/color14"
             app:layout_constraintTop_toBottomOf="@id/color10" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/color_circle"
-                android:backgroundTint="@color/color15"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:backgroundTint="@color/color15" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -308,12 +278,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/color11" >
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/color_circle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:background="@drawable/color_circle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.textview.MaterialTextView
@@ -330,30 +298,36 @@
             style="@style/TextAppearance.Collect.Headline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_small"
             android:text="@string/hash"
             app:layout_constraintBottom_toBottomOf="@+id/hex_color_layout"
             app:layout_constraintEnd_toStartOf="@+id/hex_color_layout"
             app:layout_constraintTop_toTopOf="@+id/hex_color_layout" />
 
-        <com.google.android.material.textfield.TextInputLayout
+        <FrameLayout
             android:id="@+id/hex_color_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:hintEnabled="false"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
             app:layout_constraintTop_toTopOf="@+id/current_color"
             app:layout_constraintBottom_toBottomOf="@+id/current_color"
             app:layout_constraintStart_toStartOf="@+id/color14"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/hex_color"
-                style="@style/TextAppearance.Collect.Headline5"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLength="6"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/hex_color"
+                    style="@style/TextAppearance.Collect.Headline5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="0dp"
+                    android:maxLength="6"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
