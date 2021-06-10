@@ -55,10 +55,13 @@ public class GeoUtils {
     }
 
     public static File getReferenceLayerFile(Bundle config, String layersPath) {
-        String path = getAbsoluteFilePath(layersPath, config.getString(KEY_REFERENCE_LAYER));
-        return path != null && new File(path).exists()
-                ? new File(path)
-                : null;
+        String filePath = config.getString(KEY_REFERENCE_LAYER);
+        if (filePath != null) {
+            File file = new File(getAbsoluteFilePath(layersPath, filePath));
+            return file.exists() ? file : null;
+        } else {
+            return null;
+        }
     }
 
     public static Location sanitizeAccuracy(Location location) {

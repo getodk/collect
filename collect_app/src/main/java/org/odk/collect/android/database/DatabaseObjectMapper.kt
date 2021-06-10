@@ -16,23 +16,20 @@ object DatabaseObjectMapper {
 
     @JvmStatic
     fun getValuesFromForm(form: Form, formsPath: String): ContentValues? {
+        val formFilePath = getRelativeFilePath(formsPath, form.formFilePath)
+        val formMediaPath = form.formMediaPath?.let { getRelativeFilePath(formsPath, it) }
+
         val values = ContentValues()
         values.put(BaseColumns._ID, form.dbId)
         values.put(DatabaseFormColumns.DISPLAY_NAME, form.displayName)
         values.put(DatabaseFormColumns.DESCRIPTION, form.description)
         values.put(DatabaseFormColumns.JR_FORM_ID, form.formId)
         values.put(DatabaseFormColumns.JR_VERSION, form.version)
-        values.put(
-            DatabaseFormColumns.FORM_FILE_PATH,
-            getRelativeFilePath(formsPath, form.formFilePath)
-        )
+        values.put(DatabaseFormColumns.FORM_FILE_PATH, formFilePath)
         values.put(DatabaseFormColumns.SUBMISSION_URI, form.submissionUri)
         values.put(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY, form.basE64RSAPublicKey)
         values.put(DatabaseFormColumns.MD5_HASH, form.mD5Hash)
-        values.put(
-            DatabaseFormColumns.FORM_MEDIA_PATH,
-            getRelativeFilePath(formsPath, form.formMediaPath)
-        )
+        values.put(DatabaseFormColumns.FORM_MEDIA_PATH, formMediaPath)
         values.put(DatabaseFormColumns.LANGUAGE, form.language)
         values.put(DatabaseFormColumns.AUTO_SEND, form.autoSend)
         values.put(DatabaseFormColumns.AUTO_DELETE, form.autoDelete)
@@ -42,37 +39,31 @@ object DatabaseObjectMapper {
 
     @JvmStatic
     fun getFormFromValues(values: ContentValues, storagePathProvider: StoragePathProvider): Form? {
+        val formFilePath = storagePathProvider.getAbsoluteFormFilePath(
+            values.getAsString(DatabaseFormColumns.FORM_FILE_PATH)
+        )
+
+        val cacheFilePath = values.getAsString(DatabaseFormColumns.JRCACHE_FILE_PATH)?.let {
+            storagePathProvider.getAbsoluteCacheFilePath(it)
+        }
+
+        val mediaPath = values.getAsString(DatabaseFormColumns.FORM_MEDIA_PATH)?.let {
+            storagePathProvider.getAbsoluteFormFilePath(it)
+        }
+
         return Form.Builder()
             .dbId(values.getAsLong(BaseColumns._ID))
             .displayName(values.getAsString(DatabaseFormColumns.DISPLAY_NAME))
             .description(values.getAsString(DatabaseFormColumns.DESCRIPTION))
             .formId(values.getAsString(DatabaseFormColumns.JR_FORM_ID))
             .version(values.getAsString(DatabaseFormColumns.JR_VERSION))
-            .formFilePath(
-                storagePathProvider.getAbsoluteFormFilePath(
-                    values.getAsString(
-                        DatabaseFormColumns.FORM_FILE_PATH
-                    )
-                )
-            )
+            .formFilePath(formFilePath)
             .submissionUri(values.getAsString(DatabaseFormColumns.SUBMISSION_URI))
             .base64RSAPublicKey(values.getAsString(DatabaseFormColumns.BASE64_RSA_PUBLIC_KEY))
             .md5Hash(values.getAsString(DatabaseFormColumns.MD5_HASH))
             .date(values.getAsLong(DatabaseFormColumns.DATE))
-            .jrCacheFilePath(
-                storagePathProvider.getAbsoluteCacheFilePath(
-                    values.getAsString(
-                        DatabaseFormColumns.JRCACHE_FILE_PATH
-                    )
-                )
-            )
-            .formMediaPath(
-                storagePathProvider.getAbsoluteFormFilePath(
-                    values.getAsString(
-                        DatabaseFormColumns.FORM_MEDIA_PATH
-                    )
-                )
-            )
+            .jrCacheFilePath(cacheFilePath)
+            .formMediaPath(mediaPath)
             .language(values.getAsString(DatabaseFormColumns.LANGUAGE))
             .autoSend(values.getAsString(DatabaseFormColumns.AUTO_SEND))
             .autoDelete(values.getAsString(DatabaseFormColumns.AUTO_DELETE))
