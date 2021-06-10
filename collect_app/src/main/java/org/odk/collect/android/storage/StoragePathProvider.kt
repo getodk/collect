@@ -7,26 +7,15 @@ import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
 import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.io.File
 
-class StoragePathProvider {
+class StoragePathProvider @JvmOverloads constructor(
+    private val currentProjectProvider: CurrentProjectProvider = DaggerUtils.getComponent(Collect.getInstance())
+        .currentProjectProvider(),
+    val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
+) {
 
-    private val currentProjectProvider: CurrentProjectProvider
-    val odkRootDirPath: String
-
-    constructor() {
-        currentProjectProvider =
-            DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider()
-        odkRootDirPath = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
+    fun getOdkRootDirPaths(): Array<String> {
+        return arrayOf(getOdkDirPath(StorageSubdirectory.PROJECTS))
     }
-
-    constructor(currentProjectProvider: CurrentProjectProvider, externalFilesDirPath: String) {
-        this.currentProjectProvider = currentProjectProvider
-        odkRootDirPath = externalFilesDirPath
-    }
-
-    val odkRootDirPaths: Array<String>
-        get() = arrayOf(
-            getOdkDirPath(StorageSubdirectory.PROJECTS)
-        )
 
     fun getProjectDirPaths(projectId: String?): Array<String> {
         return arrayOf(
@@ -39,8 +28,9 @@ class StoragePathProvider {
         )
     }
 
-    val projectRootDirPath: String
-        get() = getProjectRootDirPath(null)
+    fun getProjectRootDirPath(): String {
+        return getProjectRootDirPath(null)
+    }
 
     fun getProjectRootDirPath(projectId: String?): String {
         return if (projectId == null) {
@@ -51,26 +41,30 @@ class StoragePathProvider {
         }
     }
 
-    fun getOdkDirPath(subdirectory: StorageSubdirectory): String {
-        return getOdkDirPath(subdirectory, null)
-    }
-
-    fun getOdkDirPath(subdirectory: StorageSubdirectory, projectId: String?): String {
+    @JvmOverloads
+    fun getOdkDirPath(subdirectory: StorageSubdirectory, projectId: String? = null): String {
         return when (subdirectory) {
-            StorageSubdirectory.FORMS, StorageSubdirectory.INSTANCES, StorageSubdirectory.CACHE, StorageSubdirectory.METADATA, StorageSubdirectory.LAYERS, StorageSubdirectory.SETTINGS -> getProjectRootDirPath(
-                projectId
-            ) + File.separator + subdirectory.directoryName
+            StorageSubdirectory.FORMS,
+            StorageSubdirectory.INSTANCES,
+            StorageSubdirectory.CACHE,
+            StorageSubdirectory.METADATA,
+            StorageSubdirectory.LAYERS,
+            StorageSubdirectory.SETTINGS -> getProjectRootDirPath(projectId) + File.separator + subdirectory.directoryName
             StorageSubdirectory.PROJECTS -> odkRootDirPath + File.separator + subdirectory.directoryName
-            else -> throw IllegalStateException("Unexpected value: $subdirectory")
         }
     }
 
-    val customSplashScreenImagePath: String
-        get() = odkRootDirPath + File.separator + "customSplashScreenImage.jpg"
-    val tmpImageFilePath: String
-        get() = getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg"
-    val tmpVideoFilePath: String
-        get() = getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4"
+    fun getCustomSplashScreenImagePath(): String {
+        return odkRootDirPath + File.separator + "customSplashScreenImage.jpg"
+    }
+
+    fun getTmpImageFilePath(): String {
+        return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg"
+    }
+
+    fun getTmpVideoFilePath(): String {
+        return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4"
+    }
 
     fun getRelativeInstancePath(filePath: String?): String? {
         return getRelativeFilePath(getOdkDirPath(StorageSubdirectory.INSTANCES), filePath)
