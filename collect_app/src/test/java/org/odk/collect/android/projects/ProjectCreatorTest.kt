@@ -29,12 +29,13 @@ class ProjectCreatorTest {
 
     private var currentProjectProvider = mock<CurrentProjectProvider> {}
     private var settingsImporter = mock<SettingsImporter> {}
+    private var projectDetailsCreator = mock<ProjectDetailsCreator> {}
 
     private lateinit var projectCreator: ProjectCreator
 
     @Before
     fun setup() {
-        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter)
+        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, projectDetailsCreator)
     }
 
     @Test
