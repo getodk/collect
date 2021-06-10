@@ -4,6 +4,8 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
@@ -21,8 +23,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.Is.is;
+import static org.odk.collect.android.support.ActivityHelpers.getActivity;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -201,6 +206,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public MainMenuPage assertProjectIcon(String projectIcon, String expectedBackgroundColor) {
         onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
+        int backgroundColor = ((GradientDrawable) getActivity().findViewById(R.id.project_icon_text).getBackground()).getColor().getDefaultColor();
+        assertThat(backgroundColor, is(Color.parseColor(expectedBackgroundColor)));
         return this;
     }
 }
