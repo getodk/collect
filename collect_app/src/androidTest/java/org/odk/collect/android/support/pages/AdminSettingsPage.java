@@ -3,8 +3,10 @@ package org.odk.collect.android.support.pages;
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -73,7 +75,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     public AdminSettingsPage setProjectColor(String projectColor) {
         clickOnString(R.string.project_color);
-        inputText(projectColor);
+        onView(withId(R.id.hex_color)).perform(replaceText(projectColor));
         clickOKOnDialog();
         return this;
     }

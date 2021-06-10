@@ -26,7 +26,7 @@ class UpdateProjectTest {
             .clickAdminSettings()
             .setProjectName("Project X")
             .setProjectIcon("X")
-            .setProjectColor("#cccccc")
+            .setProjectColor("cccccc")
             .pressBack(MainMenuPage())
             .openProjectSettings()
             .clickGeneralSettings()
