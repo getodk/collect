@@ -4,11 +4,14 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.core.StringEndsWith.endsWith;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
@@ -68,7 +71,8 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     public AdminSettingsPage setProjectIcon(String projectIcon) {
         clickOnString(R.string.project_icon);
-        inputText(projectIcon);
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(""));
+        onView(withClassName(endsWith("EditText"))).perform(typeText(projectIcon));
         clickOKOnDialog();
         return this;
     }

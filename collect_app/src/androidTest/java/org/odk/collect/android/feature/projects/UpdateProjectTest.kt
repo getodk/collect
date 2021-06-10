@@ -25,7 +25,7 @@ class UpdateProjectTest {
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .clickAdminSettings()
             .setProjectName("Project X")
-            .setProjectIcon("X")
+            .setProjectIcon("XY")
             .setProjectColor("cccccc")
             .pressBack(MainMenuPage())
             .openProjectSettings()
