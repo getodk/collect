@@ -83,6 +83,12 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_HIDE, "integer");
 
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, "displaySubtext", "text");
+
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_SCHED_START, "long");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_SCHED_FINISH, "long");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ACT_START, "long");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ACT_FINISH, "long");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ADDRESS, "text");
     }
 
 
