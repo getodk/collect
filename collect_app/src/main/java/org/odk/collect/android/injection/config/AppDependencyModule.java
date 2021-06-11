@@ -530,7 +530,7 @@ public class AppDependencyModule {
 
     @Provides
     public AppStateProvider providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new AppStateProvider(BuildConfig.VERSION_CODE, settingsProvider.getMetaSettings());
+        return new AppStateProvider(BuildConfig.VERSION_CODE, settingsProvider.getMetaSettings(), context.getExternalFilesDir(null));
     }
 
     @Provides
