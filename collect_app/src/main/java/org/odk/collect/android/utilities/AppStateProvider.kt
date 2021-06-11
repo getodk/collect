@@ -1,20 +1,22 @@
 package org.odk.collect.android.utilities
 
-import android.content.pm.PackageInfo
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.Settings
 
-class AppStateProvider(private val packageInfo: PackageInfo, private val metaSettings: Settings) {
-
-    fun isFirstEverLaunch(): Boolean {
-        return !isUpdatedVersion() && !metaSettings.contains(MetaKeys.FIRST_LAUNCH)
-    }
+class AppStateProvider(
+    private val currentVersion: Int,
+    private val metaSettings: Settings
+) {
 
     fun isUpgradedFirstLaunch(): Boolean {
-        return false
+        return if (metaSettings.contains(MetaKeys.LAST_LAUNCHED)) {
+            metaSettings.getInt(MetaKeys.LAST_LAUNCHED) < currentVersion
+        } else {
+            false
+        }
     }
 
-    private fun isUpdatedVersion(): Boolean {
-        return packageInfo.firstInstallTime != packageInfo.lastUpdateTime
+    fun appLaunched() {
+        metaSettings.save(MetaKeys.LAST_LAUNCHED, currentVersion)
     }
 }

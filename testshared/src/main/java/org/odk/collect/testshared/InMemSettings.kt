@@ -35,7 +35,7 @@ class InMemSettings : Settings {
     }
 
     override fun contains(key: String): Boolean {
-        TODO("Not yet implemented")
+        return map.containsKey(key)
     }
 
     override fun getAll(): Map<String, *> {
@@ -51,7 +51,7 @@ class InMemSettings : Settings {
     }
 
     override fun getInt(key: String): Int {
-        TODO("Not yet implemented")
+        return map[key] as Int? ?: 0
     }
 
     override fun getFloat(key: String): Float {
