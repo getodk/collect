@@ -18,7 +18,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -187,13 +187,6 @@ public class FormsProviderTest {
             assertThat(formFile.exists(), is(false));
             assertThat(mediaDir.exists(), is(false));
             assertThat(cacheFile.exists(), is(false));
-
-            itemsetDbAdapter = new ItemsetDbAdapter().open();
-            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
-                assertThat(itemsets.getCount(), is(0));
-            } finally {
-                itemsetDbAdapter.close();
-            }
         }
     }
 

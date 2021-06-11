@@ -150,7 +150,7 @@ public class ExternalAppsUtils {
             String path = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
 
             String instanceProviderID = "-1";
-            Instance instance = new InstancesRepositoryProvider().get().getOneByPath(path);
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
             if (instance != null) {
                 instanceProviderID = instance.getDbId().toString();
             }

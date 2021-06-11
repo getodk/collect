@@ -32,7 +32,7 @@ import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -267,7 +267,7 @@ public class EncryptionUtils {
         Form form = null;
 
         if (InstanceProviderAPI.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
-            Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             if (instance == null) {
                 String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
                 Timber.e(msg);

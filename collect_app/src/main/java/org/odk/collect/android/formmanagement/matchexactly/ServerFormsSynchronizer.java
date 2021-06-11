@@ -9,7 +9,6 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 
 import java.util.List;
 
@@ -17,22 +16,20 @@ public class ServerFormsSynchronizer {
 
     private final FormsRepository formsRepository;
     private final InstancesRepository instancesRepository;
-    private final FastExternalItemsetsRepository fastExternalItemsetsRepository;
     private final FormDownloader formDownloader;
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
 
-    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, InstancesRepository instancesRepository, FormDownloader formDownloader, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
+    public ServerFormsSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepository formsRepository, InstancesRepository instancesRepository, FormDownloader formDownloader) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.formDownloader = formDownloader;
-        this.fastExternalItemsetsRepository = fastExternalItemsetsRepository;
     }
 
     public void synchronize() throws FormSourceException {
         List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
         List<Form> formsOnDevice = formsRepository.getAll();
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository, fastExternalItemsetsRepository);
+        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
 
         formsOnDevice.stream().forEach(form -> {
             if (formList.stream().noneMatch(f -> form.getFormId().equals(f.getFormId()))) {

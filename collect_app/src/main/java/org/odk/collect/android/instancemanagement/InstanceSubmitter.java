@@ -28,7 +28,7 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -116,7 +116,7 @@ public class InstanceSubmitter {
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(),
                         settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
-                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
                 String action = protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets)) ?

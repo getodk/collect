@@ -1,20 +1,23 @@
 package org.odk.collect.android.utilities
 
-import org.odk.collect.android.application.Collect
+import android.content.Context
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository
-import org.odk.collect.android.database.instances.InstancesDatabaseProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.instances.InstancesRepository
 
-class InstancesRepositoryProvider {
-    fun get(): InstancesRepository {
+class InstancesRepositoryProvider @JvmOverloads constructor(
+    private val context: Context,
+    private val storagePathProvider: StoragePathProvider = StoragePathProvider()
+) {
+
+    @JvmOverloads
+    fun get(projectId: String? = null): InstancesRepository {
         return DatabaseInstancesRepository(
-            InstancesDatabaseProvider(
-                Collect.getInstance(),
-                StoragePathProvider().getOdkDirPath(StorageSubdirectory.METADATA)
-            ),
-            StoragePathProvider(), System::currentTimeMillis
+            context,
+            storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId),
+            storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId),
+            System::currentTimeMillis
         )
     }
 }

@@ -4,13 +4,13 @@ import android.location.Location;
 import android.os.Bundle;
 
 import org.odk.collect.android.geo.MapPoint;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
 import static org.odk.collect.android.geo.MapFragment.KEY_REFERENCE_LAYER;
+import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 
 public class GeoUtils {
 
@@ -54,11 +54,14 @@ public class GeoUtils {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
     }
 
-    public static File getReferenceLayerFile(Bundle config, StoragePathProvider storagePathProvider) {
-        String path = storagePathProvider.getAbsoluteOfflineMapLayerPath(config.getString(KEY_REFERENCE_LAYER));
-        return path != null && new File(path).exists()
-                ? new File(path)
-                : null;
+    public static File getReferenceLayerFile(Bundle config, String layersPath) {
+        String filePath = config.getString(KEY_REFERENCE_LAYER);
+        if (filePath != null) {
+            File file = new File(getAbsoluteFilePath(layersPath, filePath));
+            return file.exists() ? file : null;
+        } else {
+            return null;
+        }
     }
 
     public static Location sanitizeAccuracy(Location location) {

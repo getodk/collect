@@ -33,11 +33,9 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
-import org.odk.collect.android.backgroundwork.ChangeLock;
-import org.odk.collect.android.backgroundwork.FormSubmitManager;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
-import org.odk.collect.android.backgroundwork.ReentrantLockChangeLock;
-import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -60,11 +58,10 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
-import org.odk.collect.android.formmanagement.FormUpdateChecker;
+import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
@@ -99,6 +96,7 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.AppStateProvider;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -120,7 +118,9 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
-import org.odk.collect.shared.UUIDGenerator;
+import org.odk.collect.shared.locks.ChangeLock;
+import org.odk.collect.shared.locks.ReentrantLockChangeLock;
+import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -271,13 +271,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdateManager providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
+    public FormUpdateScheduler providesFormUpdateManger(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application);
     }
 
     @Provides
-    public FormSubmitManager providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
-        return new SchedulerFormUpdateAndSubmitManager(scheduler, settingsProvider, application);
+    public InstanceSubmitScheduler providesFormSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+        return new FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application);
     }
 
     @Provides
@@ -310,7 +310,6 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     @Singleton
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
@@ -339,8 +338,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateManager, serverRepository, analytics, settingsProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, serverRepository, analytics, settingsProvider);
     }
 
     @Provides
@@ -383,20 +382,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsSynchronizer providesServerFormSynchronizer(ServerFormsDetailsFetcher serverFormsDetailsFetcher, FormsRepositoryProvider formsRepositoryProvider, FormDownloader formDownloader, InstancesRepositoryProvider instancesRepositoryProvider, FastExternalItemsetsRepository fastExternalItemsetsRepository) {
-        return new ServerFormsSynchronizer(serverFormsDetailsFetcher, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), formDownloader, fastExternalItemsetsRepository);
-    }
-
-    @Provides
     public Notifier providesNotifier(Application application, SettingsProvider settingsProvider) {
         return new NotificationManagerNotifier(application, settingsProvider);
     }
 
     @Provides
-    @Named("FORMS")
     @Singleton
-    public ChangeLock providesFormsChangeLock() {
-        return new ReentrantLockChangeLock();
+    public ChangeLockProvider providesChangeLockProvider() {
+        return new ChangeLockProvider();
     }
 
     @Provides
@@ -518,8 +511,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public InstancesAppState providesInstancesAppState(Application application) {
-        return new InstancesAppState(application);
+    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider) {
+        return new InstancesAppState(application, instancesRepositoryProvider);
     }
 
     @Provides
@@ -538,8 +531,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesRepositoryProvider providesInstancesRepositoryProvider() {
-        return new InstancesRepositoryProvider();
+    public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
+        return new InstancesRepositoryProvider(context, storagePathProvider);
     }
 
     @Provides
@@ -581,8 +574,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdateChecker providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, @Named("FORMS") ChangeLock changeLock, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
-        return new FormUpdateChecker(context, notifier, analytics, changeLock, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider);
+    public FormsUpdater providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider, ChangeLockProvider changeLockProvider) {
+        return new FormsUpdater(context, notifier, analytics, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, syncStatusAppState, instancesRepositoryProvider, changeLockProvider);
     }
 
     @Provides

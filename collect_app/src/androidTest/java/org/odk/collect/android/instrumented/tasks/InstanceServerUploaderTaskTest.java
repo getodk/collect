@@ -1,17 +1,18 @@
 package org.odk.collect.android.instrumented.tasks;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.support.MockedServerTest;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.instances.Instance;
 
 import java.io.File;
 
@@ -93,7 +94,7 @@ public class InstanceServerUploaderTaskTest extends MockedServerTest {
                 .lastStatusChangeDate(123L)
                 .build();
 
-        return new InstancesRepositoryProvider().get().save(i).getDbId();
+        return new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(i).getDbId();
     }
 
     private String hostAndPort() {

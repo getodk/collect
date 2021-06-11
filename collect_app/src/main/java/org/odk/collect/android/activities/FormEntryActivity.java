@@ -68,7 +68,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
-import org.odk.collect.android.backgroundwork.FormSubmitManager;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
@@ -312,7 +312,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PropertyManager propertyManager;
 
     @Inject
-    FormSubmitManager formSubmitManager;
+    InstanceSubmitScheduler instanceSubmitScheduler;
 
     @Inject
     Scheduler scheduler;
@@ -595,7 +595,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
 
         } else if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
-            Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(uri));
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
                 createErrorDialog(getString(R.string.bad_uri, uri), true);
@@ -1213,7 +1213,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             if (saveName == null && uriMimeType != null
                     && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
-                Instance instance = new InstancesRepositoryProvider().get().get(ContentUriHelper.getIdFromUri(instanceUri));
+                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(instanceUri));
                 if (instance != null) {
                     saveName = instance.getDisplayName();
                 }
@@ -1696,7 +1696,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        formSubmitManager.scheduleSubmit();
+                        instanceSubmitScheduler.scheduleSubmit();
                     }
 
                     finishAndReturnInstance();

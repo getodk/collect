@@ -11,7 +11,7 @@ import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

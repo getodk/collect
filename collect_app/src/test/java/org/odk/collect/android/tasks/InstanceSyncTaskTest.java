@@ -37,7 +37,7 @@ public class InstanceSyncTaskTest {
     public void whenAnInstanceFileNoLongerExists_deletesFromDatabase() {
         createDirectoryInInstances();
 
-        InstancesRepository instancesRepository = new InstancesRepositoryProvider().get();
+        InstancesRepository instancesRepository = new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get();
         instancesRepository.save(InstanceUtils.buildInstance("blah", "1", new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)).build());
         assertThat(instancesRepository.getAllNotDeleted().size(), is(1));
 
@@ -57,7 +57,7 @@ public class InstanceSyncTaskTest {
         InstanceSyncTask instanceSyncTask = new InstanceSyncTask(TestSettingsProvider.getSettingsProvider());
         instanceSyncTask.doInBackground();
 
-        List<Instance> instances = new InstancesRepositoryProvider().get().getAllByFormId("one_question");
+        List<Instance> instances = new InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getAllByFormId("one_question");
         assertThat(instances.size(), is(1));
         assertThat(instances.get(0).getFormId(), is("one_question"));
         assertThat(instances.get(0).getFormVersion(), is("1"));

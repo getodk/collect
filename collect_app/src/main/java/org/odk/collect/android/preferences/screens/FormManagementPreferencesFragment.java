@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.Protocol;
 
@@ -52,7 +52,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
     Analytics analytics;
 
     @Inject
-    FormUpdateManager formUpdateManager;
+    FormUpdateScheduler formUpdateScheduler;
 
     @Override
     public void onAttach(@NonNull Context context) {

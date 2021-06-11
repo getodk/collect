@@ -1,6 +1,6 @@
-package org.odk.collect.android.support;
+package org.odk.collect.testshared;
 
-import org.odk.collect.android.backgroundwork.ChangeLock;
+import org.odk.collect.shared.locks.ChangeLock;
 
 import java.util.function.Function;
 

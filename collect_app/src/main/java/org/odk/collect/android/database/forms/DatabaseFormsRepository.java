@@ -7,11 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,19 +36,26 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
+    private final DatabaseConnection databaseConnection;
     private final String formsPath;
     private final String cachePath;
     private final Supplier<Long> clock;
-    private final FormsDatabaseProvider formsDatabaseProvider;
 
     public DatabaseFormsRepository(Context context, String dbPath, String formsPath, String cachePath, Supplier<Long> clock) {
         this.formsPath = formsPath;
         this.cachePath = cachePath;
         this.clock = clock;
-        this.formsDatabaseProvider = new FormsDatabaseProvider(context, dbPath);
+        this.databaseConnection = new DatabaseConnection(
+                context,
+                dbPath,
+                DatabaseConstants.FORMS_DATABASE_NAME,
+                new FormDatabaseMigrator(),
+                DatabaseConstants.FORMS_DATABASE_VERSION
+        );
     }
 
     @Nullable
@@ -71,7 +79,7 @@ public class DatabaseFormsRepository implements FormsRepository {
     @Override
     public Form getOneByPath(String path) {
         String selection = FORM_FILE_PATH + "=?";
-        String[] selectionArgs = {StoragePathProvider.getRelativeFilePath(formsPath, path)};
+        String[] selectionArgs = {getRelativeFilePath(formsPath, path)};
         return queryForForm(selection, selectionArgs);
     }
 
@@ -127,7 +135,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
         String md5Hash = Md5.getMd5Hash(new File(form.getFormFilePath()));
         values.put(MD5_HASH, md5Hash);
-        values.put(FORM_MEDIA_PATH, StoragePathProvider.getRelativeFilePath(formsPath, FileUtils.constructMediaPath(form.getFormFilePath())));
+        values.put(FORM_MEDIA_PATH, getRelativeFilePath(formsPath, FileUtils.constructMediaPath(form.getFormFilePath())));
         values.put(JRCACHE_FILE_PATH, md5Hash + ".formdef");
 
         if (form.isDeleted()) {
@@ -199,19 +207,19 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
-        SQLiteDatabase readableDatabase = formsDatabaseProvider.getReadableDatabase();
+        SQLiteDatabase readableDatabase = databaseConnection.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
         return qb.query(readableDatabase, projection, selection, selectionArgs, groupBy, null, sortOrder);
     }
 
     private Long insertForm(ContentValues values) {
-        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
+        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
         return writeableDatabase.insertOrThrow(FORMS_TABLE_NAME, null, values);
     }
 
     private void updateForm(Long id, ContentValues values) {
-        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
+        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
         writeableDatabase.update(FORMS_TABLE_NAME, values, _ID + "=?", new String[]{String.valueOf(id)});
     }
 
@@ -221,7 +229,7 @@ public class DatabaseFormsRepository implements FormsRepository {
             deleteFilesForForm(form);
         }
 
-        SQLiteDatabase writeableDatabase = formsDatabaseProvider.getWriteableDatabase();
+        SQLiteDatabase writeableDatabase = databaseConnection.getWriteableDatabase();
         writeableDatabase.delete(FORMS_TABLE_NAME, selection, selectionArgs);
     }
 

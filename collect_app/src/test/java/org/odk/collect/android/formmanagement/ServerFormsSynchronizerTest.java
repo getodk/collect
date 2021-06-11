@@ -6,10 +6,9 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
+import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
-import org.odk.collect.formstest.FormUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class ServerFormsSynchronizerTest {
     private final InstancesRepository instancesRepository = new InMemInstancesRepository();
     private final RecordingFormDownloader formDownloader = new RecordingFormDownloader();
     private final ServerFormsDetailsFetcher serverFormDetailsFetcher = mock(ServerFormsDetailsFetcher.class);
-    private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, mock(FastExternalItemsetsRepository.class));
+    private final ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
     @Test
     public void downloadsNewForms() throws Exception {
@@ -105,7 +104,7 @@ public class ServerFormsSynchronizerTest {
         FormDownloader formDownloader = mock(FormDownloader.class);
         doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0), null, null);
 
-        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader, mock(FastExternalItemsetsRepository.class));
+        ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 
         try {
             synchronizer.synchronize();

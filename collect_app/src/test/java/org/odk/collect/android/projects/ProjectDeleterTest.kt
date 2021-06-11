@@ -4,7 +4,7 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.backgroundwork.FormUpdateManager
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.projects.Project
 
 class ProjectDeleterTest {
@@ -15,7 +15,7 @@ class ProjectDeleterTest {
             on { getCurrentProject() } doReturn Project.Saved("id", "name", "i", "#ffffff")
         }
 
-        val formUpdateManager = mock<FormUpdateManager>()
+        val formUpdateManager = mock<FormUpdateScheduler>()
         val deleter = ProjectDeleter(mock(), currentProjectProvider, formUpdateManager)
 
         deleter.deleteCurrentProject()

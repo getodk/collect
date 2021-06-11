@@ -1,16 +1,16 @@
 package org.odk.collect.android.projects
 
-import org.odk.collect.android.backgroundwork.FormUpdateManager
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.projects.ProjectsRepository
 
 class ProjectDeleter(
     private val projectsRepository: ProjectsRepository,
     private val currentProjectProvider: CurrentProjectProvider,
-    private val formUpdateManager: FormUpdateManager
+    private val formUpdateScheduler: FormUpdateScheduler
 ) {
     fun deleteCurrentProject(): Saved? {
-        formUpdateManager.cancelUpdates()
+        formUpdateScheduler.cancelUpdates()
 
         val currentProject = currentProjectProvider.getCurrentProject()
         projectsRepository.delete(currentProject.uuid)

@@ -14,7 +14,7 @@ import org.odk.collect.android.openrosa.HttpGetResult;
 import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

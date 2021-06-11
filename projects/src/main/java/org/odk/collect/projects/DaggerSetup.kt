@@ -3,7 +3,7 @@ package org.odk.collect.projects
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 import javax.inject.Singleton
 
 interface ProjectsDependencyComponentProvider {

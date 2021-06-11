@@ -17,12 +17,10 @@ public class FormUtils {
     }
 
     public static List<File> getMediaFiles(Form form) {
-        FileUtil fileUtil = new FileUtil();
-
         String formMediaPath = form.getFormMediaPath();
         return formMediaPath == null
                 ? new ArrayList<>()
-                : fileUtil.listFiles(fileUtil.getFileAtPath(formMediaPath));
+                : FileUtils.listFiles(new File(formMediaPath));
     }
 
     /**

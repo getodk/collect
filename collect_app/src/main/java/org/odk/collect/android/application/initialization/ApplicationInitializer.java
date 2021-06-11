@@ -51,7 +51,6 @@ public class ApplicationInitializer {
     private final ProjectImporter projectImporter;
     private final CurrentProjectProvider currentProjectProvider;
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
                                   PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
                                   Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {

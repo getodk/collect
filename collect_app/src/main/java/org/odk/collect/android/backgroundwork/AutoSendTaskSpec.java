@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.shared.locks.ChangeLock;
 
 import java.util.Map;
 import java.util.function.Supplier;

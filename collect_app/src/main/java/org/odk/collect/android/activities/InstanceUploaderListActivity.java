@@ -37,7 +37,7 @@ import androidx.work.WorkManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.backgroundwork.SchedulerFormUpdateAndSubmitManager;
+import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -187,7 +187,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(SchedulerFormUpdateAndSubmitManager.AUTO_SEND_TAG);
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(FormUpdateAndInstanceSubmitScheduler.AUTO_SEND_TAG);
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
                 for (WorkInfo status : workStatuses) {

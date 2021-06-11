@@ -4,7 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;

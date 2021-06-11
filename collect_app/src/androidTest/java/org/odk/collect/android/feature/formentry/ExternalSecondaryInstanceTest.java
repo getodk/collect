@@ -38,8 +38,10 @@ public class ExternalSecondaryInstanceTest {
         new MainMenuPage()
                 .copyForm("external_select_10.xml", Collections.singletonList("external_data_10.xml"))
                 .startBlankForm("external select 10")
-                .assertText("a")
-                .assertText("b")
-                .assertText("c");
+                .clickOnText("a")
+                .swipeToNextQuestion("Second")
+                .assertText("aa")
+                .assertText("ab")
+                .assertText("ac");
     }
 }

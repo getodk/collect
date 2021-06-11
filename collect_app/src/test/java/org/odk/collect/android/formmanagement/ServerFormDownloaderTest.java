@@ -14,7 +14,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.ManifestFile;
 import org.odk.collect.forms.MediaFile;
 import org.odk.collect.formstest.FormUtils;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -38,10 +38,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
-import static org.odk.collect.android.storage.StoragePathProvider.getAbsoluteFilePath;
 import static org.odk.collect.android.utilities.FileUtils.read;
 import static org.odk.collect.formstest.FormUtils.buildForm;
 import static org.odk.collect.formstest.FormUtils.createXFormBody;
+import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormDownloaderTest {

@@ -1,6 +1,6 @@
 package org.odk.collect.android.backgroundwork;
 
-public interface FormSubmitManager {
+public interface InstanceSubmitScheduler {
 
     void scheduleSubmit();
 }

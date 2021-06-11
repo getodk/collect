@@ -31,8 +31,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
-import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -81,7 +81,6 @@ public class WidgetFactory {
     private final AudioRecorder audioRecorder;
     private final LifecycleOwner viewLifecycle;
 
-    @SuppressWarnings("PMD.ExcessiveParameterList")
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
                          boolean useExternalRecorder,

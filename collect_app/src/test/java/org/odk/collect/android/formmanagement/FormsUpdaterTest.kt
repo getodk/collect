@@ -9,25 +9,31 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.BooleanChangeLock
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
+import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
-import org.odk.collect.shared.Md5.getMd5Hash
+import org.odk.collect.shared.strings.Md5.getMd5Hash
+import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
-class FormUpdateCheckerTest {
+class FormsUpdaterTest {
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val component = DaggerUtils.getComponent(application)
@@ -35,26 +41,35 @@ class FormUpdateCheckerTest {
     private val formsRepositoryProvider = component.formsRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
+    private val syncStatusAppState = mock<SyncStatusAppState>()
+    private val notifier = mock<Notifier>()
+    private val analytics = mock<Analytics>()
+
+    private val changeLockProvider = mock<ChangeLockProvider> {
+        on { getFormLock(any()) } doReturn BooleanChangeLock()
+    }
 
     private val formSource = mock<FormSource> {
         on { fetchFormList() } doReturn emptyList()
     }
 
-    private lateinit var updateChecker: FormUpdateChecker
+    private lateinit var updateManager: FormsUpdater
 
     @Before
     fun setup() {
         val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
 
-        updateChecker = FormUpdateChecker(
+        updateManager = FormsUpdater(
             context = application,
             notifier = mock(),
             analytics = mock(),
-            changeLock = BooleanChangeLock(),
             storagePathProvider = storagePathProvider,
             settingsProvider = settingsProvider,
             formsRepositoryProvider = formsRepositoryProvider,
-            formSourceProvider = formSourceProvider
+            formSourceProvider = formSourceProvider,
+            syncStatusAppState = syncStatusAppState,
+            instancesRepositoryProvider = mock(),
+            changeLockProvider
         )
     }
 
@@ -64,7 +79,7 @@ class FormUpdateCheckerTest {
         application.contentResolver.registerContentObserver(CONTENT_URI, false, contentObserver)
 
         val project = setupProject()
-        updateChecker.downloadUpdates(project.uuid)
+        updateManager.downloadUpdates(project.uuid)
 
         verify(contentObserver).dispatchChange(false, CONTENT_URI)
     }
@@ -80,11 +95,49 @@ class FormUpdateCheckerTest {
         settingsProvider.getGeneralSettings(project.uuid)
             .save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true)
 
-        updateChecker.downloadUpdates(project.uuid)
+        updateManager.downloadUpdates(project.uuid)
         assertThat(
             formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
             `is`(1)
         )
+    }
+
+    @Test
+    fun `synchronizeWithServer() does nothing when change lock is locked`() {
+        val project = setupProject()
+
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
+        changeLock.lock()
+
+        updateManager.matchFormsWithServer(project.uuid)
+        verifyNoInteractions(syncStatusAppState)
+        verifyNoInteractions(formSource)
+        verifyNoInteractions(notifier)
+        verifyNoInteractions(analytics)
+    }
+
+    /**
+     * We don't count calls where we can't acquire the lock as a "success". The front end should
+     * protect against this actually coming up by not letting the user sync while a sync is running.
+     */
+    @Test
+    fun `synchronizeWithServer() returns false when change lock is locked`() {
+        val project = setupProject()
+
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
+        changeLock.lock()
+
+        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
+    }
+
+    @Test
+    fun `synchronizeWithServer() returns false when there is an error communicating with the server`() {
+        val project = setupProject()
+
+        whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
+        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

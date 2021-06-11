@@ -37,7 +37,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -115,7 +115,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 List<Instance> instancesToRemove = new ArrayList<>();
 
                 // Remove all the path that's already in the content provider
-                List<Instance> instances = new InstancesRepositoryProvider().get().getAllNotDeleted();
+                List<Instance> instances = new InstancesRepositoryProvider(Collect.getInstance()).get().getAllNotDeleted();
 
                 for (Instance instance : instances) {
                     String instanceFilename = instance.getInstanceFilePath();
@@ -128,7 +128,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                 }
 
                 for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new InstancesRepositoryProvider().get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
+                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
@@ -151,7 +151,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
-                                Instance instance = new InstancesRepositoryProvider().get().save(new Instance.Builder()
+                                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder()
                                         .instanceFilePath(candidateInstance)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
@@ -238,7 +238,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                new InstancesRepositoryProvider().get().save(new Instance.Builder(instance)
+                new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder(instance)
                         .canEditWhenComplete(false)
                         .geometryType(null)
                         .geometry(null)

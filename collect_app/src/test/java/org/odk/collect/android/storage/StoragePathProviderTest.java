@@ -8,7 +8,6 @@ import org.odk.collect.projects.Project;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -115,15 +114,12 @@ public class StoragePathProviderTest {
 
     @Test
     public void getRelativeMapLayerPathTest() {
-        assertThat(storagePathProvider.getRelativeMapLayerPath(null), is(nullValue()));
-        assertThat(storagePathProvider.getRelativeMapLayerPath(""), is(nullValue()));
         assertThat(storagePathProvider.getRelativeMapLayerPath("countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
         assertThat(storagePathProvider.getRelativeMapLayerPath("/root/projects/123/layers/countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
     }
 
     @Test
     public void getOfflineMapLayerPathTestWithScopedStorage() {
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(null), is(nullValue()));
         assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath("/root/projects/123/layers/countries/countries-raster.mbtiles"), is("/root/projects/123/layers/countries/countries-raster.mbtiles"));
     }
 }

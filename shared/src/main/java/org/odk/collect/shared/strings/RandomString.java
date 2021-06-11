@@ -1,4 +1,4 @@
-package org.odk.collect.shared;
+package org.odk.collect.shared.strings;
 
 import java.security.SecureRandom;
 

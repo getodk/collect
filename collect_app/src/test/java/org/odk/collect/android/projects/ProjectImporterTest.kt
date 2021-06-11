@@ -10,13 +10,14 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.TempFiles
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -27,7 +28,7 @@ class ProjectImporterTest {
     private val rootDir = TempFiles.createTempDir()
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val storagePathProvider = StoragePathProvider(null, rootDir.absolutePath)
+    private val storagePathProvider = StoragePathProvider(mock(), rootDir.absolutePath)
     private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(

@@ -36,7 +36,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)

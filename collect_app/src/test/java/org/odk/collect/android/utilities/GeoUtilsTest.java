@@ -9,8 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.location.LocationTestUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,9 +24,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.odk.collect.android.geo.MapFragment.KEY_REFERENCE_LAYER;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoUtilsTest {
@@ -74,34 +71,32 @@ public class GeoUtilsTest {
     }
 
     @Test
-    public void whenPathIsNull_should_getReferenceLayerFileReturnNull() {
-        Bundle config = mock(Bundle.class);
-        StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
-        when(storagePathProvider.getAbsoluteOfflineMapLayerPath(any())).thenReturn(null);
+    public void getReferenceLayerFile_whenPathIsNull_should_getReferenceLayerFileReturnNull() {
+        String layersPath = TempFiles.createTempDir().getAbsolutePath();
+        Bundle config = new Bundle();
+        config.putString(KEY_REFERENCE_LAYER, null);
 
-        assertNull(GeoUtils.getReferenceLayerFile(config, storagePathProvider));
+        assertNull(GeoUtils.getReferenceLayerFile(config, layersPath));
     }
 
     @Test
     public void whenOfflineLayerFileDoesNotExist_should_getReferenceLayerFileReturnNull() {
-        Bundle config = mock(Bundle.class);
-        StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
-        when(storagePathProvider.getAbsoluteOfflineMapLayerPath(any())).thenReturn("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/MapBox_Demo_Layer/demo_layers.mbtiles");
+        String layersPath = TempFiles.createTempDir().getAbsolutePath();
+        Bundle config = new Bundle();
+        config.putString(KEY_REFERENCE_LAYER, "blah");
 
-        assertNull(GeoUtils.getReferenceLayerFile(config, storagePathProvider));
+        assertNull(GeoUtils.getReferenceLayerFile(config, layersPath));
     }
 
     @Test
     public void whenOfflineLayerFileExist_should_getReferenceLayerFileReturnThatFile() {
-        CollectHelpers.setupDemoProject();
-        File file = new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath("MapBox_Demo_Layer/demo_layers.mbtiles"));
-        FileUtils.write(file, new byte[]{});
+        String layersPath = TempFiles.createTempDir().getAbsolutePath();
+        FileUtils.write(new File(layersPath, "blah"), new byte[]{});
 
-        Bundle config = mock(Bundle.class);
-        StoragePathProvider storagePathProvider = mock(StoragePathProvider.class);
-        when(storagePathProvider.getAbsoluteOfflineMapLayerPath(any())).thenReturn(file.getAbsolutePath());
+        Bundle config = new Bundle();
+        config.putString(KEY_REFERENCE_LAYER, "blah");
 
-        assertNotNull(GeoUtils.getReferenceLayerFile(config, storagePathProvider));
+        assertNotNull(GeoUtils.getReferenceLayerFile(config, layersPath));
     }
 
     @Test

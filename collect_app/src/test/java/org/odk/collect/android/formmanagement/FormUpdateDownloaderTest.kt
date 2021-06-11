@@ -10,8 +10,8 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.stubbing.Answer
-import org.odk.collect.android.support.BooleanChangeLock
 import org.odk.collect.forms.ManifestFile
+import org.odk.collect.testshared.BooleanChangeLock
 
 class FormUpdateDownloaderTest {
 

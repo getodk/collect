@@ -1,6 +1,6 @@
 package org.odk.collect.projects
 
-import org.odk.collect.shared.UUIDGenerator
+import org.odk.collect.shared.strings.UUIDGenerator
 
 class InMemProjectsRepository(private val uuidGenerator: UUIDGenerator) : ProjectsRepository {
     val projects = mutableListOf<Project.Saved>()

@@ -57,7 +57,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;

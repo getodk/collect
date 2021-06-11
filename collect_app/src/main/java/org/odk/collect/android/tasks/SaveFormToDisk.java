@@ -173,7 +173,7 @@ public class SaveFormToDisk {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
-        InstancesRepository instances = new InstancesRepositoryProvider().get();
+        InstancesRepository instances = new InstancesRepositoryProvider(Collect.getInstance()).get();
         Instance instance = instances.getOneByPath(instancePath);
 
         Instance.Builder instanceBuilder;
@@ -203,7 +203,7 @@ public class SaveFormToDisk {
                 instanceBuilder.geometry(geometryContentValues.second);
             }
 
-            Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
+            Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
             uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
         } else {
             Timber.i("No instance found, creating");
@@ -228,7 +228,7 @@ public class SaveFormToDisk {
             }
         }
 
-        Instance newInstance = new InstancesRepositoryProvider().get().save(instanceBuilder.build());
+        Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
         uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
     }
 
@@ -420,7 +420,7 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                InstancesRepository instancesRepository = new InstancesRepositoryProvider().get();
+                InstancesRepository instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
                 Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
 
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple

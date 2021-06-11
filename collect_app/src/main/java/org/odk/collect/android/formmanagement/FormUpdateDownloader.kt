@@ -1,6 +1,6 @@
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.android.backgroundwork.ChangeLock
+import org.odk.collect.shared.locks.ChangeLock
 
 class FormUpdateDownloader {
 

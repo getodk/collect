@@ -242,6 +242,7 @@ public final class Form {
         return jrCacheFilePath;
     }
 
+    @Nullable
     public String getFormMediaPath() {
         return formMediaPath;
     }

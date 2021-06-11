@@ -35,8 +35,10 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.formmanagement.FormUpdateChecker;
+import org.odk.collect.android.formmanagement.FormSourceProvider;
+import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
@@ -297,7 +299,11 @@ public interface AppDependencyComponent {
 
     StoragePathProvider storagePathProvider();
 
-    FormUpdateChecker formUpdateChecker();
+    FormsUpdater formUpdateChecker();
 
     FormsRepositoryProvider formsRepositoryProvider();
+
+    SyncStatusAppState syncStatusAppState();
+
+    FormSourceProvider formSourceProvider();
 }

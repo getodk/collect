@@ -2,13 +2,13 @@ package org.odk.collect.android.application;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.backgroundwork.FormUpdateManager;
+import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.shared.Md5;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
 
@@ -21,14 +21,14 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SERVER_UR
 public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 
     private final PropertyManager propertyManager;
-    private final FormUpdateManager formUpdateManager;
+    private final FormUpdateScheduler formUpdateScheduler;
     private final ServerRepository serverRepository;
     private final Analytics analytics;
     private final SettingsProvider settingsProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateManager formUpdateManager, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
         this.propertyManager = propertyManager;
-        this.formUpdateManager = formUpdateManager;
+        this.formUpdateScheduler = formUpdateScheduler;
         this.serverRepository = serverRepository;
         this.analytics = analytics;
         this.settingsProvider = settingsProvider;
@@ -39,7 +39,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         propertyManager.reload();
 
         if (changedKey.equals(KEY_FORM_UPDATE_MODE) || changedKey.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) || changedKey.equals(KEY_PROTOCOL)) {
-            formUpdateManager.scheduleUpdates();
+            formUpdateScheduler.scheduleUpdates();
         }
 
         if (changedKey.equals(KEY_SERVER_URL)) {

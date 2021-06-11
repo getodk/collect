@@ -11,22 +11,20 @@ import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;
 
-import static java.util.Collections.emptyMap;
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
-public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, FormSubmitManager {
+public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler, InstanceSubmitScheduler {
 
-    private static final String MATCH_EXACTLY_SYNC_TAG = "match_exactly";
     public static final String AUTO_SEND_TAG = "AutoSendWorker";
 
     private final Scheduler scheduler;
     private final SettingsProvider settingsProvider;
     private final Application application;
 
-    public SchedulerFormUpdateAndSubmitManager(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
+    public FormUpdateAndInstanceSubmitScheduler(Scheduler scheduler, SettingsProvider settingsProvider, Application application) {
         this.scheduler = scheduler;
         this.settingsProvider = settingsProvider;
         this.application = application;
@@ -38,7 +36,7 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
         String protocol = generalSettings.getString(KEY_PROTOCOL);
         if (Protocol.parse(application, protocol) == Protocol.GOOGLE) {
-            scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+            scheduler.cancelDeferred(getMatchExactlyTag());
             scheduler.cancelDeferred(getAutoUpdateTag());
             return;
         }
@@ -48,26 +46,36 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
 
         switch (getFormUpdateMode(application, generalSettings)) {
             case MANUAL:
-                scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
+                scheduler.cancelDeferred(getMatchExactlyTag());
                 scheduler.cancelDeferred(getAutoUpdateTag());
                 break;
             case PREVIOUSLY_DOWNLOADED_ONLY:
-                scheduler.cancelDeferred(MATCH_EXACTLY_SYNC_TAG);
-
-                HashMap<String, String> inputData = new HashMap<>();
-                inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, currentProjectId());
-                scheduler.networkDeferred(getAutoUpdateTag(), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
+                scheduler.cancelDeferred(getMatchExactlyTag());
+                scheduleAutoUpdate(periodInMilliseconds);
                 break;
             case MATCH_EXACTLY:
                 scheduler.cancelDeferred(getAutoUpdateTag());
-                scheduler.networkDeferred(MATCH_EXACTLY_SYNC_TAG, new SyncFormsTaskSpec(), periodInMilliseconds, emptyMap());
+                scheduleMatchExactly(periodInMilliseconds);
                 break;
         }
+    }
+
+    private void scheduleAutoUpdate(long periodInMilliseconds) {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, currentProjectId());
+        scheduler.networkDeferred(getAutoUpdateTag(), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
+    }
+
+    private void scheduleMatchExactly(long periodInMilliseconds) {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(SyncFormsTaskSpec.DATA_PROJECT_ID, currentProjectId());
+        scheduler.networkDeferred(getMatchExactlyTag(), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
     }
 
     @Override
     public void cancelUpdates() {
         scheduler.cancelDeferred(getAutoUpdateTag());
+        scheduler.cancelDeferred(getMatchExactlyTag());
     }
 
     @Override
@@ -78,6 +86,11 @@ public class SchedulerFormUpdateAndSubmitManager implements FormUpdateManager, F
     @NotNull
     private String getAutoUpdateTag() {
         return "serverPollingJob:" + currentProjectId();
+    }
+
+    @NotNull
+    private String getMatchExactlyTag() {
+        return "match_exactly:" + currentProjectId();
     }
 
     private String currentProjectId() {

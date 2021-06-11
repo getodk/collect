@@ -27,6 +27,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -75,6 +77,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     @Override
     public boolean onCreate() {
@@ -228,8 +233,8 @@ public class InstanceProvider extends ContentProvider {
             case INSTANCES:
                 try (Cursor cursor = dbQuery(null, where, whereArgs, null)) {
                     while (cursor.moveToNext()) {
-                        Instance instance = getInstanceFromCurrentCursorPosition(cursor);
-                        ContentValues existingValues = getValuesFromInstance(instance);
+                        Instance instance = getInstanceFromCurrentCursorPosition(cursor, storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
+                        ContentValues existingValues = getValuesFromInstance(instance, storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
 
                         existingValues.putAll(values);
                         instancesRepository.save(getInstanceFromValues(existingValues));
@@ -245,7 +250,7 @@ public class InstanceProvider extends ContentProvider {
 
                 if (whereArgs == null || whereArgs.length == 0) {
                     Instance instance = instancesRepository.get(instanceId);
-                    ContentValues existingValues = getValuesFromInstance(instance);
+                    ContentValues existingValues = getValuesFromInstance(instance, storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
 
                     existingValues.putAll(values);
                     instancesRepository.save(getInstanceFromValues(existingValues));
@@ -254,8 +259,8 @@ public class InstanceProvider extends ContentProvider {
                     try (Cursor cursor = dbQuery(new String[]{_ID}, where, whereArgs, null)) {
                         while (cursor.moveToNext()) {
                             if (cursor.getLong(cursor.getColumnIndex(_ID)) == instanceId) {
-                                Instance instance = getInstanceFromCurrentCursorPosition(cursor);
-                                ContentValues existingValues = getValuesFromInstance(instance);
+                                Instance instance = getInstanceFromCurrentCursorPosition(cursor, storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
+                                ContentValues existingValues = getValuesFromInstance(instance, storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
 
                                 existingValues.putAll(values);
                                 instancesRepository.save(getInstanceFromValues(existingValues));
