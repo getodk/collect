@@ -6,10 +6,11 @@ import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -22,12 +23,13 @@ class ExistingProjectMigratorTest {
     private val storagePathProvider = component.storagePathProvider()
     private val projectsRepository = component.projectsRepository()
     private val settingsProvider = component.settingsProvider()
+    private val currentProjectProvider = component.currentProjectProvider()
     private val rootDir = storagePathProvider.odkRootDirPath
 
     @Test
     fun `creates existing project`() {
-        existingProjectMigrator.migrate()
-        assertThat(projectsRepository.getAll().size, Matchers.`is`(1))
+        existingProjectMigrator.run()
+        assertThat(projectsRepository.getAll().size, `is`(1))
     }
 
     @Test
@@ -46,17 +48,18 @@ class ExistingProjectMigratorTest {
             TempFiles.createTempFile(it, "file", ".temp")
         }
 
-        val existingProject = existingProjectMigrator.migrate()
+        existingProjectMigrator.run()
+        val existingProject = currentProjectProvider.getCurrentProject()
 
         legacyRootDirs.forEach {
-            assertThat(it.exists(), Matchers.`is`(false))
+            assertThat(it.exists(), `is`(false))
         }
 
         storagePathProvider.getProjectDirPaths(existingProject.uuid).forEach {
             val dir = File(it)
-            assertThat(dir.exists(), Matchers.`is`(true))
-            assertThat(dir.isDirectory, Matchers.`is`(true))
-            assertThat(dir.listFiles()!!.isEmpty(), Matchers.`is`(false))
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+            assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
         }
     }
 
@@ -75,16 +78,17 @@ class ExistingProjectMigratorTest {
             TempFiles.createTempFile(it, "file", ".temp")
         }
 
-        val existingProject = existingProjectMigrator.migrate()
+        existingProjectMigrator.run()
+        val existingProject = currentProjectProvider.getCurrentProject()
         storagePathProvider.getProjectDirPaths(existingProject.uuid).forEach {
             val dir = File(it)
-            assertThat(dir.exists(), Matchers.`is`(true))
-            assertThat(dir.isDirectory, Matchers.`is`(true))
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
 
             if (it.endsWith("forms")) {
-                assertThat(dir.listFiles()!!.isEmpty(), Matchers.`is`(true))
+                assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
             } else {
-                assertThat(dir.listFiles()!!.isEmpty(), Matchers.`is`(false))
+                assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
             }
         }
     }
@@ -96,14 +100,20 @@ class ExistingProjectMigratorTest {
         val oldAdminSettings = context.getSharedPreferences("admin", Context.MODE_PRIVATE)
         oldAdminSettings.edit().putString("adminKey", "adminValue").apply()
 
-        val existingProject = existingProjectMigrator.migrate()
+        existingProjectMigrator.run()
+        val existingProject = currentProjectProvider.getCurrentProject()
 
         val generalSettings = settingsProvider.getGeneralSettings(existingProject.uuid)
         assertThat(
             generalSettings.getString("generalKey"),
-            Matchers.`is`("generalValue")
+            `is`("generalValue")
         )
         val adminSettings = settingsProvider.getAdminSettings(existingProject.uuid)
-        assertThat(adminSettings.getString("adminKey"), Matchers.`is`("adminValue"))
+        assertThat(adminSettings.getString("adminKey"), `is`("adminValue"))
+    }
+
+    @Test
+    fun `has key`() {
+        assertThat(existingProjectMigrator.key(), `is`(MetaKeys.EXISTING_PROJECT_IMPORTED))
     }
 }

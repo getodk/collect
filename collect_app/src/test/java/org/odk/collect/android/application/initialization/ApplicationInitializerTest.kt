@@ -1,105 +1,59 @@
 package org.odk.collect.android.application.initialization
 
-import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.odk.collect.android.TestSettingsProvider.getMetaSettings
-import org.odk.collect.android.application.Collect
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ExistingProjectMigrator
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
-import org.odk.collect.projects.Project
-import org.odk.collect.projects.ProjectsRepository
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class ApplicationInitializerTest {
-    val appStateProvider: AppStateProvider = mock(AppStateProvider::class.java)
-    val existingProjectMigrator: ExistingProjectMigrator = mock(ExistingProjectMigrator::class.java)
-    val currentProjectProvider: CurrentProjectProvider = mock(CurrentProjectProvider::class.java)
 
-    lateinit var applicationInitializer: ApplicationInitializer
+    @Test
+    fun `runs upgrade when upgraded version launched`() {
+        val appStateProvider = mock<AppStateProvider> {
+            on { isUpgradedFirstLaunch() } doReturn true
+        }
 
-    @Before
-    fun setup() {
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesAppStateProvider(
-                context: Context,
-                settingsProvider: SettingsProvider
-            ): AppStateProvider {
-                return appStateProvider
-            }
+        val appUpgrader = mock<AppUpgrader>()
 
-            override fun providesCurrentProjectProvider(
-                settingsProvider: SettingsProvider?,
-                projectsRepository: ProjectsRepository?
-            ): CurrentProjectProvider {
-                return currentProjectProvider
-            }
+        val applicationInitializer = ApplicationInitializer(
+            ApplicationProvider.getApplicationContext(),
+            mock(),
+            mock(),
+            mock(),
+            mock(),
+            appStateProvider,
+            appUpgrader
+        )
 
-            override fun providesExistingProjectMigrator(
-                context: Context?,
-                storagePathProvider: StoragePathProvider?,
-                projectsRepository: ProjectsRepository?,
-                settingsProvider: SettingsProvider?
-            ): ExistingProjectMigrator {
-                return existingProjectMigrator
-            }
-        })
-
-        applicationInitializer =
-            DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>())
-                .applicationInitializer()
+        applicationInitializer.initialize()
+        verify(appUpgrader).upgrade()
     }
 
     @Test
-    fun `Should existing project be imported when it's not first launch and it has not been already imported`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
+    fun `does not run upgrade when not launching upgraded version`() {
+        val appStateProvider = mock<AppStateProvider> {
+            on { isUpgradedFirstLaunch() } doReturn false
+        }
 
-        val existing = Project.Saved("123", "Existing", "E", "#ffffff")
-        `when`(existingProjectMigrator.migrate()).thenReturn(existing)
-        applicationInitializer.initialize()
-        verify(currentProjectProvider).setCurrentProject(existing.uuid)
-    }
+        val appUpgrader = mock<AppUpgrader>()
 
-    @Test
-    fun `Should not existing project be imported when it's first launch`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
-        applicationInitializer.initialize()
-        verifyNoInteractions(existingProjectMigrator)
-    }
-
-    @Test
-    fun `Should not existing project be imported when it was already imported once`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, true)
-        applicationInitializer.initialize()
-        verifyNoInteractions(existingProjectMigrator)
-    }
-
-    @Test
-    fun `Initializing the app should set ALREADY_TRIED_TO_IMPORT_EXISTING_PROJECT flag to true`() {
-        getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
-
-        val existing = Project.Saved("123", "Existing", "E", "#ffffff")
-        `when`(existingProjectMigrator.migrate()).thenReturn(existing)
+        val applicationInitializer = ApplicationInitializer(
+            ApplicationProvider.getApplicationContext(),
+            mock(),
+            mock(),
+            mock(),
+            mock(),
+            appStateProvider,
+            appUpgrader
+        )
 
         applicationInitializer.initialize()
-        assertThat(getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED), equalTo(true))
+        verify(appUpgrader, never()).upgrade()
     }
 }

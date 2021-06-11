@@ -3,6 +3,8 @@ package org.odk.collect.android.projects
 import android.content.Context
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.FileUtils
+import org.odk.collect.android.application.initialization.Upgrade
+import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.Project
@@ -14,10 +16,15 @@ class ExistingProjectMigrator(
     private val context: Context,
     private val storagePathProvider: StoragePathProvider,
     private val projectsRepository: ProjectsRepository,
-    private val settingsProvider: SettingsProvider
-) {
+    private val settingsProvider: SettingsProvider,
+    private val currentProjectProvider: CurrentProjectProvider
+) : Upgrade {
 
-    fun migrate(): Project.Saved {
+    override fun key(): String {
+        return MetaKeys.EXISTING_PROJECT_IMPORTED
+    }
+
+    override fun run() {
         val project = projectsRepository.save(Project.New("Existing project", "E", "#3e9fcc"))
 
         val rootDir = storagePathProvider.odkRootDirPath
@@ -43,10 +50,12 @@ class ExistingProjectMigrator(
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
         createProjectDirs(project)
-        return project
+
+        currentProjectProvider.setCurrentProject(project.uuid)
     }
 
     private fun createProjectDirs(project: Project.Saved) {
-        storagePathProvider.getProjectDirPaths(project.uuid).forEach { org.odk.collect.android.utilities.FileUtils.createDir(it) }
+        storagePathProvider.getProjectDirPaths(project.uuid)
+            .forEach { org.odk.collect.android.utilities.FileUtils.createDir(it) }
     }
 }

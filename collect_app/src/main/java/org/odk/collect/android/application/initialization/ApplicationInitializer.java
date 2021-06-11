@@ -19,16 +19,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.preferences.keys.MetaKeys;
-import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.projects.ExistingProjectMigrator;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.AppStateProvider;
-import org.odk.collect.projects.Project;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -38,31 +35,35 @@ public class ApplicationInitializer {
     private final UserAgentProvider userAgentProvider;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
-    private final Settings metaSettings;
     private final StorageInitializer storageInitializer;
     private final AppStateProvider appStateProvider;
-    private final ExistingProjectMigrator existingProjectMigrator;
-    private final CurrentProjectProvider currentProjectProvider;
+    private final AppUpgrader appUpgrader;
 
+    @Inject
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer,
-                                  Settings metaSettings, AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
+                                  PropertyManager propertyManager, Analytics analytics,
+                                  StorageInitializer storageInitializer, AppStateProvider appStateProvider,
+                                  AppUpgrader appUpgrader) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
-        this.metaSettings = metaSettings;
         this.storageInitializer = storageInitializer;
         this.appStateProvider = appStateProvider;
-        this.existingProjectMigrator = existingProjectMigrator;
-        this.currentProjectProvider = currentProjectProvider;
+        this.appUpgrader = appUpgrader;
     }
 
     public void initialize() {
         initializeStorage();
+        performUpgradeIfNeeded();
         initializeFrameworks();
         initializeLocale();
-        importExistingProjectIfNeeded();
+    }
+
+    private void performUpgradeIfNeeded() {
+        if (appStateProvider.isUpgradedFirstLaunch()) {
+            appUpgrader.upgrade();
+        }
     }
 
     private void initializeStorage() {
@@ -124,15 +125,6 @@ public class ApplicationInitializer {
         } catch (Exception | Error ignore) {
             // ignored
         }
-    }
-
-    private void importExistingProjectIfNeeded() {
-        if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
-            Project.Saved existingProject = existingProjectMigrator.migrate();
-            currentProjectProvider.setCurrentProject(existingProject.getUuid());
-        }
-
-        metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);
     }
 }
 

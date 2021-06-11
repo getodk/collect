@@ -6,8 +6,12 @@ import org.odk.collect.shared.Settings
 
 class AppStateProvider(private val packageInfo: PackageInfo, private val metaSettings: Settings) {
 
-    fun isFreshInstall(): Boolean {
+    fun isFirstEverLaunch(): Boolean {
         return !isUpdatedVersion() && !metaSettings.contains(MetaKeys.FIRST_LAUNCH)
+    }
+
+    fun isUpgradedFirstLaunch(): Boolean {
+        return false
     }
 
     private fun isUpdatedVersion(): Boolean {

@@ -30,7 +30,7 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
-import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.application.initialization.AppUpgrader;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -127,7 +127,6 @@ import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
-import java.util.Collections;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -137,6 +136,8 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 import static androidx.core.content.FileProvider.getUriForFile;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
 /**
@@ -312,16 +313,6 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
-    @Singleton
-    @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
-                                                                 PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                                                 AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
-        return new ApplicationInitializer(application, userAgentProvider,
-                propertyManager, analytics, storageInitializer, settingsProvider.getMetaSettings(), appStateProvider, existingProjectMigrator, currentProjectProvider);
-    }
-
     @Provides
     public SettingsPreferenceMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
         return new CollectSettingsPreferenceMigrator(settingsProvider.getMetaSettings());
@@ -401,7 +392,7 @@ public class AppDependencyModule {
     @Provides
     public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
         return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
-                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
+                .usingOAuth2(context, singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff()));
     }
 
@@ -583,7 +574,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
-        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider);
+    public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
+        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider);
+    }
+
+    @Provides
+    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator) {
+        return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
+                existingProjectMigrator
+        ));
     }
 }

@@ -30,7 +30,7 @@ class SplashScreenViewModel(
         get() = splashScreenLogoFile.exists()
 
     val shouldFirstLaunchScreenBeDisplayed
-        get() = appStateProvider.isFreshInstall() || projectsRepository.getAll().isEmpty()
+        get() = appStateProvider.isFirstEverLaunch() || projectsRepository.getAll().isEmpty()
 
     open class Factory constructor(
         private val generalSettings: Settings,

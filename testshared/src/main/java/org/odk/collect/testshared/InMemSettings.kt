@@ -43,7 +43,7 @@ class InMemSettings : Settings {
     }
 
     override fun getBoolean(key: String): Boolean {
-        TODO("Not yet implemented")
+        return map[key] as Boolean? ?: false
     }
 
     override fun getLong(key: String): Long {
