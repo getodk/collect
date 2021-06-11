@@ -97,7 +97,7 @@ class ExistingProjectMigratorTest {
     fun `migrates general and admin settings`() {
         val oldGeneralSettings = PreferenceManager.getDefaultSharedPreferences(context)
         oldGeneralSettings.edit().putString("generalKey", "generalValue").apply()
-        val oldAdminSettings = context.getSharedPreferences("admin", Context.MODE_PRIVATE)
+        val oldAdminSettings = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
         oldAdminSettings.edit().putString("adminKey", "adminValue").apply()
 
         existingProjectMigrator.run()
