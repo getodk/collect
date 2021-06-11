@@ -13,6 +13,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
 class SplashScreenViewModelTest {
+
     private lateinit var generalSettings: SharedPreferencesSettings
     private lateinit var appStateProvider: AppStateProvider
     private lateinit var projectsRepository: ProjectsRepository
@@ -23,7 +24,7 @@ class SplashScreenViewModelTest {
         generalSettings = mock(SharedPreferencesSettings::class.java)
         appStateProvider = mock(AppStateProvider::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, appStateProvider, projectsRepository)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, projectsRepository)
     }
 
     @Test
@@ -50,22 +51,13 @@ class SplashScreenViewModelTest {
     }
 
     @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return true if the app is newly installed`() {
-        `when`(appStateProvider.isFirstEverLaunch()).thenReturn(true)
+    fun `shouldFirstLaunchScreenBeDisplayed should return true if there are no projects`() {
         `when`(projectsRepository.getAll()).thenReturn(emptyList())
         assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(true))
     }
 
     @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return true if the app is not newly installed but there are no projects`() {
-        `when`(appStateProvider.isFirstEverLaunch()).thenReturn(false)
-        `when`(projectsRepository.getAll()).thenReturn(emptyList())
-        assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(true))
-    }
-
-    @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return false if the app is not newly installed and there are saved projects`() {
-        `when`(appStateProvider.isFirstEverLaunch()).thenReturn(false)
+    fun `shouldFirstLaunchScreenBeDisplayed should return false if there are saved projects`() {
         `when`(projectsRepository.getAll()).thenReturn(listOf(Project.Saved("123", "Project X", "P", "#cccccc")))
         assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(false))
     }

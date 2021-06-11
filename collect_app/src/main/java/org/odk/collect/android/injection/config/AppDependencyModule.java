@@ -521,8 +521,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider, ProjectsRepository projectsRepository) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider, projectsRepository);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository);
     }
 
     @Provides

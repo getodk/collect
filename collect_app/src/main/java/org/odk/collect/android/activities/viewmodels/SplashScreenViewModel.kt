@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import org.odk.collect.projects.ProjectsRepository
@@ -13,7 +12,6 @@ import java.io.File
 
 class SplashScreenViewModel(
     private val generalSettings: Settings,
-    private val appStateProvider: AppStateProvider,
     private val projectsRepository: ProjectsRepository
 ) : ViewModel() {
 
@@ -30,15 +28,14 @@ class SplashScreenViewModel(
         get() = splashScreenLogoFile.exists()
 
     val shouldFirstLaunchScreenBeDisplayed
-        get() = appStateProvider.isFirstEverLaunch() || projectsRepository.getAll().isEmpty()
+        get() = projectsRepository.getAll().isEmpty()
 
-    open class Factory constructor(
+    open class Factory(
         private val generalSettings: Settings,
-        private val appStateProvider: AppStateProvider,
         private val projectsRepository: ProjectsRepository
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return SplashScreenViewModel(generalSettings, appStateProvider, projectsRepository) as T
+            return SplashScreenViewModel(generalSettings, projectsRepository) as T
         }
     }
 }

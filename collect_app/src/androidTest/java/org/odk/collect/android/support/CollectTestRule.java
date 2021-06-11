@@ -33,7 +33,7 @@ public class CollectTestRule implements TestRule {
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
-                if (skipLaunchScreen) {
+                if (!CopyFormRule.projectCreated && skipLaunchScreen) {
                     onView(withText(R.string.configure_later)).perform(click());
                 }
 

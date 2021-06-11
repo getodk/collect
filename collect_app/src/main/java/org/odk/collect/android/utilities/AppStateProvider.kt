@@ -15,15 +15,6 @@ class AppStateProvider(private val packageInfo: PackageInfo, private val metaSet
     }
 
     private fun isUpdatedVersion(): Boolean {
-        return if (alwaysFresh) {
-            false
-        } else {
-            packageInfo.firstInstallTime != packageInfo.lastUpdateTime
-        }
-    }
-
-    companion object {
-        @JvmField
-        var alwaysFresh: Boolean = false
+        return packageInfo.firstInstallTime != packageInfo.lastUpdateTime
     }
 }

@@ -29,7 +29,6 @@ import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.AppStateProvider
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -48,8 +47,14 @@ class SplashScreenActivityTest {
     fun setup() {
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesSplashScreenViewModel(settingsProvider: SettingsProvider, appStateProvider: AppStateProvider, projectsRepository: ProjectsRepository): SplashScreenViewModel.Factory {
-                return object : SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider, projectsRepository) {
+            override fun providesSplashScreenViewModel(
+                settingsProvider: SettingsProvider,
+                projectsRepository: ProjectsRepository
+            ): SplashScreenViewModel.Factory? {
+                return object : SplashScreenViewModel.Factory(
+                    settingsProvider.getGeneralSettings(),
+                    projectsRepository
+                ) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return splashScreenViewModel as T
                     }
