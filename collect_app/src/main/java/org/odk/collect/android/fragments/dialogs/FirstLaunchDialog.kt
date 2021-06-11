@@ -50,12 +50,6 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.appName.text = String.format(
-            "%s %s",
-            getString(R.string.app_name),
-            versionInformation.versionToDisplay
-        )
-
         binding.configureViaQrButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
                 AutomaticProjectCreatorDialog::class.java,
@@ -70,7 +64,13 @@ class FirstLaunchDialog : MaterialFullScreenDialogFragment() {
             )
         }
 
-        binding.configureLaterButton.setOnClickListener {
+        binding.appName.text = String.format(
+            "%s %s",
+            getString(R.string.app_name),
+            versionInformation.versionToDisplay
+        )
+
+        binding.configureLater.setOnClickListener {
             projectImporter.importDemoProject()
             currentProjectProvider.setCurrentProject(ProjectImporter.DEMO_PROJECT_ID)
 

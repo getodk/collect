@@ -990,23 +990,31 @@
     <string name="project_icon">Project icon</string>
     <string name="project_color">Project color</string>
     <string name="switched_project">Switched to %s</string>
-    <string name="configure_with_qr_code">Configure with QR code</string>
-    <string name="configure_manually">Manually enter project details</string>
-    <string name="configure_later">Try Collect and configure later</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
     <string name="delete_project">Delete project</string>
     <string name="delete_project_confirm_message">Are you sure you want to delete the current project?</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
-    <string name="scan_configuration_qr_code">Scan configuration QR code</string>
     <string name="or">OR</string>
     <string name="new_project_created">New project created successfully</string>
+    <string name="hex_color">Hex color</string>
 
     <!--
      ##############################################
-     # Color picker
+     # First launch and initial configuration
      ##############################################
-     -->
-    <string name="hex_color">Hex color</string>
+    -->
+    <!-- Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language. -->
+    <string name="tagline">Collect data\nanywhere</string>
+    <!-- Text for the button that allows for configuring a project by scanning a QR code. Should be short -->
+    <string name="configure_with_qr_code">Configure with QR code</string>
+    <!-- Text for the button that allows for manually entering project details. Should be short -->
+    <string name="configure_manually">Manually enter project details</string>
+    <!-- Immediately followed by "Try Collect" which is a link to create a demo project -->
+    <string name="dont_have_project">Don\'t have a project yet?</string>
+    <!-- Preceded by "Don't have a project yet?" question -->
+    <string name="try_demo">Try a demo</string>
+    <string name="scan_configuration_qr_code">Scan configuration QR code</string>
 </resources>

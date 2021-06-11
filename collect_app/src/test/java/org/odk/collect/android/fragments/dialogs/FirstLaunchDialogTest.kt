@@ -62,17 +62,17 @@ class FirstLaunchDialogTest {
 
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
-            onView(withText(R.string.configure_later)).perform(click())
+            onView(withText(R.string.try_demo)).perform(click())
             verify(projectImporter).importDemoProject()
         }
     }
 
     @Test
-    fun `The main menu should be started after clicking on the 'Configure later' button`() {
+    fun `The main menu should be started after clicking on the 'Try later' link`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             Intents.init()
-            onView(withText(R.string.configure_later)).perform(click())
+            onView(withText(R.string.try_demo)).perform(click())
             intended(hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }
@@ -115,7 +115,7 @@ class FirstLaunchDialogTest {
     }
 
     @Test
-    fun `The app logo should be displayed`() {
+    fun `The ODK logo should be displayed`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(FirstLaunchDialog::class.java, R.style.Theme_Collect_Light)
         scenario.onFragment {
             onView(withId(R.id.logo)).check(matches(isDisplayed()))
