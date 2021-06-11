@@ -315,12 +315,11 @@ public class AppDependencyModule {
     @Singleton
     @Provides
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
-                                                                 SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
+                                                                 PropertyManager propertyManager,
                                                                  Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
                                                                  AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
-                propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, existingProjectMigrator, currentProjectProvider);
+        return new ApplicationInitializer(application, userAgentProvider,
+                propertyManager, analytics, storageInitializer, settingsProvider.getMetaSettings(), appStateProvider, existingProjectMigrator, currentProjectProvider);
     }
 
     @Provides

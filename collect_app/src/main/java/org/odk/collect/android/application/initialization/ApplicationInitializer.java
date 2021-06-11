@@ -19,8 +19,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ExistingProjectMigrator;
@@ -34,33 +32,25 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-
 public class ApplicationInitializer {
 
     private final Application context;
     private final UserAgentProvider userAgentProvider;
-    private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
-    private final Settings generalSettings;
-    private final Settings adminSettings;
     private final Settings metaSettings;
     private final StorageInitializer storageInitializer;
     private final AppStateProvider appStateProvider;
     private final ExistingProjectMigrator existingProjectMigrator;
     private final CurrentProjectProvider currentProjectProvider;
 
-    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
-                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
+                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer,
+                                  Settings metaSettings, AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
-        this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
-        this.generalSettings = generalSettings;
-        this.adminSettings = adminSettings;
         this.metaSettings = metaSettings;
         this.storageInitializer = storageInitializer;
         this.appStateProvider = appStateProvider;
@@ -70,7 +60,6 @@ public class ApplicationInitializer {
 
     public void initialize() {
         initializeStorage();
-        initializePreferences();
         initializeFrameworks();
         initializeLocale();
         importExistingProjectIfNeeded();
@@ -78,11 +67,6 @@ public class ApplicationInitializer {
 
     private void initializeStorage() {
         storageInitializer.createOdkDirsOnStorage();
-    }
-
-    private void initializePreferences() {
-        performMigrations();
-        reloadSharedPreferences();
     }
 
     private void initializeFrameworks() {
@@ -95,11 +79,10 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        boolean isAnalyticsEnabled = generalSettings.getBoolean(GeneralKeys.KEY_ANALYTICS);
-        analytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+        analytics.setAnalyticsCollectionEnabled(false);
 
-        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
-        analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
+//        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
+//        analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
     }
 
     private void initializeLocale() {
@@ -127,15 +110,6 @@ public class ApplicationInitializer {
         } else {
             Timber.plant(new Timber.DebugTree());
         }
-    }
-
-    private void reloadSharedPreferences() {
-        generalSettings.setDefaultForAllSettingsWithoutValues();
-        adminSettings.setDefaultForAllSettingsWithoutValues();
-    }
-
-    private void performMigrations() {
-        preferenceMigrator.migrate(generalSettings, adminSettings);
     }
 
     private void initializeMapFrameworks() {
