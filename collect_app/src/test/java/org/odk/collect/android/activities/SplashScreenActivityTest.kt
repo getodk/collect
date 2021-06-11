@@ -1,6 +1,5 @@
 package org.odk.collect.android.activities
 
-import android.content.Context
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
@@ -61,7 +60,10 @@ class SplashScreenActivityTest {
                 return currentProjectProvider
             }
 
-            override fun providesProjectImporter(projectsRepository: ProjectsRepository, storagePathProvider: StoragePathProvider, context: Context, settingsProvider: SettingsProvider): ProjectImporter? {
+            override fun providesProjectImporter(
+                projectsRepository: ProjectsRepository,
+                storagePathProvider: StoragePathProvider
+            ): ProjectImporter? {
                 return projectImporter
             }
         })

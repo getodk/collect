@@ -89,6 +89,7 @@ import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
@@ -316,10 +317,10 @@ public class AppDependencyModule {
     public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
                                                                  SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
                                                                  Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                                                 AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
+                                                                 AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
         return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
                 propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter, currentProjectProvider);
+                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, existingProjectMigrator, currentProjectProvider);
     }
 
     @Provides
@@ -535,8 +536,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
-        return new ProjectImporter(context, storagePathProvider, projectsRepository, settingsProvider);
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider) {
+        return new ProjectImporter(storagePathProvider, projectsRepository);
     }
 
     @Provides
@@ -580,5 +581,10 @@ public class AppDependencyModule {
     @Provides
     public CodeCaptureManagerFactory providesCodeCaptureManagerFactory() {
         return CodeCaptureManagerFactory.INSTANCE;
+    }
+
+    @Provides
+    public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
+        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider);
     }
 }

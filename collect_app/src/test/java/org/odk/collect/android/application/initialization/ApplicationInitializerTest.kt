@@ -18,7 +18,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.projects.ExistingProjectMigrator
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AppStateProvider
@@ -29,7 +29,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ApplicationInitializerTest {
     val appStateProvider: AppStateProvider = mock(AppStateProvider::class.java)
-    val projectImporter: ProjectImporter = mock(ProjectImporter::class.java)
+    val existingProjectMigrator: ExistingProjectMigrator = mock(ExistingProjectMigrator::class.java)
     val currentProjectProvider: CurrentProjectProvider = mock(CurrentProjectProvider::class.java)
 
     lateinit var applicationInitializer: ApplicationInitializer
@@ -44,20 +44,20 @@ class ApplicationInitializerTest {
                 return appStateProvider
             }
 
-            override fun providesProjectImporter(
-                projectsRepository: ProjectsRepository,
-                storagePathProvider: StoragePathProvider,
-                context: Context,
-                settingsProvider: SettingsProvider
-            ): ProjectImporter? {
-                return projectImporter
-            }
-
             override fun providesCurrentProjectProvider(
                 settingsProvider: SettingsProvider?,
                 projectsRepository: ProjectsRepository?
             ): CurrentProjectProvider {
                 return currentProjectProvider
+            }
+
+            override fun providesExistingProjectMigrator(
+                context: Context?,
+                storagePathProvider: StoragePathProvider?,
+                projectsRepository: ProjectsRepository?,
+                settingsProvider: SettingsProvider?
+            ): ExistingProjectMigrator {
+                return existingProjectMigrator
             }
         })
 
@@ -72,7 +72,7 @@ class ApplicationInitializerTest {
         getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
 
         val existing = Project.Saved("123", "Existing", "E", "#ffffff")
-        `when`(projectImporter.importExistingProject()).thenReturn(existing)
+        `when`(existingProjectMigrator.migrate()).thenReturn(existing)
         applicationInitializer.initialize()
         verify(currentProjectProvider).setCurrentProject(existing.uuid)
     }
@@ -81,7 +81,7 @@ class ApplicationInitializerTest {
     fun `Should not existing project be imported when it's first launch`() {
         `when`(appStateProvider.isFreshInstall()).thenReturn(true)
         applicationInitializer.initialize()
-        verifyNoInteractions(projectImporter)
+        verifyNoInteractions(existingProjectMigrator)
     }
 
     @Test
@@ -89,7 +89,7 @@ class ApplicationInitializerTest {
         `when`(appStateProvider.isFreshInstall()).thenReturn(false)
         getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, true)
         applicationInitializer.initialize()
-        verifyNoInteractions(projectImporter)
+        verifyNoInteractions(existingProjectMigrator)
     }
 
     @Test
@@ -97,7 +97,7 @@ class ApplicationInitializerTest {
         getMetaSettings().save(MetaKeys.EXISTING_PROJECT_IMPORTED, false)
 
         val existing = Project.Saved("123", "Existing", "E", "#ffffff")
-        `when`(projectImporter.importExistingProject()).thenReturn(existing)
+        `when`(existingProjectMigrator.migrate()).thenReturn(existing)
 
         applicationInitializer.initialize()
         assertThat(getMetaSettings().getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED), equalTo(true))

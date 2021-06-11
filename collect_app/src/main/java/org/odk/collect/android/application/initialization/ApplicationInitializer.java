@@ -23,7 +23,7 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.projects.ExistingProjectMigrator;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.projects.Project;
@@ -48,12 +48,12 @@ public class ApplicationInitializer {
     private final Settings metaSettings;
     private final StorageInitializer storageInitializer;
     private final AppStateProvider appStateProvider;
-    private final ProjectImporter projectImporter;
+    private final ExistingProjectMigrator existingProjectMigrator;
     private final CurrentProjectProvider currentProjectProvider;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
                                   PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
-                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
+                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ExistingProjectMigrator existingProjectMigrator, CurrentProjectProvider currentProjectProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.preferenceMigrator = preferenceMigrator;
@@ -64,7 +64,7 @@ public class ApplicationInitializer {
         this.metaSettings = metaSettings;
         this.storageInitializer = storageInitializer;
         this.appStateProvider = appStateProvider;
-        this.projectImporter = projectImporter;
+        this.existingProjectMigrator = existingProjectMigrator;
         this.currentProjectProvider = currentProjectProvider;
     }
 
@@ -154,7 +154,7 @@ public class ApplicationInitializer {
 
     private void importExistingProjectIfNeeded() {
         if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
-            Project.Saved existingProject = projectImporter.importExistingProject();
+            Project.Saved existingProject = existingProjectMigrator.migrate();
             currentProjectProvider.setCurrentProject(existingProject.getUuid());
         }
 

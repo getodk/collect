@@ -1,7 +1,6 @@
 package org.odk.collect.android.activities
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
@@ -73,7 +72,10 @@ class MainMenuActivityTest {
                 }
             }
 
-            override fun providesProjectImporter(projectsRepository: ProjectsRepository, storagePathProvider: StoragePathProvider, context: Context, settingsProvider: SettingsProvider): ProjectImporter? {
+            override fun providesProjectImporter(
+                projectsRepository: ProjectsRepository,
+                storagePathProvider: StoragePathProvider
+            ): ProjectImporter? {
                 return projectImporter
             }
         })
