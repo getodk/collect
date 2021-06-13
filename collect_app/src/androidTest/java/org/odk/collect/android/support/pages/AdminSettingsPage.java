@@ -8,7 +8,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
@@ -79,7 +79,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
     public AdminSettingsPage setProjectColor(String projectColor) {
         clickOnString(R.string.project_color);
-        onView(withId(R.id.hex_color)).perform(replaceText(projectColor));
+        onView(withContentDescription(R.string.hex_color)).perform(replaceText(projectColor));
         clickOKOnDialog();
         return this;
     }

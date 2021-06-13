@@ -340,6 +340,7 @@
                     style="@style/TextAppearance.Collect.Headline5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:contentDescription="@string/hex_color"
                     android:padding="0dp"
                     android:maxLength="6"/>
             </com.google.android.material.textfield.TextInputLayout>
