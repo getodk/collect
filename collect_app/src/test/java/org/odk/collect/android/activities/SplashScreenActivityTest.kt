@@ -7,33 +7,30 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.notNullValue
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.doReturn
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
-import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ProjectAddedListener
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
+    @ExperimentalCoroutinesApi
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
 
@@ -75,55 +72,9 @@ class SplashScreenActivityTest {
     }
 
     @Test
-    fun `SplashScreenActivity should implement ProjectAddedListener`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(activity is ProjectAddedListener, `is`(true))
-        }
-    }
-
-    @Test
-    fun `The main menu should be displayed when onProjectAdded() is called`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            Intents.init()
-            activity.onProjectAdded()
-            Intents.intended(hasComponent(MainMenuActivity::class.java.name))
-            Intents.release()
-        }
-    }
-
-    @Test
-    fun `The First Launch Screen should be displayed if the app is newly installed`() {
-        doReturn(true).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(RobolectricHelpers.getFragmentByClass(activity.supportFragmentManager, FirstLaunchDialog::class.java), `is`(notNullValue()))
-        }
-    }
-
-    @Test
-    fun `The First Launch Screen should not be displayed if the app is not newly installed`() {
-        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-        doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
-        doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
-
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
-        scenario.onActivity { activity: SplashScreenActivity ->
-            assertThat(RobolectricHelpers.getFragmentByClass(activity.supportFragmentManager, FirstLaunchDialog::class.java), `is`(nullValue()))
-        }
-    }
-
-    @Test
     fun `The Splash screen should be displayed with the default logo if it's enabled and no other logo is set`() {
-        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-        doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
-        doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
+        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        `when`(splashScreenViewModel.doesLogoFileExist).thenReturn(false)
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
@@ -134,11 +85,8 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Splash screen should be displayed with custom logo if it's enabled and custom logo is set`() {
-        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-        doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
-        doReturn(true).`when`(splashScreenViewModel).doesLogoFileExist
-        doReturn(null).`when`(splashScreenViewModel).scaledSplashScreenLogoBitmap
-        doReturn(null).`when`(splashScreenViewModel).splashScreenLogoFile
+        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        `when`(splashScreenViewModel.doesLogoFileExist).thenReturn(true)
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
@@ -147,11 +95,11 @@ class SplashScreenActivityTest {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() = coroutineScope.runBlockingTest {
-        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-        doReturn(true).`when`(splashScreenViewModel).shouldDisplaySplashScreen
-        doReturn(false).`when`(splashScreenViewModel).doesLogoFileExist
+        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
 
         Intents.init()
 
@@ -167,13 +115,25 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The main menu should be displayed immediately if the splash screen is disabled and the app is not newly installed`() {
-        doReturn(false).`when`(splashScreenViewModel).shouldFirstLaunchScreenBeDisplayed
-        doReturn(false).`when`(splashScreenViewModel).shouldDisplaySplashScreen
+        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
+        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
 
         Intents.init()
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
         Intents.intended(hasComponent(MainMenuActivity::class.java.name))
+        Intents.release()
+    }
+
+    @Test
+    fun `The First Launch Screen should be displayed immediately if the app is newly installed`() {
+        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
+        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(true)
+
+        Intents.init()
+        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
+        Intents.intended(hasComponent(FirstLaunchActivity::class.java.name))
         Intents.release()
     }
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -25,15 +27,9 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
-    private var listener: ProjectAddedListener? = null
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
-
-        if (context is ProjectAddedListener) {
-            listener = context
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -82,8 +78,8 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         )
 
         projectCreator.createNewProject(settingsJson)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.new_project_created))
-        listener?.onProjectAdded()
         dismiss()
     }
 }
