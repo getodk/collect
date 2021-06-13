@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs
+package org.odk.collect.androidshared
 
 import android.app.Dialog
 import android.graphics.Color
@@ -14,8 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.odk.collect.android.R
-import org.odk.collect.android.databinding.ColorPickerDialogLayoutBinding
+import org.odk.collect.androidshared.databinding.ColorPickerDialogLayoutBinding
 import java.lang.Exception
 
 class ColorPickerDialog : DialogFragment() {

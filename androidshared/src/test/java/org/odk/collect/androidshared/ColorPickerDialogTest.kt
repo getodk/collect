@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs
+package org.odk.collect.androidshared
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -15,7 +15,6 @@ import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)

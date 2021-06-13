@@ -35,7 +35,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.backgroundwork.FormUpdateManager;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
-import org.odk.collect.android.fragments.dialogs.ColorPickerViewModel;
+import org.odk.collect.androidshared.ColorPickerViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
@@ -47,7 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.androidshared.OneSignTextWatcher;
 import org.odk.collect.projects.Project;
-import org.odk.collect.android.fragments.dialogs.ColorPickerDialog;
+import org.odk.collect.androidshared.ColorPickerDialog;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Inject;
