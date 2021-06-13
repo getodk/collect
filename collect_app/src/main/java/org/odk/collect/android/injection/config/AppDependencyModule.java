@@ -502,14 +502,8 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
-                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, ProjectDetailsCreator projectDetailsCreator) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, projectDetailsCreator);
-    }
-
-    @Provides
-    @Singleton
-    public ProjectDetailsCreator providesProjectDetailsCreator(Context context) {
-        return new ProjectDetailsCreator(context);
+                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, new ProjectDetailsCreator(context));
     }
 
     @Provides
