@@ -81,7 +81,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         ColorPickerViewModel colorPickerViewModel = new ViewModelProvider(requireActivity()).get(ColorPickerViewModel.class);
         colorPickerViewModel.getPickedColor().observe(this, color -> {
             Project.Saved currentProject = currentProjectProvider.getCurrentProject();
-            projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), String.valueOf(color)));
+            projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), color));
             findPreference(PROJECT_COLOR_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_COLOR_KEY, currentProjectProvider));
         });
     }
