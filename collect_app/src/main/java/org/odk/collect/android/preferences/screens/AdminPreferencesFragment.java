@@ -79,7 +79,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         DaggerUtils.getComponent(context).inject(this);
 
         ColorPickerViewModel colorPickerViewModel = new ViewModelProvider(requireActivity()).get(ColorPickerViewModel.class);
-        colorPickerViewModel.getColor().observe(this, color -> {
+        colorPickerViewModel.getPickedColor().observe(this, color -> {
             Project.Saved currentProject = currentProjectProvider.getCurrentProject();
             projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), String.valueOf(color)));
             findPreference(PROJECT_COLOR_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_COLOR_KEY, currentProjectProvider));

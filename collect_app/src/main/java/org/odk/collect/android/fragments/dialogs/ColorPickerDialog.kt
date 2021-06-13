@@ -11,6 +11,7 @@ import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
@@ -37,7 +38,7 @@ class ColorPickerDialog : DialogFragment() {
             .setView(binding.root)
             .setTitle(R.string.project_color)
             .setNegativeButton(R.string.cancel) { _, _ -> dismiss() }
-            .setPositiveButton(R.string.ok) { _, _ -> model.color.value = "#${binding.hexColor.text}" }
+            .setPositiveButton(R.string.ok) { _, _ -> model.pickColor("#${binding.hexColor.text}") }
             .create()
     }
 
@@ -82,5 +83,10 @@ class ColorPickerDialog : DialogFragment() {
 }
 
 class ColorPickerViewModel : ViewModel() {
-    val color: MutableLiveData<String> = MutableLiveData()
+    private val _pickedColor = MutableLiveData<String>()
+    val pickedColor: LiveData<String> = _pickedColor
+
+    fun pickColor(color: String) {
+        _pickedColor.value = color
+    }
 }
