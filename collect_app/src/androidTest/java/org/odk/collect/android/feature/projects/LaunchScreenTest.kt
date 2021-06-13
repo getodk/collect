@@ -51,7 +51,7 @@ class LaunchScreenTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
-            .assertProjectIcon("M", "#3e9fcc")
+            .assertProjectIcon("M")
             .openProjectSettings()
             .assertCurrentProject("my-server.com", "John / my-server.com")
     }
