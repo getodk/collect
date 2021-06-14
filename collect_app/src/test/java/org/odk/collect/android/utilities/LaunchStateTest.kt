@@ -8,13 +8,13 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.testshared.InMemSettings
 import java.io.File
 
-class LaunchStateProviderTest {
+class LaunchStateTest {
 
     private val externalFilesDir = TempFiles.createTempDir()
 
     @Test
     fun `isUpgradedFirstLaunch() returns false for empty meta settings`() {
-        val appStateProvider = LaunchStateProvider(1, InMemSettings(), externalFilesDir)
+        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -23,7 +23,7 @@ class LaunchStateProviderTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchStateProvider(1, inMemSettings, externalFilesDir)
+        val appStateProvider = LaunchState(1, inMemSettings, externalFilesDir)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -32,7 +32,7 @@ class LaunchStateProviderTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchStateProvider(2, inMemSettings, externalFilesDir)
+        val appStateProvider = LaunchState(2, inMemSettings, externalFilesDir)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
@@ -41,7 +41,7 @@ class LaunchStateProviderTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchStateProvider(2, inMemSettings, externalFilesDir)
+        val appStateProvider = LaunchState(2, inMemSettings, externalFilesDir)
         appStateProvider.appLaunched()
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
@@ -51,7 +51,7 @@ class LaunchStateProviderTest {
         val metadataDir = File(externalFilesDir, "metadata").also { it.mkdir() }
         File(metadataDir, "something").createNewFile()
 
-        val appStateProvider = LaunchStateProvider(1, InMemSettings(), externalFilesDir)
+        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir)
 
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }

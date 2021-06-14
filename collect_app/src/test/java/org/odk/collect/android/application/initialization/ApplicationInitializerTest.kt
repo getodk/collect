@@ -8,14 +8,14 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.odk.collect.android.utilities.LaunchStateProvider
+import org.odk.collect.android.utilities.LaunchState
 
 @RunWith(AndroidJUnit4::class)
 class ApplicationInitializerTest {
 
     @Test
     fun `runs upgrade when upgraded version launched`() {
-        val appStateProvider = mock<LaunchStateProvider> {
+        val launchState = mock<LaunchState> {
             on { isUpgradedFirstLaunch() } doReturn true
         }
 
@@ -27,7 +27,7 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             mock(),
-            appStateProvider,
+            launchState,
             appUpgrader
         )
 
@@ -37,7 +37,7 @@ class ApplicationInitializerTest {
 
     @Test
     fun `does not run upgrade when not launching upgraded version`() {
-        val appStateProvider = mock<LaunchStateProvider> {
+        val launchState = mock<LaunchState> {
             on { isUpgradedFirstLaunch() } doReturn false
         }
 
@@ -49,11 +49,29 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             mock(),
-            appStateProvider,
+            launchState,
             appUpgrader
         )
 
         applicationInitializer.initialize()
         verify(appUpgrader, never()).upgrade()
+    }
+
+    @Test
+    fun `registers app launch`() {
+        val launchState = mock<LaunchState>()
+
+        val applicationInitializer = ApplicationInitializer(
+            ApplicationProvider.getApplicationContext(),
+            mock(),
+            mock(),
+            mock(),
+            mock(),
+            launchState,
+            mock()
+        )
+
+        applicationInitializer.initialize()
+        verify(launchState).appLaunched()
     }
 }

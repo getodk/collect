@@ -4,7 +4,7 @@ import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.Settings
 import java.io.File
 
-class LaunchStateProvider(
+class LaunchState(
     private val currentVersion: Int,
     private val metaSettings: Settings,
     private val externalFilesDir: File

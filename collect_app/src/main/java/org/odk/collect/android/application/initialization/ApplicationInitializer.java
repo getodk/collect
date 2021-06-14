@@ -20,7 +20,7 @@ import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.utilities.LaunchStateProvider;
+import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -36,20 +36,20 @@ public class ApplicationInitializer {
     private final PropertyManager propertyManager;
     private final Analytics analytics;
     private final StorageInitializer storageInitializer;
-    private final LaunchStateProvider launchStateProvider;
+    private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
 
     @Inject
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
-                                  StorageInitializer storageInitializer, LaunchStateProvider launchStateProvider,
+                                  StorageInitializer storageInitializer, LaunchState launchState,
                                   AppUpgrader appUpgrader) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
-        this.launchStateProvider = launchStateProvider;
+        this.launchState = launchState;
         this.appUpgrader = appUpgrader;
     }
 
@@ -58,10 +58,12 @@ public class ApplicationInitializer {
         performUpgradeIfNeeded();
         initializeFrameworks();
         initializeLocale();
+
+        launchState.appLaunched();
     }
 
     private void performUpgradeIfNeeded() {
-        if (launchStateProvider.isUpgradedFirstLaunch()) {
+        if (launchState.isUpgradedFirstLaunch()) {
             appUpgrader.upgrade();
         }
     }
