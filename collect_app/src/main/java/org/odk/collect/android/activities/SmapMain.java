@@ -994,11 +994,12 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
             displayBannerWithSuccessStorageMigrationResult();
         } else {
-            StorageMigrationDialog dialog = showStorageMigrationDialog();
+            DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
+            //StorageMigrationDialog dialog = showStorageMigrationDialog();
 
-            if (dialog != null) {
-                dialog.handleMigrationError(result);
-            }
+            //if (dialog != null) {
+            //    dialog.handleMigrationError(result);
+            //}
         }
     }
 
@@ -1014,7 +1015,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private void setUpStorageMigrationBanner() {
         //storageStateProvider.disableUsingScopedStorage();       // debug
         if (!storageStateProvider.isScopedStorageUsed()) {
-            displayStorageMigrationBanner();
+            //displayStorageMigrationBanner();
         }
     }
 
