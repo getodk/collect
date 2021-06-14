@@ -25,6 +25,7 @@ import android.text.style.ForegroundColorSpan;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
@@ -34,6 +35,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.androidshared.ColorPickerViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference;
@@ -45,6 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.androidshared.OneSignTextWatcher;
 import org.odk.collect.projects.Project;
+import org.odk.collect.androidshared.ColorPickerDialog;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Inject;
@@ -74,6 +77,13 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+
+        ColorPickerViewModel colorPickerViewModel = new ViewModelProvider(requireActivity()).get(ColorPickerViewModel.class);
+        colorPickerViewModel.getPickedColor().observe(this, color -> {
+            Project.Saved currentProject = currentProjectProvider.getCurrentProject();
+            projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), color));
+            findPreference(PROJECT_COLOR_KEY).setSummaryProvider(new ProjectDetailsSummaryProvider(PROJECT_COLOR_KEY, currentProjectProvider));
+        });
     }
 
     @Override
@@ -83,6 +93,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
         findPreference("odk_preferences").setOnPreferenceClickListener(this);
         findPreference(KEY_CHANGE_ADMIN_PASSWORD).setOnPreferenceClickListener(this);
+        findPreference(PROJECT_COLOR_KEY).setOnPreferenceClickListener(this);
         findPreference(KEY_IMPORT_SETTINGS).setOnPreferenceClickListener(this);
         findPreference("main_menu").setOnPreferenceClickListener(this);
         findPreference("user_settings").setOnPreferenceClickListener(this);
@@ -95,11 +106,9 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
 
         findPreference(PROJECT_NAME_KEY).setOnPreferenceChangeListener(this);
         findPreference(PROJECT_ICON_KEY).setOnPreferenceChangeListener(this);
-        findPreference(PROJECT_COLOR_KEY).setOnPreferenceChangeListener(this);
 
         ((EditTextPreference) findPreference(PROJECT_NAME_KEY)).setText(currentProjectProvider.getCurrentProject().getName());
         ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setText(currentProjectProvider.getCurrentProject().getIcon());
-        ((EditTextPreference) findPreference(PROJECT_COLOR_KEY)).setText(currentProjectProvider.getCurrentProject().getColor());
 
         ((EditTextPreference) findPreference(PROJECT_ICON_KEY)).setOnBindEditTextListener(editText -> editText.addTextChangedListener(new OneSignTextWatcher(editText)));
     }
@@ -132,6 +141,11 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     break;
                 case KEY_CHANGE_ADMIN_PASSWORD:
                     DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class, getActivity().getSupportFragmentManager());
+                    break;
+                case PROJECT_COLOR_KEY:
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ColorPickerDialog.CURRENT_COLOR, currentProjectProvider.getCurrentProject().getColor());
+                    DialogUtils.showIfNotShowing(ColorPickerDialog.class, bundle, getActivity().getSupportFragmentManager());
                     break;
                 case KEY_IMPORT_SETTINGS:
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
@@ -172,9 +186,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
             case PROJECT_ICON_KEY:
                 projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), String.valueOf(newValue), currentProject.getColor()));
                 break;
-            case PROJECT_COLOR_KEY:
-                projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), String.valueOf(newValue)));
-                break;
         }
         return true;
     }
@@ -194,7 +205,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         fragment.preventOtherWaysOfEditingForm();
     }
 
-    private static class ProjectDetailsSummaryProvider implements Preference.SummaryProvider<EditTextPreference> {
+    private static class ProjectDetailsSummaryProvider implements Preference.SummaryProvider<Preference> {
         private final String key;
         private final CurrentProjectProvider currentProjectProvider;
 
@@ -204,7 +215,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
         }
 
         @Override
-        public CharSequence provideSummary(EditTextPreference preference) {
+        public CharSequence provideSummary(Preference preference) {
             switch (key) {
                 case PROJECT_NAME_KEY:
                     return currentProjectProvider.getCurrentProject().getName();

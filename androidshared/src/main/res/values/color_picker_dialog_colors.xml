@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Color picker palette -->
+    <color name="color1">#EA4633</color>
+    <color name="color2">#E9527E</color>
+    <color name="color3">#9F50B0</color>
+    <color name="color4">#3F51B5</color>
+    <color name="color5">#2296F3</color>
+    <color name="color6">#53BDD4</color>
+    <color name="color7">#489789</color>
+    <color name="color8">#5DAF50</color>
+    <color name="color9">#8BC34A</color>
+    <color name="color10">#CDDC39</color>
+    <color name="color11">#FFEB3B</color>
+    <color name="color12">#F9C028</color>
+    <color name="color13">#F2972C</color>
+    <color name="color14">#795548</color>
+    <color name="color15">#9E9E9E</color>
+</resources>

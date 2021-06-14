@@ -199,7 +199,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new DeleteSavedFormPage().assertOnPage();
     }
 
-    public MainMenuPage assertProjectIcon(String projectIcon, String expectedBackgroundColor) {
+    public MainMenuPage assertProjectIcon(String projectIcon) {
         onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
         return this;
     }

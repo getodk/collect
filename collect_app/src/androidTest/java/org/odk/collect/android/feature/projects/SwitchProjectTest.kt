@@ -23,7 +23,7 @@ class SwitchProjectTest {
     fun canSwitchActiveProjectToAnotherInList() {
         // Add project Turtle nesting
         rule.startAtMainMenu()
-            .assertProjectIcon("D", "#3e9fcc")
+            .assertProjectIcon("D")
             .openProjectSettings()
             .clickAddProject()
             .switchToManualMode()
@@ -37,7 +37,7 @@ class SwitchProjectTest {
             .assertInactiveProject("my-server.com", "John / my-server.com")
             .selectProject("my-server.com")
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
-            .assertProjectIcon("M", "#3e9fcc")
+            .assertProjectIcon("M")
     }
 
     @Test
@@ -54,7 +54,7 @@ class SwitchProjectTest {
             .assertNumberOfFinalizedForms(1)
 
             // Create and switch to new project
-            .assertProjectIcon("D", "#3e9fcc")
+            .assertProjectIcon("D")
             .openProjectSettings()
             .clickAddProject()
             .switchToManualMode()

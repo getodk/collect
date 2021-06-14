@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences.screens
 
 import androidx.preference.EditTextPreference
+import androidx.preference.Preference
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
@@ -99,7 +100,7 @@ class AdminPreferencesFragmentTest {
     fun `Project Color preference should be visible`() {
         val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
-            assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.isVisible, `is`(true))
+            assertThat(it.findPreference<Preference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.isVisible, `is`(true))
         }
     }
 
@@ -107,7 +108,7 @@ class AdminPreferencesFragmentTest {
     fun `Project Color preference should have proper title`() {
         val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
-            assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.title, `is`(TranslationHandler.getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.project_color)))
+            assertThat(it.findPreference<Preference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.title, `is`(TranslationHandler.getString(ApplicationProvider.getApplicationContext<Collect>(), R.string.project_color)))
         }
     }
 
@@ -115,7 +116,7 @@ class AdminPreferencesFragmentTest {
     fun `Project Color preference should have proper summary`() {
         val scenario = RobolectricHelpers.launchDialogFragment(AdminPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
         scenario.onFragment {
-            assertThat(it.findPreference<EditTextPreference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.summary.toString(), `is`("■"))
+            assertThat(it.findPreference<Preference>(AdminPreferencesFragment.PROJECT_COLOR_KEY)!!.summary.toString(), `is`("■"))
         }
     }
 }

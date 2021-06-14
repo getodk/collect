@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import android.content.Context
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -97,7 +98,8 @@ class ManualProjectCreatorDialogTest {
                 projectImporter: ProjectImporter?,
                 projectsRepository: ProjectsRepository?,
                 currentProjectProvider: CurrentProjectProvider?,
-                settingsImporter: SettingsImporter?
+                settingsImporter: SettingsImporter?,
+                context: Context
             ): ProjectCreator {
                 return projectCreator
             }

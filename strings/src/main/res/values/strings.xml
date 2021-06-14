@@ -1002,4 +1002,11 @@
     <string name="scan_configuration_qr_code">Scan configuration QR code</string>
     <string name="or">OR</string>
     <string name="new_project_created">New project created successfully</string>
+
+    <!--
+     ##############################################
+     # Color picker
+     ##############################################
+     -->
+    <string name="hex_color">Hex color</string>
 </resources>

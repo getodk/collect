@@ -88,6 +88,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectCreator;
+import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -494,8 +495,8 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
-                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
+                                                    CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, new ProjectDetailsCreator(context));
     }
 
     @Provides
