@@ -300,7 +300,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            style="@style/TextAppearance.Collect.Headline5"
+            style="?textAppearanceHeadline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hex"
@@ -310,7 +310,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
-            style="@style/TextAppearance.Collect.Headline5"
+            style="?textAppearanceHeadline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hash"
@@ -337,7 +337,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/hex_color"
-                    style="@style/TextAppearance.Collect.Headline5"
+                    style="?textAppearanceHeadline5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/hex_color"
