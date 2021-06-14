@@ -1,4 +1,4 @@
-package org.odk.collect.android.application.initialization
+package org.odk.collect.android.application.initialization.upgrade
 
 import org.junit.Test
 import org.mockito.kotlin.doReturn

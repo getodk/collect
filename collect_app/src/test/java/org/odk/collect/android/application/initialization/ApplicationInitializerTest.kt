@@ -8,6 +8,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.odk.collect.android.application.initialization.upgrade.AppUpgrader
 import org.odk.collect.android.utilities.LaunchState
 
 @RunWith(AndroidJUnit4::class)
