@@ -58,7 +58,7 @@ public class InstancesDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Timber.i("Downgrading database from version %d to %d", oldVersion, newVersion);
-        databaseMigrator.onDowngrade(db);
+        //databaseMigrator.onDowngrade(db);   // smap
         Timber.i("Downgrading database from version %d to %d completed with success.", oldVersion, newVersion);
     }
 
