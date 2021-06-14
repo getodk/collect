@@ -13,6 +13,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.projects.Project;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
 
@@ -26,6 +27,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
@@ -150,6 +152,26 @@ public class SettingsImporterTest {
                 new Pair<>("key1", "default"),
                 new Pair<>("key2", true),
                 new Pair<>("key1", 5)));
+    }
+
+    @Test
+    public void projectDetailsShouldBeImportedIfIncludedInJson() throws Exception {
+        JSONObject projectJson = new JSONObject()
+                .put("name", "Project X")
+                .put("icon", "X")
+                .put("color", "#cccccc");
+
+        JSONObject settings = new JSONObject()
+                .put("general", new JSONObject())
+                .put("admin", new JSONObject())
+                .put("project", projectJson);
+
+        when(projectsRepository.get("1")).thenReturn(new Project.Saved("1", "Project Y", "Y", "#ffffff"));
+
+        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
+        importer.fromJSON(settings.toString(), "1");
+
+        verify(projectsRepository).save(new Project.Saved("1", "Project X", "X", "#cccccc"));
     }
 
     private String emptySettings() throws Exception {
