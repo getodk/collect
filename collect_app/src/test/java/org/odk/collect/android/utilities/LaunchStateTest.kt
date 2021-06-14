@@ -10,19 +10,17 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.shared.TempFiles
 import org.odk.collect.testshared.InMemSettings
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class LaunchStateTest {
 
-    private val externalFilesDir = TempFiles.createTempDir()
     private val context = ApplicationProvider.getApplicationContext<Application>()
 
     @Test
     fun `isUpgradedFirstLaunch() returns false for empty meta settings`() {
-        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir, context)
+        val appStateProvider = LaunchState(context, InMemSettings(), 1)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -31,7 +29,7 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(1, inMemSettings, externalFilesDir, context)
+        val appStateProvider = LaunchState(context, inMemSettings, 1)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -40,7 +38,7 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(2, inMemSettings, externalFilesDir, context)
+        val appStateProvider = LaunchState(context, inMemSettings, 2)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
@@ -49,17 +47,17 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(2, inMemSettings, externalFilesDir, context)
+        val appStateProvider = LaunchState(context, inMemSettings, 2)
         appStateProvider.appLaunched()
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
     @Test
     fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy metadata dir is not empty`() {
-        val metadataDir = File(externalFilesDir, "metadata").also { it.mkdir() }
+        val metadataDir = File(context.getExternalFilesDir(null), "metadata").also { it.mkdir() }
         File(metadataDir, "something").createNewFile()
 
-        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir, context)
+        val appStateProvider = LaunchState(context, InMemSettings(), 1)
 
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
@@ -70,7 +68,7 @@ class LaunchStateTest {
             .putString("anything", "anything")
             .apply()
 
-        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir, context)
+        val appStateProvider = LaunchState(context, InMemSettings(), 1)
 
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
@@ -81,7 +79,7 @@ class LaunchStateTest {
             .putString("anything", "anything")
             .apply()
 
-        val appStateProvider = LaunchState(1, InMemSettings(), externalFilesDir, context)
+        val appStateProvider = LaunchState(context, InMemSettings(), 1)
 
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }

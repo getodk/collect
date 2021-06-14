@@ -97,7 +97,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
-import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
@@ -107,6 +106,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -530,7 +530,7 @@ public class AppDependencyModule {
 
     @Provides
     public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new LaunchState(BuildConfig.VERSION_CODE, settingsProvider.getMetaSettings(), context.getExternalFilesDir(null), context);
+        return new LaunchState(context, settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE);
     }
 
     @Provides
