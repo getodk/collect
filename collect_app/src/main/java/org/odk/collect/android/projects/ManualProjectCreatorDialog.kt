@@ -75,7 +75,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun handleAddingNewProject() {
-        val settingsJson = jsonPreferencesGenerator.getProjectDetailsAsJson(
+        val settingsJson = jsonPreferencesGenerator.getJSONWithServerDetails(
             binding.urlInputText.text?.trim().toString(),
             binding.usernameInputText.text?.trim().toString(),
             binding.passwordInputText.text?.trim().toString()

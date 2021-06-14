@@ -157,7 +157,7 @@ class JsonPreferencesGeneratorTest {
             GeneralKeys.KEY_PASSWORD to "1234"
         )
 
-        val jsonPrefs = jsonPreferencesGenerator.getProjectDetailsAsJson("https://my-server.com", "adam", "1234")
+        val jsonPrefs = jsonPreferencesGenerator.getJSONWithServerDetails("https://my-server.com", "adam", "1234")
 
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>())
     }
