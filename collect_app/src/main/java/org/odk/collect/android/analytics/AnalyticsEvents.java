@@ -161,4 +161,9 @@ public class AnalyticsEvents {
      * from disk and then encrypted
      */
     public static final String IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance";
+
+    /**
+     * Tracks responses from OpenMapKit to the OSMWidget
+     */
+    public static final String OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse";
 }
