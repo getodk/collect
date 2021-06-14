@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.openrosa.OpenRosaFormSource
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface
 import org.odk.collect.android.openrosa.OpenRosaResponseParserImpl
@@ -11,8 +10,7 @@ import org.odk.collect.forms.FormSource
 
 class FormSourceProvider(
     private val settingsProvider: SettingsProvider,
-    private val openRosaHttpInterface: OpenRosaHttpInterface,
-    private val analytics: Analytics
+    private val openRosaHttpInterface: OpenRosaHttpInterface
 ) {
 
     @JvmOverloads
@@ -27,7 +25,6 @@ class FormSourceProvider(
             formListPath,
             openRosaHttpInterface,
             WebCredentialsUtils(generalSettings),
-            analytics,
             OpenRosaResponseParserImpl()
         )
     }

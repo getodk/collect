@@ -140,7 +140,6 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         noHashInFormList = true;
     }
 
-
     public String getURL() {
         return "https://" + HOST;
     }

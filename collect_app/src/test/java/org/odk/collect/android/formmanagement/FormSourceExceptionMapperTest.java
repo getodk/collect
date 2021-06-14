@@ -55,4 +55,10 @@ public class FormSourceExceptionMapperTest {
         String expectedString = context.getString(R.string.invalid_response, "http://unknown.com") + " " + context.getString(R.string.report_to_project_lead);
         assertThat(mapper.getMessage(new FormSourceException.ParseError("http://unknown.com")), is(expectedString));
     }
+
+    @Test
+    public void serverNotOpenRosaError_returnsNotOpenRosaMessage() {
+        String expectedString = "This server does not correctly implement the OpenRosa formList API. " + context.getString(R.string.report_to_project_lead);
+        assertThat(mapper.getMessage(new FormSourceException.ServerNotOpenRosaError()), is(expectedString));
+    }
 }

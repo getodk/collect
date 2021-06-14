@@ -1,14 +1,13 @@
 package org.odk.collect.android.openrosa.api;
 
 import org.junit.Test;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.openrosa.HttpGetResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.OpenRosaResponseParser;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.forms.FormSourceException;
 
 import java.io.ByteArrayInputStream;
 import java.net.SocketTimeoutException;
@@ -29,15 +28,13 @@ import static org.mockito.Mockito.when;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class OpenRosaFormSourceTest {
-
-    private final Analytics analytics = mock(Analytics.class);
     private final OpenRosaHttpInterface httpInterface = mock(OpenRosaHttpInterface.class);
     private final WebCredentialsUtils webCredentialsUtils = mock(WebCredentialsUtils.class);
     private final OpenRosaResponseParser responseParser = mock(OpenRosaResponseParser.class);
 
     @Test
     public void fetchFormList_removesTrailingSlashesFromUrl() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com///", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com///", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
                 new ByteArrayInputStream(RESPONSE.getBytes()),
@@ -53,7 +50,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(UnknownHostException.class);
@@ -66,7 +63,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenThereIsAnSSLException_throwsSecurityErrorFormApiException() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(SSLException.class);
@@ -79,7 +76,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenThereIsATimeout_throwsFetchError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(SocketTimeoutException.class);
@@ -92,7 +89,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenThereIsA404_throwsUnreachableApiException() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 404));
@@ -105,7 +102,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenThereIsAServerError_throwsServerError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
@@ -119,7 +116,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchFormList_whenOpenRosaResponse_whenParserFails_throwsParseError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
@@ -140,8 +137,26 @@ public class OpenRosaFormSourceTest {
     }
 
     @Test
+    public void fetchFormList_whenResponseHasNoOpenRosaHeader_throwsServerNotOpenRosaError() throws Exception {
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com///", "/formList", httpInterface, webCredentialsUtils, responseParser);
+
+        when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
+                new ByteArrayInputStream(RESPONSE.getBytes()),
+                new HashMap<String, String>(), // No OpenRosa header
+                "", 200
+        ));
+
+        try {
+            formListApi.fetchFormList();
+            fail("Expected exception because server is not OpenRosa server.");
+        } catch (FormSourceException.ServerNotOpenRosaError e) {
+            // pass
+        }
+    }
+
+    @Test
     public void fetchManifest_whenThereIsAnUnknownHostException_throwsUnreachableFormApiException() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenThrow(UnknownHostException.class);
@@ -154,7 +169,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchManifest_whenThereIsAServerError_throwsServerError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 503));
@@ -168,7 +183,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchManifest_whenOpenRosaResponse_whenParserFails_throwsParseError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
@@ -190,7 +205,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchManifest_whenNotOpenRosaResponse_throwsParseError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(
@@ -209,7 +224,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchForm_whenThereIsAServerError_throwsServerError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));
@@ -223,7 +238,7 @@ public class OpenRosaFormSourceTest {
 
     @Test
     public void fetchMediaFile_whenThereIsAServerError_throwsServerError() throws Exception {
-        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, analytics, responseParser);
+        OpenRosaFormSource formListApi = new OpenRosaFormSource("http://blah.com", "/formList", httpInterface, webCredentialsUtils, responseParser);
 
         try {
             when(httpInterface.executeGetRequest(any(), any(), any())).thenReturn(new HttpGetResult(null, new HashMap<>(), "hash", 500));

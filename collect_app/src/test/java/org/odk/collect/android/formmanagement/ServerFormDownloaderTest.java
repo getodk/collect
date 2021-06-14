@@ -162,6 +162,31 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
+    public void whenFormListMissingHash_throwsError() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                null,
+                true,
+                false,
+                null);
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(ReferenceManager.instance()), mock(Analytics.class));
+        try {
+            downloader.downloadForm(serverFormDetails, null, null);
+            fail("Expected exception because of missing form hash");
+        } catch (FormDownloadException e) {
+            // pass
+        }
+    }
+
+    @Test
     public void whenFormHasMediaFiles_downloadsAndSavesFormAndMediaFiles() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(

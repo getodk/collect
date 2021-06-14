@@ -19,7 +19,7 @@ class FormSourceProviderTest {
             on { getGeneralSettings("projectId") } doReturn settings
         }
 
-        val formSourceProvider = FormSourceProvider(settingsProvider, mock(), mock())
+        val formSourceProvider = FormSourceProvider(settingsProvider, mock())
 
         settings.save(GeneralKeys.KEY_SERVER_URL, "http://example.com")
         settings.save(GeneralKeys.KEY_FORMLIST_URL, "/a-path")
