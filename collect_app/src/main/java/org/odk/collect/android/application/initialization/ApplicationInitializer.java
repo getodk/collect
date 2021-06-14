@@ -20,7 +20,7 @@ import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.utilities.AppStateProvider;
+import org.odk.collect.android.utilities.LaunchStateProvider;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -36,20 +36,20 @@ public class ApplicationInitializer {
     private final PropertyManager propertyManager;
     private final Analytics analytics;
     private final StorageInitializer storageInitializer;
-    private final AppStateProvider appStateProvider;
+    private final LaunchStateProvider launchStateProvider;
     private final AppUpgrader appUpgrader;
 
     @Inject
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
-                                  StorageInitializer storageInitializer, AppStateProvider appStateProvider,
+                                  StorageInitializer storageInitializer, LaunchStateProvider launchStateProvider,
                                   AppUpgrader appUpgrader) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
         this.storageInitializer = storageInitializer;
-        this.appStateProvider = appStateProvider;
+        this.launchStateProvider = launchStateProvider;
         this.appUpgrader = appUpgrader;
     }
 
@@ -61,7 +61,7 @@ public class ApplicationInitializer {
     }
 
     private void performUpgradeIfNeeded() {
-        if (appStateProvider.isUpgradedFirstLaunch()) {
+        if (launchStateProvider.isUpgradedFirstLaunch()) {
             appUpgrader.upgrade();
         }
     }

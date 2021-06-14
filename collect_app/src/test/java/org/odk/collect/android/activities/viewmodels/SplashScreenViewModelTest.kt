@@ -8,21 +8,21 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
-import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.android.utilities.LaunchStateProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
 class SplashScreenViewModelTest {
 
     private lateinit var generalSettings: SharedPreferencesSettings
-    private lateinit var appStateProvider: AppStateProvider
+    private lateinit var launchStateProvider: LaunchStateProvider
     private lateinit var projectsRepository: ProjectsRepository
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
         generalSettings = mock(SharedPreferencesSettings::class.java)
-        appStateProvider = mock(AppStateProvider::class.java)
+        launchStateProvider = mock(LaunchStateProvider::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
         splashScreenViewModel = SplashScreenViewModel(generalSettings, projectsRepository)
     }
