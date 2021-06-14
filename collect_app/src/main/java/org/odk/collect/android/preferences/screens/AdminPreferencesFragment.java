@@ -66,9 +66,6 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     public static final String DELETE_PROJECT_KEY = "delete_project";
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
-
-    @Inject
     ProjectsRepository projectsRepository;
 
     @Inject

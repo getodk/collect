@@ -18,6 +18,7 @@ import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
@@ -32,6 +33,9 @@ public abstract class BasePreferencesFragment extends PreferenceFragmentCompat i
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onAttach(@NonNull Context context) {

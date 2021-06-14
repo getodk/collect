@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsStore;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,9 +17,6 @@ public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFrag
     @Inject
     @Named("GENERAL_SETTINGS_STORE")
     SettingsStore generalSettingsStore;
-
-    @Inject
-    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onAttach(@NonNull Context context) {
