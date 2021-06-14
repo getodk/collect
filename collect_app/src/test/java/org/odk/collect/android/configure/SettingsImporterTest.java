@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.configure.qr.JsonPreferencesKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.projects.Project;
@@ -107,7 +108,7 @@ public class SettingsImporterTest {
     @Test
     public void removesUnknownKeys() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put("general", new JSONObject()
+                .put(JsonPreferencesKeys.GENERAL, new JSONObject()
                         .put("unknown_key", "value"));
 
         assertThat(importer.fromJSON(json.toString(), currentProjectId), is(true));
@@ -129,7 +130,7 @@ public class SettingsImporterTest {
     @Test // Migrations might use old keys that are "unknown" to the app
     public void migratesPreferences_beforeClearingUnknowns() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put("general", new JSONObject()
+                .put(JsonPreferencesKeys.GENERAL, new JSONObject()
                         .put("unknown_key", "value"));
 
         SettingsPreferenceMigrator migrator = (Settings generalSettings, Settings adminSettings) -> {
@@ -157,14 +158,14 @@ public class SettingsImporterTest {
     @Test
     public void projectDetailsShouldBeImportedIfIncludedInJson() throws Exception {
         JSONObject projectJson = new JSONObject()
-                .put("name", "Project X")
-                .put("icon", "X")
-                .put("color", "#cccccc");
+                .put(JsonPreferencesKeys.PROJECT_NAME, "Project X")
+                .put(JsonPreferencesKeys.PROJECT_ICON, "X")
+                .put(JsonPreferencesKeys.PROJECT_COLOR, "#cccccc");
 
         JSONObject settings = new JSONObject()
-                .put("general", new JSONObject())
-                .put("admin", new JSONObject())
-                .put("project", projectJson);
+                .put(JsonPreferencesKeys.GENERAL, new JSONObject())
+                .put(JsonPreferencesKeys.ADMIN, new JSONObject())
+                .put(JsonPreferencesKeys.PROJECT, projectJson);
 
         when(projectsRepository.get("1")).thenReturn(new Project.Saved("1", "Project Y", "Y", "#ffffff"));
 
@@ -181,8 +182,8 @@ public class SettingsImporterTest {
 
     private JSONObject emptySettingsObject() throws Exception {
         return new JSONObject()
-                .put("general", new JSONObject())
-                .put("admin", new JSONObject());
+                .put(JsonPreferencesKeys.GENERAL, new JSONObject())
+                .put(JsonPreferencesKeys.ADMIN, new JSONObject());
     }
 
     private static class RecordingSettingsChangeHandler implements SettingsChangeHandler {

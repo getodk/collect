@@ -19,17 +19,17 @@ class JsonPreferencesGenerator(
         }
 
         return JSONObject().apply {
-            put("general", generalSettings)
-            put("admin", getAdminPrefsAsJson(emptyList()))
-            put("project", JSONObject())
+            put(JsonPreferencesKeys.GENERAL, generalSettings)
+            put(JsonPreferencesKeys.ADMIN, getAdminPrefsAsJson(emptyList()))
+            put(JsonPreferencesKeys.PROJECT, JSONObject())
         }.toString()
     }
 
     fun getJSONFromPreferences(includedPasswordKeys: Collection<String> = emptyList()): String {
         return JSONObject().apply {
-            put("general", getGeneralPrefsAsJson(includedPasswordKeys))
-            put("admin", getAdminPrefsAsJson(includedPasswordKeys))
-            put("project", getProjectDetailsAsJson())
+            put(JsonPreferencesKeys.GENERAL, getGeneralPrefsAsJson(includedPasswordKeys))
+            put(JsonPreferencesKeys.ADMIN, getAdminPrefsAsJson(includedPasswordKeys))
+            put(JsonPreferencesKeys.PROJECT, getProjectDetailsAsJson())
         }.toString()
     }
 
@@ -73,9 +73,9 @@ class JsonPreferencesGenerator(
         val currentProject = currentProjectProvider.getCurrentProject()
 
         return JSONObject().apply {
-            put("name", currentProject.name)
-            put("icon", currentProject.icon)
-            put("color", currentProject.color)
+            put(JsonPreferencesKeys.PROJECT_NAME, currentProject.name)
+            put(JsonPreferencesKeys.PROJECT_ICON, currentProject.icon)
+            put(JsonPreferencesKeys.PROJECT_COLOR, currentProject.color)
         }
     }
 }

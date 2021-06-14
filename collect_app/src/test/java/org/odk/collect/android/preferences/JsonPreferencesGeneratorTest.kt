@@ -13,6 +13,7 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
+import org.odk.collect.android.configure.qr.JsonPreferencesKeys
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
@@ -26,9 +27,9 @@ class JsonPreferencesGeneratorTest {
         on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
     }
     val projectDetails = mapOf(
-        "name" to "Project X",
-        "icon" to "X",
-        "color" to "#cccccc"
+        JsonPreferencesKeys.PROJECT_NAME to "Project X",
+        JsonPreferencesKeys.PROJECT_ICON to "X",
+        JsonPreferencesKeys.PROJECT_COLOR to "#cccccc"
     )
     private lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
 
@@ -176,22 +177,22 @@ class JsonPreferencesGeneratorTest {
     private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>, projectDetails: Map<String, String>) {
         val jsonPrefs = JSONObject(jsonPrefsString)
         assertThat(jsonPrefs.length(), `is`(3))
-        assertThat(jsonPrefs.has("general"), `is`(true))
-        assertThat(jsonPrefs.has("admin"), `is`(true))
+        assertThat(jsonPrefs.has(JsonPreferencesKeys.GENERAL), `is`(true))
+        assertThat(jsonPrefs.has(JsonPreferencesKeys.ADMIN), `is`(true))
 
-        val jsonGeneralPrefs = jsonPrefs.get("general") as JSONObject
+        val jsonGeneralPrefs = jsonPrefs.get(JsonPreferencesKeys.GENERAL) as JSONObject
         assertThat(jsonGeneralPrefs.length(), `is`(generalPrefs.size))
         generalPrefs.entries.forEach {
             assertThat(jsonGeneralPrefs.get(it.key), `is`(it.value))
         }
 
-        val jsonAdminPrefs = jsonPrefs.get("admin") as JSONObject
+        val jsonAdminPrefs = jsonPrefs.get(JsonPreferencesKeys.ADMIN) as JSONObject
         assertThat(jsonAdminPrefs.length(), `is`(adminPrefs.size))
         adminPrefs.entries.forEach {
             assertThat(jsonAdminPrefs.get(it.key), `is`(it.value))
         }
 
-        val projectDetailsJson = jsonPrefs.get("project") as JSONObject
+        val projectDetailsJson = jsonPrefs.get(JsonPreferencesKeys.PROJECT) as JSONObject
         assertThat(projectDetailsJson.length(), `is`(projectDetails.size))
         projectDetails.entries.forEach {
             assertThat(projectDetailsJson.get(it.key), `is`(it.value))
