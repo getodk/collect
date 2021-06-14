@@ -4,8 +4,12 @@ import org.json.JSONObject
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.CurrentProjectProvider
 
-class JsonPreferencesGenerator(private val settingsProvider: SettingsProvider) {
+class JsonPreferencesGenerator(
+    private val settingsProvider: SettingsProvider,
+    private val currentProjectProvider: CurrentProjectProvider
+) {
 
     fun getJSONWithServerDetails(url: String, username: String, password: String): String {
         val generalSettings = JSONObject().apply {

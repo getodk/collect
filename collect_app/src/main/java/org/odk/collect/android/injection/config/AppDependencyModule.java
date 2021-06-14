@@ -437,8 +437,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider) {
-        return new JsonPreferencesGenerator(settingsProvider);
+    public JsonPreferencesGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
+        return new JsonPreferencesGenerator(settingsProvider, currentProjectProvider);
     }
 
     @Provides
