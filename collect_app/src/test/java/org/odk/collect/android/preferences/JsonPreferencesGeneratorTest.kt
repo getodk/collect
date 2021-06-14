@@ -8,17 +8,28 @@ import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
 class JsonPreferencesGeneratorTest {
     private val settingsProvider = TestSettingsProvider.getSettingsProvider()
+    private val currentProjectProvider: CurrentProjectProvider = mock {
+        on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
+    }
+    val projectDetails = mapOf(
+        "name" to "Project X",
+        "icon" to "X",
+        "color" to "#cccccc"
+    )
     private lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
 
     @Before
@@ -26,7 +37,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().clear()
         settingsProvider.getAdminSettings().clear()
 
-        jsonPreferencesGenerator = JsonPreferencesGenerator(settingsProvider)
+        jsonPreferencesGenerator = JsonPreferencesGenerator(settingsProvider, currentProjectProvider)
     }
 
     @Test
@@ -36,7 +47,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(AdminKeys.KEY_ADMIN_PW))
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs)
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs, projectDetails)
     }
 
     @Test
@@ -46,7 +57,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
 
     @Test
@@ -56,7 +67,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(GeneralKeys.KEY_PASSWORD))
-        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>())
+        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), projectDetails)
     }
 
     @Test
@@ -66,7 +77,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
 
     @Test
@@ -86,7 +97,7 @@ class JsonPreferencesGeneratorTest {
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
 
-        verifyJsonContent(jsonPrefs, generalPrefs, adminPrefs)
+        verifyJsonContent(jsonPrefs, generalPrefs, adminPrefs, projectDetails)
     }
 
     @Test
@@ -106,7 +117,7 @@ class JsonPreferencesGeneratorTest {
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
 
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>())
+        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
 
     @Test
@@ -142,11 +153,11 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getAdminSettings("2").saveAll(adminPrefsForProjectX)
 
         // Verify the demo project
-        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForDemoProject, adminPrefsForDemoProject)
+        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForDemoProject, adminPrefsForDemoProject, projectDetails)
 
         // Verify the 'Project X' project
         DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).currentProjectProvider().setCurrentProject("2")
-        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForProjectX, adminPrefsForProjectX)
+        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForProjectX, adminPrefsForProjectX, projectDetails)
     }
 
     @Test
@@ -159,12 +170,12 @@ class JsonPreferencesGeneratorTest {
 
         val jsonPrefs = jsonPreferencesGenerator.getJSONWithServerDetails("https://my-server.com", "adam", "1234")
 
-        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>())
+        verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), emptyMap())
     }
 
-    private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>) {
+    private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>, projectDetails: Map<String, String>) {
         val jsonPrefs = JSONObject(jsonPrefsString)
-        assertThat(jsonPrefs.length(), `is`(2))
+        assertThat(jsonPrefs.length(), `is`(3))
         assertThat(jsonPrefs.has("general"), `is`(true))
         assertThat(jsonPrefs.has("admin"), `is`(true))
 
@@ -178,6 +189,12 @@ class JsonPreferencesGeneratorTest {
         assertThat(jsonAdminPrefs.length(), `is`(adminPrefs.size))
         adminPrefs.entries.forEach {
             assertThat(jsonAdminPrefs.get(it.key), `is`(it.value))
+        }
+
+        val projectDetailsJson = jsonPrefs.get("project") as JSONObject
+        assertThat(projectDetailsJson.length(), `is`(projectDetails.size))
+        projectDetails.entries.forEach {
+            assertThat(projectDetailsJson.get(it.key), `is`(it.value))
         }
     }
 }
