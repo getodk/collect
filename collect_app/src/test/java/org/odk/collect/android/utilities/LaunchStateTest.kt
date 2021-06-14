@@ -52,6 +52,9 @@ class LaunchStateTest {
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
+    /**
+     * Account for installs of versions before `LAST_LAUNCHED` was added
+     */
     @Test
     fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy metadata dir is not empty`() {
         val metadataDir = File(context.getExternalFilesDir(null), "metadata").also { it.mkdir() }
@@ -62,6 +65,9 @@ class LaunchStateTest {
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
+    /**
+     * Account for installs of versions before `LAST_LAUNCHED` was added
+     */
     @Test
     fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy general prefs is not empty`() {
         PreferenceManager.getDefaultSharedPreferences(context).edit()
@@ -73,6 +79,9 @@ class LaunchStateTest {
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
+    /**
+     * Account for installs of versions before `LAST_LAUNCHED` was added
+     */
     @Test
     fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy admin prefs is not empty`() {
         context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE).edit()
