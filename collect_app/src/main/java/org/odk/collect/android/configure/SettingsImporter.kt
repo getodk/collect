@@ -4,6 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 
 class SettingsImporter(
@@ -12,7 +13,8 @@ class SettingsImporter(
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
     private val adminDefaults: Map<String, Any>,
-    private val settingsChangedHandler: SettingsChangeHandler
+    private val settingsChangedHandler: SettingsChangeHandler,
+    private val projectsRepository: ProjectsRepository
 ) {
 
     fun fromJSON(json: String, projectId: String): Boolean {
@@ -28,10 +30,17 @@ class SettingsImporter(
 
         try {
             val jsonObject = JSONObject(json)
+
             val general = jsonObject.getJSONObject("general")
             importToPrefs(general, generalSettings)
+
             val admin = jsonObject.getJSONObject("admin")
             importToPrefs(admin, adminSettings)
+
+            if (jsonObject.has("project")) {
+                val project = jsonObject.getJSONObject("project")
+                importProjectDetails(project, projectId)
+            }
         } catch (ignored: JSONException) {
             // Ignored
         }
@@ -74,5 +83,21 @@ class SettingsImporter(
                 preferences.remove(key)
             }
         }
+    }
+
+    private fun importProjectDetails(projectJson: JSONObject, projectId: String) {
+        val project = projectsRepository.get(projectId)!!
+
+        val projectName = if (projectJson.has("name")) projectJson.get("name").toString() else project.name
+        val projectIcon = if (projectJson.has("icon")) projectJson.get("icon").toString() else project.icon
+        val projectColor = if (projectJson.has("color")) projectJson.get("color").toString() else project.color
+
+        projectsRepository.save(
+            project.copy(
+                name = projectName,
+                icon = projectIcon,
+                color = projectColor
+            )
+        )
     }
 }

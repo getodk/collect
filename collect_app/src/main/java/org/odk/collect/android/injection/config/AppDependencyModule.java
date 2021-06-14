@@ -344,14 +344,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler) {
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository) {
         return new SettingsImporter(
                 settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
                 GeneralKeys.getDefaults(),
                 AdminKeys.getDefaults(),
-                settingsChangeHandler
+                settingsChangeHandler,
+                projectsRepository
         );
     }
 

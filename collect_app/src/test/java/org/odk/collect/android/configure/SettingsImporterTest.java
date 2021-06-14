@@ -13,6 +13,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 public class SettingsImporterTest {
 
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
+    private final ProjectsRepository projectsRepository = mock(ProjectsRepository.class);
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
     private String currentProjectId;
@@ -57,7 +59,7 @@ public class SettingsImporterTest {
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
 
-        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
     }
 
     @Test
@@ -118,7 +120,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
         assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
     }
 
@@ -134,7 +136,7 @@ public class SettingsImporterTest {
             }
         };
 
-        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {});
+        importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
         assertThat(importer.fromJSON(json.toString(), currentProjectId), is(true));
     }
 
@@ -142,7 +144,7 @@ public class SettingsImporterTest {
     public void afterSettingsImportedAndMigrated_runsSettingsChangeHandlerForEveryKey() throws Exception {
         RecordingSettingsChangeHandler handler = new RecordingSettingsChangeHandler();
 
-        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, handler);
+        importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, handler, projectsRepository);
         assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
         assertThat(handler.changes, containsInAnyOrder(
                 new Pair<>("key1", "default"),
