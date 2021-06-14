@@ -21,6 +21,7 @@ class JsonPreferencesGenerator(
         return JSONObject().apply {
             put("general", generalSettings)
             put("admin", getAdminPrefsAsJson(emptyList()))
+            put("project", JSONObject())
         }.toString()
     }
 
@@ -28,6 +29,7 @@ class JsonPreferencesGenerator(
         return JSONObject().apply {
             put("general", getGeneralPrefsAsJson(includedPasswordKeys))
             put("admin", getAdminPrefsAsJson(includedPasswordKeys))
+            put("project", getProjectDetailsAsJson())
         }.toString()
     }
 
@@ -65,5 +67,15 @@ class JsonPreferencesGenerator(
             }
         }
         return adminPrefs
+    }
+
+    private fun getProjectDetailsAsJson(): JSONObject {
+        val currentProject = currentProjectProvider.getCurrentProject()
+
+        return JSONObject().apply {
+            put("name", currentProject.name)
+            put("icon", currentProject.icon)
+            put("color", currentProject.color)
+        }
     }
 }
