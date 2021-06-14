@@ -4,7 +4,6 @@ import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.preferences.Protocol;
-import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
@@ -18,8 +17,6 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 
 public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler, InstanceSubmitScheduler {
 
-    public static final String AUTO_SEND_TAG = "AutoSendWorker";
-
     private final Scheduler scheduler;
     private final SettingsProvider settingsProvider;
     private final Application application;
@@ -31,13 +28,13 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     }
 
     @Override
-    public void scheduleUpdates() {
-        Settings generalSettings = settingsProvider.getGeneralSettings();
+    public void scheduleUpdates(String projectId) {
+        Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
 
         String protocol = generalSettings.getString(KEY_PROTOCOL);
         if (Protocol.parse(application, protocol) == Protocol.GOOGLE) {
-            scheduler.cancelDeferred(getMatchExactlyTag());
-            scheduler.cancelDeferred(getAutoUpdateTag());
+            scheduler.cancelDeferred(getMatchExactlyTag(projectId));
+            scheduler.cancelDeferred(getAutoUpdateTag(projectId));
             return;
         }
 
@@ -46,54 +43,62 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
         switch (getFormUpdateMode(application, generalSettings)) {
             case MANUAL:
-                scheduler.cancelDeferred(getMatchExactlyTag());
-                scheduler.cancelDeferred(getAutoUpdateTag());
+                scheduler.cancelDeferred(getMatchExactlyTag(projectId));
+                scheduler.cancelDeferred(getAutoUpdateTag(projectId));
                 break;
             case PREVIOUSLY_DOWNLOADED_ONLY:
-                scheduler.cancelDeferred(getMatchExactlyTag());
-                scheduleAutoUpdate(periodInMilliseconds);
+                scheduler.cancelDeferred(getMatchExactlyTag(projectId));
+                scheduleAutoUpdate(periodInMilliseconds, projectId);
                 break;
             case MATCH_EXACTLY:
-                scheduler.cancelDeferred(getAutoUpdateTag());
-                scheduleMatchExactly(periodInMilliseconds);
+                scheduler.cancelDeferred(getAutoUpdateTag(projectId));
+                scheduleMatchExactly(periodInMilliseconds, projectId);
                 break;
         }
     }
 
-    private void scheduleAutoUpdate(long periodInMilliseconds) {
+    private void scheduleAutoUpdate(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, currentProjectId());
-        scheduler.networkDeferred(getAutoUpdateTag(), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
+        inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, projectId);
+        scheduler.networkDeferred(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
     }
 
-    private void scheduleMatchExactly(long periodInMilliseconds) {
+    private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(SyncFormsTaskSpec.DATA_PROJECT_ID, currentProjectId());
-        scheduler.networkDeferred(getMatchExactlyTag(), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
+        inputData.put(SyncFormsTaskSpec.DATA_PROJECT_ID, projectId);
+        scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
     }
 
     @Override
-    public void cancelUpdates() {
-        scheduler.cancelDeferred(getAutoUpdateTag());
-        scheduler.cancelDeferred(getMatchExactlyTag());
+    public void cancelUpdates(String projectId) {
+        scheduler.cancelDeferred(getAutoUpdateTag(projectId));
+        scheduler.cancelDeferred(getMatchExactlyTag(projectId));
     }
 
     @Override
-    public void scheduleSubmit() {
-        scheduler.networkDeferred(AUTO_SEND_TAG, new AutoSendTaskSpec());
+    public void scheduleSubmit(String projectId) {
+        HashMap<String, String> inputData = new HashMap<>();
+        inputData.put(AutoSendTaskSpec.DATA_PROJECT_ID, projectId);
+        scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData);
+    }
+
+    @Override
+    public void cancelSubmit(String projectId) {
+        scheduler.cancelDeferred(getAutoSendTag(projectId));
     }
 
     @NotNull
-    private String getAutoUpdateTag() {
-        return "serverPollingJob:" + currentProjectId();
+    public String getAutoSendTag(String projectId) {
+        return "AutoSendWorker:" + projectId;
     }
 
     @NotNull
-    private String getMatchExactlyTag() {
-        return "match_exactly:" + currentProjectId();
+    private String getMatchExactlyTag(String projectId) {
+        return "match_exactly:" + projectId;
     }
 
-    private String currentProjectId() {
-        return settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID);
+    @NotNull
+    private String getAutoUpdateTag(String projectId) {
+        return "serverPollingJob:" + projectId;
     }
 }

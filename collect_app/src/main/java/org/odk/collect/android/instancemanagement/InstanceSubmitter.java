@@ -2,8 +2,6 @@ package org.odk.collect.android.instancemanagement;
 
 import android.util.Pair;
 
-import androidx.annotation.NonNull;
-
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -11,13 +9,10 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
-import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -26,12 +21,13 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,30 +46,25 @@ public class InstanceSubmitter {
     private final GoogleAccountsManager googleAccountsManager;
     private final GoogleApiProvider googleApiProvider;
     private final PermissionsProvider permissionsProvider;
-    private final SettingsProvider settingsProvider;
+    private final Settings generalSettings;
 
     public InstanceSubmitter(Analytics analytics, FormsRepository formsRepository, InstancesRepository instancesRepository,
-                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider) {
+                             GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, Settings generalSettings) {
         this.analytics = analytics;
         this.formsRepository = formsRepository;
         this.instancesRepository = instancesRepository;
         this.googleAccountsManager = googleAccountsManager;
         this.googleApiProvider = googleApiProvider;
         this.permissionsProvider = permissionsProvider;
-        this.settingsProvider = settingsProvider;
+        this.generalSettings = generalSettings;
     }
 
-    public Pair<Boolean, String> submitUnsubmittedInstances() throws SubmitException {
-        List<Instance> toUpload = getInstancesToAutoSend(!settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_AUTOSEND).equals("off"));
-        return submitSelectedInstances(toUpload);
-    }
-
-    public Pair<Boolean, String> submitSelectedInstances(List<Instance> toUpload) throws SubmitException {
+    public Pair<Boolean, String> submitInstances(List<Instance> toUpload) throws SubmitException {
         if (toUpload.isEmpty()) {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
 
-        String protocol = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PROTOCOL);
+        String protocol = generalSettings.getString(GeneralKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
@@ -93,7 +84,7 @@ public class InstanceSubmitter {
             }
         } else {
             OpenRosaHttpInterface httpInterface = Collect.getInstance().getComponent().openRosaHttpInterface();
-            uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(settingsProvider.getGeneralSettings()), new HashMap<>(), settingsProvider);
+            uploader = new InstanceServerUploader(httpInterface, new WebCredentialsUtils(generalSettings), new HashMap<>(), generalSettings);
             deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
         }
 
@@ -115,7 +106,7 @@ public class InstanceSubmitter {
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(),
-                        settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
+                        generalSettings.getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
                     new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
@@ -124,7 +115,7 @@ public class InstanceSubmitter {
                 String label = Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion());
                 analytics.logEvent(SUBMISSION, action, label);
 
-                String submissionEndpoint = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SUBMISSION_URL);
+                String submissionEndpoint = generalSettings.getString(GeneralKeys.KEY_SUBMISSION_URL);
                 if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
                     String submissionEndpointHash = Md5.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
@@ -138,39 +129,5 @@ public class InstanceSubmitter {
         }
 
         return new Pair<>(anyFailure, InstanceUploaderUtils.getUploadResultMessage(instancesRepository, Collect.getInstance(), resultMessagesByInstanceId));
-    }
-
-    /**
-     * Returns instances that need to be auto-sent.
-     */
-    @NonNull
-    private List<Instance> getInstancesToAutoSend(boolean isAutoSendAppSettingEnabled) {
-        List<Instance> toUpload = new ArrayList<>();
-        for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
-            if (shouldFormBeSent(formsRepository, instance.getFormId(), instance.getFormVersion(), isAutoSendAppSettingEnabled)) {
-                toUpload.add(instance);
-            }
-        }
-
-        return toUpload;
-    }
-
-    /**
-     * Returns whether a form with the specified form_id should be auto-sent given the current
-     * app-level auto-send settings. Returns false if there is no form with the specified form_id.
-     * <p>
-     * A form should be auto-sent if auto-send is on at the app level AND this form doesn't override
-     * auto-send settings OR if auto-send is on at the form-level.
-     *
-     * @param isAutoSendAppSettingEnabled whether the auto-send option is enabled at the app level
-     * @deprecated should be private what requires refactoring the whole class to make it testable
-     */
-    @Deprecated
-    public static boolean shouldFormBeSent(FormsRepository formsRepository, String jrFormId, String jrFormVersion, boolean isAutoSendAppSettingEnabled) {
-        Form form = formsRepository.getLatestByFormIdAndVersion(jrFormId, jrFormVersion);
-        if (form == null) {
-            return false;
-        }
-        return form.getAutoSend() == null ? isAutoSendAppSettingEnabled : Boolean.valueOf(form.getAutoSend());
     }
 }

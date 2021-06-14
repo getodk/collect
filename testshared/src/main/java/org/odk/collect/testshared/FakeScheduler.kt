@@ -21,7 +21,7 @@ class FakeScheduler : Scheduler {
         foregroundTasks.push(foreground)
     }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec) {}
+    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {}
 
     override fun networkDeferred(tag: String, taskSpec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {}
 

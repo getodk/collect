@@ -2,7 +2,7 @@ package org.odk.collect.android.backgroundwork;
 
 public interface FormUpdateScheduler {
 
-    void scheduleUpdates();
+    void scheduleUpdates(String projectId);
 
-    void cancelUpdates();
+    void cancelUpdates(String projectId);
 }

@@ -22,38 +22,38 @@ public class CollectSettingsChangeHandlerTest {
 
     @Test
     public void updatesPropertyManager() {
-        handler.onSettingChanged("blah", "anything");
+        handler.onSettingChanged("projectId", "anything", "blah");
         verify(propertyManager).reload();
     }
 
     @Test
     public void doesNotDoAnythingElse() {
-        handler.onSettingChanged("blah", "anything");
+        handler.onSettingChanged("projectId", "anything", "blah");
         verifyNoInteractions(formUpdateScheduler);
         verifyNoInteractions(serverRepository);
     }
 
     @Test
     public void whenChangedKeyIsFormUpdateMode_schedulesUpdates() {
-        handler.onSettingChanged(GeneralKeys.KEY_FORM_UPDATE_MODE, "anything");
-        verify(formUpdateScheduler).scheduleUpdates();
+        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_FORM_UPDATE_MODE);
+        verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 
     @Test
     public void whenChangedKeyIsPeriodicUpdatesCheck_schedulesUpdates() {
-        handler.onSettingChanged(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, "anything");
-        verify(formUpdateScheduler).scheduleUpdates();
+        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK);
+        verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 
     @Test
     public void whenChangedKeyIsProtocol_schedulesUpdates() {
-        handler.onSettingChanged(GeneralKeys.KEY_PROTOCOL, "anything");
-        verify(formUpdateScheduler).scheduleUpdates();
+        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_PROTOCOL);
+        verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 
     @Test
     public void whenChangedKeyIsServerURL_savesURLToServerRepository() {
-        handler.onSettingChanged(GeneralKeys.KEY_SERVER_URL, "http://newUrl");
+        handler.onSettingChanged("projectId", "http://newUrl", GeneralKeys.KEY_SERVER_URL);
         verify(serverRepository).save("http://newUrl");
     }
 }

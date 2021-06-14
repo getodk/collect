@@ -30,10 +30,12 @@ interface Scheduler {
      * Schedule a task to run in the background even if the app isn't running. The task
      * will only be run when the network is available.
      *
-     * @param tag used to identify this task in future
+     * @param tag used to identify this task in future. If there is a previously scheduled task
+     * with the same tag then that task then nothing new will be scheduled (this becomes  no-op)
      * @param spec defines the task to be run
+     * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(tag: String, spec: TaskSpec)
+    fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>)
 
     /**
      * Schedule a task to run in the background repeatedly even if the app isn't running. The task
@@ -45,7 +47,12 @@ interface Scheduler {
      * @param repeatPeriod the period between each run of the task
      * @param inputData a map of input data that can be accessed by the task
      */
-    fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>)
+    fun networkDeferred(
+        tag: String,
+        spec: TaskSpec,
+        repeatPeriod: Long,
+        inputData: Map<String, String>
+    )
 
     /**
      * Cancel deferred task scheduled with tag

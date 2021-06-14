@@ -45,10 +45,10 @@ class SettingsImporter(
         loadDefaults(adminSettings, adminDefaults)
 
         for ((key, value) in generalSettings.getAll()) {
-            settingsChangedHandler.onSettingChanged(key, value)
+            settingsChangedHandler.onSettingChanged(projectId, value, key)
         }
         for ((key, value) in adminSettings.getAll()) {
-            settingsChangedHandler.onSettingChanged(key, value)
+            settingsChangedHandler.onSettingChanged(projectId, value, key)
         }
         return true
     }

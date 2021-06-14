@@ -17,14 +17,18 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
 
     constructor(workManager: WorkManager) : this(Dispatchers.Main, Dispatchers.IO, workManager) // Needed for Java construction
 
-    override fun networkDeferred(tag: String, spec: TaskSpec) {
+    override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val workRequest = OneTimeWorkRequest.Builder(spec.getWorkManagerAdapter())
+        val workManagerInputData = Data.Builder().putAll(inputData).build()
+
+        val worker = spec.getWorkManagerAdapter()
+        val workRequest = OneTimeWorkRequest.Builder(worker)
             .addTag(tag)
             .setConstraints(constraints)
+            .setInputData(workManagerInputData)
             .build()
 
         workManager.beginUniqueWork(tag, ExistingWorkPolicy.KEEP, workRequest).enqueue()

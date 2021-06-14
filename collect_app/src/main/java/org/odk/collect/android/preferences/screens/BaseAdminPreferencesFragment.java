@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragment {
+
     @Inject
     @Named("ADMIN_SETTINGS_STORE")
     SettingsStore adminSettingsStore;
@@ -42,6 +43,6 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(key, settingsProvider.getAdminSettings().getAll().get(key));
+        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getAdminSettings().getAll().get(key), key);
     }
 }

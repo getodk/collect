@@ -34,16 +34,18 @@ import androidx.loader.content.Loader;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -81,6 +83,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @BindView(R.id.toggle_button)
     Button toggleSelsButton;
 
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
     private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
@@ -94,6 +99,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Inject
     NetworkStateProvider connectivityProvider;
+
+    @Inject
+    InstanceSubmitScheduler instanceSubmitScheduler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,7 +195,10 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
      * Updates whether an auto-send job is ongoing.
      */
     private void updateAutoSendStatus() {
-        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(FormUpdateAndInstanceSubmitScheduler.AUTO_SEND_TAG);
+        // This shouldn't use WorkManager directly but it's likely this code will be removed when
+        // we eventually move sending forms to a Foreground Service (rather than a blocking AsyncTask)
+        String tag = ((FormUpdateAndInstanceSubmitScheduler) instanceSubmitScheduler).getAutoSendTag(currentProjectProvider.getCurrentProject().getUuid());
+        LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(tag);
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
                 for (WorkInfo status : workStatuses) {

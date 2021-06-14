@@ -18,73 +18,41 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.util.Pair;
 
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
-import org.odk.collect.android.instancemanagement.InstanceSubmitter;
-import org.odk.collect.android.instancemanagement.SubmitException;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
-import org.odk.collect.shared.locks.ChangeLock;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import static java.lang.Boolean.parseBoolean;
 
 public class AutoSendTaskSpec implements TaskSpec {
 
+    public static final String DATA_PROJECT_ID = "projectId";
+
     @Inject
     NetworkStateProvider connectivityProvider;
-
-    @Inject
-    Analytics analytics;
-
-    @Inject
-    Notifier notifier;
-
-    @Inject
-    @Named("INSTANCES")
-    ChangeLock changeLock;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    InstancesRepositoryProvider instancesRepositoryProvider;
-
-    @Inject
-    GoogleAccountsManager googleAccountsManager;
-
-    @Inject
-    GoogleApiProvider googleApiProvider;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Inject
-    InstancesAppState instancesAppState;
+    InstanceAutoSender instanceAutoSender;
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
@@ -102,41 +70,19 @@ public class AutoSendTaskSpec implements TaskSpec {
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         return () -> {
-            Collect.getInstance().getComponent().inject(this);
+            DaggerUtils.getComponent(context).inject(this);
 
+            String projectId = inputData.get(DATA_PROJECT_ID);
             NetworkInfo currentNetworkInfo = connectivityProvider.getNetworkInfo();
-            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo) || atLeastOneFormSpecifiesAutoSend())) {
-                if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo)) {
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))) {
+                if (!networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)) {
                     return false;
                 }
 
                 return true;
             }
 
-            return changeLock.withLock(acquiredLock -> {
-                if (acquiredLock) {
-                    try {
-                        Pair<Boolean, String> results = new InstanceSubmitter(analytics, formsRepositoryProvider.get(), instancesRepositoryProvider.get(), googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider).submitUnsubmittedInstances();
-                        notifier.onSubmission(results.first, results.second);
-                    } catch (SubmitException e) {
-                        switch (e.getType()) {
-                            case GOOGLE_ACCOUNT_NOT_SET:
-                                notifier.onSubmission(true, context.getString(R.string.google_set_account));
-                                break;
-                            case GOOGLE_ACCOUNT_NOT_PERMITTED:
-                                notifier.onSubmission(true, context.getString(R.string.odk_permissions_fail));
-                                break;
-                            case NOTHING_TO_SUBMIT:
-                                break;
-                        }
-                    }
-
-                    instancesAppState.update();
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+            return instanceAutoSender.autoSendInstances(projectId);
         };
     }
 
@@ -153,12 +99,12 @@ public class AutoSendTaskSpec implements TaskSpec {
      * @return true if a connection is available and settings specify it should trigger auto-send,
      * false otherwise.
      */
-    private boolean networkTypeMatchesAutoSendSetting(NetworkInfo currentNetworkInfo) {
+    private boolean networkTypeMatchesAutoSendSetting(NetworkInfo currentNetworkInfo, String projectId) {
         if (currentNetworkInfo == null) {
             return false;
         }
 
-        String autosend = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_AUTOSEND);
+        String autosend = settingsProvider.getGeneralSettings(projectId).getString(GeneralKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {
@@ -175,8 +121,8 @@ public class AutoSendTaskSpec implements TaskSpec {
      * Returns true if at least one form currently on the device specifies that all of its filled
      * forms should auto-send no matter the connection type.
      */
-    private boolean atLeastOneFormSpecifiesAutoSend() {
-        return formsRepositoryProvider.get().getAll().stream().anyMatch(form -> parseBoolean(form.getAutoSend()));
+    private boolean atLeastOneFormSpecifiesAutoSend(String projectId) {
+        return formsRepositoryProvider.get(projectId).getAll().stream().anyMatch(form -> parseBoolean(form.getAutoSend()));
     }
 
     public static class Adapter extends WorkerAdapter {

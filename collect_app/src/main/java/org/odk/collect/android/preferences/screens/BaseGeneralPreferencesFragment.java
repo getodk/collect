@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFragment {
+
     @Inject
     @Named("GENERAL_SETTINGS_STORE")
     SettingsStore generalSettingsStore;
@@ -42,6 +43,6 @@ public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(key, settingsProvider.getGeneralSettings().getAll().get(key));
+        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getGeneralSettings().getAll().get(key), key);
     }
 }

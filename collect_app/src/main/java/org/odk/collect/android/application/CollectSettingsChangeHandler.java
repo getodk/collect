@@ -6,8 +6,8 @@ import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -35,11 +35,11 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
     }
 
     @Override
-    public void onSettingChanged(String changedKey, Object newValue) {
+    public void onSettingChanged(String projectId, Object newValue, String changedKey) {
         propertyManager.reload();
 
         if (changedKey.equals(KEY_FORM_UPDATE_MODE) || changedKey.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) || changedKey.equals(KEY_PROTOCOL)) {
-            formUpdateScheduler.scheduleUpdates();
+            formUpdateScheduler.scheduleUpdates(projectId);
         }
 
         if (changedKey.equals(KEY_SERVER_URL)) {
@@ -47,7 +47,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            Settings generalSettings = settingsProvider.getGeneralSettings();
+            Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
             String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
             String serverHash = Md5.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
 

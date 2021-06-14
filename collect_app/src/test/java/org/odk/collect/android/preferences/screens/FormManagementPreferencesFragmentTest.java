@@ -14,10 +14,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.Protocol;
 
 import static android.os.Looper.getMainLooper;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,16 +39,15 @@ import static org.robolectric.Shadows.shadowOf;
 public class FormManagementPreferencesFragmentTest {
 
     private Context context;
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
-    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private Settings generalSettings;
+    private Settings adminSettings;
 
     @Before
     public void setup() {
         context = ApplicationProvider.getApplicationContext();
-        generalSettings.clear();
-        generalSettings.setDefaultForAllSettingsWithoutValues();
-        adminSettings.clear();
-        adminSettings.setDefaultForAllSettingsWithoutValues();
+        CollectHelpers.setupDemoProject();
+        generalSettings = TestSettingsProvider.getGeneralSettings();
+        adminSettings = TestSettingsProvider.getAdminSettings();
     }
 
     @Test

@@ -121,6 +121,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -341,6 +342,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1698,7 +1702,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        instanceSubmitScheduler.scheduleSubmit();
+                        instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
                     }
 
                     finishAndReturnInstance();
