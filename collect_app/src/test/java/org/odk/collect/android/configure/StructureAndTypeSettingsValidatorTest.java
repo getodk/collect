@@ -2,7 +2,7 @@ package org.odk.collect.android.configure;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.odk.collect.android.configure.qr.JsonPreferencesKeys;
+import org.odk.collect.android.configure.qr.AppConfigurationKeys;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void withoutGeneralObject_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject();
-        json.remove(JsonPreferencesKeys.GENERAL); // Remove mutates and returns removed item :(
+        json.remove(AppConfigurationKeys.GENERAL); // Remove mutates and returns removed item :(
 
         assertThat(validator.isValid(json.toString()), is(false));
     }
@@ -44,7 +44,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void withoutAdminObject_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject();
-        json.remove(JsonPreferencesKeys.ADMIN); // Remove mutates and returns removed item :(
+        json.remove(AppConfigurationKeys.ADMIN); // Remove mutates and returns removed item :(
 
         assertThat(validator.isValid(json.toString()), is(false));
     }
@@ -52,7 +52,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void ifGeneralValueDoesNotMatchDefaultType_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put(JsonPreferencesKeys.GENERAL, new JSONObject()
+                .put(AppConfigurationKeys.GENERAL, new JSONObject()
                         .put("key1", "string"));
 
         assertThat(validator.isValid(json.toString()), is(false));
@@ -61,7 +61,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void ifAdminValueDoesNotMatchDefaultType_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put(JsonPreferencesKeys.ADMIN, new JSONObject()
+                .put(AppConfigurationKeys.ADMIN, new JSONObject()
                         .put("key1", false));
 
         assertThat(validator.isValid(json.toString()), is(false));
@@ -74,7 +74,7 @@ public class StructureAndTypeSettingsValidatorTest {
 
     private JSONObject emptySettingsObject() throws Exception {
         return new JSONObject()
-                .put(JsonPreferencesKeys.GENERAL, new JSONObject())
-                .put(JsonPreferencesKeys.ADMIN, new JSONObject());
+                .put(AppConfigurationKeys.GENERAL, new JSONObject())
+                .put(AppConfigurationKeys.ADMIN, new JSONObject());
     }
 }

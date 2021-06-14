@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CallbackCountingTaskExecutorRule;
@@ -161,7 +161,7 @@ public class ConfigureWithQRCodeTest {
         private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
 
         @Override
-        public String generateQRCode(Collection<String> selectedPasswordKeys, JsonPreferencesGenerator jsonPreferencesGenerator) {
+        public String generateQRCode(Collection<String> selectedPasswordKeys, AppConfigurationGenerator appConfigurationGenerator) {
             return getQRCodeFilePath();
         }
 

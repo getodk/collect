@@ -1,6 +1,6 @@
 package org.odk.collect.android.configure.qr
 
-object JsonPreferencesKeys {
+object AppConfigurationKeys {
     const val GENERAL = "general"
     const val ADMIN = "admin"
     const val PROJECT = "project"

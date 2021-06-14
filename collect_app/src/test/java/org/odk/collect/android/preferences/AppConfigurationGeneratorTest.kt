@@ -12,8 +12,8 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
-import org.odk.collect.android.configure.qr.JsonPreferencesKeys
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator
+import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
@@ -21,24 +21,24 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
-class JsonPreferencesGeneratorTest {
+class AppConfigurationGeneratorTest {
     private val settingsProvider = TestSettingsProvider.getSettingsProvider()
     private val currentProjectProvider: CurrentProjectProvider = mock {
         on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
     }
     val projectDetails = mapOf(
-        JsonPreferencesKeys.PROJECT_NAME to "Project X",
-        JsonPreferencesKeys.PROJECT_ICON to "X",
-        JsonPreferencesKeys.PROJECT_COLOR to "#cccccc"
+        AppConfigurationKeys.PROJECT_NAME to "Project X",
+        AppConfigurationKeys.PROJECT_ICON to "X",
+        AppConfigurationKeys.PROJECT_COLOR to "#cccccc"
     )
-    private lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
+    private lateinit var appConfigurationGenerator: AppConfigurationGenerator
 
     @Before
     fun setup() {
         settingsProvider.getGeneralSettings().clear()
         settingsProvider.getAdminSettings().clear()
 
-        jsonPreferencesGenerator = JsonPreferencesGenerator(settingsProvider, currentProjectProvider)
+        appConfigurationGenerator = AppConfigurationGenerator(settingsProvider, currentProjectProvider)
     }
 
     @Test
@@ -47,7 +47,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(AdminKeys.KEY_ADMIN_PW))
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(AdminKeys.KEY_ADMIN_PW))
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs, projectDetails)
     }
 
@@ -57,7 +57,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
 
@@ -67,7 +67,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences(listOf(GeneralKeys.KEY_PASSWORD))
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(GeneralKeys.KEY_PASSWORD))
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), projectDetails)
     }
 
@@ -77,7 +77,7 @@ class JsonPreferencesGeneratorTest {
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
 
@@ -96,7 +96,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
 
         verifyJsonContent(jsonPrefs, generalPrefs, adminPrefs, projectDetails)
     }
@@ -116,7 +116,7 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONFromPreferences()
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
 
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
     }
@@ -154,11 +154,11 @@ class JsonPreferencesGeneratorTest {
         settingsProvider.getAdminSettings("2").saveAll(adminPrefsForProjectX)
 
         // Verify the demo project
-        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForDemoProject, adminPrefsForDemoProject, projectDetails)
+        verifyJsonContent(appConfigurationGenerator.getAppConfigurationAsJson(), generalPrefsForDemoProject, adminPrefsForDemoProject, projectDetails)
 
         // Verify the 'Project X' project
         DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).currentProjectProvider().setCurrentProject("2")
-        verifyJsonContent(jsonPreferencesGenerator.getJSONFromPreferences(), generalPrefsForProjectX, adminPrefsForProjectX, projectDetails)
+        verifyJsonContent(appConfigurationGenerator.getAppConfigurationAsJson(), generalPrefsForProjectX, adminPrefsForProjectX, projectDetails)
     }
 
     @Test
@@ -169,7 +169,7 @@ class JsonPreferencesGeneratorTest {
             GeneralKeys.KEY_PASSWORD to "1234"
         )
 
-        val jsonPrefs = jsonPreferencesGenerator.getJSONWithServerDetails("https://my-server.com", "adam", "1234")
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails("https://my-server.com", "adam", "1234")
 
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), emptyMap())
     }
@@ -177,22 +177,22 @@ class JsonPreferencesGeneratorTest {
     private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>, projectDetails: Map<String, String>) {
         val jsonPrefs = JSONObject(jsonPrefsString)
         assertThat(jsonPrefs.length(), `is`(3))
-        assertThat(jsonPrefs.has(JsonPreferencesKeys.GENERAL), `is`(true))
-        assertThat(jsonPrefs.has(JsonPreferencesKeys.ADMIN), `is`(true))
+        assertThat(jsonPrefs.has(AppConfigurationKeys.GENERAL), `is`(true))
+        assertThat(jsonPrefs.has(AppConfigurationKeys.ADMIN), `is`(true))
 
-        val jsonGeneralPrefs = jsonPrefs.get(JsonPreferencesKeys.GENERAL) as JSONObject
+        val jsonGeneralPrefs = jsonPrefs.get(AppConfigurationKeys.GENERAL) as JSONObject
         assertThat(jsonGeneralPrefs.length(), `is`(generalPrefs.size))
         generalPrefs.entries.forEach {
             assertThat(jsonGeneralPrefs.get(it.key), `is`(it.value))
         }
 
-        val jsonAdminPrefs = jsonPrefs.get(JsonPreferencesKeys.ADMIN) as JSONObject
+        val jsonAdminPrefs = jsonPrefs.get(AppConfigurationKeys.ADMIN) as JSONObject
         assertThat(jsonAdminPrefs.length(), `is`(adminPrefs.size))
         adminPrefs.entries.forEach {
             assertThat(jsonAdminPrefs.get(it.key), `is`(it.value))
         }
 
-        val projectDetailsJson = jsonPrefs.get(JsonPreferencesKeys.PROJECT) as JSONObject
+        val projectDetailsJson = jsonPrefs.get(AppConfigurationKeys.PROJECT) as JSONObject
         assertThat(projectDetailsJson.length(), `is`(projectDetails.size))
         projectDetails.entries.forEach {
             assertThat(projectDetailsJson.get(it.key), `is`(it.value))

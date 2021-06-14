@@ -43,7 +43,7 @@ import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
@@ -438,8 +438,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
-        return new JsonPreferencesGenerator(settingsProvider, currentProjectProvider);
+    public AppConfigurationGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
+        return new AppConfigurationGenerator(settingsProvider, currentProjectProvider);
     }
 
     @Provides

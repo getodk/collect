@@ -3,7 +3,7 @@ package org.odk.collect.android.configure
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
-import org.odk.collect.android.configure.qr.JsonPreferencesKeys
+import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
@@ -32,14 +32,14 @@ class SettingsImporter(
         try {
             val jsonObject = JSONObject(json)
 
-            val general = jsonObject.getJSONObject(JsonPreferencesKeys.GENERAL)
+            val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 
-            val admin = jsonObject.getJSONObject(JsonPreferencesKeys.ADMIN)
+            val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
             importToPrefs(admin, adminSettings)
 
-            if (jsonObject.has(JsonPreferencesKeys.PROJECT)) {
-                val project = jsonObject.getJSONObject(JsonPreferencesKeys.PROJECT)
+            if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
+                val project = jsonObject.getJSONObject(AppConfigurationKeys.PROJECT)
                 importProjectDetails(project, projectId)
             }
         } catch (ignored: JSONException) {
@@ -89,9 +89,9 @@ class SettingsImporter(
     private fun importProjectDetails(projectJson: JSONObject, projectId: String) {
         val project = projectsRepository.get(projectId)!!
 
-        val projectName = if (projectJson.has(JsonPreferencesKeys.PROJECT_NAME)) projectJson.get(JsonPreferencesKeys.PROJECT_NAME).toString() else project.name
-        val projectIcon = if (projectJson.has(JsonPreferencesKeys.PROJECT_ICON)) projectJson.get(JsonPreferencesKeys.PROJECT_ICON).toString() else project.icon
-        val projectColor = if (projectJson.has(JsonPreferencesKeys.PROJECT_COLOR)) projectJson.get(JsonPreferencesKeys.PROJECT_COLOR).toString() else project.color
+        val projectName = if (projectJson.has(AppConfigurationKeys.PROJECT_NAME)) projectJson.get(AppConfigurationKeys.PROJECT_NAME).toString() else project.name
+        val projectIcon = if (projectJson.has(AppConfigurationKeys.PROJECT_ICON)) projectJson.get(AppConfigurationKeys.PROJECT_ICON).toString() else project.icon
+        val projectColor = if (projectJson.has(AppConfigurationKeys.PROJECT_COLOR)) projectJson.get(AppConfigurationKeys.PROJECT_COLOR).toString() else project.color
 
         projectsRepository.save(
             project.copy(

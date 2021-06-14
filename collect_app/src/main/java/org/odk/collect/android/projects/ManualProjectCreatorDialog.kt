@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -21,7 +21,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     lateinit var projectCreator: ProjectCreator
 
     @Inject
-    lateinit var jsonPreferencesGenerator: JsonPreferencesGenerator
+    lateinit var appConfigurationGenerator: AppConfigurationGenerator
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
@@ -75,7 +75,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun handleAddingNewProject() {
-        val settingsJson = jsonPreferencesGenerator.getJSONWithServerDetails(
+        val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
             binding.urlInputText.text?.trim().toString(),
             binding.usernameInputText.text?.trim().toString(),
             binding.passwordInputText.text?.trim().toString()

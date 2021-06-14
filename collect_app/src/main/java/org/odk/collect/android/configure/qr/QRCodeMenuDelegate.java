@@ -29,7 +29,7 @@ public class QRCodeMenuDelegate implements MenuDelegate {
     private String qrFilePath;
 
     QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator,
-                       JsonPreferencesGenerator jsonPreferencesGenerator, FileProvider fileProvider,
+                       AppConfigurationGenerator appConfigurationGenerator, FileProvider fileProvider,
                        SettingsProvider settingsProvider, Scheduler scheduler) {
         this.activity = activity;
         this.activityAvailability = activityAvailability;
@@ -37,7 +37,7 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
         QRCodeViewModel qrCodeViewModel = new ViewModelProvider(
                 activity,
-                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, settingsProvider, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, appConfigurationGenerator, settingsProvider, scheduler)
         ).get(QRCodeViewModel.class);
         qrCodeViewModel.getFilePath().observe(activity, filePath -> {
             if (filePath != null) {
