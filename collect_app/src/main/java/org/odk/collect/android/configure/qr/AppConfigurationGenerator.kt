@@ -20,7 +20,7 @@ class AppConfigurationGenerator(
 
         return JSONObject().apply {
             put(AppConfigurationKeys.GENERAL, generalSettings)
-            put(AppConfigurationKeys.ADMIN, getAdminPrefsAsJson(emptyList()))
+            put(AppConfigurationKeys.ADMIN, JSONObject())
             put(AppConfigurationKeys.PROJECT, JSONObject())
         }.toString()
     }

@@ -162,7 +162,7 @@ class AppConfigurationGeneratorTest {
     }
 
     @Test
-    fun `When project details provided should getProjectDetailsAsJson() generate proper json`() {
+    fun `When server details provided should getProjectDetailsAsJson() generate proper json`() {
         val generalPrefs = mapOf<String, Any> (
             GeneralKeys.KEY_SERVER_URL to "https://my-server.com",
             GeneralKeys.KEY_USERNAME to "adam",
@@ -179,6 +179,7 @@ class AppConfigurationGeneratorTest {
         assertThat(jsonPrefs.length(), `is`(3))
         assertThat(jsonPrefs.has(AppConfigurationKeys.GENERAL), `is`(true))
         assertThat(jsonPrefs.has(AppConfigurationKeys.ADMIN), `is`(true))
+        assertThat(jsonPrefs.has(AppConfigurationKeys.PROJECT), `is`(true))
 
         val jsonGeneralPrefs = jsonPrefs.get(AppConfigurationKeys.GENERAL) as JSONObject
         assertThat(jsonGeneralPrefs.length(), `is`(generalPrefs.size))
