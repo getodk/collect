@@ -15,8 +15,7 @@ class SettingsImporter(
     private val settingsChangedHandler: SettingsChangeHandler
 ) {
 
-    @JvmOverloads
-    fun fromJSON(json: String, projectId: String? = null): Boolean {
+    fun fromJSON(json: String, projectId: String): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
         }

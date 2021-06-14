@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
@@ -32,16 +33,20 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_
 public class SettingsImporterRegressionTest {
 
     private SettingsImporter settingsImporter;
+    private String currentProjectId;
     private final SettingsProvider settingsProvider = TestSettingsProvider.getSettingsProvider();
 
     @Before
     public void setup() {
+        getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importDemoProject();
+        getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
         settingsImporter = getComponent(ApplicationProvider.<Collect>getApplicationContext()).settingsImporter();
+        currentProjectId = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject().getUuid();
     }
 
     @Test
     public void cartoDarkMatter() {
-        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_darkmatter\"},\"admin\":{}}");
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_darkmatter\"},\"admin\":{}}", currentProjectId);
         Settings prefs = settingsProvider.getGeneralSettings();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_CARTO));
         assertThat(prefs.getString(KEY_CARTO_MAP_STYLE), is("dark_matter"));
@@ -49,7 +54,7 @@ public class SettingsImporterRegressionTest {
 
     @Test
     public void cartoPositron() {
-        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_positron\"},\"admin\":{}}");
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_cartodb_positron\"},\"admin\":{}}", currentProjectId);
         Settings prefs = settingsProvider.getGeneralSettings();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_CARTO));
         assertThat(prefs.getString(KEY_CARTO_MAP_STYLE), is("positron"));
@@ -57,7 +62,7 @@ public class SettingsImporterRegressionTest {
 
     @Test
     public void usgsHybrid() {
-        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_usgs_sat\"},\"admin\":{}}");
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"osmdroid\",\"map_basemap_behavior\":\"openmap_usgs_sat\"},\"admin\":{}}", currentProjectId);
         Settings prefs = settingsProvider.getGeneralSettings();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_USGS));
         assertThat(prefs.getString(KEY_USGS_MAP_STYLE), is("hybrid"));
@@ -65,7 +70,7 @@ public class SettingsImporterRegressionTest {
 
     @Test
     public void googleMapsSatellite() {
-        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"google_maps\",\"map_basemap_behavior\":\"satellite\"},\"admin\":{}}");
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"google_maps\",\"map_basemap_behavior\":\"satellite\"},\"admin\":{}}", currentProjectId);
         Settings prefs = settingsProvider.getGeneralSettings();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_GOOGLE));
         assertThat(prefs.getString(KEY_GOOGLE_MAP_STYLE), is(String.valueOf(GoogleMap.MAP_TYPE_SATELLITE)));
@@ -73,7 +78,7 @@ public class SettingsImporterRegressionTest {
 
     @Test
     public void mapboxLight() {
-        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"mapbox_maps\",\"map_basemap_behavior\":\"mapbox_light\"},\"admin\":{}}");
+        settingsImporter.fromJSON("{\"general\":{\"map_sdk_behavior\":\"mapbox_maps\",\"map_basemap_behavior\":\"mapbox_light\"},\"admin\":{}}", currentProjectId);
         Settings prefs = settingsProvider.getGeneralSettings();
         assertThat(prefs.getString(KEY_BASEMAP_SOURCE), is(BASEMAP_SOURCE_MAPBOX));
         assertThat(prefs.getString(KEY_MAPBOX_MAP_STYLE), is(Style.LIGHT));
@@ -81,7 +86,7 @@ public class SettingsImporterRegressionTest {
 
     @Test
     public void adminPW() {
-        settingsImporter.fromJSON("{\"general\":{\"periodic_form_updates_check\":\"every_fifteen_minutes\"},\"admin\":{\"admin_pw\":\"blah\"}}");
+        settingsImporter.fromJSON("{\"general\":{\"periodic_form_updates_check\":\"every_fifteen_minutes\"},\"admin\":{\"admin_pw\":\"blah\"}}", currentProjectId);
         assertThat(settingsProvider.getAdminSettings().getString(KEY_ADMIN_PW), is("blah"));
     }
 }
