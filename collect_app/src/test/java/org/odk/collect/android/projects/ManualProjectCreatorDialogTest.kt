@@ -112,7 +112,7 @@ class ManualProjectCreatorDialogTest {
             onView(withHint(R.string.password)).perform(replaceText("1234"))
 
             onView(withText(R.string.add)).perform(click())
-            verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
+            verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{},\"project\":{}}")
         }
     }
 }
