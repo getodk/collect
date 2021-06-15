@@ -80,6 +80,5 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         projectCreator.createNewProject(settingsJson)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.new_project_created))
-        dismiss()
     }
 }

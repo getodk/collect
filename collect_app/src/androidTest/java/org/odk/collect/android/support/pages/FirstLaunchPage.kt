@@ -19,8 +19,8 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
         return ManualProjectCreatorDialogPage().assertOnPage()
     }
 
-    fun clickAutomaticallyEnterProjectDetails(): AutomaticProjectCreatorDialogPage {
+    fun clickConfigureWithQrCode(): QrCodeProjectCreatorDialogPage {
         clickOnString(R.string.configure_with_qr_code)
-        return AutomaticProjectCreatorDialogPage().assertOnPage()
+        return QrCodeProjectCreatorDialogPage().assertOnPage()
     }
 }

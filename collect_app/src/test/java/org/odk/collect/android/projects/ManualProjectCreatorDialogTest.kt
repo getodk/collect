@@ -64,17 +64,6 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `The dialog should be dismissed after clicking the 'Add' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
-        scenario.onFragment {
-            assertThat(it.isVisible, `is`(true))
-            onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
-            onView(withText(R.string.add)).perform(click())
-            assertThat(it.isVisible, `is`(false))
-        }
-    }
-
-    @Test
     fun `The 'Add' button should be disabled when url is blank`() {
         val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
         scenario.onFragment {

@@ -23,9 +23,9 @@ import org.mockito.Mockito.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler.getString
@@ -65,11 +65,11 @@ class FirstLaunchActivityTest {
     }
 
     @Test
-    fun `The AutomaticProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {
+    fun `The QrCodeProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {
         val scenario = ActivityScenario.launch(FirstLaunchActivity::class.java)
         scenario.onActivity {
             onView(withText(R.string.configure_with_qr_code)).perform(click())
-            assertThat(it.supportFragmentManager.findFragmentByTag(AutomaticProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+            assertThat(it.supportFragmentManager.findFragmentByTag(QrCodeProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
 

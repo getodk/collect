@@ -4,10 +4,10 @@ import android.os.Bundle
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
+import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
         DaggerUtils.getComponent(this).inject(this)
 
         binding.configureViaQrButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(AutomaticProjectCreatorDialog::class.java, supportFragmentManager)
+            DialogUtils.showIfNotShowing(QrCodeProjectCreatorDialog::class.java, supportFragmentManager)
         }
 
         binding.configureManuallyButton.setOnClickListener {

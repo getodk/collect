@@ -70,7 +70,7 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.projects.AutomaticProjectCreatorDialog;
+import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectImporter;
@@ -268,7 +268,7 @@ public interface AppDependencyComponent {
 
     void inject(ManualProjectCreatorDialog manualProjectCreatorDialog);
 
-    void inject(AutomaticProjectCreatorDialog automaticProjectCreatorDialog);
+    void inject(QrCodeProjectCreatorDialog qrCodeProjectCreatorDialog);
 
     void inject(FirstLaunchActivity firstLaunchActivity);
 
