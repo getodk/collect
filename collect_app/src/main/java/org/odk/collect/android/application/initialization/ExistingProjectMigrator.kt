@@ -13,6 +13,12 @@ import org.odk.collect.projects.ProjectsRepository
 import java.io.File
 import java.io.FileNotFoundException
 
+/**
+ * This migrates from a version before Projects were introduced. Any data and settings will be
+ * used used to create a new project which is then set as the current one This means the user never
+ * goes through the "first launch" experience and has their setup available to them immediately
+ * after upgrade.
+ */
 class ExistingProjectMigrator(
     private val context: Context,
     private val storagePathProvider: StoragePathProvider,
