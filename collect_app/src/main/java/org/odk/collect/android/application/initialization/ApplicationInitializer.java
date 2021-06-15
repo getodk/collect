@@ -26,8 +26,6 @@ import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 import timber.log.Timber;
 
 public class ApplicationInitializer {
@@ -40,7 +38,6 @@ public class ApplicationInitializer {
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
 
-    @Inject
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   StorageInitializer storageInitializer, LaunchState launchState,
