@@ -54,10 +54,6 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         setUpToolbar()
         binding.configureManuallyButton.setOnClickListener {
             DialogUtils.showIfNotShowing(ManualProjectCreatorDialog::class.java, requireActivity().supportFragmentManager)
-            lifecycleScope.launch {
-                delay(1000)
-                dismiss()
-            }
         }
         binding.cancelButton.setOnClickListener {
             dismiss()
