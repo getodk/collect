@@ -5,7 +5,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.ProjectsRepository
 
-class SchedulerUpgrade(
+class FormUpdatesUpgrade(
     private val scheduler: Scheduler,
     private val projectsRepository: ProjectsRepository,
     private val formUpdateScheduler: FormUpdateScheduler

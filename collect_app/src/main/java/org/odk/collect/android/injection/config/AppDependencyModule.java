@@ -30,7 +30,7 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
-import org.odk.collect.android.application.initialization.SchedulerUpgrade;
+import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -572,12 +572,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, Scheduler scheduler, FormUpdateScheduler formUpdateScheduler, ProjectsRepository projectsRepository) {
-        SchedulerUpgrade schedulerUpgrade = new SchedulerUpgrade(scheduler, projectsRepository, formUpdateScheduler);
+    public FormUpdatesUpgrade providesFormUpdatesUpgrader(Scheduler scheduler, ProjectsRepository projectsRepository, FormUpdateScheduler formUpdateScheduler) {
+        return new FormUpdatesUpgrade(scheduler, projectsRepository, formUpdateScheduler);
+    }
 
+    @Provides
+    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade) {
         return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
                 existingProjectMigrator,
-                schedulerUpgrade
+                formUpdatesUpgrade
         ));
     }
 }
