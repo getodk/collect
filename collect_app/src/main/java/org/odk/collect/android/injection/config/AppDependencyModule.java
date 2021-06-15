@@ -29,6 +29,7 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -87,7 +88,6 @@ import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
@@ -134,7 +134,6 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 import static androidx.core.content.FileProvider.getUriForFile;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
@@ -571,7 +570,7 @@ public class AppDependencyModule {
 
     @Provides
     public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator) {
-        return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
+        return new AppUpgrader(settingsProvider.getMetaSettings(), singletonList(
                 existingProjectMigrator
         ));
     }
