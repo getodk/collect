@@ -118,7 +118,12 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner,
             { barcodeResult: BarcodeResult ->
-                beepManager.playBeepSoundAndVibrate()
+                try {
+                    beepManager.playBeepSoundAndVibrate()
+                } catch (e: Exception) {
+                    // ignore
+                }
+
                 try {
                     handleScanningResult(barcodeResult)
                 } catch (e: Exception) {

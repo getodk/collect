@@ -6,6 +6,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -18,6 +20,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
@@ -102,6 +105,19 @@ class ManualProjectCreatorDialogTest {
 
             onView(withText(R.string.add)).perform(click())
             verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{},\"project\":{}}")
+        }
+    }
+
+    @Test
+    fun `Project creation goes to main menu`() {
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(ManualProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            onView(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
+
+            Intents.init()
+            onView(withText(R.string.add)).perform(click())
+            Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
+            Intents.release()
         }
     }
 }
