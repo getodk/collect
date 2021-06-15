@@ -46,7 +46,7 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
 
     @Override
     protected void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException {
-        boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()), currentProjectProvider.getCurrentProject().getUuid());
+        boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()), currentProjectProvider.getCurrentProject());
         String settingsHash = Md5.getMd5Hash(new ByteArrayInputStream(result.getText().getBytes()));
 
         if (importSuccess) {

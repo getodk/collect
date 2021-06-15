@@ -42,7 +42,7 @@ public class SettingsImporterTest {
     private final ProjectsRepository projectsRepository = mock(ProjectsRepository.class);
     private SettingsValidator settingsValidator;
     private SettingsImporter importer;
-    private String currentProjectId;
+    private Project.Saved currentProject;
 
     private final Map<String, Object> generalDefaults = new HashMap<String, Object>() {{
         put("key1", "default");
@@ -57,7 +57,7 @@ public class SettingsImporterTest {
     public void setup() {
         getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importDemoProject();
         getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
-        currentProjectId = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject().getUuid();
+        currentProject = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject();
 
         settingsValidator = mock(SettingsValidator.class);
         when(settingsValidator.isValid(any())).thenReturn(true);
@@ -68,12 +68,12 @@ public class SettingsImporterTest {
     @Test
     public void whenJSONSettingsAreInvalid_returnsFalse() throws Exception {
         when(settingsValidator.isValid(emptySettings())).thenReturn(false);
-        assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(false));
+        assertThat(importer.fromJSON(emptySettings(), currentProject), is(false));
     }
 
     @Test
     public void forSettingsKeysNotINJSON_savesDefaults() throws Exception {
-        assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(emptySettings(), currentProject), is(true));
 
         assertPrefs(settingsProvider.getGeneralSettings(),
                 "key1", "default",
@@ -94,7 +94,7 @@ public class SettingsImporterTest {
                 "key1", 0
         );
 
-        assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(emptySettings(), currentProject), is(true));
 
         assertPrefs(settingsProvider.getGeneralSettings(),
                 "key1", "default",
@@ -111,7 +111,7 @@ public class SettingsImporterTest {
                 .put(AppConfigurationKeys.GENERAL, new JSONObject()
                         .put("unknown_key", "value"));
 
-        assertThat(importer.fromJSON(json.toString(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(json.toString(), currentProject), is(true));
         assertThat(settingsProvider.getGeneralSettings().contains("unknown_key"), is(false));
     }
 
@@ -124,7 +124,7 @@ public class SettingsImporterTest {
         };
 
         importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
-        assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(emptySettings(), currentProject), is(true));
     }
 
     @Test // Migrations might use old keys that are "unknown" to the app
@@ -140,7 +140,7 @@ public class SettingsImporterTest {
         };
 
         importer = new SettingsImporter(settingsProvider, migrator, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
-        assertThat(importer.fromJSON(json.toString(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(json.toString(), currentProject), is(true));
     }
 
     @Test
@@ -148,7 +148,7 @@ public class SettingsImporterTest {
         RecordingSettingsChangeHandler handler = new RecordingSettingsChangeHandler();
 
         importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, handler, projectsRepository);
-        assertThat(importer.fromJSON(emptySettings(), currentProjectId), is(true));
+        assertThat(importer.fromJSON(emptySettings(), currentProject), is(true));
         assertThat(handler.changes, containsInAnyOrder(
                 new Pair<>("key1", "default"),
                 new Pair<>("key2", true),
@@ -167,12 +167,10 @@ public class SettingsImporterTest {
                 .put(AppConfigurationKeys.ADMIN, new JSONObject())
                 .put(AppConfigurationKeys.PROJECT, projectJson);
 
-        when(projectsRepository.get("1")).thenReturn(new Project.Saved("1", "Project Y", "Y", "#ffffff"));
-
         importer = new SettingsImporter(settingsProvider, (Settings generalSettings, Settings adminSettings) -> {}, settingsValidator, generalDefaults, adminDefaults, (projectId, key, newValue) -> {}, projectsRepository);
-        importer.fromJSON(settings.toString(), "1");
+        importer.fromJSON(settings.toString(), currentProject);
 
-        verify(projectsRepository).save(new Project.Saved("1", "Project X", "X", "#cccccc"));
+        verify(projectsRepository).save(new Project.Saved(currentProject.getUuid(), "Project X", "X", "#cccccc"));
     }
 
     private String emptySettings() throws Exception {

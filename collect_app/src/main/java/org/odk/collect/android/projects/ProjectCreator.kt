@@ -27,7 +27,7 @@ class ProjectCreator(
         val newProject = projectDetailsCreator.getProject(urlString)
         val savedProject = projectImporter.importNewProject(newProject)
 
-        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject.uuid)
+        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject)
 
         return if (settingsImportedSuccessfully) {
             if (projectsRepository.getAll().size == 1) {
