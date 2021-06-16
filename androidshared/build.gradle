@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: '../config/quality.gradle'
+
 android {
     compileSdkVersion rootProject.androidCompileSdk
 
