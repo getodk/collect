@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+            android:textAppearance="?textAppearanceSubtitle1"
             tools:text="A project"/>
 
         <TextView
