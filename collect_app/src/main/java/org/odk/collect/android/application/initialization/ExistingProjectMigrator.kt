@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.FileUtils
 import org.odk.collect.android.application.initialization.upgrade.Upgrade
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -24,7 +26,8 @@ class ExistingProjectMigrator(
     private val storagePathProvider: StoragePathProvider,
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider,
-    private val currentProjectProvider: CurrentProjectProvider
+    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectDetailsCreator: ProjectDetailsCreator
 ) : Upgrade {
 
     override fun key(): String {
@@ -32,7 +35,10 @@ class ExistingProjectMigrator(
     }
 
     override fun run() {
-        val project = projectsRepository.save(Project.New("Existing project", "E", "#3e9fcc"))
+        val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val newProject = projectDetailsCreator.getProject(generalSharedPrefs.getString(GeneralKeys.KEY_SERVER_URL, "") ?: "")
+        val project = projectsRepository.save(newProject)
 
         val rootDir = storagePathProvider.odkRootDirPath
         listOf(
@@ -51,7 +57,6 @@ class ExistingProjectMigrator(
             }
         }
 
-        val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
         val adminSharedPrefs = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
