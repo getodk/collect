@@ -100,6 +100,7 @@
         android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
         app:layout_constraintStart_toEndOf="parent"
