@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -10,34 +9,39 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.odk.collect.android.TestSettingsProvider
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.testshared.InMemSettings
 
 @RunWith(AndroidJUnit4::class)
 class AppConfigurationGeneratorTest {
-    private val settingsProvider = TestSettingsProvider.getSettingsProvider()
+    private val generalSettingsForProject1 = InMemSettings()
+    private val adminSettingsForProject1 = InMemSettings()
+
+    private val settingsProvider = mock<SettingsProvider> {
+        on { getGeneralSettings() } doReturn generalSettingsForProject1
+        on { getAdminSettings() } doReturn adminSettingsForProject1
+    }
+
     private val currentProjectProvider: CurrentProjectProvider = mock {
         on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
     }
+
     val projectDetails = mapOf(
         AppConfigurationKeys.PROJECT_NAME to "Project X",
         AppConfigurationKeys.PROJECT_ICON to "X",
         AppConfigurationKeys.PROJECT_COLOR to "#cccccc"
     )
+
     private lateinit var appConfigurationGenerator: AppConfigurationGenerator
 
     @Before
     fun setup() {
-        settingsProvider.getGeneralSettings().clear()
-        settingsProvider.getAdminSettings().clear()
-
         appConfigurationGenerator = AppConfigurationGenerator(settingsProvider, currentProjectProvider)
     }
 
@@ -119,46 +123,6 @@ class AppConfigurationGeneratorTest {
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
 
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
-    }
-
-    @Test
-    fun `Only preferences from the current project should be included in json`() {
-        // Setup settings for the demo project
-        val generalPrefsForDemoProject = mapOf<String, Any> (
-            GeneralKeys.KEY_DELETE_AFTER_SEND to true,
-            GeneralKeys.KEY_APP_THEME to "dark_theme"
-        )
-
-        val adminPrefsForDemoProject = mapOf<String, Any> (
-            AdminKeys.KEY_GET_BLANK to false,
-            AdminKeys.KEY_DELETE_SAVED to false
-        )
-
-        settingsProvider.getGeneralSettings().saveAll(generalPrefsForDemoProject)
-        settingsProvider.getAdminSettings().saveAll(adminPrefsForDemoProject)
-
-        // Setup settings for another project
-        DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).projectsRepository().save(Project.Saved("2", "Project X", "x", "#cccccc"))
-
-        val generalPrefsForProjectX = mapOf<String, Any> (
-            GeneralKeys.KEY_COMPLETED_DEFAULT to false,
-            GeneralKeys.KEY_IMAGE_SIZE to "large"
-        )
-
-        val adminPrefsForProjectX = mapOf<String, Any> (
-            AdminKeys.KEY_SEND_FINALIZED to false,
-            AdminKeys.KEY_VIEW_SENT to false
-        )
-
-        settingsProvider.getGeneralSettings("2").saveAll(generalPrefsForProjectX)
-        settingsProvider.getAdminSettings("2").saveAll(adminPrefsForProjectX)
-
-        // Verify the demo project
-        verifyJsonContent(appConfigurationGenerator.getAppConfigurationAsJson(), generalPrefsForDemoProject, adminPrefsForDemoProject, projectDetails)
-
-        // Verify the 'Project X' project
-        DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Collect>()).currentProjectProvider().setCurrentProject("2")
-        verifyJsonContent(appConfigurationGenerator.getAppConfigurationAsJson(), generalPrefsForProjectX, adminPrefsForProjectX, projectDetails)
     }
 
     @Test
