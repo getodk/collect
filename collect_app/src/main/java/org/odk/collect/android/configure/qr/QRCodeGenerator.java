@@ -11,5 +11,5 @@ import java.util.Collection;
 
 public interface QRCodeGenerator {
 
-    String generateQRCode(Collection<String> selectedPasswordKeys, JsonPreferencesGenerator jsonPreferencesGenerator) throws JSONException, NoSuchAlgorithmException, IOException, WriterException;
+    String generateQRCode(Collection<String> selectedPasswordKeys, AppConfigurationGenerator appConfigurationGenerator) throws JSONException, NoSuchAlgorithmException, IOException, WriterException;
 }

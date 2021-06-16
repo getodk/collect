@@ -4,10 +4,14 @@ import org.json.JSONObject
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.CurrentProjectProvider
 
-class JsonPreferencesGenerator(private val settingsProvider: SettingsProvider) {
+class AppConfigurationGenerator(
+    private val settingsProvider: SettingsProvider,
+    private val currentProjectProvider: CurrentProjectProvider
+) {
 
-    fun getProjectDetailsAsJson(url: String, username: String, password: String): String {
+    fun getAppConfigurationAsJsonWithServerDetails(url: String, username: String, password: String): String {
         val generalSettings = JSONObject().apply {
             put(GeneralKeys.KEY_SERVER_URL, url)
             put(GeneralKeys.KEY_USERNAME, username)
@@ -15,15 +19,17 @@ class JsonPreferencesGenerator(private val settingsProvider: SettingsProvider) {
         }
 
         return JSONObject().apply {
-            put("general", generalSettings)
-            put("admin", getAdminPrefsAsJson(emptyList()))
+            put(AppConfigurationKeys.GENERAL, generalSettings)
+            put(AppConfigurationKeys.ADMIN, JSONObject())
+            put(AppConfigurationKeys.PROJECT, JSONObject())
         }.toString()
     }
 
-    fun getJSONFromPreferences(includedPasswordKeys: Collection<String> = emptyList()): String {
+    fun getAppConfigurationAsJson(includedPasswordKeys: Collection<String> = emptyList()): String {
         return JSONObject().apply {
-            put("general", getGeneralPrefsAsJson(includedPasswordKeys))
-            put("admin", getAdminPrefsAsJson(includedPasswordKeys))
+            put(AppConfigurationKeys.GENERAL, getGeneralPrefsAsJson(includedPasswordKeys))
+            put(AppConfigurationKeys.ADMIN, getAdminPrefsAsJson(includedPasswordKeys))
+            put(AppConfigurationKeys.PROJECT, getProjectDetailsAsJson())
         }.toString()
     }
 
@@ -61,5 +67,15 @@ class JsonPreferencesGenerator(private val settingsProvider: SettingsProvider) {
             }
         }
         return adminPrefs
+    }
+
+    private fun getProjectDetailsAsJson(): JSONObject {
+        val currentProject = currentProjectProvider.getCurrentProject()
+
+        return JSONObject().apply {
+            put(AppConfigurationKeys.PROJECT_NAME, currentProject.name)
+            put(AppConfigurationKeys.PROJECT_ICON, currentProject.icon)
+            put(AppConfigurationKeys.PROJECT_COLOR, currentProject.color)
+        }
     }
 }

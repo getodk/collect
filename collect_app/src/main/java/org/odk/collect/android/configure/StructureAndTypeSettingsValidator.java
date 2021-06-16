@@ -2,6 +2,7 @@ package org.odk.collect.android.configure;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.odk.collect.android.configure.qr.AppConfigurationKeys;
 
 import java.util.Map;
 
@@ -19,8 +20,8 @@ public class StructureAndTypeSettingsValidator implements SettingsValidator {
     public boolean isValid(String json) {
         try {
             JSONObject jsonObject = new JSONObject(json);
-            JSONObject general = jsonObject.getJSONObject("general");
-            JSONObject admin = jsonObject.getJSONObject("admin");
+            JSONObject general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL);
+            JSONObject admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN);
 
             return !hasInvalidTypes(general, generalDefaults) && !hasInvalidTypes(admin, adminDefaults);
         } catch (JSONException e) {

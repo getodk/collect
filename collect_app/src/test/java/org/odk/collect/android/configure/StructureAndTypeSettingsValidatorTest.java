@@ -2,6 +2,7 @@ package org.odk.collect.android.configure;
 
 import org.json.JSONObject;
 import org.junit.Test;
+import org.odk.collect.android.configure.qr.AppConfigurationKeys;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void withoutGeneralObject_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject();
-        json.remove("general"); // Remove mutates and returns removed item :(
+        json.remove(AppConfigurationKeys.GENERAL); // Remove mutates and returns removed item :(
 
         assertThat(validator.isValid(json.toString()), is(false));
     }
@@ -43,7 +44,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void withoutAdminObject_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject();
-        json.remove("admin"); // Remove mutates and returns removed item :(
+        json.remove(AppConfigurationKeys.ADMIN); // Remove mutates and returns removed item :(
 
         assertThat(validator.isValid(json.toString()), is(false));
     }
@@ -51,7 +52,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void ifGeneralValueDoesNotMatchDefaultType_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put("general", new JSONObject()
+                .put(AppConfigurationKeys.GENERAL, new JSONObject()
                         .put("key1", "string"));
 
         assertThat(validator.isValid(json.toString()), is(false));
@@ -60,7 +61,7 @@ public class StructureAndTypeSettingsValidatorTest {
     @Test
     public void ifAdminValueDoesNotMatchDefaultType_returnsFalse() throws Exception {
         JSONObject json = emptySettingsObject()
-                .put("admin", new JSONObject()
+                .put(AppConfigurationKeys.ADMIN, new JSONObject()
                         .put("key1", false));
 
         assertThat(validator.isValid(json.toString()), is(false));
@@ -73,7 +74,7 @@ public class StructureAndTypeSettingsValidatorTest {
 
     private JSONObject emptySettingsObject() throws Exception {
         return new JSONObject()
-                .put("general", new JSONObject())
-                .put("admin", new JSONObject());
+                .put(AppConfigurationKeys.GENERAL, new JSONObject())
+                .put(AppConfigurationKeys.ADMIN, new JSONObject());
     }
 }

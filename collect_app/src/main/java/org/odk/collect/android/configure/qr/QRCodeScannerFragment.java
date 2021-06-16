@@ -12,6 +12,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.shared.strings.Md5;
 
@@ -34,6 +35,9 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
     @Inject
     Analytics analytics;
 
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -42,7 +46,7 @@ public class QRCodeScannerFragment extends BarCodeScannerFragment {
 
     @Override
     protected void handleScanningResult(BarcodeResult result) throws IOException, DataFormatException {
-        boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()));
+        boolean importSuccess = settingsImporter.fromJSON(decompress(result.getText()), currentProjectProvider.getCurrentProject());
         String settingsHash = Md5.getMd5Hash(new ByteArrayInputStream(result.getText().getBytes()));
 
         if (importSuccess) {

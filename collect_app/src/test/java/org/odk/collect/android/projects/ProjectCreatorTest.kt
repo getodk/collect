@@ -4,7 +4,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.anyString
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -49,12 +48,12 @@ class ProjectCreatorTest {
     @Test
     fun `Importing settings should be triggered with proper params`() {
         projectCreator.createNewProject(json)
-        verify(settingsImporter).fromJSON(json, "1")
+        verify(settingsImporter).fromJSON(json, savedProject)
     }
 
     @Test
     fun `When importing settings failed createNewProject() should return false`() {
-        whenever(settingsImporter.fromJSON(anyString(), anyString())).thenReturn(false)
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(false)
 
         projectCreator.createNewProject(json)
         assertThat(projectCreator.createNewProject(json), `is`(false))
@@ -62,7 +61,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `When importing settings succeeded createNewProject() should return true`() {
-        whenever(settingsImporter.fromJSON(anyString(), anyString())).thenReturn(true)
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(true)
 
         projectCreator.createNewProject(json)
         assertThat(projectCreator.createNewProject(json), `is`(true))
@@ -70,7 +69,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `When importing settings failed should created project be deleted`() {
-        whenever(settingsImporter.fromJSON(anyString(), anyString())).thenReturn(false)
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(false)
 
         projectCreator.createNewProject(json)
         verify(projectsRepository).delete(savedProject.uuid)
@@ -78,7 +77,7 @@ class ProjectCreatorTest {
 
     @Test
     fun `New project id should be set if it's the only project`() {
-        whenever(settingsImporter.fromJSON(anyString(), anyString())).thenReturn(true)
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(true)
 
         projectCreator.createNewProject(json)
         verify(currentProjectProvider).setCurrentProject("1")

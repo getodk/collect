@@ -35,7 +35,7 @@ public class QRCodeMenuDelegateTest {
 
     private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
     private final QRCodeGenerator qrCodeGenerator = mock(QRCodeGenerator.class);
-    private final JsonPreferencesGenerator jsonPreferencesGenerator = mock(JsonPreferencesGenerator.class);
+    private final AppConfigurationGenerator appConfigurationGenerator = mock(AppConfigurationGenerator.class);
     private final FileProvider fileProvider = mock(FileProvider.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
@@ -46,7 +46,7 @@ public class QRCodeMenuDelegateTest {
     public void setup() {
         activity = Robolectric.setupActivity(FragmentActivity.class);
         menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
-                jsonPreferencesGenerator, fileProvider, TestSettingsProvider.getSettingsProvider(), fakeScheduler);
+                appConfigurationGenerator, fileProvider, TestSettingsProvider.getSettingsProvider(), fakeScheduler);
     }
 
     @Test

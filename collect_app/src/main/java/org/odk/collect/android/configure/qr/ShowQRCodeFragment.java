@@ -74,7 +74,7 @@ public class ShowQRCodeFragment extends Fragment {
     public Scheduler scheduler;
 
     @Inject
-    JsonPreferencesGenerator jsonPreferencesGenerator;
+    AppConfigurationGenerator appConfigurationGenerator;
 
     private QRCodeViewModel qrCodeViewModel;
 
@@ -116,7 +116,7 @@ public class ShowQRCodeFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
         qrCodeViewModel = new ViewModelProvider(
                 requireActivity(),
-                new QRCodeViewModel.Factory(qrCodeGenerator, jsonPreferencesGenerator, settingsProvider, scheduler)
+                new QRCodeViewModel.Factory(qrCodeGenerator, appConfigurationGenerator, settingsProvider, scheduler)
         ).get(QRCodeViewModel.class);
     }
 

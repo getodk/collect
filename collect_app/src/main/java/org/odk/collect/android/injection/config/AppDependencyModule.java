@@ -42,7 +42,7 @@ import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
-import org.odk.collect.android.configure.qr.JsonPreferencesGenerator;
+import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
@@ -332,14 +332,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler) {
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository) {
         return new SettingsImporter(
                 settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
                 GeneralKeys.getDefaults(),
                 AdminKeys.getDefaults(),
-                settingsChangeHandler
+                settingsChangeHandler,
+                projectsRepository
         );
     }
 
@@ -425,8 +426,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public JsonPreferencesGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider) {
-        return new JsonPreferencesGenerator(settingsProvider);
+    public AppConfigurationGenerator providesJsonPreferencesGenerator(SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
+        return new AppConfigurationGenerator(settingsProvider, currentProjectProvider);
     }
 
     @Provides

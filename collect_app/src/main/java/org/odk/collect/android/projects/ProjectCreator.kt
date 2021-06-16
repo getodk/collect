@@ -3,6 +3,7 @@ package org.odk.collect.android.projects
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.projects.ProjectsRepository
 
@@ -17,7 +18,7 @@ class ProjectCreator(
     fun createNewProject(settingsJson: String): Boolean {
         val urlString = try {
             JSONObject(settingsJson)
-                .getJSONObject("general")
+                .getJSONObject(AppConfigurationKeys.GENERAL)
                 .getString(GeneralKeys.KEY_SERVER_URL)
         } catch (e: JSONException) {
             ""
@@ -26,7 +27,7 @@ class ProjectCreator(
         val newProject = projectDetailsCreator.getProject(urlString)
         val savedProject = projectImporter.importNewProject(newProject)
 
-        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject.uuid)
+        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject)
 
         return if (settingsImportedSuccessfully) {
             if (projectsRepository.getAll().size == 1) {

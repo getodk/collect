@@ -11,6 +11,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -27,12 +28,15 @@ public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
     private final SettingsImporter settingsImporter;
     private final QRCodeDecoder qrCodeDecoder;
     private final Analytics analytics;
+    private final Project.Saved project;
 
-    public QRCodeActivityResultDelegate(Activity activity, SettingsImporter settingsImporter, QRCodeDecoder qrCodeDecoder, Analytics analytics) {
+    public QRCodeActivityResultDelegate(Activity activity, SettingsImporter settingsImporter,
+                                        QRCodeDecoder qrCodeDecoder, Analytics analytics, Project.Saved project) {
         this.activity = activity;
         this.settingsImporter = settingsImporter;
         this.qrCodeDecoder = qrCodeDecoder;
         this.analytics = analytics;
+        this.project = project;
     }
 
     @Override
@@ -53,7 +57,7 @@ public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
                     String response = qrCodeDecoder.decode(imageStream);
                     String responseHash = Md5.getMd5Hash(new ByteArrayInputStream(response.getBytes()));
                     if (response != null) {
-                        if (settingsImporter.fromJSON(response)) {
+                        if (settingsImporter.fromJSON(response, project)) {
                             showToast(R.string.successfully_imported_settings);
                             analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR_IMAGE, "Success", responseHash);
                             startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
