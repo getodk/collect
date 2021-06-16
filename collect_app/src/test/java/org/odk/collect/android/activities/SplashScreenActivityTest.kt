@@ -15,8 +15,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -73,8 +73,8 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Splash screen should be displayed with the default logo if it's enabled and no other logo is set`() {
-        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
-        `when`(splashScreenViewModel.doesLogoFileExist).thenReturn(false)
+        whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        whenever(splashScreenViewModel.doesLogoFileExist).thenReturn(false)
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
@@ -85,8 +85,8 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The Splash screen should be displayed with custom logo if it's enabled and custom logo is set`() {
-        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
-        `when`(splashScreenViewModel.doesLogoFileExist).thenReturn(true)
+        whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        whenever(splashScreenViewModel.doesLogoFileExist).thenReturn(true)
 
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
@@ -98,8 +98,8 @@ class SplashScreenActivityTest {
     @ExperimentalCoroutinesApi
     @Test
     fun `The main menu should be displayed automatically after 2s if the Splash screen is enabled and the app is not newly installed`() = coroutineScope.runBlockingTest {
-        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
-        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
+        whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
+        whenever(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
 
         Intents.init()
 
@@ -115,8 +115,8 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The main menu should be displayed immediately if the splash screen is disabled and the app is not newly installed`() {
-        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
-        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
+        whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
+        whenever(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
 
         Intents.init()
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
@@ -127,8 +127,8 @@ class SplashScreenActivityTest {
 
     @Test
     fun `The First Launch Screen should be displayed immediately if the app is newly installed`() {
-        `when`(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
-        `when`(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(true)
+        whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(false)
+        whenever(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(true)
 
         Intents.init()
         val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)

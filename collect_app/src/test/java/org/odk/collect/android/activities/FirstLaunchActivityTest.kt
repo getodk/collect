@@ -17,9 +17,9 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -93,7 +93,7 @@ class FirstLaunchActivityTest {
     @Test
     fun `The app name with its version should be displayed`() {
         val versionInformation = mock(VersionInformation::class.java)
-        `when`(versionInformation.versionToDisplay).thenReturn("vfake")
+        whenever(versionInformation.versionToDisplay).thenReturn("vfake")
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesVersionInformation(): VersionInformation {
                 return versionInformation
