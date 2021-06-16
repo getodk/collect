@@ -20,7 +20,7 @@ class LaunchState(
         }
     }
 
-    // Check if it looks like  is an install from before when `LAST_LAUNCHED` was introduced
+    // Check if it looks like is an install from before when `LAST_LAUNCHED` was introduced
     private fun legacyInstallDetected(): Boolean {
         val legacyMetadataDir = File(context.getExternalFilesDir(null), "metadata")
         val hasLegacyMetadata = FileUtils.listFiles(legacyMetadataDir).isNotEmpty()
