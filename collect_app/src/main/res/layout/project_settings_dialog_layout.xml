@@ -53,8 +53,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginStart="@dimen/project_list_icon_size"
         android:text="@string/general_preferences"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintStart_toStartOf="@+id/current_project"
         app:layout_constraintTop_toBottomOf="@+id/current_project" />
 
     <com.google.android.material.button.MaterialButton
@@ -62,6 +63,7 @@
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/project_list_icon_size"
         android:text="@string/admin_preferences"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
@@ -81,9 +83,9 @@
         android:id="@+id/project_list_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintHeight_max="100dp"
         android:layout_marginBottom="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="100dp"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/top_divider">
 
