@@ -27,12 +27,20 @@ android {
             minifyEnabled false
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -43,6 +51,11 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation "androidx.fragment:fragment-ktx:1.3.4"
     implementation project(':strings')
+
+    debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
+        exclude group: 'androidx.test', module: 'monitor'
+        //fixes issue https://github.com/android/android-test/issues/731
+    }
 
     testImplementation project(':testshared')
     testImplementation "junit:junit:4.13.2"
