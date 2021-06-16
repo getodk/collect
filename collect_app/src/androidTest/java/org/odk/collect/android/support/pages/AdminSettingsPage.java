@@ -90,9 +90,9 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
         return new MainMenuPage();
     }
 
-    public FirstLaunchActivityPage deleteLastProject() {
+    public FirstLaunchPage deleteLastProject() {
         clickOnString(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
-        return new FirstLaunchActivityPage();
+        return new FirstLaunchPage();
     }
 }
