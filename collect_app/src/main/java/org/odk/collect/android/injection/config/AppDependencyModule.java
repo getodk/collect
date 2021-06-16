@@ -3,8 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
@@ -30,9 +28,10 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
-import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
@@ -98,7 +97,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
-import org.odk.collect.android.utilities.AppStateProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
@@ -108,6 +106,7 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -126,7 +125,6 @@ import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
-import java.util.Collections;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -136,6 +134,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 import static androidx.core.content.FileProvider.getUriForFile;
+import static java.util.Collections.singletonList;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
 /**
@@ -311,17 +310,6 @@ public class AppDependencyModule {
         return new CoroutineAndWorkManagerScheduler(workManager);
     }
 
-    @Singleton
-    @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application application, UserAgentProvider userAgentProvider,
-                                                                 SettingsPreferenceMigrator preferenceMigrator, PropertyManager propertyManager,
-                                                                 Analytics analytics, StorageInitializer storageInitializer, SettingsProvider settingsProvider,
-                                                                 AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
-        return new ApplicationInitializer(application, userAgentProvider, preferenceMigrator,
-                propertyManager, analytics, storageInitializer, settingsProvider.getGeneralSettings(),
-                settingsProvider.getAdminSettings(), settingsProvider.getMetaSettings(), appStateProvider, projectImporter, currentProjectProvider);
-    }
-
     @Provides
     public SettingsPreferenceMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
         return new CollectSettingsPreferenceMigrator(settingsProvider.getMetaSettings());
@@ -401,7 +389,7 @@ public class AppDependencyModule {
     @Provides
     public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
         return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
-                .usingOAuth2(context, Collections.singletonList(DriveScopes.DRIVE))
+                .usingOAuth2(context, singletonList(DriveScopes.DRIVE))
                 .setBackOff(new ExponentialBackOff()));
     }
 
@@ -530,25 +518,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, AppStateProvider appStateProvider, ProjectsRepository projectsRepository) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), appStateProvider, projectsRepository);
+    public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository);
     }
 
     @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider, Context context, SettingsProvider settingsProvider) {
-        return new ProjectImporter(context, storagePathProvider, projectsRepository, settingsProvider);
+    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider) {
+        return new ProjectImporter(storagePathProvider, projectsRepository);
     }
 
     @Provides
-    public AppStateProvider providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            // ignored
-        }
-
-        return new AppStateProvider(packageInfo, settingsProvider.getMetaSettings());
+    public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
+        return new LaunchState(context, settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE);
     }
 
     @Provides
@@ -580,5 +561,17 @@ public class AppDependencyModule {
     @Provides
     public CodeCaptureManagerFactory providesCodeCaptureManagerFactory() {
         return CodeCaptureManagerFactory.INSTANCE;
+    }
+
+    @Provides
+    public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
+        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider);
+    }
+
+    @Provides
+    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator) {
+        return new AppUpgrader(settingsProvider.getMetaSettings(), singletonList(
+                existingProjectMigrator
+        ));
     }
 }

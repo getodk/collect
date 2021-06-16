@@ -23,7 +23,13 @@ class FakeScheduler : Scheduler {
 
     override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {}
 
-    override fun networkDeferred(tag: String, taskSpec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {}
+    override fun networkDeferred(
+        tag: String,
+        taskSpec: TaskSpec,
+        repeatPeriod: Long,
+        inputData: Map<String, String>
+    ) {
+    }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
         foregroundTasks.add(foreground)
@@ -38,6 +44,8 @@ class FakeScheduler : Scheduler {
             }
         }
     }
+
+    override fun cancelAllDeferred() {}
 
     fun runForeground() {
         while (foregroundTasks.isNotEmpty()) {
@@ -71,7 +79,7 @@ class FakeScheduler : Scheduler {
         return repeatTasks.isNotEmpty()
     }
 
-    override fun isRunning(tag: String): Boolean {
+    override fun isDeferredRunning(tag: String): Boolean {
         return false
     }
 

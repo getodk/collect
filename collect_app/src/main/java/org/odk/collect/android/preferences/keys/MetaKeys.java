@@ -11,6 +11,7 @@ public class MetaKeys {
     public static final String KEY_PROJECTS = "projects";
     public static final String FIRST_LAUNCH = "first_launch";
     public static final String EXISTING_PROJECT_IMPORTED = "existing_project_imported";
+    public static final String LAST_LAUNCHED = "last_launched";
 
     private MetaKeys() {
 

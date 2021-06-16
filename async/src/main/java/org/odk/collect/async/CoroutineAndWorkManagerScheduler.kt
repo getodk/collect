@@ -55,8 +55,12 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         workManager.cancelUniqueWork(tag)
     }
 
-    override fun isRunning(tag: String): Boolean {
+    override fun isDeferredRunning(tag: String): Boolean {
         return isWorkManagerWorkRunning(tag)
+    }
+
+    override fun cancelAllDeferred() {
+        workManager.cancelAllWork()
     }
 
     private fun isWorkManagerWorkRunning(tag: String): Boolean {

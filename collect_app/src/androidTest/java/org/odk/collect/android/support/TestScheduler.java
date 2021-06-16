@@ -79,8 +79,8 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public boolean isRunning(@NotNull String tag) {
-        return wrappedScheduler.isRunning(tag);
+    public boolean isDeferredRunning(@NotNull String tag) {
+        return wrappedScheduler.isDeferredRunning(tag);
     }
 
     public void runDeferredTasks() {
@@ -122,6 +122,10 @@ public class TestScheduler implements Scheduler {
 
     public List<DeferredTask> getDeferredTasks() {
         return deferredTasks;
+    }
+
+    @Override
+    public void cancelAllDeferred() {
     }
 
     public static class DeferredTask {

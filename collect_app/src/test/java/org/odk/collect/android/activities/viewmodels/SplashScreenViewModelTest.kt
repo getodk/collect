@@ -8,22 +8,23 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
-import org.odk.collect.android.utilities.AppStateProvider
+import org.odk.collect.android.utilities.LaunchState
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
 class SplashScreenViewModelTest {
+
     private lateinit var generalSettings: SharedPreferencesSettings
-    private lateinit var appStateProvider: AppStateProvider
+    private lateinit var launchState: LaunchState
     private lateinit var projectsRepository: ProjectsRepository
     private lateinit var splashScreenViewModel: SplashScreenViewModel
 
     @Before
     fun setup() {
         generalSettings = mock(SharedPreferencesSettings::class.java)
-        appStateProvider = mock(AppStateProvider::class.java)
+        launchState = mock(LaunchState::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
-        splashScreenViewModel = SplashScreenViewModel(generalSettings, appStateProvider, projectsRepository)
+        splashScreenViewModel = SplashScreenViewModel(generalSettings, projectsRepository)
     }
 
     @Test
@@ -50,22 +51,13 @@ class SplashScreenViewModelTest {
     }
 
     @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return true if the app is newly installed`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(true)
+    fun `shouldFirstLaunchScreenBeDisplayed should return true if there are no projects`() {
         `when`(projectsRepository.getAll()).thenReturn(emptyList())
         assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(true))
     }
 
     @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return true if the app is not newly installed but there are no projects`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
-        `when`(projectsRepository.getAll()).thenReturn(emptyList())
-        assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(true))
-    }
-
-    @Test
-    fun `shouldFirstLaunchScreenBeDisplayed should return false if the app is not newly installed and there are saved projects`() {
-        `when`(appStateProvider.isFreshInstall()).thenReturn(false)
+    fun `shouldFirstLaunchScreenBeDisplayed should return false if there are saved projects`() {
         `when`(projectsRepository.getAll()).thenReturn(listOf(Project.Saved("123", "Project X", "P", "#cccccc")))
         assertThat(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed, `is`(false))
     }

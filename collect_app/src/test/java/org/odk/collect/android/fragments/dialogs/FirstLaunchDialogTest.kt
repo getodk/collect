@@ -1,6 +1,5 @@
 package org.odk.collect.android.fragments.dialogs
 
-import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -26,7 +25,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.AutomaticProjectCreatorDialog
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
@@ -56,9 +54,7 @@ class FirstLaunchDialogTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectImporter(
                 projectsRepository: ProjectsRepository,
-                storagePathProvider: StoragePathProvider,
-                context: Context,
-                settingsProvider: SettingsProvider
+                storagePathProvider: StoragePathProvider
             ): ProjectImporter? {
                 return projectImporter
             }

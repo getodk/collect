@@ -1,8 +1,6 @@
 package org.odk.collect.android.projects
 
 import android.app.Application
-import android.content.Context
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -32,10 +30,8 @@ class ProjectImporterTest {
     private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(
-        context,
         storagePathProvider,
-        projectsRepository,
-        settingsProvider
+        projectsRepository
     )
 
     @Test
@@ -76,85 +72,5 @@ class ProjectImporterTest {
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
         }
-    }
-
-    @Test
-    fun `importExistingProject() creates existing project`() {
-        projectImporter.importDemoProject()
-        assertThat(projectsRepository.getAll().size, `is`(1))
-    }
-
-    @Test
-    fun `importExistingProject() moves files from root`() {
-        val legacyRootDirs = listOf(
-            File(rootDir, "forms"),
-            File(rootDir, "instances"),
-            File(rootDir, "metadata"),
-            File(rootDir, "layers"),
-            File(rootDir, ".cache"),
-            File(rootDir, "settings")
-        )
-
-        legacyRootDirs.forEach {
-            it.mkdir()
-            TempFiles.createTempFile(it, "file", ".temp")
-        }
-
-        val existingProject = projectImporter.importExistingProject()
-
-        legacyRootDirs.forEach {
-            assertThat(it.exists(), `is`(false))
-        }
-
-        storagePathProvider.getProjectDirPaths(existingProject.uuid).forEach {
-            val dir = File(it)
-            assertThat(dir.exists(), `is`(true))
-            assertThat(dir.isDirectory, `is`(true))
-            assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
-        }
-    }
-
-    @Test
-    fun `importExistingProject() still copies other files if a directory is missing`() {
-        val legacyRootDirsWithoutForms = listOf(
-            File(rootDir, "instances"),
-            File(rootDir, "metadata"),
-            File(rootDir, "layers"),
-            File(rootDir, ".cache"),
-            File(rootDir, "settings")
-        )
-
-        legacyRootDirsWithoutForms.forEach {
-            it.mkdir()
-            TempFiles.createTempFile(it, "file", ".temp")
-        }
-
-        val existingProject = projectImporter.importExistingProject()
-        storagePathProvider.getProjectDirPaths(existingProject.uuid).forEach {
-            val dir = File(it)
-            assertThat(dir.exists(), `is`(true))
-            assertThat(dir.isDirectory, `is`(true))
-
-            if (it.endsWith("forms")) {
-                assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
-            } else {
-                assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
-            }
-        }
-    }
-
-    @Test
-    fun `importExistingProject migrates general and admin settings`() {
-        val oldGeneralSettings = PreferenceManager.getDefaultSharedPreferences(context)
-        oldGeneralSettings.edit().putString("generalKey", "generalValue").apply()
-        val oldAdminSettings = context.getSharedPreferences("admin", Context.MODE_PRIVATE)
-        oldAdminSettings.edit().putString("adminKey", "adminValue").apply()
-
-        val existingProject = projectImporter.importExistingProject()
-
-        val generalSettings = settingsProvider.getGeneralSettings(existingProject.uuid)
-        assertThat(generalSettings.getString("generalKey"), `is`("generalValue"))
-        val adminSettings = settingsProvider.getAdminSettings(existingProject.uuid)
-        assertThat(adminSettings.getString("adminKey"), `is`("adminValue"))
     }
 }

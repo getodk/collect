@@ -16,73 +16,61 @@ import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.keys.MetaKeys;
-import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.utilities.AppStateProvider;
-import org.odk.collect.projects.Project;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
 
-import timber.log.Timber;
+import javax.inject.Inject;
 
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
+import timber.log.Timber;
 
 public class ApplicationInitializer {
 
     private final Application context;
     private final UserAgentProvider userAgentProvider;
-    private final SettingsPreferenceMigrator preferenceMigrator;
     private final PropertyManager propertyManager;
     private final Analytics analytics;
-    private final Settings generalSettings;
-    private final Settings adminSettings;
-    private final Settings metaSettings;
     private final StorageInitializer storageInitializer;
-    private final AppStateProvider appStateProvider;
-    private final ProjectImporter projectImporter;
-    private final CurrentProjectProvider currentProjectProvider;
+    private final LaunchState launchState;
+    private final AppUpgrader appUpgrader;
 
-    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider, SettingsPreferenceMigrator preferenceMigrator,
-                                  PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, Settings generalSettings,
-                                  Settings adminSettings, Settings metaSettings, AppStateProvider appStateProvider, ProjectImporter projectImporter, CurrentProjectProvider currentProjectProvider) {
+    @Inject
+    public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
+                                  PropertyManager propertyManager, Analytics analytics,
+                                  StorageInitializer storageInitializer, LaunchState launchState,
+                                  AppUpgrader appUpgrader) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
-        this.preferenceMigrator = preferenceMigrator;
         this.propertyManager = propertyManager;
         this.analytics = analytics;
-        this.generalSettings = generalSettings;
-        this.adminSettings = adminSettings;
-        this.metaSettings = metaSettings;
         this.storageInitializer = storageInitializer;
-        this.appStateProvider = appStateProvider;
-        this.projectImporter = projectImporter;
-        this.currentProjectProvider = currentProjectProvider;
+        this.launchState = launchState;
+        this.appUpgrader = appUpgrader;
     }
 
     public void initialize() {
         initializeStorage();
-        initializePreferences();
+        performUpgradeIfNeeded();
         initializeFrameworks();
         initializeLocale();
-        importExistingProjectIfNeeded();
+
+        launchState.appLaunched();
+    }
+
+    private void performUpgradeIfNeeded() {
+        if (launchState.isUpgradedFirstLaunch()) {
+            appUpgrader.upgrade();
+        }
     }
 
     private void initializeStorage() {
         storageInitializer.createOdkDirsOnStorage();
-    }
-
-    private void initializePreferences() {
-        performMigrations();
-        reloadSharedPreferences();
     }
 
     private void initializeFrameworks() {
@@ -95,11 +83,10 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        boolean isAnalyticsEnabled = generalSettings.getBoolean(GeneralKeys.KEY_ANALYTICS);
-        analytics.setAnalyticsCollectionEnabled(isAnalyticsEnabled);
+        analytics.setAnalyticsCollectionEnabled(false);
 
-        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
-        analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
+//        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
+//        analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
     }
 
     private void initializeLocale() {
@@ -129,15 +116,6 @@ public class ApplicationInitializer {
         }
     }
 
-    private void reloadSharedPreferences() {
-        generalSettings.setDefaultForAllSettingsWithoutValues();
-        adminSettings.setDefaultForAllSettingsWithoutValues();
-    }
-
-    private void performMigrations() {
-        preferenceMigrator.migrate(generalSettings, adminSettings);
-    }
-
     private void initializeMapFrameworks() {
         try {
             Handler handler = new Handler(context.getMainLooper());
@@ -150,15 +128,6 @@ public class ApplicationInitializer {
         } catch (Exception | Error ignore) {
             // ignored
         }
-    }
-
-    private void importExistingProjectIfNeeded() {
-        if (!appStateProvider.isFreshInstall() && !metaSettings.getBoolean(MetaKeys.EXISTING_PROJECT_IMPORTED)) {
-            Project.Saved existingProject = projectImporter.importExistingProject();
-            currentProjectProvider.setCurrentProject(existingProject.getUuid());
-        }
-
-        metaSettings.save(MetaKeys.EXISTING_PROJECT_IMPORTED, true);
     }
 }
 

@@ -20,6 +20,8 @@ import java.util.List;
 @Deprecated
 public class CopyFormRule implements TestRule {
 
+    public static boolean projectCreated;
+
     private final String fileName;
     private final List<String> mediaFilePaths;
     private final boolean copyToDatabase;
@@ -71,6 +73,7 @@ public class CopyFormRule implements TestRule {
             } catch (IllegalStateException e) {
                 component.projectImporter().importDemoProject();
                 component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+                projectCreated = true;
             }
 
             AdbFormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase, fileName);

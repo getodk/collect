@@ -72,6 +72,7 @@ import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragm
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.AutomaticProjectCreatorDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.provider.FormsProvider;
@@ -306,4 +307,6 @@ public interface AppDependencyComponent {
     SyncStatusAppState syncStatusAppState();
 
     FormSourceProvider formSourceProvider();
+
+    ExistingProjectMigrator existingProjectMigrator();
 }
