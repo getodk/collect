@@ -22,8 +22,6 @@ the License.
 
     <color name="highContrastHighlight">#ff8c00</color>
 
-    <color name="dark_gray">#999999</color>
-
     <!-- Background colors in the GeoTrace status bar, under white text. -->
     <color name="locationStatusSearching">#333333</color>
     <color name="locationStatusAcceptable">#337733</color>

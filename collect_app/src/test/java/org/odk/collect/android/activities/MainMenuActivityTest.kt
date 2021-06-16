@@ -80,6 +80,14 @@ class MainMenuActivityTest {
     }
 
     @Test
+    fun `Activity title is current project name`() {
+        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        scenario.onActivity {
+            assertThat(it.title, `is`("Project"))
+        }
+    }
+
+    @Test
     fun `Project icon for current project should be displayed`() {
         val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
