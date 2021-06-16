@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.lifecycleScope
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.odk.collect.android.databinding.AutomaticProjectCreatorDialogLayoutBinding
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
@@ -26,7 +25,7 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
-class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
@@ -43,28 +42,18 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
-    lateinit var binding: AutomaticProjectCreatorDialogLayoutBinding
-
-    private var listener: ProjectAddedListener? = null
+    lateinit var binding: QrCodeProjectCreatorDialogLayoutBinding
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
-
-        if (context is ProjectAddedListener) {
-            listener = context
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = AutomaticProjectCreatorDialogLayoutBinding.inflate(inflater)
+        binding = QrCodeProjectCreatorDialogLayoutBinding.inflate(inflater)
         setUpToolbar()
         binding.configureManuallyButton.setOnClickListener {
             DialogUtils.showIfNotShowing(ManualProjectCreatorDialog::class.java, requireActivity().supportFragmentManager)
-            lifecycleScope.launch {
-                delay(1000)
-                dismiss()
-            }
         }
         binding.cancelButton.setOnClickListener {
             dismiss()
@@ -129,7 +118,12 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner,
             { barcodeResult: BarcodeResult ->
-                beepManager.playBeepSoundAndVibrate()
+                try {
+                    beepManager.playBeepSoundAndVibrate()
+                } catch (e: Exception) {
+                    // ignore
+                }
+
                 try {
                     handleScanningResult(barcodeResult)
                 } catch (e: Exception) {
@@ -143,15 +137,10 @@ class AutomaticProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         val projectCreatedSuccessfully = projectCreator.createNewProject(CompressionUtils.decompress(result.text))
 
         if (projectCreatedSuccessfully) {
+            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
             ToastUtils.showLongToast(getString(R.string.new_project_created))
-            listener?.onProjectAdded()
-            dismiss()
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
         }
-    }
-
-    interface AddProjectDialogListener {
-        fun onProjectAdded()
     }
 }

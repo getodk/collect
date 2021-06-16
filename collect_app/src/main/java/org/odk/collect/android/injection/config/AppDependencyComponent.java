@@ -44,7 +44,7 @@ import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
-import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog;
+import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
@@ -70,7 +70,7 @@ import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.projects.AutomaticProjectCreatorDialog;
+import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectImporter;
@@ -268,9 +268,9 @@ public interface AppDependencyComponent {
 
     void inject(ManualProjectCreatorDialog manualProjectCreatorDialog);
 
-    void inject(AutomaticProjectCreatorDialog automaticProjectCreatorDialog);
+    void inject(QrCodeProjectCreatorDialog qrCodeProjectCreatorDialog);
 
-    void inject(FirstLaunchDialog firstLaunchDialog);
+    void inject(FirstLaunchActivity firstLaunchActivity);
 
     void inject(InstanceUploader instanceUploader);
 

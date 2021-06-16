@@ -2,8 +2,8 @@ package org.odk.collect.android.support.pages
 
 import org.odk.collect.android.R
 
-class AutomaticProjectCreatorDialogPage : Page<AutomaticProjectCreatorDialogPage>() {
-    override fun assertOnPage(): AutomaticProjectCreatorDialogPage {
+class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
+    override fun assertOnPage(): QrCodeProjectCreatorDialogPage {
         assertText(R.string.add_project)
         return this
     }

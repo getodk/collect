@@ -96,7 +96,7 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.addProjectButton.setOnClickListener {
             DialogUtils.showIfNotShowing(
-                AutomaticProjectCreatorDialog::class.java,
+                QrCodeProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
             dismiss()

@@ -10,7 +10,7 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        clickOnString(R.string.configure_later)
+        clickOnString(R.string.try_demo)
         return MainMenuPage().assertOnPage()
     }
 
@@ -19,8 +19,8 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
         return ManualProjectCreatorDialogPage().assertOnPage()
     }
 
-    fun clickAutomaticallyEnterProjectDetails(): AutomaticProjectCreatorDialogPage {
+    fun clickConfigureWithQrCode(): QrCodeProjectCreatorDialogPage {
         clickOnString(R.string.configure_with_qr_code)
-        return AutomaticProjectCreatorDialogPage().assertOnPage()
+        return QrCodeProjectCreatorDialogPage().assertOnPage()
     }
 }

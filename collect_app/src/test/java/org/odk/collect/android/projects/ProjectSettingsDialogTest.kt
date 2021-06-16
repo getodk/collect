@@ -185,14 +185,14 @@ class ProjectSettingsDialogTest {
     }
 
     @Test
-    fun `AutomaticProjectCreatorDialog should be displayed after clicking on the 'Add project' button`() {
+    fun `QrCodeProjectCreatorDialog should be displayed after clicking on the 'Add project' button`() {
         val scenario = RobolectricHelpers.launchDialogFragment(
             ProjectSettingsDialog::class.java,
             R.style.Theme_Collect_Light
         )
         scenario.onFragment {
             it.binding.addProjectButton.performClick()
-            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(AutomaticProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(QrCodeProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
 
