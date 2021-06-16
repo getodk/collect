@@ -50,6 +50,7 @@ class SettingsImporter(
 
         clearUnknownKeys(generalSettings, generalDefaults)
         clearUnknownKeys(adminSettings, adminDefaults)
+
         loadDefaults(generalSettings, generalDefaults)
         loadDefaults(adminSettings, adminDefaults)
 
@@ -62,16 +63,14 @@ class SettingsImporter(
         return true
     }
 
-    private fun importToPrefs(`object`: JSONObject, preferences: Settings) {
-        val generalKeys = `object`.keys()
-        while (generalKeys.hasNext()) {
-            val key = generalKeys.next()
-            preferences.save(key, `object`[key])
+    private fun importToPrefs(jsonObject: JSONObject, preferences: Settings) {
+        jsonObject.keys().forEach {
+            preferences.save(it, jsonObject[it])
         }
     }
 
     private fun loadDefaults(preferences: Settings, defaults: Map<String, Any>) {
-        for ((key, value) in defaults) {
+        defaults.forEach { (key, value) ->
             if (!preferences.contains(key)) {
                 preferences.save(key, value)
             }
@@ -79,7 +78,7 @@ class SettingsImporter(
     }
 
     private fun clearUnknownKeys(preferences: Settings, defaults: Map<String, Any>) {
-        for (key in preferences.getAll().keys) {
+        preferences.getAll().forEach { (key, _) ->
             if (!defaults.containsKey(key)) {
                 preferences.remove(key)
             }
