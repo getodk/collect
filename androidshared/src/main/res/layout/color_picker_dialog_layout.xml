@@ -304,16 +304,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hex"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
-            app:layout_constraintStart_toEndOf="@+id/current_color"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/materialTextView"
-            style="?textAppearanceHeadline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hash"
             app:layout_constraintBottom_toBottomOf="@+id/hex_color_layout"
             app:layout_constraintEnd_toStartOf="@+id/hex_color_layout"
             app:layout_constraintTop_toTopOf="@+id/hex_color_layout" />
@@ -333,7 +323,9 @@
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintEnabled="false">
+                app:hintEnabled="false"
+                app:prefixText="@string/hash"
+                app:prefixTextAppearance="?textAppearanceHeadline5">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/hex_color"
@@ -342,7 +334,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/hex_color"
                     android:padding="0dp"
-                    android:maxLength="6"/>
+                    android:maxLength="6" />
             </com.google.android.material.textfield.TextInputLayout>
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

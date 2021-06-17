@@ -4,8 +4,12 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
@@ -26,6 +30,7 @@ class ColorPickerDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = ColorPickerDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
+        fixHexColorPrefix()
         setListeners()
         setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
 
@@ -83,6 +88,13 @@ class ColorPickerDialog : DialogFragment() {
                 it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
             }
         }
+    }
+
+    // https://github.com/material-components/material-components-android/issues/773#issuecomment-603759649
+    private fun fixHexColorPrefix() {
+        val prefixView = binding.hexColorLayout.findViewById<AppCompatTextView>(com.google.android.material.R.id.textinput_prefix_text)
+        prefixView.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        prefixView.gravity = Gravity.CENTER
     }
 
     companion object {
