@@ -14,7 +14,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
+import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -121,7 +121,7 @@ class SettingsImporterTest {
     @Test // Migrations might add/rename/move keys
     fun migratesPreferences_beforeLoadingDefaults() {
         val migrator =
-            SettingsPreferenceMigrator { _: Settings?, _: Settings? ->
+            SettingsMigrator { _: Settings?, _: Settings? ->
                 if (generalSettings.contains("key1")) {
                     throw RuntimeException("defaults already loaded!")
                 }
@@ -146,7 +146,7 @@ class SettingsImporterTest {
                 JSONObject().put("unknown_key", "value")
             )
         val migrator =
-            SettingsPreferenceMigrator { _: Settings?, _: Settings? ->
+            SettingsMigrator { _: Settings?, _: Settings? ->
                 if (!generalSettings.contains("unknown_key")) {
                     throw RuntimeException("unknowns already cleared!")
                 }

@@ -2,7 +2,7 @@ package org.odk.collect.android.configure
 
 import org.json.JSONException
 import org.json.JSONObject
-import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator
+import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.Project
@@ -11,7 +11,7 @@ import org.odk.collect.shared.Settings
 
 class SettingsImporter(
     private val settingsProvider: SettingsProvider,
-    private val preferenceMigrator: SettingsPreferenceMigrator,
+    private val settngsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
     private val adminDefaults: Map<String, Any>,
@@ -46,7 +46,7 @@ class SettingsImporter(
             // Ignored
         }
 
-        preferenceMigrator.migrate(generalSettings, adminSettings)
+        settngsMigrator.migrate(generalSettings, adminSettings)
 
         clearUnknownKeys(generalSettings, generalDefaults)
         clearUnknownKeys(adminSettings, adminDefaults)

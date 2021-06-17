@@ -29,10 +29,10 @@ import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
-import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.CollectSettingsMigrator;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
-import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
+import org.odk.collect.android.application.initialization.SettingsMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -314,8 +314,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsPreferenceMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
-        return new CollectSettingsPreferenceMigrator(settingsProvider.getMetaSettings());
+    public SettingsMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
+        return new CollectSettingsMigrator(settingsProvider.getMetaSettings());
     }
 
     @Provides
@@ -335,7 +335,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsPreferenceMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository) {
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository) {
         return new SettingsImporter(
                 settingsProvider,
                 preferenceMigrator,
