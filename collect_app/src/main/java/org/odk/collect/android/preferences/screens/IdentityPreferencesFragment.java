@@ -21,19 +21,24 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.CheckBoxPreference;
 
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.version.VersionInformation;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_ANALYTICS;
+import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment {
 
     @Inject
     Analytics analytics;
+
+    @Inject
+    VersionInformation versionInformation;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -66,10 +71,15 @@ public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment 
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
-            analyticsPreference.setOnPreferenceClickListener(preference -> {
-                analytics.setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
-                return true;
-            });
+            if (versionInformation.isBeta()) {
+                displayDisabled(analyticsPreference, true);
+                analyticsPreference.setSummary(analyticsPreference.getSummary() + " Usage data collection cannot be disabled in beta versions of Collect.");
+            } else {
+                analyticsPreference.setOnPreferenceClickListener(preference -> {
+                    analytics.setAnalyticsCollectionEnabled(analyticsPreference.isChecked());
+                    return true;
+                });
+            }
         }
     }
 }
