@@ -90,12 +90,21 @@
                     tools:text="@string/manage_files" />
 
                 <TextView
-                    android:id="@+id/version_sha"
-                    style="@style/TextAppearance.Collect.Caption"
+                    android:id="@+id/app_name"
+                    android:textAppearance="?textAppearanceBody1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_standard"
+                    android:textColor="@color/color_on_surface_medium_emphasis"
+                    tools:text="ODK Collect v2022.3" />
+
+                <TextView
+                    android:id="@+id/version_sha"
+                    android:textAppearance="?textAppearanceCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     tools:text="commit sha" />
             </LinearLayout>
         </LinearLayout>
