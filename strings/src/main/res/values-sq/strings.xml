@@ -451,7 +451,6 @@
   <string name="instance_sync">Finalizo format në importim</string>
   <string name="analytics_preferences">Përdorimi i të dhënave</string>
   <string name="analytics">Mblidh të dhëna përdorimi anonime</string>
-  <string name="analytics_summary">Mbledhja e të dhënave anonime ndihmon ekipin e ODK të vendosë prioritet në përmirësimet e aplikacionit</string>
   <string name="form_metadata_title">Metadata të formularit</string>
   <string name="form_metadata">Metadata të formularit</string>
   <string name="form_metadata_summary">Këto të dhëna do të shtohen në formularët që kanë një fushë të plotësuar paraprakisht me emër përdoruesi, email dhe/ose telefon në mënyrë që të identifikohet personi që plotësoi formularin.</string>
@@ -575,4 +574,18 @@
   <string name="fs_file_copy_error">\'%1$s\' nuk mund të kopjohet mbi \'%2$s\'. Arsyeja: %3$s</string>
   <string name="survey_multiple_forms_error">Keni ngarkuar dy formularë të ndryshëm me të njëjtin numër identifikues dhe version. Ndoshta është i njëjti formular, i ngarkuar në kohë të ndryshme ose servera të ndryshëm. Në çdo rast, duhet të fshini një prej tyre. </string>
   <string name="select_odk_shortcut">Përzgjidh ODK Shortcut</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">Po</string>
+  <string name="delete_project_no">Jo</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

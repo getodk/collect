@@ -374,4 +374,16 @@
   <string name="fs_create_media_folder_error">Kan ikke opprette mediamappe \'%s\'.</string>
   <string name="fs_file_copy_error">Kan ikke kopiere \'%1$s\' over \'%2$s\'. Årsak: %3$s</string>
   <string name="survey_multiple_forms_error">Du har lastet ned to ulike skjemamaler med samme skjema-ID og versjon. Kanskje er samme skjemamal lastet opp til ulike tidspunkt eller til ulike servere. Uansett bør du slette en av dem. </string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

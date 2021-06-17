@@ -530,4 +530,17 @@
   <string name="please_wait">Vent et øjeblik</string>
   <string name="please_wait_long">Vent et øjeblik. Det kan vare et par minutter.</string>
   <string name="survey_multiple_forms_error">Du har downloadet to forskellige formularer med samme formular-id og version. Måske var de den samme form, der blev uploadet på forskellige tidspunkter eller til forskellige servere. Under alle omstændigheder skal du slette en.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Tilføj</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

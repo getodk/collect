@@ -321,4 +321,16 @@
   <string name="error_occured">ত্রুটি ঘটেছে</string>
   <string name="please_wait">দয়া করে কিছু সময় অপেক্ষা করুন।</string>
   <string name="please_wait_long">দয়া করে অপেক্ষা করুন। এটি শেষ হতে কয়েক মিনিট সময় লাগতে পারে।</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

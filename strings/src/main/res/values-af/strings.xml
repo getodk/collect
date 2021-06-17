@@ -366,4 +366,16 @@
   <string name="fs_create_media_folder_error">Kon nie media-folder \'%s\' skep nie</string>
   <string name="fs_file_copy_error">Kon nie \'%1$s\' oor \'%2$s\' skryf nie. Rede: %3$s</string>
   <string name="survey_multiple_forms_error">U het twee verskillende vorms afgelaai met dieselfde Vorm ID en weergawe. Miskien is dit dieselfde vorm wat of op verskillende tye of na verskillende servers opgelaai is. U moet in enige geval een verwyder.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

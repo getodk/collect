@@ -532,7 +532,6 @@
   <string name="instance_sync">Финализировать опросы при импорте</string>
   <string name="analytics_preferences">Данные по использованию</string>
   <string name="analytics">Сбор анонимной статистики</string>
-  <string name="analytics_summary">Данные об использовании приложения помогают команде планировать процесс дальнейшей разработки</string>
   <string name="form_metadata_title">Метаданные</string>
   <string name="form_metadata">Метаданные</string>
   <string name="form_metadata_summary">будут добавлены к ответам для идентификации интервьюера проводящего опросы</string>
@@ -667,4 +666,19 @@
   <string name="fs_file_copy_error">Не удалось скопировать \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_multiple_forms_error">Вы загрузили два разных опросника с одинаковым ID и версией. Возможно, это один и тот же опросник загруженный в разное время или на разные сервера. В любом случае, вам следует удалить один из них.</string>
   <string name="select_odk_shortcut">Выбрать ярлык ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Добавить</string>
+  <string name="delete_project_yes">Да</string>
+  <string name="delete_project_no">Нет</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

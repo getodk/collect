@@ -623,7 +623,6 @@
   <string name="instance_sync_summary">ఇన్‌స్టాన్స్ ఫోల్డర్‌కు నేరుగా జోడించిన ఫారమ్‌లను ప్రభావితం చేస్తుంది.</string>
   <string name="analytics_preferences">వినియోగించబడిన డేటా</string>
   <string name="analytics">అనామక వినియోగ డేటాను సేకరించండి</string>
-  <string name="analytics_summary">అనామక వినియోగ డేటా వల్ల పరిష్కారాలు, లక్షణాలకు ప్రాధాన్యత ఇవ్వడానికి ODK బృందానికి వీలు కలుగుతుంది. </string>
   <string name="form_metadata_title">ఫారం మెటాడేటా</string>
   <string name="form_metadata">ఫారం మెటాడేటా</string>
   <string name="form_metadata_summary">డేటాను సమర్పించే వ్యక్తిని గుర్తించడానికి వినియోగదారు పేరు, ఇమెయిల్ మరియు / లేదా టెలిఫోన్ ప్రీలోడ్ చేసిన ఫీల్డ్‌లను కలిగి ఉన్న ఫారమ్‌లకు ఈ విలువలు జోడించబడతాయి.</string>
@@ -768,4 +767,19 @@
   <string name="fs_file_copy_error">%2$sమీద %1$sను కాపీ చేయలేకపోయింది . కారణం :%3$s</string>
   <string name="survey_multiple_forms_error">మీరు ఒకే ఫారమ్ ఐడి, వెర్షన్‌తో రెండు వేర్వేరు ఫారమ్‌లను డౌన్‌లోడ్ చేసారు. అది వేర్వేరు సమయాల్లో లేదా వేర్వేరు సర్వర్‌లకు అప్‌లోడ్ చేసిన ఒకే ఫారం కావచ్చు. మీరు ఒకదాన్ని తొలగించవలసిందే. </string>
   <string name="select_odk_shortcut">ODK సత్వరమార్గాన్ని ఎంచుకోండి</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">జోడించు</string>
+  <string name="delete_project_yes">అవును</string>
+  <string name="delete_project_no">లేదు</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

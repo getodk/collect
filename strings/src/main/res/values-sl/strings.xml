@@ -384,7 +384,6 @@
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="analytics">Zberi anonimne podatke o uporabi</string>
-  <string name="analytics_summary">Anonimni podatki o uporabi pomagajo ODK ekipi določiti prednost popravkov in funkcij</string>
   <string name="form_metadata_summary">Vrednosti bodo dodane obrazcem, ki imajo uporabnisko ime, email ali telefonsko stevilko …</string>
   <string name="phone_number">Telefonska številka</string>
   <!--Displayed when a device property such as the phone number is not available-->
@@ -460,4 +459,16 @@
   <string name="fs_create_media_folder_error">Ne morem ustvariti medijsko mapo \'%s\'.</string>
   <string name="fs_file_copy_error">Ne morem kopirat \'%1$s\' preko \'%2$s\'. Razlog: %3$s.</string>
   <string name="survey_multiple_forms_error">Naložili ste dva različna obrazca z istim ID obrazca in verzijo. Izbrišite enega od obeh.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

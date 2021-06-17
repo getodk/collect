@@ -160,7 +160,7 @@
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Mediatiedostoa ei voitu liittää lomakkeeseen, mutta se on saatavilla sijainnissa %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
-  <string name="recording_disabled">Äänitys estetty. Käynnistä valikossa %s</string>
+  <string name="recording_disabled">Taustaäänitys estetty. Käynnistä valikossa %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -221,11 +221,12 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Jatka</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Äänen tallennus</string>
+  <string name="record_audio">Taustaäänitys</string>
   <string name="background_audio_permission_explanation">Tämä lomake tallentaa taustalla ääntä. Sinun pitää antaa lupa käyttää mikrofonia. Jos et anna lupaa, et voi avata lomaketta.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
-  <string name="stop_recording_confirmation">Tämä lomake tallentaa taustalla ääntä. Keskeyttäminen lopettaa tallennuksen ja poistaa olemassa olevan äänityksen. Haluatko varmasti tehdä näin?</string>
+  <string name="stop_recording_confirmation">Tämä lomake pyytää lupaa tallentaa taustalla ääntä. Kytkeminen pois lopettaa tallennuksen ja poistaa olemassa olevan äänityksen. Haluatko varmasti tehdä näin?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Poista taustaäänitys käytöstä</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <string name="background_audio_recording_enabled_explanation">Äänitys ei ala heti. Sinun täytyy avata lomake uudelleen tallentaaksesi ääntä.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
@@ -508,7 +509,7 @@
   <string name="report_to_project_lead">Jos ongelma jatkuu, ilmoita siitä tiedonkeruusta vastaavalle.</string>
   <string name="unreachable_error">Collect ei tavoita palvelinta osoitteessa %s. Syötitkö URL:in oikein?</string>
   <string name="security_error">Collect ei saa turvattua yhteyttä palvelimeen %s. Syötitkö URL:in oikein?</string>
-  <string name="server_error">Palvelin %s vastasi statuskoodilla %s.</string>
+  <string name="server_error">Palvelin %1$s vastasi statuskoodilla %2$s.</string>
   <string name="invalid_response">Palvelin %s antoi epäkelvon vastauksen.</string>
   <string name="failure">Epäonnistui</string>
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
@@ -660,7 +661,6 @@
   <string name="instance_sync_summary">Vaikuttaa lomakkeisiin jotka lisätään suoraan Instances -kansioon.</string>
   <string name="analytics_preferences">Käyttötiedot</string>
   <string name="analytics">Kerää anonyymejä käyttötietoja</string>
-  <string name="analytics_summary">Anonyymit käyttötiedot auttavat ODK-tiimiä priorisoimaan korjauksia ja ominaisuuksia</string>
   <string name="form_metadata_title">Lomakkeen metadata</string>
   <string name="form_metadata">Lomakkeen metadata</string>
   <string name="form_metadata_summary">Nämä arvot lisätään lomakkeisiin joissa on käyttäjätunnus, sähköpostiosoite ja/tai puhelinnumero valmiiksi täytettynä lähettäjän tunnistamiseksi.</string>
@@ -688,6 +688,7 @@
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
+  <string name="project_configuration">Projektikonfiguraatio</string>
   <string name="reset_settings_dialog">Palauta sovellus alkutilaan…</string>
   <string name="select_all">Valitse kaikki</string>
   <string name="clear_all">Tyhjennä kaikki</string>
@@ -811,4 +812,39 @@
   <string name="fs_file_copy_error">Ei voitu kopioida \'%1$s\' yli \'%2$s\'. Syy: %3$s</string>
   <string name="survey_multiple_forms_error">Olet ladannut kaksi eri lomaketta, joilla on sama lomake tunnus ja versio. Ehkä ne olivat samat lomake ladattuna eri aikoina tai eri palvelimille. Joka tapauksessa, sinun pitäisi poistaa toinen.</string>
   <string name="select_odk_shortcut">Valitse ODK-oikotie</string>
+  <string name="background_audio_help">Tämä lomake tallentaa ääntä laitteesi mikrofonin avulla.\n\nVoit käyttää äänitason ilmaisinta varmistaaksesi, että mikrofoni on riittävän lähellä ääntä, jota haluat äänittää.\n\nSulje tämä lomake lopettaaksesi äänityksen.\n\nOle yhteydessä henkilöön joka pyysi sinua keräämään tietoja saadaksesi lisätietoja.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="projects">Projektit</string>
+  <string name="add_project">Lisää projekti</string>
+  <string name="add">Lisätään</string>
+  <string name="project_name">Projektin nimi</string>
+  <string name="project_icon">Projektikuvake</string>
+  <string name="project_color">Projektiväri</string>
+  <string name="switched_project">Projekti vaihdettu, nyt %s</string>
+  <string name="using_project">%s käytössä</string>
+  <string name="switch_to_project">Vaihda projektiin %s</string>
+  <string name="delete_project">Poista projekti</string>
+  <string name="delete_project_confirm_message">Haluatko varmasti poistaa tämän projektin?</string>
+  <string name="delete_project_yes">Kyllä</string>
+  <string name="delete_project_no">Ei</string>
+  <string name="or">OR</string>
+  <string name="new_project_created">Uuden projektin luominen onnistui</string>
+  <string name="hex_color">Heksadesimaalinen väri</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">Kerää dataa\nmissä vain</string>
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">Asetusten määrittely QR-koodilla</string>
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">Syötä projektin yksityiskohdat manuaalisesti</string>
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">Puuttuuko projekti vielä?</string>
+  <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">Kokeile demoa</string>
+  <string name="scan_configuration_qr_code">Skannaa asetukset QR-koodista</string>
 </resources>

@@ -364,4 +364,16 @@
   <string name="fs_create_media_folder_error">ບໍ່​ສາ​ມາດ​ສ້າງ​ໂຟນ​ເດີ \'%s\'.</string>
   <string name="fs_file_copy_error">ບໍ່​ສາ​ມາດ​ກ໋ອບ​ປີ້ \'%1$s\' ຈາກ​ທັງ​ໝົດ \'%2$s\'. ​ເຫດຜົນ: %3$s</string>
   <string name="survey_multiple_forms_error">ທ່ານ​ໄດ້​ດາວ​ໂຫຼດ​ສອງ​ແບບ​ຟອມ ທີ່​ມີ ID ແລະ ເວີ​ຊັນ ຄື​ກັນ. ບາງ​ເທື່ອ​ຟອ​ມ​ດັ່ງ​ກ່າວ​ເປັນ​ຟອມ​ດຽວ​ກັນ ແຕ່​ອັບ​ໂຫຼດ​ເວ​ລາ​ຕ່າງ​ກັນ ຫຼື ຫາເສີບ​ເວີ​ຕ່າງ​ກັນ. ຢ່າງ​ໃດ​ກໍ່​ຕາມ ທ່ານ​ຄວນ​ລຶບ​ຟອມ​ໜຶ່ງ​ຖີ້ມ.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

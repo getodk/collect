@@ -1,15 +1,22 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
+  <string name="enter_data">പുതിയ ഫോം പൂരിപ്പിക്കുക</string>
   <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">പുതിയ ഫോം പൂരിപ്പിക്കുക</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">സേവ് ചെയ്ത ഫോമിൽ മാറ്റം വരുത്തുക </string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">അവസാനിപ്പിച്ച ഫോം അയക്കുക </string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">അയച്ച ഫോം കാണുക </string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">പുതിയ ഫോം എടുക്കുക </string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">സേവ് ചെയ്ത ഫോം ഡിലീറ്റ് ചെയ്യുക </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -17,19 +24,43 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_form">ഫോം ഡിലീറ്റ് ചെയ്യുക </string>
+  <string name="sort_the_list">പട്ടിക ക്രമീകരിക്കുക</string>
+  <string name="sort_by_name_asc">പേര്, A - Z </string>
+  <string name="sort_by_date_asc">തിയതി, പുതിയത് ആദ്യം </string>
+  <string name="sort_by_date_desc">തിയതി, പഴയത് ആദ്യം</string>
+  <string name="sort_by_status_asc">സ്റ്റാറ്റസ് , അവസാനിപ്പിച്ചത് ആദ്യം </string>
+  <string name="sort_by_status_desc">സ്റ്റാറ്റസ്, അവസാനിപ്പിക്കാത്തത് ആദ്യം </string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">തിരയുക</string>
+  <string name="no_items_display">സ്‌ക്രീനിൽ കാണിക്കുവാൻ ഒന്നും ലഭ്യം അല്ല </string>
+  <string name="not_granted_permission">നിങ്ങൾ തുടങ്ങാൻ ഉദ്ദേശിക്കുന്ന പ്രവൃത്തിക്ക് ലഭിച്ചിട്ടില്ലാത്ത അനുമതികൾ വേണം </string>
+  <string name="storage_runtime_permission_denied_title">സ്റ്റോറേജ് അനുമതികൾ </string>
+  <string name="storage_runtime_permission_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ ഫോമിലേക്ക് പ്രവേശിക്കുകയോ ഉത്തരങ്ങൾ സേവ് ചെയ്യുകയോ ചെയ്യാൻ ആകുന്നതല്ല. അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ ആപ്പ് വീണ്ടും തുറക്കുക.</string>
+  <string name="location_runtime_permissions_denied_title">സ്ഥാന നിർണയത്തിനുള്ള അനുമതി.</string>
+  <string name="location_runtime_permissions_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ സ്ഥാനം നിർണയിക്കാൻ ആകുന്നതല്ല. ദയവു ചെയ്ത് അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ വീണ്ടും ശ്രമിക്കുക.</string>
+  <string name="camera_runtime_permission_denied_title">ക്യാമറ അനുമതി</string>
+  <string name="camera_runtime_permission_denied_desc">ഈ അനുമതി ഇല്ലാതെ കളക്ടിന് ക്യാമറ നിയന്ത്രിക്കാൻ കഴിയുകയില്ല. ദയവു ചെയ്ത് അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ വീണ്ടും ശ്രമിക്കുക.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <string name="finished_disk_scan">തിരച്ചിൽ അവസാനിച്ചിരിക്കുന്നു. എല്ലാ ഫോമുകളും ലോഡ് ചെയ്‌തിരിക്കുന്നു.</string>
+  <string name="loading_form">ഫോം ലോഡ് ചെയ്തുകൊണ്ടിരിക്കുന്നു</string>
+  <string name="survey_loading_reading_data_message">സർവ്വേ വിവരങ്ങൾ വായിച്ചുകൊണ്ടിരിക്കുന്നു…</string>
+  <string name="loading_form_failed">ഫോം ലോഡ് ചെയ്തുകൊണ്ടിരിക്കുമ്പോൾ ഒരു തെറ്റ് പറ്റിയിരിക്കുന്നു. ദയവു ചെയ്ത് വീണ്ടും ശ്രമിക്കുക.</string>
   <string name="cannot_edit_completed_form">അന്തിമമായി അടയാളപ്പെടുത്തിക്കഴിഞ്ഞാൽ ഈ ഫോർമ് എഡിറ്റ് ചെയ്യാൻ കഴിയില്ല. ഇത് എൻക്രിപ്റ്റ് ചെയ്തതായിരിക്കാം.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">ഭാഷ മാറ്റുക</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ഫോം സേവ് ചെയ്യുക </string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">തുടക്കത്തിലേക്ക് പോകുക </string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">അവസാനത്തിലേക്കു പോകുക</string>
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">മുകളിലേക്ക് പോകുക</string>
   <!--Displayed below group names in a form's table of contents-->
   <!--Displayed below repeat names in a form's table of contents-->
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
@@ -44,6 +75,10 @@
   <string name="delete_repeat_ask">ഈ ഗ്രൂപ്പ് നീക്കംചെയ്യണോ?</string>
   <string name="delete_repeat_confirm">ഗ്രൂപ്പ് \" %s\" ഉം അതിന്റെ എല്ലാ ഉപ-ഗ്രൂപ്പുകളും നീക്കംചെയ്യണോ?</string>
   <string name="delete_repeat_no">റദ്ദാക്കുക</string>
+  <string name="required_answer_error">ക്ഷമിക്കണം, ഈ ഉത്തരം അത്യാവശ്യമാണ്</string>
+  <string name="save_form_as">ഈ ഫോമിന് പേര് നൽകുക</string>
+  <string name="save_as_error">സേവ് ചെയ്ത പേര് ശൂന്യമാകാൻ പാടുള്ളതല്ല</string>
+  <string name="mark_finished">ഫോം അവസാനിപ്പിച്ചതായി അടയാളപ്പെടുത്തുക</string>
   <string name="data_saved_error">ക്ഷമിക്കണം, ഫോർമ് സംരക്ഷിക്കുന്നത് പരാജയപ്പെട്ടു!</string>
   <string name="data_saved_ok">ഫോർമ് വിജയകരമായി സംരക്ഷിച്ചു!</string>
   <string name="save_point_error">വീണ്ടെടുക്കൽ പോയിന്റ് സംരക്ഷിക്കുന്നതിൽ പിശക്/പ്രമാദം: 1 %s</string>
@@ -60,12 +95,24 @@
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="activity_not_found"> കൈകാര്യം ചെയ്യാൻ പ്രവർത്തനങ്ങളൊന്നും കണ്ടെത്തിയില്ല: %s</string>
+  <string name="launch_printer">പ്രിന്റ് ചെയ്തു തുടങ്ങുക </string>
+  <string name="open_url">Url തുറക്കുക </string>
   <string name="capture_osm">OpenMapKit സമാരംഭിക്കുക</string>
   <string name="recapture_osm">OSM ടാഗ്ഗിംഗ് വീണ്ടും ചെയ്യുക</string>
+  <string name="open_file">ഫയൽ തുറക്കുക</string>
+  <string name="svg_file_does_not_exist">SVG ഫയൽ നിലവിലില്ല!</string>
   <string name="capture_image">ചിത്രം എടുക്കുക</string>
+  <string name="choose_image">ചിത്രം തിരഞ്ഞെടുക്കുക </string>
+  <string name="view_image">ചിത്രം വീക്ഷിക്കുക</string>
+  <string name="take_picture_instruction">ചിത്രം എടുക്കാനായി സ്‌ക്രീനിൽ തൊടുക</string>
+  <string name="error_front_camera_unavailable">ഈ ഉപകരണത്തിൽ മുന്നിലെ ക്യാമറ ലഭ്യമല്ല</string>
   <!--Dialog heading for saving annotated image-->
   <string name="capture_video"> വീഡിയോ റെക്കോർഡ് ചെയ്യുക</string>
+  <string name="choose_video">വീഡിയോ തിരഞ്ഞെടുക്കുക</string>
+  <string name="view_video">വീഡിയോ വീക്ഷിക്കുക</string>
+  <string name="choose_file">ഫയൽ തിരഞ്ഞെടുക്കുക</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">ഡിലീറ്റ് </string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">ശബ്ദംറെക്കോർഡ് ചെയ്യുക</string>
   <!--Text for button that lets the user choose a sound file on their device-->
@@ -76,16 +123,31 @@
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">ഈ ഫയൽ ഡിലീറ്റ് ചെയ്യണമോ?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">ഈ ഫയൽ ഡിലീറ്റ് ചെയ്താൽ തിരിച്ചെടുക്കാവുന്നതല്ല. മുന്നോട്ടു പോകണം എന്ന് ഉറപ്പാണോ?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">നിർത്തുക</string>
   <!--Text to let the user know a recording is in progress-->
   <!--Title of Android Notification Channel for audio recording notifications-->
   <!--Text for button that plays audio clip-->
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">ഫയൽ സേവ് ചെയ്തുകൊണ്ടിരിക്കുന്നു</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">മൂല്യം തിരഞ്ഞെടുക്കുക</string>
+  <string name="select_answer">ഉത്തരം തിരഞ്ഞെടുക്കുക</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">മൂല്യത്തിൽ മാറ്റം വരുത്തുക</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">മൂല്യം ഒന്നും തന്നെ തിരഞ്ഞെടുത്തട്ടില്ല</string>
+  <string name="selected">തിരഞ്ഞെടുക്കപ്പെട്ടത്:</string>
+  <string name="trigger">ശരി. ദയവു ചെയ്തു തുടരുക</string>
+  <string name="ext_file_no_data_error">ഈ ഫയലിൽ വിവരങ്ങൾ ഒന്നും തന്നെയില്ല!</string>
+  <string name="select_date">തിയതി തിരഞ്ഞെടുക്കുക</string>
+  <string name="select_time">സമയം തിരഞ്ഞെടുക്കുക</string>
+  <string name="no_date_selected">തിയതി തിരഞ്ഞെടുക്കപ്പെട്ടട്ടില്ല</string>
+  <string name="no_time_selected">സമയം തിരഞ്ഞെടുക്കപെട്ടട്ടില്ല </string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
@@ -93,8 +155,11 @@
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <!--Action to close a full screen dialog-->
+  <string name="close">അടയ്ക്കുക</string>
   <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">മാറ്റങ്ങൾക്കു കാരണം</string>
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason">കാരണം</string>
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
   <!--##############################################
@@ -167,9 +232,10 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="show_password"> സങ്കേതപദം കാണിക്കുക</string>
+  <string name="show_password">പാസ്സ്‌വേർഡ് കാണിക്കുക</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ഫോം സേവ് ചെയ്യുക </string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -192,4 +258,16 @@
   <string name="cancel_location">റദ്ദാക്കുക</string>
   <string name="do_not_change">റദ്ദാക്കുക</string>
   <string name="do_not_exit">റദ്ദാക്കുക</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

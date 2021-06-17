@@ -380,7 +380,6 @@
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="analytics_preferences">Kasutusinfo</string>
   <string name="analytics">Anonüümne kasutusinfo kogumine</string>
-  <string name="analytics_summary">Anonüümne kasutusinfo aitab ODK meeskonnal prioritiseerida parandusi ja arendusi</string>
   <!--Displayed when a device property such as the phone number is not available-->
   <!--##############################################
      # ADMIN SETTINGS
@@ -462,4 +461,16 @@
   <string name="fs_file_copy_error">\'%1$s\' kopeerimine \'%2$s\' ebaõnnestus. Põhjuseks: %3$s</string>
   <string name="survey_multiple_forms_error">Olete alla laadinud kaks eri vormi millel on sama ID ja versioon. Võis juhtuda, et sama vorm oli üles laetud erinevatel aegadel või erinevatesse serveritesse. Igatahes peaksite ühe neist eemaldama.</string>
   <string name="select_odk_shortcut">Vali ODK otsetee</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>
