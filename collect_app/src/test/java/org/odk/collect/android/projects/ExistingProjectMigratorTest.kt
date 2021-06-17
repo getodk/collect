@@ -10,6 +10,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -27,9 +28,21 @@ class ExistingProjectMigratorTest {
     private val rootDir = storagePathProvider.odkRootDirPath
 
     @Test
-    fun `creates existing project`() {
+    fun `creates existing project with details based on its url`() {
+        PreferenceManager
+            .getDefaultSharedPreferences(context)
+            .edit()
+            .putString(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
+            .apply()
+
         existingProjectMigrator.run()
+
         assertThat(projectsRepository.getAll().size, `is`(1))
+
+        val project = projectsRepository.getAll()[0]
+        assertThat(project.name, `is`("my-server.com"))
+        assertThat(project.icon, `is`("M"))
+        assertThat(project.color, `is`("#53bdd4"))
     }
 
     @Test
