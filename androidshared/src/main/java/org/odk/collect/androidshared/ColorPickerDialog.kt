@@ -4,8 +4,12 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
@@ -25,13 +29,13 @@ class ColorPickerDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = ColorPickerDialogLayoutBinding.inflate(LayoutInflater.from(context))
-
-        setListeners()
-        setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
-
         binding.hexColor.doOnTextChanged { color, _, _, _ ->
             updateCurrentColorCircle("#$color")
         }
+
+        fixHexColorPrefix()
+        setListeners()
+        setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -64,16 +68,31 @@ class ColorPickerDialog : DialogFragment() {
     }
 
     private fun setCurrentColor(color: String) {
-        updateCurrentColorCircle(color)
         binding.hexColor.setText(color.substring(1))
     }
 
     private fun updateCurrentColorCircle(color: String) {
         try {
             (binding.currentColor.children.iterator().next().background as GradientDrawable).setColor(Color.parseColor(color))
+            binding.hexColor.error = null
+            (dialog as? AlertDialog)?.also {
+                it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 1f
+                it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+            }
         } catch (e: Exception) {
-            // ignored
+            binding.hexColor.error = getString(R.string.invalid_hex_code)
+            (dialog as? AlertDialog)?.also {
+                it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 0.3f
+                it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            }
         }
+    }
+
+    // https://github.com/material-components/material-components-android/issues/773#issuecomment-603759649
+    private fun fixHexColorPrefix() {
+        val prefixView = binding.hexColorLayout.findViewById<AppCompatTextView>(com.google.android.material.R.id.textinput_prefix_text)
+        prefixView.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        prefixView.gravity = Gravity.CENTER
     }
 
     companion object {
