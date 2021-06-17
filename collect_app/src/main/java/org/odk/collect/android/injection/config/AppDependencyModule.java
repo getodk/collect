@@ -43,8 +43,8 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
-import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
+import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
@@ -586,7 +586,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader, VersionInformation versionInformation) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader, versionInformation);
     }
 }
