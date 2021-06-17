@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import org.odk.collect.projects.Project
 import java.net.URL
+import kotlin.math.abs
 
 class ProjectDetailsCreator(private val context: Context) {
 
@@ -22,7 +23,7 @@ class ProjectDetailsCreator(private val context: Context) {
     }
 
     private fun getProjectColorForProjectName(projectName: String): String {
-        val colorId = (projectName.hashCode() % 15) + 1
+        val colorId = (abs(projectName.hashCode()) % 15) + 1
         val colorName = "color$colorId"
         val colorValue = context.resources.getIdentifier(colorName, "color", context.packageName)
 
