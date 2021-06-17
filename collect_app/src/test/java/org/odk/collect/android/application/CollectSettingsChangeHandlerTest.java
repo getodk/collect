@@ -3,7 +3,6 @@ package org.odk.collect.android.application;
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -16,9 +15,8 @@ public class CollectSettingsChangeHandlerTest {
 
     private final PropertyManager propertyManager = mock(PropertyManager.class);
     private final FormUpdateScheduler formUpdateScheduler = mock(FormUpdateScheduler.class);
-    private final ServerRepository serverRepository = mock(ServerRepository.class);
 
-    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, serverRepository, mock(Analytics.class), mock(SettingsProvider.class));
+    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, mock(Analytics.class), mock(SettingsProvider.class));
 
     @Test
     public void updatesPropertyManager() {
@@ -30,7 +28,6 @@ public class CollectSettingsChangeHandlerTest {
     public void doesNotDoAnythingElse() {
         handler.onSettingChanged("projectId", "anything", "blah");
         verifyNoInteractions(formUpdateScheduler);
-        verifyNoInteractions(serverRepository);
     }
 
     @Test
@@ -49,11 +46,5 @@ public class CollectSettingsChangeHandlerTest {
     public void whenChangedKeyIsProtocol_schedulesUpdates() {
         handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_PROTOCOL);
         verify(formUpdateScheduler).scheduleUpdates("projectId");
-    }
-
-    @Test
-    public void whenChangedKeyIsServerURL_savesURLToServerRepository() {
-        handler.onSettingChanged("projectId", "http://newUrl", GeneralKeys.KEY_SERVER_URL);
-        verify(serverRepository).save("http://newUrl");
     }
 }

@@ -22,11 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListPopupWindow;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -38,7 +33,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
@@ -51,7 +45,6 @@ import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.shared.strings.Validator;
 import org.odk.collect.shared.strings.Md5;
@@ -70,7 +63,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SELECTED_
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment implements View.OnTouchListener, OnBackPressedListener {
+public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment implements OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
@@ -86,15 +79,8 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
     FormUpdateScheduler formUpdateScheduler;
 
     @Inject
-    ServerRepository serverRepository;
-
-    @Inject
-    SoftKeyboardController softKeyboardController;
-
-    @Inject
     PermissionsProvider permissionsProvider;
 
-    private ListPopupWindow listPopupWindow;
     private Preference selectedGoogleAccountPreference;
     private boolean allowClickSelectedGoogleAccountPreference = true;
 
@@ -111,13 +97,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.server_preferences, rootKey);
         initProtocolPrefs();
-    }
-
-    @Override
-    public void onDestroyView() {
-        // to avoid leaking listPopupWindow
-        listPopupWindow = null;
-        super.onDestroyView();
     }
 
     private void initProtocolPrefs() {
@@ -161,13 +140,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
 
-        serverUrlPreference.setOnBindEditTextListener(editText -> {
-            urlDropdownSetup(editText);
-            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_drop_down, 0);
-            editText.setFilters(new InputFilter[]{new ControlCharacterFilter(), new WhitespaceFilter()});
-            editText.setOnTouchListener(this);
-        });
-
         usernamePreference.setOnPreferenceChangeListener(createChangeListener());
         usernamePreference.setSummary(usernamePreference.getText());
 
@@ -195,22 +167,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
                 return false;
             }
         });
-    }
-
-    private void urlDropdownSetup(EditText editText) {
-        listPopupWindow = new ListPopupWindow(getActivity());
-        setupUrlDropdownAdapter(listPopupWindow);
-        listPopupWindow.setAnchorView(editText);
-        listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener((parent, view, position, id) -> {
-            editText.setText(serverRepository.getServers().get(position));
-            listPopupWindow.dismiss();
-        });
-    }
-
-    public void setupUrlDropdownAdapter(ListPopupWindow listPopupWindow) {
-        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serverRepository.getServers());
-        listPopupWindow.setAdapter(adapter);
     }
 
     public void addGooglePreferences() {
@@ -260,20 +216,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         });
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int DRAWABLE_RIGHT = 2;
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (event.getX() >= (v.getWidth() - ((EditText) v)
-                    .getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                softKeyboardController.hideSoftKeyboard(v);
-                listPopupWindow.show();
-                return true;
-            }
-        }
-        return false;
-    }
-
     private Preference.OnPreferenceChangeListener createChangeListener() {
         return (preference, newValue) -> {
             switch (preference.getKey()) {
@@ -290,7 +232,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
                         sendAnalyticsEvent(url);
 
                         preference.setSummary(newValue.toString());
-                        setupUrlDropdownAdapter(listPopupWindow);
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
