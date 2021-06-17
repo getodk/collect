@@ -325,7 +325,7 @@
             android:padding="@dimen/margin_small"
             app:layout_constraintTop_toTopOf="@+id/current_color"
             app:layout_constraintBottom_toBottomOf="@+id/current_color"
-            app:layout_constraintStart_toStartOf="@+id/color14"
+            app:layout_constraintStart_toStartOf="@+id/color13"
             app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
