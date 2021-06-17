@@ -1,21 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
+  <string name="enter_data">Попълване на бланка</string>
   <!--Text for an action button on the main screen.-->
+  <string name="enter_data_button">Попълване на бланка</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">Редактиране на записан формуляр</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="review_data_button">Редактиране на записан формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">Изпращане на завършен формуляр</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="send_data_button">Изпращане на завършен формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Преглед на изпратен формуляр</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
+  <string name="view_sent_forms_button">Преглед на изпратен формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Изтегляне на бланка</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Изтриване на записан формуляр</string>
+  <string name="version_number">Версия: %s</string>
+  <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">\'Добавено на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">\'Записано на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">\'Завършено на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'Изпратено на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'Неуспешно изпращане на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">\'Изтрито на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <!--##############################################
@@ -44,7 +62,6 @@
     # FORM FEATURES
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
-  <string name="capture_image">Maka sary</string>
   <!--Dialog heading for saving annotated image-->
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
@@ -116,7 +133,6 @@
   <!--Title of a settings section only available in beta or development builds.-->
   <!--Label for server type setting-->
   <!--Title of dialog for configuring server URL-->
-  <string name="change_password">Teny miafina ODK</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->

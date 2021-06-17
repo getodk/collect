@@ -424,7 +424,6 @@
   <string name="form_import_category">फॉर्म आयात </string>
   <string name="analytics_preferences">डेटा का उपयोग</string>
   <string name="analytics">अनाम उपयोग डेटा एकत्र करें</string>
-  <string name="analytics_summary">अनाम उपयोग डेटा ODK टीम को फिक्स और फीचर्स की प्राथमिकता निर्धारण में मदद करता है</string>
   <string name="form_metadata_title">फॉर्म मेटाडेटा</string>
   <string name="form_metadata">फॉर्म मेटाडेटा</string>
   <string name="form_metadata_summary">इन मानों को उन फ़ॉर्म में जोड़ा जाएगा जिनमें डेटा जमा करने वाले व्यक्ति की पहचान के लिये प्रयोक्ता नाम, ईमेल और / या टेलीफ़ोन पहले से लोड किए गए फ़ील्ड हैं। </string>
@@ -539,4 +538,18 @@
   <string name="fs_file_copy_error">\'%2$s\' पर \'%1$s\' की नकल नहीं कर सकता. कारण: %3$s</string>
   <string name="survey_multiple_forms_error">आपने एक ही फॉर्म आईडी और संस्करण के साथ दो अलग-अलग फॉर्म डाउनलोड किए हैं। हो सकता है कि वे अलग-अलग समय या अलग-अलग सर्वरों पर अपलोड किए गए समान फॉर्म थे. किसी भी मामले में, आपको एक को हटाना होगा.</string>
   <string name="select_odk_shortcut">ODK शॉर्टकट चयन करें</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">हाँ</string>
+  <string name="delete_project_no">नहीं</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

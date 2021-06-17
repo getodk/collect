@@ -509,7 +509,7 @@
   <string name="report_to_project_lead">Si vous continuez à avoir ce problème, avertissez la personne qui vous a demandé de collecter les données.</string>
   <string name="unreachable_error">Collect n\'arrive pas à joindre le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
   <string name="security_error">Collect n\'arrive pas à établir une connexion sécurisée avec le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
-  <string name="server_error">Le serveur %s a envoyé le code de réponse %s.</string>
+  <string name="server_error">Le serveur %1$s a retourné le code de réponse %2$s.</string>
   <string name="invalid_response">Le serveur %s a fourni une réponse invalide.</string>
   <string name="failure">Échec</string>
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Modifier les Paramètres</string>
+  <string name="general_preferences">Paramètres généraux</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Serveur</string>
   <!--Title of a settings section-->
@@ -540,7 +540,7 @@
   <!--Title of a settings section-->
   <string name="maps">Cartes</string>
   <!--Title of a settings section-->
-  <string name="form_management_preferences">Gestion de formulaire</string>
+  <string name="form_management_preferences">Gestion des formulaires</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identité de l\'utilisateur et de l\'appareil</string>
   <!--Title of a settings section only available in beta or development builds.-->
@@ -661,7 +661,6 @@
   <string name="instance_sync_summary">Impacte sur les formulaires ajoutés directement au dossier instances.</string>
   <string name="analytics_preferences">Données d\'utilisation</string>
   <string name="analytics">Collecter des données d\'utilisation anonymes</string>
-  <string name="analytics_summary">Les données anonymes d\'utilisation aident l\'équipe ODK à prioriser les correctifs et les fonctionnalités</string>
   <string name="form_metadata_title">Métadonnées du formulaire</string>
   <string name="form_metadata">Métadonnées du formulaire</string>
   <string name="form_metadata_summary">Ces valeurs seront ajoutées aux formulaires qui ont des champs pré-chargés d\'utilisateur, de courrier électronique et / ou de téléphone pour identifier la personne qui soumet des données.</string>
@@ -689,6 +688,7 @@
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
+  <string name="project_configuration">Configuration du projet</string>
   <string name="reset_settings_dialog">Réinitialiser l\'application …</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>
@@ -812,4 +812,27 @@
   <string name="fs_file_copy_error">Impossible de copier \'%1$s\' sur \'%2$s\'. Raison: %3$s</string>
   <string name="survey_multiple_forms_error">Vous avez téléchargé deux formulaires différents avec le même numéro d\'identification et la même version. Peut-être que le même formulaire a été téléchargés deux fois ou à deux serveurs différents. Dans tous les cas, vous devez en supprimer un.</string>
   <string name="select_odk_shortcut">Sélectionnez le raccourci ODK</string>
+  <string name="background_audio_help">Ce formulaire enregistre le son du micro de votre appareil.\n\nVous pouvez utiliser l\'indicateur de volume pour vous assurer que le micro est assez proche de son que vous devez enregistrer.\n\nQuittez le formulaire pour arrêter l\'enregistrement.\n\nPour plus d\'informations contacter la personne responsable de cette collecte de données.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="projects">Projets</string>
+  <string name="add_project">Ajouter un projet</string>
+  <string name="add">Ajouter</string>
+  <string name="project_name">Nom du projet</string>
+  <string name="project_icon">Icône du projet</string>
+  <string name="project_color">Couleur du projet </string>
+  <string name="delete_project_yes">Oui</string>
+  <string name="delete_project_no">Non</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">Configurer par QR code</string>
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">Saisir les détails du projet</string>
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

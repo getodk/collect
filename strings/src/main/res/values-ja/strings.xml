@@ -154,9 +154,13 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">認識できない URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">録音を開始できません。</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">マイクはすでに使われています。</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">メディアはフォームに添付できませんでしたが %1$s にあります</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">録音が無効になりました。 %s で有効にしてください</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -190,6 +194,7 @@
   <string name="error_front_camera_unavailable">このデバイスは前面カメラが利用できません</string>
   <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
   <string name="annotate_image">画像に注釈をつける</string>
+  <string name="invalid_file_type">アプリケーションが無効なファイル形式を返しました</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">保存して閉じる</string>
   <string name="signature_capture">署名キャプチャ</string>
@@ -206,26 +211,40 @@
   <string name="play_video">ビデオを再生</string>
   <string name="choose_file">ファイルを選択</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">削除</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">サウンドを録音</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">サウンドを選択</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">一時停止</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">再開</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">オーディオの録音</string>
+  <string name="background_audio_permission_explanation">このフォームはバックグラウンドでオーディオを録音します。 マイクの使用を許可する必要があります。 そうしないと、このフォームを開くことができません。</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">このフォームはバックグラウンドオーディオ録音を要求します。 無効にすると、録音が停止し、既存のオーディオが破棄されます。 続行してもよろしいですか?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">録音を無効にする</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">録音はすぐには開始されません。 録音するには、フォームを再度開く必要があります。</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">ファイルを削除しますか?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">削除すると、このファイルを復元することはできません。 続行してもよろしいですか?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">停止</string>
   <!--Text to let the user know a recording is in progress-->
   <string name="recording">録音中…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
   <string name="recording_channel">オーディオ録音</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">オーディオを再生</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">ファイルの保存中</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">この画面を終了する前に、録音を停止する必要があります。</string>
   <string name="error_attaching_binary_file">メディアの添付中にエラーが発生しました: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">値を選択</string>
@@ -487,6 +506,8 @@
   <string name="report_to_project_lead">この問題が引き続き発生する場合は、データの収集を依頼した人に報告してください。</string>
   <string name="unreachable_error">Collect が %s のサーバーに到達できません。 URL を正しく入力しましたか?</string>
   <string name="security_error">Collect が %s のサーバーに安全に接続できません。 URL を正しく入力しましたか?</string>
+  <string name="server_error">サーバー %1$s がステータスコード %2$s を返しました。</string>
+  <string name="invalid_response">サーバー %s が無効なレスポンスを返しました。</string>
   <string name="failure">失敗</string>
   <string name="load_remote_form_error">フォーム一覧がダウンロードできませんでした</string>
   <!--##############################################
@@ -637,7 +658,6 @@
   <string name="instance_sync_summary">インスタンスフォルダーに直接追加されたフォームに影響します。</string>
   <string name="analytics_preferences">使用状況データ</string>
   <string name="analytics">匿名の使用状況データを収集</string>
-  <string name="analytics_summary">匿名の使用状況データは、ODK チームが修正および機能に優先順位付けするのに役立ちます</string>
   <string name="form_metadata_title">フォームメタデータ</string>
   <string name="form_metadata">フォームメタデータ</string>
   <string name="form_metadata_summary">これらの値は、プリロードしたフィールドのユーザー名、メール、電話を持つフォームに追加され、データの送信者を識別します。</string>
@@ -788,4 +808,19 @@
   <string name="fs_file_copy_error">\'%1$s\' を \'%2$s\' に上書きコピーできませんでした。理由: %3$s</string>
   <string name="survey_multiple_forms_error">同じフォームIDとバージョンを持つ、2つの異なるフォームをダウンロードしました。異なる時間に、または異なるサーバーにアップロードした、同じフォームかもしれません​​。いずれにせよ、一方を削除する必要があります。</string>
   <string name="select_odk_shortcut">ODK ショートカットを選択</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">追加</string>
+  <string name="delete_project_yes">はい</string>
+  <string name="delete_project_no">いいえ</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

@@ -371,7 +371,6 @@
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
   <string name="analytics_preferences">ข้อมูลการใช้งาน</string>
   <string name="analytics">บันทึกค่าการใช้งานแบบไม่เจาะจงผู้ใช้</string>
-  <string name="analytics_summary">ค่าการใช้งานแบบไม่เจาะจงผู้ใช้จะช่วยทีมODK จัดลำดับการแก้ไขและเพิ่มความสามารถใหม่</string>
   <string name="form_metadata_title">Metadata ของแบบสำรวจ</string>
   <string name="form_metadata">Form metadata</string>
   <string name="form_metadata_summary">ค่านี้จะถูกบันทึกในแบบสำรวจที่มีชื่อผู้ใช้ อีเมล์ และ/หรือ เบอร์โทรศัพท์ ที่โหลดไว้แล้วเพื่อระบุตัวผู้ส่งข้อมูล</string>
@@ -458,4 +457,16 @@
   <string name="fs_file_copy_error">ไม่สามารถคัดลอก \'%1$s\' บน \'%2$s\' เนื่องจาก %3$s</string>
   <string name="survey_multiple_forms_error">คุณดาวน์โหลดแบบสำรวจสองฉบับที่มีชื่อและรุ่นตรงกัน ซึ่งอาจเป็นแบบสำรวจเดียวกันที่ถูกอัพโหลดต่างเวลาหรือต่างเซิร์ฟเวอร์ อย่างไรก็แล้วแต่ ควรลบออกหนึ่งฉบับ</string>
   <string name="select_odk_shortcut">เลือก ODK Shortcut</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

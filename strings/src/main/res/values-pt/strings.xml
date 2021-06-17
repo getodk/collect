@@ -653,7 +653,6 @@ Escolher Imagem</string>
   <string name="instance_sync_summary">Afeta formulários adicionados diretamente na pasta instances.</string>
   <string name="analytics_preferences">Uso de dados</string>
   <string name="analytics">Coletar dados anônimos</string>
-  <string name="analytics_summary">Os dados anônimos ajudam a equipe do ODK a priorizar a correção de erros e funcionalidades</string>
   <string name="form_metadata_title">Metadados do Formulário</string>
   <string name="form_metadata">Metadados do Formulário</string>
   <string name="form_metadata_summary">Estes valores serão adicionados aos formulários que têm os campos usuário, e-mail e/ou telefone pré-determinados para identificar a pessoa que está enviando os dados.</string>
@@ -804,4 +803,19 @@ Escolher Imagem</string>
   <string name="fs_file_copy_error">Não foi possível copiar os dados de \'%1$s\' para \'%2$s\'.. Motivo: %3$s</string>
   <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
   <string name="select_odk_shortcut">Selecionar o Atalho ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Adicionar</string>
+  <string name="delete_project_yes">Sim</string>
+  <string name="delete_project_no">Não</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

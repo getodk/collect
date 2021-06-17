@@ -577,7 +577,6 @@
   <string name="instance_sync_summary">Брати до уваги форми додані безпосередньо до директорії екземплярів.</string>
   <string name="analytics_preferences">Дані про використання</string>
   <string name="analytics">Анонімно збирати дані про використання</string>
-  <string name="analytics_summary">Анонімний збір даних про використання допомагає команді ODK пріоритетизувати правки та нові функції</string>
   <string name="form_metadata_title">Метаданні Анкети</string>
   <string name="form_metadata">Метаданні анкети</string>
   <string name="form_metadata_summary">Ці значення будуть додані до анкет, що мають поля ім\'я користувача, електронна адреса та/або телефон для ідентифікації особи, що надсилає дані.</string>
@@ -715,4 +714,18 @@
   <string name="fs_file_copy_error">Неможливо скопіювати \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_multiple_forms_error">Ви завантажили дві різні анкети однакової версії з однаковим ID. Можливо це та сама акета опублікована в різний час або на різних серверах. В будь-якому разі одну треба видалити.</string>
   <string name="select_odk_shortcut">Обрати посилання ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">Так</string>
+  <string name="delete_project_no">Ні</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

@@ -564,7 +564,6 @@
   <string name="instance_sync_summary">Inaathiri fomu zilizowekwa moja kwa moja kwenye makabrasha ya mifano.</string>
   <string name="analytics_preferences">Matumizi ya takwimu</string>
   <string name="analytics">Kusanya takwimu za matumizi bila majina</string>
-  <string name="analytics_summary"> Matumizi ya takwimu zisizojulikana husaidia timu ya ODK kutoa kipaumbele cha hitilafu na vifaa</string>
   <string name="form_metadata_title">Unda taarifa za data</string>
   <string name="form_metadata">Unda taarifa za data</string>
   <string name="form_metadata_summary">Thamani hizi zitaongezwa katika fomu ambazo zina jina, barua pepe na au namba ya simu kupakuliwa kabla nafasi kumtambulisha mtu aliye wasilisha data.</string>
@@ -701,4 +700,19 @@
   <string name="fs_file_copy_error">Haiwezi nakili  \'%1$s\' zidi ya \'%2$s\'. Sababu:%3$s</string>
   <string name="survey_multiple_forms_error">Unepakua fomu mbili tofauti  zenye  fomu ya utambulisho sawa na toleo sawa. Labda ilikuwa ni fomu moja iliyoekwa muda tofauti au seva tofauti. Kama ni hivyo futa mojawapo. </string>
   <string name="select_odk_shortcut">Chagua njia fupi ya ODK </string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Ongeza</string>
+  <string name="delete_project_yes">Ndiyo</string>
+  <string name="delete_project_no">Hapana</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

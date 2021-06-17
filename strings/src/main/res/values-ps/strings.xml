@@ -276,4 +276,18 @@
   <string name="error_occured">خطا وشوله</string>
   <string name="please_wait">مهرباني وکړئ څو ځلې انتظار وکړئ.</string>
   <string name="please_wait_long">هیله کوم لږ صبر وکړه. دا کیدای شي څو دقیقو وخت ونیسي.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">هو</string>
+  <string name="delete_project_no">نه</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

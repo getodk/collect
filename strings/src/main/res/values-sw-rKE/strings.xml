@@ -13,11 +13,12 @@
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <string name="send_data_button">Tuma fomu (%s) iliyo kamilika</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Tazama fomu iliyotumwa</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Weka Fomu tupu</string>
+  <string name="get_forms">Pata fomu tupu</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Ondoa fomu iliyo hifadhiwa</string>
+  <string name="manage_files">futa fomu iliyohifadhiwa</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">Imeongezwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -43,6 +44,7 @@
   <string name="survey_loading_reading_data_message">Takwimu ya utafiti inasomwa…</string>
   <string name="survey_loading_reading_csv_message">Faili za CSV zinasomwa…</string>
   <string name="parse_error">Samahani, haiwezi kuchanganua fomu</string>
+  <string name="cannot_edit_completed_form">Fomu hii haiwezi kuhaririwa ikiwa imewekwa alama kuwa imekamilika Inaweza kusimbwa kwa njia fiche.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Madiliko ambayo hayakuhifadhiwa, yameokolewa kutoka awali</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
@@ -59,7 +61,11 @@
   <string name="jump_to_previous">Enda Juu</string>
   <!--Displayed below group names in a form's table of contents-->
   <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">Kikundi kinachoweza kurudiwa</string>
+  <string name="exit">Toka</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="dont_add_repeat">Usiongeze</string>
+  <string name="add_another_menu">Ongeza nyingine</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Hariri ilani</string>
   <string name="clearanswer_confirm">Ondoa jibu la \"%s\"?</string>
@@ -348,4 +354,16 @@
   <string name="please_wait_long">Tafadhali subiri. Hii inaweza kuchukua dakika chache.</string>
   <string name="fs_create_media_folder_error">Faili \'%s\' la midia halitengenezeki.</string>
   <string name="survey_multiple_forms_error">Umepakua fomu mbili tofauti zinayo ID na version moja. Labda ilikuwa fomu moja ikipakiwa</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>
