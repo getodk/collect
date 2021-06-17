@@ -65,7 +65,7 @@ public class VersionInformation {
         return getVersionDescriptionComponents().length == 1;
     }
 
-    private boolean isBeta() {
+    public boolean isBeta() {
         return versionDescriptionProvider.getVersionDescription().contains("beta");
     }
 

@@ -83,7 +83,7 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        analytics.setAnalyticsCollectionEnabled(versionInformation.getBetaNumber() != null);
+        analytics.setAnalyticsCollectionEnabled(versionInformation.isBeta());
     }
 
     private void initializeLocale() {

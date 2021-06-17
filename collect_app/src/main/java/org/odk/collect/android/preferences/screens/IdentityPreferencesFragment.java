@@ -71,7 +71,7 @@ public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment 
         final CheckBoxPreference analyticsPreference = (CheckBoxPreference) findPreference(KEY_ANALYTICS);
 
         if (analyticsPreference != null) {
-            if (versionInformation.getBetaNumber() != null) {
+            if (versionInformation.isBeta()) {
                 displayDisabled(analyticsPreference, true);
                 analyticsPreference.setSummary(analyticsPreference.getSummary() + " Usage data collection cannot be disabled in beta versions of Collect.");
             } else {
