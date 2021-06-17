@@ -31,6 +31,7 @@ import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsMigrator;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
+import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
@@ -578,9 +579,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade) {
+    public ExistingSettingsMigrator providesExistingSettingsMigrator(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsMigrator settingsMigrator) {
+        return new ExistingSettingsMigrator(projectsRepository, settingsProvider, settingsMigrator);
+    }
+
+    @Provides
+    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
         return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
                 existingProjectMigrator,
+                existingSettingsMigrator,
                 formUpdatesUpgrade
         ));
     }
