@@ -9,8 +9,8 @@ import kotlin.math.abs
 class ProjectDetailsCreator(private val context: Context) {
 
     fun getProject(urlString: String): Project.New {
-        var projectName = ""
-        var projectIcon = ""
+        var projectName = "Project"
+        var projectIcon = "P"
         var projectColor = "#3e9fcc"
         try {
             val url = URL(urlString)
