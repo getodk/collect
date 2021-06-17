@@ -71,8 +71,17 @@ class ColorPickerDialog : DialogFragment() {
     private fun updateCurrentColorCircle(color: String) {
         try {
             (binding.currentColor.children.iterator().next().background as GradientDrawable).setColor(Color.parseColor(color))
+            binding.hexColor.error = null
+            (dialog as? AlertDialog)?.also {
+                it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 1f
+                it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+            }
         } catch (e: Exception) {
-            // ignored
+            binding.hexColor.error = getString(R.string.invalid_hex_code)
+            (dialog as? AlertDialog)?.also {
+                it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 0.3f
+                it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            }
         }
     }
 

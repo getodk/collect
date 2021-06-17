@@ -999,6 +999,7 @@
     <string name="or">OR</string>
     <string name="new_project_created">New project created successfully</string>
     <string name="hex_color">Hex color</string>
+    <string name="invalid_hex_code">Invalid hex code</string>
 
     <!--
      ##############################################
