@@ -18,8 +18,6 @@ public class RobolectricApplication extends Collect {
 
     @Override
     public void onCreate() {
-        super.onCreate();
-
         // Prevents OKHttp from exploding on initialization https://github.com/robolectric/robolectric/issues/5115
         System.setProperty("javax.net.ssl.trustStore", "NONE");
 
@@ -29,6 +27,8 @@ public class RobolectricApplication extends Collect {
         } catch (IllegalStateException e) {
             // initialize() explodes if it's already been called
         }
+
+        super.onCreate();
 
         // We don't want to deal with permission checks in Robolectric
         ShadowApplication shadowApplication = shadowOf(this);

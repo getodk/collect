@@ -28,8 +28,10 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
+import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
+import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsPreferenceMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -134,6 +136,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 
 import static androidx.core.content.FileProvider.getUriForFile;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
@@ -570,9 +573,20 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator) {
-        return new AppUpgrader(settingsProvider.getMetaSettings(), singletonList(
-                existingProjectMigrator
+    public FormUpdatesUpgrade providesFormUpdatesUpgrader(Scheduler scheduler, ProjectsRepository projectsRepository, FormUpdateScheduler formUpdateScheduler) {
+        return new FormUpdatesUpgrade(scheduler, projectsRepository, formUpdateScheduler);
+    }
+
+    @Provides
+    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade) {
+        return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
+                existingProjectMigrator,
+                formUpdatesUpgrade
         ));
+    }
+
+    @Provides
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader);
     }
 }
