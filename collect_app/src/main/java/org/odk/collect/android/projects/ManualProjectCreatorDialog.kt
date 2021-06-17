@@ -13,6 +13,7 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
@@ -24,6 +25,9 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var appConfigurationGenerator: AppConfigurationGenerator
+
+    @Inject
+    lateinit var softKeyboardController: SoftKeyboardController
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
@@ -43,6 +47,10 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
         binding.urlInputText.doOnTextChanged { text, _, _, _ ->
             binding.addButton.isEnabled = !text.isNullOrBlank()
+        }
+
+        binding.urlInputText.post {
+            softKeyboardController.showSoftKeyboard(binding.urlInputText)
         }
 
         binding.cancelButton.setOnClickListener {
