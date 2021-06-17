@@ -19,7 +19,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(AndroidJUnit4.class)
-public class CollectSettingsPreferenceMigratorTest {
+public class CollectSettingsMigratorTest {
 
     private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
     private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
@@ -266,6 +266,6 @@ public class CollectSettingsPreferenceMigratorTest {
     }
 
     private void runMigrations() {
-        new CollectSettingsPreferenceMigrator(metaSettings).migrate(generalSettings, adminSettings);
+        new CollectSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
     }
 }
