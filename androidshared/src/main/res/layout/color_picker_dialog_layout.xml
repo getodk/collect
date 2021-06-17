@@ -325,7 +325,9 @@
                 android:layout_height="match_parent"
                 app:hintEnabled="false"
                 app:prefixText="@string/hash"
-                app:prefixTextAppearance="?textAppearanceBody1">
+                app:prefixTextAppearance="?textAppearanceBody1"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/hex_color"
