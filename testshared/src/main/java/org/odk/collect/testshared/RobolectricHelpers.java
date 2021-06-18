@@ -91,8 +91,16 @@ public class RobolectricHelpers {
         return null;
     }
 
+    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass) {
+        return launchDialogFragment(fragmentClass, null, R.style.Theme_DialogFragmentTest);
+    }
+
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
         return launchDialogFragment(fragmentClass, null, theme);
+    }
+
+    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs) {
+        return launchDialogFragment(fragmentClass, fragmentArgs, R.style.Theme_DialogFragmentTest);
     }
 
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
@@ -103,8 +111,8 @@ public class RobolectricHelpers {
 
           This is probably something that should be fixed within Robolectric.
          */
-        ApplicationProvider.getApplicationContext().setTheme(theme);
-        return FragmentScenario.launch(fragmentClass, fragmentArgs);
+//        ApplicationProvider.getApplicationContext().setTheme(theme);
+        return FragmentScenario.launch(fragmentClass, fragmentArgs, theme, null);
     }
 
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, int theme) {
