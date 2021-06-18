@@ -376,9 +376,7 @@ dependencies {
     testImplementation "org.robolectric:robolectric:4.5.1"
 
     testImplementation 'androidx.test.ext:junit:1.1.2'
-    debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
-        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
-    }
+    debugImplementation project(':fragmentstest')
     testImplementation "androidx.arch.core:core-testing:2.1.0"
     testImplementation "org.robolectric:shadows-multidex:4.5.1"
     testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"

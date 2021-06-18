@@ -91,10 +91,6 @@ public class RobolectricHelpers {
         return null;
     }
 
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass) {
-        return launchDialogFragment(fragmentClass, null, R.style.Theme_DialogFragmentTest);
-    }
-
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
         return launchDialogFragment(fragmentClass, null, theme);
     }
