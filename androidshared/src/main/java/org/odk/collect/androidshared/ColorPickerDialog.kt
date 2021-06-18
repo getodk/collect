@@ -35,7 +35,7 @@ class ColorPickerDialog : DialogFragment() {
 
         fixHexColorPrefix()
         setListeners()
-        setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
+        setCurrentColor(model.initColor)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -94,13 +94,11 @@ class ColorPickerDialog : DialogFragment() {
         prefixView.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         prefixView.gravity = Gravity.CENTER
     }
-
-    companion object {
-        const val CURRENT_COLOR = "CURRENT_COLOR"
-    }
 }
 
 class ColorPickerViewModel : ViewModel() {
+    lateinit var initColor: String
+
     private val _pickedColor = MutableLiveData<String>()
     val pickedColor: LiveData<String> = _pickedColor
 
