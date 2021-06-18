@@ -98,6 +98,7 @@ class ColorPickerDialog : DialogFragment() {
 
 class ColorPickerViewModel : ViewModel() {
     lateinit var initColor: String
+    lateinit var icon: String
 
     private val _pickedColor = MutableLiveData<String>()
     val pickedColor: LiveData<String> = _pickedColor
