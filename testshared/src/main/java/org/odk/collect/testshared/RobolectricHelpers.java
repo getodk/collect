@@ -95,11 +95,7 @@ public class RobolectricHelpers {
         return launchDialogFragment(fragmentClass, null, theme);
     }
 
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs) {
-        return launchDialogFragment(fragmentClass, fragmentArgs, R.style.Theme_DialogFragmentTest);
-    }
-
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
+    private static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
         /*
           Needed to avoid explosion (NullPointerException) inside internal platform code (WindowDecorActionBar).
           For some reason AppCompat.Light or AppCompat.Light.NoActionBar don't work. Our theme must declare
