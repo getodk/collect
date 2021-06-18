@@ -3,7 +3,6 @@ package org.odk.collect.android.application;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -22,14 +21,12 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 
     private final PropertyManager propertyManager;
     private final FormUpdateScheduler formUpdateScheduler;
-    private final ServerRepository serverRepository;
     private final Analytics analytics;
     private final SettingsProvider settingsProvider;
 
-    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
+    public CollectSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, Analytics analytics, SettingsProvider settingsProvider) {
         this.propertyManager = propertyManager;
         this.formUpdateScheduler = formUpdateScheduler;
-        this.serverRepository = serverRepository;
         this.analytics = analytics;
         this.settingsProvider = settingsProvider;
     }
@@ -40,10 +37,6 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 
         if (changedKey.equals(KEY_FORM_UPDATE_MODE) || changedKey.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) || changedKey.equals(KEY_PROTOCOL)) {
             formUpdateScheduler.scheduleUpdates(projectId);
-        }
-
-        if (changedKey.equals(KEY_SERVER_URL)) {
-            serverRepository.save((String) newValue);
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {

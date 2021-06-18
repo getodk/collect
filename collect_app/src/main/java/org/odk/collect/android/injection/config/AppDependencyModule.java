@@ -23,7 +23,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
@@ -38,11 +37,9 @@ import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.SettingsValidator;
-import org.odk.collect.android.configure.SharedPreferencesServerRepository;
 import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -326,13 +323,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerRepository providesServerRepository(Context context, SettingsProvider settingsProvider) {
-        return new SharedPreferencesServerRepository(context.getString(R.string.default_server_url), settingsProvider.getMetaSettings());
-    }
-
-    @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, ServerRepository serverRepository, Analytics analytics, SettingsProvider settingsProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, serverRepository, analytics, settingsProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, Analytics analytics, SettingsProvider settingsProvider) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, analytics, settingsProvider);
     }
 
     @Provides
