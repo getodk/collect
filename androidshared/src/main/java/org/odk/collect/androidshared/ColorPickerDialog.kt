@@ -11,7 +11,6 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -32,6 +31,7 @@ class ColorPickerDialog : DialogFragment() {
         binding.hexColor.doOnTextChanged { color, _, _, _ ->
             updateCurrentColorCircle("#$color")
         }
+        binding.currentColor.text = model.icon
 
         fixHexColorPrefix()
         setListeners()
@@ -73,7 +73,7 @@ class ColorPickerDialog : DialogFragment() {
 
     private fun updateCurrentColorCircle(color: String) {
         try {
-            (binding.currentColor.children.iterator().next().background as GradientDrawable).setColor(Color.parseColor(color))
+            (binding.currentColor.background as GradientDrawable).setColor(Color.parseColor(color))
             binding.hexColor.error = null
             (dialog as? AlertDialog)?.also {
                 it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 1f
