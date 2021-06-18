@@ -8,9 +8,9 @@ interface SettingsProvider {
 
     fun getGeneralSettings(projectId: String?): Settings
 
-    fun getGeneralSettings(): Settings
+    fun getGeneralSettings(): Settings = getGeneralSettings(null)
 
     fun getAdminSettings(projectId: String?): Settings
 
-    fun getAdminSettings(): Settings
+    fun getAdminSettings(): Settings = getAdminSettings(null)
 }

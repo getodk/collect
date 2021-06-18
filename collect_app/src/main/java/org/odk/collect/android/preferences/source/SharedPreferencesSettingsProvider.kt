@@ -24,24 +24,8 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         }
     }
 
-    override fun getGeneralSettings(): Settings {
-        val settingsId = getSettingsId(GENERAL_SETTINGS_NAME, null)
-
-        return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), GeneralKeys.getDefaults())
-        }
-    }
-
     override fun getAdminSettings(projectId: String?): Settings {
         val settingsId = getSettingsId(ADMIN_SETTINGS_NAME, projectId)
-
-        return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), AdminKeys.getDefaults())
-        }
-    }
-
-    override fun getAdminSettings(): Settings {
-        val settingsId = getSettingsId(ADMIN_SETTINGS_NAME, null)
 
         return settings.getOrPut(settingsId) {
             SharedPreferencesSettings(getSharedPrefs(settingsId), AdminKeys.getDefaults())
