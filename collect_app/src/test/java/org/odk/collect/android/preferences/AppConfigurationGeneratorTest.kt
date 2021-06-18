@@ -13,20 +13,14 @@ import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
-import org.odk.collect.testshared.InMemSettings
 
 @RunWith(AndroidJUnit4::class)
 class AppConfigurationGeneratorTest {
-    private val generalSettingsForProject1 = InMemSettings()
-    private val adminSettingsForProject1 = InMemSettings()
 
-    private val settingsProvider = mock<SettingsProvider> {
-        on { getGeneralSettings() } doReturn generalSettingsForProject1
-        on { getAdminSettings() } doReturn adminSettingsForProject1
-    }
+    private val settingsProvider = InMemSettingsProvider()
 
     private val currentProjectProvider: CurrentProjectProvider = mock {
         on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
