@@ -16,6 +16,7 @@ import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.testshared.R
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
