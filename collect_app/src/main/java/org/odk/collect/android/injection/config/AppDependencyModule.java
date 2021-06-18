@@ -87,6 +87,7 @@ import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
@@ -228,7 +229,7 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public SettingsProvider providesSettingsProvider(Context context) {
-        return new SettingsProvider(context);
+        return new SharedPreferencesSettingsProvider(context);
     }
 
     @Provides

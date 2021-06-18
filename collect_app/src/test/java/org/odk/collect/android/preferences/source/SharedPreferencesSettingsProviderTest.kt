@@ -11,9 +11,9 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
 
 @RunWith(AndroidJUnit4::class)
-class SettingsProviderTest {
+class SharedPreferencesSettingsProviderTest {
 
-    private val settingsProvider = SettingsProvider(ApplicationProvider.getApplicationContext())
+    private val settingsProvider = SharedPreferencesSettingsProvider(ApplicationProvider.getApplicationContext())
 
     @Before
     fun setup() {

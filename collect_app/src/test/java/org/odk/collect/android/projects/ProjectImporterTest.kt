@@ -1,7 +1,5 @@
 package org.odk.collect.android.projects
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
@@ -9,7 +7,6 @@ import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -24,9 +21,7 @@ class ProjectImporterTest {
 
     private val rootDir = TempFiles.createTempDir()
 
-    private val context = ApplicationProvider.getApplicationContext<Application>()
     private val storagePathProvider = StoragePathProvider(mock(), rootDir.absolutePath)
-    private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(
         storagePathProvider,
