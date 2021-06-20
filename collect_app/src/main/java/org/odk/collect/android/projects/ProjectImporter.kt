@@ -17,16 +17,12 @@ class ProjectImporter(
     }
 
     fun importDemoProject() {
-        val project = Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        val project = Project.demoProject
         projectsRepository.save(project)
         createProjectDirs(project)
     }
 
     private fun createProjectDirs(project: Saved) {
         storagePathProvider.getProjectDirPaths(project.uuid).forEach { FileUtils.createDir(it) }
-    }
-
-    companion object {
-        const val DEMO_PROJECT_ID = "DEMO"
     }
 }
