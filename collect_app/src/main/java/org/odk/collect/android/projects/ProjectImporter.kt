@@ -10,14 +10,14 @@ class ProjectImporter(
     private val storagePathProvider: StoragePathProvider,
     private val projectsRepository: ProjectsRepository
 ) {
-    fun importNewProject(project: Project.New): Saved {
+    fun importNewProject(project: Project): Saved {
         val savedProject = projectsRepository.save(project)
         createProjectDirs(savedProject)
         return savedProject
     }
 
     fun importDemoProject() {
-        val project = Project.demoProject
+        val project = Project.DEMO_PROJECT
         projectsRepository.save(project)
         createProjectDirs(project)
     }
