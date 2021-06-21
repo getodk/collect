@@ -17,17 +17,35 @@ public class CursorLoaderFactory {
 
     public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
         String selection = DatabaseInstanceColumns.STATUS + " !=? " +
-                (beforeUpdate ?"":("and " +DatabaseInstanceColumns.STATUS + " !=? "));
+                (beforeUpdate ? "" : ("and " + DatabaseInstanceColumns.STATUS + " !=? "));
         String[] selectionArgs = beforeUpdate ?
-            new String[]{
-                Instance.STATUS_SUBMITTED
-            }
-            :new String[]{
+                new String[]{
+                        Instance.STATUS_SUBMITTED
+                }
+                : new String[]{
                 Instance.STATUS_SUBMITTED,
                 Instance.STATUS_SUBMISSION_FAILED
-            };
+        };
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+    }
+
+    public CursorLoader createUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
+        CursorLoader cursorLoader;
+        if (charSequence.length() == 0) {
+            cursorLoader = createUnsentInstancesCursorLoader(sortOrder);
+        } else {
+            String selection =
+                    DatabaseInstanceColumns.STATUS + " !=? and "
+                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String[] selectionArgs = {
+                    Instance.STATUS_SUBMITTED,
+                    "%" + charSequence + "%"};
+
+            cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+        }
+
+        return cursorLoader;
     }
 
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
