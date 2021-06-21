@@ -13,6 +13,23 @@ import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {
 
+    public static boolean beforeUpdate;
+
+    public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
+        String selection = DatabaseInstanceColumns.STATUS + " !=? " +
+                (beforeUpdate ?"":("and " +DatabaseInstanceColumns.STATUS + " !=? "));
+        String[] selectionArgs = beforeUpdate ?
+            new String[]{
+                Instance.STATUS_SUBMITTED
+            }
+            :new String[]{
+                Instance.STATUS_SUBMITTED,
+                Instance.STATUS_SUBMISSION_FAILED
+            };
+
+        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+    }
+
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
@@ -33,13 +50,6 @@ public class CursorLoaderFactory {
 
     public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
         String selection = DatabaseInstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " !=? ";
         String[] selectionArgs = {Instance.STATUS_SUBMITTED};
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
@@ -170,7 +180,9 @@ public class CursorLoaderFactory {
         return cursorLoader;
     }
 
-    private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
+    private CursorLoader getInstancesCursorLoader(String selection,
+                                                  String[] selectionArgs,
+                                                  String sortOrder) {
         return new CursorLoader(
                 Collect.getInstance(),
                 InstanceProviderAPI.CONTENT_URI,
