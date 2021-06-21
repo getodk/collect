@@ -16,7 +16,7 @@ import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.fragmentstest.FragmentsTest
+import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -127,7 +127,7 @@ class ColorPickerDialogTest {
     }
 
     private fun launchFragment(args: Bundle): FragmentScenario<ColorPickerDialog> {
-        return FragmentsTest.launchDialogFragment(ColorPickerDialog::class.java, args)
+        return DialogFragmentTest.launchDialogFragment(ColorPickerDialog::class.java, args)
     }
 
     private fun assertCurrentColor(fragment: ColorPickerDialog, color: String) {

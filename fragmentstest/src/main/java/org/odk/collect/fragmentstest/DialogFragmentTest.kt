@@ -10,10 +10,10 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import org.hamcrest.Matcher
 
 /**
- * Helpers for writing tests for Fragment that (hopefully) make interacting with [FragmentScenario]
- * less troublesome.
+ * Helpers for writing tests for [androidx.fragment.app.DialogFragment] that (hopefully) make
+ * interacting with [FragmentScenario] less troublesome.
  */
-object FragmentsTest {
+object DialogFragmentTest {
 
     /**
      * Creates a FragmentScenario using a test theme that supports AppCompat and MaterialComponents

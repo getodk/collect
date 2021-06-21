@@ -25,8 +25,8 @@ import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
-import org.odk.collect.fragmentstest.FragmentsTest
-import org.odk.collect.fragmentstest.FragmentsTest.onViewInDialog
+import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
@@ -34,7 +34,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `Password should be protected`() {
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("123456789"))
             onViewInDialog(withHint(R.string.server_url)).check(matches(not(isPasswordHidden())))
@@ -49,7 +49,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onViewInDialog(withText(R.string.cancel)).perform(click())
@@ -59,7 +59,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -69,7 +69,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The 'Add' button should be disabled when url is blank`() {
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
 
@@ -98,7 +98,7 @@ class ManualProjectCreatorDialogTest {
             }
         })
 
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
             onViewInDialog(withHint(R.string.username)).perform(replaceText("adam"))
@@ -111,7 +111,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `Project creation goes to main menu`() {
-        val scenario = FragmentsTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
 
