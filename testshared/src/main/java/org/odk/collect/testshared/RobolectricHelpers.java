@@ -92,7 +92,7 @@ public class RobolectricHelpers {
     }
 
     /**
-     * @deprecated use `FragmentTest.launchDialogFragment` instead
+     * @deprecated use `FragmentsTest.launchDialogFragment` instead
      */
     @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
@@ -100,7 +100,7 @@ public class RobolectricHelpers {
     }
 
     /**
-     * @deprecated use `FragmentTest.launchDialogFragment` instead
+     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
      */
     @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, int theme) {
@@ -108,7 +108,7 @@ public class RobolectricHelpers {
     }
 
     /**
-     * @deprecated use `FragmentTest.launchDialogFragment` instead
+     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
      */
     @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {

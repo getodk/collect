@@ -37,8 +37,9 @@ object FragmentsTest {
     }
 
     /**
-     * Slightly easier way to perform actions/assertions against a [DialogFragment]'s UI. Using
-     * [onView] normally will match on a root view outside of where the dialog is displayed.
+     * When testing a [androidx.fragment.app.DialogFragment] we need to specify the root when
+     * performing view assertions/actions. Using [onView] will fail as it targets the blank
+     * activity being used by the [FragmentScenario].
      */
     @JvmStatic
     fun onViewInDialog(viewMatcher: Matcher<View>): ViewInteraction {
