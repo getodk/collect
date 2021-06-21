@@ -28,7 +28,6 @@ import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.shared.Settings;
 
 import timber.log.Timber;
 
@@ -54,7 +53,6 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     private static final int SECONDS_TO_CONSIDER_UPDATES = 20;
 
     private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
-    private Settings generalSettings;
 
     public CollectSetGeopointAction() {
         // For serialization
@@ -63,7 +61,6 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     // Needed to set the action name.
     CollectSetGeopointAction(TreeReference targetReference) {
         super(targetReference);
-        generalSettings = DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings();
     }
 
     @Override
@@ -75,7 +72,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
 
         // Only start acquiring location if the Collect preference allows it and Google Play
         // Services are available. If it's not allowed, leave the target field blank.
-        if (generalSettings.getBoolean(KEY_BACKGROUND_LOCATION)
+        if (isBackgroundLocationEnabled()
             && new PlayServicesChecker().isGooglePlayServicesAvailable(Collect.getInstance().getApplicationContext())) {
             maxAccuracyLocationClient.requestLocationUpdates(SECONDS_TO_CONSIDER_UPDATES);
         }
@@ -91,7 +88,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
      */
     @Override
     public void onLocationChanged(Location location) {
-        if (generalSettings.getBoolean(KEY_BACKGROUND_LOCATION)) {
+        if (isBackgroundLocationEnabled()) {
             Timber.i("Setgeopoint action for " + getContextualizedTargetReference() + ": location update");
 
             String formattedLocation = GeoUtils.formatLocationResultString(location);
@@ -99,5 +96,13 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
         } else {
             saveLocationValue("");
         }
+    }
+
+    private boolean isBackgroundLocationEnabled() {
+        return DaggerUtils
+                .getComponent(Collect.getInstance())
+                .settingsProvider()
+                .getGeneralSettings()
+                .getBoolean(KEY_BACKGROUND_LOCATION);
     }
 }
