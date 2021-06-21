@@ -26,6 +26,15 @@ import static org.hamcrest.core.AllOf.allOf;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
+    public ViewSentFormPage clickViewSentForm(int formCount) {
+        String text = formCount < 1
+                ? getTranslatedString(R.string.view_sent_forms_button)
+                .replace(" (%s)", "")
+                : getTranslatedString(R.string.view_sent_forms_button, formCount);
+        onView(withText(text)).perform(click());
+        return new ViewSentFormPage().assertOnPage();
+    }
+
     @Override
     public MainMenuPage assertOnPage() {
         onView(withText(containsString(getTranslatedString(R.string.app_name)))).check(matches(isDisplayed()));
@@ -186,11 +195,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public OkDialog clickGetBlankFormWithError() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
         return new OkDialog().assertOnPage();
-    }
-
-    public ViewSentFormPage clickViewSentForm(int formCount) {
-        onView(withText(getTranslatedString(R.string.view_sent_forms_button, formCount))).perform(click());
-        return new ViewSentFormPage().assertOnPage();
     }
 
     public DeleteSavedFormPage clickDeleteSavedForm() {
