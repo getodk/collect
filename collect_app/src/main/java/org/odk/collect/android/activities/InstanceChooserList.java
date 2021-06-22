@@ -19,7 +19,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,14 +35,10 @@ import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.InstanceProviderAPI;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;
-
-import timber.log.Timber;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -51,14 +46,11 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements
-        DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class InstanceChooserList extends InstanceListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
     private static final boolean DO_NOT_EXIT = false;
-
-    private InstanceSyncTask instanceSyncTask;
 
     private boolean editMode;
 
@@ -93,9 +85,6 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     private void init() {
         setupAdapter();
-        instanceSyncTask = new InstanceSyncTask(settingsProvider);
-        instanceSyncTask.setDiskSyncListener(this);
-//        instanceSyncTask.execute();
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
@@ -149,32 +138,6 @@ public class InstanceChooserList extends InstanceListActivity implements
         }
     }
 
-    @Override
-    protected void onResume() {
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(this);
-            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-                syncComplete(instanceSyncTask.getStatusMessage());
-            }
-        }
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(null);
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void syncComplete(@NonNull String result) {
-        Timber.i("Disk scan complete");
-        hideProgressBarAndAllow();
-        showSnackbar(result);
-    }
-
     private void setupAdapter() {
         String[] data = {DatabaseInstanceColumns.DISPLAY_NAME, DatabaseInstanceColumns.DELETED_DATE};
         int[] view = {R.id.form_title, R.id.form_subtitle2};
@@ -208,7 +171,7 @@ public class InstanceChooserList extends InstanceListActivity implements
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        hideProgressBarIfAllowed();
+        hideProgressBarAndAllow();
         listAdapter.swapCursor(cursor);
     }
 

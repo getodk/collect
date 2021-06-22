@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,11 +41,9 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -71,7 +68,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
  */
 
 public class InstanceUploaderListActivity extends InstanceListActivity implements
-        OnLongClickListener, DiskSyncListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+        OnLongClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
@@ -85,8 +82,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
-
-    private InstanceSyncTask instanceSyncTask;
 
     private boolean showAllMode;
 
@@ -176,10 +171,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             uploadButton.setEnabled(areCheckedItems());
         });
 
-        instanceSyncTask = new InstanceSyncTask(settingsProvider);
-        instanceSyncTask.setDiskSyncListener(this);
-//        instanceSyncTask.execute();
-
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc
@@ -215,29 +206,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(this);
-            if (instanceSyncTask.getStatus() == AsyncTask.Status.FINISHED) {
-                syncComplete(instanceSyncTask.getStatusMessage());
-            }
-
-        }
         uploadButton.setText(R.string.send_selected_data);
-    }
-
-    @Override
-    protected void onPause() {
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(null);
-        }
-        super.onPause();
-    }
-
-    @Override
-    public void syncComplete(@NonNull String result) {
-        Timber.i("Disk scan complete");
-        hideProgressBarAndAllow();
-        showSnackbar(result);
     }
 
     private void uploadSelectedFiles() {
@@ -360,7 +329,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-        hideProgressBarIfAllowed();
+        hideProgressBarAndAllow();
         listAdapter.changeCursor(cursor);
         checkPreviouslyCheckedItems();
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
