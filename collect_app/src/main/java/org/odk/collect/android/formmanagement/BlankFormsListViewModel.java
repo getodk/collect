@@ -10,6 +10,7 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -54,15 +55,15 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> isSyncing() {
-        return syncRepository.isSyncing();
+        return syncRepository.isSyncing(getProjectId());
     }
 
     public LiveData<Boolean> isOutOfSync() {
-        return Transformations.map(syncRepository.getSyncError(), Objects::nonNull);
+        return Transformations.map(syncRepository.getSyncError(getProjectId()), Objects::nonNull);
     }
 
     public LiveData<Boolean> isAuthenticationRequired() {
-        return Transformations.map(syncRepository.getSyncError(), error -> {
+        return Transformations.map(syncRepository.getSyncError(getProjectId()), error -> {
             if (error != null) {
                 return error instanceof FormSourceException.AuthRequired;
             } else {
@@ -75,8 +76,13 @@ public class BlankFormsListViewModel extends ViewModel {
         logManualSync();
 
         MutableLiveData<Boolean> result = new MutableLiveData<>();
-        scheduler.immediate(() -> formsUpdater.matchFormsWithServer(currentProjectProvider.getCurrentProject().getUuid()), result::setValue);
+        scheduler.immediate(() -> formsUpdater.matchFormsWithServer(getProjectId()), result::setValue);
         return result;
+    }
+
+    @NotNull
+    private String getProjectId() {
+        return currentProjectProvider.getCurrentProject().getUuid();
     }
 
     private void logManualSync() {

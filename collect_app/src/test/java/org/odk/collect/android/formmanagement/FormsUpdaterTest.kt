@@ -13,6 +13,7 @@ import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -103,7 +104,7 @@ class FormsUpdaterTest {
     }
 
     @Test
-    fun `synchronizeWithServer() does nothing when change lock is locked`() {
+    fun `matchFormsWithServer() does nothing when change lock is locked`() {
         val project = setupProject()
 
         val changeLock = BooleanChangeLock()
@@ -122,7 +123,7 @@ class FormsUpdaterTest {
      * protect against this actually coming up by not letting the user sync while a sync is running.
      */
     @Test
-    fun `synchronizeWithServer() returns false when change lock is locked`() {
+    fun `matchFormsWithServer() returns false when change lock is locked`() {
         val project = setupProject()
 
         val changeLock = BooleanChangeLock()
@@ -133,11 +134,21 @@ class FormsUpdaterTest {
     }
 
     @Test
-    fun `synchronizeWithServer() returns false when there is an error communicating with the server`() {
+    fun `matchFormsWithServer() returns false when there is an error communicating with the server`() {
         val project = setupProject()
 
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
         assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
+    }
+
+    @Test
+    fun `matchFormsWithServer() updates sync state`() {
+        val project = setupProject()
+
+        val inOrder = inOrder(syncStatusAppState)
+        updateManager.matchFormsWithServer(project.uuid)
+        inOrder.verify(syncStatusAppState).startSync(project.uuid)
+        inOrder.verify(syncStatusAppState).finishSync(project.uuid, null)
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {
