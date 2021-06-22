@@ -91,26 +91,26 @@ public class RobolectricHelpers {
         return null;
     }
 
+    /**
+     * @deprecated use `FragmentsTest.launchDialogFragment` instead
+     */
+    @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
-        return launchDialogFragment(fragmentClass, null, theme);
+        return FragmentScenario.launch(fragmentClass, null, theme, null);
     }
 
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
-        /*
-          Needed to avoid explosion (NullPointerException) inside internal platform code (WindowDecorActionBar).
-          For some reason AppCompat.Light or AppCompat.Light.NoActionBar don't work. Our theme must declare
-          something that is missing in those base themes when they are used in Robolectric.
-
-          This is probably something that should be fixed within Robolectric.
-         */
-        ApplicationProvider.getApplicationContext().setTheme(theme);
-        return FragmentScenario.launch(fragmentClass, fragmentArgs);
-    }
-
+    /**
+     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
+     */
+    @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, int theme) {
         return launchDialogFragmentInContainer(fragmentClass, null, theme);
     }
 
+    /**
+     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
+     */
+    @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
         /*
           Needed to avoid explosion (NullPointerException) inside internal platform code (WindowDecorActionBar).

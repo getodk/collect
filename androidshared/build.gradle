@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: '../config/quality.gradle'
+
 android {
     compileSdkVersion rootProject.androidCompileSdk
 
@@ -25,12 +27,20 @@ android {
             minifyEnabled false
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -41,6 +51,8 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation "androidx.fragment:fragment-ktx:1.3.4"
     implementation project(':strings')
+
+    debugImplementation project(':fragmentstest')
 
     testImplementation project(':testshared')
     testImplementation "junit:junit:4.13.2"

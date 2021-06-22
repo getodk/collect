@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.children
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -15,6 +16,7 @@ import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
@@ -25,11 +27,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -39,11 +37,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the cancel button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_NEGATIVE)).performClick()
@@ -54,11 +48,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `No more than six characters should be accepted as hex color`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             assertThat(it.binding.hexColor.length(), `is`(6))
         }
@@ -66,11 +56,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `Current color should be set properly after opening the dialog`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             assertCurrentColor(it, "cccccc")
         }
@@ -78,11 +64,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `Selected color should be remembered after dialog recreation`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             it.binding.color5.performClick()
             assertCurrentColor(it, "2296F3")
@@ -95,11 +77,7 @@ class ColorPickerDialogTest {
 
     @Test
     fun `Selecting any color should update the current color`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ColorPickerDialog::class.java,
-            args,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = launchFragment(args)
         scenario.onFragment {
             it.binding.color1.performClick()
             assertCurrentColor(it, "EA4633")
@@ -148,8 +126,17 @@ class ColorPickerDialogTest {
         }
     }
 
+    private fun launchFragment(args: Bundle): FragmentScenario<ColorPickerDialog> {
+        return DialogFragmentTest.launchDialogFragment(ColorPickerDialog::class.java, args)
+    }
+
     private fun assertCurrentColor(fragment: ColorPickerDialog, color: String) {
         assertThat(fragment.binding.hexColor.text.toString(), equalToIgnoringCase(color))
-        assertThat((fragment.binding.currentColor.children.iterator().next().background as GradientDrawable).color!!.defaultColor, `is`(Color.parseColor("#$color")))
+
+        val background = fragment.binding.currentColor.children.iterator()
+            .next().background
+        val currentColor = (background as GradientDrawable).color!!.defaultColor
+
+        assertThat(currentColor, `is`(Color.parseColor("#$color")))
     }
 }

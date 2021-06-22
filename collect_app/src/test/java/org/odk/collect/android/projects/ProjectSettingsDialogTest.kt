@@ -21,7 +21,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment
@@ -33,6 +32,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -84,10 +84,8 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'X' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
+
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             it.binding.closeIcon.performClick()
@@ -98,10 +96,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -112,10 +107,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `General settings should be started after clicking on the 'General Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -132,10 +124,7 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `Admin settings should be started after clicking on the 'Admin Settings' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -157,22 +146,21 @@ class ProjectSettingsDialogTest {
 
         whenever(adminPasswordProvider.isAdminPasswordSet).thenReturn(true)
 
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             it.binding.adminSettingsButton.performClick()
-            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(AdminPasswordDialogFragment::class.java.name), `is`(notNullValue()))
+            assertThat(
+                it.activity!!.supportFragmentManager.findFragmentByTag(
+                    AdminPasswordDialogFragment::class.java.name
+                ),
+                `is`(notNullValue())
+            )
         }
     }
 
     @Test
     fun `About section should be started after clicking on the 'About' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -186,13 +174,15 @@ class ProjectSettingsDialogTest {
 
     @Test
     fun `QrCodeProjectCreatorDialog should be displayed after clicking on the 'Add project' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             it.binding.addProjectButton.performClick()
-            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(QrCodeProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+            assertThat(
+                it.activity!!.supportFragmentManager.findFragmentByTag(
+                    QrCodeProjectCreatorDialog::class.java.name
+                ),
+                `is`(notNullValue())
+            )
         }
     }
 
@@ -200,10 +190,7 @@ class ProjectSettingsDialogTest {
     fun `currentProjectViewModel should be notified when project switched`() {
         val projectY = projectsRepository.save(Project.New("Project Y", "Y", "#ffffff"))
 
-        val scenario = RobolectricHelpers.launchDialogFragment(
-            ProjectSettingsDialog::class.java,
-            R.style.Theme_Collect_Light
-        )
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             it.binding.projectList.children.iterator().asSequence().first().performClick()
             verify(currentProjectViewModel).setCurrentProject(projectY)
