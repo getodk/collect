@@ -176,8 +176,8 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                     break;
                 case ProjectResetter.ResetAction.RESET_FORMS:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(getActivity().getString(R.string.reset_blank_forms_result),
-                                getActivity().getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(R.string.reset_blank_forms_result),
+                                context.getString(R.string.error_occured)));
                     } else {
                         resultMessage.append(String.format(context.getString(R.string.reset_blank_forms_result),
                                 context.getString(R.string.success)));
