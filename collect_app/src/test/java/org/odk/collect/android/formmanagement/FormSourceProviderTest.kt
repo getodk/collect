@@ -3,21 +3,17 @@ package org.odk.collect.android.formmanagement
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.openrosa.OpenRosaFormSource
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.testshared.InMemSettings
+import org.odk.collect.android.support.InMemSettingsProvider
 
 class FormSourceProviderTest {
 
     @Test
     fun `returned source uses project's server when passed`() {
-        val settings = InMemSettings()
-        val settingsProvider = mock<SettingsProvider> {
-            on { getGeneralSettings("projectId") } doReturn settings
-        }
+        val settingsProvider = InMemSettingsProvider()
+        val settings = settingsProvider.getGeneralSettings("projectId")
 
         val formSourceProvider = FormSourceProvider(settingsProvider, mock())
 

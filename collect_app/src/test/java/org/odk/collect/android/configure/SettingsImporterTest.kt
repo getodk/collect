@@ -17,23 +17,19 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
-import org.odk.collect.testshared.InMemSettings
 
 @RunWith(AndroidJUnit4::class)
 class SettingsImporterTest {
+
     private var currentProject = Project.Saved("1", "Project X", "X", "#cccccc")
 
-    private val generalSettings = InMemSettings()
-    private val adminSettings = InMemSettings()
-
-    private val settingsProvider = mock<SettingsProvider> {
-        on { getGeneralSettings(currentProject.uuid) } doReturn generalSettings
-        on { getAdminSettings(currentProject.uuid) } doReturn adminSettings
-    }
+    private val settingsProvider = InMemSettingsProvider()
+    private val generalSettings = settingsProvider.getGeneralSettings(currentProject.uuid)
+    private val adminSettings = settingsProvider.getAdminSettings(currentProject.uuid)
 
     private val projectsRepository = mock<ProjectsRepository> {}
     private var settingsValidator = mock<SettingsValidator> {
