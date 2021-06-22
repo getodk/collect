@@ -31,11 +31,11 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class CollectSettingsPreferenceMigrator implements SettingsPreferenceMigrator {
+public class CollectSettingsMigrator implements SettingsMigrator {
 
     private final Settings metaPrefs;
 
-    public CollectSettingsPreferenceMigrator(Settings metaPrefs) {
+    public CollectSettingsMigrator(Settings metaPrefs) {
         this.metaPrefs = metaPrefs;
     }
 

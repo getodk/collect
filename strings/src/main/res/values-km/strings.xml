@@ -535,7 +535,6 @@
   <string name="instance_sync_summary">ទម្រង់ដែលប៉ះពាល់ត្រូវបានបន្ថែមដោយផ្ទាល់ទៅកាន់ថតទម្រង់</string>
   <string name="analytics_preferences">ការប្រើប្រាស់ទិន្នន័យ</string>
   <string name="analytics">ប្រមូលទិន្នន័យប្រើប្រាស់អនាមិក</string>
-  <string name="analytics_summary">ផ្តល់​ទិន្នន័យ​ប្រើប្រាស់​ជា​អនាមិក​ដើម្បី​ជួយ​ឱ្យ​ក្រុម​មួយ​នេះ​បាន​ផ្តល់​អាទិភាព​ដល់​ការ​ជួស​ជុល​ ODK និង​លក្ខណៈ​ពិសេស​របស់​វា</string>
   <string name="form_metadata_title">ទម្រង់ទិន្នន័យមេតា</string>
   <string name="form_metadata">ទម្រង់ទិន្នន័យមេតា</string>
   <string name="form_metadata_summary">តម្លៃទាំងនេះនឹងត្រូវបានបញ្ចូលបន្ថែមទៅក្នុងទម្រង់ដែលរួមមានឈ្មោះអ្នកប្រើប្រាស់, អ៊ីម៉ែល និង/ឬលេខទូរស័ព្ទដើម្បីកំណត់អ្នកដែលបានបញ្ជូនទិន្នន័យ។</string>
@@ -670,4 +669,19 @@
   <string name="fs_file_copy_error">មិនអាចចម្លងបាន \'%1$s\' លើសពី \'%2$s\' ។ មូលហេតុ: %3$s</string>
   <string name="survey_multiple_forms_error">អ្នក​បាន​ទាញ​យក​សំណុំ​បែប​បទ​ពីរខុស​គ្នា​ដែល​មាន​លេខ​សម្គាល់​ទម្រង់​ និង​កំណែ។ ពួក​វា​ប្រហែល​ជា​សំណុំ​បែប​បទ​តែ​មួយ​ដែល​បាន​ផ្ទុក​ឡើង​នៅ​ម៉ោង​ ឬ​ម៉ាស៊ីន​មេ​ខុស​គ្នា។ សូម​អ្នក​លុប​វាមួយ​ក្នុង​​ករណី​ណា​មួយ។</string>
   <string name="select_odk_shortcut">ជ្រើសរើសផ្លូវកាត់ ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">បន្ថែម</string>
+  <string name="delete_project_yes">បាទ/ចាស</string>
+  <string name="delete_project_no">ទេ</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

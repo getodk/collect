@@ -22,13 +22,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.databinding.SplashScreenBinding
-import org.odk.collect.android.fragments.dialogs.FirstLaunchDialog
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.ProjectAddedListener
-import org.odk.collect.android.utilities.DialogUtils
 import javax.inject.Inject
 
-class SplashScreenActivity : AppCompatActivity(), ProjectAddedListener {
+class SplashScreenActivity : AppCompatActivity() {
 
     @Inject
     lateinit var splashScreenViewModelFactoryFactory: SplashScreenViewModel.Factory
@@ -49,7 +46,7 @@ class SplashScreenActivity : AppCompatActivity(), ProjectAddedListener {
     private fun init() {
         when {
             viewModel.shouldFirstLaunchScreenBeDisplayed -> {
-                DialogUtils.showIfNotShowing(FirstLaunchDialog::class.java, supportFragmentManager)
+                ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity::class.java)
             }
             viewModel.shouldDisplaySplashScreen -> startSplashScreen()
             else -> endSplashScreen()
@@ -71,9 +68,5 @@ class SplashScreenActivity : AppCompatActivity(), ProjectAddedListener {
             delay(2000)
             endSplashScreen()
         }
-    }
-
-    override fun onProjectAdded() {
-        endSplashScreen()
     }
 }

@@ -300,20 +300,10 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            style="?textAppearanceHeadline5"
+            style="?textAppearanceBody1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hex"
-            app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
-            app:layout_constraintStart_toEndOf="@+id/current_color"
-            app:layout_constraintTop_toTopOf="@+id/materialTextView" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/materialTextView"
-            style="?textAppearanceHeadline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hash"
             app:layout_constraintBottom_toBottomOf="@+id/hex_color_layout"
             app:layout_constraintEnd_toStartOf="@+id/hex_color_layout"
             app:layout_constraintTop_toTopOf="@+id/hex_color_layout" />
@@ -325,7 +315,7 @@
             android:padding="@dimen/margin_small"
             app:layout_constraintTop_toTopOf="@+id/current_color"
             app:layout_constraintBottom_toBottomOf="@+id/current_color"
-            app:layout_constraintStart_toStartOf="@+id/color14"
+            app:layout_constraintStart_toStartOf="@+id/color13"
             app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -333,16 +323,20 @@
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:hintEnabled="false">
+                app:hintEnabled="false"
+                app:prefixText="@string/hash"
+                app:prefixTextAppearance="?textAppearanceBody1"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/hex_color"
-                    style="?textAppearanceHeadline5"
+                    style="?textAppearanceBody1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/hex_color"
                     android:padding="0dp"
-                    android:maxLength="6"/>
+                    android:maxLength="6" />
             </com.google.android.material.textfield.TextInputLayout>
         </FrameLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

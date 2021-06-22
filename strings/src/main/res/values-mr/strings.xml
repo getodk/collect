@@ -412,7 +412,6 @@
   <string name="form_import_category">फॉर्म भरणे</string>
   <string name="analytics_preferences">वापर डेटा</string>
   <string name="analytics">अनामित वापर डेटा संकलित करा</string>
-  <string name="analytics_summary">अनामित वापर डेटा ओडीके कार्यसंघ निदान आणि वैशिष्ट्ये प्राधान्यक्रमित करण्यात मदत करतो</string>
   <string name="form_metadata_title">फॉर्म मेटाडेटा</string>
   <string name="form_metadata">फॉर्म मेटाडेटा</string>
   <string name="form_metadata_summary">ही मूल्ये डेटा सबमिट करणाऱ्या व्यक्तीस ओळखण्यासाठी वापरकर्तानाव, ईमेल आणि / किंवा टेलिफोन प्रील्डेड फील्ड्स असलेल्या फॉर्ममध्ये जोडली जातील.</string>
@@ -525,4 +524,16 @@
   <string name="fs_file_copy_error"> \'%1$s\' वर \'%2$s\' कॉपी करू शकलो नाही. कारण :%3$s</string>
   <string name="survey_multiple_forms_error">आपण एकाच फॉर्म आयडी आणि आवृत्तीसह दोन भिन्न फॉर्म डाउनलोड केले आहेत. कदाचित ते वेगळ्या वेळी किंवा भिन्न सर्व्हरवर अपलोड केलेले समान फॉर्म होते. यापैकी एक फाईल हटवा.</string>
   <string name="select_odk_shortcut">ओडीके शॉर्टकट निवडा</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

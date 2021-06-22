@@ -35,8 +35,8 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -81,7 +81,7 @@ public class ImageConverterTest {
                 // Set up demo project
                 AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
                 component.projectImporter().importDemoProject();
-                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+                component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
             }));
 
     @Before

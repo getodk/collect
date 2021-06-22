@@ -160,6 +160,7 @@
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Médium nelze připojit k formuláři, ale je k dispozici na %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Nahrávání zakázáno. Povolit v %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -193,6 +194,7 @@
   <string name="error_front_camera_unavailable">Přední fotoaparát není v tomto zařízení k dispozici</string>
   <string name="camera_error">Toto zařízení nepodporuje API Camera2.</string>
   <string name="annotate_image">Přidat popisek obrázku</string>
+  <string name="invalid_file_type">Aplikace vrátila neplatný typ souboru</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Uložit a zavřít</string>
   <string name="signature_capture">Zachycení podpisu</string>
@@ -219,9 +221,14 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Pokračovat</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Záznam zvuku</string>
+  <string name="background_audio_permission_explanation">This form records audio in the background. You must grant permission to use your microphone. If you do not, you will not be able to open this form.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Tento formulář požaduje záznam zvuku na pozadí. Jeho deaktivací se zastaví nahrávání a zahodí se stávající zvuk. Opravdu chcete pokračovat?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Zakázat nahrávání</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">Nahrávání nezačne okamžitě. Chcete-li nahrávat, musíte znovu otevřít formulář.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Smazat soubor?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -508,7 +515,7 @@
   <string name="report_to_project_lead">Pokud problém přetrvává, nahlaste jej osobě, která vás požádala o sběr dat.</string>
   <string name="unreachable_error">Collect nemůže kontaktovat server na %s. Zadali jste adresu URL správně?</string>
   <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
-  <string name="server_error">Server %s vrátil stavový kód %s.</string>
+  <string name="server_error">Server %1$s vrátil stavový kód %2$s.</string>
   <string name="invalid_response">Server %s poskytl neplatnou odpověď.</string>
   <string name="failure">Selhání</string>
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
@@ -660,7 +667,6 @@
   <string name="instance_sync_summary">Ovlivňuje formuláře přidávané přímo do složky instance.</string>
   <string name="analytics_preferences">Údaje o použití</string>
   <string name="analytics">Shromažďujte anonymní údaje o použití</string>
-  <string name="analytics_summary">Anonymní data o použití pomáhají týmům ODK upřednostňovat opravy a funkce</string>
   <string name="form_metadata_title">Metadata formulářů</string>
   <string name="form_metadata">Metadata formulářů</string>
   <string name="form_metadata_summary">Tyto hodnoty budou přidány do formulářů, které obsahují uživatelské jméno, e-mail a / nebo telefonem předem vyplněná pole pro identifikaci odesílající osoby.</string>
@@ -688,6 +694,7 @@
   <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Formulářů</string>
+  <string name="project_configuration">Konfigurace projektu</string>
   <string name="reset_settings_dialog">Resetovat aplikaci…</string>
   <string name="select_all">Vybrat vše</string>
   <string name="clear_all">Vymazat vše</string>
@@ -811,4 +818,32 @@
   <string name="fs_file_copy_error">Nezdařilo se nakopírovat \'%1$s\' přes \'%2$s\'. Důvod: %3$s </string>
   <string name="survey_multiple_forms_error">Stáhli jste dva různé formuláře se shodným ID a verzí. Možná jste nahráli stejný dotazník dvakrát nebo na jiné servery. Každopádně, jeden byste měli smazat.</string>
   <string name="select_odk_shortcut">Vybrat ODK zástupce</string>
+  <string name="background_audio_help">Tento formulář zaznamenává zvuk z mikrofonu zařízení.\n\nMůžete použít indikátor hlasitosti a ujistit se, že je mikrofon dostatečně blízko zvuku, který potřebujete zaznamenat.\n\nChcete-li zastavit nahrávání, ukončete tento formulář.\n\nDalší informace získáte od osoby, která vás požádala o shromažďování údajů.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="projects">Projekty</string>
+  <string name="add_project">Přidat projekt</string>
+  <string name="add">Přidat</string>
+  <string name="project_name">Název projektu</string>
+  <string name="project_icon">Ikona projektu</string>
+  <string name="project_color">Barva projektu</string>
+  <string name="switched_project">Přepnuto na %s</string>
+  <string name="using_project">S pomocí %s</string>
+  <string name="switch_to_project">Přepnout na %s</string>
+  <string name="delete_project">Smazat projekt</string>
+  <string name="delete_project_confirm_message">Opravdu chcete odstranit aktuální projekt?</string>
+  <string name="delete_project_yes">Ano</string>
+  <string name="delete_project_no">Ne</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">Nakonfigurujte pomocí QR kódu</string>
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">Ručně zadejte podrobnosti projektu</string>
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

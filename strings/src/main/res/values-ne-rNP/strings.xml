@@ -481,4 +481,18 @@
   <string name="fs_create_media_folder_error">मिडिया फोल्डर बनाउन असमर्थ \'%s\'।</string>
   <string name="fs_file_copy_error">\'%2$s\' माथि \'%1$s\' कपी गर्न सकिएन | कारण: %3$s</string>
   <string name="survey_multiple_forms_error">तपाईंले एकै फारम आइ डी र भर्सनको दुई भिन्न फारम डाउनलोड गर्नुभयो । ती फारमहरू भिन्न समय वा भिन्न सर्भरमा अपलोड गरिएको हुन सक्छ । कुनै एक फारम डिलिट गर्नुहोस् ।</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">हो</string>
+  <string name="delete_project_no">होइन</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

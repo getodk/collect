@@ -20,6 +20,7 @@ class ProjectCreatorTest {
 
     private var projectImporter = mock<ProjectImporter> {
         on { importNewProject(newProject) } doReturn savedProject
+        on { importNewProject(Project.DEMO_PROJECT) } doReturn Project.DEMO_PROJECT
     }
 
     private var projectsRepository = mock<ProjectsRepository> {
@@ -30,6 +31,7 @@ class ProjectCreatorTest {
     private var settingsImporter = mock<SettingsImporter> {}
     private var projectDetailsCreator = mock<ProjectDetailsCreator> {
         on { getProject("https://my-server.com") } doReturn newProject
+        on { getProject("https://demo.getodk.org") } doReturn Project.DEMO_PROJECT
     }
 
     private lateinit var projectCreator: ProjectCreator
@@ -40,7 +42,13 @@ class ProjectCreatorTest {
     }
 
     @Test
-    fun `Importing new project should be triggered with a proper project`() {
+    fun `Importing new project should be triggered with the DEMO project if url is not present in json`() {
+        projectCreator.createNewProject("{\"general\":{},\"admin\":{}}")
+        verify(projectImporter).importNewProject(Project.DEMO_PROJECT)
+    }
+
+    @Test
+    fun `Importing new project should be triggered with a proper project if url is present in json`() {
         projectCreator.createNewProject(json)
         verify(projectImporter).importNewProject(newProject)
     }

@@ -22,11 +22,10 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.LaunchState;
+import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -39,12 +38,12 @@ public class ApplicationInitializer {
     private final StorageInitializer storageInitializer;
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
+    private final VersionInformation versionInformation;
 
-    @Inject
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   StorageInitializer storageInitializer, LaunchState launchState,
-                                  AppUpgrader appUpgrader) {
+                                  AppUpgrader appUpgrader, VersionInformation versionInformation) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
@@ -52,6 +51,7 @@ public class ApplicationInitializer {
         this.storageInitializer = storageInitializer;
         this.launchState = launchState;
         this.appUpgrader = appUpgrader;
+        this.versionInformation = versionInformation;
     }
 
     public void initialize() {
@@ -83,10 +83,7 @@ public class ApplicationInitializer {
     }
 
     private void initializeAnalytics() {
-        analytics.setAnalyticsCollectionEnabled(false);
-
-//        FormUpdateMode formUpdateMode = getFormUpdateMode(context, generalSettings);
-//        analytics.setUserProperty("FormUpdateMode", formUpdateMode.getValue(context));
+        analytics.setAnalyticsCollectionEnabled(versionInformation.isBeta());
     }
 
     private void initializeLocale() {

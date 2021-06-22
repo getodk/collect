@@ -92,6 +92,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
         currentProjectViewModel.getCurrentProject().observe(this, project -> {
             invalidateOptionsMenu();
+            setTitle(project.getName());
         });
 
         initToolbar();
@@ -181,6 +182,9 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             }
         });
 
+        TextView appName = findViewById(R.id.app_name);
+        appName.setText(String.format("%s %s", getString(R.string.app_name), mainMenuViewModel.getVersion()));
+
         TextView versionSHAView = findViewById(R.id.version_sha);
         String versionSHA = mainMenuViewModel.getVersionCommitDescription();
         if (versionSHA != null) {
@@ -265,7 +269,6 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(String.format("%s %s", getString(R.string.app_name), mainMenuViewModel.getVersion()));
         setSupportActionBar(toolbar);
     }
 

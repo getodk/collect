@@ -476,4 +476,18 @@
   <string name="fs_create_media_folder_error">Kon media directory \'%s\' niet aanmaken.</string>
   <string name="fs_file_copy_error">Kon \'%1$s\' niet over \'%2$s\' kopieren. Oorzaak: %3$s</string>
   <string name="survey_multiple_forms_error">Je hebt twee formulieren met een identieke form ID en versie. Misschien zijn ze op verschillende tijden of verschillende servers geupload. Je moet er één verwijderen.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Toevoegen</string>
+  <string name="delete_project_no">Nee</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

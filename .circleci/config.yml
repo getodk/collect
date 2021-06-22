@@ -70,6 +70,9 @@ jobs:
           name: Run shared unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 shared:test
       - run:
+          name: Run androidshared unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidshared:testDebug
+      - run:
           name: Run formtest unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 formstest:test
       - run:

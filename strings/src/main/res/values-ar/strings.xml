@@ -154,9 +154,13 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">عنوان غير معروف: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">تعذر بدء التسجيل</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">الميكرفون قيد الإستخدام</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">لا يمكن إرفاق الوسائط بالنموذج ولكنها متوفرة على %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">التسجيل معطل. تمكين في %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -190,6 +194,7 @@
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
   <string name="camera_error">خطأ في الكاميرا</string>
   <string name="annotate_image">تعليق على الصورة</string>
+  <string name="invalid_file_type">أرجع التطبيق نوع ملف غير صالح</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">الحفظ و الاغلاق</string>
   <string name="signature_capture">صورة التوقيع</string>
@@ -206,18 +211,28 @@
   <string name="play_video">تشغيل تسجيل الفيديو</string>
   <string name="choose_file">إختر ملف</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">حذف</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">تسجيل الصوت</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">إختر تسجيل صوتي</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">إيقاف مؤقت</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">استئناف</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">تسجيل صورت</string>
+  <string name="background_audio_permission_explanation">هذا النموذج يسجل الصوت في الخلفية. يجب أن تمنح الإذن لاستخدام الميكروفون الخاص بك. إذا لم تقم بذلك ، فلن تتمكن من فتح هذا النموذج.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">يطلب هذا النموذج تسجيل صوت في الخلفية. سيؤدي تعطيله إلى إيقاف التسجيل وتجاهل الصوت الموجود. هل انت متأكد انك تريد المتابعة؟</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">تعطيل التسجيل</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">التسجيل لن يبدأ على الفور. يجب عليك إعادة فتح النموذج للتسجيل.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">حذف الملف؟</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">لن تتمكن من استعادة هذا الملف بعد حذفه. هل انت متأكد انك تريد المتابعة؟</string>
   <!--Text for button that stops audio recording-->
   <string name="stop_recording">توقف</string>
   <!--Text to let the user know a recording is in progress-->
@@ -506,6 +521,8 @@
   <string name="report_to_project_lead">إذا استمرت هذه المشكلة، فأبلغ عنها الشخص الذي طلب منك جمع البيانات.</string>
   <string name="unreachable_error">التطبيق لا يمكن أن يصل إلى الخادم في %s. هل أدخلت عنوان URL بشكل صحيح؟</string>
   <string name="security_error">التطبيق لا يمكن أن يصل إلى الخادم في %s بشكل آمن. هل أدخلت عنوان URL بشكل صحيح؟</string>
+  <string name="server_error">الخادم %1$s ارجع خطأ بكود %2$s</string>
+  <string name="invalid_response">قدم الخادم %s بإرجاع استجابة غير صالحة.</string>
   <string name="failure">فشل</string>
   <string name="load_remote_form_error">خطأ في تنزيل قائمة الإستمارة</string>
   <!--##############################################
@@ -656,7 +673,6 @@
   <string name="instance_sync_summary">يؤثر على الاستمارات المضافة مباشرة إلى مجلد النماذج.</string>
   <string name="analytics_preferences">بيانات الاستخدام</string>
   <string name="analytics">جمع بيانات الاستخدام دون تحديد هوية المستخدم</string>
-  <string name="analytics_summary">جمع بيانات الاستخدام دون تحديد هوية المستخدم يساعد فريق عمل ODK على ترتيب أولويات الإصلاحات والمزايا.</string>
   <string name="form_metadata_title">معلومات حول النموذج</string>
   <string name="form_metadata">معلومات حول النموذج</string>
   <string name="form_metadata_summary">هذه القيم سيتم إضافتها بشكل افتراضي إلى النماذج التي فيها حقول لتحديد اسم المستخدم، بريده الإلكتروني و/أو رقم الهاتف وذلك لتحديد الشخص الذي يقوم بإرسال البيانات.</string>
@@ -807,4 +823,19 @@
   <string name="fs_file_copy_error">لا يمكن النسخ  \'%1$s\' فوق  \'%2$s\'. السبب: \'%3$s\'</string>
   <string name="survey_multiple_forms_error">قمت بتحميل استمارتين مختلفتين بنفس رقم النموذج والاصدار. ربما قد يكون نفس النموذج تم تحميله في اوقات مختلفة او في خودام مختلفة. بأي حال يجب عليك حذف واحدة.</string>
   <string name="select_odk_shortcut">اختيار اختصار ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">أضف</string>
+  <string name="delete_project_yes">نعم</string>
+  <string name="delete_project_no">لا</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

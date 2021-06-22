@@ -34,7 +34,7 @@ public class CollectTestRule implements TestRule {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
                 if (!CopyFormRule.projectCreated && skipLaunchScreen) {
-                    onView(withText(R.string.configure_later)).perform(click());
+                    onView(withText(R.string.try_demo)).perform(click());
                 }
 
                 base.evaluate();

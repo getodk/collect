@@ -402,4 +402,18 @@
   <string name="fs_create_media_folder_error">Nu pot crea directorul media \'%s\'.</string>
   <string name="fs_file_copy_error">Nu pot copia \'%1$s\' peste \'%2$s\'. Motiv: %3$s</string>
   <string name="survey_multiple_forms_error">Ați descărcat două formulare diferite cu același form ID și versiune. Poate a fost același formular încărcat la momente diferite sau către servere diferite. Va trebui să ștergeți unul.</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">Da</string>
+  <string name="delete_project_no">Nu</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

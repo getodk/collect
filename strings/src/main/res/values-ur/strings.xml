@@ -543,7 +543,6 @@
   <string name="instance_sync_summary">افیکٹس فارمز براہ راست انسٹنسز فولڈر میں شامل کیا گئے.</string>
   <string name="analytics_preferences">استعمال کا ڈیٹا</string>
   <string name="analytics">انانمس ڈیٹا جمع کریں</string>
-  <string name="analytics_summary">انانمس ڈیٹا سےاو ڈی کی ٹیم کو فکسز اور فیچرزکو ترجیح دینے میں مدد ملتی ہے </string>
   <string name="form_metadata_title">فارم میٹا ڈیٹا</string>
   <string name="form_metadata">فارم میٹا ڈیٹا</string>
   <string name="form_metadata_summary">ان ویلیوزکو فارمز میں شامل کیا جائے گا جس میں ڈیٹا جمع کرنے والے شخص کو شناخت کرنے کے لئے صارف کا نام، ای میل اور / یاٹیلی فون پہلے سے لوڈ شدہ فیلڈ موجود ہیں.</string>
@@ -679,4 +678,18 @@
   <string name="fs_file_copy_error">کاپی نہیں کر سکا \'%1$s\' اوور \'%2$s\'. وجہ:%3$s</string>
   <string name="survey_multiple_forms_error">آپ نے ایک ہی  ID اور ورژن کے ساتھ دو مختلف فارم ڈاؤن لوڈ کیے ہیں. شاید وہ وہی وقت تھے جو مختلف اوقات میں یا مختلف سرورز میں اپ لوڈ کیے گئے ہیں. کسی بھی صورت میں، آپ کو ایک کو ڈیلیٹ کرنا چاہئے.</string>
   <string name="select_odk_shortcut">او ڈی کے شارٹ کٹ منتخب کریں</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">ہاں </string>
+  <string name="delete_project_no">نہیں </string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

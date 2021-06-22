@@ -1,7 +1,6 @@
 package org.odk.collect.android.utilities;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -9,13 +8,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
@@ -29,32 +25,21 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @RunWith(AndroidJUnit4.class)
 public class ApplicationResetterTest {
 
-    private final ServerRepository serverRepository = mock(ServerRepository.class);
     private StoragePathProvider storagePathProvider;
     private Settings generalSettings;
     private Settings adminSettings;
 
     @Before
     public void setup() {
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public ServerRepository providesServerRepository(Context context, SettingsProvider settingsProvider) {
-                return serverRepository;
-            }
-        });
-
         CollectHelpers.setupDemoProject();
 
         AppDependencyComponent component = DaggerUtils.getComponent((Application) ApplicationProvider.getApplicationContext());
@@ -210,12 +195,5 @@ public class ApplicationResetterTest {
     private void assertFolderEmpty(String folder) {
         assertTrue(new File(folder).isDirectory());
         assertEquals(new File(folder).list().length, 0);
-    }
-
-    @Test
-    public void resettingPreferences_alsoResetsServers() {
-        ApplicationResetter applicationResetter = new ApplicationResetter();
-        applicationResetter.reset(asList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
-        verify(serverRepository).clear();
     }
 }

@@ -23,7 +23,7 @@ import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 
 @RunWith(AndroidJUnit4.class)
-public class FormMetadataTest {
+public class FormMetadataSettingsTest {
 
     private final DeviceDetailsProvider deviceDetailsProvider = new FakeDeviceDetailsProvider();
     public CollectTestRule rule = new CollectTestRule();

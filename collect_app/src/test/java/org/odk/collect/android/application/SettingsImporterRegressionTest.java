@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -40,7 +39,7 @@ public class SettingsImporterRegressionTest {
     @Before
     public void setup() {
         getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importDemoProject();
-        getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+        getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
         settingsImporter = getComponent(ApplicationProvider.<Collect>getApplicationContext()).settingsImporter();
         currentProject = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject();
     }

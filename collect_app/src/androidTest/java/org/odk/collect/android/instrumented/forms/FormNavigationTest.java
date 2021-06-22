@@ -31,13 +31,13 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.projects.Project;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,7 +66,7 @@ public class FormNavigationTest {
                 // Set up demo project
                 AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
                 component.projectImporter().importDemoProject();
-                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+                component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
             }));
 
     @Parameters(name = "{0}")

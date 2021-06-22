@@ -1,7 +1,5 @@
 package org.odk.collect.android.projects
 
-import android.app.Application
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
@@ -9,8 +7,6 @@ import org.hamcrest.Matchers.contains
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.ProjectImporter.Companion.DEMO_PROJECT_ID
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -25,9 +21,7 @@ class ProjectImporterTest {
 
     private val rootDir = TempFiles.createTempDir()
 
-    private val context = ApplicationProvider.getApplicationContext<Application>()
     private val storagePathProvider = StoragePathProvider(mock(), rootDir.absolutePath)
-    private val settingsProvider = SettingsProvider(context)
 
     private val projectImporter = ProjectImporter(
         storagePathProvider,
@@ -58,7 +52,7 @@ class ProjectImporterTest {
     fun `importDemoProject() creates demo project`() {
         projectImporter.importDemoProject()
 
-        val demoProject = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        val demoProject = Project.Saved(Project.DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         assertThat(projectsRepository.getAll(), contains(demoProject))
     }
 
@@ -66,7 +60,7 @@ class ProjectImporterTest {
     fun `importDemoProject() creates storage for project`() {
         projectImporter.importDemoProject()
 
-        val demoProject = Project.Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        val demoProject = Project.Saved(Project.DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
         storagePathProvider.getProjectDirPaths(demoProject.uuid).forEach {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))

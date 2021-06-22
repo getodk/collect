@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
@@ -79,7 +80,8 @@
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/password"
                 android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/username">
+                app:layout_constraintTop_toBottomOf="@+id/username"
+                tools:layout_editor_absoluteX="16dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password_input_text"
@@ -89,6 +91,67 @@
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/config_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_standard"
+                app:layout_constraintBottom_toTopOf="@+id/gdrive"
+                app:layout_constraintTop_toBottomOf="@+id/password">
+
+                <ImageView
+                    android:id="@+id/tip_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_outline_info_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tip_text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:text="@string/project_config_tip"
+                    android:textAppearance="?textAppearanceBody1"
+                    app:layout_constraintStart_toEndOf="@+id/tip_icon"
+                    android:layout_marginStart="@dimen/margin_small"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/gdrive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_standard"
+                android:layout_marginBottom="@dimen/margin_standard"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password">
+
+                <TextView
+                    android:id="@+id/project_uses_gdrive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gdrive_project"
+                    android:textColor="?colorOnSurface"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/configure_gdrive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:text="@string/gdrive_configure"
+                    android:textColor="@color/website_blue"
+                    app:layout_constraintStart_toEndOf="@+id/project_uses_gdrive"
+                    app:layout_constraintTop_toTopOf="@+id/project_uses_gdrive" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

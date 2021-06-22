@@ -76,6 +76,7 @@
   <string name="survey_loading_reading_data_message">Lettura dati survey…</string>
   <string name="survey_loading_reading_csv_message">Lettura file CSV…</string>
   <string name="parse_error">Spiacenti, non sono in grado di analizzare il modulo.</string>
+  <string name="loading_form_failed">Si è verificato un errore durante il caricamento del modulo. Per favore riprova. </string>
   <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che viene segnato come completato. Potrebbe venire cifrato.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
@@ -118,6 +119,7 @@
   <string name="required_answer_error">Spiacenti, questa risposta è richiesta!</string>
   <string name="invalid_space_in_answer_singular">Attenzione: ci sono degli spazi nel valore sottostante %s </string>
   <string name="invalid_space_in_answer_plural">Attenzione: ci sono degli spazi nei valori sottostanti %s </string>
+  <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
   <string name="save_form_as">Nome di questo modulo:</string>
@@ -150,6 +152,7 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI non riconosciuto : %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Impossibile avviare la registrazione. </string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
@@ -220,6 +223,7 @@
   <!--Text for button that plays audio clip-->
   <!--Text to let the user know a file is being saved-->
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Devi interrompere la registrazione prima di uscire da questa schermata. </string>
   <string name="error_attaching_binary_file">Si è verificato un errore mentre allegavi: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Selezione valore</string>
@@ -577,7 +581,6 @@
   <string name="instance_sync_summary">Riguarda un modulo aggiunto direttamente alla cartella esempi</string>
   <string name="analytics_preferences">Dati sull\'utilizzo</string>
   <string name="analytics">Raccolta di dati anonimi sull\'utilizzo</string>
-  <string name="analytics_summary">La raccolta di dati anonimi sull\'utilizzo aiuta il team di ODK a dare priorità a certe funzioni e fix</string>
   <string name="form_metadata_title">Metadati del Modulo</string>
   <string name="form_metadata">Metadati del modulo</string>
   <string name="form_metadata_summary">Questi valori vengono precompilati nei moduli provvisti di nome utente, email e/o numero di telefono e servono ad identificare la persona che invia i dati.</string>
@@ -718,4 +721,19 @@
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>
   <string name="survey_multiple_forms_error">Hai scaricato due diversi Moduli ma con lo stesso nome ID e versione. Potrebbe essere lo stesso Modulo scaricato in momenti diversi o con Server diversi. In ogni caso devi cancellarne uno.</string>
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Aggiungere</string>
+  <string name="delete_project_yes">Sì</string>
+  <string name="delete_project_no">No</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

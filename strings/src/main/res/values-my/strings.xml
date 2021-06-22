@@ -321,4 +321,16 @@
   <string name="error_occured">မွားယြင္းေနပါသည္</string>
   <string name="please_wait">ေခတၱေစာင့္ပါ</string>
   <string name="please_wait_long">ေခတၱေစာင့္ပါ၊ အခ်ိန္အနည္းငယ္ယူပါသည္</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

@@ -78,7 +78,7 @@ public class FillBlankFormTest {
     @Test
     public void searchBar_ShouldSearchForm() {
         //TestCase12
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .clickFillBlankForm()
                 .clickMenuFilter()
                 .searchInBar("Aaa")
@@ -416,7 +416,7 @@ public class FillBlankFormTest {
     @Test
     public void question_ShouldBeVisibleOnTheTopOfHierarchy() {
         //TestCase23
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .copyForm("manyQ.xml")
                 .startBlankForm("manyQ")
                 .swipeToNextQuestion("t2")
@@ -430,21 +430,18 @@ public class FillBlankFormTest {
     @Test
     public void bigForm_ShouldBeFilledSuccessfully() {
         //TestCase18
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .copyForm("nigeria-wards.xml")
                 .startBlankForm("Nigeria Wards")
                 .assertQuestion("State")
                 .openSelectMinimalDialog()
                 .clickOnText("Adamawa")
-                .closeSelectMinimalDialog()
                 .swipeToNextQuestion("LGA", true)
                 .openSelectMinimalDialog()
                 .clickOnText("Ganye")
-                .closeSelectMinimalDialog()
                 .swipeToNextQuestion("Ward", true)
                 .openSelectMinimalDialog()
                 .clickOnText("Jaggu")
-                .closeSelectMinimalDialog()
                 .swipeToNextQuestion("Comments")
                 .swipeToEndScreen()
                 .clickSaveAndExit();

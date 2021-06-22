@@ -29,7 +29,8 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             launchState,
-            appUpgrader
+            appUpgrader,
+            mock()
         )
 
         applicationInitializer.initialize()
@@ -51,7 +52,8 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             launchState,
-            appUpgrader
+            appUpgrader,
+            mock()
         )
 
         applicationInitializer.initialize()
@@ -69,6 +71,7 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             launchState,
+            mock(),
             mock()
         )
 

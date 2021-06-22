@@ -10,23 +10,19 @@ class ProjectImporter(
     private val storagePathProvider: StoragePathProvider,
     private val projectsRepository: ProjectsRepository
 ) {
-    fun importNewProject(project: Project.New): Saved {
+    fun importNewProject(project: Project): Saved {
         val savedProject = projectsRepository.save(project)
         createProjectDirs(savedProject)
         return savedProject
     }
 
     fun importDemoProject() {
-        val project = Saved(DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
+        val project = Project.DEMO_PROJECT
         projectsRepository.save(project)
         createProjectDirs(project)
     }
 
     private fun createProjectDirs(project: Saved) {
         storagePathProvider.getProjectDirPaths(project.uuid).forEach { FileUtils.createDir(it) }
-    }
-
-    companion object {
-        const val DEMO_PROJECT_ID = "DEMO"
     }
 }

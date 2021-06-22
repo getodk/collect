@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="TextAppearance.Collect.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
+    </style>
+
     <style name="TextAppearance.Collect.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textColor">@color/color_on_surface_high_emphasis</item>
     </style>
@@ -31,8 +35,5 @@
     <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0.04</item>
-    </style>
-
-    <style name="TextAppearance.Collect.Caption" parent="TextAppearance.MaterialComponents.Caption">
     </style>
 </resources>

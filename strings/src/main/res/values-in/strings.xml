@@ -160,6 +160,7 @@
   <!--Error message displayed when copying media from a temporary directory fails-->
   <string name="answer_file_copy_failed_message">Media tidak dapat dilampirkan ke formulir tetapi tetap tersedia di %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Perekaman dinonaktifkan. Aktifkan dalam %s</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -193,6 +194,7 @@
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam perangkat ini.</string>
   <string name="camera_error">Perangkat ini tidak mendukung Camera2 API.</string>
   <string name="annotate_image">Menganotasi Gambar</string>
+  <string name="invalid_file_type">Aplikasi tidak mengenali tipe file</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Simpan dan Tutup</string>
   <string name="signature_capture">Ambil Tanda Tangan</string>
@@ -219,9 +221,14 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Lanjut</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Rekam suara</string>
+  <string name="background_audio_permission_explanation">Formulir ini merekam suara di latar belakang. Anda harus memberikan izin untuk bisa menggunakan mikrofon Anda. Jika tidak, Anda tidak akan dapat membuka formulir ini.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Formulir ini meminta perekaman suara latar belakang. Menonaktifkannya akan menghentikan perekaman dan membuang suara yang terekam. Anda yakin ingin melanjutkan?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Non aktfikan perekaman</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">Perekaman tidak akan dimulai. Anda harus membuka kembali formulir untuk merekam.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Hapus berkas?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -499,6 +506,8 @@
   <string name="report_to_project_lead">Jika anda terus mengalami masalah ini, laporkan ke orang yang meminta anda untuk mengumpulkan data.</string>
   <string name="unreachable_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
   <string name="security_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
+  <string name="server_error">Peladen %1$s rmengembalikan kode status %2$s.</string>
+  <string name="invalid_response">Peladen %s mengembalikan respon tidak valid.</string>
   <string name="failure">Tidak Berhasil</string>
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
   <!--##############################################
@@ -649,7 +658,6 @@
   <string name="instance_sync_summary">Formulir yang rusak akan langsung ditambahkan ke berkas instance</string>
   <string name="analytics_preferences">Penggunaan data</string>
   <string name="analytics">Kumpulkan data pengguna anonim</string>
-  <string name="analytics_summary">Data pengguna anonim membantu tim ODK untuk memprioritaskan perbaikan dan fitur tambahan.</string>
   <string name="form_metadata_title">Metadata Formulir</string>
   <string name="form_metadata">Metadata formulir</string>
   <string name="form_metadata_summary">Semua nilai ini akan ditambahkan ke formulir yang menyediakan field nama pengguna, email dan/atau telepon untuk mengidentifikasi orang yang mengirimkan data.</string>
@@ -800,4 +808,19 @@
   <string name="fs_file_copy_error">Tidak dapat menyalin \'%1$s\' terhadap \'%2$s\'. Penyebab: %3$s</string>
   <string name="survey_multiple_forms_error">Anda mengunduh dua formulir berbeda, tetapi memiliki ID dan versi formulir yang sama. Kemungkinan keduanya adalah formulir yang sama dan diunggah pada saat yang berbeda atau pada server yang berbeda. Pada kasus ini, hapus salah satu formulir.</string>
   <string name="select_odk_shortcut">Pilih pintasan ODK</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="add">Tambah</string>
+  <string name="delete_project_yes">Ya</string>
+  <string name="delete_project_no">Tidak</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

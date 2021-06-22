@@ -577,7 +577,6 @@
   <string name="instance_sync_summary">Odnosi se na fomrulare direktno dodate folderu instanci.</string>
   <string name="analytics_preferences">Podaci o korišćenju</string>
   <string name="analytics">Prikupi anonimne podatke o korišćenju</string>
-  <string name="analytics_summary">Anonimni podaci o korišćenju pomađu ODK timu da prioritizuje ispravke i doda nove opcije</string>
   <string name="form_metadata_title">Metapodaci formulara</string>
   <string name="form_metadata">Metapodaci formulara</string>
   <string name="form_metadata_summary">Ove vrijednosti će biti dodate formularima koji imaju korisnično ime, email ili telefon u početnim poljima kako bi se identifikovala osoba koja otprema podatke.</string>
@@ -718,4 +717,18 @@
   <string name="fs_file_copy_error">Nisam mogao da prekopiram \'%1$s\' preko \'%2$s\'. Razlog: %3$s</string>
   <string name="survey_multiple_forms_error">Preuzeli ste dva drugačija formulara sa istim ID-jem i verzijom. Možda su to isti formulari učitani u različito vrijeme ili sa različitih servera. U svakom slučaju, treba da obrišete jedan.</string>
   <string name="select_odk_shortcut">Odaberi ODK prečicu</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="delete_project_yes">Da</string>
+  <string name="delete_project_no">Ne</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <!--Preceded by "Don't have a project yet?" question-->
 </resources>

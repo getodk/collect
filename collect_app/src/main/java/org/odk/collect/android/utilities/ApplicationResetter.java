@@ -17,7 +17,6 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.ServerRepository;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
@@ -43,9 +42,6 @@ public class ApplicationResetter {
     PropertyManager propertyManager;
 
     @Inject
-    ServerRepository serverRepository;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Inject
@@ -67,7 +63,6 @@ public class ApplicationResetter {
             switch (action) {
                 case ResetAction.RESET_PREFERENCES:
                     resetPreferences();
-                    serverRepository.clear();
                     break;
                 case ResetAction.RESET_INSTANCES:
                     resetInstances();
