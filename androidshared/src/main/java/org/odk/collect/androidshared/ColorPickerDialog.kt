@@ -1,6 +1,7 @@
 package org.odk.collect.androidshared
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -13,18 +14,33 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.databinding.ColorPickerDialogLayoutBinding
 import java.lang.Exception
+import javax.inject.Inject
 
 class ColorPickerDialog : DialogFragment() {
 
+    @Inject
+    lateinit var colorPickerViewModelFactory: ColorPickerViewModel.Factory
+
     lateinit var binding: ColorPickerDialogLayoutBinding
 
-    val model: ColorPickerViewModel by activityViewModels()
+    lateinit var model: ColorPickerViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val provider = context.applicationContext as AndroidSharedDependencyComponentProvider
+        provider.androidSharedDependencyComponent.inject(this)
+
+        model = ViewModelProvider(
+            requireActivity(),
+            colorPickerViewModelFactory
+        )[ColorPickerViewModel::class.java]
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = ColorPickerDialogLayoutBinding.inflate(LayoutInflater.from(context))
@@ -105,5 +121,12 @@ class ColorPickerViewModel : ViewModel() {
 
     fun pickColor(color: String) {
         _pickedColor.value = color
+    }
+
+    open class Factory :
+        ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ColorPickerViewModel() as T
+        }
     }
 }
