@@ -2,14 +2,15 @@ package org.odk.collect.android.support;
 
 import android.content.Context;
 
-import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.preference.PreferenceManager;
+import androidx.test.core.app.ApplicationProvider;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.DatabaseConnection;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -49,14 +50,14 @@ public class ResetStateRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+            Context context = ApplicationProvider.getApplicationContext();
 
             resetDagger();
-            clearPrefs();
+            clearPrefs(context);
             clearDisk();
             setTestState();
 
-            AppDependencyComponent component = ((Collect) context.getApplicationContext()).getComponent();
+            AppDependencyComponent component = DaggerUtils.getComponent(context.getApplicationContext());
 
             // Reinitialize any application state with new deps/state
             component.applicationInitializer().initialize();
@@ -88,11 +89,11 @@ public class ResetStateRule implements TestRule {
         }
     }
 
-    private void clearPrefs() {
-        settingsProvider.getGeneralSettings().clear();
-        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues();
-        settingsProvider.getAdminSettings().clear();
-        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
-        settingsProvider.getMetaSettings().clear();
+    private void clearPrefs(Context context) {
+        settingsProvider.clearAll();
+
+        // Delete legacy prefs in case older version of app was run on test device
+        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply();
+        context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE).edit().clear().apply();
     }
 }
