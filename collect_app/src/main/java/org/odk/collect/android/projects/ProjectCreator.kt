@@ -16,15 +16,7 @@ class ProjectCreator(
 ) {
 
     fun createNewProject(settingsJson: String): Boolean {
-        val urlString = try {
-            JSONObject(settingsJson)
-                .getJSONObject(AppConfigurationKeys.GENERAL)
-                .getString(GeneralKeys.KEY_SERVER_URL)
-        } catch (e: JSONException) {
-            ""
-        }
-
-        val newProject = projectDetailsCreator.getProject(urlString)
+        val newProject = projectDetailsCreator.getProject(getServerUrl(settingsJson))
         val savedProject = projectImporter.importNewProject(newProject)
 
         val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject)
@@ -38,5 +30,16 @@ class ProjectCreator(
             projectsRepository.delete(savedProject.uuid)
             false
         }
+    }
+
+    private fun getServerUrl(settingsJson: String): String {
+        val url = try {
+            JSONObject(settingsJson)
+                .getJSONObject(AppConfigurationKeys.GENERAL)
+                .getString(GeneralKeys.KEY_SERVER_URL)
+        } catch (e: JSONException) {
+            ""
+        }
+        return if (url.isNotBlank()) url else "https://demo.getodk.org"
     }
 }

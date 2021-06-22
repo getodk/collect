@@ -9,7 +9,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
-import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.projects.Project;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class CopyFormRule implements TestRule {
                 component.currentProjectProvider().getCurrentProject();
             } catch (IllegalStateException e) {
                 component.projectImporter().importDemoProject();
-                component.currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
+                component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
                 projectCreated = true;
             }
 

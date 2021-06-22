@@ -10,6 +10,7 @@ import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.projects.Project
 import javax.inject.Inject
 
 class FirstLaunchActivity : CollectAbstractActivity() {
@@ -47,7 +48,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
 
         binding.configureLater.setOnClickListener {
             projectImporter.importDemoProject()
-            currentProjectProvider.setCurrentProject(ProjectImporter.DEMO_PROJECT_ID)
+            currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
         }

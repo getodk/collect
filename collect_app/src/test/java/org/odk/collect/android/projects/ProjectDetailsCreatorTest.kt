@@ -7,6 +7,7 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
 class ProjectDetailsCreatorTest {
@@ -44,5 +45,13 @@ class ProjectDetailsCreatorTest {
         assertThat(projectDetailsCreator.getProject("https://my-project.com").color, not(projectDetailsCreator.getProject("http://www.my-project.com").color))
         assertThat(projectDetailsCreator.getProject("https://your-project.com/one").color, not(projectDetailsCreator.getProject("http://www.my-project.com").color))
         assertThat(projectDetailsCreator.getProject("http://www.my-project.com").color, not(projectDetailsCreator.getProject("https://your-project.com/one").color))
+    }
+
+    @Test
+    fun `Generated project should have demo details if demo url is used`() {
+        val project = projectDetailsCreator.getProject("https://demo.getodk.org")
+        assertThat(project.name, `is`(Project.DEMO_PROJECT_NAME))
+        assertThat(project.icon, `is`(Project.DEMO_PROJECT_ICON))
+        assertThat(project.color, `is`(Project.DEMO_PROJECT_COLOR))
     }
 }

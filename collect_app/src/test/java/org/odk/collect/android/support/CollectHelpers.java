@@ -15,7 +15,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
-import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.projects.Project;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
@@ -87,7 +87,7 @@ public final class CollectHelpers {
 
     public static String setupDemoProject() {
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectImporter().importDemoProject();
-        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).currentProjectProvider().setCurrentProject(ProjectImporter.DEMO_PROJECT_ID);
-        return ProjectImporter.DEMO_PROJECT_ID;
+        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
+        return Project.DEMO_PROJECT_ID;
     }
 }
