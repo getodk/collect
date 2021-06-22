@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class ApplicationResetterTest {
+public class ProjectResetterTest {
 
     private StoragePathProvider storagePathProvider;
     private Settings generalSettings;
@@ -51,7 +51,7 @@ public class ApplicationResetterTest {
     @Test
     public void resetSettingsTest() throws IOException {
         setupTestSettings();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_PREFERENCES));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_PREFERENCES));
 
         assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), is(GeneralKeys.getDefaults().get(GeneralKeys.KEY_USERNAME)));
         assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), is(GeneralKeys.getDefaults().get(GeneralKeys.KEY_PASSWORD)));
@@ -66,7 +66,7 @@ public class ApplicationResetterTest {
         saveTestFormFiles();
         setupTestFormsDatabase();
         createTestItemsetsDatabaseFile();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_FORMS));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_FORMS));
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
         assertFalse(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").exists());
     }
@@ -75,33 +75,33 @@ public class ApplicationResetterTest {
     public void resetInstancesTest() throws IOException {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_INSTANCES));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_INSTANCES));
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
     }
 
     @Test
     public void resetLayersTest() throws IOException {
         saveTestLayerFiles();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_LAYERS));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_LAYERS));
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
     }
 
     @Test
     public void resetCacheTest() throws IOException {
         saveTestCacheFiles();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_CACHE));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_CACHE));
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
     }
 
     @Test
     public void resetOSMDroidTest() throws IOException {
         saveTestOSMDroidFiles();
-        resetAppState(Collections.singletonList(ApplicationResetter.ResetAction.RESET_OSM_DROID));
+        resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_OSM_DROID));
         assertFolderEmpty(Configuration.getInstance().getOsmdroidTileCache().getPath());
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ApplicationResetter().reset(resetActions);
+        List<Integer> failedResetActions = new ProjectResetter().reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 

@@ -17,7 +17,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
-import org.odk.collect.android.utilities.ApplicationResetter;
+import org.odk.collect.android.utilities.ProjectResetter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 import timber.log.Timber;
 
 import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
-import static org.odk.collect.android.utilities.ApplicationResetter.ResetAction.RESET_PREFERENCES;
+import static org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmentCompat implements CompoundButton.OnCheckedChangeListener {
 
@@ -105,19 +105,19 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
             resetActions.add(RESET_PREFERENCES);
         }
         if (instances.isChecked()) {
-            resetActions.add(ApplicationResetter.ResetAction.RESET_INSTANCES);
+            resetActions.add(ProjectResetter.ResetAction.RESET_INSTANCES);
         }
         if (forms.isChecked()) {
-            resetActions.add(ApplicationResetter.ResetAction.RESET_FORMS);
+            resetActions.add(ProjectResetter.ResetAction.RESET_FORMS);
         }
         if (layers.isChecked()) {
-            resetActions.add(ApplicationResetter.ResetAction.RESET_LAYERS);
+            resetActions.add(ProjectResetter.ResetAction.RESET_LAYERS);
         }
         if (cache.isChecked()) {
-            resetActions.add(ApplicationResetter.ResetAction.RESET_CACHE);
+            resetActions.add(ProjectResetter.ResetAction.RESET_CACHE);
         }
         if (osmDroid.isChecked()) {
-            resetActions.add(ApplicationResetter.ResetAction.RESET_OSM_DROID);
+            resetActions.add(ProjectResetter.ResetAction.RESET_OSM_DROID);
         }
 
         if (!resetActions.isEmpty()) {
@@ -129,7 +129,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
                 @Override
                 protected List<Integer> doInBackground(Void... voids) {
-                    return new ApplicationResetter().reset(resetActions);
+                    return new ProjectResetter().reset(resetActions);
                 }
 
                 @Override
@@ -165,7 +165,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ApplicationResetter.ResetAction.RESET_INSTANCES:
+                case ProjectResetter.ResetAction.RESET_INSTANCES:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(context.getString(R.string.reset_saved_forms_result),
                                 context.getString(R.string.error_occured)));
@@ -174,7 +174,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ApplicationResetter.ResetAction.RESET_FORMS:
+                case ProjectResetter.ResetAction.RESET_FORMS:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(getActivity().getString(R.string.reset_blank_forms_result),
                                 getActivity().getString(R.string.error_occured)));
@@ -183,7 +183,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ApplicationResetter.ResetAction.RESET_CACHE:
+                case ProjectResetter.ResetAction.RESET_CACHE:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(context.getString(R.string.reset_cache_result),
                                 context.getString(R.string.error_occured)));
@@ -192,7 +192,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ApplicationResetter.ResetAction.RESET_LAYERS:
+                case ProjectResetter.ResetAction.RESET_LAYERS:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(context.getString(R.string.reset_layers_result),
                                 context.getString(R.string.error_occured)));
@@ -201,7 +201,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ApplicationResetter.ResetAction.RESET_OSM_DROID:
+                case ProjectResetter.ResetAction.RESET_OSM_DROID:
                     if (failedResetActions.contains(action)) {
                         resultMessage.append(String.format(context.getString(R.string.reset_osm_tiles_result),
                                 context.getString(R.string.error_occured)));
