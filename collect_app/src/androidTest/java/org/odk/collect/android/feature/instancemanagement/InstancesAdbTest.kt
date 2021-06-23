@@ -1,0 +1,30 @@
+package org.odk.collect.android.feature.instancemanagement
+
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
+import org.junit.Test
+import org.junit.rules.RuleChain
+import org.junit.runner.RunWith
+import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.MainMenuPage
+
+@RunWith(AndroidJUnit4::class)
+class InstancesAdbTest {
+
+    private val rule = CollectTestRule()
+
+    @get:Rule
+    val chain: RuleChain = TestRuleChain.chain().around(rule)
+
+    @Test
+    fun canAddInstanceOnDisk() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .clickFillBlankForm() // Add form via disk sync
+            .copyInstance("One Question_2021-06-22_15-55-50.xml")
+            .pressBack(MainMenuPage()) // Return to main menu to trigger instance disk sync
+            .clickEditSavedForm(1)
+            .assertText("One Question")
+    }
+}

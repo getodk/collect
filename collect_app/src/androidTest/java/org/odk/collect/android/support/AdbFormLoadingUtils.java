@@ -18,6 +18,7 @@ package org.odk.collect.android.support;
 
 import androidx.test.core.app.ApplicationProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
@@ -70,6 +71,12 @@ public class AdbFormLoadingUtils {
         copyFormToStorage(formFilename, null, copyToDatabase, formFilename);
     }
 
+    public static void copyInstanceToStorage(String instanceFileName) throws IOException {
+        String instanceDirPath = getInstancesDirPath() + instanceFileName.split("\\.")[0];
+        new File(instanceDirPath).mkdir();
+        copyFileFromAssets("instances/" + instanceFileName, instanceDirPath + "/" + instanceFileName);
+    }
+
     public static FormActivityTestRule getFormActivityTestRuleFor(String formFilename) {
         return new FormActivityTestRule(formFilename);
     }
@@ -99,9 +106,19 @@ public class AdbFormLoadingUtils {
      * @return the forms dir path that the user would expect (from docs)
      */
     private static String getFormsDirPath() {
-        String projectsDirPath = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/projects/";
-        String firstProjectId = new File(projectsDirPath).list()[0];
+        return firstProjectPath() + "/forms/";
+    }
 
-        return projectsDirPath + "/" + firstProjectId + "/forms/";
+    /**
+     * @return the instances dir path that the user would expect (from docs)
+     */
+    private static String getInstancesDirPath() {
+        return firstProjectPath() + "/instances/";
+    }
+
+    @NotNull
+    private static String firstProjectPath() {
+        String projectsDirPath = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/projects/";
+        return projectsDirPath + "/" + new File(projectsDirPath).list()[0];
     }
 }
