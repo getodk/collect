@@ -2,10 +2,9 @@ package org.odk.collect.androidshared
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.testing.FragmentScenario
-import androidx.lifecycle.ViewModel
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
@@ -14,35 +13,17 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.androidshared.support.RobolectricApplication
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ColorPickerDialogTest {
-    private val colorPickerViewModel = ColorPickerViewModel()
 
-    private val application: RobolectricApplication by lazy { ApplicationProvider.getApplicationContext() }
-
-    @Before
-    fun setup() {
-        colorPickerViewModel.initColor = "#cccccc"
-        colorPickerViewModel.icon = "P"
-
-        application.setupDependencies(
-            object : AndroidSharedDependencyModule() {
-                override fun providesColorPickerViewModel(): ColorPickerViewModel.Factory {
-                    return object : ColorPickerViewModel.Factory() {
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return colorPickerViewModel as T
-                        }
-                    }
-                }
-            }
-        )
+    val args = Bundle().apply {
+        putString(ColorPickerDialog.CURRENT_COLOR, "#cccccc")
+        putString(ColorPickerDialog.CURRENT_ICON, "P")
     }
 
     @Test
@@ -155,7 +136,7 @@ class ColorPickerDialogTest {
     }
 
     private fun launchFragment(): FragmentScenario<ColorPickerDialog> {
-        return DialogFragmentTest.launchDialogFragment(ColorPickerDialog::class.java)
+        return DialogFragmentTest.launchDialogFragment(ColorPickerDialog::class.java, args)
     }
 
     private fun assertCurrentColor(fragment: ColorPickerDialog, color: String) {

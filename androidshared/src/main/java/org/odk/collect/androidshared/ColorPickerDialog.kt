@@ -1,7 +1,6 @@
 package org.odk.collect.androidshared
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -14,44 +13,28 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.databinding.ColorPickerDialogLayoutBinding
 import java.lang.Exception
-import javax.inject.Inject
 
 class ColorPickerDialog : DialogFragment() {
-
-    @Inject
-    lateinit var colorPickerViewModelFactory: ColorPickerViewModel.Factory
-
     lateinit var binding: ColorPickerDialogLayoutBinding
 
-    lateinit var model: ColorPickerViewModel
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val provider = context.applicationContext as AndroidSharedDependencyComponentProvider
-        provider.androidSharedDependencyComponent.inject(this)
-
-        model = ViewModelProvider(
-            requireActivity(),
-            colorPickerViewModelFactory
-        )[ColorPickerViewModel::class.java]
-    }
+    val model: ColorPickerViewModel by activityViewModels()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = ColorPickerDialogLayoutBinding.inflate(LayoutInflater.from(context))
         binding.hexColor.doOnTextChanged { color, _, _, _ ->
             updateCurrentColorCircle("#$color")
         }
-        binding.currentColor.text = model.icon
+        binding.currentColor.text = requireArguments().getString(CURRENT_ICON)!!
 
         fixHexColorPrefix()
         setListeners()
-        setCurrentColor(model.initColor)
+        setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
 
         return AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -110,23 +93,18 @@ class ColorPickerDialog : DialogFragment() {
         prefixView.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         prefixView.gravity = Gravity.CENTER
     }
+
+    companion object {
+        const val CURRENT_COLOR = "CURRENT_COLOR"
+        const val CURRENT_ICON = "CURRENT_ICON"
+    }
 }
 
 class ColorPickerViewModel : ViewModel() {
-    lateinit var initColor: String
-    lateinit var icon: String
-
     private val _pickedColor = MutableLiveData<String>()
     val pickedColor: LiveData<String> = _pickedColor
 
     fun pickColor(color: String) {
         _pickedColor.value = color
-    }
-
-    open class Factory :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ColorPickerViewModel() as T
-        }
     }
 }

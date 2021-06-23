@@ -4,7 +4,6 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
-import dagger.Provides
 import javax.inject.Singleton
 
 /**
@@ -38,10 +37,4 @@ interface AndroidSharedDependencyComponent {
 }
 
 @Module
-open class AndroidSharedDependencyModule {
-
-    @Provides
-    open fun providesColorPickerViewModel(): ColorPickerViewModel.Factory {
-        return ColorPickerViewModel.Factory()
-    }
-}
+open class AndroidSharedDependencyModule

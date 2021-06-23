@@ -74,14 +74,12 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     @Inject
     InstanceSubmitScheduler instanceSubmitScheduler;
 
-    private ColorPickerViewModel colorPickerViewModel;
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        colorPickerViewModel = new ViewModelProvider(requireActivity()).get(ColorPickerViewModel.class);
+        ColorPickerViewModel colorPickerViewModel = new ViewModelProvider(requireActivity()).get(ColorPickerViewModel.class);
         colorPickerViewModel.getPickedColor().observe(this, color -> {
             Project.Saved currentProject = currentProjectProvider.getCurrentProject();
             projectsRepository.save(new Project.Saved(currentProject.getUuid(), currentProject.getName(), currentProject.getIcon(), color));
@@ -147,9 +145,10 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     break;
                 case PROJECT_COLOR_KEY:
                     Project.Saved project = currentProjectProvider.getCurrentProject();
-                    colorPickerViewModel.initColor = project.getColor();
-                    colorPickerViewModel.icon = project.getIcon();
-                    DialogUtils.showIfNotShowing(ColorPickerDialog.class, getActivity().getSupportFragmentManager());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ColorPickerDialog.CURRENT_COLOR, project.getColor());
+                    bundle.putString(ColorPickerDialog.CURRENT_ICON, project.getIcon());
+                    DialogUtils.showIfNotShowing(ColorPickerDialog.class, bundle, getActivity().getSupportFragmentManager());
                     break;
                 case KEY_IMPORT_SETTINGS:
                     Intent pref = new Intent(getActivity(), QRCodeTabsActivity.class);
