@@ -51,7 +51,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
-public class InstacesDirDiskInstancesSynchronizer {
+public class InstanceDiskSynchronizer {
 
     private static int counter;
 
@@ -64,7 +64,7 @@ public class InstacesDirDiskInstancesSynchronizer {
         return currentStatus;
     }
 
-    public InstacesDirDiskInstancesSynchronizer(SettingsProvider settingsProvider) {
+    public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
         instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
     }
