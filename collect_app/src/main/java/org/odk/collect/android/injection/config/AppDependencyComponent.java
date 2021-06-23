@@ -57,6 +57,7 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
@@ -83,7 +84,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
-import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -209,7 +209,7 @@ public interface AppDependencyComponent {
 
     void inject(GeneralPreferencesActivity generalPreferencesActivity);
 
-    void inject(ProjectResetter projectResetter);
+    void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
 
     void inject(FillBlankFormActivity fillBlankFormActivity);
 

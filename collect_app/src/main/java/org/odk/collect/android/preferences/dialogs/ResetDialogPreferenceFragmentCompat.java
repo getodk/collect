@@ -16,11 +16,14 @@ import androidx.preference.PreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.ProjectResetter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -28,6 +31,9 @@ import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialo
 import static org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmentCompat implements CompoundButton.OnCheckedChangeListener {
+
+    @Inject
+    ProjectResetter projectResetter;
 
     private ProgressDialog progressDialog;
     private AppCompatCheckBox preferences;
@@ -51,6 +57,8 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     public void onAttach(@NonNull Context context) {
         this.context = context;
         super.onAttach(context);
+
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -129,7 +137,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
                 @Override
                 protected List<Integer> doInBackground(Void... voids) {
-                    return new ProjectResetter().reset(resetActions);
+                    return projectResetter.reset(resetActions);
                 }
 
                 @Override

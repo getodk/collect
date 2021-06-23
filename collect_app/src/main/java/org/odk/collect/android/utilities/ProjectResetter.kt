@@ -15,34 +15,23 @@
  */
 package org.odk.collect.android.utilities
 
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
-import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.osmdroid.config.Configuration
 import java.io.File
-import javax.inject.Inject
 
-class ProjectResetter {
+class ProjectResetter(
+    private val storagePathProvider: StoragePathProvider,
+    private val propertyManager: PropertyManager,
+    private val settingsProvider: SettingsProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val formsRepositoryProvider: FormsRepositoryProvider
+) {
+
     private var failedResetActions = mutableListOf<Int>()
-
-    @Inject
-    lateinit var storagePathProvider: StoragePathProvider
-
-    @Inject
-    lateinit var propertyManager: PropertyManager
-
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
-
-    @Inject
-    lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
-
-    @Inject
-    lateinit var formsRepositoryProvider: FormsRepositoryProvider
 
     fun reset(resetActions: List<Int>): List<Int> {
         for (action in resetActions) {
@@ -130,10 +119,5 @@ class ProjectResetter {
         const val RESET_LAYERS = 3
         const val RESET_CACHE = 4
         const val RESET_OSM_DROID = 5
-    }
-
-    init {
-        // This should probably just take arguments in the constructor rather than use Dagger
-        DaggerUtils.getComponent(Collect.getInstance()).inject(this)
     }
 }
