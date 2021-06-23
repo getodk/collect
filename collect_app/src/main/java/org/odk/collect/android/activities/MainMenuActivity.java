@@ -40,7 +40,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -224,14 +223,10 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     protected void onResume() {
         super.onResume();
-        mainMenuViewModel.resume();
+        mainMenuViewModel.refreshInstances();
 
         setButtonsVisibility();
         currentProjectViewModel.refresh();
-
-        InstanceSyncTask instanceSyncTask = new InstanceSyncTask(settingsProvider);
-        instanceSyncTask.setDiskSyncListener(result -> mainMenuViewModel.resume());
-        instanceSyncTask.execute();
     }
 
     private void setButtonsVisibility() {

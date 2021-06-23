@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.R;
@@ -25,7 +24,6 @@ import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -58,12 +56,11 @@ import timber.log.Timber;
  * Background task for syncing form instances from the instances folder to the instances table.
  * Returns immediately if it detects an error.
  */
-public class InstanceSyncTask extends AsyncTask<Void, String, String> {
+public class InstanceSyncTask {
 
     private static int counter;
 
     private String currentStatus = "";
-    private DiskSyncListener diskSyncListener;
     private final SettingsProvider settingsProvider;
     StoragePathProvider storagePathProvider = new StoragePathProvider();
 
@@ -71,16 +68,11 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
         return currentStatus;
     }
 
-    public void setDiskSyncListener(DiskSyncListener diskSyncListener) {
-        this.diskSyncListener = diskSyncListener;
-    }
-
     public InstanceSyncTask(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
     }
 
-    @Override
-    protected String doInBackground(Void... params) {
+    public String doInBackground() {
         int currentInstance = ++counter;
         Timber.i("[%d] doInBackground begins!", currentInstance);
         try {
@@ -255,13 +247,5 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private boolean shouldInstanceBeEncrypted(Form form) {
         return form.getBASE64RSAPublicKey() != null;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        if (diskSyncListener != null) {
-            diskSyncListener.syncComplete(result);
-        }
     }
 }

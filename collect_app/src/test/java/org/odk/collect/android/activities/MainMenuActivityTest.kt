@@ -56,7 +56,7 @@ class MainMenuActivityTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesMainMenuViewModel(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesAppState: InstancesAppState): MainMenuViewModel.Factory {
+            override fun providesMainMenuViewModelFactory(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesAppState: InstancesAppState): MainMenuViewModel.Factory {
                 return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return mainMenuViewModel as T
