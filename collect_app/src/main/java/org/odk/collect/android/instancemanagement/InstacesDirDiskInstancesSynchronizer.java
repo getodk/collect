@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.instancemanagement;
 
 import android.net.Uri;
 
@@ -28,6 +28,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;

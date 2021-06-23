@@ -14,7 +14,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.tasks.InstacesDirDiskInstancesSynchronizer;
+import org.odk.collect.android.instancemanagement.InstacesDirDiskInstancesSynchronizer;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
