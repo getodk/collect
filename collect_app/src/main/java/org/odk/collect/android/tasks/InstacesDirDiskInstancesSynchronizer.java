@@ -50,11 +50,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
-/**
- * Background task for syncing form instances from the instances folder to the instances table.
- * Returns immediately if it detects an error.
- */
-public class InstanceSyncTask {
+public class InstacesDirDiskInstancesSynchronizer {
 
     private static int counter;
 
@@ -67,7 +63,7 @@ public class InstanceSyncTask {
         return currentStatus;
     }
 
-    public InstanceSyncTask(SettingsProvider settingsProvider) {
+    public InstacesDirDiskInstancesSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
         instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
     }

@@ -33,6 +33,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
@@ -56,8 +57,8 @@ class MainMenuActivityTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesMainMenuViewModelFactory(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesAppState: InstancesAppState): MainMenuViewModel.Factory {
-                return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState) {
+            override fun providesMainMenuViewModelFactory(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesAppState: InstancesAppState, scheduler: Scheduler): MainMenuViewModel.Factory {
+                return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState, scheduler) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return mainMenuViewModel as T
                     }

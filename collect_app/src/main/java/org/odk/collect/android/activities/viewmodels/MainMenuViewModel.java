@@ -14,7 +14,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.tasks.InstanceSyncTask;
+import org.odk.collect.android.tasks.InstacesDirDiskInstancesSynchronizer;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
@@ -117,7 +117,7 @@ public class MainMenuViewModel extends ViewModel {
 
     public void refreshInstances() {
         scheduler.immediate(() -> {
-            new InstanceSyncTask(settingsProvider).doInBackground();
+            new InstacesDirDiskInstancesSynchronizer(settingsProvider).doInBackground();
             instancesAppState.update();
             return null;
         }, ignored -> {
