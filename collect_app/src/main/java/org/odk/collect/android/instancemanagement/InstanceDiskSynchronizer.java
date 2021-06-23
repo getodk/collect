@@ -17,6 +17,7 @@ package org.odk.collect.android.instancemanagement;
 import android.net.Uri;
 
 import org.apache.commons.io.FileUtils;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
@@ -57,8 +58,9 @@ public class InstanceDiskSynchronizer {
 
     private String currentStatus = "";
     private final SettingsProvider settingsProvider;
-    StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final StoragePathProvider storagePathProvider = new StoragePathProvider();
     private final InstancesRepository instancesRepository;
+    private final Analytics analytics;
 
     public String getStatusMessage() {
         return currentStatus;
@@ -67,6 +69,7 @@ public class InstanceDiskSynchronizer {
     public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
         instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        analytics = DaggerUtils.getComponent(Collect.getInstance()).analytics();
     }
 
     public String doInBackground() {
@@ -185,15 +188,24 @@ public class InstanceDiskSynchronizer {
             if (shouldInstanceBeEncrypted(form)) {
                 logImportAndEncrypt(form);
                 encryptInstance(instance);
+            } else {
+                logImport(form);
             }
         }
+    }
+
+    private void logImport(Form form) {
+        String id = form.getFormId();
+        String title = form.getDisplayName();
+        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
+        analytics.logFormEvent(AnalyticsEvents.IMPORT_INSTANCE, formIdHash);
     }
 
     private void logImportAndEncrypt(Form form) {
         String id = form.getFormId();
         String title = form.getDisplayName();
         String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
-        DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
+        analytics.logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
     private void encryptInstance(Instance instance) throws EncryptionException, IOException {

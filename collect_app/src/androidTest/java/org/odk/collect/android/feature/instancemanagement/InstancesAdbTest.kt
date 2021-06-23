@@ -39,7 +39,7 @@ class InstancesAdbTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit();
+            .clickSaveAndExit()
 
         val instancesDir = testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
         val instanceDeleted = File(instancesDir).listFiles()[0].deleteRecursively()
