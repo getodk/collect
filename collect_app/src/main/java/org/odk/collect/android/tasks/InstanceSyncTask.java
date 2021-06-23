@@ -22,7 +22,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -35,6 +34,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.strings.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,8 +42,6 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +61,7 @@ public class InstanceSyncTask {
     private String currentStatus = "";
     private final SettingsProvider settingsProvider;
     StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final InstancesRepository instancesRepository;
 
     public String getStatusMessage() {
         return currentStatus;
@@ -70,13 +69,14 @@ public class InstanceSyncTask {
 
     public InstanceSyncTask(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
+        instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
     }
 
     public String doInBackground() {
         int currentInstance = ++counter;
         Timber.i("[%d] doInBackground begins!", currentInstance);
         try {
-            List<String> candidateInstances = new LinkedList<>();
+            List<String> instancePaths = new LinkedList<>();
             File instancesPath = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
@@ -97,38 +97,21 @@ public class InstanceSyncTask {
                         }
                     }
                     if (instanceFile.exists() && instanceFile.canRead()) {
-                        candidateInstances.add(instanceFile.getAbsolutePath());
+                        instancePaths.add(instanceFile.getAbsolutePath());
                     } else {
                         Timber.i("[%d] Ignoring: %s", currentInstance, instanceDir.getAbsolutePath());
                     }
-                }
-                Collections.sort(candidateInstances);
-
-                List<Instance> instancesToRemove = new ArrayList<>();
-
-                // Remove all the path that's already in the content provider
-                List<Instance> instances = new InstancesRepositoryProvider(Collect.getInstance()).get().getAllNotDeleted();
-
-                for (Instance instance : instances) {
-                    String instanceFilename = instance.getInstanceFilePath();
-
-                    if (candidateInstances.contains(instanceFilename) || instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
-                        candidateInstances.remove(instanceFilename);
-                    } else {
-                        instancesToRemove.add(instance);
-                    }
-                }
-
-                for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
 
                 int counter = 0;
-                // Begin parsing and add them to the content provider
-                for (String candidateInstance : candidateInstances) {
-                    String instanceFormId = getFormIdFromInstance(candidateInstance);
+                for (String instancePath : instancePaths) {
+                    if (instancesRepository.getOneByPath(instancePath) != null) {
+                        continue; // Skip instances that are already stored in repo
+                    }
+
+                    String instanceFormId = getFormIdFromInstance(instancePath);
                     // only process if we can find the id from the instance file
                     if (instanceFormId != null) {
                         try {
@@ -143,8 +126,8 @@ public class InstanceSyncTask {
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
-                                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder()
-                                        .instanceFilePath(candidateInstance)
+                                Instance instance = instancesRepository.save(new Instance.Builder()
+                                        .instanceFilePath(instancePath)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
                                         .formId(jrFormId)
@@ -230,7 +213,7 @@ public class InstanceSyncTask {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder(instance)
+                instancesRepository.save(new Instance.Builder(instance)
                         .canEditWhenComplete(false)
                         .geometryType(null)
                         .geometry(null)
