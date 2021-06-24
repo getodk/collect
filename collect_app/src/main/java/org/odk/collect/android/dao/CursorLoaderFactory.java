@@ -170,7 +170,7 @@ public class CursorLoaderFactory {
             String[] selectionArgs = {"%" + charSequence + "%"};
 
             Uri formUri = newestByFormId ?
-                    FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI :
+                    FormsProviderAPI.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsProviderAPI.CONTENT_URI;
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
         }

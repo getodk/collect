@@ -211,7 +211,6 @@ public class FormsProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
         return count;
     }
 
@@ -260,7 +259,6 @@ public class FormsProvider extends ContentProvider {
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        getContext().getContentResolver().notifyChange(FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI, null);
 
         return count;
     }
@@ -288,7 +286,7 @@ public class FormsProvider extends ContentProvider {
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath(), FORMS);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
 
         PROJECTION_MAP.put(_ID, _ID);
         PROJECTION_MAP.put(DISPLAY_NAME, DISPLAY_NAME);

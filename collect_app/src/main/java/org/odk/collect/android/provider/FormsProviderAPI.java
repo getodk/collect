@@ -57,9 +57,6 @@ public final class FormsProviderAPI {
      * available as a special content URI case.
      */
     @Deprecated
-    public static final Uri CONTENT_NEWEST_FORMS_BY_FORMID_URI = Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id");
-
-    @Deprecated
     public static Uri getContentNewestFormsByFormIdUri(String projectId) {
         return new Uri.Builder()
                 .scheme("content")
