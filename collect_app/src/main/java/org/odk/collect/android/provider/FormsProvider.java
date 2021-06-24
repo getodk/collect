@@ -35,7 +35,9 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.utilities.Clock;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -58,21 +60,20 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.MAX_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
 
-    private static HashMap<String, String> sFormsProjectionMap;
+    private static final HashMap<String, String> PROJECTION_MAP = new HashMap<>();
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
     // Forms unique by ID, keeping only the latest one downloaded
     private static final int NEWEST_FORMS_BY_FORM_ID = 3;
 
-    private static final UriMatcher URI_MATCHER;
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     @Inject
     Clock clock;
@@ -106,20 +107,25 @@ public class FormsProvider extends ContentProvider {
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = databaseQuery(projection, selection, selectionArgs, sortOrder, null);
+                cursor = databaseQuery(PROJECTION_MAP, projection, selection, selectionArgs, sortOrder, null);
                 cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
                 break;
 
             case NEWEST_FORMS_BY_FORM_ID:
-                Map<String, String> filteredProjectionMap = new HashMap<>(sFormsProjectionMap);
-                filteredProjectionMap.put(DATE, MAX_DATE);
-                cursor = databaseQuery(filteredProjectionMap.values().toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
+                Collection<String> allColumns = new HashSet<>(PROJECTION_MAP.values());
+                allColumns.remove(DATE);
+                allColumns.add("MAX(date)");
+
+                Map<String, String> maxDateProjectionMap = new HashMap<>(PROJECTION_MAP);
+                maxDateProjectionMap.put("MAX(date)", DATE);
+
+                cursor = databaseQuery(maxDateProjectionMap, allColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
                 cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = databaseQuery(null, _ID + "=?", new String[]{formId}, null, null);
+                cursor = databaseQuery(PROJECTION_MAP, null, _ID + "=?", new String[]{formId}, null, null);
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
@@ -175,7 +181,7 @@ public class FormsProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(PROJECTION_MAP, null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -206,7 +212,7 @@ public class FormsProvider extends ContentProvider {
         int count;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(PROJECTION_MAP, null, where, whereArgs, null, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
 
@@ -244,34 +250,32 @@ public class FormsProvider extends ContentProvider {
         return count;
     }
 
-    private Cursor databaseQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String o) {
-        return ((DatabaseFormsRepository) formsRepositoryProvider.get()).rawQuery(projection, selection, selectionArgs, sortOrder, o);
+    private Cursor databaseQuery(Map<String, String> projectionMap, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+        return ((DatabaseFormsRepository) formsRepositoryProvider.get()).rawQuery(projectionMap, projection, selection, selectionArgs, sortOrder, groupBy);
     }
 
     static {
-        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath(), FORMS);
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath() + "/#", FORM_ID);
         // Only available for query and type
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_NEWEST_FORMS_BY_FORMID_URI.getPath(), NEWEST_FORMS_BY_FORM_ID);
 
-        sFormsProjectionMap = new HashMap<>();
-        sFormsProjectionMap.put(_ID, _ID);
-        sFormsProjectionMap.put(DISPLAY_NAME, DISPLAY_NAME);
-        sFormsProjectionMap.put(DESCRIPTION, DESCRIPTION);
-        sFormsProjectionMap.put(JR_FORM_ID, JR_FORM_ID);
-        sFormsProjectionMap.put(JR_VERSION, JR_VERSION);
-        sFormsProjectionMap.put(SUBMISSION_URI, SUBMISSION_URI);
-        sFormsProjectionMap.put(BASE64_RSA_PUBLIC_KEY, BASE64_RSA_PUBLIC_KEY);
-        sFormsProjectionMap.put(MD5_HASH, MD5_HASH);
-        sFormsProjectionMap.put(DATE, DATE);
-        sFormsProjectionMap.put(FORM_MEDIA_PATH, FORM_MEDIA_PATH);
-        sFormsProjectionMap.put(FORM_FILE_PATH, FORM_FILE_PATH);
-        sFormsProjectionMap.put(JRCACHE_FILE_PATH, JRCACHE_FILE_PATH);
-        sFormsProjectionMap.put(LANGUAGE, LANGUAGE);
-        sFormsProjectionMap.put(AUTO_DELETE, AUTO_DELETE);
-        sFormsProjectionMap.put(AUTO_SEND, AUTO_SEND);
-        sFormsProjectionMap.put(GEOMETRY_XPATH, GEOMETRY_XPATH);
-        sFormsProjectionMap.put(DELETED_DATE, DELETED_DATE);
+        PROJECTION_MAP.put(_ID, _ID);
+        PROJECTION_MAP.put(DISPLAY_NAME, DISPLAY_NAME);
+        PROJECTION_MAP.put(DESCRIPTION, DESCRIPTION);
+        PROJECTION_MAP.put(JR_FORM_ID, JR_FORM_ID);
+        PROJECTION_MAP.put(JR_VERSION, JR_VERSION);
+        PROJECTION_MAP.put(SUBMISSION_URI, SUBMISSION_URI);
+        PROJECTION_MAP.put(BASE64_RSA_PUBLIC_KEY, BASE64_RSA_PUBLIC_KEY);
+        PROJECTION_MAP.put(MD5_HASH, MD5_HASH);
+        PROJECTION_MAP.put(DATE, DATE);
+        PROJECTION_MAP.put(FORM_MEDIA_PATH, FORM_MEDIA_PATH);
+        PROJECTION_MAP.put(FORM_FILE_PATH, FORM_FILE_PATH);
+        PROJECTION_MAP.put(JRCACHE_FILE_PATH, JRCACHE_FILE_PATH);
+        PROJECTION_MAP.put(LANGUAGE, LANGUAGE);
+        PROJECTION_MAP.put(AUTO_DELETE, AUTO_DELETE);
+        PROJECTION_MAP.put(AUTO_SEND, AUTO_SEND);
+        PROJECTION_MAP.put(GEOMETRY_XPATH, GEOMETRY_XPATH);
+        PROJECTION_MAP.put(DELETED_DATE, DELETED_DATE);
     }
 }

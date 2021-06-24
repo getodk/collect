@@ -235,7 +235,7 @@ public class FillBlankFormActivity extends FormListActivity implements
         String[] columnNames = {
                 DatabaseFormColumns.DISPLAY_NAME,
                 DatabaseFormColumns.JR_VERSION,
-                hideOldFormVersions() ? DatabaseFormColumns.MAX_DATE : DatabaseFormColumns.DATE,
+                DatabaseFormColumns.DATE,
                 DatabaseFormColumns.GEOMETRY_XPATH
         };
         int[] viewIds = {

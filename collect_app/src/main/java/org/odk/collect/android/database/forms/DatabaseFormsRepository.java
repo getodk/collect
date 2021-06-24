@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
@@ -190,8 +191,8 @@ public class DatabaseFormsRepository implements FormsRepository {
         updateForm(id, values);
     }
 
-    public Cursor rawQuery(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
-        return queryAndReturnCursor(projection, selection, selectionArgs, sortOrder, groupBy);
+    public Cursor rawQuery(Map<String, String> projectionMap, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+        return queryAndReturnCursor(projectionMap, projection, selection, selectionArgs, sortOrder, groupBy);
     }
 
     @Nullable
@@ -201,15 +202,20 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private List<Form> queryForForms(String selection, String[] selectionArgs) {
-        try (Cursor cursor = queryAndReturnCursor(null, selection, selectionArgs, null, null)) {
+        try (Cursor cursor = queryAndReturnCursor(null, null, selection, selectionArgs, null, null)) {
             return getFormsFromCursor(cursor, formsPath, cachePath);
         }
     }
 
-    private Cursor queryAndReturnCursor(String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
+    private Cursor queryAndReturnCursor(Map<String, String> projectionMap, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
         SQLiteDatabase readableDatabase = databaseConnection.getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(FORMS_TABLE_NAME);
+
+        if (projectionMap != null) {
+            qb.setProjectionMap(projectionMap);
+        }
+
         return qb.query(readableDatabase, projection, selection, selectionArgs, groupBy, null, sortOrder);
     }
 
