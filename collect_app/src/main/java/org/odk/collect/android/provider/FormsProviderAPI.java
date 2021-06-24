@@ -36,6 +36,15 @@ public final class FormsProviderAPI {
      */
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
 
+    public static Uri getContentUri(String projectId) {
+        return new Uri.Builder()
+                .scheme("content")
+                .authority(AUTHORITY)
+                .appendPath("forms")
+                .appendQueryParameter("projectId", projectId)
+                .build();
+    }
+
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 

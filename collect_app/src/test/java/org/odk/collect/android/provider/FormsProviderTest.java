@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -22,7 +21,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.shared.strings.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -41,21 +39,21 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAG
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.getContentUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
 
     private ContentResolver contentResolver;
     private StoragePathProvider storagePathProvider;
+    private String firstProjectId;
 
     @Before
     public void setup() {
-        CollectHelpers.setupDemoProject();
-
         Context context = ApplicationProvider.getApplicationContext();
         storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
 
+        firstProjectId = CollectHelpers.createDemoProject();
         contentResolver = context.getContentResolver();
     }
 
@@ -68,9 +66,9 @@ public class FormsProviderTest {
         String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        contentResolver.insert(CONTENT_URI, values);
+        contentResolver.insert(getContentUri(firstProjectId), values);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -94,7 +92,7 @@ public class FormsProviderTest {
         File formFile = addFormToFormsDir(formId, formVersion, formName);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        Uri newFormUri = contentResolver.insert(CONTENT_URI, values);
+        Uri newFormUri = contentResolver.insert(getContentUri(firstProjectId), values);
 
         try (Cursor cursor = contentResolver.query(newFormUri, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -127,8 +125,8 @@ public class FormsProviderTest {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        contentResolver.update(CONTENT_URI, contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+        contentResolver.update(getContentUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -145,7 +143,7 @@ public class FormsProviderTest {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        int updatedCount = contentResolver.update(Uri.withAppendedPath(CONTENT_URI, String.valueOf(1)), contentValues, null, null);
+        int updatedCount = contentResolver.update(Uri.withAppendedPath(getContentUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
         assertThat(updatedCount, is(0));
     }
 
@@ -154,7 +152,7 @@ public class FormsProviderTest {
         Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
         contentResolver.delete(formUri, null, null);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(0));
         }
     }
@@ -175,15 +173,8 @@ public class FormsProviderTest {
             assertThat(mediaDir.exists(), is(true));
 
             String cacheFileName = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
-            File cacheFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + cacheFileName);
+            File cacheFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, firstProjectId) + File.separator + cacheFileName);
             assertThat(cacheFile.exists(), is(true));
-
-            ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
-            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
-                assertThat(itemsets.getCount(), is(1));
-            } finally {
-                itemsetDbAdapter.close();
-            }
 
             contentResolver.delete(formUri, null, null);
 
@@ -199,8 +190,8 @@ public class FormsProviderTest {
         addFormsToDirAndDb("form2", "1", "Not matching form");
         addFormsToDirAndDb("form3", "1", "Matching form");
 
-        contentResolver.delete(CONTENT_URI, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        contentResolver.delete(getContentUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -221,7 +212,7 @@ public class FormsProviderTest {
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -237,7 +228,7 @@ public class FormsProviderTest {
         addFormsToDirAndDb("form2", "1", "Not a matching form");
         addFormsToDirAndDb("form3", "1", "Matching form");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
             assertThat(cursor.getCount(), is(2));
 
             cursor.moveToNext();
@@ -254,7 +245,7 @@ public class FormsProviderTest {
         addFormsToDirAndDb("formC", "1", "Form C");
         addFormsToDirAndDb("formA", "1", "Form A");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, DISPLAY_NAME + " ASC")) {
+        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -270,14 +261,14 @@ public class FormsProviderTest {
 
     @Test
     public void getType_returnsFormAndAllFormsTypes() {
-        assertThat(contentResolver.getType(CONTENT_URI), is(CONTENT_TYPE));
-        assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
+        assertThat(contentResolver.getType(getContentUri(firstProjectId)), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(getContentUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
     }
 
     private Uri addFormsToDirAndDb(String id, String version, String name) {
         File formFile = addFormToFormsDir(id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
-        return contentResolver.insert(CONTENT_URI, values);
+        return contentResolver.insert(getContentUri(firstProjectId), values);
     }
 
     @NotNull
@@ -323,16 +314,10 @@ public class FormsProviderTest {
 
         // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
-            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + md5Hash + ".formdef").createNewFile();
+            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, firstProjectId) + File.separator + md5Hash + ".formdef").createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // Create a itemset table and row so we can check deletion etc - wouldn't always be there
-        String itemsetsCsvPath = mediaDirPath + File.separator + "itemsets.csv";
-        ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
-        itemsetDbAdapter.createTable(md5Hash, Md5.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
-        itemsetDbAdapter.close();
     }
 
     private String mediaPathForFormFile(File newFile) {
@@ -341,6 +326,6 @@ public class FormsProviderTest {
 
     @NotNull
     private String getFormsDirPath() {
-        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator;
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, firstProjectId) + File.separator;
     }
 }

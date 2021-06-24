@@ -22,6 +22,7 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -104,10 +105,12 @@ public class FormsProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         deferDaggerInit();
 
+        String projectId = uri.getQueryParameter("projectId");
+
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = databaseQuery(PROJECTION_MAP, projection, selection, selectionArgs, sortOrder, null);
+                cursor = databaseQuery(projectId, projection, selection, selectionArgs, sortOrder, null, PROJECTION_MAP);
                 cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
                 break;
 
@@ -119,13 +122,13 @@ public class FormsProvider extends ContentProvider {
                 Map<String, String> maxDateProjectionMap = new HashMap<>(PROJECTION_MAP);
                 maxDateProjectionMap.put("MAX(date)", DATE);
 
-                cursor = databaseQuery(maxDateProjectionMap, allColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID);
+                cursor = databaseQuery(projectId, allColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID, maxDateProjectionMap);
                 cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = databaseQuery(PROJECTION_MAP, null, _ID + "=?", new String[]{formId}, null, null);
+                cursor = databaseQuery(projectId, null, _ID + "=?", new String[]{formId}, null, null, PROJECTION_MAP);
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
@@ -162,8 +165,11 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        Form form = formsRepositoryProvider.get().save(getFormFromValues(initialValues, storagePathProvider));
-        return Uri.withAppendedPath(CONTENT_URI, String.valueOf(form.getDbId()));
+        String projectId = uri.getQueryParameter("projectId");
+        String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
+        String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
+        Form form = getFormsRepository(projectId).save(getFormFromValues(initialValues, formsPath, cachePath));
+        return Uri.withAppendedPath(FormsProviderAPI.getContentUri(projectId), String.valueOf(form.getDbId()));
     }
 
     /**
@@ -177,11 +183,12 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
-        FormDeleter formDeleter = new FormDeleter(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
+        String projectId = uri.getQueryParameter("projectId");
+        FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(PROJECTION_MAP, null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, PROJECTION_MAP)) {
                     while (cursor.moveToNext()) {
                         formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -207,19 +214,23 @@ public class FormsProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         deferDaggerInit();
-        FormsRepository formsRepository = formsRepositoryProvider.get();
+
+        String projectId = uri.getQueryParameter("projectId");
+        FormsRepository formsRepository = getFormsRepository(projectId);
+        String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
+        String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
 
         int count;
+
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(PROJECTION_MAP, null, where, whereArgs, null, null)) {
+                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, PROJECTION_MAP)) {
                     while (cursor.moveToNext()) {
-                        Form form = getFormFromCurrentCursorPosition(cursor, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
-
-                        ContentValues existingValues = getValuesFromForm(form, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
+                        Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
+                        ContentValues existingValues = getValuesFromForm(form, formsPath);
                         existingValues.putAll(values);
 
-                        formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
+                        formsRepository.save(getFormFromValues(existingValues, formsPath, cachePath));
                     }
 
                     count = cursor.getCount();
@@ -229,10 +240,10 @@ public class FormsProvider extends ContentProvider {
             case FORM_ID:
                 Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
                 if (form != null) {
-                    ContentValues existingValues = getValuesFromForm(form, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS));
+                    ContentValues existingValues = getValuesFromForm(form, formsPath);
                     existingValues.putAll(values);
 
-                    formsRepository.save(getFormFromValues(existingValues, storagePathProvider));
+                    formsRepository.save(getFormFromValues(existingValues, formsPath, cachePath));
                     count = 1;
                 } else {
                     count = 0;
@@ -250,8 +261,13 @@ public class FormsProvider extends ContentProvider {
         return count;
     }
 
-    private Cursor databaseQuery(Map<String, String> projectionMap, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy) {
-        return ((DatabaseFormsRepository) formsRepositoryProvider.get()).rawQuery(projectionMap, projection, selection, selectionArgs, sortOrder, groupBy);
+    @NotNull
+    private FormsRepository getFormsRepository(String projectId) {
+        return formsRepositoryProvider.get(projectId);
+    }
+
+    private Cursor databaseQuery(String projectId, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy, Map<String, String> projectionMap) {
+        return ((DatabaseFormsRepository) getFormsRepository(projectId)).rawQuery(projectionMap, projection, selection, selectionArgs, sortOrder, groupBy);
     }
 
     static {
