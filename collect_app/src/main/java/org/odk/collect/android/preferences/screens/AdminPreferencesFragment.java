@@ -144,8 +144,10 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog.class, getActivity().getSupportFragmentManager());
                     break;
                 case PROJECT_COLOR_KEY:
+                    Project.Saved project = currentProjectProvider.getCurrentProject();
                     Bundle bundle = new Bundle();
-                    bundle.putString(ColorPickerDialog.CURRENT_COLOR, currentProjectProvider.getCurrentProject().getColor());
+                    bundle.putString(ColorPickerDialog.CURRENT_COLOR, project.getColor());
+                    bundle.putString(ColorPickerDialog.CURRENT_ICON, project.getIcon());
                     DialogUtils.showIfNotShowing(ColorPickerDialog.class, bundle, getActivity().getSupportFragmentManager());
                     break;
                 case KEY_IMPORT_SETTINGS:

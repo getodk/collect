@@ -283,7 +283,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/current_color"
+            android:id="@+id/current_color_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="@dimen/margin_small"
@@ -293,10 +293,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/color11" >
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/current_color"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/color_circle" />
+                android:padding="@dimen/margin_extra_small"
+                android:background="@drawable/color_circle"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:gravity="center"
+                app:autoSizeTextType="uniform" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.textview.MaterialTextView
@@ -313,8 +319,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:padding="@dimen/margin_small"
-            app:layout_constraintTop_toTopOf="@+id/current_color"
-            app:layout_constraintBottom_toBottomOf="@+id/current_color"
+            app:layout_constraintTop_toTopOf="@+id/current_color_container"
+            app:layout_constraintBottom_toBottomOf="@+id/current_color_container"
             app:layout_constraintStart_toStartOf="@+id/color13"
             app:layout_constraintEnd_toEndOf="parent">
 
