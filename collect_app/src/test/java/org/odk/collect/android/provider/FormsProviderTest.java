@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
@@ -45,14 +47,15 @@ import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 public class FormsProviderTest {
 
     private ContentResolver contentResolver;
-    private File externalFilesDir;
+    private StoragePathProvider storagePathProvider;
 
     @Before
     public void setup() {
         CollectHelpers.setupDemoProject();
 
         Context context = ApplicationProvider.getApplicationContext();
-        externalFilesDir = new File(DaggerUtils.getComponent(context).storagePathProvider().getProjectRootDirPath());
+        storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
+
         contentResolver = context.getContentResolver();
     }
 
@@ -172,7 +175,7 @@ public class FormsProviderTest {
             assertThat(mediaDir.exists(), is(true));
 
             String cacheFileName = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
-            File cacheFile = new File(externalFilesDir + File.separator + ".cache" + File.separator + cacheFileName);
+            File cacheFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + cacheFileName);
             assertThat(cacheFile.exists(), is(true));
 
             ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
@@ -320,7 +323,7 @@ public class FormsProviderTest {
 
         // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
-            new File(externalFilesDir + File.separator + ".cache" + File.separator + md5Hash + ".formdef").createNewFile();
+            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + md5Hash + ".formdef").createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -338,6 +341,6 @@ public class FormsProviderTest {
 
     @NotNull
     private String getFormsDirPath() {
-        return externalFilesDir + File.separator + "forms" + File.separator;
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator;
     }
 }
