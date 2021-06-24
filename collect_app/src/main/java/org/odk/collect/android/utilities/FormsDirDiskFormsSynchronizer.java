@@ -2,7 +2,6 @@ package org.odk.collect.android.utilities;
 
 import android.database.SQLException;
 
-import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
@@ -21,8 +20,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 
 public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
@@ -209,10 +206,6 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
         HashMap<String, String> fields;
         try {
-            // If the form definition includes external secondary instances, they need to be resolved
-            final File formMediaDir = FileUtils.getFormMediaDir(formDefFile);
-            setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
-
             FileUtils.getOrCreateLastSavedSrc(formDefFile);
             fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
         } catch (RuntimeException e) {
