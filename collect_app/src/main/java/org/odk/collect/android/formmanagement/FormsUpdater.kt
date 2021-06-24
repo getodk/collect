@@ -94,15 +94,15 @@ class FormsUpdater(
 
         return sandbox.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
-                syncStatusAppState.startSync()
+                syncStatusAppState.startSync(projectId)
 
                 val exception = try {
                     serverFormsSynchronizer.synchronize()
-                    syncStatusAppState.finishSync(null)
+                    syncStatusAppState.finishSync(projectId, null)
                     notifier.onSync(null)
                     null
                 } catch (e: FormSourceException) {
-                    syncStatusAppState.finishSync(e)
+                    syncStatusAppState.finishSync(projectId, e)
                     notifier.onSync(e)
                     e
                 }

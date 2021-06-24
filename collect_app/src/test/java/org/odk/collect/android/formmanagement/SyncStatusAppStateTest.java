@@ -14,6 +14,7 @@ import org.odk.collect.forms.FormSourceException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -35,33 +36,50 @@ public class SyncStatusAppStateTest {
     @Test
     public void getSyncError_isNullAtFirst() {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
-        assertThat(syncStatusAppState.getSyncError().getValue(), is(nullValue()));
+        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(nullValue()));
     }
 
     @Test
     public void getSyncError_whenFinishSyncWithException_isException() {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
-        syncStatusAppState.startSync();
+        syncStatusAppState.startSync("projectId");
         FormSourceException exception = new FormSourceException.FetchError();
-        syncStatusAppState.finishSync(exception);
+        syncStatusAppState.finishSync("projectId", exception);
 
-        assertThat(syncStatusAppState.getSyncError().getValue(), is(exception));
+        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(exception));
     }
 
     @Test
     public void getSyncError_whenFinishSyncWithNull_isNull() {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
-        syncStatusAppState.startSync();
-        syncStatusAppState.finishSync(null);
+        syncStatusAppState.startSync("projectId");
+        syncStatusAppState.finishSync("projectId", null);
 
-        assertThat(syncStatusAppState.getSyncError().getValue(), is(nullValue()));
+        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(nullValue()));
+    }
+
+    @Test
+    public void isSyncing_isDifferentForDifferentProjects() {
+        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
+        syncStatusAppState.startSync("projectId");
+        assertThat(syncStatusAppState.isSyncing("projectId").getValue(), is(true));
+        assertThat(syncStatusAppState.isSyncing("otherProjectId").getValue(), is(false));
+    }
+
+    @Test
+    public void getSyncError_isDifferentForDifferentProjects() {
+        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
+        syncStatusAppState.startSync("projectId");
+        syncStatusAppState.finishSync("projectId", new FormSourceException.FetchError());
+        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(notNullValue()));
+        assertThat(syncStatusAppState.getSyncError("otherProjectId").getValue(), is(nullValue()));
     }
 
     @Test
     public void finishSync_updatesFormsContentObserver() {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
-        syncStatusAppState.startSync();
-        syncStatusAppState.finishSync(null);
+        syncStatusAppState.startSync("projectId");
+        syncStatusAppState.finishSync("projectId", null);
         verify(contentResolver).notifyChange(FormsProviderAPI.CONTENT_URI, null);
     }
 }

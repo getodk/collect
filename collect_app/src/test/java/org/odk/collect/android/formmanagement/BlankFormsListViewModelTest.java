@@ -55,7 +55,7 @@ public class BlankFormsListViewModelTest {
     @Test
     public void isSyncing_followsRepositoryIsSyncing() {
         MutableLiveData<Boolean> liveData = new MutableLiveData<>(true);
-        when(syncRepository.isSyncing()).thenReturn(liveData);
+        when(syncRepository.isSyncing("testProject")).thenReturn(liveData);
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider);
         assertThat(viewModel.isSyncing().getValue(), is(true));
@@ -67,7 +67,7 @@ public class BlankFormsListViewModelTest {
     @Test
     public void isOutOfSync_followsRepositorySyncError() {
         MutableLiveData<FormSourceException> liveData = new MutableLiveData<>(new FormSourceException.FetchError());
-        when(syncRepository.getSyncError()).thenReturn(liveData);
+        when(syncRepository.getSyncError("testProject")).thenReturn(liveData);
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider);
         LiveData<Boolean> outOfSync = liveDataTester.activate(viewModel.isOutOfSync());
