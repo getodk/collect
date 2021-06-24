@@ -223,7 +223,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     @Override
     protected void onResume() {
         super.onResume();
-        mainMenuViewModel.resume();
+        mainMenuViewModel.refreshInstances();
 
         setButtonsVisibility();
         currentProjectViewModel.refresh();

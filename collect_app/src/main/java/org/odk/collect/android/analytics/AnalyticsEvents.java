@@ -153,6 +153,12 @@ public class AnalyticsEvents {
 
     /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
+     * from disk
+     */
+    public static final String IMPORT_INSTANCE = "ImportInstance";
+
+    /**
+     * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk and then encrypted
      */
     public static final String IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance";

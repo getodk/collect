@@ -17,6 +17,7 @@ package org.odk.collect.android.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,16 +29,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
-import org.odk.collect.android.tasks.InstanceSyncTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -53,13 +54,11 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class SavedFormListFragment extends InstanceListFragment
-        implements DeleteInstancesListener, DiskSyncListener, View.OnClickListener {
+public class SavedFormListFragment extends InstanceListFragment implements DeleteInstancesListener, View.OnClickListener {
     private static final String DATA_MANAGER_LIST_SORTING_ORDER = "dataManagerListSortingOrder";
 
     DeleteInstancesTask deleteInstancesTask;
     private AlertDialog alertDialog;
-    private InstanceSyncTask instanceSyncTask;
     private ProgressDialog progressDialog;
 
     @Inject
@@ -87,9 +86,6 @@ public class SavedFormListFragment extends InstanceListFragment
         toggleButton.setOnClickListener(this);
 
         setupAdapter();
-        instanceSyncTask = new InstanceSyncTask(settingsProvider);
-        instanceSyncTask.setDiskSyncListener(this);
-//        instanceSyncTask.execute();
 
         super.onViewCreated(rootView, savedInstanceState);
     }
@@ -99,9 +95,6 @@ public class SavedFormListFragment extends InstanceListFragment
         // hook up to receive completion events
         if (deleteInstancesTask != null) {
             deleteInstancesTask.setDeleteListener(this);
-        }
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(this);
         }
         super.onResume();
         // async task may have completed while we were reorienting...
@@ -116,20 +109,10 @@ public class SavedFormListFragment extends InstanceListFragment
         if (deleteInstancesTask != null) {
             deleteInstancesTask.setDeleteListener(null);
         }
-        if (instanceSyncTask != null) {
-            instanceSyncTask.setDiskSyncListener(null);
-        }
         if (alertDialog != null && alertDialog.isShowing()) {
             alertDialog.dismiss();
         }
         super.onPause();
-    }
-
-    @Override
-    public void syncComplete(@NonNull String result) {
-        Timber.i("Disk scan complete");
-        hideProgressBarAndAllow();
-        showSnackbar(result);
     }
 
     private void setupAdapter() {
@@ -263,4 +246,9 @@ public class SavedFormListFragment extends InstanceListFragment
         }
     }
 
+    @Override
+    public void onLoadFinished(@NonNull @NotNull Loader<Cursor> loader, Cursor cursor) {
+        super.onLoadFinished(loader, cursor);
+        hideProgressBarAndAllow();
+    }
 }

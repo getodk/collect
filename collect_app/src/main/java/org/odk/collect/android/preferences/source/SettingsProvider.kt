@@ -13,4 +13,6 @@ interface SettingsProvider {
     fun getAdminSettings(projectId: String?): Settings
 
     fun getAdminSettings(): Settings = getAdminSettings(null)
+
+    fun clearAll()
 }

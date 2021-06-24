@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.async.Scheduler;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -80,6 +81,6 @@ public class MainMenuViewModelTest {
 
     @NotNull
     private MainMenuViewModel createViewModelWithVersion(String version) {
-        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(InstancesAppState.class));
+        return new MainMenuViewModel(mock(Application.class), new VersionInformation(() -> version), mock(SettingsProvider.class), mock(InstancesAppState.class), mock(Scheduler.class));
     }
 }

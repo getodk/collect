@@ -32,6 +32,11 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         }
     }
 
+    override fun clearAll() {
+        settings.values.forEach { it.clear() }
+        settings.clear()
+    }
+
     private fun getSharedPrefs(name: String) =
         context.getSharedPreferences(name, Context.MODE_PRIVATE)
 

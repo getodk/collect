@@ -455,7 +455,7 @@ public class SaveFormToDisk {
         }
     }
 
-    static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
+    public static void manageFilesAfterSavingEncryptedForm(File instanceXml, File submissionXml) throws IOException {
         // AT THIS POINT, there is no going back.  We are committed
         // to returning "success" (true) whether or not we can
         // rename "submission.xml" to instanceXml and whether or

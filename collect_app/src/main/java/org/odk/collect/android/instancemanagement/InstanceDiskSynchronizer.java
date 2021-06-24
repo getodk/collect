@@ -12,31 +12,31 @@
  * the License.
  */
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.instancemanagement;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import org.apache.commons.io.FileUtils;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.strings.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -44,8 +44,6 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -54,37 +52,31 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
 
-/**
- * Background task for syncing form instances from the instances folder to the instances table.
- * Returns immediately if it detects an error.
- */
-public class InstanceSyncTask extends AsyncTask<Void, String, String> {
+public class InstanceDiskSynchronizer {
 
     private static int counter;
 
     private String currentStatus = "";
-    private DiskSyncListener diskSyncListener;
     private final SettingsProvider settingsProvider;
-    StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final InstancesRepository instancesRepository;
+    private final Analytics analytics;
 
     public String getStatusMessage() {
         return currentStatus;
     }
 
-    public void setDiskSyncListener(DiskSyncListener diskSyncListener) {
-        this.diskSyncListener = diskSyncListener;
-    }
-
-    public InstanceSyncTask(SettingsProvider settingsProvider) {
+    public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
+        instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        analytics = DaggerUtils.getComponent(Collect.getInstance()).analytics();
     }
 
-    @Override
-    protected String doInBackground(Void... params) {
+    public String doInBackground() {
         int currentInstance = ++counter;
         Timber.i("[%d] doInBackground begins!", currentInstance);
         try {
-            List<String> candidateInstances = new LinkedList<>();
+            List<String> instancePaths = new LinkedList<>();
             File instancesPath = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
             if (instancesPath.exists() && instancesPath.isDirectory()) {
                 File[] instanceFolders = instancesPath.listFiles();
@@ -105,38 +97,21 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                         }
                     }
                     if (instanceFile.exists() && instanceFile.canRead()) {
-                        candidateInstances.add(instanceFile.getAbsolutePath());
+                        instancePaths.add(instanceFile.getAbsolutePath());
                     } else {
                         Timber.i("[%d] Ignoring: %s", currentInstance, instanceDir.getAbsolutePath());
                     }
-                }
-                Collections.sort(candidateInstances);
-
-                List<Instance> instancesToRemove = new ArrayList<>();
-
-                // Remove all the path that's already in the content provider
-                List<Instance> instances = new InstancesRepositoryProvider(Collect.getInstance()).get().getAllNotDeleted();
-
-                for (Instance instance : instances) {
-                    String instanceFilename = instance.getInstanceFilePath();
-
-                    if (candidateInstances.contains(instanceFilename) || instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
-                        candidateInstances.remove(instanceFilename);
-                    } else {
-                        instancesToRemove.add(instance);
-                    }
-                }
-
-                for (Instance instance : instancesToRemove) {
-                    new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
                 final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_INSTANCE_SYNC);
 
                 int counter = 0;
-                // Begin parsing and add them to the content provider
-                for (String candidateInstance : candidateInstances) {
-                    String instanceFormId = getFormIdFromInstance(candidateInstance);
+                for (String instancePath : instancePaths) {
+                    if (instancesRepository.getOneByPath(instancePath) != null) {
+                        continue; // Skip instances that are already stored in repo
+                    }
+
+                    String instanceFormId = getFormIdFromInstance(instancePath);
                     // only process if we can find the id from the instance file
                     if (instanceFormId != null) {
                         try {
@@ -151,8 +126,8 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
                                 String formName = form.getDisplayName();
                                 String submissionUri = form.getSubmissionUri();
 
-                                Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder()
-                                        .instanceFilePath(candidateInstance)
+                                Instance instance = instancesRepository.save(new Instance.Builder()
+                                        .instanceFilePath(instancePath)
                                         .submissionUri(submissionUri)
                                         .displayName(formName)
                                         .formId(jrFormId)
@@ -213,15 +188,24 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
             if (shouldInstanceBeEncrypted(form)) {
                 logImportAndEncrypt(form);
                 encryptInstance(instance);
+            } else {
+                logImport(form);
             }
         }
+    }
+
+    private void logImport(Form form) {
+        String id = form.getFormId();
+        String title = form.getDisplayName();
+        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
+        analytics.logFormEvent(AnalyticsEvents.IMPORT_INSTANCE, formIdHash);
     }
 
     private void logImportAndEncrypt(Form form) {
         String id = form.getFormId();
         String title = form.getDisplayName();
         String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
-        DaggerUtils.getComponent(Collect.getInstance()).analytics().logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
+        analytics.logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
     }
 
     private void encryptInstance(Instance instance) throws EncryptionException, IOException {
@@ -238,7 +222,7 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
 
-                new InstancesRepositoryProvider(Collect.getInstance()).get().save(new Instance.Builder(instance)
+                instancesRepository.save(new Instance.Builder(instance)
                         .canEditWhenComplete(false)
                         .geometryType(null)
                         .geometry(null)
@@ -255,13 +239,5 @@ public class InstanceSyncTask extends AsyncTask<Void, String, String> {
 
     private boolean shouldInstanceBeEncrypted(Form form) {
         return form.getBASE64RSAPublicKey() != null;
-    }
-
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        if (diskSyncListener != null) {
-            diskSyncListener.syncComplete(result);
-        }
     }
 }

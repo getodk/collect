@@ -447,6 +447,16 @@ public abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T copyInstance(String instanceFileName) {
+        try {
+            AdbFormLoadingUtils.copyInstanceToStorage(instanceFileName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return (T) this;
+    }
+
     public T assertContentDescriptionDisplayed(int string) {
         onView(withContentDescription(string)).check(matches(isDisplayed()));
         return (T) this;

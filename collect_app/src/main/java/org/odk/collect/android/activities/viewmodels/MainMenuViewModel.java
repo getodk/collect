@@ -14,10 +14,10 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer;
 import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
-
-import javax.inject.Inject;
 
 public class MainMenuViewModel extends ViewModel {
 
@@ -25,15 +25,20 @@ public class MainMenuViewModel extends ViewModel {
     private final Settings generalSettings;
     private final Settings adminSettings;
     private final InstancesAppState instancesAppState;
+    private final Scheduler scheduler;
     private final Application application;
+    private final SettingsProvider settingsProvider;
 
     public MainMenuViewModel(Application application, VersionInformation versionInformation,
-                             SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+                             SettingsProvider settingsProvider, InstancesAppState instancesAppState,
+                             Scheduler scheduler) {
         this.application = application;
         this.version = versionInformation;
+        this.settingsProvider = settingsProvider;
         this.generalSettings = settingsProvider.getGeneralSettings();
         this.adminSettings = settingsProvider.getAdminSettings();
         this.instancesAppState = instancesAppState;
+        this.scheduler = scheduler;
     }
 
     public String getVersion() {
@@ -110,8 +115,14 @@ public class MainMenuViewModel extends ViewModel {
         return commitDescription;
     }
 
-    public void resume() {
-        instancesAppState.update();
+    public void refreshInstances() {
+        scheduler.immediate(() -> {
+            new InstanceDiskSynchronizer(settingsProvider).doInBackground();
+            instancesAppState.update();
+            return null;
+        }, ignored -> {
+        });
+
     }
 
     public static class Factory implements ViewModelProvider.Factory {
@@ -120,20 +131,22 @@ public class MainMenuViewModel extends ViewModel {
         private final Application application;
         private final SettingsProvider settingsProvider;
         private final InstancesAppState instancesAppState;
+        private final Scheduler scheduler;
 
-        @Inject
         public Factory(VersionInformation versionInformation, Application application,
-                       SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
+                       SettingsProvider settingsProvider, InstancesAppState instancesAppState,
+                       Scheduler scheduler) {
             this.versionInformation = versionInformation;
             this.application = application;
             this.settingsProvider = settingsProvider;
             this.instancesAppState = instancesAppState;
+            this.scheduler = scheduler;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesAppState);
+            return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesAppState, scheduler);
         }
     }
 }
