@@ -36,7 +36,9 @@ class SettingsImporterTest {
     private var settingsValidator = mock<SettingsValidator> {
         on { isValid(any()) } doReturn true
     }
-    private val projectDetailsCreator = mock<ProjectDetailsCreator> {}
+    private val projectDetailsCreator = mock<ProjectDetailsCreator> {
+        on { createProjectFromDetails() } doReturn Project.DEMO_PROJECT
+    }
 
     private val generalDefaults: Map<String, Any> = mapOf(
         "key1" to "default",

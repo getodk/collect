@@ -36,19 +36,25 @@ class SettingsImporter(
         try {
             val jsonObject = JSONObject(json)
 
+            // Import general settings
             val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 
+            // Import admin settings
             val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
             importToPrefs(admin, adminSettings)
 
-            if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
-                importProjectDetails(
-                    generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
-                    jsonObject.getJSONObject(AppConfigurationKeys.PROJECT),
-                    project
-                )
+            // Import project details
+            val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
+                jsonObject.getJSONObject(AppConfigurationKeys.PROJECT)
+            } else {
+                JSONObject()
             }
+            importProjectDetails(
+                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
+                projectDetails,
+                project
+            )
         } catch (ignored: JSONException) {
             // Ignored
         }
