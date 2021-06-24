@@ -97,6 +97,11 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllUnsent() {
+        return getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED);
+    }
+
+    @Override
     public List<Instance> getAllByStatus(String... status) {
         try (Cursor instancesCursor = getCursorForAllByStatus(status)) {
             return getInstancesFromCursor(instancesCursor, instancesPath);

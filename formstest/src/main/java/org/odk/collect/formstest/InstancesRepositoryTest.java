@@ -57,6 +57,33 @@ public abstract class InstancesRepositoryTest {
     }
 
     @Test
+    public void getAllUnsent_returnsUnsentInstances() {
+        InstancesRepository instancesRepository = buildSubject();
+
+        instancesRepository.save(InstanceUtils.buildInstance("incomplete", "1", getInstancesDir())
+                .status(Instance.STATUS_INCOMPLETE)
+                .build());
+
+        instancesRepository.save(InstanceUtils.buildInstance("complete", "1", getInstancesDir())
+                .status(Instance.STATUS_COMPLETE)
+                .build());
+
+        instancesRepository.save(InstanceUtils.buildInstance("submission_failed", "1", getInstancesDir())
+                .status(Instance.STATUS_SUBMISSION_FAILED)
+                .build());
+
+        instancesRepository.save(InstanceUtils.buildInstance("submitted", "1", getInstancesDir())
+                .status(Instance.STATUS_SUBMITTED)
+                .build());
+
+        List<Instance> allUnsent = instancesRepository.getAllUnsent();
+        assertThat(allUnsent.size(), is(3));
+        assertThat(allUnsent.get(0).getFormId(), is("incomplete"));
+        assertThat(allUnsent.get(1).getFormId(), is("complete"));
+        assertThat(allUnsent.get(2).getFormId(), is("submission_failed"));
+    }
+
+    @Test
     public void getAllByStatus_withOneStatus_returnsMatchingInstances() {
         InstancesRepository instancesRepository = buildSubject();
 

@@ -28,6 +28,8 @@ public interface InstancesRepository {
 
     List<Instance> getAllNotDeleted();
 
+    List<Instance> getAllUnsent();
+
     List<Instance> getAllByStatus(String... status);
 
     int getCountByStatus(String... status);

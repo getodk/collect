@@ -78,6 +78,13 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     @Override
+    public List<Instance> getAllUnsent() {
+        return instances.stream()
+                .filter(instance -> !instance.getStatus().equals(Instance.STATUS_SUBMITTED))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Instance> getAllByStatus(String... status) {
         List<String> statuses = Arrays.asList(status);
         List<Instance> result = new ArrayList<>();
