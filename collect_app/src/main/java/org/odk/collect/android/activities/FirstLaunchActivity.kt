@@ -47,7 +47,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
         )
 
         binding.configureLater.setOnClickListener {
-            projectImporter.importDemoProject()
+            projectImporter.importNewProject(Project.DEMO_PROJECT)
             currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)

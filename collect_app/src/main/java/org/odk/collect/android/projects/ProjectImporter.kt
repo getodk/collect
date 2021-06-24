@@ -16,12 +16,6 @@ class ProjectImporter(
         return savedProject
     }
 
-    fun importDemoProject() {
-        val project = Project.DEMO_PROJECT
-        projectsRepository.save(project)
-        createProjectDirs(project)
-    }
-
     private fun createProjectDirs(project: Saved) {
         storagePathProvider.getProjectDirPaths(project.uuid).forEach { FileUtils.createDir(it) }
     }

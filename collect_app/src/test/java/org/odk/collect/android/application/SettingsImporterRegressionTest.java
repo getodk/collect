@@ -38,7 +38,7 @@ public class SettingsImporterRegressionTest {
 
     @Before
     public void setup() {
-        getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importDemoProject();
+        getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importNewProject(Project.Companion.getDEMO_PROJECT());
         getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
         settingsImporter = getComponent(ApplicationProvider.<Collect>getApplicationContext()).settingsImporter();
         currentProject = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject();
