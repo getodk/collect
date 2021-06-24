@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Collection;
@@ -91,6 +92,9 @@ public class FormsProvider extends ContentProvider {
     @Inject
     StoragePathProvider storagePathProvider;
 
+    @Inject
+    ProjectsRepository projectsRepository;
+
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
     private void deferDaggerInit() {
         DaggerUtils.getComponent(getContext()).inject(this);
@@ -105,7 +109,7 @@ public class FormsProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         deferDaggerInit();
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
 
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
@@ -165,7 +169,7 @@ public class FormsProvider extends ContentProvider {
             throw new IllegalArgumentException("Unknown URI " + uri);
         }
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
         Form form = getFormsRepository(projectId).save(getFormFromValues(initialValues, formsPath, cachePath));
@@ -183,7 +187,7 @@ public class FormsProvider extends ContentProvider {
 
         int count;
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
         FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
 
         switch (URI_MATCHER.match(uri)) {
@@ -215,7 +219,7 @@ public class FormsProvider extends ContentProvider {
     public int update(Uri uri, ContentValues values, String where, String[] whereArgs) {
         deferDaggerInit();
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
         FormsRepository formsRepository = getFormsRepository(projectId);
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
@@ -264,6 +268,16 @@ public class FormsProvider extends ContentProvider {
     @NotNull
     private FormsRepository getFormsRepository(String projectId) {
         return formsRepositoryProvider.get(projectId);
+    }
+
+    private String getProjectId(@NonNull Uri uri) {
+        String queryParam = uri.getQueryParameter("projectId");
+
+        if (queryParam != null) {
+            return queryParam;
+        } else {
+            return projectsRepository.getAll().get(0).getUuid();
+        }
     }
 
     private Cursor databaseQuery(String projectId, String[] projection, String selection, String[] selectionArgs, String sortOrder, String groupBy, Map<String, String> projectionMap) {

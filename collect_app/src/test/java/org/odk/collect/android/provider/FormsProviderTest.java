@@ -19,6 +19,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -256,6 +257,27 @@ public class FormsProviderTest {
 
             cursor.moveToNext();
             assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is("formC"));
+        }
+    }
+
+    @Test
+    public void query_withoutProjectId_usesFirstProject() {
+        CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
+        addFormsToDirAndDb("formA", "1", "Form A");
+
+        Uri uriWithProject = getContentUri("blah");
+        Uri uriWithoutProject = new Uri.Builder()
+                .scheme(uriWithProject.getScheme())
+                .authority(uriWithProject.getAuthority())
+                .path(uriWithProject.getPath())
+                .query(null)
+                .build();
+
+        try (Cursor cursor = contentResolver.query(uriWithoutProject, null, null, null, DISPLAY_NAME + " ASC")) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is("formA"));
         }
     }
 

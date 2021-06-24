@@ -35,10 +35,13 @@ import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;
+
+import javax.inject.Inject;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -53,6 +56,9 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
     private static final boolean DO_NOT_EXIT = false;
 
     private boolean editMode;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -163,9 +169,9 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (editMode) {
-            return new CursorLoaderFactory().createUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(currentProjectProvider).createUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return new CursorLoaderFactory().createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(currentProjectProvider).createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

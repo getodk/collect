@@ -34,6 +34,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -66,6 +67,9 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     @Inject
     FastExternalItemsetsRepository fastExternalItemsetsRepository;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -146,7 +150,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
     @Override
     protected CursorLoader getCursorLoader() {
-        return new CursorLoaderFactory().getFormsCursorLoader(getFilterText(), getSortingOrder(), false);
+        return new CursorLoaderFactory(currentProjectProvider).getFormsCursorLoader(getFilterText(), getSortingOrder(), false);
     }
 
     /**

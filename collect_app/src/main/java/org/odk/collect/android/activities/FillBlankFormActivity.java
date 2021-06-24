@@ -42,6 +42,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -72,6 +73,9 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Inject
     BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     BlankFormListMenuDelegate menuDelegate;
 
@@ -266,7 +270,7 @@ public class FillBlankFormActivity extends FormListActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
 
-        return new CursorLoaderFactory().getFormsCursorLoader(getFilterText(), getSortingOrder(), hideOldFormVersions());
+        return new CursorLoaderFactory(currentProjectProvider).getFormsCursorLoader(getFilterText(), getSortingOrder(), hideOldFormVersions());
     }
 
     @Override
