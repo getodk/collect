@@ -28,8 +28,10 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     @Override
     public MainMenuPage assertOnPage() {
-        onView(withText(containsString(getTranslatedString(R.string.app_name)))).check(matches(isDisplayed()));
-        return this;
+        return waitFor(() -> {
+            onView(withText(containsString(getTranslatedString(R.string.app_name)))).check(matches(isDisplayed()));
+            return this;
+        });
     }
 
     public ProjectSettingsDialogPage openProjectSettings() {
