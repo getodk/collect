@@ -475,7 +475,7 @@ public class AppDependencyModule {
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
                                                  CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, new ProjectDetailsCreator(context));
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
     }
 
     @Provides
