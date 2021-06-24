@@ -34,6 +34,7 @@ import org.odk.collect.android.activities.ActivityUtils;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
+import org.odk.collect.android.projects.DeleteProjectResult;
 import org.odk.collect.androidshared.ColorPickerViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
@@ -230,13 +231,22 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
     }
 
     public void deleteProject() {
-        Project.Saved newProject = projectDeleter.deleteCurrentProject();
+        DeleteProjectResult deleteProjectResult = projectDeleter.deleteCurrentProject();
 
-        if (newProject != null) {
-            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
-            ToastUtils.showLongToast(getString(R.string.switched_project, newProject.getName()));
-        } else {
-            ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
+        if (deleteProjectResult instanceof DeleteProjectResult.UnsentInstances) {
+            new AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.cannot_delete_project_title)
+                    .setMessage(R.string.cannot_delete_project_message)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        } else if (deleteProjectResult instanceof DeleteProjectResult.DeletedSuccessfully) {
+            Project.Saved newCurrentProject = ((DeleteProjectResult.DeletedSuccessfully) deleteProjectResult).getProject();
+            if (newCurrentProject != null) {
+                ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
+                ToastUtils.showLongToast(getString(R.string.switched_project, newCurrentProject.getName()));
+            } else {
+                ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), SplashScreenActivity.class);
+            }
         }
     }
 }

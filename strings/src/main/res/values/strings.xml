@@ -996,6 +996,8 @@
     <string name="delete_project_confirm_message">Are you sure you want to delete the current project?</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
+    <string name="cannot_delete_project_title">Cannot delete the current project!</string>
+    <string name="cannot_delete_project_message">You have unsent instances. Please send them or delete first.</string>
     <string name="or">OR</string>
     <string name="hex_color">Hex color</string>
     <string name="invalid_hex_code">Invalid hex code</string>
