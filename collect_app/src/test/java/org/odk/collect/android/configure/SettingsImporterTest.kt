@@ -9,10 +9,10 @@ import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils
@@ -203,18 +203,8 @@ class SettingsImporterTest {
 
         whenever(projectDetailsCreator.createProjectFromDetails("", newProject.name, newProject.icon, newProject.color)).thenReturn(newProject)
 
-        importer = SettingsImporter(
-            settingsProvider,
-            { _: Settings?, _: Settings? -> },
-            settingsValidator,
-            generalDefaults,
-            adminDefaults,
-            { _: String?, _: Any?, _: String? -> },
-            projectsRepository,
-            projectDetailsCreator
-        )
         importer.fromJSON(settings.toString(), currentProject)
-        Mockito.verify(projectsRepository)
+        verify(projectsRepository)
             .save(Project.Saved(currentProject.uuid, newProject.name, newProject.icon, newProject.color))
     }
 

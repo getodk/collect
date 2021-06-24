@@ -13,7 +13,7 @@ import org.odk.collect.shared.Settings
 
 class SettingsImporter(
     private val settingsProvider: SettingsProvider,
-    private val settngsMigrator: SettingsMigrator,
+    private val settingsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
     private val adminDefaults: Map<String, Any>,
@@ -44,7 +44,7 @@ class SettingsImporter(
 
             if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
                 importProjectDetails(
-                    settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SERVER_URL) ?: "",
+                    generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
                     jsonObject.getJSONObject(AppConfigurationKeys.PROJECT),
                     project
                 )
@@ -53,7 +53,7 @@ class SettingsImporter(
             // Ignored
         }
 
-        settngsMigrator.migrate(generalSettings, adminSettings)
+        settingsMigrator.migrate(generalSettings, adminSettings)
 
         clearUnknownKeys(generalSettings, generalDefaults)
         clearUnknownKeys(adminSettings, adminDefaults)
