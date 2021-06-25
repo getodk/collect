@@ -206,7 +206,6 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
         HashMap<String, String> fields;
         try {
-            FileUtils.getOrCreateLastSavedSrc(formDefFile);
             fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());

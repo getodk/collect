@@ -1,7 +1,6 @@
 package org.odk.collect.android.formmanagement
 
 import android.content.Context
-import org.javarosa.core.reference.ReferenceManager
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsUtils
@@ -158,7 +157,7 @@ private fun formDownloader(
         projectSandbox.formsRepository,
         File(projectSandbox.cacheDir),
         projectSandbox.formsDir,
-        FormMetadataParser(ReferenceManager.instance()),
+        FormMetadataParser(),
         analytics
     )
 }

@@ -28,17 +28,13 @@ public class FormUtils {
      * directory with name matching the name of the directory represented by {@code formMediaDir}.
      * <p>
      * E.g. if /foo/bar/baz is passed in as {@code formMediaDir}, jr:// URIs will be resolved to
-     * /odk/root/forms/baz.
+     * projectRoot/forms/baz.
      */
     public static void setupReferenceManagerForForm(ReferenceManager referenceManager, File formMediaDir) {
-        // Clear mappings to the media dir for the previous form that was configured
-        referenceManager.clearSession();
+        referenceManager.reset();
 
-        // This should get moved to the Application Class
-        if (referenceManager.getFactories().length == 0) {
-            // Always build URIs against the ODK root, regardless of the absolute path of formMediaDir
-            referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getProjectRootDirPath()));
-        }
+        // Always build URIs against the project root, regardless of the absolute path of formMediaDir
+        referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getProjectRootDirPath()));
 
         addSessionRootTranslators(referenceManager,
                 buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));
@@ -50,7 +46,7 @@ public class FormUtils {
 
     public static List<RootTranslator> buildSessionRootTranslators(String formMediaDir, String[] hostStrings) {
         List<RootTranslator> rootTranslators = new ArrayList<>();
-        // Set jr://... to point to /sdcard/odk/forms/formBasename-media/
+        // Set jr://... to point to <projectRoot>/forms/formBasename-media/
         final String translatedPrefix = String.format("jr://file/forms/" + formMediaDir + "/");
         for (String t : hostStrings) {
             rootTranslators.add(new RootTranslator(String.format("jr://%s/", t), translatedPrefix));
