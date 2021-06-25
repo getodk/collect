@@ -329,7 +329,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository) {
+    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository, Context context) {
         return new SettingsImporter(
                 settingsProvider,
                 preferenceMigrator,
@@ -337,7 +337,8 @@ public class AppDependencyModule {
                 GeneralKeys.getDefaults(),
                 AdminKeys.getDefaults(),
                 settingsChangeHandler,
-                projectsRepository
+                projectsRepository,
+                new ProjectDetailsCreator(context)
         );
     }
 
@@ -475,7 +476,7 @@ public class AppDependencyModule {
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
                                                  CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter, Context context) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, new ProjectDetailsCreator(context));
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
     }
 
     @Provides

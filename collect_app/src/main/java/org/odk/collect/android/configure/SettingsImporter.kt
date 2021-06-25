@@ -4,19 +4,22 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 
 class SettingsImporter(
     private val settingsProvider: SettingsProvider,
-    private val settngsMigrator: SettingsMigrator,
+    private val settingsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
     private val adminDefaults: Map<String, Any>,
     private val settingsChangedHandler: SettingsChangeHandler,
-    private val projectsRepository: ProjectsRepository
+    private val projectsRepository: ProjectsRepository,
+    private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
     fun fromJSON(json: String, project: Project.Saved): Boolean {
@@ -33,20 +36,30 @@ class SettingsImporter(
         try {
             val jsonObject = JSONObject(json)
 
+            // Import general settings
             val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 
+            // Import admin settings
             val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
             importToPrefs(admin, adminSettings)
 
-            if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
-                importProjectDetails(jsonObject.getJSONObject(AppConfigurationKeys.PROJECT), project)
+            // Import project details
+            val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
+                jsonObject.getJSONObject(AppConfigurationKeys.PROJECT)
+            } else {
+                JSONObject()
             }
+            importProjectDetails(
+                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
+                projectDetails,
+                project
+            )
         } catch (ignored: JSONException) {
             // Ignored
         }
 
-        settngsMigrator.migrate(generalSettings, adminSettings)
+        settingsMigrator.migrate(generalSettings, adminSettings)
 
         clearUnknownKeys(generalSettings, generalDefaults)
         clearUnknownKeys(adminSettings, adminDefaults)
@@ -85,16 +98,30 @@ class SettingsImporter(
         }
     }
 
-    private fun importProjectDetails(projectJson: JSONObject, project: Project.Saved) {
-        val projectName = if (projectJson.has(AppConfigurationKeys.PROJECT_NAME)) projectJson.get(AppConfigurationKeys.PROJECT_NAME).toString() else project.name
-        val projectIcon = if (projectJson.has(AppConfigurationKeys.PROJECT_ICON)) projectJson.get(AppConfigurationKeys.PROJECT_ICON).toString() else project.icon
-        val projectColor = if (projectJson.has(AppConfigurationKeys.PROJECT_COLOR)) projectJson.get(AppConfigurationKeys.PROJECT_COLOR).toString() else project.color
+    private fun importProjectDetails(url: String, projectJson: JSONObject, project: Project.Saved) {
+        val projectName = if (projectJson.has(AppConfigurationKeys.PROJECT_NAME)) {
+            projectJson.getString(AppConfigurationKeys.PROJECT_NAME)
+        } else {
+            ""
+        }
+        val projectIcon = if (projectJson.has(AppConfigurationKeys.PROJECT_ICON)) {
+            projectJson.getString(AppConfigurationKeys.PROJECT_ICON)
+        } else {
+            ""
+        }
+        val projectColor = if (projectJson.has(AppConfigurationKeys.PROJECT_COLOR)) {
+            projectJson.getString(AppConfigurationKeys.PROJECT_COLOR)
+        } else {
+            ""
+        }
+
+        val newProject = projectDetailsCreator.createProjectFromDetails(url, projectName, projectIcon, projectColor)
 
         projectsRepository.save(
             project.copy(
-                name = projectName,
-                icon = projectIcon,
-                color = projectColor
+                name = newProject.name,
+                icon = newProject.icon,
+                color = newProject.color
             )
         )
     }
