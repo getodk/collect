@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.formstest.InstanceUtils;
 
@@ -46,14 +48,15 @@ import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 public class InstanceProviderTest {
 
     private ContentResolver contentResolver;
-    private File externalFilesDir;
+    private String firstProjectId;
+    private StoragePathProvider storagePathProvider;
 
     @Before
     public void setup() {
-        CollectHelpers.setupDemoProject();
-
         Context context = ApplicationProvider.getApplicationContext();
-        externalFilesDir = new File(DaggerUtils.getComponent(context).storagePathProvider().getProjectRootDirPath());
+        storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
+
+        firstProjectId = CollectHelpers.setupDemoProject();
         contentResolver = context.getContentResolver();
     }
 
@@ -185,7 +188,7 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_deletesInstanceDir() {
-        File instanceFile = createInstanceDirAndFile();
+        File instanceFile = createInstanceDirAndFile(firstProjectId);
 
         Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
         contentResolver.delete(uri, null, null);
@@ -194,7 +197,7 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_whenStatusIsSubmitted_deletesFilesButSoftDeletesInstance() {
-        File instanceFile = createInstanceDirAndFile();
+        File instanceFile = createInstanceDirAndFile(firstProjectId);
         Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
@@ -214,7 +217,7 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_whenStatusIsSubmitted_clearsGeometryFields() {
-        File instanceFile = createInstanceDirAndFile();
+        File instanceFile = createInstanceDirAndFile(firstProjectId);
         Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
@@ -332,8 +335,8 @@ public class InstanceProviderTest {
         assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
     }
 
-    private File createInstanceDirAndFile() {
-        return InstanceUtils.createInstanceDirAndFile(externalFilesDir + File.separator + "instances");
+    private File createInstanceDirAndFile(String projectId) {
+        return InstanceUtils.createInstanceDirAndFile(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId));
     }
 
     private Uri addInstanceToDb(String instanceFilePath, String displayName) {
