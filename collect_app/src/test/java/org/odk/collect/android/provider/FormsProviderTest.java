@@ -102,7 +102,7 @@ public class FormsProviderTest {
 
     @Test
     public void update_updatesForm_andReturns1() {
-        Uri formUri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
@@ -119,9 +119,9 @@ public class FormsProviderTest {
 
     @Test
     public void update_withSelection_onlyUpdatesMatchingForms() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
@@ -150,7 +150,7 @@ public class FormsProviderTest {
 
     @Test
     public void delete_deletesForm() {
-        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
         contentResolver.delete(formUri, null, null);
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
@@ -160,7 +160,7 @@ public class FormsProviderTest {
 
     @Test
     public void delete_deletesFiles() {
-        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
         try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
@@ -187,9 +187,9 @@ public class FormsProviderTest {
 
     @Test
     public void delete_withSelection_onlyDeletesMatchingForms() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
         contentResolver.delete(getUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Matching form"});
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
@@ -202,7 +202,7 @@ public class FormsProviderTest {
 
     @Test
     public void query_returnsTheExpectedNumberColumns() {
-        Uri uri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+        Uri uri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
             assertThat(cursor.getColumnCount(), is(17));
@@ -211,7 +211,7 @@ public class FormsProviderTest {
 
     @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
-        addFormsToDirAndDb("external_app_form", "1", "External app form");
+        addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -225,9 +225,9 @@ public class FormsProviderTest {
 
     @Test
     public void query_withSelection_onlyReturnsMatchingRows() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not a matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not a matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
             assertThat(cursor.getCount(), is(2));
@@ -242,9 +242,9 @@ public class FormsProviderTest {
 
     @Test
     public void query_withSortOrder_returnsSortedResults() {
-        addFormsToDirAndDb("formB", "1", "Form B");
-        addFormsToDirAndDb("formC", "1", "Form C");
-        addFormsToDirAndDb("formA", "1", "Form A");
+        addFormsToDirAndDb(firstProjectId, "formB", "Form B", "1");
+        addFormsToDirAndDb(firstProjectId, "formC", "Form C", "1");
+        addFormsToDirAndDb(firstProjectId, "formA", "Form A", "1");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
@@ -263,7 +263,7 @@ public class FormsProviderTest {
     @Test
     public void query_withoutProjectId_usesFirstProject() {
         CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
-        addFormsToDirAndDb("formA", "1", "Form A");
+        addFormsToDirAndDb(firstProjectId, "formA", "Form A", "1");
 
         Uri uriWithProject = getUri("blah");
         Uri uriWithoutProject = new Uri.Builder()
@@ -287,10 +287,10 @@ public class FormsProviderTest {
         assertThat(contentResolver.getType(Uri.withAppendedPath(getUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
     }
 
-    private Uri addFormsToDirAndDb(String id, String version, String name) {
+    private Uri addFormsToDirAndDb(String projectId, String id, String name, String version) {
         File formFile = addFormToFormsDir(id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
-        return contentResolver.insert(getUri(firstProjectId), values);
+        return contentResolver.insert(getUri(projectId), values);
     }
 
     @NotNull
