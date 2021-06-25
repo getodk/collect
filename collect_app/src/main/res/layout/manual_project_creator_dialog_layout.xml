@@ -162,7 +162,7 @@
         android:src="@drawable/shadow_up"
         app:layout_constraintBottom_toTopOf="@+id/cancel_button" />
 
-    <com.google.android.material.button.MaterialButton
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/cancel_button"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
@@ -173,7 +173,7 @@
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintTop_toTopOf="@+id/add_button" />
 
-    <com.google.android.material.button.MaterialButton
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/add_button"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
