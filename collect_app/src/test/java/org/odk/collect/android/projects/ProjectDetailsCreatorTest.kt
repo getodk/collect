@@ -20,38 +20,38 @@ class ProjectDetailsCreatorTest {
     }
 
     @Test
-    fun `If project name is not included in project details or empty should be generated based on url`() {
-        // Case1: not included
+    fun `If project name is not included in project details should be generated based on url`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-server.com").name, `is`("my-server.com"))
+    }
 
-        // Case2: empty
+    @Test
+    fun `If project name is empty should be generated based on url`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-server.com", name = " ").name, `is`("my-server.com"))
     }
 
     @Test
-    fun `If project icon is included in project details should be used`() {
-        // Case1: normal chars
+    fun `If project icon is included in project details and it's a normal char should be used`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(icon = "X").icon, `is`("X"))
+    }
 
-        // Case2: emoticons
+    @Test
+    fun `If project icon is included in project details and it's an emoticon should be used`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(icon = "\uD83D\uDC22").icon, `is`("\uD83D\uDC22"))
     }
 
     @Test
-    fun `If project icon is not included in project details or empty should be generated based on project name`() {
-        // Case1: not included
+    fun `If project icon is not included in project details should be generated based on project name`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X").icon, `is`("P"))
+    }
 
-        // Case2: empty
+    @Test
+    fun `If project icon is empty should be generated based on project name`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(name = "My Project X", icon = " ").icon, `is`("M"))
     }
 
     @Test
     fun `If project icon is included in project details but longer than one sign, only the first sign should be used`() {
-        // Case1: normal chars
         assertThat(projectDetailsCreator.createProjectFromDetails(icon = "XX").icon, `is`("X"))
-
-        // Case2: emoticons
         assertThat(projectDetailsCreator.createProjectFromDetails(icon = "\uD83D\uDC22XX").icon, `is`("\uD83D\uDC22"))
     }
 
@@ -62,10 +62,11 @@ class ProjectDetailsCreatorTest {
 
     @Test
     fun `If project color is not included in project details should be generated based on project name`() {
-        // Case1: any project name
         assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X").color, `is`("#9f50b0"))
+    }
 
-        // Case2: demo project
+    @Test
+    fun `If project color is not included in project details and project name is demo the color should be demo color`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(name = Project.DEMO_PROJECT_NAME).color, `is`(Project.DEMO_PROJECT_COLOR))
     }
 

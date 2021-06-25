@@ -22,7 +22,7 @@ class ProjectDetailsCreator(private val context: Context) {
             if (Character.codePointCount(icon, 0, icon.length) == 1) {
                 icon.toUpperCase(Locale.US)
             } else {
-                getFirstSing(icon)
+                getFirstSign(icon)
             }
         } else {
             projectName.first().toUpperCase().toString()
@@ -68,11 +68,11 @@ class ProjectDetailsCreator(private val context: Context) {
             .matches()
     }
 
-    private fun getFirstSing(value: String): String {
+    private fun getFirstSign(value: String): String {
         return if (Character.codePointCount(value, 0, value.length) == 1) {
             value
         } else {
-            getFirstSing(value.substring(0, value.length - 1))
+            getFirstSign(value.substring(0, value.length - 1))
         }
     }
 }
