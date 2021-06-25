@@ -41,6 +41,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -66,8 +67,6 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HAS
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 
 public class FormsProvider extends ContentProvider {
-
-    private static final HashMap<String, String> PROJECTION_MAP = new HashMap<>();
 
     private static final int FORMS = 1;
     private static final int FORM_ID = 2;
@@ -113,25 +112,46 @@ public class FormsProvider extends ContentProvider {
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                cursor = databaseQuery(projectId, projection, selection, selectionArgs, sortOrder, null, PROJECTION_MAP);
+                cursor = databaseQuery(projectId, projection, selection, selectionArgs, sortOrder, null, null);
                 cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
                 break;
 
             case NEWEST_FORMS_BY_FORM_ID:
-                Collection<String> allColumns = new HashSet<>(PROJECTION_MAP.values());
-                allColumns.remove(DATE);
-                allColumns.add("MAX(date)");
+                Set<String> maxDateColumns = new HashSet<>();
+                maxDateColumns.add(_ID);
+                maxDateColumns.add(DISPLAY_NAME);
+                maxDateColumns.add(DESCRIPTION);
+                maxDateColumns.add(JR_FORM_ID);
+                maxDateColumns.add(JR_VERSION);
+                maxDateColumns.add(SUBMISSION_URI);
+                maxDateColumns.add(BASE64_RSA_PUBLIC_KEY);
+                maxDateColumns.add(MD5_HASH);
+                maxDateColumns.add(FORM_MEDIA_PATH);
+                maxDateColumns.add(FORM_FILE_PATH);
+                maxDateColumns.add(JRCACHE_FILE_PATH);
+                maxDateColumns.add(LANGUAGE);
+                maxDateColumns.add(AUTO_DELETE);
+                maxDateColumns.add(AUTO_SEND);
+                maxDateColumns.add(GEOMETRY_XPATH);
+                maxDateColumns.add(DELETED_DATE);
+                maxDateColumns.add("MAX(date)");
 
-                Map<String, String> maxDateProjectionMap = new HashMap<>(PROJECTION_MAP);
-                maxDateProjectionMap.put("MAX(date)", DATE);
+                Map<String, String> maxDateProjectionMap = new HashMap<>();
+                for (String column : maxDateColumns) {
+                    if (column.equals("MAX(date)")) {
+                        maxDateProjectionMap.put("MAX(date)", DATE);
+                    } else {
+                        maxDateProjectionMap.put(column, column);
+                    }
+                }
 
-                cursor = databaseQuery(projectId, allColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID, maxDateProjectionMap);
+                cursor = databaseQuery(projectId, maxDateColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID, maxDateProjectionMap);
                 cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
                 break;
 
             case FORM_ID:
                 String formId = String.valueOf(ContentUriHelper.getIdFromUri(uri));
-                cursor = databaseQuery(projectId, null, _ID + "=?", new String[]{formId}, null, null, PROJECTION_MAP);
+                cursor = databaseQuery(projectId, null, _ID + "=?", new String[]{formId}, null, null, null);
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 break;
 
@@ -191,7 +211,7 @@ public class FormsProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, PROJECTION_MAP)) {
+                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
                     while (cursor.moveToNext()) {
                         formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
@@ -226,7 +246,7 @@ public class FormsProvider extends ContentProvider {
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
-                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, PROJECTION_MAP)) {
+                try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
                     while (cursor.moveToNext()) {
                         Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
                         ContentValues existingValues = getValuesFromForm(form, formsPath);
@@ -286,23 +306,5 @@ public class FormsProvider extends ContentProvider {
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
         // Only available for query and type
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
-
-        PROJECTION_MAP.put(_ID, _ID);
-        PROJECTION_MAP.put(DISPLAY_NAME, DISPLAY_NAME);
-        PROJECTION_MAP.put(DESCRIPTION, DESCRIPTION);
-        PROJECTION_MAP.put(JR_FORM_ID, JR_FORM_ID);
-        PROJECTION_MAP.put(JR_VERSION, JR_VERSION);
-        PROJECTION_MAP.put(SUBMISSION_URI, SUBMISSION_URI);
-        PROJECTION_MAP.put(BASE64_RSA_PUBLIC_KEY, BASE64_RSA_PUBLIC_KEY);
-        PROJECTION_MAP.put(MD5_HASH, MD5_HASH);
-        PROJECTION_MAP.put(DATE, DATE);
-        PROJECTION_MAP.put(FORM_MEDIA_PATH, FORM_MEDIA_PATH);
-        PROJECTION_MAP.put(FORM_FILE_PATH, FORM_FILE_PATH);
-        PROJECTION_MAP.put(JRCACHE_FILE_PATH, JRCACHE_FILE_PATH);
-        PROJECTION_MAP.put(LANGUAGE, LANGUAGE);
-        PROJECTION_MAP.put(AUTO_DELETE, AUTO_DELETE);
-        PROJECTION_MAP.put(AUTO_SEND, AUTO_SEND);
-        PROJECTION_MAP.put(GEOMETRY_XPATH, GEOMETRY_XPATH);
-        PROJECTION_MAP.put(DELETED_DATE, DELETED_DATE);
     }
 }
