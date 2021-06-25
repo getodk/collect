@@ -42,6 +42,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.provider.InstanceProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
@@ -82,6 +83,9 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     private MapFragment map;
 
@@ -199,7 +203,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            final Uri formUri = ContentUris.withAppendedId(FormsProviderAPI.CONTENT_URI, viewModel.getFormId());
+            final Uri formUri = FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
             startActivity(new Intent(Intent.ACTION_EDIT, formUri));
         });
 

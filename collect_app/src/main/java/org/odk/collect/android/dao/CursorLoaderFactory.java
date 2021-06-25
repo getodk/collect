@@ -163,7 +163,7 @@ public class CursorLoaderFactory {
         if (charSequence.length() == 0) {
             Uri formUri = newestByFormId ?
                     FormsProviderAPI.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
-                    FormsProviderAPI.CONTENT_URI;
+                    FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid());
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
             String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
@@ -171,7 +171,7 @@ public class CursorLoaderFactory {
 
             Uri formUri = newestByFormId ?
                     FormsProviderAPI.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
-                    FormsProviderAPI.CONTENT_URI;
+                    FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid());
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;

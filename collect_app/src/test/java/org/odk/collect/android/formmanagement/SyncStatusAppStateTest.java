@@ -80,6 +80,6 @@ public class SyncStatusAppStateTest {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
         syncStatusAppState.startSync("projectId");
         syncStatusAppState.finishSync("projectId", null);
-        verify(contentResolver).notifyChange(FormsProviderAPI.CONTENT_URI, null);
+        verify(contentResolver).notifyChange(FormsProviderAPI.getUri("projectId"), null);
     }
 }

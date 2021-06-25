@@ -34,15 +34,12 @@ public final class FormsProviderAPI {
     /**
      * The content:// style URL for accessing Forms.
      */
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
+    public static Uri getUri(String projectId, Long formDbId) {
+        return Uri.parse("content://" + AUTHORITY + "/forms/" + formDbId + "?projectId=" + projectId);
+    }
 
-    public static Uri getContentUri(String projectId) {
-        return new Uri.Builder()
-                .scheme("content")
-                .authority(AUTHORITY)
-                .appendPath("forms")
-                .appendQueryParameter("projectId", projectId)
-                .build();
+    public static Uri getUri(String projectId) {
+        return Uri.parse("content://" + AUTHORITY + "/forms?projectId=" + projectId);
     }
 
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";

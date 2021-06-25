@@ -17,10 +17,10 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
-
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 /**
  * Background task for adding to the forms content provider, any forms that have been added to the
@@ -47,7 +47,8 @@ public class FormSyncTask extends AsyncTask<Void, String, String> {
         super.onPostExecute(result);
 
         // Make sure content observers (CursorLoaders for instance) are notified of change
-        Collect.getInstance().getContentResolver().notifyChange(CONTENT_URI, null);
+        String projectId = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider().getCurrentProject().getUuid();
+        Collect.getInstance().getContentResolver().notifyChange(FormsProviderAPI.getUri(projectId), null);
 
         statusMessage = result;
 

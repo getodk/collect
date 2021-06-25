@@ -28,7 +28,7 @@ class SyncStatusAppState(private val context: Context) {
     fun finishSync(projectId: String, exception: FormSourceException?) {
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
-        context.contentResolver.notifyChange(FormsProviderAPI.CONTENT_URI, null)
+        context.contentResolver.notifyChange(FormsProviderAPI.getUri(projectId), null)
     }
 
     private fun getSyncingLiveData(projectId: String) =

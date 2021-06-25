@@ -22,7 +22,7 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI
+import org.odk.collect.android.provider.FormsProviderAPI
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
@@ -76,13 +76,18 @@ class FormsUpdaterTest {
 
     @Test
     fun `downloadUpdates() notifies Forms content resolver`() {
-        val contentObserver = mock<ContentObserver>()
-        application.contentResolver.registerContentObserver(CONTENT_URI, false, contentObserver)
-
         val project = setupProject()
+
+        val contentObserver = mock<ContentObserver>()
+        application.contentResolver.registerContentObserver(
+            FormsProviderAPI.getUri(project.uuid),
+            false,
+            contentObserver
+        )
+
         updateManager.downloadUpdates(project.uuid)
 
-        verify(contentObserver).dispatchChange(false, CONTENT_URI)
+        verify(contentObserver).dispatchChange(false, FormsProviderAPI.getUri(project.uuid))
     }
 
     @Test

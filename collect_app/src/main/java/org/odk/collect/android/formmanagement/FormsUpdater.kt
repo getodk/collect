@@ -68,7 +68,7 @@ class FormsUpdater(
                 }
             }
 
-            context.contentResolver.notifyChange(FormsProviderAPI.getContentUri(projectId), null)
+            context.contentResolver.notifyChange(FormsProviderAPI.getUri(projectId), null)
         } catch (_: FormSourceException) {
             // Ignored
         }

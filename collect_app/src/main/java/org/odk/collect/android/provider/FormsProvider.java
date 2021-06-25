@@ -64,7 +64,6 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERS
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
 
 public class FormsProvider extends ContentProvider {
 
@@ -115,7 +114,7 @@ public class FormsProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 cursor = databaseQuery(projectId, projection, selection, selectionArgs, sortOrder, null, PROJECTION_MAP);
-                cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
+                cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
                 break;
 
             case NEWEST_FORMS_BY_FORM_ID:
@@ -127,7 +126,7 @@ public class FormsProvider extends ContentProvider {
                 maxDateProjectionMap.put("MAX(date)", DATE);
 
                 cursor = databaseQuery(projectId, allColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID, maxDateProjectionMap);
-                cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
+                cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
                 break;
 
             case FORM_ID:
@@ -173,7 +172,7 @@ public class FormsProvider extends ContentProvider {
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
         Form form = getFormsRepository(projectId).save(getFormFromValues(initialValues, formsPath, cachePath));
-        return Uri.withAppendedPath(FormsProviderAPI.getContentUri(projectId), String.valueOf(form.getDbId()));
+        return Uri.withAppendedPath(FormsProviderAPI.getUri(projectId), String.valueOf(form.getDbId()));
     }
 
     /**
@@ -283,8 +282,8 @@ public class FormsProvider extends ContentProvider {
     }
 
     static {
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath(), FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, FormsProviderAPI.CONTENT_URI.getPath() + "/#", FORM_ID);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
+        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
         // Only available for query and type
         URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
 

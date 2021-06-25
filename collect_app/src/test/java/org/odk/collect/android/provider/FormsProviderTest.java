@@ -40,7 +40,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAG
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.getContentUri;
+import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
@@ -67,9 +67,9 @@ public class FormsProviderTest {
         String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        contentResolver.insert(getContentUri(firstProjectId), values);
+        contentResolver.insert(getUri(firstProjectId), values);
 
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -93,7 +93,7 @@ public class FormsProviderTest {
         File formFile = addFormToFormsDir(formId, formVersion, formName);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        Uri newFormUri = contentResolver.insert(getContentUri(firstProjectId), values);
+        Uri newFormUri = contentResolver.insert(getUri(firstProjectId), values);
 
         try (Cursor cursor = contentResolver.query(newFormUri, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -126,8 +126,8 @@ public class FormsProviderTest {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        contentResolver.update(getContentUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null)) {
+        contentResolver.update(getUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -144,7 +144,7 @@ public class FormsProviderTest {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        int updatedCount = contentResolver.update(Uri.withAppendedPath(getContentUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
+        int updatedCount = contentResolver.update(Uri.withAppendedPath(getUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
         assertThat(updatedCount, is(0));
     }
 
@@ -153,7 +153,7 @@ public class FormsProviderTest {
         Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
         contentResolver.delete(formUri, null, null);
 
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(0));
         }
     }
@@ -191,8 +191,8 @@ public class FormsProviderTest {
         addFormsToDirAndDb("form2", "1", "Not matching form");
         addFormsToDirAndDb("form3", "1", "Matching form");
 
-        contentResolver.delete(getContentUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, null)) {
+        contentResolver.delete(getUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -213,7 +213,7 @@ public class FormsProviderTest {
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addFormsToDirAndDb("external_app_form", "1", "External app form");
 
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -229,7 +229,7 @@ public class FormsProviderTest {
         addFormsToDirAndDb("form2", "1", "Not a matching form");
         addFormsToDirAndDb("form3", "1", "Matching form");
 
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
             assertThat(cursor.getCount(), is(2));
 
             cursor.moveToNext();
@@ -246,7 +246,7 @@ public class FormsProviderTest {
         addFormsToDirAndDb("formC", "1", "Form C");
         addFormsToDirAndDb("formA", "1", "Form A");
 
-        try (Cursor cursor = contentResolver.query(getContentUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -265,7 +265,7 @@ public class FormsProviderTest {
         CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
         addFormsToDirAndDb("formA", "1", "Form A");
 
-        Uri uriWithProject = getContentUri("blah");
+        Uri uriWithProject = getUri("blah");
         Uri uriWithoutProject = new Uri.Builder()
                 .scheme(uriWithProject.getScheme())
                 .authority(uriWithProject.getAuthority())
@@ -283,14 +283,14 @@ public class FormsProviderTest {
 
     @Test
     public void getType_returnsFormAndAllFormsTypes() {
-        assertThat(contentResolver.getType(getContentUri(firstProjectId)), is(CONTENT_TYPE));
-        assertThat(contentResolver.getType(Uri.withAppendedPath(getContentUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
+        assertThat(contentResolver.getType(getUri(firstProjectId)), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(getUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
     }
 
     private Uri addFormsToDirAndDb(String id, String version, String name) {
         File formFile = addFormToFormsDir(id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
-        return contentResolver.insert(getContentUri(firstProjectId), values);
+        return contentResolver.insert(getUri(firstProjectId), values);
     }
 
     @NotNull
