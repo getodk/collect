@@ -30,6 +30,8 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
 public final class FormsProviderAPI {
 
     static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
+    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
     /**
      * The content:// style URL for accessing Forms.
@@ -41,9 +43,6 @@ public final class FormsProviderAPI {
     public static Uri getUri(String projectId) {
         return Uri.parse("content://" + AUTHORITY + "/forms?projectId=" + projectId);
     }
-
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
-    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
     /**
      * The content:// style URL for accessing the newest versions of Forms. For each

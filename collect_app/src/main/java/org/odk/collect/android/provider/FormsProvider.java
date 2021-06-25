@@ -37,7 +37,6 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.Clock;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -192,7 +191,7 @@ public class FormsProvider extends ContentProvider {
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
         Form form = getFormsRepository(projectId).save(getFormFromValues(initialValues, formsPath, cachePath));
-        return Uri.withAppendedPath(FormsProviderAPI.getUri(projectId), String.valueOf(form.getDbId()));
+        return FormsProviderAPI.getUri(projectId, form.getDbId());
     }
 
     /**

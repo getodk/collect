@@ -39,7 +39,7 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
+import static org.odk.collect.android.provider.InstanceProviderAPI.getUri;
 import static org.odk.collect.forms.instances.Instance.STATUS_COMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
@@ -56,16 +56,16 @@ public class InstanceProviderTest {
         Context context = ApplicationProvider.getApplicationContext();
         storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
 
-        firstProjectId = CollectHelpers.setupDemoProject();
+        firstProjectId = CollectHelpers.createDemoProject();
         contentResolver = context.getContentResolver();
     }
 
     @Test
     public void insert_addsInstance() {
         ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
-        contentResolver.insert(CONTENT_URI, values);
+        contentResolver.insert(getUri(firstProjectId), values);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -82,7 +82,7 @@ public class InstanceProviderTest {
     @Test
     public void insert_returnsInstanceUri() {
         ContentValues values = getContentValues("/blah", "External app form", "external_app_form", "1");
-        Uri uri = contentResolver.insert(CONTENT_URI, values);
+        Uri uri = contentResolver.insert(getUri(firstProjectId), values);
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -95,7 +95,7 @@ public class InstanceProviderTest {
 
         long originalStatusChangeDate = 0L;
         values.put(LAST_STATUS_CHANGE_DATE, originalStatusChangeDate);
-        Uri instanceUri = contentResolver.insert(CONTENT_URI, values);
+        Uri instanceUri = contentResolver.insert(getUri(firstProjectId), values);
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_COMPLETE);
@@ -118,7 +118,7 @@ public class InstanceProviderTest {
 
         long originalStatusChangeDate = 0L;
         values.put(LAST_STATUS_CHANGE_DATE, originalStatusChangeDate);
-        Uri instanceUri = contentResolver.insert(CONTENT_URI, values);
+        Uri instanceUri = contentResolver.insert(getUri(firstProjectId), values);
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(DELETED_DATE, 123L);
@@ -139,9 +139,9 @@ public class InstanceProviderTest {
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_COMPLETE);
-        contentResolver.update(CONTENT_URI, updateValues, INSTANCE_FILE_PATH + "=?", new String[]{"/blah2"});
+        contentResolver.update(getUri(firstProjectId), updateValues, INSTANCE_FILE_PATH + "=?", new String[]{"/blah2"});
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(2));
 
             while (cursor.moveToNext()) {
@@ -167,7 +167,7 @@ public class InstanceProviderTest {
         updateValues.put(STATUS, STATUS_COMPLETE);
         contentResolver.update(uri, updateValues, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(2));
 
             while (cursor.moveToNext()) {
@@ -181,7 +181,7 @@ public class InstanceProviderTest {
         Uri uri = addInstanceToDb("/blah1", "Instance 1");
         contentResolver.delete(uri, null, null);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(0));
         }
     }
@@ -207,7 +207,7 @@ public class InstanceProviderTest {
         contentResolver.delete(uri, null, null);
         assertThat(instanceFile.getParentFile().exists(), is(false));
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -229,7 +229,7 @@ public class InstanceProviderTest {
         contentResolver.delete(uri, null, null);
         assertThat(instanceFile.getParentFile().exists(), is(false));
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -249,7 +249,7 @@ public class InstanceProviderTest {
 
         contentResolver.delete(uri, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(2));
         }
     }
@@ -259,8 +259,8 @@ public class InstanceProviderTest {
         addInstanceToDb("/blah1", "Instance 1");
         addInstanceToDb("/blah2", "Instance 2");
 
-        contentResolver.delete(CONTENT_URI, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        contentResolver.delete(getUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Instance 2"});
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -281,7 +281,7 @@ public class InstanceProviderTest {
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
         addInstanceToDb("/blah1", "Instance 1");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, new String[]{INSTANCE_FILE_PATH, DISPLAY_NAME}, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), new String[]{INSTANCE_FILE_PATH, DISPLAY_NAME}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -297,7 +297,7 @@ public class InstanceProviderTest {
         addInstanceToDb("/blah2", "Not a matching instance");
         addInstanceToDb("/blah3", "Matching instance");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, DISPLAY_NAME + "=?", new String[]{"Matching instance"}, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching instance"}, null)) {
             assertThat(cursor.getCount(), is(2));
 
             List<String> paths = new ArrayList<>();
@@ -315,7 +315,7 @@ public class InstanceProviderTest {
         addInstanceToDb("/blah2", "Instance B");
         addInstanceToDb("/blah1", "Instance A");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, DISPLAY_NAME + " ASC")) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -331,8 +331,8 @@ public class InstanceProviderTest {
 
     @Test
     public void getType_returnsInstanceAndAllInstanceTypes() {
-        assertThat(contentResolver.getType(CONTENT_URI), is(CONTENT_TYPE));
-        assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
+        assertThat(contentResolver.getType(getUri(firstProjectId)), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(getUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
     }
 
     private File createInstanceDirAndFile(String projectId) {
@@ -341,7 +341,7 @@ public class InstanceProviderTest {
 
     private Uri addInstanceToDb(String instanceFilePath, String displayName) {
         ContentValues values = getContentValues(instanceFilePath, displayName, "external_app_form", "1");
-        return contentResolver.insert(CONTENT_URI, values);
+        return contentResolver.insert(getUri(firstProjectId), values);
     }
 
     private ContentValues getContentValues(String instanceFilePath, String displayName, String formId, String formVersion) {

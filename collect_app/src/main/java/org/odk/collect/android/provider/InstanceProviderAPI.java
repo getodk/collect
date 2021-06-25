@@ -21,10 +21,17 @@ import android.net.Uri;
 public final class InstanceProviderAPI {
 
     public static final String AUTHORITY = "org.odk.collect.android.provider.odk.instances";
-
-    public static final Uri CONTENT_URI = Uri.parse("content://" + InstanceProviderAPI.AUTHORITY + "/instances");
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.instance";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.instance";
+
+    public static final Uri CONTENT_URI = Uri.parse("content://" + InstanceProviderAPI.AUTHORITY + "/instances");
+    public static Uri getUri(String projectId) {
+        return Uri.parse("content://" + AUTHORITY + "/instances?projectId=" + projectId);
+    }
+
+    public static Uri getUri(String projectId, Long instanceDbId) {
+        return Uri.parse("content://" + AUTHORITY + "/instances/" + instanceDbId + "?projectId=" + projectId);
+    }
 
     // This class cannot be instantiated
     private InstanceProviderAPI() {
