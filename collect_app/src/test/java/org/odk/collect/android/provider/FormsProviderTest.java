@@ -63,7 +63,7 @@ public class FormsProviderTest {
         String formId = "external_app_form";
         String formVersion = "1";
         String formName = "External app form";
-        File formFile = addFormToFormsDir(formId, formVersion, formName);
+        File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
         String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
@@ -90,7 +90,7 @@ public class FormsProviderTest {
         String formId = "external_app_form";
         String formVersion = "1";
         String formName = "External app form";
-        File formFile = addFormToFormsDir(formId, formVersion, formName);
+        File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
         Uri newFormUri = contentResolver.insert(getUri(firstProjectId), values);
@@ -166,11 +166,11 @@ public class FormsProviderTest {
 
             cursor.moveToNext();
             String formFileName = cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH));
-            File formFile = new File(getFormsDirPath() + formFileName);
+            File formFile = new File(getFormsDirPath(firstProjectId) + formFileName);
             assertThat(formFile.exists(), is(true));
 
             String mediaDirName = cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH));
-            File mediaDir = new File(getFormsDirPath() + mediaDirName);
+            File mediaDir = new File(getFormsDirPath(firstProjectId) + mediaDirName);
             assertThat(mediaDir.exists(), is(true));
 
             String cacheFileName = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
@@ -288,7 +288,7 @@ public class FormsProviderTest {
     }
 
     private Uri addFormsToDirAndDb(String projectId, String id, String name, String version) {
-        File formFile = addFormToFormsDir(id, version, name);
+        File formFile = addFormToFormsDir(projectId, id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
         return contentResolver.insert(getUri(projectId), values);
     }
@@ -308,25 +308,25 @@ public class FormsProviderTest {
      * able to access our external files dir (according to
      * https://developer.android.com/training/data-storage/app-specific#external anyway.
      **/
-    private File addFormToFormsDir(String formId, String formVersion, String formName) {
-        File formFile = createFormFileInFormsDir(formId, formVersion, formName);
+    private File addFormToFormsDir(String projectId, String formId, String formVersion, String formName) {
+        File formFile = createFormFileInFormsDir(projectId, formId, formVersion, formName);
         String md5Hash = Md5.getMd5Hash(formFile);
 
-        createExtraFormFiles(formFile, md5Hash);
+        createExtraFormFiles(projectId, formFile, md5Hash);
         return formFile;
     }
 
-    private File createFormFileInFormsDir(String formId, String formVersion, String formName) {
+    private File createFormFileInFormsDir(String projectId, String formId, String formVersion, String formName) {
         String xformBody = FormUtils.createXFormBody(formId, formVersion, formName);
         String fileName = formId + "-" + formVersion + "-" + Math.random();
-        File formFile = new File(getFormsDirPath() + fileName + ".xml");
+        File formFile = new File(getFormsDirPath(projectId) + fileName + ".xml");
         FileUtils.write(formFile, xformBody.getBytes());
         return formFile;
     }
 
-    private void createExtraFormFiles(File formFile, String md5Hash) {
+    private void createExtraFormFiles(String projectId, File formFile, String md5Hash) {
         // Create a media directory (and file) so we can check deletion etc - wouldn't always be there
-        String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
+        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
         new File(mediaDirPath).mkdir();
         try {
             new File(mediaDirPath, "blah.test").createNewFile();
@@ -336,7 +336,7 @@ public class FormsProviderTest {
 
         // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
-            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, firstProjectId) + File.separator + md5Hash + ".formdef").createNewFile();
+            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) + File.separator + md5Hash + ".formdef").createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -347,7 +347,7 @@ public class FormsProviderTest {
     }
 
     @NotNull
-    private String getFormsDirPath() {
-        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, firstProjectId) + File.separator;
+    private String getFormsDirPath(String projectId) {
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) + File.separator;
     }
 }
