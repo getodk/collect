@@ -27,16 +27,16 @@ class DeleteProjectTest {
             .inputUsername("John")
             .addProject()
 
-            // Delete Demo project
+            // Delete Turtle nesting project
             .openProjectSettings()
             .clickAdminSettings()
             .deleteProject()
 
             // Assert switching to Turtle nesting
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
-            .assertProjectIcon("M")
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .assertProjectIcon("D")
 
-            // Delete Turtle nesting project
+            // Delete Demo project
             .openProjectSettings()
             .clickAdminSettings()
             .deleteLastProject()

@@ -830,7 +830,6 @@
   <string name="delete_project_yes">Kyllä</string>
   <string name="delete_project_no">Ei</string>
   <string name="or">OR</string>
-  <string name="new_project_created">Uuden projektin luominen onnistui</string>
   <string name="hex_color">Heksadesimaalinen väri</string>
   <!--##############################################
      # First launch and initial configuration

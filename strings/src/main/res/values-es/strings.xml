@@ -831,7 +831,6 @@
   <string name="delete_project_yes">Si</string>
   <string name="delete_project_no">No</string>
   <string name="or">O</string>
-  <string name="new_project_created">Nuevo proyecto creado exitosamente</string>
   <string name="hex_color">Color en Hex</string>
   <!--##############################################
      # First launch and initial configuration
