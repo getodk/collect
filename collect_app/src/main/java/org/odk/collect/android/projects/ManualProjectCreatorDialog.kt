@@ -31,6 +31,9 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var softKeyboardController: SoftKeyboardController
 
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
+
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
     override fun onAttach(context: Context) {
@@ -93,7 +96,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
         projectCreator.createNewProject(settingsJson)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-        ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.new_project_created))
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
     }
 
     private fun showGdrivePlaceholderDialog() {
