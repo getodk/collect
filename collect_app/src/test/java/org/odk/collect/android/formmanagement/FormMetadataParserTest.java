@@ -2,8 +2,6 @@ package org.odk.collect.android.formmanagement;
 
 import com.google.common.io.Files;
 
-import org.javarosa.core.reference.InvalidReferenceException;
-import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.utilities.FileUtils;
@@ -13,18 +11,13 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 
 public class FormMetadataParserTest {
 
     private File mediaDir;
-    private ReferenceManager referenceManager;
 
     @Before
     public void setup() {
-        referenceManager = ReferenceManager.instance();
-        referenceManager.reset();
-
         mediaDir = Files.createTempDir();
     }
 
@@ -73,46 +66,6 @@ public class FormMetadataParserTest {
         formMetadataParser.parse(formXml, mediaDir);
 
         assertThat(mediaDir.listFiles().length, is(0));
-    }
-
-    @Test
-    public void cleansUpReferenceManager() throws Exception {
-        File formXml = File.createTempFile("form", ".xml");
-        FileUtils.write(formXml, EXTERNAL_SECONDARY_INSTANCE.getBytes());
-
-        File externalInstance = new File(mediaDir, "external-data.xml");
-        FileUtils.write(externalInstance, EXTERNAL_INSTANCE.getBytes());
-
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-        formMetadataParser.parse(formXml, mediaDir);
-
-        try {
-            referenceManager.deriveReference("jr://file/external-data.xml");
-            fail("ReferenceManager still able to derive reference so hasn't been cleaned up!");
-        } catch (InvalidReferenceException ignored) {
-            // Pass
-        }
-    }
-
-    @Test
-    public void cleansUpReferenceManagerAfterFail() throws Exception {
-        File formXml = File.createTempFile("form", ".xml");
-
-        FormMetadataParser formMetadataParser = new FormMetadataParser();
-
-        try {
-            formMetadataParser.parse(formXml, mediaDir);
-            fail("Parse should have failed because file doesn't exist");
-        } catch (Exception e) {
-            // Expected
-        }
-
-        try {
-            referenceManager.deriveReference("jr://file/external-data.xml");
-            fail("ReferenceManager still able to derive reference so hasn't been cleaned up!");
-        } catch (InvalidReferenceException ignored) {
-            // Pass
-        }
     }
 
     private static final String EXTERNAL_SECONDARY_INSTANCE = "<h:html xmlns=\"http://www.w3.org/2002/xforms\" xmlns:h=\"http://www.w3.org/1999/xhtml\" >\n" +
