@@ -40,8 +40,8 @@ class AddNewProjectTest {
             .addProject()
 
             .openProjectSettings()
-            .assertCurrentProject("Demo project", "demo.getodk.org")
-            .assertInactiveProject("my-server.com", "John / my-server.com")
+            .assertCurrentProject("my-server.com", "John / my-server.com")
+            .assertInactiveProject("Demo project", "demo.getodk.org")
     }
 
     @Test
@@ -51,12 +51,12 @@ class AddNewProjectTest {
             .clickAddProject()
 
         stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
-        page.checkIsToastWithMessageDisplayed(R.string.new_project_created)
+        page.checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
 
         MainMenuPage()
             .assertOnPage()
             .openProjectSettings()
-            .assertCurrentProject("Demo project", "demo.getodk.org")
-            .assertInactiveProject("my-server.com", "adam / my-server.com")
+            .assertCurrentProject("my-server.com", "adam / my-server.com")
+            .assertInactiveProject("Demo project", "demo.getodk.org")
     }
 }

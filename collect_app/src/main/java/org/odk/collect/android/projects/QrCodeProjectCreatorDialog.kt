@@ -39,6 +39,9 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var projectCreator: ProjectCreator
 
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
+
     private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
@@ -138,7 +141,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
         if (projectCreatedSuccessfully) {
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-            ToastUtils.showLongToast(getString(R.string.new_project_created))
+            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
         }

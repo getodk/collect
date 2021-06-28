@@ -7,7 +7,6 @@ import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.projects.Project
@@ -73,14 +72,10 @@ class ProjectCreatorTest {
     }
 
     @Test
-    fun `New project id should be set if it's the only project`() {
+    fun `New project id should be set`() {
         whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(true)
 
         projectCreator.createNewProject(json)
         verify(currentProjectProvider).setCurrentProject("1")
-
-        whenever(projectsRepository.getAll()).thenReturn(listOf(savedProject, Project.Saved("2", "Project X", "X", "#cccccc")))
-        projectCreator.createNewProject(json)
-        verifyNoMoreInteractions(currentProjectProvider)
     }
 }

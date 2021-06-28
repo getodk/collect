@@ -17,16 +17,19 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
+import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
@@ -85,6 +88,9 @@ class ManualProjectCreatorDialogTest {
     @Test
     fun `Project creation should be triggered after clicking on the 'Add' button`() {
         val projectCreator = mock<ProjectCreator> {}
+        val currentProjectProvider = mock<CurrentProjectProvider> {
+            on { getCurrentProject() } doReturn Project.DEMO_PROJECT
+        }
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectCreator(
@@ -95,6 +101,13 @@ class ManualProjectCreatorDialogTest {
                 context: Context
             ): ProjectCreator {
                 return projectCreator
+            }
+
+            override fun providesCurrentProjectProvider(
+                settingsProvider: SettingsProvider,
+                projectsRepository: ProjectsRepository
+            ): CurrentProjectProvider {
+                return currentProjectProvider
             }
         })
 

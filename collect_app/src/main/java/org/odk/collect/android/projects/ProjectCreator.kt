@@ -16,9 +16,7 @@ class ProjectCreator(
         val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject)
 
         return if (settingsImportedSuccessfully) {
-            if (projectsRepository.getAll().size == 1) {
-                currentProjectProvider.setCurrentProject(savedProject.uuid)
-            }
+            currentProjectProvider.setCurrentProject(savedProject.uuid)
             true
         } else {
             projectsRepository.delete(savedProject.uuid)

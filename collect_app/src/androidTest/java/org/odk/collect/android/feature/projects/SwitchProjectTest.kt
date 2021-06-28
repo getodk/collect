@@ -33,11 +33,11 @@ class SwitchProjectTest {
 
             // Switch to Turtle nesting
             .openProjectSettings()
-            .assertCurrentProject("Demo project", "demo.getodk.org")
-            .assertInactiveProject("my-server.com", "John / my-server.com")
-            .selectProject("my-server.com")
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
-            .assertProjectIcon("M")
+            .assertCurrentProject("my-server.com", "John / my-server.com")
+            .assertInactiveProject("Demo project", "demo.getodk.org")
+            .selectProject("Demo project")
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .assertProjectIcon("D")
     }
 
     @Test
@@ -61,8 +61,6 @@ class SwitchProjectTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
-            .openProjectSettings()
-            .selectProject("my-server.com")
 
             // Set server and download form
             .setServer(testDependencies.server.url)
