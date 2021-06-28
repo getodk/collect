@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.provider.InstanceProviderAPI
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
@@ -16,7 +17,8 @@ import javax.inject.Singleton
 @Singleton
 class InstancesAppState(
     private val context: Context,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val currentProjectProvider: CurrentProjectProvider
 ) {
 
     private val _unsent = MutableLiveData(0)
@@ -30,14 +32,24 @@ class InstancesAppState(
 
     fun update() {
         val instancesRepository = instancesRepositoryProvider.get()
-        val finalizedInstances = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
+        val finalizedInstances = instancesRepository.getCountByStatus(
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMISSION_FAILED
+        )
         val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
-        val unsentInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
+        val unsentInstances = instancesRepository.getCountByStatus(
+            Instance.STATUS_INCOMPLETE,
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMISSION_FAILED
+        )
 
         _finalized.postValue(finalizedInstances)
         _sent.postValue(sentInstances)
         _unsent.postValue(unsentInstances)
 
-        context.contentResolver.notifyChange(InstanceProviderAPI.CONTENT_URI, null)
+        context.contentResolver.notifyChange(
+            InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().uuid),
+            null
+        )
     }
 }

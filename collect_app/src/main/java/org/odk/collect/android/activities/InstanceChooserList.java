@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -102,9 +101,8 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
         if (MultiClickGuard.allowClick(getClass().getName())) {
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
-                Uri instanceUri =
-                        ContentUris.withAppendedId(InstanceProviderAPI.CONTENT_URI,
-                                c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID)));
+                long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
+                Uri instanceUri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
 
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {

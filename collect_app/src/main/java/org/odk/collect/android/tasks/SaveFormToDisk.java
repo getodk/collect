@@ -84,6 +84,7 @@ public class SaveFormToDisk {
     private String instanceName;
     private final Analytics analytics;
     private final ArrayList<String> tempFiles;
+    private final String currentProjectId;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -91,7 +92,7 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, Analytics analytics, ArrayList<String> tempFiles) {
+                          Uri uri, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
@@ -100,6 +101,7 @@ public class SaveFormToDisk {
         this.instanceName = updatedName;
         this.analytics = analytics;
         this.tempFiles = tempFiles;
+        this.currentProjectId = currentProjectId;
     }
 
     @Nullable
@@ -204,7 +206,7 @@ public class SaveFormToDisk {
             }
 
             Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
-            uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
+            uri = InstanceProviderAPI.getUri(currentProjectId, newInstance.getDbId());
         } else {
             Timber.i("No instance found, creating");
             Form form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
@@ -229,7 +231,7 @@ public class SaveFormToDisk {
         }
 
         Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
-        uri = Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, newInstance.getDbId().toString());
+        uri = InstanceProviderAPI.getUri(currentProjectId, newInstance.getDbId());
     }
 
     /**

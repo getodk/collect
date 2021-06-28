@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -396,7 +395,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = ContentUris.withAppendedId(InstanceProviderAPI.CONTENT_URI, instanceId);
+        Uri uri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 

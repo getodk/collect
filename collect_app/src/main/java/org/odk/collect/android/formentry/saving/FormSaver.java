@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public interface FormSaver {
     SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize, boolean exitAfter,
-                          String updatedSaveName, ProgressListener progressListener, Analytics analytics, ArrayList<String> tempFiles);
+                          String updatedSaveName, ProgressListener progressListener, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId);
 
     interface ProgressListener {
         void onProgressUpdate(String message);

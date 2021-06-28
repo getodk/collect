@@ -23,9 +23,11 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -57,6 +59,7 @@ public class InstanceDiskSynchronizer {
     private static int counter;
 
     private String currentStatus = "";
+    private final CurrentProjectProvider currentProjectProvider;
     private final SettingsProvider settingsProvider;
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
     private final InstancesRepository instancesRepository;
@@ -69,7 +72,9 @@ public class InstanceDiskSynchronizer {
     public InstanceDiskSynchronizer(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
         instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
-        analytics = DaggerUtils.getComponent(Collect.getInstance()).analytics();
+        AppDependencyComponent component = DaggerUtils.getComponent(Collect.getInstance());
+        analytics = component.analytics();
+        currentProjectProvider = component.currentProjectProvider();
     }
 
     public String doInBackground() {
@@ -212,7 +217,7 @@ public class InstanceDiskSynchronizer {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = Uri.parse(InstanceProviderAPI.CONTENT_URI + "/" + instance.getDbId());
+            Uri uri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instance.getDbId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 

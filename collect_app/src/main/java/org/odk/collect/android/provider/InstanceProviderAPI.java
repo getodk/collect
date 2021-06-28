@@ -24,7 +24,6 @@ public final class InstanceProviderAPI {
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.instance";
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.instance";
 
-    public static final Uri CONTENT_URI = Uri.parse("content://" + InstanceProviderAPI.AUTHORITY + "/instances");
     public static Uri getUri(String projectId) {
         return Uri.parse("content://" + AUTHORITY + "/instances?projectId=" + projectId);
     }
