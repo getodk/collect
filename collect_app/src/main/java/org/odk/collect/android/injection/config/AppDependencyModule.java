@@ -263,8 +263,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public StoragePathProvider providesStoragePathProvider() {
-        return new StoragePathProvider();
+    public StoragePathProvider providesStoragePathProvider(Context context, CurrentProjectProvider currentProjectProvider) {
+        return new StoragePathProvider(currentProjectProvider, context.getExternalFilesDir(null).getAbsolutePath());
     }
 
     @Provides
