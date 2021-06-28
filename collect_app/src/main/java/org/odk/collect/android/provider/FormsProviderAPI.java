@@ -54,12 +54,7 @@ public final class FormsProviderAPI {
      */
     @Deprecated
     public static Uri getContentNewestFormsByFormIdUri(String projectId) {
-        return new Uri.Builder()
-                .scheme("content")
-                .authority(AUTHORITY)
-                .appendPath("newest_forms_by_form_id")
-                .appendQueryParameter("projectId", projectId)
-                .build();
+        return Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id?projectId=" + projectId);
     }
 
     private FormsProviderAPI() {
