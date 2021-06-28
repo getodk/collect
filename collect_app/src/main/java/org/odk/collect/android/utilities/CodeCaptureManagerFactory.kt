@@ -27,6 +27,7 @@ object CodeCaptureManagerFactory {
         return IntentIntegrator(activity)
             .setDesiredBarcodeFormats(supportedFormats)
             .setPrompt(prompt)
+            .setOrientationLocked(false) // Let UI control orientation lock
             .addExtra(Intents.Scan.SCAN_TYPE, Intents.Scan.MIXED_SCAN)
             .createScanIntent()
     }
