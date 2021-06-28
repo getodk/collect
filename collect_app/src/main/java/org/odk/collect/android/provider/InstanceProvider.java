@@ -38,7 +38,6 @@ import org.odk.collect.projects.ProjectsRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -48,17 +47,6 @@ import timber.log.Timber;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DELETED_DATE;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.DISPLAY_NAME;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.GEOMETRY_TYPE;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.INSTANCE_FILE_PATH;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.SUBMISSION_URI;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
@@ -66,12 +54,9 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.getUri;
 
 public class InstanceProvider extends ContentProvider {
 
-    private static HashMap<String, String> sInstancesProjectionMap;
-
     private static final int INSTANCES = 1;
     private static final int INSTANCE_ID = 2;
-
-    private static final UriMatcher URI_MATCHER;
+    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
@@ -305,22 +290,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     static {
-        URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
         URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
         URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
-
-        sInstancesProjectionMap = new HashMap<>();
-        sInstancesProjectionMap.put(_ID, _ID);
-        sInstancesProjectionMap.put(DISPLAY_NAME, DISPLAY_NAME);
-        sInstancesProjectionMap.put(SUBMISSION_URI, SUBMISSION_URI);
-        sInstancesProjectionMap.put(CAN_EDIT_WHEN_COMPLETE, CAN_EDIT_WHEN_COMPLETE);
-        sInstancesProjectionMap.put(INSTANCE_FILE_PATH, INSTANCE_FILE_PATH);
-        sInstancesProjectionMap.put(JR_FORM_ID, JR_FORM_ID);
-        sInstancesProjectionMap.put(JR_VERSION, JR_VERSION);
-        sInstancesProjectionMap.put(STATUS, STATUS);
-        sInstancesProjectionMap.put(LAST_STATUS_CHANGE_DATE, LAST_STATUS_CHANGE_DATE);
-        sInstancesProjectionMap.put(DELETED_DATE, DELETED_DATE);
-        sInstancesProjectionMap.put(GEOMETRY, GEOMETRY);
-        sInstancesProjectionMap.put(GEOMETRY_TYPE, GEOMETRY_TYPE);
     }
 }
