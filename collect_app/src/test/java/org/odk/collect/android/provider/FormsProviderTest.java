@@ -262,8 +262,8 @@ public class FormsProviderTest {
 
     @Test
     public void query_withoutProjectId_usesFirstProject() {
-        CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
         addFormsToDirAndDb(firstProjectId, "formA", "Form A", "1");
+        CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
 
         Uri uriWithProject = getUri("blah");
         Uri uriWithoutProject = new Uri.Builder()

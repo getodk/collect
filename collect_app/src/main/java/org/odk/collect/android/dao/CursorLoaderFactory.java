@@ -180,7 +180,7 @@ public class CursorLoaderFactory {
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
         return new CursorLoader(
                 Collect.getInstance(),
-                InstanceProviderAPI.CONTENT_URI,
+                InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid()),
                 null,
                 selection,
                 selectionArgs,

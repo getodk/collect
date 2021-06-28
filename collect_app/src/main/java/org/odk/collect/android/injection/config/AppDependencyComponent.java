@@ -14,6 +14,7 @@ import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
@@ -241,6 +242,8 @@ public interface AppDependencyComponent {
     void inject(AudioRecordingErrorDialogFragment audioRecordingErrorDialogFragment);
 
     void inject(CollectAbstractActivity collectAbstractActivity);
+
+    void inject(InstanceChooserList instanceChooserList);
 
     void inject(FormsProvider formsProvider);
 

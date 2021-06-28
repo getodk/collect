@@ -12,11 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.formstest.InstanceUtils;
+import org.odk.collect.projects.Project;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -134,8 +136,8 @@ public class InstanceProviderTest {
 
     @Test
     public void update_withSelection_onlyUpdatesMatchingInstance() {
-        addInstanceToDb("/blah1", "Instance 1");
-        addInstanceToDb("/blah2", "Instance 2");
+        addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
+        addInstanceToDb(firstProjectId, "/blah2", "Instance 2");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_COMPLETE);
@@ -160,8 +162,8 @@ public class InstanceProviderTest {
      */
     @Test
     public void update_withInstanceUri_andSelection_doesNotUpdateInstanceThatDoesNotMatchSelection() {
-        Uri uri = addInstanceToDb("/blah1", "Instance 1");
-        addInstanceToDb("/blah1", "Instance 2");
+        Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
+        addInstanceToDb(firstProjectId, "/blah1", "Instance 2");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_COMPLETE);
@@ -178,7 +180,7 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_deletesInstance() {
-        Uri uri = addInstanceToDb("/blah1", "Instance 1");
+        Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
         contentResolver.delete(uri, null, null);
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
@@ -190,7 +192,7 @@ public class InstanceProviderTest {
     public void delete_deletesInstanceDir() {
         File instanceFile = createInstanceDirAndFile(firstProjectId);
 
-        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
+        Uri uri = addInstanceToDb(firstProjectId, instanceFile.getAbsolutePath(), "Instance 1");
         contentResolver.delete(uri, null, null);
         assertThat(instanceFile.getParentFile().exists(), is(false));
     }
@@ -198,7 +200,7 @@ public class InstanceProviderTest {
     @Test
     public void delete_whenStatusIsSubmitted_deletesFilesButSoftDeletesInstance() {
         File instanceFile = createInstanceDirAndFile(firstProjectId);
-        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
+        Uri uri = addInstanceToDb(firstProjectId, instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_SUBMITTED);
@@ -218,7 +220,7 @@ public class InstanceProviderTest {
     @Test
     public void delete_whenStatusIsSubmitted_clearsGeometryFields() {
         File instanceFile = createInstanceDirAndFile(firstProjectId);
-        Uri uri = addInstanceToDb(instanceFile.getAbsolutePath(), "Instance 1");
+        Uri uri = addInstanceToDb(firstProjectId, instanceFile.getAbsolutePath(), "Instance 1");
 
         ContentValues updateValues = new ContentValues();
         updateValues.put(STATUS, STATUS_SUBMITTED);
@@ -244,8 +246,8 @@ public class InstanceProviderTest {
      */
     @Test
     public void delete_withInstanceUri_andSelection_doesNotDeleteInstanceThatDoesNotMatchSelection() {
-        Uri uri = addInstanceToDb("/blah1", "Instance 1");
-        addInstanceToDb("/blah2", "Instance 2");
+        Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
+        addInstanceToDb(firstProjectId, "/blah2", "Instance 2");
 
         contentResolver.delete(uri, DISPLAY_NAME + "=?", new String[]{"Instance 2"});
 
@@ -256,8 +258,8 @@ public class InstanceProviderTest {
 
     @Test
     public void delete_withSelection_deletesMatchingInstances() {
-        addInstanceToDb("/blah1", "Instance 1");
-        addInstanceToDb("/blah2", "Instance 2");
+        addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
+        addInstanceToDb(firstProjectId, "/blah2", "Instance 2");
 
         contentResolver.delete(getUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Instance 2"});
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
@@ -270,7 +272,7 @@ public class InstanceProviderTest {
 
     @Test
     public void query_returnsTheExpectedNumberColumns() {
-        Uri uri = addInstanceToDb("/blah1", "Instance 1");
+        Uri uri = addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
             assertThat(cursor.getColumnCount(), is(12));
@@ -279,7 +281,7 @@ public class InstanceProviderTest {
 
     @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
-        addInstanceToDb("/blah1", "Instance 1");
+        addInstanceToDb(firstProjectId, "/blah1", "Instance 1");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), new String[]{INSTANCE_FILE_PATH, DISPLAY_NAME}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -293,9 +295,9 @@ public class InstanceProviderTest {
 
     @Test
     public void query_withSelection_onlyReturnsMatchingRows() {
-        addInstanceToDb("/blah1", "Matching instance");
-        addInstanceToDb("/blah2", "Not a matching instance");
-        addInstanceToDb("/blah3", "Matching instance");
+        addInstanceToDb(firstProjectId, "/blah1", "Matching instance");
+        addInstanceToDb(firstProjectId, "/blah2", "Not a matching instance");
+        addInstanceToDb(firstProjectId, "/blah3", "Matching instance");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching instance"}, null)) {
             assertThat(cursor.getCount(), is(2));
@@ -311,9 +313,9 @@ public class InstanceProviderTest {
 
     @Test
     public void query_withSortOrder_returnsSortedResults() {
-        addInstanceToDb("/blah3", "Instance C");
-        addInstanceToDb("/blah2", "Instance B");
-        addInstanceToDb("/blah1", "Instance A");
+        addInstanceToDb(firstProjectId, "/blah3", "Instance C");
+        addInstanceToDb(firstProjectId, "/blah2", "Instance B");
+        addInstanceToDb(firstProjectId, "/blah1", "Instance A");
 
         try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
@@ -330,6 +332,27 @@ public class InstanceProviderTest {
     }
 
     @Test
+    public void query_withoutProjectId_usesFirstProject() {
+        addInstanceToDb(firstProjectId, "/blah1", "Instance A");
+        CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
+
+        Uri uriWithProject = InstanceProviderAPI.getUri("blah");
+        Uri uriWithoutProject = new Uri.Builder()
+                .scheme(uriWithProject.getScheme())
+                .authority(uriWithProject.getAuthority())
+                .path(uriWithProject.getPath())
+                .query(null)
+                .build();
+
+        try (Cursor cursor = contentResolver.query(uriWithoutProject, null, null, null, DatabaseFormColumns.DISPLAY_NAME + " ASC")) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is("Instance A"));
+        }
+    }
+
+    @Test
     public void getType_returnsInstanceAndAllInstanceTypes() {
         assertThat(contentResolver.getType(getUri(firstProjectId)), is(CONTENT_TYPE));
         assertThat(contentResolver.getType(Uri.withAppendedPath(getUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
@@ -339,9 +362,9 @@ public class InstanceProviderTest {
         return InstanceUtils.createInstanceDirAndFile(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId));
     }
 
-    private Uri addInstanceToDb(String instanceFilePath, String displayName) {
+    private Uri addInstanceToDb(String projectId, String instanceFilePath, String displayName) {
         ContentValues values = getContentValues(instanceFilePath, displayName, "external_app_form", "1");
-        return contentResolver.insert(getUri(firstProjectId), values);
+        return contentResolver.insert(getUri(projectId), values);
     }
 
     private ContentValues getContentValues(String instanceFilePath, String displayName, String formId, String formVersion) {

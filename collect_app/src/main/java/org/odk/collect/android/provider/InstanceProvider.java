@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.projects.ProjectsRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +62,6 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_URI;
 import static org.odk.collect.android.provider.InstanceProviderAPI.getUri;
 
 public class InstanceProvider extends ContentProvider {
@@ -82,6 +82,9 @@ public class InstanceProvider extends ContentProvider {
     @Inject
     StoragePathProvider storagePathProvider;
 
+    @Inject
+    ProjectsRepository projectsRepository;
+
     @Override
     public boolean onCreate() {
         return true;
@@ -92,7 +95,7 @@ public class InstanceProvider extends ContentProvider {
                         String sortOrder) {
         DaggerUtils.getComponent(getContext()).inject(this);
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
 
         Cursor c;
         switch (URI_MATCHER.match(uri)) {
@@ -136,7 +139,7 @@ public class InstanceProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         DaggerUtils.getComponent(getContext()).inject(this);
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
@@ -184,7 +187,7 @@ public class InstanceProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, String where, String[] whereArgs) {
         DaggerUtils.getComponent(getContext()).inject(this);
 
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
 
         int count;
 
@@ -232,7 +235,7 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         DaggerUtils.getComponent(getContext()).inject(this);
-        String projectId = uri.getQueryParameter("projectId");
+        String projectId = getProjectId(uri);
         InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
         String instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId);
 
@@ -289,6 +292,16 @@ public class InstanceProvider extends ContentProvider {
         getContext().getContentResolver().notifyChange(uri, null);
 
         return count;
+    }
+
+    private String getProjectId(@NonNull Uri uri) {
+        String queryParam = uri.getQueryParameter("projectId");
+
+        if (queryParam != null) {
+            return queryParam;
+        } else {
+            return projectsRepository.getAll().get(0).getUuid();
+        }
     }
 
     static {
