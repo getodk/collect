@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/tagline"
-            style="@style/TextAppearance.Collect.Headline4"
+            style="?textAppearanceHeadline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="2"
@@ -83,7 +83,7 @@
 
     <TextView
         android:id="@+id/app_name"
-        style="@style/TextAppearance.Collect.Body1"
+        style="?textAppearanceBody1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_extra_small"
