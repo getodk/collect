@@ -992,12 +992,12 @@
     <string name="switched_project">Switched to %s</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
-    <string name="delete_project">Delete project</string>
-    <string name="delete_project_confirm_message">Are you sure you want to delete the current project?</string>
+    <string name="delete_project">Delete project?</string>
+    <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
-    <string name="cannot_delete_project_title">Cannot delete the current project!</string>
-    <string name="cannot_delete_project_message">You have unsent instances. Please send them or delete first.</string>
+    <string name="cannot_delete_project_title">Project can\'t be deleted</string>
+    <string name="cannot_delete_project_message">You have unsent submissions. To delete the project, you must first send or delete those submissions.</string>
     <string name="or">OR</string>
     <string name="hex_color">Hex color</string>
     <string name="invalid_hex_code">Invalid hex code</string>
