@@ -20,6 +20,13 @@ public class CursorLoaderFactory {
         this.currentProjectProvider = currentProjectProvider;
     }
 
+    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
+        String selection = DatabaseInstanceColumns.STATUS + " =? ";
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
+
+        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+    }
+
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
@@ -38,20 +45,18 @@ public class CursorLoaderFactory {
         return cursorLoader;
     }
 
-    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
+        String selection = DatabaseInstanceColumns.STATUS + " !=? " +
+                "and " + DatabaseInstanceColumns.STATUS + " !=? ";
+        String[] selectionArgs = {
+                Instance.STATUS_SUBMITTED,
+                Instance.STATUS_SUBMISSION_FAILED
+        };
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
 
+    //2021-06 Not updated as not testable?
     public CursorLoader createUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
