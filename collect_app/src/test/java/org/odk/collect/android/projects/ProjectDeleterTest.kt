@@ -7,11 +7,13 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.database.instances.DatabaseInstancesRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
@@ -21,15 +23,39 @@ class ProjectDeleterTest {
     private val currentProjectProvider = mock<CurrentProjectProvider> {
         on { getCurrentProject() } doReturn project1
     }
-    private val instancesRepository = mock<DatabaseInstancesRepository> {
-        on { allUnsent } doReturn emptyList()
+    private val formUpdateManager = mock<FormUpdateScheduler>()
+    private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
+    private val instancesRepository = spy(InMemInstancesRepository())
+
+    @Test
+    fun `ProjectDeleter should look for forms with proper statuses`() {
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            formUpdateManager,
+            instanceSubmitScheduler,
+            instancesRepository
+        )
+
+        deleter.deleteCurrentProject()
+
+        verify(instancesRepository)
+            .getAllByStatus(
+                Instance.STATUS_INCOMPLETE,
+                Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED
+            )
+
+        verifyNoMoreInteractions(instancesRepository)
     }
 
     @Test
     fun `If there are unsent instances the project should not be deleted`() {
-        val instancesRepository = mock<DatabaseInstancesRepository> {
-            on { allUnsent } doReturn listOf(Instance.Builder().build())
-        }
+        instancesRepository.save(
+            Instance.Builder()
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
 
         val deleter = ProjectDeleter(
             mock(),
@@ -44,10 +70,28 @@ class ProjectDeleterTest {
     }
 
     @Test
-    fun `Deleting project cancels scheduled form updates and instance submits`() {
-        val formUpdateManager = mock<FormUpdateScheduler>()
-        val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
+    fun `If there are saved instances but all sent the project should be deleted`() {
+        instancesRepository.save(
+            Instance.Builder()
+                .status(Instance.STATUS_SUBMITTED)
+                .build()
+        )
 
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            formUpdateManager,
+            instanceSubmitScheduler,
+            instancesRepository
+        )
+
+        val result = deleter.deleteCurrentProject()
+        assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
+        assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(nullValue()))
+    }
+
+    @Test
+    fun `Deleting project cancels scheduled form updates and instance submits`() {
         val deleter = ProjectDeleter(
             mock(),
             currentProjectProvider,
