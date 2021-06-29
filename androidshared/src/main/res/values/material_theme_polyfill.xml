@@ -9,9 +9,9 @@
 <resources>
 
     <style name="Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout" parent="">
-        <item name="colorPrimary">?attr/colorOnSurface</item>
-        <item name="boxStrokeColor">?colorOnSurface</item>
-        <item name="hintTextColor">?colorOnSurface</item>
+        <item name="colorPrimary">?attr/colorSecondary</item>
+        <item name="boxStrokeColor">?attr/colorSecondary</item>
+        <item name="hintTextColor">?attr/colorSecondary</item>
     </style>
 
     <style name="Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton" parent="">
