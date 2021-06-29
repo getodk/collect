@@ -37,7 +37,7 @@ public class CollectTestRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                ActivityScenario.launch(SplashScreenActivity.class);
+                restart();
 
                 if (!CopyFormRule.projectCreated && skipLaunchScreen) {
                     onView(withText(R.string.try_demo)).perform(click());
@@ -46,6 +46,11 @@ public class CollectTestRule implements TestRule {
                 base.evaluate();
             }
         };
+    }
+
+    public CollectTestRule restart() {
+        ActivityScenario.launch(SplashScreenActivity.class);
+        return this;
     }
 
     public MainMenuPage startAtMainMenu() {

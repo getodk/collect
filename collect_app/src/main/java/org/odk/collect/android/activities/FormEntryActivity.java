@@ -633,10 +633,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             formPath = candidateForms.get(0).getFormFilePath();
-        } else if (uriMimeType != null
-                && uriMimeType.equals(FormsProviderAPI.CONTENT_ITEM_TYPE)) {
-
-            Form form = formsRepository.get(ContentUriHelper.getIdFromUri(uri));
+        } else if (uriMimeType != null && uriMimeType.equals(FormsProviderAPI.CONTENT_ITEM_TYPE)) {
+            String projectId = uri.getQueryParameter("projectId");
+            Form form = formsRepositoryProvider.get(projectId).get(ContentUriHelper.getIdFromUri(uri));
             if (form != null) {
                 formPath = form.getFormFilePath();
             }

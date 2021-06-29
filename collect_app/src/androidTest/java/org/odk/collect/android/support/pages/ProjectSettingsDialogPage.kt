@@ -2,6 +2,7 @@ package org.odk.collect.android.support.pages
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -55,7 +56,7 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
     }
 
     fun selectProject(projectName: String): MainMenuPage {
-        clickOnText(projectName)
+        onView(allOf(hasDescendant(withText(projectName)), withContentDescription(getTranslatedString(R.string.switch_to_project, projectName)))).perform(click())
         return MainMenuPage().assertOnPage()
     }
 }

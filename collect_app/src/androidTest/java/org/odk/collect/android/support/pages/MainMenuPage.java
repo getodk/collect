@@ -176,6 +176,14 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
+    public MainMenuPage addAndSwitchToProject(String serverUrl) {
+        return openProjectSettings()
+                .clickAddProject()
+                .switchToManualMode()
+                .inputUrl(serverUrl)
+                .addProject();
+    }
+
     public ServerAuthDialog clickGetBlankFormWithAuthenticationError() {
         onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
         return new ServerAuthDialog().assertOnPage();
