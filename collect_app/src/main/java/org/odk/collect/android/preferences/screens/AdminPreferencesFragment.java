@@ -240,7 +240,7 @@ public class AdminPreferencesFragment extends BaseAdminPreferencesFragment
                     .setPositiveButton(R.string.ok, null)
                     .show();
         } else if (deleteProjectResult instanceof DeleteProjectResult.DeletedSuccessfully) {
-            Project.Saved newCurrentProject = ((DeleteProjectResult.DeletedSuccessfully) deleteProjectResult).getProject();
+            Project.Saved newCurrentProject = ((DeleteProjectResult.DeletedSuccessfully) deleteProjectResult).getNewCurrentProject();
             if (newCurrentProject != null) {
                 ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
                 ToastUtils.showLongToast(getString(R.string.switched_project, newCurrentProject.getName()));

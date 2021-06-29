@@ -89,7 +89,7 @@ class ProjectDeleterTest {
 
         val result = deleter.deleteCurrentProject()
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
-        assertThat((result as DeleteProjectResult.DeletedSuccessfully).project, `is`(nullValue()))
+        assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(nullValue()))
     }
 
     @Test
@@ -109,6 +109,6 @@ class ProjectDeleterTest {
         val result = deleter.deleteCurrentProject()
         verify(currentProjectProvider).setCurrentProject(project2.uuid)
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
-        assertThat((result as DeleteProjectResult.DeletedSuccessfully).project, `is`(project2))
+        assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(project2))
     }
 }

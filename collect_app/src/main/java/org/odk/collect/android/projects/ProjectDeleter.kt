@@ -38,5 +38,5 @@ class ProjectDeleter(
 sealed class DeleteProjectResult {
     object UnsentInstances : DeleteProjectResult()
 
-    data class DeletedSuccessfully(val project: Project.Saved?) : DeleteProjectResult()
+    data class DeletedSuccessfully(val newCurrentProject: Project.Saved?) : DeleteProjectResult()
 }
