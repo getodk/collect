@@ -21,12 +21,13 @@ import android.os.Parcelable;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
 
 import java.util.ArrayList;
@@ -43,18 +44,21 @@ import javax.inject.Inject;
 public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @Inject
-    FormsRepositoryProvider formsRepositoryProvider;
+    CurrentProjectProvider currentProjectProvider;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
 
     private Uri[] commands;
     private String[] names;
+    private BlankFormsListViewModel blankFormsListViewModel;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         DaggerUtils.getComponent(this).inject(this);
+        blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
+
         buildMenuList();
     }
 
@@ -65,10 +69,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         ArrayList<String> names = new ArrayList<>();
         ArrayList<Uri> commands = new ArrayList<>();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.select_odk_shortcut);
-
-        List<Form> forms = formsRepositoryProvider.get().getAll();
+        List<Form> forms = blankFormsListViewModel.getForms();
         for (Form form : forms) {
             String formName = form.getDisplayName();
             names.add(formName);
@@ -78,6 +79,9 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
 
         this.names = names.toArray(new String[0]);
         this.commands = commands.toArray(new Uri[0]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.select_odk_shortcut);
 
         builder.setItems(this.names, (dialog, item) -> returnShortcut(this.names[item], this.commands[item]));
 
