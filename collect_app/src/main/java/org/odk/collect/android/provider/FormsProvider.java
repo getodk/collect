@@ -138,7 +138,7 @@ public class FormsProvider extends ContentProvider {
                 Map<String, String> maxDateProjectionMap = new HashMap<>();
                 for (String column : maxDateColumns) {
                     if (column.equals("MAX(date)")) {
-                        maxDateProjectionMap.put("MAX(date)", DATE);
+                        maxDateProjectionMap.put("MAX(date)", "MAX(date) AS " + DATE);
                     } else {
                         maxDateProjectionMap.put(column, column);
                     }
