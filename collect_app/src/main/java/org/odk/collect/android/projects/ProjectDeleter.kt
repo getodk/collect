@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -14,7 +15,12 @@ class ProjectDeleter(
     private val instancesRepository: InstancesRepository
 ) {
     fun deleteCurrentProject(): DeleteProjectResult {
-        if (instancesRepository.allUnsent.isNotEmpty()) {
+        if (instancesRepository.getAllByStatus(
+                Instance.STATUS_INCOMPLETE,
+                Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED
+            ).isNotEmpty()
+        ) {
             return DeleteProjectResult.UnsentInstances
         } else {
             val currentProject = currentProjectProvider.getCurrentProject()
