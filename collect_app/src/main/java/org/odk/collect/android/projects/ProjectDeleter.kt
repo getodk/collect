@@ -6,13 +6,15 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import java.io.File
 
 class ProjectDeleter(
     private val projectsRepository: ProjectsRepository,
     private val currentProjectProvider: CurrentProjectProvider,
     private val formUpdateScheduler: FormUpdateScheduler,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
-    private val instancesRepository: InstancesRepository
+    private val instancesRepository: InstancesRepository,
+    private val projectDirPath: String
 ) {
     fun deleteCurrentProject(): DeleteProjectResult {
         if (instancesRepository.getAllByStatus(
@@ -29,6 +31,8 @@ class ProjectDeleter(
             instanceSubmitScheduler.cancelSubmit(currentProject.uuid)
 
             projectsRepository.delete(currentProject.uuid)
+
+            File(projectDirPath).deleteRecursively()
 
             return if (projectsRepository.getAll().isNotEmpty()) {
                 val newProject = projectsRepository.getAll()[0]
