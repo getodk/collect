@@ -14,6 +14,8 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.shared.TempFiles
+import java.io.File
 
 class ProjectDeleterTest {
     private val project1 = Project.Saved("1", "1", "1", "#ffffff")
@@ -39,7 +41,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         deleter.deleteCurrentProject()
@@ -59,7 +62,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         deleter.deleteCurrentProject()
@@ -79,7 +83,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         deleter.deleteCurrentProject()
@@ -99,7 +104,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         val result = deleter.deleteCurrentProject()
@@ -114,7 +120,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         deleter.deleteCurrentProject()
@@ -131,7 +138,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         deleter.deleteCurrentProject()
@@ -145,7 +153,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         val result = deleter.deleteCurrentProject()
@@ -164,12 +173,34 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository
+            instancesRepository,
+            ""
         )
 
         val result = deleter.deleteCurrentProject()
         verify(currentProjectProvider).setCurrentProject(project2.uuid)
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
         assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(project2))
+    }
+
+    @Test
+    fun `Project directory should be removed`() {
+        val projectDir = TempFiles.createTempDir()
+        File(projectDir, "dir").mkdir()
+
+        assertThat(projectDir.exists(), `is`(true))
+        assertThat(projectDir.listFiles().size, `is`(1))
+
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            mock(),
+            mock(),
+            instancesRepository,
+            projectDir.absolutePath
+        )
+
+        deleter.deleteCurrentProject()
+        assertThat(projectDir.exists(), `is`(false))
     }
 }
