@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class ProjectResetterTest {
 
+    private ProjectResetter projectResetter;
     private StoragePathProvider storagePathProvider;
     private Settings generalSettings;
     private Settings adminSettings;
@@ -43,13 +44,14 @@ public class ProjectResetterTest {
         CollectHelpers.setupDemoProject();
 
         AppDependencyComponent component = DaggerUtils.getComponent((Application) ApplicationProvider.getApplicationContext());
+        projectResetter = component.projectResetter();
         storagePathProvider = component.storagePathProvider();
         generalSettings = component.settingsProvider().getGeneralSettings();
         adminSettings = component.settingsProvider().getAdminSettings();
     }
 
     @Test
-    public void resetSettingsTest() throws IOException {
+    public void resetSettingsTest() {
         setupTestSettings();
         resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_PREFERENCES));
 
@@ -72,7 +74,7 @@ public class ProjectResetterTest {
     }
 
     @Test
-    public void resetInstancesTest() throws IOException {
+    public void resetInstancesTest() {
         saveTestInstanceFiles();
         setupTestInstancesDatabase();
         resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_INSTANCES));
@@ -94,18 +96,18 @@ public class ProjectResetterTest {
     }
 
     @Test
-    public void resetOSMDroidTest() throws IOException {
+    public void resetOSMDroidTest() {
         saveTestOSMDroidFiles();
         resetAppState(Collections.singletonList(ProjectResetter.ResetAction.RESET_OSM_DROID));
         assertFolderEmpty(Configuration.getInstance().getOsmdroidTileCache().getPath());
     }
 
     private void resetAppState(List<Integer> resetActions) {
-        List<Integer> failedResetActions = new ProjectResetter().reset(resetActions);
+        List<Integer> failedResetActions = projectResetter.reset(resetActions);
         assertEquals(0, failedResetActions.size());
     }
 
-    private void setupTestSettings() throws IOException {
+    private void setupTestSettings() {
         String username = "usernameTest";
         String password = "passwordTest";
         generalSettings.save(GeneralKeys.KEY_USERNAME, username);
@@ -178,7 +180,7 @@ public class ProjectResetterTest {
         assertTrue(new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile3").createNewFile());
     }
 
-    private void saveTestOSMDroidFiles() throws IOException {
+    private void saveTestOSMDroidFiles() {
         assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile1").mkdirs());
         assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile2").mkdirs());
         assertTrue(new File(Configuration.getInstance().getOsmdroidTileCache().getPath() + "/testFile3").mkdirs());

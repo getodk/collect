@@ -86,6 +86,7 @@ import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -312,4 +313,6 @@ public interface AppDependencyComponent {
     FormSourceProvider formSourceProvider();
 
     ExistingProjectMigrator existingProjectMigrator();
+
+    ProjectResetter projectResetter();
 }
