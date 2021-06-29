@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_extra_small"
                     android:text="@string/gdrive_configure"
-                    android:textColor="@color/website_blue"
+                    android:textColor="?colorSecondary"
                     app:layout_constraintStart_toEndOf="@+id/project_uses_gdrive"
                     app:layout_constraintTop_toTopOf="@+id/project_uses_gdrive" />
             </androidx.constraintlayout.widget.ConstraintLayout>

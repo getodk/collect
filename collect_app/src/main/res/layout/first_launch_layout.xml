@@ -55,7 +55,7 @@
                 style="@style/Widget.Collect.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/website_blue"
+                android:backgroundTint="?colorSecondary"
                 android:text="@string/configure_with_qr_code"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@android:color/white"
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_extra_small"
             android:text="@string/try_demo"
-            android:textColor="@color/website_blue"
+            android:textColor="?colorSecondary"
             app:layout_constraintStart_toEndOf="@+id/dont_have_server"
             app:layout_constraintTop_toTopOf="@+id/dont_have_server" />
     </androidx.constraintlayout.widget.ConstraintLayout>
