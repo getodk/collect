@@ -200,6 +200,9 @@
     <!-- Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu. -->
     <string name="recording_disabled">Recording disabled. Enable in %s</string>
 
+    <!-- Error displayed when opened filled form has been deleted on disk -->
+    <string name="instance_deleted_message">Filled form has been deleted!</string>
+
     <!--
     ##############################################
     # FORM FEATURES

@@ -64,6 +64,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
@@ -107,6 +108,7 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.FormDesignException;
@@ -608,6 +610,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             instancePath = instance.getInstanceFilePath();
+            if (!new File(instancePath).exists()) {
+                analytics.logEvent(AnalyticsEvents.OPEN_DELETED_INSTANCE);
+                new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
+                createErrorDialog(getString(R.string.instance_deleted_message), true);
+                return;
+            }
+
             List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             if (candidateForms.isEmpty()) {

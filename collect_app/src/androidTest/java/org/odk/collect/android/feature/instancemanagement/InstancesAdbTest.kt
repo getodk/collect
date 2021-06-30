@@ -6,6 +6,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestDependencies
@@ -34,7 +35,7 @@ class InstancesAdbTest {
     }
 
     @Test
-    fun deletingInstanceOnDisk_andThenOpeningInstance_doesNotCrash() {
+    fun deletingInstanceOnDisk_andThenOpeningInstance_showsWarning_andRemovesInstance() {
         val mainMenuPage = rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
@@ -47,6 +48,9 @@ class InstancesAdbTest {
 
         mainMenuPage
             .clickEditSavedForm(1)
-            .clickOnText("One Question")
+            .clickOnFormWithDialog("One Question")
+            .assertText(R.string.instance_deleted_message)
+            .clickOK(MainMenuPage())
+            .assertNumberOfEditableForms(0)
     }
 }
