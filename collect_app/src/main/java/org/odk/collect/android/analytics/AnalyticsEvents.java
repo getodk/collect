@@ -167,4 +167,9 @@ public class AnalyticsEvents {
      * Tracks responses from OpenMapKit to the OSMWidget
      */
     public static final String OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse";
+
+    /**
+     * Tracks how often instances that have been deleted on disk are opened for editing/viewing
+     */
+    public static final String OPEN_DELETED_INSTANCE = "OpenDeletedInstance";
 }

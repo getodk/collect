@@ -25,6 +25,10 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
         firebaseAnalytics.logEvent(category, bundle)
     }
 
+    override fun logEvent(event: String) {
+        firebaseAnalytics.logEvent(event, null)
+    }
+
     override fun logFormEvent(event: String, formIdHash: String) {
         val bundle = Bundle()
         bundle.putString("form", formIdHash)

@@ -64,6 +64,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
@@ -610,6 +611,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             instancePath = instance.getInstanceFilePath();
             if (!new File(instancePath).exists()) {
+                analytics.logEvent(AnalyticsEvents.OPEN_DELETED_INSTANCE);
                 new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
                 createErrorDialog(getString(R.string.instance_deleted_message), true);
                 return;
