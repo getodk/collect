@@ -28,10 +28,12 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
 
 public class BlankFormsListViewModel extends ViewModel {
 
@@ -55,8 +57,12 @@ public class BlankFormsListViewModel extends ViewModel {
         this.formsRepositoryProvider = formsRepositoryProvider;
     }
 
-    public List<Form> getForms() {
-        return formsRepositoryProvider.get().getAll();
+    public List<BlankForm> getForms() {
+        return formsRepositoryProvider.get()
+                .getAll()
+                .stream()
+                .map(form -> new BlankForm(form, currentProjectProvider))
+                .collect(Collectors.toList());
     }
 
     public boolean isMatchExactlyEnabled() {
@@ -99,6 +105,25 @@ public class BlankFormsListViewModel extends ViewModel {
         String host = uri.getHost() != null ? uri.getHost() : "";
         String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
+    }
+
+    public static class BlankForm {
+
+        private final String name;
+        private final Uri contentUri;
+
+        private BlankForm(Form form, CurrentProjectProvider currentProjectProvider) {
+            this.name = form.getDisplayName();
+            this.contentUri = getUri(currentProjectProvider.getCurrentProject().getUuid(), form.getDbId());
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Uri getContentUri() {
+            return contentUri;
+        }
     }
 
     public static class Factory implements ViewModelProvider.Factory {

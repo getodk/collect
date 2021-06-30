@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 
@@ -23,14 +22,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
+import org.odk.collect.android.formmanagement.BlankFormsListViewModel.BlankForm;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.forms.Form;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,73 +41,44 @@ import javax.inject.Inject;
 public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
-
-    @Inject
     BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
-
-    private Uri[] commands;
-    private String[] names;
-    private BlankFormsListViewModel blankFormsListViewModel;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         DaggerUtils.getComponent(this).inject(this);
-        blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
-
-        buildMenuList();
+        BlankFormsListViewModel blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
+        List<BlankForm> forms = blankFormsListViewModel.getForms();
+        
+        showFormListDialog(forms);
     }
 
-    /**
-     * Builds a list of shortcuts
-     */
-    private void buildMenuList() {
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Uri> commands = new ArrayList<>();
-
-        List<Form> forms = blankFormsListViewModel.getForms();
-        for (Form form : forms) {
-            String formName = form.getDisplayName();
-            names.add(formName);
-            Uri uri = FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), form.getDbId());
-            commands.add(uri);
-        }
-
-        this.names = names.toArray(new String[0]);
-        this.commands = commands.toArray(new Uri[0]);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.select_odk_shortcut);
-
-        builder.setItems(this.names, (dialog, item) -> returnShortcut(this.names[item], this.commands[item]));
-
-        builder.setOnCancelListener(dialog -> {
-            setResult(RESULT_CANCELED);
-            finish();
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
+    private void showFormListDialog(List<BlankForm> forms) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.select_odk_shortcut)
+                .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
+                    Intent intent = getShortcutIntent(forms, item);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                })
+                .setOnCancelListener(dialog -> {
+                    setResult(RESULT_CANCELED);
+                    finish();
+                })
+                .create()
+                .show();
     }
 
-    /**
-     * Returns the results to the calling intent.
-     */
-    private void returnShortcut(String name, Uri command) {
+    @NotNull
+    private Intent getShortcutIntent(List<BlankForm> forms, int item) {
         Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
-        shortcutIntent.setData(command);
+        shortcutIntent.setData(forms.get(item).getContentUri());
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, forms.get(item).getName());
         Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.notes);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
-
-        // Now, return the result to the launcher
-
-        setResult(RESULT_OK, intent);
-        finish();
+        return intent;
     }
-
 }
