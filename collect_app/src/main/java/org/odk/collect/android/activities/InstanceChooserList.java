@@ -167,7 +167,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (editMode) {
-            return new CursorLoaderFactory(currentProjectProvider).createUnsentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(currentProjectProvider).createEditableInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
             return new CursorLoaderFactory(currentProjectProvider).createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }

@@ -45,7 +45,7 @@ public class CursorLoaderFactory {
         return cursorLoader;
     }
 
-    public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
+    public CursorLoader createEditableInstancesCursorLoader(String sortOrder) {
         String selection = DatabaseInstanceColumns.STATUS + " !=? " +
                 "and " + DatabaseInstanceColumns.STATUS + " !=? ";
         String[] selectionArgs = {
@@ -56,17 +56,17 @@ public class CursorLoaderFactory {
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
 
-    public CursorLoader createUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
+    public CursorLoader createEditableInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
-            cursorLoader = createUnsentInstancesCursorLoader(sortOrder);
+            cursorLoader = createEditableInstancesCursorLoader(sortOrder);
         } else {
             String selection = DatabaseInstanceColumns.STATUS + " !=? " +
-                    //"and " + DatabaseInstanceColumns.STATUS + " !=? " +
+                    "and " + DatabaseInstanceColumns.STATUS + " !=? " +
                     "and " + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
-                    //Instance.STATUS_SUBMISSION_FAILED,
+                    Instance.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);

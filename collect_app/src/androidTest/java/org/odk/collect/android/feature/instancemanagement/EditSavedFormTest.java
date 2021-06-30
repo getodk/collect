@@ -46,6 +46,10 @@ public class EditSavedFormTest {
 
                 .assertNumberOfEditableForms(0)
                 .clickEditSavedForm()
+                .assertTextDoesNotExist(TEXT_FORM_NAME)
+
+                .clickMenuFilter()
+                .searchInBar(TEXT_FORM_NAME.substring(0, 1))
                 .assertTextDoesNotExist(TEXT_FORM_NAME);
     }
 
@@ -68,6 +72,10 @@ public class EditSavedFormTest {
 
                 .assertNumberOfEditableForms(0)
                 .clickEditSavedForm()
+                .assertTextDoesNotExist(TEXT_FORM_NAME)
+
+                .clickMenuFilter()
+                .searchInBar(TEXT_FORM_NAME.substring(0, 1))
                 .assertTextDoesNotExist(TEXT_FORM_NAME);
     }
 }
