@@ -243,7 +243,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    public static final String EXTRA_TESTING_PATH = "testingPath";
     public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
 
     private boolean autoSaved;
@@ -598,10 +597,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        if (uriMimeType == null && intent.hasExtra(EXTRA_TESTING_PATH)) {
-            formPath = intent.getStringExtra(EXTRA_TESTING_PATH);
-
-        } else if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
+        if (uriMimeType != null && uriMimeType.equals(InstanceProviderAPI.CONTENT_ITEM_TYPE)) {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             if (instance == null) {
