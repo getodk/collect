@@ -86,8 +86,17 @@ public final class CollectHelpers {
     }
 
     public static String setupDemoProject() {
-        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectImporter().importDemoProject();
+        createDemoProject();
         DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
         return Project.DEMO_PROJECT_ID;
+    }
+
+    public static String createDemoProject() {
+        return createProject(Project.Companion.getDEMO_PROJECT());
+    }
+
+    public static String createProject(Project project) {
+        Project.Saved savedProject = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectImporter().importNewProject(project);
+        return savedProject.getUuid();
     }
 }

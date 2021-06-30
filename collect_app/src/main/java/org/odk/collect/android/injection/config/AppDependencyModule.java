@@ -264,8 +264,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public StoragePathProvider providesStoragePathProvider() {
-        return new StoragePathProvider();
+    public StoragePathProvider providesStoragePathProvider(Context context, CurrentProjectProvider currentProjectProvider) {
+        return new StoragePathProvider(currentProjectProvider, context.getExternalFilesDir(null).getAbsolutePath());
     }
 
     @Provides
@@ -404,12 +404,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder) {
+    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
         return (owner, defaultArgs) -> new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
             @NonNull
             @Override
             protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler, audioRecorder);
+                return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler, audioRecorder, currentProjectProvider);
             }
         };
     }
@@ -493,8 +493,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider) {
-        return new InstancesAppState(application, instancesRepositoryProvider);
+    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
+        return new InstancesAppState(application, instancesRepositoryProvider, currentProjectProvider);
     }
 
     @Provides

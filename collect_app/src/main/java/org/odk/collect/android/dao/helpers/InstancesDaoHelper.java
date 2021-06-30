@@ -14,11 +14,8 @@
 
 package org.odk.collect.android.dao.helpers;
 
-import android.net.Uri;
-
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -67,19 +64,6 @@ public final class InstancesDaoHelper {
         }
 
         return complete;
-    }
-
-    // TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
-    // that returns an {@link Instance} object from a path.
-    public static Uri getLastInstanceUri(String path) {
-        if (path != null) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
-            if (instance != null) {
-                return Uri.withAppendedPath(InstanceProviderAPI.CONTENT_URI, instance.getDbId().toString());
-            }
-        }
-
-        return null;
     }
 
     // TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}

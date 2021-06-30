@@ -3,9 +3,9 @@ package org.odk.collect.android.feature.external;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -29,7 +29,6 @@ public class AndroidShortcutsTest {
             .around(rule);
 
     @Test
-    @Ignore("See comment in #pickAndLaunchShortcutForForm")
     public void canFillOutFormFromShortcut() {
         rule.startAtMainMenu()
                 .copyForm("one-question.xml")
@@ -46,9 +45,10 @@ public class AndroidShortcutsTest {
         Intent shortcutIntent = resultData.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 
          /*
-        This launch call doesn't work because of: https://github.com/android/android-test/issues/496
+        This can't use ActivityScenario.launch because of: https://github.com/android/android-test/issues/496
          */
-        ActivityScenario.launch(shortcutIntent);
+        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ApplicationProvider.getApplicationContext().startActivity(shortcutIntent);
         return new FormEntryPage(formName);
     }
 }

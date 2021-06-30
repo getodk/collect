@@ -321,9 +321,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (showAllMode) {
-            return new CursorLoaderFactory().createCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(currentProjectProvider).createCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return new CursorLoaderFactory().createFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(currentProjectProvider).createFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

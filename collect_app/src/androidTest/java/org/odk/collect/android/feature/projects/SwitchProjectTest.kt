@@ -51,7 +51,9 @@ class SwitchProjectTest {
             .swipeToNextQuestion("What is your age?")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfFinalizedForms(1)
+            .clickEditSavedForm(1)
+            .assertText("Two Question")
+            .pressBack(MainMenuPage())
 
             // Create and switch to new project
             .assertProjectIcon("D")
@@ -72,7 +74,9 @@ class SwitchProjectTest {
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfFinalizedForms(1)
+            .clickEditSavedForm(1)
+            .assertText("One Question")
+            .pressBack(MainMenuPage())
 
             // Switch back to first project
             .openProjectSettings()

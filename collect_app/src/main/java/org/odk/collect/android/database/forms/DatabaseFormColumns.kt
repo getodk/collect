@@ -24,7 +24,6 @@ object DatabaseFormColumns : BaseColumns {
     const val DISPLAY_SUBTEXT = "displaySubtext" // not used in the newest database version
     const val MD5_HASH = "md5Hash"
     const val DATE = "date"
-    const val MAX_DATE = "MAX(date)" // used only to get latest forms for each form_id
     const val JRCACHE_FILE_PATH = "jrcacheFilePath"
     const val FORM_MEDIA_PATH = "formMediaPath"
 

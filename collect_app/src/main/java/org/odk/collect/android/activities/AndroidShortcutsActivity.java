@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
@@ -43,6 +44,9 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     private Uri[] commands;
     private String[] names;
@@ -68,7 +72,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         for (Form form : forms) {
             String formName = form.getDisplayName();
             names.add(formName);
-            Uri uri = Uri.withAppendedPath(FormsProviderAPI.CONTENT_URI, String.valueOf(form.getDbId()));
+            Uri uri = FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), form.getDbId());
             commands.add(uri);
         }
 

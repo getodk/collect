@@ -13,14 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.formstest.FormUtils;
+import org.odk.collect.projects.Project;
 import org.odk.collect.shared.strings.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -39,20 +40,21 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAG
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_ITEM_TYPE;
 import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_URI;
+import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {
 
     private ContentResolver contentResolver;
-    private File externalFilesDir;
+    private StoragePathProvider storagePathProvider;
+    private String firstProjectId;
 
     @Before
     public void setup() {
-        CollectHelpers.setupDemoProject();
-
         Context context = ApplicationProvider.getApplicationContext();
-        externalFilesDir = new File(DaggerUtils.getComponent(context).storagePathProvider().getProjectRootDirPath());
+        storagePathProvider = DaggerUtils.getComponent(context).storagePathProvider();
+
+        firstProjectId = CollectHelpers.createDemoProject();
         contentResolver = context.getContentResolver();
     }
 
@@ -61,13 +63,13 @@ public class FormsProviderTest {
         String formId = "external_app_form";
         String formVersion = "1";
         String formName = "External app form";
-        File formFile = addFormToFormsDir(formId, formVersion, formName);
+        File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
         String md5Hash = Md5.getMd5Hash(formFile);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        contentResolver.insert(CONTENT_URI, values);
+        contentResolver.insert(getUri(firstProjectId), values);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -88,10 +90,10 @@ public class FormsProviderTest {
         String formId = "external_app_form";
         String formVersion = "1";
         String formName = "External app form";
-        File formFile = addFormToFormsDir(formId, formVersion, formName);
+        File formFile = addFormToFormsDir(firstProjectId, formId, formVersion, formName);
 
         ContentValues values = getContentValues(formId, formVersion, formName, formFile);
-        Uri newFormUri = contentResolver.insert(CONTENT_URI, values);
+        Uri newFormUri = contentResolver.insert(getUri(firstProjectId), values);
 
         try (Cursor cursor = contentResolver.query(newFormUri, null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
@@ -100,7 +102,7 @@ public class FormsProviderTest {
 
     @Test
     public void update_updatesForm_andReturns1() {
-        Uri formUri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
@@ -117,15 +119,15 @@ public class FormsProviderTest {
 
     @Test
     public void update_withSelection_onlyUpdatesMatchingForms() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        contentResolver.update(CONTENT_URI, contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+        contentResolver.update(getUri(firstProjectId), contentValues, DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -142,45 +144,38 @@ public class FormsProviderTest {
         ContentValues contentValues = new ContentValues();
         contentValues.put(LANGUAGE, "English");
 
-        int updatedCount = contentResolver.update(Uri.withAppendedPath(CONTENT_URI, String.valueOf(1)), contentValues, null, null);
+        int updatedCount = contentResolver.update(Uri.withAppendedPath(getUri(firstProjectId), String.valueOf(1)), contentValues, null, null);
         assertThat(updatedCount, is(0));
     }
 
     @Test
     public void delete_deletesForm() {
-        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
         contentResolver.delete(formUri, null, null);
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null)) {
             assertThat(cursor.getCount(), is(0));
         }
     }
 
     @Test
     public void delete_deletesFiles() {
-        Uri formUri = addFormsToDirAndDb("form1", "1", "Matching form");
+        Uri formUri = addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
         try (Cursor cursor = contentResolver.query(formUri, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
             String formFileName = cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH));
-            File formFile = new File(getFormsDirPath() + formFileName);
+            File formFile = new File(getFormsDirPath(firstProjectId) + formFileName);
             assertThat(formFile.exists(), is(true));
 
             String mediaDirName = cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH));
-            File mediaDir = new File(getFormsDirPath() + mediaDirName);
+            File mediaDir = new File(getFormsDirPath(firstProjectId) + mediaDirName);
             assertThat(mediaDir.exists(), is(true));
 
             String cacheFileName = cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH));
-            File cacheFile = new File(externalFilesDir + File.separator + ".cache" + File.separator + cacheFileName);
+            File cacheFile = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, firstProjectId) + File.separator + cacheFileName);
             assertThat(cacheFile.exists(), is(true));
-
-            ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
-            try (Cursor itemsets = itemsetDbAdapter.getItemsets()) {
-                assertThat(itemsets.getCount(), is(1));
-            } finally {
-                itemsetDbAdapter.close();
-            }
 
             contentResolver.delete(formUri, null, null);
 
@@ -192,12 +187,12 @@ public class FormsProviderTest {
 
     @Test
     public void delete_withSelection_onlyDeletesMatchingForms() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
-        contentResolver.delete(CONTENT_URI, DISPLAY_NAME + "=?", new String[]{"Matching form"});
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null)) {
+        contentResolver.delete(getUri(firstProjectId), DISPLAY_NAME + "=?", new String[]{"Matching form"});
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -207,7 +202,7 @@ public class FormsProviderTest {
 
     @Test
     public void query_returnsTheExpectedNumberColumns() {
-        Uri uri = addFormsToDirAndDb("external_app_form", "1", "External app form");
+        Uri uri = addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
         try (Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
             assertThat(cursor.getColumnCount(), is(17));
@@ -216,9 +211,9 @@ public class FormsProviderTest {
 
     @Test
     public void query_withProjection_onlyReturnsSpecifiedColumns() {
-        addFormsToDirAndDb("external_app_form", "1", "External app form");
+        addFormsToDirAndDb(firstProjectId, "external_app_form", "External app form", "1");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), new String[]{JR_FORM_ID, JR_VERSION}, null, null, null)) {
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToNext();
@@ -230,11 +225,11 @@ public class FormsProviderTest {
 
     @Test
     public void query_withSelection_onlyReturnsMatchingRows() {
-        addFormsToDirAndDb("form1", "1", "Matching form");
-        addFormsToDirAndDb("form2", "1", "Not a matching form");
-        addFormsToDirAndDb("form3", "1", "Matching form");
+        addFormsToDirAndDb(firstProjectId, "form1", "Matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form2", "Not a matching form", "1");
+        addFormsToDirAndDb(firstProjectId, "form3", "Matching form", "1");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, DISPLAY_NAME + "=?", new String[]{"Matching form"}, null)) {
             assertThat(cursor.getCount(), is(2));
 
             cursor.moveToNext();
@@ -247,11 +242,11 @@ public class FormsProviderTest {
 
     @Test
     public void query_withSortOrder_returnsSortedResults() {
-        addFormsToDirAndDb("formB", "1", "Form B");
-        addFormsToDirAndDb("formC", "1", "Form C");
-        addFormsToDirAndDb("formA", "1", "Form A");
+        addFormsToDirAndDb(firstProjectId, "formB", "Form B", "1");
+        addFormsToDirAndDb(firstProjectId, "formC", "Form C", "1");
+        addFormsToDirAndDb(firstProjectId, "formA", "Form A", "1");
 
-        try (Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, DISPLAY_NAME + " ASC")) {
+        try (Cursor cursor = contentResolver.query(getUri(firstProjectId), null, null, null, DISPLAY_NAME + " ASC")) {
             assertThat(cursor.getCount(), is(3));
 
             cursor.moveToNext();
@@ -266,15 +261,36 @@ public class FormsProviderTest {
     }
 
     @Test
-    public void getType_returnsFormAndAllFormsTypes() {
-        assertThat(contentResolver.getType(CONTENT_URI), is(CONTENT_TYPE));
-        assertThat(contentResolver.getType(Uri.withAppendedPath(CONTENT_URI, "1")), is(CONTENT_ITEM_TYPE));
+    public void query_withoutProjectId_usesFirstProject() {
+        addFormsToDirAndDb(firstProjectId, "formA", "Form A", "1");
+        CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
+
+        Uri uriWithProject = getUri("blah");
+        Uri uriWithoutProject = new Uri.Builder()
+                .scheme(uriWithProject.getScheme())
+                .authority(uriWithProject.getAuthority())
+                .path(uriWithProject.getPath())
+                .query(null)
+                .build();
+
+        try (Cursor cursor = contentResolver.query(uriWithoutProject, null, null, null, DISPLAY_NAME + " ASC")) {
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToNext();
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is("formA"));
+        }
     }
 
-    private Uri addFormsToDirAndDb(String id, String version, String name) {
-        File formFile = addFormToFormsDir(id, version, name);
+    @Test
+    public void getType_returnsFormAndAllFormsTypes() {
+        assertThat(contentResolver.getType(getUri(firstProjectId)), is(CONTENT_TYPE));
+        assertThat(contentResolver.getType(Uri.withAppendedPath(getUri(firstProjectId), "1")), is(CONTENT_ITEM_TYPE));
+    }
+
+    private Uri addFormsToDirAndDb(String projectId, String id, String name, String version) {
+        File formFile = addFormToFormsDir(projectId, id, version, name);
         ContentValues values = getContentValues(id, version, name, formFile);
-        return contentResolver.insert(CONTENT_URI, values);
+        return contentResolver.insert(getUri(projectId), values);
     }
 
     @NotNull
@@ -292,25 +308,25 @@ public class FormsProviderTest {
      * able to access our external files dir (according to
      * https://developer.android.com/training/data-storage/app-specific#external anyway.
      **/
-    private File addFormToFormsDir(String formId, String formVersion, String formName) {
-        File formFile = createFormFileInFormsDir(formId, formVersion, formName);
+    private File addFormToFormsDir(String projectId, String formId, String formVersion, String formName) {
+        File formFile = createFormFileInFormsDir(projectId, formId, formVersion, formName);
         String md5Hash = Md5.getMd5Hash(formFile);
 
-        createExtraFormFiles(formFile, md5Hash);
+        createExtraFormFiles(projectId, formFile, md5Hash);
         return formFile;
     }
 
-    private File createFormFileInFormsDir(String formId, String formVersion, String formName) {
+    private File createFormFileInFormsDir(String projectId, String formId, String formVersion, String formName) {
         String xformBody = FormUtils.createXFormBody(formId, formVersion, formName);
         String fileName = formId + "-" + formVersion + "-" + Math.random();
-        File formFile = new File(getFormsDirPath() + fileName + ".xml");
+        File formFile = new File(getFormsDirPath(projectId) + fileName + ".xml");
         FileUtils.write(formFile, xformBody.getBytes());
         return formFile;
     }
 
-    private void createExtraFormFiles(File formFile, String md5Hash) {
+    private void createExtraFormFiles(String projectId, File formFile, String md5Hash) {
         // Create a media directory (and file) so we can check deletion etc - wouldn't always be there
-        String mediaDirPath = getFormsDirPath() + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
+        String mediaDirPath = getFormsDirPath(projectId) + formFile.getName().substring(0, formFile.getName().lastIndexOf(".")) + "-media";
         new File(mediaDirPath).mkdir();
         try {
             new File(mediaDirPath, "blah.test").createNewFile();
@@ -320,16 +336,10 @@ public class FormsProviderTest {
 
         // Create a cache file so we can check deletion etc - wouldn't always be there
         try {
-            new File(externalFilesDir + File.separator + ".cache" + File.separator + md5Hash + ".formdef").createNewFile();
+            new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) + File.separator + md5Hash + ".formdef").createNewFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // Create a itemset table and row so we can check deletion etc - wouldn't always be there
-        String itemsetsCsvPath = mediaDirPath + File.separator + "itemsets.csv";
-        ItemsetDbAdapter itemsetDbAdapter = new ItemsetDbAdapter().open();
-        itemsetDbAdapter.createTable(md5Hash, Md5.getMd5Hash(new ByteArrayInputStream(itemsetsCsvPath.getBytes())), new String[]{"a, b"}, itemsetsCsvPath);
-        itemsetDbAdapter.close();
     }
 
     private String mediaPathForFormFile(File newFile) {
@@ -337,7 +347,7 @@ public class FormsProviderTest {
     }
 
     @NotNull
-    private String getFormsDirPath() {
-        return externalFilesDir + File.separator + "forms" + File.separator;
+    private String getFormsDirPath(String projectId) {
+        return storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) + File.separator;
     }
 }

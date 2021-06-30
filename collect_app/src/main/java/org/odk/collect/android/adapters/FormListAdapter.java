@@ -51,7 +51,7 @@ public class FormListAdapter extends SimpleCursorAdapter {
         originalBinder = getViewBinder();
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
-            if (columnName.equals(DatabaseFormColumns.DATE) || columnName.equals(DatabaseFormColumns.MAX_DATE)) {
+            if (columnName.equals(DatabaseFormColumns.DATE)) {
                 String timestampText = getTimestampText(new Date(cursor.getLong(columnIndex)));
                 if (!timestampText.isEmpty()) {
                     TextView v = (TextView) view;

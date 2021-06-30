@@ -5,7 +5,6 @@ import android.database.Cursor
 import android.provider.BaseColumns
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
@@ -15,7 +14,7 @@ import java.lang.Boolean
 object DatabaseObjectMapper {
 
     @JvmStatic
-    fun getValuesFromForm(form: Form, formsPath: String): ContentValues? {
+    fun getValuesFromForm(form: Form, formsPath: String): ContentValues {
         val formFilePath = getRelativeFilePath(formsPath, form.formFilePath)
         val formMediaPath = form.formMediaPath?.let { getRelativeFilePath(formsPath, it) }
 
@@ -38,17 +37,18 @@ object DatabaseObjectMapper {
     }
 
     @JvmStatic
-    fun getFormFromValues(values: ContentValues, storagePathProvider: StoragePathProvider): Form? {
-        val formFilePath = storagePathProvider.getAbsoluteFormFilePath(
+    fun getFormFromValues(values: ContentValues, formsPath: String, cachePath: String): Form {
+        val formFilePath = getAbsoluteFilePath(
+            formsPath,
             values.getAsString(DatabaseFormColumns.FORM_FILE_PATH)
         )
 
         val cacheFilePath = values.getAsString(DatabaseFormColumns.JRCACHE_FILE_PATH)?.let {
-            storagePathProvider.getAbsoluteCacheFilePath(it)
+            getAbsoluteFilePath(cachePath, it)
         }
 
         val mediaPath = values.getAsString(DatabaseFormColumns.FORM_MEDIA_PATH)?.let {
-            storagePathProvider.getAbsoluteFormFilePath(it)
+            getAbsoluteFilePath(formsPath, it)
         }
 
         return Form.Builder()

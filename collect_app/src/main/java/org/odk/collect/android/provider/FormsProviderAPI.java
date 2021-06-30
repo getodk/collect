@@ -30,14 +30,19 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
 public final class FormsProviderAPI {
 
     static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
+    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
 
     /**
      * The content:// style URL for accessing Forms.
      */
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/forms");
+    public static Uri getUri(String projectId, Long formDbId) {
+        return Uri.parse("content://" + AUTHORITY + "/forms/" + formDbId + "?projectId=" + projectId);
+    }
 
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
-    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.odk.form";
+    public static Uri getUri(String projectId) {
+        return Uri.parse("content://" + AUTHORITY + "/forms?projectId=" + projectId);
+    }
 
     /**
      * The content:// style URL for accessing the newest versions of Forms. For each
@@ -48,7 +53,9 @@ public final class FormsProviderAPI {
      * available as a special content URI case.
      */
     @Deprecated
-    public static final Uri CONTENT_NEWEST_FORMS_BY_FORMID_URI = Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id");
+    public static Uri getContentNewestFormsByFormIdUri(String projectId) {
+        return Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id?projectId=" + projectId);
+    }
 
     private FormsProviderAPI() {
     }

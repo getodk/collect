@@ -47,24 +47,4 @@ class ProjectImporterTest {
             assertThat(dir.isDirectory, `is`(true))
         }
     }
-
-    @Test
-    fun `importDemoProject() creates demo project`() {
-        projectImporter.importDemoProject()
-
-        val demoProject = Project.Saved(Project.DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
-        assertThat(projectsRepository.getAll(), contains(demoProject))
-    }
-
-    @Test
-    fun `importDemoProject() creates storage for project`() {
-        projectImporter.importDemoProject()
-
-        val demoProject = Project.Saved(Project.DEMO_PROJECT_ID, "Demo project", "D", "#3e9fcc")
-        storagePathProvider.getProjectDirPaths(demoProject.uuid).forEach {
-            val dir = File(it)
-            assertThat(dir.exists(), `is`(true))
-            assertThat(dir.isDirectory, `is`(true))
-        }
-    }
 }

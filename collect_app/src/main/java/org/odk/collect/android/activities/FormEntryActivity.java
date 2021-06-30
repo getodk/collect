@@ -2306,7 +2306,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form
-            Uri uri = InstancesDaoHelper.getLastInstanceUri(getAbsoluteInstancePath());
+            Uri uri = null;
+            String path = getAbsoluteInstancePath();
+            if (path != null) {
+                Instance instance = new InstancesRepositoryProvider(this).get().getOneByPath(path);
+                if (instance != null) {
+                    uri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instance.getDbId());
+                }
+            }
+
             if (uri != null) {
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
