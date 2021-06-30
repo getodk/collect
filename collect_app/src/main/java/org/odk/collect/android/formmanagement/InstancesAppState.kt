@@ -21,31 +21,31 @@ class InstancesAppState(
     private val currentProjectProvider: CurrentProjectProvider
 ) {
 
-    private val _unsent = MutableLiveData(0)
-    val unsentCount: LiveData<Int> = _unsent
+    private val _editable = MutableLiveData(0)
+    val editableCount: LiveData<Int> = _editable
 
-    private val _finalized = MutableLiveData(0)
-    val finalizedCount: LiveData<Int> = _finalized
+    private val _sendable = MutableLiveData(0)
+    val sendableCount: LiveData<Int> = _sendable
 
     private val _sent = MutableLiveData(0)
     val sentCount: LiveData<Int> = _sent
 
     fun update() {
         val instancesRepository = instancesRepositoryProvider.get()
-        val finalizedInstances = instancesRepository.getCountByStatus(
+
+        val sendableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         )
         val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
-        val unsentInstances = instancesRepository.getCountByStatus(
+        val editableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_INCOMPLETE,
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_SUBMISSION_FAILED
+            Instance.STATUS_COMPLETE
         )
 
-        _finalized.postValue(finalizedInstances)
+        _sendable.postValue(sendableInstances)
         _sent.postValue(sentInstances)
-        _unsent.postValue(unsentInstances)
+        _editable.postValue(editableInstances)
 
         context.contentResolver.notifyChange(
             InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().uuid),

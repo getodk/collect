@@ -56,17 +56,17 @@ public class CursorLoaderFactory {
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
 
-    //2021-06 Not updated as not testable?
     public CursorLoader createUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
             cursorLoader = createUnsentInstancesCursorLoader(sortOrder);
         } else {
-            String selection =
-                    DatabaseInstanceColumns.STATUS + " !=? and "
-                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selection = DatabaseInstanceColumns.STATUS + " !=? " +
+                    //"and " + DatabaseInstanceColumns.STATUS + " !=? " +
+                    "and " + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
+                    //Instance.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
