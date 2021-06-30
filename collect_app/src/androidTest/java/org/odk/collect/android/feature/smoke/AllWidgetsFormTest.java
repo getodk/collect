@@ -51,7 +51,7 @@ public class AllWidgetsFormTest {
                     return activityAvailability;
                 }
             }))
-            .around(new CopyFormRule("all-widgets.xml"))
+            .around(new CopyFormRule("all-widgets.xml", true))
             .around(activityTestRule);
 
     @BeforeClass

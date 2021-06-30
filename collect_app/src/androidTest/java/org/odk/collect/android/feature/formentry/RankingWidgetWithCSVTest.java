@@ -15,13 +15,14 @@ public class RankingWidgetWithCSVTest {
 
     private static final String TEST_FORM = "ranking_widget.xml";
 
+    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv")));
+            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv"), true))
+            .around(activityTestRule);
 
-    @Rule
-    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
 
     @Test
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
