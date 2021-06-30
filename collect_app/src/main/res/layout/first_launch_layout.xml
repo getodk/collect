@@ -8,38 +8,38 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:src="@drawable/odk_logo"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
         android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
-        android:layout_marginTop="@dimen/margin_standard"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/odk_logo"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5">
 
         <TextView
             android:id="@+id/tagline"
-            style="?textAppearanceHeadline4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lines="2"
             android:text="@string/tagline"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="?textAppearanceHeadline4"
             app:layout_constraintBottom_toTopOf="@+id/configuration_buttons"
-            app:layout_constraintStart_toStartOf="@+id/configuration_buttons"/>
+            app:layout_constraintStart_toStartOf="@+id/configuration_buttons"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/configuration_buttons"
@@ -55,7 +55,7 @@
                 style="@style/Widget.Collect.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/website_blue"
+                android:backgroundTint="?colorSecondary"
                 android:text="@string/configure_with_qr_code"
                 android:textAppearance="?attr/textAppearanceBody1"
                 android:textColor="@android:color/white"
@@ -83,16 +83,16 @@
 
     <TextView
         android:id="@+id/app_name"
-        style="?textAppearanceBody1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_extra_small"
+        android:textAppearance="?textAppearanceBody1"
         android:textColor="@color/color_on_surface_medium_emphasis"
-        tools:text="ODK Collect v2022.3"
         app:layout_constraintBottom_toTopOf="@+id/configure_later"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="ODK Collect v2022.3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/configure_later"
@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dont_have_project"
-            android:textColor="?colorOnSurface"
+            android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_extra_small"
             android:text="@string/try_demo"
-            android:textColor="@color/website_blue"
+            android:textAppearance="@style/TextAppearance.Collect.Link"
             app:layout_constraintStart_toEndOf="@+id/dont_have_server"
             app:layout_constraintTop_toTopOf="@+id/dont_have_server" />
     </androidx.constraintlayout.widget.ConstraintLayout>
