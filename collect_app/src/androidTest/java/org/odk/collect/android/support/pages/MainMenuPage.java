@@ -6,16 +6,13 @@ import android.app.Instrumentation;
 import android.content.Intent;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.forms.DatabaseFormColumns;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -70,8 +67,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     private void goToBlankForm(String formName) {
-        clickFillBlankForm();
-        onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).perform(click());
+        clickFillBlankForm().clickOnForm(formName);
     }
 
     public EditSavedFormPage clickEditSavedForm() {
