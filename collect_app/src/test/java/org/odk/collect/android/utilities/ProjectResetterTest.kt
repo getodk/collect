@@ -12,14 +12,22 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.projects.Project
 import org.odk.collect.shared.Settings
 import org.osmdroid.config.Configuration
 import java.io.File
@@ -28,94 +36,217 @@ import java.io.File
 class ProjectResetterTest {
     private lateinit var projectResetter: ProjectResetter
     private lateinit var storagePathProvider: StoragePathProvider
-    private lateinit var generalSettings: Settings
-    private lateinit var adminSettings: Settings
+    private lateinit var settingsProvider: SettingsProvider
     private lateinit var formsRepositoryProvider: FormsRepositoryProvider
     private lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
+    private lateinit var currentProjectId: String
+    private lateinit var anotherProjectId: String
+
+    private val propertyManager = mock<PropertyManager>()
 
     @Before
     fun setup() {
-        CollectHelpers.setupDemoProject()
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesPropertyManager(
+                eventBus: RxEventBus?,
+                permissionsProvider: PermissionsProvider?,
+                deviceDetailsProvider: DeviceDetailsProvider?,
+                settingsProvider: SettingsProvider?
+            ): PropertyManager {
+                return propertyManager
+            }
+        })
+
+        currentProjectId = CollectHelpers.setupDemoProject()
+        anotherProjectId = CollectHelpers.createProject(Project.New("Another project", "A", "#cccccc"))
 
         val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>() as Application)
         projectResetter = component.projectResetter()
         storagePathProvider = component.storagePathProvider()
-        generalSettings = component.settingsProvider().getGeneralSettings()
-        adminSettings = component.settingsProvider().getAdminSettings()
+        settingsProvider = component.settingsProvider()
         formsRepositoryProvider = component.formsRepositoryProvider()
         instancesRepositoryProvider = component.instancesRepositoryProvider()
     }
 
     @Test
-    fun resetSettingsTest() {
-        setupTestSettings()
+    fun `Reset settings clears general settings for current project`() {
+        setupTestGeneralSettings(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            generalSettings.getString(GeneralKeys.KEY_USERNAME),
+            getGeneralSettings(currentProjectId).getString(GeneralKeys.KEY_USERNAME),
             `is`(
                 GeneralKeys.getDefaults()[GeneralKeys.KEY_USERNAME]
             )
         )
         assertThat(
-            generalSettings.getString(GeneralKeys.KEY_PASSWORD),
+            getGeneralSettings(currentProjectId).getString(GeneralKeys.KEY_PASSWORD),
             `is`(
                 GeneralKeys.getDefaults()[GeneralKeys.KEY_PASSWORD]
             )
         )
+    }
+
+    @Test
+    fun `Reset settings does not clear general settings for another projects`() {
+        setupTestGeneralSettings(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
         assertThat(
-            adminSettings.getBoolean(AdminKeys.KEY_VIEW_SENT),
+            getGeneralSettings(anotherProjectId).getString(GeneralKeys.KEY_USERNAME),
+            `is`(
+                "usernameTest"
+            )
+        )
+        assertThat(
+            getGeneralSettings(anotherProjectId).getString(GeneralKeys.KEY_PASSWORD),
+            `is`(
+                "passwordTest"
+            )
+        )
+    }
+
+    @Test
+    fun `Reset settings clears admin settings for current project`() {
+        setupTestAdminSettings(currentProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
+        assertThat(
+            getAdminSettings(currentProjectId).getBoolean(AdminKeys.KEY_VIEW_SENT),
             `is`(
                 AdminKeys.getDefaults()[AdminKeys.KEY_VIEW_SENT]
             )
         )
-        assertEquals(0, formsRepositoryProvider.get().all.size)
-        assertEquals(0, instancesRepositoryProvider.get().all.size)
     }
 
     @Test
-    fun resetFormsTest() {
-        saveTestFormFiles()
-        setupTestFormsDatabase()
-        createTestItemsetsDatabaseFile()
+    fun `Reset settings does not clear admin settings for another projects`() {
+        setupTestAdminSettings(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
+        assertThat(
+            getAdminSettings(anotherProjectId).getBoolean(AdminKeys.KEY_VIEW_SENT),
+            `is`(
+                false
+            )
+        )
+    }
+
+    @Test
+    fun `Reset settings clears settings folder for current project`() {
+        setupTestSettingsFolder(currentProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS, currentProjectId))
+    }
+
+    @Test
+    fun `Reset settings does not clear settings folder for another projects`() {
+        setupTestSettingsFolder(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS, anotherProjectId), "settings.png").exists())
+    }
+
+    @Test
+    fun `Reset settings reloads property manager`() {
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
+
+        verify(propertyManager).reload()
+    }
+
+    @Test
+    fun `Reset forms clears forms for current project`() {
+        saveTestFormFiles(currentProjectId)
+        setupTestFormsDatabase(currentProjectId)
+        createTestItemsetsDatabaseFile(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_FORMS))
 
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS))
-        assertFalse(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").exists())
+        assertEquals(0, formsRepositoryProvider.get(currentProjectId).all.size)
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, currentProjectId))
+        assertFalse(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, currentProjectId) + "/itemsets.db").exists())
     }
 
     @Test
-    fun resetInstancesTest() {
-        saveTestInstanceFiles()
-        setupTestInstancesDatabase()
+    fun `Reset forms does not clear forms for another projects`() {
+        saveTestFormFiles(anotherProjectId)
+        setupTestFormsDatabase(anotherProjectId)
+        createTestItemsetsDatabaseFile(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_FORMS))
+
+        assertEquals(1, formsRepositoryProvider.get(anotherProjectId).all.size)
+        assertTestFormFiles(anotherProjectId)
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, anotherProjectId) + "/itemsets.db").exists())
+    }
+
+    @Test
+    fun `Reset instances clears instances for current project`() {
+        saveTestInstanceFiles(currentProjectId)
+        setupTestInstancesDatabase(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
 
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES))
+        assertEquals(0, instancesRepositoryProvider.get(currentProjectId).all.size)
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, currentProjectId))
     }
 
     @Test
-    fun resetLayersTest() {
-        saveTestLayerFiles()
+    fun `Reset instances does not clear instances for another projects`() {
+        saveTestInstanceFiles(anotherProjectId)
+        setupTestInstancesDatabase(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_INSTANCES))
+
+        assertEquals(1, instancesRepositoryProvider.get(anotherProjectId).all.size)
+        assertTestInstanceFiles(anotherProjectId)
+    }
+
+    @Test
+    fun `Reset layers clears layers for current project`() {
+        saveTestLayerFiles(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_LAYERS))
 
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS))
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, currentProjectId))
     }
 
     @Test
-    fun resetCacheTest() {
-        saveTestCacheFiles()
+    fun `Reset layers does not clear layers for another projects`() {
+        saveTestLayerFiles(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_LAYERS))
+
+        assertTestLayerFiles(anotherProjectId)
+    }
+
+    @Test
+    fun `Reset cache clears cache for project`() {
+        saveTestCacheFiles(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
 
-        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE))
+        assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, currentProjectId))
     }
 
     @Test
-    fun resetOSMDroidTest() {
+    fun `Reset cache does not clear cache for another projects`() {
+        saveTestCacheFiles(anotherProjectId)
+
+        resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
+
+        assertTestCacheFiles(anotherProjectId)
+    }
+
+    @Test
+    fun `Reset osmdroid cache clears osmdroid cache`() {
         saveTestOSMDroidFiles()
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_OSM_DROID))
@@ -128,38 +259,38 @@ class ProjectResetterTest {
         assertEquals(0, failedResetActions.size)
     }
 
-    private fun setupTestSettings() {
-        val username = "usernameTest"
-        val password = "passwordTest"
-
-        generalSettings.save(GeneralKeys.KEY_USERNAME, username)
-        generalSettings.save(GeneralKeys.KEY_PASSWORD, password)
-
-        assertEquals(username, generalSettings.getString(GeneralKeys.KEY_USERNAME))
-        assertEquals(password, generalSettings.getString(GeneralKeys.KEY_PASSWORD))
-
-        adminSettings.save(AdminKeys.KEY_VIEW_SENT, false)
-        assertFalse(adminSettings.getBoolean(AdminKeys.KEY_VIEW_SENT))
-        assertTrue(
-            File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)).exists() || File(
-                storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS)
-            ).mkdir()
-        )
+    private fun setupTestGeneralSettings(uuid: String) {
+        getGeneralSettings(uuid).save(GeneralKeys.KEY_USERNAME, "usernameTest")
+        getGeneralSettings(uuid).save(GeneralKeys.KEY_PASSWORD, "passwordTest")
     }
 
-    private fun setupTestFormsDatabase() {
-        FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(
+    private fun setupTestAdminSettings(uuid: String) {
+        getAdminSettings(uuid).save(AdminKeys.KEY_VIEW_SENT, false)
+    }
+
+    private fun setupTestSettingsFolder(uuid: String) {
+        assertTrue(
+            File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS, uuid)).exists() || File(
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS, uuid)
+            ).mkdir()
+        )
+
+        File(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS, uuid), "settings.png").createNewFile()
+    }
+
+    private fun setupTestFormsDatabase(uuid: String) {
+        FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get(uuid).save(
             Form.Builder()
                 .formId("jrFormId")
                 .displayName("displayName")
-                .formFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml")
+                .formFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile1.xml")
                 .build()
         )
-        assertEquals(1, formsRepositoryProvider.get().all.size)
+        assertEquals(1, formsRepositoryProvider.get(uuid).all.size)
     }
 
-    private fun setupTestInstancesDatabase() {
-        InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get().save(
+    private fun setupTestInstancesDatabase(uuid: String) {
+        InstancesRepositoryProvider(ApplicationProvider.getApplicationContext()).get(uuid).save(
             Instance.Builder()
                 .instanceFilePath("testDir1/testFile1")
                 .submissionUri("submissionUri")
@@ -168,39 +299,67 @@ class ProjectResetterTest {
                 .formVersion("jrversion")
                 .build()
         )
-        assertEquals(1, instancesRepositoryProvider.get().all.size)
+        assertEquals(1, instancesRepositoryProvider.get(uuid).all.size)
     }
 
-    private fun createTestItemsetsDatabaseFile() {
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA) + "/itemsets.db").createNewFile())
+    private fun createTestItemsetsDatabaseFile(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, uuid) + "/itemsets.db").createNewFile())
     }
 
-    private fun saveTestFormFiles() {
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile1.xml").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile2.xml").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testFile3.xml").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir1/testFile1-media").mkdirs())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir2/testFile2-media").mkdirs())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + "/testDir3/testFile3-media/testFile.csv").mkdirs())
+    private fun saveTestFormFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile1.xml").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile2.xml").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile3.xml").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir1/testFile1-media").mkdirs())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir2/testFile2-media").mkdirs())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir3/testFile3-media/testFile.csv").mkdirs())
     }
 
-    private fun saveTestInstanceFiles() {
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir1/testFile1.xml").mkdirs())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir2/testFile2.xml").mkdirs())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + "/testDir3").mkdirs())
+    private fun assertTestFormFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile1.xml").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile2.xml").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testFile3.xml").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir1/testFile1-media").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir2/testFile2-media").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, uuid) + "/testDir3/testFile3-media/testFile.csv").exists())
     }
 
-    private fun saveTestLayerFiles() {
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile1").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile2").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile3").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS) + "/testFile4").createNewFile())
+    private fun saveTestInstanceFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir1/testFile1.xml").mkdirs())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir2/testFile2.xml").mkdirs())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir3").mkdirs())
     }
 
-    private fun saveTestCacheFiles() {
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile1").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile2").createNewFile())
-        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE) + "/testFile3").createNewFile())
+    private fun assertTestInstanceFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir1/testFile1.xml").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir2/testFile2.xml").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, uuid) + "/testDir3").exists())
+    }
+
+    private fun saveTestLayerFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile1").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile2").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile3").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile4").createNewFile())
+    }
+
+    private fun assertTestLayerFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile1").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile2").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile3").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS, uuid) + "/testFile4").exists())
+    }
+
+    private fun saveTestCacheFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile1").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile2").createNewFile())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile3").createNewFile())
+    }
+
+    private fun assertTestCacheFiles(uuid: String) {
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile1").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile2").exists())
+        assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile3").exists())
     }
 
     private fun saveTestOSMDroidFiles() {
@@ -211,6 +370,14 @@ class ProjectResetterTest {
 
     private fun assertFolderEmpty(folder: String) {
         assertTrue(File(folder).isDirectory)
-        assertEquals(File(folder).list().size, 0)
+        assertTrue(File(folder).list().isEmpty())
+    }
+
+    fun getGeneralSettings(uuid: String): Settings {
+        return settingsProvider.getGeneralSettings(uuid)
+    }
+
+    fun getAdminSettings(uuid: String): Settings {
+        return settingsProvider.getAdminSettings(uuid)
     }
 }
