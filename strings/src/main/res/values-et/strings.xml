@@ -403,7 +403,6 @@
   <string name="reset_blank_forms">Sisestusvormid (vormide kaust, vormide andmebaas, andmekogud)</string>
   <string name="reset_layers">Kaardikihid (kihtide kaust)</string>
   <string name="reset_cache">Vormi laadimise vahemälu (.cache kaust)</string>
-  <string name="reset_osm_tiles">OSM kaardikihi vahemälu (osmdroid kaust)</string>
   <string name="reset_settings_dialog_title">Vali mida lähtestada</string>
   <string name="reset_settings_button_reset">Lähtesta</string>
   <string name="reset_in_progress">Lähtestamine…</string>
@@ -414,7 +413,6 @@
   <string name="reset_blank_forms_result">Tühjad vormid :: %s</string>
   <string name="reset_layers_result">Kaardikihid :: %s</string>
   <string name="reset_cache_result">Vormi laadimise vahemälu :: %s</string>
-  <string name="reset_osm_tiles_result">OSM kaardikihi vahemälu :: %s</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salvesta vorm</string>

@@ -29,7 +29,6 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.Settings
-import org.osmdroid.config.Configuration
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -245,15 +244,6 @@ class ProjectResetterTest {
         assertTestCacheFiles(anotherProjectId)
     }
 
-    @Test
-    fun `Reset osmdroid cache clears osmdroid cache`() {
-        saveTestOSMDroidFiles()
-
-        resetAppState(listOf(ProjectResetter.ResetAction.RESET_OSM_DROID))
-
-        assertFolderEmpty(Configuration.getInstance().osmdroidTileCache.path)
-    }
-
     private fun resetAppState(resetActions: List<Int>) {
         val failedResetActions = projectResetter.reset(resetActions)
         assertEquals(0, failedResetActions.size)
@@ -360,12 +350,6 @@ class ProjectResetterTest {
         assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile1").exists())
         assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile2").exists())
         assertTrue(File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, uuid) + "/testFile3").exists())
-    }
-
-    private fun saveTestOSMDroidFiles() {
-        assertTrue(File(Configuration.getInstance().osmdroidTileCache.path + "/testFile1").mkdirs())
-        assertTrue(File(Configuration.getInstance().osmdroidTileCache.path + "/testFile2").mkdirs())
-        assertTrue(File(Configuration.getInstance().osmdroidTileCache.path + "/testFile3").mkdirs())
     }
 
     private fun assertFolderEmpty(folder: String) {

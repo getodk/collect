@@ -697,7 +697,6 @@
   <string name="reset_blank_forms">Tyhjät lomakkeet (forms -kansio, forms -tietokanta, itemsets -tietokanta)</string>
   <string name="reset_layers">Karttatasot (layers -kansio)</string>
   <string name="reset_cache">Lomakkeiden latausvälimuisti (.cache -kansio)</string>
-  <string name="reset_osm_tiles">OSM-tiilien välimuisti (osmdroid -kansio)</string>
   <string name="reset_settings_dialog_title">Valitse mitä palautetaan alkutilaan</string>
   <string name="reset_settings_button_reset">Palautus alkutilaan</string>
   <string name="reset_in_progress">Palautetaan alkutilaan…</string>
@@ -708,7 +707,6 @@
   <string name="reset_blank_forms_result">Tyhjät lomakkeet :: %s</string>
   <string name="reset_layers_result">Karttatasot :: %s</string>
   <string name="reset_cache_result">Lomakkeiden latausvälimuisti :: %s</string>
-  <string name="reset_osm_tiles_result">OSM-tiilien välimuisti :: %s</string>
   <string name="user_access_control">Käyttäjän pääsynvalvonta</string>
   <string name="main_menu_settings">Päävalikkoasetukset</string>
   <string name="main_menu_settings_summary">Napsauta asettaaksesi päävalikon kohtia</string>

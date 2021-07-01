@@ -688,7 +688,6 @@ Escolher Imagem</string>
   <string name="reset_blank_forms">Formulários em branco (pasta de formulários, banco de dados de formulários, banco de dados dos conjuntos de itens)</string>
   <string name="reset_layers">Camadas do mapa (pasta de camadas)</string>
   <string name="reset_cache">Cache de carga dos formulários (pasta .cache)</string>
-  <string name="reset_osm_tiles">Cache de tiles OSM (pasta osmdroid)</string>
   <string name="reset_settings_dialog_title">Selecione o que restaurar</string>
   <string name="reset_settings_button_reset">Restaurar</string>
   <string name="reset_in_progress">Restaurando…</string>
@@ -699,7 +698,6 @@ Escolher Imagem</string>
   <string name="reset_blank_forms_result">Formulários em branco :: %s</string>
   <string name="reset_layers_result">Layers do mapa :: %s</string>
   <string name="reset_cache_result">Carga do cache do formulário :: %s</string>
-  <string name="reset_osm_tiles_result">Encaixe do cache OSM :: %s</string>
   <string name="user_access_control">Controle de Acesso de Usuários</string>
   <string name="main_menu_settings">Configurações de Menu Principal</string>
   <string name="main_menu_settings_summary">Toque para gerenciar itens de menu</string>

@@ -658,7 +658,6 @@
   <string name="reset_blank_forms">ఖాళీ ఫారం లు (ఫారం ఫోల్డర్, ఫారమ్ డేటాబేస్, ఐటమ్‌సెట్స్ డేటాబేస్)</string>
   <string name="reset_layers">మ్యాప్ లేయర్స్ (లేయర్స్ ఫోల్డర్)</string>
   <string name="reset_cache">ఫారం లోడ్ కాష్ (.కాష్ ఫోల్డర్)</string>
-  <string name="reset_osm_tiles">OSM టైల్ cache (ఓస్మ్‌డ్రాయిడ్ ఫోల్డర్)</string>
   <string name="reset_settings_dialog_title">ఏమి రీసెట్ చేయాలో ఎంచుకోండి</string>
   <string name="reset_settings_button_reset">రీసెట్</string>
   <string name="reset_in_progress">రీసెట్ చేస్తోంది …</string>
@@ -669,7 +668,6 @@
   <string name="reset_blank_forms_result">ఖాళీ ఫారంలు ::%s</string>
   <string name="reset_layers_result">మ్యాప్ లేయర్స్ ::%s</string>
   <string name="reset_cache_result">ఫారం లోడ్ cache ::%s</string>
-  <string name="reset_osm_tiles_result">OSM టైల్ cache ::%s</string>
   <string name="user_access_control">వినియోగదారు ప్రాప్యత నియంత్రణ.</string>
   <string name="main_menu_settings">ప్రధాన మెనూ సెట్టింగులు</string>
   <string name="main_menu_settings_summary">ప్రధాన మెను అంశాలను నిర్వహించడానికి నొక్కండి</string>

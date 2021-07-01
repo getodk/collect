@@ -566,7 +566,6 @@
   <string name="reset_blank_forms">Бланки опросников (forms folder, forms database, itemsets database)</string>
   <string name="reset_layers">Слои карты (папка layers)</string>
   <string name="reset_cache">Кэш (папка .cache)</string>
-  <string name="reset_osm_tiles">Кэш тайлов OSM (папка osmdroid)</string>
   <string name="reset_settings_dialog_title">Выберите, что хотите сбросить</string>
   <string name="reset_settings_button_reset">Сброс</string>
   <string name="reset_in_progress">Сбрасывание…</string>
@@ -576,7 +575,6 @@
   <string name="reset_saved_forms_result">Сохранённые опросы: %s</string>
   <string name="reset_blank_forms_result">Бланки опросников: %s</string>
   <string name="reset_layers_result">Слои карт: %s</string>
-  <string name="reset_osm_tiles_result">Кэш тайлов OSM: %s</string>
   <string name="user_access_control">Контроль доступа пользователя</string>
   <string name="main_menu_settings">Кнопки главного меню…</string>
   <string name="main_menu_settings_summary"> Доступ к кнопкам в главном меню</string>

@@ -708,7 +708,6 @@
   <string name="reset_blank_forms">النماذج الفارغة (مجلد النماذج، وقاعدة بيانات النماذج، وقاعدة بيانات مجموعات العناصر)</string>
   <string name="reset_layers">طبقات الخريطة (مجلد الطبقات)</string>
   <string name="reset_cache">الذاكرة المخبئية المؤقتة للنماذج (مجلد cache.)</string>
-  <string name="reset_osm_tiles">الذاكرة المخبئية المؤقتة لملفات OSM (مجلد osmdroid)</string>
   <string name="reset_settings_dialog_title">اختر ما تريد إعادته للضبط الافتراضي</string>
   <string name="reset_settings_button_reset">إعادة ضبط</string>
   <string name="reset_in_progress">جاري إعادة الضبط</string>
@@ -719,7 +718,6 @@
   <string name="reset_blank_forms_result">الاستمارات الفارغة  :: %s</string>
   <string name="reset_layers_result">طبقات الخرائط  :: %s</string>
   <string name="reset_cache_result">التخزين المؤقت للنماذج المحملة  :: %s</string>
-  <string name="reset_osm_tiles_result">التخزين المؤقت لشرائح OSM  :: %s</string>
   <string name="user_access_control">قيود المستخدم</string>
   <string name="main_menu_settings">إعدادات القائمة الرئيسة</string>
   <string name="main_menu_settings_summary">إنقر لإدارة عناصر القائمة الرئيسية</string>

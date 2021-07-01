@@ -697,7 +697,6 @@
   <string name="reset_blank_forms">Formularios Vacíos (carpeta forms, base de datos forms, base de datos itemsets)</string>
   <string name="reset_layers">Capas cartográficas (carpeta de las capas)</string>
   <string name="reset_cache">Cache de formularios cargados (carpeta .cache)</string>
-  <string name="reset_osm_tiles">OSM tile caché (carpeta osmdroid)</string>
   <string name="reset_settings_dialog_title">Seleccione que restablecer</string>
   <string name="reset_settings_button_reset">Restablecer</string>
   <string name="reset_in_progress">Restableciendo</string>
@@ -708,7 +707,6 @@
   <string name="reset_blank_forms_result">Formularios en blanco :: %s</string>
   <string name="reset_layers_result">Capas de mapa :: %s</string>
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
-  <string name="reset_osm_tiles_result">OSM tile caché :: %s</string>
   <string name="user_access_control">Control de acceso a usuario</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
   <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>

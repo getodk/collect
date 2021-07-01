@@ -41,7 +41,6 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     private AppCompatCheckBox forms;
     private AppCompatCheckBox layers;
     private AppCompatCheckBox cache;
-    private AppCompatCheckBox osmDroid;
 
     private Context context;
 
@@ -68,13 +67,11 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
         forms = view.findViewById(R.id.forms);
         layers = view.findViewById(R.id.layers);
         cache = view.findViewById(R.id.cache);
-        osmDroid = view.findViewById(R.id.osmdroid);
         preferences.setOnCheckedChangeListener(this);
         instances.setOnCheckedChangeListener(this);
         forms.setOnCheckedChangeListener(this);
         layers.setOnCheckedChangeListener(this);
         cache.setOnCheckedChangeListener(this);
-        osmDroid.setOnCheckedChangeListener(this);
         super.onBindDialogView(view);
     }
 
@@ -91,7 +88,6 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
         forms = null;
         layers = null;
         cache = null;
-        osmDroid = null;
         super.onDetach();
     }
 
@@ -123,9 +119,6 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
         }
         if (cache.isChecked()) {
             resetActions.add(ProjectResetter.ResetAction.RESET_CACHE);
-        }
-        if (osmDroid.isChecked()) {
-            resetActions.add(ProjectResetter.ResetAction.RESET_OSM_DROID);
         }
 
         if (!resetActions.isEmpty()) {
@@ -209,15 +202,6 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                                 context.getString(R.string.success)));
                     }
                     break;
-                case ProjectResetter.ResetAction.RESET_OSM_DROID:
-                    if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_osm_tiles_result),
-                                context.getString(R.string.error_occured)));
-                    } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_osm_tiles_result),
-                                context.getString(R.string.success)));
-                    }
-                    break;
             }
             if (resetActions.indexOf(action) < resetActions.size() - 1) {
                 resultMessage.append("\n\n");
@@ -246,7 +230,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
     public void adjustResetButtonAccessibility() {
         if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
-                || layers.isChecked() || cache.isChecked() || osmDroid.isChecked()) {
+                || layers.isChecked() || cache.isChecked()) {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
                     .setTextColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor());

@@ -693,7 +693,6 @@
   <string name="reset_blank_forms">Formulir kosong (folder formulir, database formulir, database itemsets)</string>
   <string name="reset_layers">Lapisan peta (folder lapisan)</string>
   <string name="reset_cache">Cache formulir yang dimuat (folder .cache)</string>
-  <string name="reset_osm_tiles">Cache tile OSM (folder osmdroid)</string>
   <string name="reset_settings_dialog_title">Pilih apa yang ingin di set ulang</string>
   <string name="reset_settings_button_reset">Set Ulang</string>
   <string name="reset_in_progress">Mengeset ulang…</string>
@@ -704,7 +703,6 @@
   <string name="reset_blank_forms_result">Formulir kosong :: %s</string>
   <string name="reset_layers_result">Lapisan peta :: %s</string>
   <string name="reset_cache_result">Cache formulir yang dimuat :: %s</string>
-  <string name="reset_osm_tiles_result">Cache tile OSM :: %s</string>
   <string name="user_access_control">Kontrol Akses Pengguna</string>
   <string name="main_menu_settings">Pengaturan Menu Utama</string>
   <string name="main_menu_settings_summary">Sentuh untuk mengelola item menu utama</string>

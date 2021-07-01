@@ -611,7 +611,6 @@
   <string name="reset_blank_forms">Prazni formulari (folder formulara, baza podataka formulara, baza podataka ajtema)</string>
   <string name="reset_layers">Slojevi mape (folder slojeva)</string>
   <string name="reset_cache">Keš za učitavanje formulara (keš folder)</string>
-  <string name="reset_osm_tiles">OSM keš (osmdroid folder)</string>
   <string name="reset_settings_dialog_title">Obilježi šta želiš da resetuješ</string>
   <string name="reset_settings_button_reset">Resetuj</string>
   <string name="reset_in_progress">Resetujem…</string>
@@ -622,7 +621,6 @@
   <string name="reset_blank_forms_result">Prazni formulari :: %s</string>
   <string name="reset_layers_result">Slojevi mape :: %s</string>
   <string name="reset_cache_result">Keš za ulčitavanje formulara :: %s</string>
-  <string name="reset_osm_tiles_result">OSM keš :: %s</string>
   <string name="user_access_control">Kontrola korisničkog pristupa</string>
   <string name="main_menu_settings">Podešavanja glavnog menija</string>
   <string name="main_menu_settings_summary">Dodirni za upravljanje stavkama glavnog menija</string>

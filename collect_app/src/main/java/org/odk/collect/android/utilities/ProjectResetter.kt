@@ -20,7 +20,6 @@ import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.osmdroid.config.Configuration
 import java.io.File
 
 class ProjectResetter(
@@ -41,7 +40,6 @@ class ProjectResetter(
                 ResetAction.RESET_FORMS -> resetForms()
                 ResetAction.RESET_LAYERS -> resetLayers()
                 ResetAction.RESET_CACHE -> resetCache()
-                ResetAction.RESET_OSM_DROID -> resetOSMDroid()
             }
         }
         return failedResetActions
@@ -92,12 +90,6 @@ class ProjectResetter(
         }
     }
 
-    private fun resetOSMDroid() {
-        if (!deleteFolderContent(Configuration.getInstance().osmdroidTileCache.path)) {
-            failedResetActions.add(ResetAction.RESET_OSM_DROID)
-        }
-    }
-
     private fun deleteFolderContent(path: String): Boolean {
         var result = true
         val file = File(path)
@@ -118,6 +110,5 @@ class ProjectResetter(
         const val RESET_FORMS = 2
         const val RESET_LAYERS = 3
         const val RESET_CACHE = 4
-        const val RESET_OSM_DROID = 5
     }
 }

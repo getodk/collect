@@ -611,7 +611,6 @@
   <string name="reset_blank_forms">Чисті анкети (директорія forms, база даних forms, база даних itemsets)</string>
   <string name="reset_layers">Шари карт (директорія layers)</string>
   <string name="reset_cache">Кеш завантаження анкет (директорія .cache)</string>
-  <string name="reset_osm_tiles">Кеш фрагментів OSM (директорія osmdroid)</string>
   <string name="reset_settings_dialog_title">Оберіть що скинути</string>
   <string name="reset_settings_button_reset">Скинути</string>
   <string name="reset_in_progress">Скидання…</string>
@@ -622,7 +621,6 @@
   <string name="reset_blank_forms_result">Незаповнені анкети :: %s</string>
   <string name="reset_layers_result">Шари карт :: %s</string>
   <string name="reset_cache_result">Кеш завантаження анкет :: %s</string>
-  <string name="reset_osm_tiles_result">Кеш фрагментів OSM :: %s</string>
   <string name="user_access_control">Контроль Доступу Користувачів</string>
   <string name="main_menu_settings">Налаштування Головного Меню</string>
   <string name="main_menu_settings_summary">Натисніть для управління пунктами головного меню</string>

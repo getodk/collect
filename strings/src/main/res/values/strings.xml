@@ -840,7 +840,6 @@
     <string name="reset_blank_forms">Blank forms (forms folder, forms database, itemsets database)</string>
     <string name="reset_layers">Map layers (layers folder)</string>
     <string name="reset_cache">Form load cache (.cache folder)</string>
-    <string name="reset_osm_tiles">OSM tile cache (osmdroid folder)</string>
     <string name="reset_settings_dialog_title">Select what to reset</string>
     <string name="reset_settings_button_reset">Reset</string>
     <string name="reset_in_progress">Resetting…</string>
@@ -851,7 +850,6 @@
     <string name="reset_blank_forms_result">Blank forms :: %s</string>
     <string name="reset_layers_result">Map layers :: %s</string>
     <string name="reset_cache_result">Form load cache :: %s</string>
-    <string name="reset_osm_tiles_result">OSM tile cache :: %s</string>
 
     <string name="user_access_control">User Access Control</string>
     <string name="main_menu_settings">Main Menu Settings</string>
