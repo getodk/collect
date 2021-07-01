@@ -11,11 +11,11 @@ import kotlin.math.abs
 
 class ProjectDetailsCreator(private val context: Context) {
 
-    fun createProjectFromDetails(url: String = "", name: String = "", icon: String = "", color: String = ""): Project {
+    fun createProjectFromDetails(name: String = "", icon: String = "", color: String = "", connectionIdentifier: String = ""): Project {
         val projectName = if (name.isNotBlank()) {
             name
         } else {
-            getProjectNameFromUrl(url)
+            getProjectNameFromConnectionIdentifier(connectionIdentifier)
         }
 
         val projectIcon = if (icon.isNotBlank()) {
@@ -37,14 +37,14 @@ class ProjectDetailsCreator(private val context: Context) {
         return Project.New(projectName, projectIcon, projectColor)
     }
 
-    private fun getProjectNameFromUrl(url: String): String {
-        return if (url.isBlank() || url.startsWith(context.getString(R.string.default_server_url))) {
+    private fun getProjectNameFromConnectionIdentifier(connectionIdentifier: String): String {
+        return if (connectionIdentifier.isBlank() || connectionIdentifier.startsWith(context.getString(R.string.default_server_url))) {
             Project.DEMO_PROJECT_NAME
         } else {
             try {
-                URL(url).host
+                URL(connectionIdentifier).host
             } catch (e: Exception) {
-                "Project"
+                connectionIdentifier
             }
         }
     }

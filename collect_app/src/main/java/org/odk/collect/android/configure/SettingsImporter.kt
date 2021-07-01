@@ -2,6 +2,8 @@ package org.odk.collect.android.configure
 
 import org.json.JSONException
 import org.json.JSONObject
+import org.odk.collect.android.R
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
@@ -50,10 +52,17 @@ class SettingsImporter(
             } else {
                 JSONObject()
             }
+
+            val connectionIdentifier = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
+                generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
+            } else {
+                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""
+            }
+
             importProjectDetails(
-                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
+                project,
                 projectDetails,
-                project
+                connectionIdentifier
             )
         } catch (ignored: JSONException) {
             // Ignored
@@ -98,7 +107,7 @@ class SettingsImporter(
         }
     }
 
-    private fun importProjectDetails(url: String, projectJson: JSONObject, project: Project.Saved) {
+    private fun importProjectDetails(project: Project.Saved, projectJson: JSONObject, connectionIdentifier: String) {
         val projectName = if (projectJson.has(AppConfigurationKeys.PROJECT_NAME)) {
             projectJson.getString(AppConfigurationKeys.PROJECT_NAME)
         } else {
@@ -115,7 +124,7 @@ class SettingsImporter(
             ""
         }
 
-        val newProject = projectDetailsCreator.createProjectFromDetails(url, projectName, projectIcon, projectColor)
+        val newProject = projectDetailsCreator.createProjectFromDetails(projectName, projectIcon, projectColor, connectionIdentifier)
 
         projectsRepository.save(
             project.copy(

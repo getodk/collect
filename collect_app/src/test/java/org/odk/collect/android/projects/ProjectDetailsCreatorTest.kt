@@ -12,7 +12,7 @@ import org.odk.collect.projects.Project
 @RunWith(AndroidJUnit4::class)
 class ProjectDetailsCreatorTest {
 
-    val projectDetailsCreator = ProjectDetailsCreator(ApplicationProvider.getApplicationContext())
+    private val projectDetailsCreator = ProjectDetailsCreator(ApplicationProvider.getApplicationContext())
 
     @Test
     fun `If project name is included in project details should be used`() {
@@ -20,13 +20,27 @@ class ProjectDetailsCreatorTest {
     }
 
     @Test
-    fun `If project name is not included in project details should be generated based on url`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-server.com").name, `is`("my-server.com"))
+    fun `When no project name is specified and the connection identifier is a valid URL, the project name is the URL domain`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").name, `is`("my-project.com"))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").name, `is`("your-project.com"))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").name, `is`("www.my-project.com"))
     }
 
     @Test
-    fun `If project name is empty should be generated based on url`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-server.com", name = " ").name, `is`("my-server.com"))
+    fun `When no project name is specified and the connection identifier is not a valid URL, the project name is the connection identifier`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "foo@bar.baz").name, `is`("foo@bar.baz"))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "something").name, `is`("something"))
+    }
+
+    @Test
+    fun `When no project name is specified and the connection identifier is the demo project explicitly or by default, the project name is 'Demo project'`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://demo.getodk.org").name, `is`(Project.DEMO_PROJECT_NAME))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "").name, `is`(Project.DEMO_PROJECT_NAME))
+    }
+
+    @Test
+    fun `If project name is empty should be generated based on connection identifier`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(name = " ", connectionIdentifier = "https://my-server.com").name, `is`("my-server.com"))
     }
 
     @Test
@@ -76,27 +90,16 @@ class ProjectDetailsCreatorTest {
     }
 
     @Test
-    fun `Test generating project name from various urls`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-project.com").name, `is`("my-project.com"))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://your-project.com/one").name, `is`("your-project.com"))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").name, `is`("www.my-project.com"))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://demo.getodk.org").name, `is`(Project.DEMO_PROJECT_NAME))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "").name, `is`(Project.DEMO_PROJECT_NAME))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "something").name, `is`("Project")) // default project name for invalid urls
-    }
-
-    @Test
     fun `Generated project color should be the same for identical project names`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(url = "https://my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://your-project.com/one").color, `is`(projectDetailsCreator.createProjectFromDetails(url = "https://your-project.com/one").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "qwerty").color, `is`(projectDetailsCreator.createProjectFromDetails(url = "something").color)) // default project color for invalid urls
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
     }
 
     @Test
     fun `Generated project color should be different for different project names`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "https://your-project.com/one").color, not(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(url = "http://www.my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(url = "https://your-project.com/one").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color))
     }
 }

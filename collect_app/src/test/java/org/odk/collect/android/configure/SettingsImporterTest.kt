@@ -203,7 +203,7 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.ADMIN, JSONObject())
             .put(AppConfigurationKeys.PROJECT, projectJson)
 
-        whenever(projectDetailsCreator.createProjectFromDetails("", newProject.name, newProject.icon, newProject.color)).thenReturn(newProject)
+        whenever(projectDetailsCreator.createProjectFromDetails(newProject.name, newProject.icon, newProject.color, "")).thenReturn(newProject)
 
         importer.fromJSON(settings.toString(), currentProject)
         verify(projectsRepository)

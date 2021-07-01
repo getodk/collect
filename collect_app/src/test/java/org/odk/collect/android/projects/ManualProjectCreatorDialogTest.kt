@@ -5,11 +5,13 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -23,7 +25,10 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.permissions.PermissionsChecker
+import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
@@ -86,7 +91,7 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `Project creation should be triggered after clicking on the 'Add' button`() {
+    fun `Server project creation should be triggered after clicking on the 'Add' button`() {
         val projectCreator = mock<ProjectCreator> {}
         val currentProjectProvider = mock<CurrentProjectProvider> {
             on { getCurrentProject() } doReturn Project.DEMO_PROJECT
@@ -123,7 +128,7 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `Project creation goes to main menu`() {
+    fun `Server project creation goes to main menu`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))

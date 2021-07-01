@@ -1,6 +1,8 @@
 package org.odk.collect.android.configure.qr
 
 import org.json.JSONObject
+import org.odk.collect.android.R
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -16,6 +18,20 @@ class AppConfigurationGenerator(
             put(GeneralKeys.KEY_SERVER_URL, url)
             put(GeneralKeys.KEY_USERNAME, username)
             put(GeneralKeys.KEY_PASSWORD, password)
+        }
+
+        return JSONObject().apply {
+            put(AppConfigurationKeys.GENERAL, generalSettings)
+            put(AppConfigurationKeys.ADMIN, JSONObject())
+            put(AppConfigurationKeys.PROJECT, JSONObject())
+        }.toString()
+    }
+
+    fun getAppConfigurationAsJsonWithGoogleDriveDetails(googleAccount: String?): String {
+        val generalSettings = JSONObject().apply {
+            put(GeneralKeys.KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_google_sheets))
+            put(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, googleAccount)
+            put(GeneralKeys.KEY_SERVER_URL, "")
         }
 
         return JSONObject().apply {
