@@ -75,7 +75,6 @@
         android:layout_marginTop="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
-        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/admin_settings_button" />
 
@@ -85,9 +84,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_max="100dp"
+        app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/top_divider">
+        app:layout_constraintTop_toBottomOf="@+id/top_divider"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_divider">
 
         <LinearLayout
             android:id="@+id/project_list"
@@ -100,18 +100,16 @@
         android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginVertical="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
-        app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/project_list_container" />
+        app:layout_constraintBottom_toTopOf="@+id/add_project_button" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_project_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_small"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -121,21 +119,20 @@
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
         app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline_center" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/about_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_small"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:gravity="center_vertical"
         android:text="@string/about_preferences"
         android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_outline_info_24"
         app:iconTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="@+id/add_project_button"
         app:layout_constraintStart_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_divider" />
+        app:layout_constraintTop_toTopOf="@+id/add_project_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
