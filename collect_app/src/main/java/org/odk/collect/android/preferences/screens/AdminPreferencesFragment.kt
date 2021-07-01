@@ -159,7 +159,8 @@ class AdminPreferencesFragment :
                     startActivity(pref)
                 }
                 DELETE_PROJECT_KEY -> AlertDialog.Builder(requireActivity())
-                    .setTitle(R.string.delete_project_confirm_message)
+                    .setTitle(R.string.delete_project)
+                    .setMessage(R.string.delete_project_confirm_message)
                     .setNegativeButton(R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
                     .setPositiveButton(R.string.delete_project_yes) { _: DialogInterface?, _: Int -> deleteProject() }
                     .show()
