@@ -44,6 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
+        android:paddingEnd="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
@@ -82,7 +83,6 @@
         android:id="@+id/project_list_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
@@ -100,7 +100,7 @@
         android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginVertical="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
