@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_extra_small"
+    android:paddingEnd="@dimen/margin_standard"
     xmlns:tools="http://schemas.android.com/tools">
 
     <org.odk.collect.android.projects.ProjectIconView
