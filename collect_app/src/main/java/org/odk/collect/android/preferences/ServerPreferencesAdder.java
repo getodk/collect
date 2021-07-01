@@ -25,11 +25,11 @@ import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
  * Extracted use case class to isolate and allow testing of functionality (in this
  * case error handling). Originally contained in {@link ServerPreferencesFragment}.
  **/
-public class AggregatePreferencesAdder {
+public class ServerPreferencesAdder {
 
     private final PreferenceFragmentCompat fragment;
 
-    public AggregatePreferencesAdder(PreferenceFragmentCompat fragment) {
+    public ServerPreferencesAdder(PreferenceFragmentCompat fragment) {
         this.fragment = fragment;
     }
 

@@ -38,7 +38,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.AggregatePreferencesAdder;
+import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -49,13 +49,11 @@ import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
 
 import java.io.ByteArrayInputStream;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -120,17 +118,17 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         if (GeneralKeys.PROTOCOL_GOOGLE_SHEETS.equals(protocolPref.getValue())) {
             addGooglePreferences();
         } else {
-            addAggregatePreferences();
+            addServerPreferences();
         }
     }
 
-    public void addAggregatePreferences() {
-        if (!new AggregatePreferencesAdder(this).add()) {
+    public void addServerPreferences() {
+        if (!new ServerPreferencesAdder(this).add()) {
             return;
         }
-        EditTextPreference serverUrlPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_SERVER_URL);
-        EditTextPreference usernamePreference = (EditTextPreference) findPreference(GeneralKeys.KEY_USERNAME);
-        passwordPreference = (EditTextPreference) findPreference(GeneralKeys.KEY_PASSWORD);
+        EditTextPreference serverUrlPreference = findPreference(GeneralKeys.KEY_SERVER_URL);
+        EditTextPreference usernamePreference = findPreference(GeneralKeys.KEY_USERNAME);
+        passwordPreference = findPreference(GeneralKeys.KEY_PASSWORD);
 
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
@@ -215,17 +213,9 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         return (preference, newValue) -> {
             switch (preference.getKey()) {
                 case GeneralKeys.KEY_SERVER_URL:
-
                     String url = newValue.toString();
 
-                    // remove all trailing "/"s
-                    while (url.endsWith("/")) {
-                        url = url.substring(0, url.length() - 1);
-                    }
-
                     if (Validator.isUrlValid(url)) {
-                        sendAnalyticsEvent(url);
-
                         preference.setSummary(newValue.toString());
                     } else {
                         ToastUtils.showShortToast(R.string.url_error);
@@ -260,11 +250,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
                 case GeneralKeys.KEY_GOOGLE_SHEETS_URL:
                     url = newValue.toString();
 
-                    // remove all trailing "/"s
-                    while (url.endsWith("/")) {
-                        url = url.substring(0, url.length() - 1);
-                    }
-
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
 
@@ -284,32 +269,6 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
             }
             return true;
         };
-    }
-
-    /**
-     * Remotely log the URL scheme, whether the URL is on one of 3 common hosts, and a URL hash.
-     * This will help inform decisions on whether or not to allow insecure server configurations
-     * (HTTP) and on which hosts to strengthen support for.
-     *
-     * @param url the URL that the server setting has just been set to
-     */
-    private void sendAnalyticsEvent(String url) {
-        String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
-        String scheme = upperCaseURL.split(":")[0];
-
-        String host = "Other";
-        if (upperCaseURL.contains("APPSPOT")) {
-            host = "Appspot";
-        } else if (upperCaseURL.contains("KOBOTOOLBOX.ORG") ||
-                upperCaseURL.contains("HUMANITARIANRESPONSE.INFO")) {
-            host = "Kobo";
-        } else if (upperCaseURL.contains("ONA.IO")) {
-            host = "Ona";
-        }
-
-        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
-
-        analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
     }
 
     private void maskPasswordSummary(String password) {
