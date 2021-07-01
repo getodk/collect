@@ -995,7 +995,7 @@
     <string name="switched_project">Switched to %s</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
-    <string name="delete_project">Delete project?</string>
+    <string name="delete_project">Delete project</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
