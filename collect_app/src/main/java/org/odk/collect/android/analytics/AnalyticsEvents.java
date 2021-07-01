@@ -169,6 +169,11 @@ public class AnalyticsEvents {
     public static final String OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse";
 
     /**
+     * Tracks how often users create shortcuts to forms
+     */
+    public static final String CREATE_SHORTCUT = "CreateShortcut";
+
+    /**
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
      */
     public static final String OPEN_DELETED_INSTANCE = "OpenDeletedInstance";

@@ -16,9 +16,12 @@
 
 package org.odk.collect.android.support;
 
+import android.app.Application;
+
 import androidx.test.core.app.ApplicationProvider;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
@@ -106,19 +109,18 @@ public class AdbFormLoadingUtils {
      * @return the forms dir path that the user would expect (from docs)
      */
     private static String getFormsDirPath() {
-        return firstProjectPath() + "/forms/";
+        return currentProjectPath() + "/forms/";
     }
 
     /**
      * @return the instances dir path that the user would expect (from docs)
      */
     private static String getInstancesDirPath() {
-        return firstProjectPath() + "/instances/";
+        return currentProjectPath() + "/instances/";
     }
 
     @NotNull
-    private static String firstProjectPath() {
-        String projectsDirPath = ApplicationProvider.getApplicationContext().getExternalFilesDir(null) + "/projects/";
-        return projectsDirPath + "/" + new File(projectsDirPath).list()[0];
+    private static String currentProjectPath() {
+        return DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).storagePathProvider().getProjectRootDirPath();
     }
 }

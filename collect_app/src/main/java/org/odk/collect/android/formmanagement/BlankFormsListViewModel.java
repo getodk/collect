@@ -18,17 +18,22 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
 
 public class BlankFormsListViewModel extends ViewModel {
 
@@ -39,8 +44,9 @@ public class BlankFormsListViewModel extends ViewModel {
     private final Analytics analytics;
     private final FormsUpdater formsUpdater;
     private final CurrentProjectProvider currentProjectProvider;
+    private final FormsRepositoryProvider formsRepositoryProvider;
 
-    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider) {
+    public BlankFormsListViewModel(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider) {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
@@ -48,6 +54,15 @@ public class BlankFormsListViewModel extends ViewModel {
         this.analytics = analytics;
         this.formsUpdater = formsUpdater;
         this.currentProjectProvider = currentProjectProvider;
+        this.formsRepositoryProvider = formsRepositoryProvider;
+    }
+
+    public List<BlankForm> getForms() {
+        return formsRepositoryProvider.get()
+                .getAll()
+                .stream()
+                .map(form -> new BlankForm(form, currentProjectProvider))
+                .collect(Collectors.toList());
     }
 
     public boolean isMatchExactlyEnabled() {
@@ -92,6 +107,25 @@ public class BlankFormsListViewModel extends ViewModel {
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);
     }
 
+    public static class BlankForm {
+
+        private final String name;
+        private final Uri contentUri;
+
+        private BlankForm(Form form, CurrentProjectProvider currentProjectProvider) {
+            this.name = form.getDisplayName();
+            this.contentUri = getUri(currentProjectProvider.getCurrentProject().getUuid(), form.getDbId());
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Uri getContentUri() {
+            return contentUri;
+        }
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Application application;
@@ -101,9 +135,10 @@ public class BlankFormsListViewModel extends ViewModel {
         private final Analytics analytics;
         private final FormsUpdater formsUpdater;
         private final CurrentProjectProvider currentProjectProvider;
+        private final FormsRepositoryProvider formsRepositoryProvider;
 
         @Inject
-        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider) {
+        public Factory(Application application, Scheduler scheduler, SyncStatusAppState syncRepository, SettingsProvider settingsProvider, Analytics analytics, FormsUpdater formsUpdater, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider) {
             this.application = application;
             this.scheduler = scheduler;
             this.syncRepository = syncRepository;
@@ -111,12 +146,13 @@ public class BlankFormsListViewModel extends ViewModel {
             this.analytics = analytics;
             this.formsUpdater = formsUpdater;
             this.currentProjectProvider = currentProjectProvider;
+            this.formsRepositoryProvider = formsRepositoryProvider;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider);
+            return (T) new BlankFormsListViewModel(application, scheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider, formsRepositoryProvider);
         }
     }
 }

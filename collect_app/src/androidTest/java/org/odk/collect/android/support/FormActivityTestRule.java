@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import android.app.Application;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
@@ -9,10 +10,10 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.provider.FormsProviderAPI;
 import org.odk.collect.android.storage.StorageSubdirectory;
-
-import static org.odk.collect.android.activities.FormEntryActivity.EXTRA_TESTING_PATH;
+import org.odk.collect.forms.Form;
 
 public class FormActivityTestRule implements TestRule {
 
@@ -34,9 +35,14 @@ public class FormActivityTestRule implements TestRule {
     }
 
     private Intent getActivityIntent() {
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), FormEntryActivity.class);
-        intent.putExtra(EXTRA_TESTING_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename);
+        Application application = ApplicationProvider.getApplicationContext();
 
+        String formPath = DaggerUtils.getComponent(application).storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename;
+        Form form = DaggerUtils.getComponent(application).formsRepositoryProvider().get().getOneByPath(formPath);
+        String projectId = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject().getUuid();
+
+        Intent intent = new Intent(application, FormEntryActivity.class);
+        intent.setData(FormsProviderAPI.getUri(projectId, form.getDbId()));
         return intent;
     }
 }

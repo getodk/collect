@@ -57,7 +57,7 @@ public class BlankFormsListViewModelTest {
         MutableLiveData<Boolean> liveData = new MutableLiveData<>(true);
         when(syncRepository.isSyncing("testProject")).thenReturn(liveData);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider, null);
         assertThat(viewModel.isSyncing().getValue(), is(true));
 
         liveData.setValue(false);
@@ -69,7 +69,7 @@ public class BlankFormsListViewModelTest {
         MutableLiveData<FormSourceException> liveData = new MutableLiveData<>(new FormSourceException.FetchError());
         when(syncRepository.getSyncError("testProject")).thenReturn(liveData);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider, null);
         LiveData<Boolean> outOfSync = liveDataTester.activate(viewModel.isOutOfSync());
 
         assertThat(outOfSync.getValue(), is(true));
@@ -83,7 +83,7 @@ public class BlankFormsListViewModelTest {
         FakeScheduler fakeScheduler = new FakeScheduler();
         FormsUpdater formsUpdater = mock(FormsUpdater.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider, null);
 
         doReturn(true).when(formsUpdater).matchFormsWithServer("testProject");
         LiveData<Boolean> result = viewModel.syncWithServer();
@@ -97,7 +97,7 @@ public class BlankFormsListViewModelTest {
         FakeScheduler fakeScheduler = new FakeScheduler();
         FormsUpdater formsUpdater = mock(FormsUpdater.class);
 
-        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider);
+        BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), fakeScheduler, syncRepository, settingsProvider, analytics, formsUpdater, currentProjectProvider, null);
 
         doReturn(false).when(formsUpdater).matchFormsWithServer("testProject");
         LiveData<Boolean> result = viewModel.syncWithServer();
