@@ -1,13 +1,5 @@
 package org.odk.collect.android.feature.projects
 
-import android.Manifest
-import android.accounts.AccountManager
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
-import androidx.test.espresso.intent.Intents.intending
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain

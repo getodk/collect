@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
@@ -25,9 +27,6 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
-
-    private val GDRIVE_ACCOUNT_PICKER_REQUEST_CODE = 1000
-
     @Inject
     lateinit var projectCreator: ProjectCreator
 
@@ -47,6 +46,20 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     lateinit var googleAccountsManager: GoogleAccountsManager
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
+
+    val googleAccountResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data!!.extras != null) {
+            val accountName = result.data!!.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+            googleAccountsManager.selectAccount(accountName)
+
+            val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails(
+                accountName
+            )
+
+            projectCreator.createNewProject(settingsJson)
+            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -112,34 +125,18 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun configureGoogleAccount() {
-        permissionsProvider.requestGetAccountsPermission(activity, object : PermissionListener {
-            override fun granted() {
-                val intent: Intent = googleAccountsManager.accountChooserIntent
-                startActivityForResult(intent, GDRIVE_ACCOUNT_PICKER_REQUEST_CODE)
-            }
+        permissionsProvider.requestGetAccountsPermission(
+            activity,
+            object : PermissionListener {
+                override fun granted() {
+                    val intent: Intent = googleAccountsManager.accountChooserIntent
+                    googleAccountResultLauncher.launch(intent)
+                }
 
-            override fun denied() {
-                // nothing
-            }
-        })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            GDRIVE_ACCOUNT_PICKER_REQUEST_CODE -> {
-                if (resultCode == Activity.RESULT_OK && data != null && data.extras != null) {
-                    val accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
-                    googleAccountsManager.selectAccount(accountName)
-
-                    val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails(
-                        accountName
-                    )
-
-                    projectCreator.createNewProject(settingsJson)
-                    ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+                override fun denied() {
+                    // nothing
                 }
             }
-        }
+        )
     }
 }

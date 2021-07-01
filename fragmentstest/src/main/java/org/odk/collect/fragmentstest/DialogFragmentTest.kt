@@ -24,7 +24,7 @@ object DialogFragmentTest {
      */
     @JvmOverloads
     @JvmStatic
-    fun <F : Fragment?> launchDialogFragment(
+    fun <F : Fragment> launchDialogFragment(
         fragmentClass: Class<F>,
         fragmentArgs: Bundle? = null
     ): FragmentScenario<F> {

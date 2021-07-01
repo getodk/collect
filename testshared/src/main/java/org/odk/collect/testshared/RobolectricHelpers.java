@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.recyclerview.widget.RecyclerView;
@@ -96,7 +97,7 @@ public class RobolectricHelpers {
      */
     @Deprecated
     public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
-        return FragmentScenario.launch(fragmentClass, null, theme, null);
+        return FragmentScenario.launch(fragmentClass, null, theme, (FragmentFactory) null);
     }
 
     /**
