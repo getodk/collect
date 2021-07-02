@@ -9,6 +9,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.utilities.ChangeLockProvider
@@ -122,6 +123,48 @@ class ProjectDeleterTest {
         val result = deleter.deleteCurrentProject()
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
         assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(nullValue()))
+    }
+
+    @Test
+    fun `If there are running background jobs that use blank forms the project should not be deleted`() {
+        val formChangeLock = BooleanChangeLock()
+        formChangeLock.lock()
+
+        whenever(changeLockProvider.getFormLock(any())).thenReturn(formChangeLock)
+
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            formUpdateManager,
+            instanceSubmitScheduler,
+            instancesRepository,
+            "",
+            changeLockProvider
+        )
+
+        val result = deleter.deleteCurrentProject()
+        assertThat(result, instanceOf(DeleteProjectResult.RunningBackgroundJobs::class.java))
+    }
+
+    @Test
+    fun `If there are running background jobs that use saved forms the project should not be deleted`() {
+        val changeLock = BooleanChangeLock()
+        changeLock.lock()
+
+        whenever(changeLockProvider.getInstanceLock(any())).thenReturn(changeLock)
+
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            formUpdateManager,
+            instanceSubmitScheduler,
+            instancesRepository,
+            "",
+            changeLockProvider
+        )
+
+        val result = deleter.deleteCurrentProject()
+        assertThat(result, instanceOf(DeleteProjectResult.RunningBackgroundJobs::class.java))
     }
 
     @Test
