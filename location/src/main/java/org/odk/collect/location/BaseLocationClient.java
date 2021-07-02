@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.location.LocationManager;
 
@@ -14,7 +14,7 @@ import org.odk.collect.location.LocationClient;
  * An abstract base LocationClient class that provides some shared functionality for determining
  * whether or not certain Location providers are available.
  */
-abstract class BaseLocationClient implements LocationClient {
+public abstract class BaseLocationClient implements LocationClient {
 
     @NonNull
     private final LocationManager locationManager;
@@ -31,7 +31,7 @@ abstract class BaseLocationClient implements LocationClient {
      *
      * @param locationManager The LocationManager to retrieve locations from.
      */
-    BaseLocationClient(@NonNull LocationManager locationManager) {
+    protected BaseLocationClient(@NonNull LocationManager locationManager) {
         this.locationManager = locationManager;
     }
 
@@ -103,12 +103,12 @@ abstract class BaseLocationClient implements LocationClient {
     }
 
     @NonNull
-    Priority getPriority() {
+    protected Priority getPriority() {
         return priority;
     }
 
     @NonNull
-    LocationManager getLocationManager() {
+    protected LocationManager getLocationManager() {
         return locationManager;
     }
 

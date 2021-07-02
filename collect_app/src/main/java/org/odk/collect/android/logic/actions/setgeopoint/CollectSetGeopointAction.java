@@ -24,7 +24,7 @@ import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;

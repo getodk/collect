@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.location.AndroidLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 
 import static org.hamcrest.MatcherAssert.assertThat;

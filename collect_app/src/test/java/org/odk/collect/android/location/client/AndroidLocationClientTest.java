@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.location.LocationTestUtils;
+import org.odk.collect.location.AndroidLocationClient;
 
 import java.util.Collections;
 import java.util.List;

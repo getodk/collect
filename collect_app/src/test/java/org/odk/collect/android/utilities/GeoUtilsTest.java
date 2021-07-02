@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.location.LocationTestUtils;
+import org.odk.collect.location.LocationUtils;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
@@ -102,7 +103,7 @@ public class GeoUtilsTest {
     @Test
     public void whenAccuracyIsNegative_shouldBeSetToZeroAfterSanitizing() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
-        Location sanitizedLocation = GeoUtils.sanitizeAccuracy(location);
+        Location sanitizedLocation = LocationUtils.sanitizeAccuracy(location);
         assertThat(sanitizedLocation.getLatitude(), is(7.0));
         assertThat(sanitizedLocation.getLongitude(), is(2.0));
         assertThat(sanitizedLocation.getAltitude(), is(3.0));
@@ -112,7 +113,7 @@ public class GeoUtilsTest {
     @Test
     public void whenLocationIsMocked_shouldAccuracyBeSetToZeroAfterSanitizing() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
-        Location sanitizedLocation = GeoUtils.sanitizeAccuracy(location);
+        Location sanitizedLocation = LocationUtils.sanitizeAccuracy(location);
         assertThat(sanitizedLocation.getLatitude(), is(7.0));
         assertThat(sanitizedLocation.getLongitude(), is(2.0));
         assertThat(sanitizedLocation.getAltitude(), is(3.0));
@@ -121,6 +122,6 @@ public class GeoUtilsTest {
 
     @Test
     public void whenLocationIsNull_shouldNullBeReturnedAfterSanitizing() {
-        assertThat(GeoUtils.sanitizeAccuracy(null), nullValue());
+        assertThat(LocationUtils.sanitizeAccuracy(null), nullValue());
     }
 }

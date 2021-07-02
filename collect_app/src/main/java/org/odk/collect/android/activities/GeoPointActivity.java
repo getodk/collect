@@ -32,7 +32,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;

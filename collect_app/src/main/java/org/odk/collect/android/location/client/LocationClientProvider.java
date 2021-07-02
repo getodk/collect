@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.location.AndroidLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 
 import java.util.function.Supplier;

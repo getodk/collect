@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -18,9 +18,6 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.location.LocationClient;
 
 import timber.log.Timber;
 
@@ -88,9 +85,9 @@ public class GoogleFusedLocationClient
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
-                              @NonNull FusedLocationProviderApi fusedLocationProviderApi,
-                              @NonNull LocationManager locationManager) {
+    public GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
+                                     @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+                                     @NonNull LocationManager locationManager) {
         super(locationManager);
 
         this.googleApiClient = googleApiClient;
@@ -149,7 +146,7 @@ public class GoogleFusedLocationClient
             googleApiClient.blockingConnect();
         }
 
-        return GeoUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
+        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
     }
 
     @Override
@@ -219,7 +216,7 @@ public class GoogleFusedLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            locationListener.onLocationChanged(GeoUtils.sanitizeAccuracy(location));
+            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
         }
     }
 
