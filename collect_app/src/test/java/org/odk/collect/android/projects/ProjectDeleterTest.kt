@@ -5,16 +5,19 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.nullValue
 import org.junit.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
 
 class ProjectDeleterTest {
@@ -27,6 +30,10 @@ class ProjectDeleterTest {
     }
     private val formUpdateManager = mock<FormUpdateScheduler>()
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
+    private val changeLockProvider = mock<ChangeLockProvider> {
+        on { getFormLock(any()) } doReturn BooleanChangeLock()
+        on { getInstanceLock(any()) } doReturn BooleanChangeLock()
+    }
 
     @Test
     fun `If there are incomplete instances the project should not be deleted`() {
@@ -42,7 +49,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
@@ -63,7 +71,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
@@ -84,7 +93,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
@@ -105,7 +115,8 @@ class ProjectDeleterTest {
             formUpdateManager,
             instanceSubmitScheduler,
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -121,7 +132,8 @@ class ProjectDeleterTest {
             formUpdateManager,
             instanceSubmitScheduler,
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
@@ -139,7 +151,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
@@ -154,7 +167,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -174,7 +188,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            ""
+            "",
+            changeLockProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -197,7 +212,8 @@ class ProjectDeleterTest {
             mock(),
             mock(),
             instancesRepository,
-            projectDir.absolutePath
+            projectDir.absolutePath,
+            changeLockProvider
         )
 
         deleter.deleteCurrentProject()
