@@ -31,6 +31,7 @@ import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
 class ManualProjectCreatorDialogTest {
@@ -82,6 +83,19 @@ class ManualProjectCreatorDialogTest {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText(" "))
             onViewInDialog(withText(R.string.add)).perform(click())
             assertThat(it.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `When URL has no protocol, a toast is displayed`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        scenario.onFragment {
+            onViewInDialog(withHint(R.string.server_url)).perform(replaceText("demo.getodk.org"))
+            onViewInDialog(withText(R.string.add)).perform(click())
+            assertThat(it.isVisible, `is`(true))
+
+            val toastText = ShadowToast.getTextOfLatestToast()
+            assertThat(toastText, `is`(it.getString(R.string.url_error)))
         }
     }
 

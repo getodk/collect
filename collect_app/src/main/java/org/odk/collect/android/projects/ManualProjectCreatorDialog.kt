@@ -24,6 +24,7 @@ import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
@@ -115,15 +116,19 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     }
 
     private fun handleAddingNewProject() {
-        val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
-            binding.urlInputText.text?.trim().toString(),
-            binding.usernameInputText.text?.trim().toString(),
-            binding.passwordInputText.text?.trim().toString()
-        )
+        if (!Validator.isUrlValid(binding.urlInputText.text?.trim().toString())) {
+            ToastUtils.showShortToast(R.string.url_error)
+        } else {
+            val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
+                binding.urlInputText.text?.trim().toString(),
+                binding.usernameInputText.text?.trim().toString(),
+                binding.passwordInputText.text?.trim().toString()
+            )
 
-        projectCreator.createNewProject(settingsJson)
-        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+            projectCreator.createNewProject(settingsJson)
+            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+        }
     }
 
     private fun configureGoogleAccount() {
