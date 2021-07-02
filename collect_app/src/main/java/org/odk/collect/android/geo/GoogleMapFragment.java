@@ -50,7 +50,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.GoogleFusedLocationClient;
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;

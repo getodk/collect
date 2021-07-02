@@ -8,6 +8,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.odk.collect.location.LocationClient;
+
 /**
  * An abstract base LocationClient class that provides some shared functionality for determining
  * whether or not certain Location providers are available.

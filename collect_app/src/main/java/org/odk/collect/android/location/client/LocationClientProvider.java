@@ -6,9 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.location.LocationClient;
 
 import java.util.function.Supplier;
-
 
 /** A static helper class for obtaining the appropriate LocationClient to use. */
 public class LocationClientProvider {

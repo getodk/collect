@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.location.LocationListener;
 
+import org.odk.collect.location.LocationClient;
+
 import timber.log.Timber;
 
 /**

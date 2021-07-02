@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointAction;

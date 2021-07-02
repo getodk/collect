@@ -351,6 +351,7 @@ dependencies {
     implementation project(':forms')
     implementation project(':audiorecorder')
     implementation project(':projects')
+    implementation project(':location')
 
     // Makes binding to Views easy:
     implementation "com.jakewharton:butterknife:10.2.3"
