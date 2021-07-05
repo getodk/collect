@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingVertical="@dimen/margin_extra_small"
-    android:paddingEnd="@dimen/margin_standard"
     xmlns:tools="http://schemas.android.com/tools">
 
     <org.odk.collect.android.projects.ProjectIconView
@@ -16,26 +15,31 @@
         tools:text="A"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/project_icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/project_icon"
         app:layout_constraintTop_toTopOf="@+id/project_icon">
 
         <TextView
             android:id="@+id/project_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="?textAppearanceSubtitle1"
             tools:text="A project"/>
 
         <TextView
             android:id="@+id/project_subtext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
             tools:text="my.cool.project.com"/>
     </LinearLayout>

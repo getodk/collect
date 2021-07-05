@@ -18,6 +18,13 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_standard" />
+
     <ImageView
         android:id="@+id/close_icon"
         android:layout_width="wrap_content"
@@ -41,10 +48,10 @@
 
     <org.odk.collect.android.projects.ProjectListItemView
         android:id="@+id/current_project"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
-        android:paddingEnd="@dimen/margin_standard"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
@@ -86,6 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/top_divider"
         app:layout_constraintBottom_toTopOf="@+id/bottom_divider">
 
