@@ -44,7 +44,7 @@ public class SelectOneWidgetUtils {
             return;
         }
         //...or in unit test
-        else if(fc.getQuestionPrompt()==null){
+        else if (fc.getQuestionPrompt() == null) {
             return;
         }
 
@@ -98,6 +98,52 @@ public class SelectOneWidgetUtils {
 
         } catch (JavaRosaException e) {
             Timber.d(e);
+        }
+    }
+
+    public static void checkFastExternalCascadeInFieldList(FormIndex lastChangedIndex,
+                                                           FormEntryPrompt[] questionsAfterSave) {
+        FormController fc = Collect.getInstance().getFormController();
+        //Formality
+        if (fc == null) {
+            return;
+        }
+        //Find the index in the field list, get its form label
+        FormIndex seekIndex = lastChangedIndex;
+        FormIndex nextLevel;
+        int offset = 1;
+        for (; (nextLevel = seekIndex.getNextLevel()) != null; offset++) {
+            seekIndex = nextLevel;
+        }
+        String matchIndexLabel = "(\\w+) .+";
+        String checkName = seekIndex.getReference().getSubReference(offset).toShortString()
+                .replaceAll(matchIndexLabel, "$1");
+
+        //Check each current question in turn
+        for (FormEntryPrompt question : questionsAfterSave) {
+
+            //FEI?
+            String query = question.getFormElement().getAdditionalAttribute(null, "query");
+            if (query == null) {
+                continue;
+            }
+
+            //Next cascade member?
+            boolean matches = query.matches(".*\\b" + checkName + "\\b.*");
+            if (!matches) {
+                continue;
+            }
+
+            //Reset it
+            try {
+                fc.saveAnswer(question.getIndex(), null);
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+            }
+
+            //Ready for next question
+            String matchQuestionLabel = ".+/([^/]+)$";
+            checkName = question.getQuestion().getBind().getReference().toString().replaceAll(matchQuestionLabel, "$1");
         }
     }
 

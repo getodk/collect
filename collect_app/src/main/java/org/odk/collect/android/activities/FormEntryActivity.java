@@ -142,6 +142,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -2567,6 +2568,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formIndexesToRemove.add(questionBeforeSave.getFormIndex());
             }
         }
+
+        SelectOneWidgetUtils.checkFastExternalCascadeInFieldList(lastChangedIndex, questionsAfterSave);
+
 
         for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
             ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
