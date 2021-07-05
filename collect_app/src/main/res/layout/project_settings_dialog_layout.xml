@@ -108,39 +108,53 @@
         android:id="@+id/bottom_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginBottom="@dimen/margin_small"
         android:alpha="0.2"
         android:background="?colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/add_project_button" />
 
-    <com.google.android.material.button.MaterialButton
+    <FrameLayout
         android:id="@+id/add_project_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_small"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center_vertical"
-        android:text="@string/add_project"
-        android:textColor="?colorOnSurface"
-        app:icon="@drawable/ic_baseline_qr_code_scanner_24"
-        app:iconTintMode="multiply"
+        android:paddingVertical="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_standard"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_center" />
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_center">
 
-    <com.google.android.material.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center_vertical"
+            android:text="@string/add_project"
+            android:textColor="?colorOnSurface"
+            android:layout_gravity="end"
+            app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+            app:iconTintMode="multiply" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/about_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:gravity="center_vertical"
-        android:text="@string/about_preferences"
-        android:textColor="?colorOnSurface"
-        app:icon="@drawable/ic_outline_info_24"
-        app:iconTintMode="multiply"
-        app:layout_constraintBottom_toBottomOf="@+id/add_project_button"
+        android:paddingVertical="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_standard"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
         app:layout_constraintStart_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toTopOf="@+id/add_project_button" />
+        app:layout_constraintTop_toTopOf="@+id/add_project_button"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:gravity="center_vertical"
+            android:text="@string/about_preferences"
+            android:textColor="?colorOnSurface"
+            android:layout_gravity="start"
+            app:icon="@drawable/ic_outline_info_24"
+            app:iconTintMode="multiply" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
