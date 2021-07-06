@@ -91,31 +91,31 @@ public class SelectOneResetTest {
 
     }
 
-    final static String TEXT_NO = "no";
-    final static String TEXT_YES = "yes";
-    final static String TEXT_SELECT_ANSWER = "Select Answer";
-    final static String TEXT_HARLINGEN = "Harlingen";
-    final static String TEXT_BROWNSVILLE = "Brownsville";
-    final static String TEXT_TEXAS = "Texas";
-    final static String TEXT_WASHINGTON = "Washington";
-    final static String TEXT_NORTH = "North";
-    final static String TEXT_SOUTH = "South";
-    final static String TEXT_WEST = "West";
-    final static String TEXT_EAST = "East";
-    final static String formName = "selectOneReset";
+    static final String TEXT_NO = "no";
+    static final String TEXT_YES = "yes";
+    static final String TEXT_SELECT_ANSWER = "Select Answer";
+    static final String TEXT_HARLINGEN = "Harlingen";
+    static final String TEXT_BROWNSVILLE = "Brownsville";
+    static final String TEXT_TEXAS = "Texas";
+    static final String TEXT_WASHINGTON = "Washington";
+    static final String TEXT_NORTH = "North";
+    static final String TEXT_SOUTH = "South";
+    static final String TEXT_WEST = "West";
+    static final String TEXT_EAST = "East";
+    static final String TEXT_FORM = "selectOneReset";
 
     public CollectTestRule rule = new CollectTestRule();
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule((formName) + ".xml",
-                    Collections.singletonList(formName + "-media/itemsets.csv")))
+            .around(new CopyFormRule(TEXT_FORM + ".xml",
+                    Collections.singletonList(TEXT_FORM + "-media/itemsets.csv")))
             .around(rule);
 
     @Test
     public void testAllVariants() {
         FormHierarchyPage hierarchy = new MainMenuPage()
-                .startBlankForm(formName)
+                .startBlankForm(TEXT_FORM)
                 .clickGoToArrow();
         for (SectionVariant variant : SectionVariant.values()) {
             int ordinal = variant.ordinal();
@@ -190,19 +190,19 @@ public class SelectOneResetTest {
         if (block != A) {
             //BC3h
             entry.clickGoToArrow()
-                    .assertText(TEXT_WASHINGTON,TEXT_YES)
+                    .assertText(TEXT_WASHINGTON, TEXT_YES)
                     .assertTextDoesNotExist(TEXT_NORTH)
                     .clickOnQuestion(stateLabel);
         }
         //ABC3e
         entry.swipeToNextQuestion(block.countyLabel(variant))
-            .assertTextDoesNotExist()
-            .swipeToNextQuestion(block.cityLabel(variant))
-            .assertTextDoesNotExist()
-            .swipeToNextQuestion(block.showWardLabel(variant))
-            .swipeToNextQuestion(block.wardLabel(variant))
-            .assertTextDoesNotExist()
-            .clickGoToArrow();
+                .assertTextDoesNotExist()
+                .swipeToNextQuestion(block.cityLabel(variant))
+                .assertTextDoesNotExist()
+                .swipeToNextQuestion(block.showWardLabel(variant))
+                .swipeToNextQuestion(block.wardLabel(variant))
+                .assertTextDoesNotExist()
+                .clickGoToArrow();
 
         return hierarchy;
     }
