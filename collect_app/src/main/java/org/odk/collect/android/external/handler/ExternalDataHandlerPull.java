@@ -45,6 +45,17 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     public static final String HANDLER_NAME = "pulldata";
 
+    // Valid pulldata functions
+    public static final String FN_COUNT = "count";
+    public static final String FN_LIST = "list";
+    public static final String FN_INDEX = "index";
+    public static final String FN_SUM = "sum";
+    public static final String FN_MAX = "max";
+    public static final String FN_MIN = "min";
+    public static final String FN_MEAN = "mean";
+
+
+
     public ExternalDataHandlerPull(ExternalDataManager externalDataManager) {
         super(externalDataManager);
     }
@@ -93,11 +104,32 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
         // start smap
         boolean multiSelect = (args.length == 6);
         int index = 0;
+        String fn = null;    // count || list || index || sum || max || min || mean
         String searchType = null;
         if(multiSelect) {
             try {
-                index = Integer.valueOf(XPathFuncExpr.toString(args[4]));
+                fn = XPathFuncExpr.toString(args[4]).toLowerCase();
+
+                // Support legacy function values
+                if(fn.equals("-1")) { // legacy
+                    fn = FN_COUNT;
+                } else if(fn.equals("0")) { // legacy
+                    fn = FN_LIST;
+                }
+
+                // If the function is a numnber greater than 0 then set the function to Index
+                try {
+                    index = Integer.valueOf(XPathFuncExpr.toString(args[4]));
+                    if(index > 0) {
+                        fn = FN_INDEX;
+                    } else {
+                        fn = FN_LIST;
+                    }
+                } catch (Exception e) {
+
+                }
             } catch (Exception e) {
+                fn = FN_LIST;        // default
             }
             searchType = XPathFuncExpr.toString(args[5]);
         }
@@ -138,23 +170,57 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                     c.moveToFirst();
                     return ExternalDataUtil.nullSafe(c.getString(0));
                 } else {  // smap
-                    StringBuilder result = new StringBuilder("");
-                    if(index < 0) {
-                        result.append(c.getCount());
-                    } else if(index == 0) {   // Get all
-                        c.moveToPosition(-1);
-                        int count = 0;
-                        while (c.moveToNext()) {
-                            if(count++ > 0) {
-                                result.append(" ");
-                            }
-                            result.append(ExternalDataUtil.nullSafe(c.getString(0)));
-                        }
-                    } else {    // Get 1
-                        c.moveToPosition(index - 1);        // If index is 1 get the first
-                        result.append(ExternalDataUtil.nullSafe(c.getString(0)));
+                    StringBuilder sResult = new StringBuilder("");
+                    int count = 0;
+                    Double dResult = 0.0;
+                    if(fn.equals(FN_MIN)) {
+                        dResult = Double.MAX_VALUE;
                     }
-                    return result.toString();
+
+                    if(fn.equals(FN_COUNT)) {
+                        sResult.append(c.getCount());
+                    } else if(fn.equals(FN_INDEX)) {    // Get 1
+                        c.moveToPosition(index - 1);        // If index is 1 get the first
+                        sResult.append(ExternalDataUtil.nullSafe(c.getString(0)));
+                    } else {   // Apply the function to the data
+                        c.moveToPosition(-1);
+                        while (c.moveToNext()) {
+                            if(fn.equals(FN_LIST)) {
+                                if (count++ > 0) {
+                                    sResult.append(" ");
+                                }
+                                sResult.append(ExternalDataUtil.nullSafe(c.getString(0)));
+                            } else {
+                                // Numeric calculation
+                                count++;
+                                String sVal = ExternalDataUtil.nullSafe(c.getString(0));
+                                Double dVal = 0.0;
+                                try {
+                                    dVal = Double.valueOf(sVal);
+                                } catch (Exception e) {
+
+                                }
+                                if(fn.equals(FN_SUM) || fn.equals(FN_MEAN)) {
+                                    dResult += dVal;
+                                } else if(fn.equals(FN_MAX) && dVal > dResult) {
+                                    dResult = dVal;
+                                } else if(fn.equals(FN_MIN) && dVal < dResult) {
+                                    dResult = dVal;
+                                }
+                            }
+                        }
+                    }
+                    if(fn.equals(FN_COUNT) || fn.equals(FN_INDEX) || fn.equals(FN_LIST) ) {
+                        return sResult.toString();
+                    } else if(fn.equals(FN_MEAN)) {
+                        if(count == 0) {
+                            return "";
+                        } else {
+                            return String.valueOf(dResult / count);
+                        }
+                    } else {
+                        return String.valueOf(dResult);
+                    }
                 }
             } else {
                 Timber.i("Could not find a value in %s where the column %s has the value %s",
