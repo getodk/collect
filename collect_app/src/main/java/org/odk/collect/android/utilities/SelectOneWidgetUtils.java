@@ -35,9 +35,9 @@ public class SelectOneWidgetUtils {
         }
 
         FormController fc = Collect.getInstance().getFormController();
-        if ( fc == null //Impossible?
-                ||fc.indexIsInFieldList(fc.getFormIndex()) //In field list?
-                ||fc.getQuestionPrompt() == null) { //In unit test?
+        if (fc == null //Impossible?
+                || fc.indexIsInFieldList(fc.getFormIndex()) //In field list?
+                || fc.getQuestionPrompt() == null) { //In unit test?
             return;
         }
 
