@@ -19,12 +19,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
-public class AggregatePreferencesAdderTest {
+public class ServerPreferencesAdderTest {
 
     @Test
     public void whenPreferencesAreAdded_returnsTrue() {
         PreferenceFragmentCompat fragment = mock(PreferenceFragmentCompat.class);
-        AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
+        ServerPreferencesAdder loader = new ServerPreferencesAdder(fragment);
 
         boolean result = loader.add();
         assertTrue(result);
@@ -38,7 +38,7 @@ public class AggregatePreferencesAdderTest {
         doThrow(ClassCastException.class).when(fragment).addPreferencesFromResource(R.xml.odk_server_preferences);
         when(fragment.getActivity()).thenReturn(activity);
 
-        AggregatePreferencesAdder loader = new AggregatePreferencesAdder(fragment);
+        ServerPreferencesAdder loader = new ServerPreferencesAdder(fragment);
         boolean result = loader.add();
         assertFalse(result);
 
