@@ -2,13 +2,11 @@ package org.odk.collect.location;
 
 import android.location.LocationManager;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.location.LocationClient;
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * An abstract base LocationClient class that provides some shared functionality for determining

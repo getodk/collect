@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.content.Context;
 
@@ -7,10 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-
-import org.odk.collect.location.AndroidLocationClient;
-import org.odk.collect.location.GoogleFusedLocationClient;
-import org.odk.collect.location.LocationClient;
 
 import java.util.function.Supplier;
 

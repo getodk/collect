@@ -24,6 +24,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.location.AndroidLocationClient;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
