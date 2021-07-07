@@ -20,6 +20,13 @@ public class CursorLoaderFactory {
         this.currentProjectProvider = currentProjectProvider;
     }
 
+    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
+        String selection = DatabaseInstanceColumns.STATUS + " =? ";
+        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
+
+        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
+    }
+
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
@@ -38,30 +45,28 @@ public class CursorLoaderFactory {
         return cursorLoader;
     }
 
-    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
+    public CursorLoader createEditableInstancesCursorLoader(String sortOrder) {
+        String selection = DatabaseInstanceColumns.STATUS + " !=? " +
+                "and " + DatabaseInstanceColumns.STATUS + " !=? ";
+        String[] selectionArgs = {
+                Instance.STATUS_SUBMITTED,
+                Instance.STATUS_SUBMISSION_FAILED
+        };
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
 
-    public CursorLoader createUnsentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-    }
-
-    public CursorLoader createUnsentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
+    public CursorLoader createEditableInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
-            cursorLoader = createUnsentInstancesCursorLoader(sortOrder);
+            cursorLoader = createEditableInstancesCursorLoader(sortOrder);
         } else {
-            String selection =
-                    DatabaseInstanceColumns.STATUS + " !=? and "
-                            + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
+            String selection = DatabaseInstanceColumns.STATUS + " !=? " +
+                    "and " + DatabaseInstanceColumns.STATUS + " !=? " +
+                    "and " + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
+                    Instance.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);

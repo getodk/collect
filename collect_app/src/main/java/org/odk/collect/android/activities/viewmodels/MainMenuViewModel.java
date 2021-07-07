@@ -89,15 +89,15 @@ public class MainMenuViewModel extends ViewModel {
         return adminSettings.getBoolean(AdminKeys.KEY_DELETE_SAVED);
     }
 
-    public LiveData<Integer> getUnsentFormsCount() {
-        return instancesAppState.getUnsentCount();
+    public LiveData<Integer> getEditableInstancesCount() {
+        return instancesAppState.getEditableCount();
     }
 
-    public LiveData<Integer> getFinalizedFormsCount() {
-        return instancesAppState.getFinalizedCount();
+    public LiveData<Integer> getSendableInstancesCount() {
+        return instancesAppState.getSendableCount();
     }
 
-    public LiveData<Integer> getSentFormsCount() {
+    public LiveData<Integer> getSentInstancesCount() {
         return instancesAppState.getSentCount();
     }
 

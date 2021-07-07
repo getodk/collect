@@ -193,7 +193,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             versionSHAView.setVisibility(View.GONE);
         }
 
-        mainMenuViewModel.getFinalizedFormsCount().observe(this, finalized -> {
+        mainMenuViewModel.getSendableInstancesCount().observe(this, finalized -> {
             if (finalized > 0) {
                 sendDataButton.setText(getString(R.string.send_data_button, String.valueOf(finalized)));
             } else {
@@ -202,7 +202,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
 
 
-        mainMenuViewModel.getUnsentFormsCount().observe(this, unsent -> {
+        mainMenuViewModel.getEditableInstancesCount().observe(this, unsent -> {
             if (unsent > 0) {
                 reviewDataButton.setText(getString(R.string.review_data_button, String.valueOf(unsent)));
             } else {
@@ -211,7 +211,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
         });
 
 
-        mainMenuViewModel.getSentFormsCount().observe(this, sent -> {
+        mainMenuViewModel.getSentInstancesCount().observe(this, sent -> {
             if (sent > 0) {
                 viewSentFormsButton.setText(getString(R.string.view_sent_forms_button, String.valueOf(sent)));
             } else {

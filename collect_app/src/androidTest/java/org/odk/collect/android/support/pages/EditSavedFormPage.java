@@ -25,9 +25,11 @@ import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -75,5 +77,15 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     private void scrollToAndClickOnForm(String formName) {
         onView(withText(formName)).perform(scrollTo(), click());
+    }
+
+    public EditSavedFormPage clickMenuFilter() {
+        onView(withId(R.id.menu_filter)).perform(click());
+        return this;
+    }
+
+    public EditSavedFormPage searchInBar(String query) {
+        onView(withId(R.id.search_src_text)).perform(replaceText(query));
+        return this;
     }
 }
