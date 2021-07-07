@@ -14,12 +14,7 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 
 @RunWith(AndroidJUnit4.class)
 public class EditSavedFormTest {
-
-    public static final String TEXT_FORM_NAME = "One Question";
-    public static final String TEXT_FORM_XML = "one-question.xml";
-    public static final String TEXT_QUESTION = "what is your age";
-    public static final String TEXT_ANSWER = "123";
-
+    
     private final CollectTestRule rule = new CollectTestRule();
 
     final TestDependencies testDependencies = new TestDependencies();
@@ -32,25 +27,27 @@ public class EditSavedFormTest {
     public void whenSubmissionSucceeds_instanceNotEditable() {
         rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
-                .copyForm(TEXT_FORM_XML)
-                .startBlankForm(TEXT_FORM_NAME)
-                .answerQuestion(TEXT_QUESTION, TEXT_ANSWER)
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm(TEXT_FORM_NAME)
+                .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
 
                 .assertNumberOfEditableForms(0)
                 .clickEditSavedForm()
-                .assertTextDoesNotExist(TEXT_FORM_NAME)
+                .assertTextDoesNotExist("One Question")
 
+                // Tests that search doesn't change visibility. Move down to lower testing level.
+                // (possibly when replacing CursorLoader)
                 .clickMenuFilter()
-                .searchInBar(TEXT_FORM_NAME.substring(0, 1))
-                .assertTextDoesNotExist(TEXT_FORM_NAME);
+                .searchInBar("One Question".substring(0, 1))
+                .assertTextDoesNotExist("One Question");
     }
 
     @Test
@@ -58,24 +55,26 @@ public class EditSavedFormTest {
         testDependencies.server.alwaysReturnError();
 
         rule.startAtMainMenu()
-                .copyForm(TEXT_FORM_XML)
-                .startBlankForm(TEXT_FORM_NAME)
-                .answerQuestion(TEXT_QUESTION, TEXT_ANSWER)
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm(TEXT_FORM_NAME)
+                .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
 
                 .assertNumberOfEditableForms(0)
                 .clickEditSavedForm()
-                .assertTextDoesNotExist(TEXT_FORM_NAME)
+                .assertTextDoesNotExist("One Question")
 
+                // Tests that search doesn't change visibility. Move down to lower testing level
+                // (possibly when replacing CursorLoader)
                 .clickMenuFilter()
-                .searchInBar(TEXT_FORM_NAME.substring(0, 1))
-                .assertTextDoesNotExist(TEXT_FORM_NAME);
+                .searchInBar("One Question".substring(0, 1))
+                .assertTextDoesNotExist("One Question");
     }
 }
