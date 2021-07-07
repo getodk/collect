@@ -167,14 +167,6 @@ public class GoogleFusedLocationClient
         this.fastestUpdateInterval = fastestUpdateInterval;
     }
 
-    @Override
-    public void resetUpdateIntervals() {
-        Timber.i("GoogleFusedLocationClient resetting update intervals.");
-
-        this.updateInterval = DEFAULT_UPDATE_INTERVAL;
-        this.fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
-    }
-
     // GoogleFusedLocationClient:
 
     private LocationRequest createLocationRequest() {

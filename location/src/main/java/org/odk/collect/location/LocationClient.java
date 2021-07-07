@@ -108,13 +108,6 @@ public interface LocationClient {
     void setUpdateIntervals(long updateInterval, long fastestUpdateInterval);
 
     /**
-     * Resets the LocationClient's updateInterval and fastestUpdateInterval.
-     * <p>
-     * Implementations that don't offer this feature should do nothing here.
-     */
-    void resetUpdateIntervals();
-
-    /**
      * An interface for listening to status changes on a LocaitonClient.
      */
     interface LocationClientListener {
