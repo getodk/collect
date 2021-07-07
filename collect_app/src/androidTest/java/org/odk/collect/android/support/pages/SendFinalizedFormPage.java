@@ -27,4 +27,9 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         clickOnText(getTranslatedString(R.string.send_selected_data));
         return new OkDialog();
     }
+
+    public ServerAuthDialog clickSendSelectedWithAuthenticationError() {
+        clickOnText(getTranslatedString(R.string.send_selected_data));
+        return new ServerAuthDialog().assertOnPage();
+    }
 }

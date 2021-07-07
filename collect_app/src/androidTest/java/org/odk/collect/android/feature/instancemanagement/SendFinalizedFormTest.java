@@ -16,6 +16,7 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,6 +30,27 @@ public class SendFinalizedFormTest {
             .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
             .around(new RecordedIntentsRule())
             .around(rule);
+
+    @Test
+    public void whenThereIsAnAuthenticationError_allowsUserToReenterCredentials() {
+        testDependencies.server.setCredentials("Draymond", "Green");
+
+        rule.startAtMainMenu()
+                .setServer(testDependencies.server.getURL())
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "123")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question")
+                .clickSendSelectedWithAuthenticationError()
+                .fillUsername("Draymond")
+                .fillPassword("Green")
+                .clickOK(new OkDialog())
+                .assertText("One Question - Success");
+    }
 
     @Test
     public void canViewSentForms() {
