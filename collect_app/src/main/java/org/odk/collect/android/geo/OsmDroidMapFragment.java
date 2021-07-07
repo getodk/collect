@@ -48,7 +48,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
@@ -186,7 +185,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
 
-        locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+        locationClient = LocationClientProvider.getClient(getActivity(),
                 () -> new GoogleFusedLocationClient(getActivity().getApplication()));
         locationClient.setListener(this);
 
@@ -416,7 +415,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+            locationClient = LocationClientProvider.getClient(getActivity(),
                     () -> new GoogleFusedLocationClient(getActivity().getApplication()));
             locationClient.setListener(this);
         }

@@ -36,7 +36,6 @@ import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.text.DecimalFormat;
@@ -104,7 +103,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClientProvider.getClient(this, new PlayServicesChecker(),
+        locationClient = LocationClientProvider.getClient(this,
                 () -> new GoogleFusedLocationClient(getApplication()));
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);

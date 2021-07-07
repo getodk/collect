@@ -55,7 +55,6 @@ import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 
 import java.io.File;
@@ -526,7 +525,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
+            locationClient = LocationClientProvider.getClient(getActivity(),
                     () -> new GoogleFusedLocationClient(getActivity().getApplication()));
             locationClient.setListener(this);
         }

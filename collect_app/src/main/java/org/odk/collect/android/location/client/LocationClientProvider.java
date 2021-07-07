@@ -5,32 +5,48 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import org.odk.collect.location.AndroidLocationClient;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 
 import java.util.function.Supplier;
 
-/** A static helper class for obtaining the appropriate LocationClient to use. */
+/**
+ * A static helper class for obtaining the appropriate LocationClient to use.
+ */
 public class LocationClientProvider {
-    @Nullable private static LocationClient testClient;
+    @Nullable
+    private static LocationClient testClient;
 
-    private LocationClientProvider() { }  // prevent instantiation of this utility class
+    private LocationClientProvider() {
+    }  // prevent instantiation of this utility class
 
-    /** Returns a LocationClient appropriate for a given context. */
+    /**
+     * Returns a LocationClient appropriate for a given context.
+     */
     // NOTE(ping): As of 2018-11-01, the GoogleFusedLocationClient never returns an
     // accuracy radius below 3m: https://issuetracker.google.com/issues/118789585
-    public static LocationClient getClient(@NonNull Context context, @NonNull PlayServicesChecker playServicesChecker,
+    public static LocationClient getClient(@NonNull Context context,
                                            @NonNull Supplier<GoogleFusedLocationClient> googleFusedLocationClientProvider) {
-        return testClient != null
-            ? testClient
-            : playServicesChecker.isGooglePlayServicesAvailable(context)
-                ? googleFusedLocationClientProvider.get()
-                : new AndroidLocationClient(context);
+        boolean playServicesAvailable = GoogleApiAvailability
+                .getInstance()
+                .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
+
+        if (testClient != null) {
+            return testClient;
+        } else if (playServicesAvailable) {
+            return googleFusedLocationClientProvider.get();
+        } else {
+            return new AndroidLocationClient(context);
+        }
     }
 
-    /** Sets the LocationClient.  For use in tests only. */
+    /**
+     * Sets the LocationClient.  For use in tests only.
+     */
     public static void setTestClient(@NonNull LocationClient testClient) {
         LocationClientProvider.testClient = testClient;
     }

@@ -46,7 +46,7 @@ public class LocationClientProviderTest {
     public void fusedLocationClient_returnedWhenPlayServicesAvailable() {
         when(playServicesChecker.isGooglePlayServicesAvailable(any())).thenReturn(true);
 
-        LocationClient client = LocationClientProvider.getClient(context, playServicesChecker, () -> googleFusedLocationClient);
+        LocationClient client = LocationClientProvider.getClient(context, () -> googleFusedLocationClient);
         assertThat(client, is(googleFusedLocationClient));
     }
 
@@ -54,7 +54,7 @@ public class LocationClientProviderTest {
     public void androidLocationClient_returnedWhenPlayServicesNotAvailable() {
         when(playServicesChecker.isGooglePlayServicesAvailable(any())).thenReturn(false);
 
-        LocationClient client = LocationClientProvider.getClient(context, playServicesChecker, () -> googleFusedLocationClient);
+        LocationClient client = LocationClientProvider.getClient(context, () -> googleFusedLocationClient);
         assertThat(client, instanceOf(AndroidLocationClient.class));
     }
 }
