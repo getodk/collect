@@ -154,7 +154,7 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
             public void onClick(View v) {
                 String protocol = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_PROTOCOL);
                 Intent i = null;
-                if (protocol.equalsIgnoreCase(getString(R.string.protocol_google_sheets))) {
+                if (protocol.equalsIgnoreCase(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
                     if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                         i = new Intent(getApplicationContext(),
                                 GoogleDriveActivity.class);

@@ -73,6 +73,9 @@ public final class GeneralKeys {
     public static final String KEY_BACKGROUND_RECORDING = "background_recording";
 
     // values
+    public static final String PROTOCOL_SERVER = "odk_default";
+    public static final String PROTOCOL_GOOGLE_SHEETS = "google_sheets";
+
     public static final String NAVIGATION_SWIPE = "swipe";
     public static final String NAVIGATION_BUTTONS = "buttons";
     public static final String NAVIGATION_BOTH = "swipe_buttons";
@@ -129,7 +132,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_FORMLIST_URL, Collect.getInstance().getString(R.string.default_odk_formlist));
         hashMap.put(KEY_SUBMISSION_URL, Collect.getInstance().getString(R.string.default_odk_submission));
         // server_preferences.xml
-        hashMap.put(KEY_PROTOCOL, Collect.getInstance().getString(R.string.protocol_odk_default));
+        hashMap.put(KEY_PROTOCOL, PROTOCOL_SERVER);
         // user_interface_preferences.xml
         hashMap.put(KEY_APP_THEME, Collect.getInstance().getString(R.string.app_theme_light));
         hashMap.put(KEY_APP_LANGUAGE, "");

@@ -30,24 +30,23 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AggregatePreferencesAdder;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
-import org.odk.collect.android.preferences.Protocol;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.shared.strings.Validator;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.shared.strings.Validator;
 
 import java.io.ByteArrayInputStream;
 import java.util.Locale;
@@ -118,14 +117,10 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
             return true;
         });
 
-        String value = protocolPref.getValue();
-        switch (Protocol.parse(getActivity(), value)) {
-            case ODK:
-                addAggregatePreferences();
-                break;
-            case GOOGLE:
-                addGooglePreferences();
-                break;
+        if (GeneralKeys.PROTOCOL_GOOGLE_SHEETS.equals(protocolPref.getValue())) {
+            addGooglePreferences();
+        } else {
+            addAggregatePreferences();
         }
     }
 
@@ -342,7 +337,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         String account = settingsProvider.getGeneralSettings().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
         String protocol = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
 
-        if (TextUtils.isEmpty(account) && protocol.equals(getString(R.string.protocol_google_sheets))) {
+        if (TextUtils.isEmpty(account) && protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
 
             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_dialog_info)

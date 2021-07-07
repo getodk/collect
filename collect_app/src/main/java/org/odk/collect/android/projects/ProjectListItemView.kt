@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
 import org.odk.collect.android.R
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.Settings
@@ -26,13 +25,13 @@ class ProjectListItemView(context: Context, attrs: AttributeSet?) : FrameLayout(
     }
 
     private fun getSubtext(generalSettings: Settings): String {
-        val username = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
+        val username = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
             generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
         } else {
             generalSettings.getString(GeneralKeys.KEY_USERNAME) ?: ""
         }
 
-        val connectedTo = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(Collect.getInstance().getString(R.string.protocol_google_sheets))) {
+        val connectedTo = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
             "Google Drive"
         } else {
             val url = generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""

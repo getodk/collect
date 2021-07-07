@@ -14,7 +14,6 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.Protocol;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -52,7 +51,7 @@ public class MainMenuAccessPreferencesTest {
     @Test
     public void whenMatchExactlyEnabled_andGoogleUsedAsProtocol_getBlankFormIsEnabled() {
         generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context));
-        generalSettings.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
+        generalSettings.save(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS);
 
         FragmentScenario<MainMenuAccessPreferencesFragment> scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment.class);
         scenario.onFragment(f -> {
