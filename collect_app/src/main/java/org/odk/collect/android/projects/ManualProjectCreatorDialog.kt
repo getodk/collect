@@ -1,11 +1,15 @@
 package org.odk.collect.android.projects
 
+import android.accounts.AccountManager
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.android.R
@@ -13,15 +17,16 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
+import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.listeners.PermissionListener
+import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
-
     @Inject
     lateinit var projectCreator: ProjectCreator
 
@@ -34,7 +39,29 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var permissionsProvider: PermissionsProvider
+
+    @Inject
+    lateinit var googleAccountsManager: GoogleAccountsManager
+
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
+
+    val googleAccountResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        val resultData = result.data
+
+        if (result.resultCode == Activity.RESULT_OK && resultData != null && resultData.extras != null) {
+            val accountName = resultData.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+            googleAccountsManager.selectAccount(accountName)
+
+            val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails(
+                accountName
+            )
+
+            projectCreator.createNewProject(settingsJson)
+            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,7 +94,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         }
 
         binding.gdrive.setOnClickListener {
-            showGdrivePlaceholderDialog()
+            configureGoogleAccount()
         }
     }
 
@@ -99,12 +126,19 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
     }
 
-    private fun showGdrivePlaceholderDialog() {
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Google Drive configuration coming soon")
-            .setMessage("Google Drive configuration is not fully implemented in this beta!")
-            .setPositiveButton(getString(R.string.ok)) { _, _ -> }
-            .create()
-        DialogUtils.showDialog(dialog, activity)
+    private fun configureGoogleAccount() {
+        permissionsProvider.requestGetAccountsPermission(
+            activity,
+            object : PermissionListener {
+                override fun granted() {
+                    val intent: Intent = googleAccountsManager.accountChooserIntent
+                    googleAccountResultLauncher.launch(intent)
+                }
+
+                override fun denied() {
+                    // nothing
+                }
+            }
+        )
     }
 }

@@ -25,18 +25,27 @@ class ProjectListItemView(context: Context, attrs: AttributeSet?) : FrameLayout(
     }
 
     private fun getSubtext(generalSettings: Settings): String {
-        val username = generalSettings.getString(GeneralKeys.KEY_USERNAME) ?: ""
-        var url = generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""
+        val username = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+            generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
+        } else {
+            generalSettings.getString(GeneralKeys.KEY_USERNAME) ?: ""
+        }
 
-        try {
-            url = URL(url).host
-        } catch (e: Exception) {
+        val connectedTo = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+            "Google Drive"
+        } else {
+            val url = generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""
+            try {
+                URL(url).host
+            } catch (e: Exception) {
+                url
+            }
         }
 
         return if (username.isNotBlank()) {
-            "$username / $url"
+            "$username / $connectedTo"
         } else {
-            url
+            connectedTo
         }
     }
 }

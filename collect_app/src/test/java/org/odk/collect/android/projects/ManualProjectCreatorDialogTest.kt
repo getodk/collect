@@ -86,7 +86,7 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `Project creation should be triggered after clicking on the 'Add' button`() {
+    fun `Server project creation should be triggered after clicking on the 'Add' button`() {
         val projectCreator = mock<ProjectCreator> {}
         val currentProjectProvider = mock<CurrentProjectProvider> {
             on { getCurrentProject() } doReturn Project.DEMO_PROJECT
@@ -123,7 +123,7 @@ class ManualProjectCreatorDialogTest {
     }
 
     @Test
-    fun `Project creation goes to main menu`() {
+    fun `Server project creation goes to main menu`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))

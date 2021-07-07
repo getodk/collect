@@ -17,8 +17,8 @@ the specific language governing permissions and limitations under the License. -
     </string-array>
     <!-- DO NOT translate protocol_entry_values - only used internally -->
     <string-array name="protocol_entry_values">
-        <item>@string/protocol_odk_default</item>
-        <item>@string/protocol_google_sheets</item>
+        <item>odk_default</item>
+        <item>google_sheets</item>
     </string-array>
     <string-array name="protocol_entries">
         <item>@string/server_platform_odk</item>

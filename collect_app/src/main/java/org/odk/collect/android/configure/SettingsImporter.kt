@@ -50,10 +50,17 @@ class SettingsImporter(
             } else {
                 JSONObject()
             }
+
+            val connectionIdentifier = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+                generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
+            } else {
+                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""
+            }
+
             importProjectDetails(
-                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: "",
+                project,
                 projectDetails,
-                project
+                connectionIdentifier
             )
         } catch (ignored: JSONException) {
             // Ignored
@@ -91,14 +98,20 @@ class SettingsImporter(
     }
 
     private fun clearUnknownKeys(preferences: Settings, defaults: Map<String, Any>) {
+        val toRemove = ArrayList<String>()
+
         preferences.getAll().forEach { (key, _) ->
             if (!defaults.containsKey(key)) {
-                preferences.remove(key)
+                toRemove.add(key)
             }
+        }
+
+        toRemove.forEach { key ->
+            preferences.remove(key)
         }
     }
 
-    private fun importProjectDetails(url: String, projectJson: JSONObject, project: Project.Saved) {
+    private fun importProjectDetails(project: Project.Saved, projectJson: JSONObject, connectionIdentifier: String) {
         val projectName = if (projectJson.has(AppConfigurationKeys.PROJECT_NAME)) {
             projectJson.getString(AppConfigurationKeys.PROJECT_NAME)
         } else {
@@ -115,7 +128,7 @@ class SettingsImporter(
             ""
         }
 
-        val newProject = projectDetailsCreator.createProjectFromDetails(url, projectName, projectIcon, projectColor)
+        val newProject = projectDetailsCreator.createProjectFromDetails(projectName, projectIcon, projectColor, connectionIdentifier)
 
         projectsRepository.save(
             project.copy(

@@ -24,12 +24,12 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.Protocol;
 
 import javax.inject.Inject;
 
@@ -91,7 +91,7 @@ public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFra
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (Protocol.parse(getActivity(), generalSettings.getString(KEY_PROTOCOL)) == Protocol.GOOGLE) {
+        if (generalSettings.getString(KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manual));
             if (automaticDownload != null) {
                 displayDisabled(automaticDownload, false);

@@ -3,7 +3,7 @@ package org.odk.collect.android.backgroundwork;
 import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.preferences.Protocol;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
@@ -32,7 +32,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
         Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
 
         String protocol = generalSettings.getString(KEY_PROTOCOL);
-        if (Protocol.parse(application, protocol) == Protocol.GOOGLE) {
+        if (protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
             scheduler.cancelDeferred(getMatchExactlyTag(projectId));
             scheduler.cancelDeferred(getAutoUpdateTag(projectId));
             return;

@@ -51,8 +51,11 @@ dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
+
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
+    implementation "androidx.fragment:fragment-ktx:${rootProject.fragmentVersion}"
+
     implementation project(':shared')
     implementation project(':androidshared')
     implementation 'com.google.code.gson:gson:2.8.6'

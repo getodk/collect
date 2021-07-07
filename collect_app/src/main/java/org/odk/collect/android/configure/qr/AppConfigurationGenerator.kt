@@ -25,6 +25,20 @@ class AppConfigurationGenerator(
         }.toString()
     }
 
+    fun getAppConfigurationAsJsonWithGoogleDriveDetails(googleAccount: String?): String {
+        val generalSettings = JSONObject().apply {
+            put(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
+            put(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, googleAccount)
+            put(GeneralKeys.KEY_SERVER_URL, "")
+        }
+
+        return JSONObject().apply {
+            put(AppConfigurationKeys.GENERAL, generalSettings)
+            put(AppConfigurationKeys.ADMIN, JSONObject())
+            put(AppConfigurationKeys.PROJECT, JSONObject())
+        }.toString()
+    }
+
     fun getAppConfigurationAsJson(includedPasswordKeys: Collection<String> = emptyList()): String {
         return JSONObject().apply {
             put(AppConfigurationKeys.GENERAL, getGeneralPrefsAsJson(includedPasswordKeys))

@@ -17,6 +17,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
+import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
@@ -203,11 +204,40 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.ADMIN, JSONObject())
             .put(AppConfigurationKeys.PROJECT, projectJson)
 
-        whenever(projectDetailsCreator.createProjectFromDetails("", newProject.name, newProject.icon, newProject.color)).thenReturn(newProject)
+        whenever(projectDetailsCreator.createProjectFromDetails(newProject.name, newProject.icon, newProject.color, "")).thenReturn(newProject)
 
         importer.fromJSON(settings.toString(), currentProject)
         verify(projectsRepository)
             .save(Project.Saved(currentProject.uuid, newProject.name, newProject.icon, newProject.color))
+    }
+
+    @Test
+    fun `when protocol is server and project name not set, project name falls back to server url`() {
+        val generalJson = JSONObject()
+            .put(GeneralKeys.KEY_SERVER_URL, "foo")
+        val settings = JSONObject()
+            .put(AppConfigurationKeys.GENERAL, generalJson)
+            .put(AppConfigurationKeys.ADMIN, JSONObject())
+
+        whenever(projectDetailsCreator.createProjectFromDetails(any(), any(), any(), any())).thenReturn(Project.New("A", "B", "C"))
+
+        importer.fromJSON(settings.toString(), currentProject)
+        verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo")
+    }
+
+    @Test
+    fun `when protocol is Google Drive and project name not set, project name falls back to Google account`() {
+        val generalJson = JSONObject()
+            .put(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
+            .put(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "foo@bar.baz")
+        val settings = JSONObject()
+            .put(AppConfigurationKeys.GENERAL, generalJson)
+            .put(AppConfigurationKeys.ADMIN, JSONObject())
+
+        whenever(projectDetailsCreator.createProjectFromDetails(any(), any(), any(), any())).thenReturn(Project.New("A", "B", "C"))
+
+        importer.fromJSON(settings.toString(), currentProject)
+        verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo@bar.baz")
     }
 
     private fun emptySettings(): String {

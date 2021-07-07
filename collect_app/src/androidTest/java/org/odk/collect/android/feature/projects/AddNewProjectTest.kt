@@ -4,29 +4,20 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
-import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.RecordedIntentsRule
 import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.ResetStateRule
-import org.odk.collect.android.support.StubBarcodeViewDecoder
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.views.BarcodeViewDecoder
 
 class AddNewProjectTest {
 
     val rule = CollectTestRule()
-
-    private val stubBarcodeViewDecoder = StubBarcodeViewDecoder()
+    private val testDependencies = TestDependencies()
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain()
-        .around(
-            ResetStateRule(object : AppDependencyModule() {
-                override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
-                    return stubBarcodeViewDecoder
-                }
-            })
-        )
+    val chain: RuleChain = TestRuleChain.chain(testDependencies)
+        .around(RecordedIntentsRule())
         .around(rule)
 
     @Test
@@ -45,12 +36,28 @@ class AddNewProjectTest {
     }
 
     @Test
+    fun addingGdriveProjectManually_addsNewProject() {
+        val googleAccount = "steph@curry.basket"
+        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+
+        rule.startAtMainMenu()
+            .openProjectSettings()
+            .clickAddProject()
+            .switchToManualMode()
+            .openGooglePickerAndSelect(googleAccount)
+
+            .openProjectSettings()
+            .assertCurrentProject(googleAccount, "$googleAccount / Google Drive")
+            .assertInactiveProject("Demo project", "demo.getodk.org")
+    }
+
+    @Test
     fun addingProjectAutomatically_addsNewProject() {
         val page = rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
 
-        stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
+        testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
         page.checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
 
         MainMenuPage()

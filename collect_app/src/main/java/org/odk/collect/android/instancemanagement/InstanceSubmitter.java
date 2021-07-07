@@ -71,7 +71,7 @@ public class InstanceSubmitter {
         String deviceId = null;
         boolean anyFailure = false;
 
-        if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))) {
+        if (protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
             if (permissionsProvider.isGetAccountsPermissionGranted()) {
                 String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
@@ -91,7 +91,7 @@ public class InstanceSubmitter {
         for (Instance instance : toUpload) {
             try {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null, null);
-                if (protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets))
+                if (protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
                         && !InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
                     anyFailure = true;
                     resultMessagesByInstanceId.put(instance.getDbId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
@@ -110,7 +110,7 @@ public class InstanceSubmitter {
                     new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
-                String action = protocol.equals(TranslationHandler.getString(Collect.getInstance(), R.string.protocol_google_sheets)) ?
+                String action = protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion());
                 analytics.logEvent(SUBMISSION, action, label);

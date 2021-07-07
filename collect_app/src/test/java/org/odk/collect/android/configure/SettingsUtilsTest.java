@@ -6,12 +6,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.Protocol;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +23,7 @@ public class SettingsUtilsTest {
         Settings generalSettings = TestSettingsProvider.getGeneralSettings();
         Context context = getApplicationContext();
 
-        generalSettings.save(GeneralKeys.KEY_PROTOCOL, Protocol.GOOGLE.getValue(context));
+        generalSettings.save(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS);
         generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY.getValue(context));
 
         FormUpdateMode formUpdateMode = SettingsUtils.getFormUpdateMode(context, generalSettings);

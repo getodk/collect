@@ -246,7 +246,7 @@ dependencies {
     implementation 'androidx.exifinterface:exifinterface:1.3.2'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.preference:preference:1.1.1'
-    implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
+    implementation "androidx.fragment:fragment-ktx:${rootProject.fragmentVersion}"
 
     implementation "com.google.android.material:material:${rootProject.materialVersion}"
     implementation 'com.google.android:flexbox:2.0.1'

@@ -13,6 +13,7 @@ import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -29,6 +30,8 @@ public class TestDependencies extends AppDependencyModule {
     public final FakeGoogleApi googleApi = new FakeGoogleApi();
     public final FakeGoogleAccountPicker googleAccountPicker = new FakeGoogleAccountPicker();
     public final StoragePathProvider storagePathProvider = new StoragePathProvider();
+    public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
+
 
     public final List<IdlingResource> idlingResources = asList(
             new SchedulerIdlingResource(scheduler),
@@ -66,5 +69,10 @@ public class TestDependencies extends AppDependencyModule {
     @Override
     public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
         return googleAccountPicker;
+    }
+
+    @Override
+    public BarcodeViewDecoder providesBarcodeViewDecoder() {
+        return stubBarcodeViewDecoder;
     }
 }
