@@ -693,7 +693,6 @@
   <string name="reset_blank_forms">空のフォーム (フォームフォルダー、フォームデータベース、アイテムセットデータベース)</string>
   <string name="reset_layers">地図レイヤー (レイヤーフォルダー)</string>
   <string name="reset_cache">フォーム読み込みキャッシュ (キャッシュフォルダー)</string>
-  <string name="reset_osm_tiles">OSM タイルキャッシュ (osmdroid フォルダー)</string>
   <string name="reset_settings_dialog_title">リセットするものを選択</string>
   <string name="reset_settings_button_reset">リセット</string>
   <string name="reset_in_progress">リセットしています…</string>
@@ -704,7 +703,6 @@
   <string name="reset_blank_forms_result">空のフォーム :: %s</string>
   <string name="reset_layers_result">地図レイヤー :: %s</string>
   <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
-  <string name="reset_osm_tiles_result">OSM タイルキャッシュ :: %s</string>
   <string name="user_access_control">ユーザーアクセスコントロール</string>
   <string name="main_menu_settings">メインメニュー設定</string>
   <string name="main_menu_settings_summary">タップしてメインメニュー項目を管理</string>

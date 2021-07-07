@@ -57,6 +57,7 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
+import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.AdminPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
@@ -83,9 +84,10 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
-import org.odk.collect.android.utilities.ApplicationResetter;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -209,7 +211,7 @@ public interface AppDependencyComponent {
 
     void inject(GeneralPreferencesActivity generalPreferencesActivity);
 
-    void inject(ApplicationResetter applicationResetter);
+    void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
 
     void inject(FillBlankFormActivity fillBlankFormActivity);
 
@@ -307,9 +309,13 @@ public interface AppDependencyComponent {
 
     FormsRepositoryProvider formsRepositoryProvider();
 
+    InstancesRepositoryProvider instancesRepositoryProvider();
+
     SyncStatusAppState syncStatusAppState();
 
     FormSourceProvider formSourceProvider();
 
     ExistingProjectMigrator existingProjectMigrator();
+
+    ProjectResetter projectResetter();
 }

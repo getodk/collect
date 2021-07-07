@@ -445,7 +445,6 @@
   <string name="reset_blank_forms">रिक्त फॉर्म (फॉर्म फोल्डर, फॉर्म डेटाबेस, आयटसेट्स डेटाबेस)</string>
   <string name="reset_layers">नकाशा स्तर (स्तर फलक)</string>
   <string name="reset_cache">फॉर्म लोड कॅशे (.cache फोल्डर)</string>
-  <string name="reset_osm_tiles">ओपन स्ट्रीट नकाशा टाइल कॅशे (ओपन स्ट्रीट नकाशाdroid फोल्डर)</string>
   <string name="reset_settings_dialog_title">काय रीसेट करावे ते निवडा</string>
   <string name="reset_settings_button_reset">रीसेट करा</string>
   <string name="reset_in_progress">रीसेट करत आहे …</string>
@@ -456,7 +455,6 @@
   <string name="reset_blank_forms_result">रिक्त फॉर्म :: %s</string>
   <string name="reset_layers_result">नकाशा स्तर :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कॅशे :: %s</string>
-  <string name="reset_osm_tiles_result">ओपन स्ट्रीट नकाशा टाइल कॅशे :: %s</string>
   <string name="user_access_control">वापरकर्ता प्रवेश नियंत्रण</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्ज</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>

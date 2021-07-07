@@ -599,7 +599,6 @@
   <string name="reset_blank_forms">Fomu tupu(kabrasha la fomu,hifadhidata ya fomu,seti_vifaa vya hifadhidata)</string>
   <string name="reset_layers">Safu za ramani (Kabrasha la safu)</string>
   <string name="reset_cache">Fomu ya kuweka hifahi ya muda mfupi (.kabrasha la hifadhi la muda mfupi)</string>
-  <string name="reset_osm_tiles">Takwimu za OSM za muda mfupi (kabrasha ya osmdroid)</string>
   <string name="reset_settings_dialog_title">Chagua kipi cha kurekebisha</string>
   <string name="reset_settings_button_reset">Rudisha mwanzo</string>
   <string name="reset_in_progress">Kurudisha mwanzo…</string>
@@ -610,7 +609,6 @@
   <string name="reset_blank_forms_result">Fomu tupu :: %s</string>
   <string name="reset_layers_result">Safu za ramani :: %s</string>
   <string name="reset_cache_result">Fomu ya takwimu za muda mfupi :: %s</string>
-  <string name="reset_osm_tiles_result">Takwimu za muda mfupi  za OSM 1%s</string>
   <string name="user_access_control">Dhibiti ya ufikivu wa mtumiaji</string>
   <string name="main_menu_settings">Mipangilio ya menyu kuu</string>
   <string name="main_menu_settings_summary">Bofya ili kudhibiti vitu muhimu vya menyu kuu</string>

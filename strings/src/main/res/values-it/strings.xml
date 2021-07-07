@@ -615,7 +615,6 @@
   <string name="reset_blank_forms">Moduli vuoti (cartella forms, database forms, database itemsets)</string>
   <string name="reset_layers">Livelli della mappa (cartella layers)</string>
   <string name="reset_cache">Cache di caricamento dei moduli (cartella .cache)</string>
-  <string name="reset_osm_tiles">Cache dei tile OSM (cartella osmdroid)</string>
   <string name="reset_settings_dialog_title">Seleziona le opzioni da reimpostare</string>
   <string name="reset_settings_button_reset">Reimposta</string>
   <string name="reset_in_progress">Reimpostazione…</string>
@@ -626,7 +625,6 @@
   <string name="reset_blank_forms_result">Form vuoti :: %s</string>
   <string name="reset_layers_result">Livelli della mappa :: %s</string>
   <string name="reset_cache_result">Cache di caricamento dei moduli :: %s</string>
-  <string name="reset_osm_tiles_result">Cache dei tile OSM :: %s</string>
   <string name="user_access_control">Controllo Accesso Utente</string>
   <string name="main_menu_settings">Parametri Menu Principale</string>
   <string name="main_menu_settings_summary">Tocca per gestire elementi menu principale</string>

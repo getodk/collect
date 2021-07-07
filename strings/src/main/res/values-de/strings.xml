@@ -697,7 +697,6 @@
   <string name="reset_blank_forms">Leere Formulare (Formular-Ordner, Formular-Datenbank, Itemsets-Datenbank)</string>
   <string name="reset_layers">Kartenebenen (layers-Ordner)</string>
   <string name="reset_cache">Formular-Cache (.cache-Ordner)</string>
-  <string name="reset_osm_tiles">OSM-Tile-Cache (osmdroid-Ordner)</string>
   <string name="reset_settings_dialog_title">Auswählen, was zurückgesetzt werden soll</string>
   <string name="reset_settings_button_reset">Zurücksetzen (Reset)</string>
   <string name="reset_in_progress">Zurücksetzen…</string>
@@ -708,7 +707,6 @@
   <string name="reset_blank_forms_result">Leere Formulare :: %s</string>
   <string name="reset_layers_result">Kartenebenen :: %s</string>
   <string name="reset_cache_result">Formular-Cache :: %s</string>
-  <string name="reset_osm_tiles_result">OSM-Tile-Cache :: %s</string>
   <string name="user_access_control">Benutzerzugriffskontrolle</string>
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
   <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>

@@ -485,7 +485,6 @@
   <string name="reset_blank_forms">Formularë bosh (dosja e formularëve, baza e të dhënave të formave, baza e të dhënave itemsets)</string>
   <string name="reset_layers">Shtrasat e hartës (dosja e shtresave)</string>
   <string name="reset_cache">Cache e ngarkimit të formularëve (.dosja e cache)</string>
-  <string name="reset_osm_tiles">Cache e kuadrateve OSM (dosja osmdroid)</string>
   <string name="reset_settings_dialog_title">Zgjidh çfarë do të rivendoset</string>
   <string name="reset_settings_button_reset">Rivendos</string>
   <string name="reset_in_progress">Duke rivendosur…</string>
@@ -496,7 +495,6 @@
   <string name="reset_blank_forms_result">Formularë bosh :: %s</string>
   <string name="reset_layers_result">Shtresat e hartës :: %s</string>
   <string name="reset_cache_result">Cache ngarkimi i formularëve :: %s</string>
-  <string name="reset_osm_tiles_result">Cache e kuadratëve OSM ::%s</string>
   <string name="user_access_control">Kontrolli i aksesi të përdoruesit</string>
   <string name="main_menu_settings">Parametrat e Menusë Kryesore</string>
   <string name="main_menu_settings_summary">Administro elementët e menusë kryesore</string>

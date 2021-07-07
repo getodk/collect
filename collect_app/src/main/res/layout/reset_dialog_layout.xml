@@ -90,16 +90,5 @@ limitations under the License.
             android:background="?android:attr/selectableItemBackground"
             android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/osmdroid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/reset_osm_tiles"
-            android:padding="5dp"
-            android:button="@null"
-            app:buttonCompat="@null"
-            android:background="?android:attr/selectableItemBackground"
-            android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
-
     </LinearLayout>
 </ScrollView>

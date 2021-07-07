@@ -697,7 +697,6 @@
   <string name="reset_blank_forms">Formulaires vierges (dossier de formulaires, base de données de formulaires, base de données de jeux de données)</string>
   <string name="reset_layers">Couches cartographiques (dossier des couches)</string>
   <string name="reset_cache">Cache pour chargement de formulaire (dossier .cache)</string>
-  <string name="reset_osm_tiles">Cache des couches OSM (dossier osmdroid)</string>
   <string name="reset_settings_dialog_title">Sélectionnez ce que vous souhaitez réinitialiser</string>
   <string name="reset_settings_button_reset">Réinitialiser</string>
   <string name="reset_in_progress">Réinitialisation en cours…</string>
@@ -708,7 +707,6 @@
   <string name="reset_blank_forms_result">Formulaires vierges :: %s</string>
   <string name="reset_layers_result">Couches cartographiques :: %s</string>
   <string name="reset_cache_result">Cache pour chargement de formulaire :: %s</string>
-  <string name="reset_osm_tiles_result">Cache des couches OSM :: %s</string>
   <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
   <string name="main_menu_settings">Paramètres du Menu principal</string>
   <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>

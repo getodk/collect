@@ -457,7 +457,6 @@
   <string name="reset_blank_forms">रिक्त फॉर्म (फॉर्म फ़ोल्डर, फॉर्म डेटाबेस, आइटम सेट डेटाबेस)</string>
   <string name="reset_layers">मानचित्र लेयरें (लेयर फ़ोल्डर)</string>
   <string name="reset_cache">फॉर्म लोड कैश (.कैश फोल्डर)</string>
-  <string name="reset_osm_tiles">OSM टाइल कैश (osmdroid फ़ोल्डर)</string>
   <string name="reset_settings_dialog_title">क्या रीसेट करना है, चुनें</string>
   <string name="reset_settings_button_reset">रीसेट</string>
   <string name="reset_in_progress">रीसेट किया जा रहा …</string>
@@ -468,7 +467,6 @@
   <string name="reset_blank_forms_result">खाली  फॉर्म:: %s</string>
   <string name="reset_layers_result">मानचित्र लेयरें :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कैश :: %s</string>
-  <string name="reset_osm_tiles_result">OSM टाइल कैश :: %s</string>
   <string name="user_access_control">प्रयोगकर्ता एक्सेस नियंत्रण</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्स</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आइटम मैनेज करने के लिए टैप करें</string>

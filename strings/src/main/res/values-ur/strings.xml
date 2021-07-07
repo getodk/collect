@@ -578,7 +578,6 @@
   <string name="reset_blank_forms">خالی فارم (فولڈر فارم، فارم ڈیٹا بیس، آئٹم سیٹ ڈیٹا بیس)</string>
   <string name="reset_layers">میپ لئیرز (لئیرزفولڈر)</string>
   <string name="reset_cache">فارم لوڈ کیشے (.کیشے فولڈر)</string>
-  <string name="reset_osm_tiles">او ایس ایم ٹائل کیشے (او ایس ایم ڈراؤڈ فولڈر )</string>
   <string name="reset_settings_dialog_title">ری سیٹ کرنے کے لئے منتخب کریں</string>
   <string name="reset_settings_button_reset">ری سیٹ </string>
   <string name="reset_in_progress">ریستٹنگ </string>
@@ -589,7 +588,6 @@
   <string name="reset_blank_forms_result">خالی فارم  :: %s</string>
   <string name="reset_layers_result">میپ لیؑیرز:: %s</string>
   <string name="reset_cache_result">فارم لوڈ کیشے::%s</string>
-  <string name="reset_osm_tiles_result">OSM ٹائل کیشے:: %s</string>
   <string name="user_access_control">یوزر ایکسیس کنٹرول </string>
   <string name="main_menu_settings">مین مینو سیٹنگز </string>
   <string name="main_menu_settings_summary">مین مینوآئٹمز کو مینیج کرنے کیلئے ٹیپ کریں</string>

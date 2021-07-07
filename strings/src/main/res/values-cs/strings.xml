@@ -703,7 +703,6 @@
   <string name="reset_blank_forms">Prázdné formuláře (složka formulářů, databáze formulářů, databáze položek)</string>
   <string name="reset_layers">Mapové vrstvy (složka layers)</string>
   <string name="reset_cache">Mezipaměť načítání formulářů (složka .cache)</string>
-  <string name="reset_osm_tiles">Mezipaměť dlaždic OSM (složka osmdroid)</string>
   <string name="reset_settings_dialog_title">Vybrat co resetovat</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_in_progress">Resetování…</string>
@@ -714,7 +713,6 @@
   <string name="reset_blank_forms_result">Prázdné formuláře: %s</string>
   <string name="reset_layers_result">Mapové vrstvy :: %s</string>
   <string name="reset_cache_result">Mezipaměť pro načtení formuláře :: %s</string>
-  <string name="reset_osm_tiles_result">Mezipaměť na OSM dlaždice :: %s</string>
   <string name="user_access_control">Řízení přístupu uživatelů</string>
   <string name="main_menu_settings">Nastavení hlavního menu</string>
   <string name="main_menu_settings_summary">Klepnutím spravovat položky hlavní nabídky</string>

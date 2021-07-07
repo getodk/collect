@@ -652,7 +652,6 @@
   <string name="reset_blank_forms">Czyste formularze (folder formularzy, baza danych formularzy, baza danych zbiorów pozycji) </string>
   <string name="reset_layers">Warstwy mapy (folder warstw)</string>
   <string name="reset_cache">Pamięć podręczna załadowanego formularza (folder cache)</string>
-  <string name="reset_osm_tiles">Pamięć podręczna kafelka tytułowego OSM (folder osmdroid)</string>
   <string name="reset_settings_dialog_title">Wybierz co zresetować</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_in_progress">Resetowanie…</string>
@@ -663,7 +662,6 @@
   <string name="reset_blank_forms_result">Puste formularze :: %s</string>
   <string name="reset_layers_result">Warstwy mapy :: %s</string>
   <string name="reset_cache_result">Pamięć podręczna załadowanego formularza :: %s</string>
-  <string name="reset_osm_tiles_result">Pamięć podręczna kafelka tytułowego OSM :: %s</string>
   <string name="user_access_control">Kontrola dostępu użytkownika</string>
   <string name="main_menu_settings">Ustawienia Menu Głównego</string>
   <string name="main_menu_settings_summary">Dotknij, by zarządzać elementami menu głównego</string>
