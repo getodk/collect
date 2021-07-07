@@ -98,10 +98,16 @@ class SettingsImporter(
     }
 
     private fun clearUnknownKeys(preferences: Settings, defaults: Map<String, Any>) {
+        val toRemove = ArrayList<String>()
+
         preferences.getAll().forEach { (key, _) ->
             if (!defaults.containsKey(key)) {
-                preferences.remove(key)
+                toRemove.add(key)
             }
+        }
+
+        toRemove.forEach { key ->
+            preferences.remove(key)
         }
     }
 

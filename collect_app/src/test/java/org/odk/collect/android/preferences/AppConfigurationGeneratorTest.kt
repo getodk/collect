@@ -120,7 +120,7 @@ class AppConfigurationGeneratorTest {
     }
 
     @Test
-    fun `When server details provided should getProjectDetailsAsJson() generate proper json`() {
+    fun `When server details provided should getAppConfigurationAsJsonWithServerDetails() generate proper json`() {
         val generalPrefs = mapOf<String, Any> (
             GeneralKeys.KEY_SERVER_URL to "https://my-server.com",
             GeneralKeys.KEY_USERNAME to "adam",
@@ -130,6 +130,19 @@ class AppConfigurationGeneratorTest {
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails("https://my-server.com", "adam", "1234")
 
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), emptyMap())
+    }
+
+    @Test
+    fun `When Google account provided, getAppConfigurationAsJsonWithGoogleDriveDetails generates expected json`() {
+        val expectedPrefs = mapOf<String, Any> (
+            GeneralKeys.KEY_SERVER_URL to "",
+            GeneralKeys.KEY_PROTOCOL to GeneralKeys.PROTOCOL_GOOGLE_SHEETS,
+            GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT to "foo@bar.baz"
+        )
+
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails("foo@bar.baz")
+
+        verifyJsonContent(jsonPrefs, expectedPrefs, emptyMap<String, Any>(), emptyMap())
     }
 
     private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>, projectDetails: Map<String, String>) {
