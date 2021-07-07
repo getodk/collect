@@ -44,7 +44,7 @@ class AddNewProjectTest {
             .openProjectSettings()
             .clickAddProject()
             .switchToManualMode()
-            .setGoogleAccount(googleAccount)
+            .openGooglePickerAndSelect(googleAccount)
 
             .openProjectSettings()
             .assertCurrentProject(googleAccount, "$googleAccount / Google Drive")

@@ -48,8 +48,10 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
     val googleAccountResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK && result.data != null && result.data!!.extras != null) {
-            val accountName = result.data!!.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
+        val resultData = result.data
+
+        if (result.resultCode == Activity.RESULT_OK && resultData != null && resultData.extras != null) {
+            val accountName = resultData.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
             googleAccountsManager.selectAccount(accountName)
 
             val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails(

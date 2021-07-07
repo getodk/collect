@@ -9,7 +9,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.odk.collect.android.R
 
@@ -34,7 +33,7 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
         return this
     }
 
-    fun setGoogleAccount(googleAccount: String): MainMenuPage {
+    fun openGooglePickerAndSelect(googleAccount: String): MainMenuPage {
         val data = Intent()
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccount)
         val activityResult = Instrumentation.ActivityResult(Activity.RESULT_OK, data)
@@ -45,7 +44,7 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
     }
 
     fun addProject(): MainMenuPage {
-        onView(withId(R.id.add_button)).perform(click())
+        onView(withText(R.string.add)).perform(click())
         return MainMenuPage().assertOnPage()
     }
 }
