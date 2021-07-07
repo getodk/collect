@@ -167,11 +167,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStart() {
         super.onStart();
         mapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
-    @Override public void onStop() {
+    @Override public void onPause() {
+        super.onPause();
         enableLocationUpdates(false);
+    }
+
+    @Override public void onStop() {
         mapProvider.onMapFragmentStop(this);
         super.onStop();
     }
