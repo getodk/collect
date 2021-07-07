@@ -38,7 +38,7 @@ class ProjectListItemView(context: Context, attrs: AttributeSet?) : FrameLayout(
             try {
                 URL(url).host
             } catch (e: Exception) {
-                ""
+                url
             }
         }
 

@@ -72,4 +72,51 @@ class ProjectListItemViewTest {
         view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
         assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("my-project.com"))
     }
+
+    @Test
+    fun `shows username only if url is not set`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn "foo@bar.baz"
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn ""
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("foo@bar.baz / "))
+    }
+
+    @Test
+    fun `passes through URL value that can't be parsed as URL`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_USERNAME) } doReturn "foo"
+            on { getString(GeneralKeys.KEY_SERVER_URL) } doReturn "something something"
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("foo / something something"))
+    }
+
+    @Test
+    fun `shows Google account and "Google Drive" if protocol is Google Drive`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_PROTOCOL) } doReturn GeneralKeys.PROTOCOL_GOOGLE_SHEETS
+            on { getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } doReturn "foo@bar.baz"
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("foo@bar.baz / Google Drive"))
+    }
+
+    @Test
+    fun `shows "Google Drive" if protocol is Google Drive and username is not set`() {
+        val generalSettings = mock<Settings> {
+            on { getString(GeneralKeys.KEY_PROTOCOL) } doReturn GeneralKeys.PROTOCOL_GOOGLE_SHEETS
+        }
+
+        val view = ProjectListItemView(context)
+        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
+        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("Google Drive"))
+    }
 }
