@@ -18,7 +18,7 @@ import timber.log.Timber;
  *
  * New requests reset the timeout and the highest accuracy.
  */
-public class MaxAccuracyWithinTimeoutLocationClient implements LocationClient.LocationClientListener, LocationListener {
+public class MaxAccuracyWithinTimeoutLocationClientWrapper implements LocationClient.LocationClientListener, LocationListener {
     private final LocationClient locationClient;
 
     private final LocationListener listener;
@@ -31,7 +31,7 @@ public class MaxAccuracyWithinTimeoutLocationClient implements LocationClient.Lo
 
     private static final LocationClient.Priority DEFAULT_PRIORITY = LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
 
-    public MaxAccuracyWithinTimeoutLocationClient(LocationClient locationClient, LocationListener listener) {
+    public MaxAccuracyWithinTimeoutLocationClientWrapper(LocationClient locationClient, LocationListener listener) {
         this.locationClient = locationClient;
         this.locationClient.setPriority(DEFAULT_PRIORITY);
 

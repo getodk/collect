@@ -19,18 +19,18 @@ import static org.odk.collect.android.location.LocationTestUtils.createLocation;
 import static org.robolectric.shadows.ShadowSystemClock.advanceBy;
 
 @RunWith(AndroidJUnit4.class)
-public class MaxAccuracyWithinTimeoutLocationClientTest {
+public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
     private FakeLocationClient fakeLocationClient;
     private TestLocationListener testLocationListener;
 
-    private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
+    private MaxAccuracyWithinTimeoutLocationClientWrapper maxAccuracyLocationClient;
 
     @Before
     public void setUp() {
         fakeLocationClient = new FakeLocationClient();
         testLocationListener = new TestLocationListener();
 
-        maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(fakeLocationClient, testLocationListener);
+        maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(fakeLocationClient, testLocationListener);
     }
 
     @Test
