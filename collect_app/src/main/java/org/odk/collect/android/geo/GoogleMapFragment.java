@@ -28,6 +28,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -534,7 +535,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
             locationClient = LocationClientProvider.getClient(getActivity(),
-                    () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+                    () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
+                            .getInstance());
             locationClient.setListener(this);
         }
         if (enable) {

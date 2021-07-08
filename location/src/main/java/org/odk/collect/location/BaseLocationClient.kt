@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
  *
  * @param locationManager The LocationManager to retrieve locations from.
  */
-internal abstract class BaseLocationClient(protected val locationManager: LocationManager) :
+internal abstract class BaseLocationClient(protected val locationManager: LocationManager?) :
     LocationClient {
 
     private var listenerRef: WeakReference<LocationClientListener?>? = null
@@ -63,7 +63,7 @@ internal abstract class BaseLocationClient(protected val locationManager: Locati
             return false
         }
 
-        val enabledProviders = locationManager.getProviders(true)
+        val enabledProviders = locationManager!!.getProviders(true)
         for (enabledProvider in enabledProviders) {
             if (enabledProvider.equals(provider, ignoreCase = true)) {
                 return true

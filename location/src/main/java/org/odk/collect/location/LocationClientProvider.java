@@ -26,9 +26,9 @@ public class LocationClientProvider {
     // NOTE(ping): As of 2018-11-01, the GoogleFusedLocationClient never returns an
     // accuracy radius below 3m: https://issuetracker.google.com/issues/118789585
     public static LocationClient getClient(@NonNull Context context,
-                                           @NonNull Supplier<GoogleFusedLocationClient> googleFusedLocationClientProvider) {
-        boolean playServicesAvailable = GoogleApiAvailability
-                .getInstance()
+                                           @NonNull Supplier<GoogleFusedLocationClient> googleFusedLocationClientProvider,
+                                           GoogleApiAvailability googleApiAvailability) {
+        boolean playServicesAvailable = googleApiAvailability
                 .isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
 
         if (testClient != null) {

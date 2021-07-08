@@ -29,6 +29,7 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
@@ -104,7 +105,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         setTitle(getString(R.string.get_location));
 
         locationClient = LocationClientProvider.getClient(this,
-                () -> new GoogleFusedLocationClient(getApplication()));
+                () -> new GoogleFusedLocationClient(getApplication()), GoogleApiAvailability
+                        .getInstance());
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }

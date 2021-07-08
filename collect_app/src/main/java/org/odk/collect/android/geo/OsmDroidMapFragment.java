@@ -37,6 +37,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
@@ -194,7 +195,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         addMapLayoutChangeListener(map);
 
         locationClient = LocationClientProvider.getClient(getActivity(),
-                () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+                () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
+                        .getInstance());
         locationClient.setListener(this);
 
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
@@ -424,7 +426,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
             locationClient = LocationClientProvider.getClient(getActivity(),
-                    () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+                    () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
+                            .getInstance());
             locationClient.setListener(this);
         }
 
