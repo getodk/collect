@@ -680,6 +680,7 @@
     <!-- Title of a settings section only available in beta or development builds. -->
     <string name="experimental">Experimental</string>
 
+    <string name="protected_settings">Protected</string>
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
     <string name="type">Type</string>
