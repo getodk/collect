@@ -847,6 +847,7 @@
     <string name="project_configuration">Project Configuration</string>
     <string name="reset_project_settings_title">Reset</string>
     <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
+    <string name="delete_project">Delete</string>
     <string name="select_all">Select All</string>
     <string name="clear_all">Clear All</string>
     <string name="reset_settings">All settings (internal settings, saved settings)</string>
@@ -1004,7 +1005,6 @@
     <string name="switched_project">Switched to %s</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
-    <string name="delete_project">Delete project</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>

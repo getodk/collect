@@ -53,9 +53,9 @@
             app:iconSpaceReserved="false" />
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_delete_24"
             android:key="delete_project"
-            android:title="@string/delete_project"
-            app:iconSpaceReserved="false" />
+            android:title="@string/delete_project" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_access_control"
