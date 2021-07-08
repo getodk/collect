@@ -19,6 +19,12 @@ limitations under the License.
         android:summary="@string/server_settings_subtext" />
 
     <Preference
+        android:icon="@drawable/ic_outline_color_lens_24"
+        android:key="project_display"
+        android:title="@string/project_display_title"
+        android:summary="@string/project_display_subtext" />
+
+    <Preference
         android:icon="@drawable/ic_outline_phonelink_setup_24"
         android:key="user_interface"
         android:title="@string/client"

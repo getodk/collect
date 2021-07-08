@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/project_display_title">
+
+    <EditTextPreference
+        android:key="project_name"
+        android:title="@string/project_name"
+        app:iconSpaceReserved="false"
+        app:useSimpleSummaryProvider="true"
+        app:persistent="false"/>
+
+    <EditTextPreference
+        android:key="project_icon"
+        android:title="@string/project_icon"
+        app:iconSpaceReserved="false"
+        app:persistent="false"/>
+
+    <Preference
+        android:key="project_color"
+        android:title="@string/project_color"
+        app:iconSpaceReserved="false"
+        app:persistent="false"/>
+</PreferenceScreen>

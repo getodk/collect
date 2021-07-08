@@ -53,6 +53,7 @@ public class GeneralPreferencesFragment extends BaseGeneralPreferencesFragment i
         setPreferencesFromResource(R.xml.general_preferences, rootKey);
 
         findPreference("protocol").setOnPreferenceClickListener(this);
+        findPreference("project_display").setOnPreferenceClickListener(this);
         findPreference("user_interface").setOnPreferenceClickListener(this);
         findPreference("maps").setOnPreferenceClickListener(this);
         findPreference("form_management").setOnPreferenceClickListener(this);
@@ -90,6 +91,8 @@ public class GeneralPreferencesFragment extends BaseGeneralPreferencesFragment i
         switch (preferenceKey) {
             case "protocol":
                 return new ServerPreferencesFragment();
+            case "project_display":
+                return new ProjectDisplayPreferencesFragment();
             case "user_interface":
                 return new UserInterfacePreferencesFragment();
             case "maps":

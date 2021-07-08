@@ -658,6 +658,10 @@
     <!-- Subtext of a settings section -->
     <string name="server_settings_subtext">URL, username, password</string>
     <!-- Title of a settings section -->
+    <string name="project_display_title">Project display</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_display_subtext">Name, icon, color</string>
+    <!-- Title of a settings section -->
     <string name="client">User interface</string>
     <!-- Subtext of a settings section -->
     <string name="user_interface_settings_subtext">App language, theme, font size</string>

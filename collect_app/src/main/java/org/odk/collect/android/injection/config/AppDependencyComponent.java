@@ -69,6 +69,7 @@ import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragme
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
 import org.odk.collect.android.preferences.screens.GeneralPreferencesFragment;
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
+import org.odk.collect.android.preferences.screens.ProjectDisplayPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -148,6 +149,8 @@ public interface AppDependencyComponent {
     void inject(InstanceServerUploaderTask uploader);
 
     void inject(ServerPreferencesFragment serverPreferencesFragment);
+
+    void inject(ProjectDisplayPreferencesFragment projectDisplayPreferencesFragment);
 
     void inject(AuthDialogUtility authDialogUtility);
 
