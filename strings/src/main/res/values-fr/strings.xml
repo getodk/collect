@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Paramètres généraux</string>
+  <string name="project_settings">Paramètres généraux</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Serveur</string>
   <!--Title of a settings section-->

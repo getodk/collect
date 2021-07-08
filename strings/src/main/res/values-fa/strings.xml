@@ -279,7 +279,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">تنظیمات عمومی</string>
+  <string name="project_settings">تنظیمات عمومی</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور</string>
   <!--Title of a settings section-->

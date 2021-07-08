@@ -418,7 +418,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">ការកំណត់ទូទៅ</string>
+  <string name="project_settings">ការកំណត់ទូទៅ</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">ម៉ាស៊ីនមេ</string>
   <!--Title of a settings section-->

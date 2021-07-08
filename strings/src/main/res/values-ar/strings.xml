@@ -544,7 +544,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">الإعدادات العامة</string>
+  <string name="project_settings">الإعدادات العامة</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">الخادم</string>
   <!--Title of a settings section-->

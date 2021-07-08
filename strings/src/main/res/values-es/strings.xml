@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Cambiar la configuración</string>
+  <string name="project_settings">Cambiar la configuración</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor - Usuario</string>
   <!--Title of a settings section-->

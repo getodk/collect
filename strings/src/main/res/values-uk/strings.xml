@@ -459,7 +459,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Загальні налаштування</string>
+  <string name="project_settings">Загальні налаштування</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Сервер</string>
   <!--Title of a settings section-->

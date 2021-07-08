@@ -268,7 +268,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">አጠቃላይ ቅንብሮች</string>
+  <string name="project_settings">አጠቃላይ ቅንብሮች</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">የተጠቃሚ በይነገጽ</string>

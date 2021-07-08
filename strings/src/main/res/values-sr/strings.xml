@@ -459,7 +459,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Opšta podešavanja</string>
+  <string name="project_settings">Opšta podešavanja</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->

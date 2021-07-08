@@ -499,7 +499,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Ustawienia Ogólne</string>
+  <string name="project_settings">Ustawienia Ogólne</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Serwer</string>
   <!--Title of a settings section-->

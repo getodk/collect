@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
         android:layout_marginStart="38dp"
-        android:text="@string/general_preferences"
+        android:text="@string/project_settings"
         app:layout_constraintStart_toStartOf="@+id/current_project"
         app:layout_constraintTop_toBottomOf="@+id/current_project" />
 

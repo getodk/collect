@@ -524,7 +524,7 @@ Escolher Imagem</string>
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Alterar configuração</string>
+  <string name="project_settings">Alterar configuração</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor</string>
   <!--Title of a settings section-->

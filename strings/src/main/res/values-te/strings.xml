@@ -499,7 +499,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">సాధారణ సెట్టింగులు</string>
+  <string name="project_settings">సాధారణ సెట్టింగులు</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">సర్వర్</string>
   <!--Title of a settings section-->

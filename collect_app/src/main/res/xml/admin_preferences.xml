@@ -5,7 +5,7 @@
     <Preference
         android:key="odk_preferences"
         android:summary="@string/admin_access_settings"
-        android:title="@string/general_preferences"
+        android:title="@string/project_settings"
         app:iconSpaceReserved="false">
     </Preference>
 

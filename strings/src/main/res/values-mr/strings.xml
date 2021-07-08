@@ -320,7 +320,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">सामान्य सेटिंग्ज</string>
+  <string name="project_settings">सामान्य सेटिंग्ज</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">सर्व्हर</string>
   <!--Title of a settings section-->

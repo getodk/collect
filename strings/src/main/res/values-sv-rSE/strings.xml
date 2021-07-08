@@ -429,7 +429,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Allmäna inställningar</string>
+  <string name="project_settings">Allmäna inställningar</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->

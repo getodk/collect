@@ -90,7 +90,7 @@
   <string name="url_error">Paumanhin, may mali sa URL!</string>
   <string name="username">Username</string>
   <string name="view_hierarchy">Pumunta sa Udyok</string>
-  <string name="general_preferences">Palitan ang Settings</string>
+  <string name="project_settings">Palitan ang Settings</string>
   <string name="client">Client</string>
     <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
   <string name="splash_path">Piniling larawan para sa Panimulang Tabing</string>

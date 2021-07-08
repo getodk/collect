@@ -529,7 +529,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">全般設定</string>
+  <string name="project_settings">全般設定</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">サーバー</string>
   <!--Title of a settings section-->

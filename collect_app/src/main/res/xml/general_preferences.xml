@@ -10,7 +10,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/general_preferences">
+    android:title="@string/project_settings">
 
     <Preference
         android:icon="@drawable/ic_outline_cloud_24"

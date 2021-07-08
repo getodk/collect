@@ -185,7 +185,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Genel Ayarlar</string>
+  <string name="project_settings">Genel Ayarlar</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->

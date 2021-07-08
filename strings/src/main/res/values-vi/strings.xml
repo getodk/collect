@@ -212,7 +212,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Thay đổi thiết lập</string>
+  <string name="project_settings">Thay đổi thiết lập</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->

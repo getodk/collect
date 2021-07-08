@@ -231,7 +231,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">设置</string>
+  <string name="project_settings">设置</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">用户界面</string>

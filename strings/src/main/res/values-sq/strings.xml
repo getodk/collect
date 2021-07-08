@@ -344,7 +344,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Parametrat e përgjithshëm</string>
+  <string name="project_settings">Parametrat e përgjithshëm</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->

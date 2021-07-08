@@ -47,7 +47,7 @@ public class GeneralPreferencesActivity extends CollectAbstractActivity {
 
         setTheme(new ThemeUtils(this).getSettingsTheme());
 
-        setTitle(R.string.general_preferences);
+        setTitle(R.string.project_settings);
         if (savedInstanceState == null) {
             Fragment fragment = new GeneralPreferencesFragment();
             fragment.setArguments(getIntent().getExtras());

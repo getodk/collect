@@ -309,7 +309,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Üldseaded</string>
+  <string name="project_settings">Üldseaded</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
