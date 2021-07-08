@@ -50,7 +50,7 @@ object LocationTestUtils {
 class FakeLocation(provider: String?) : Location(provider) {
 
     private var _isFromMockProvider = false
-    private var _provider: String? = null
+    private var _provider: String? = provider
     private var _latitude: Double = 0.0
     private var _longitude: Double = 0.0
     private var _accuracy: Float? = null
