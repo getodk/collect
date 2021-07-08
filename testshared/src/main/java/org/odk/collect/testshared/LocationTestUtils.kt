@@ -53,7 +53,7 @@ class FakeLocation(provider: String?) : Location(provider) {
     private var _provider: String? = null
     private var _latitude: Double = 0.0
     private var _longitude: Double = 0.0
-    private var _accuracy: Float = 0.0f
+    private var _accuracy: Float? = null
     private var _altitude: Double = 0.0
 
     fun setIsFromMockProvider(isFromMockProvider: Boolean) {
@@ -69,7 +69,7 @@ class FakeLocation(provider: String?) : Location(provider) {
     }
 
     override fun getAccuracy(): Float {
-        return _accuracy
+        return _accuracy ?: 0.0f
     }
 
     override fun getLatitude(): Double {
@@ -82,6 +82,10 @@ class FakeLocation(provider: String?) : Location(provider) {
 
     override fun getProvider(): String? {
         return _provider
+    }
+
+    override fun hasAccuracy(): Boolean {
+        return _accuracy != null
     }
 
     override fun setLatitude(latitude: Double) {
