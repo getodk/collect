@@ -437,7 +437,7 @@
   <string name="found_in_main">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
   <string name="found_in_settings">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
-  <string name="reset_settings_dialog">अनुप्रयोग रीसेट करा …</string>
+  <string name="reset_project_settings_title">अनुप्रयोग रीसेट करा …</string>
   <string name="select_all">सर्व निवडा</string>
   <string name="clear_all">सर्व साफ करा</string>
   <string name="reset_settings">सर्व सेटिंग्ज (अंतर्गत सेटिंग्ज, सेव्ह सेटिंग्ज)</string>

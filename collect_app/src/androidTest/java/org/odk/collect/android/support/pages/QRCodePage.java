@@ -25,7 +25,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class QRCodePage extends Page<QRCodePage> {
     @Override
     public QRCodePage assertOnPage() {
-        assertText(R.string.configure_via_qr_code);
+        assertText(R.string.reconfigure_with_qr_code_settings_title);
         return this;
     }
 

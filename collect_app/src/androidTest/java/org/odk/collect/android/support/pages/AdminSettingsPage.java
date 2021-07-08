@@ -48,7 +48,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage clickOnResetApplication() {
-        clickOnString(R.string.reset_settings_dialog);
+        clickOnString(R.string.reset_project_settings_title);
         return this;
     }
 
@@ -58,7 +58,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public QRCodePage clickConfigureQR() {
-        clickOnString(R.string.configure_via_qr_code);
+        clickOnString(R.string.reconfigure_with_qr_code_settings_title);
         return new QRCodePage().assertOnPage();
     }
 
@@ -85,13 +85,13 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public MainMenuPage deleteProject() {
-        clickOnString(R.string.delete_project);
+        scrollToRecyclerViewItemAndClickText(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
         return new MainMenuPage();
     }
 
     public FirstLaunchPage deleteLastProject() {
-        clickOnString(R.string.delete_project);
+        scrollToRecyclerViewItemAndClickText(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
         return new FirstLaunchPage();
     }

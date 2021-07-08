@@ -38,23 +38,26 @@
             app:iconSpaceReserved="false"
             app:persistent="false"/>
 
+
+        <PreferenceScreen
+            android:icon="@drawable/ic_outline_qr_code_scanner_24"
+            android:key="import_settings"
+            android:title="@string/reconfigure_with_qr_code_settings_title"
+            android:summary="@string/reconfigure_with_qr_code_settings_subtext"/>
+
         <org.odk.collect.android.preferences.dialogs.ResetDialogPreference
+            android:icon="@drawable/ic_outline_refresh_24"
             android:dialogTitle="@string/reset_settings_dialog_title"
             android:key="reset_settings"
             android:negativeButtonText="@string/cancel"
             android:positiveButtonText="@string/reset_settings_button_reset"
-            android:title="@string/reset_settings_dialog"
-            app:iconSpaceReserved="false" />
+            android:title="@string/reset_project_settings_title"
+            android:summary="@string/reset_project_settings_subtext" />
 
         <PreferenceScreen
-            android:key="import_settings"
-            android:title="@string/configure_via_qr_code"
-            app:iconSpaceReserved="false" />
-
-        <PreferenceScreen
+            android:icon="@drawable/ic_outline_delete_24"
             android:key="delete_project"
-            android:title="@string/delete_project"
-            app:iconSpaceReserved="false" />
+            android:title="@string/delete_project" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_access_control"
@@ -63,22 +66,22 @@
         app:iconSpaceReserved="false">
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_menu_24"
             android:key="main_menu"
             android:summary="@string/main_menu_settings_summary"
-            android:title="@string/main_menu_settings"
-            app:iconSpaceReserved="false" />
+            android:title="@string/main_menu_settings" />
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_settings_24"
             android:key="user_settings"
             android:summary="@string/user_setting_summary"
-            android:title="@string/user_settings"
-            app:iconSpaceReserved="false" />
+            android:title="@string/user_settings" />
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_assignment_24"
             android:key="form_entry"
             android:summary="@string/form_entry_settings_summary"
-            android:title="@string/form_entry_setting"
-            app:iconSpaceReserved="false" />
+            android:title="@string/form_entry_setting" />
 
     </PreferenceCategory>
 </PreferenceScreen>

@@ -655,14 +655,24 @@
 
     <!-- Title of a settings section -->
     <string name="server_settings_title">Server</string>
+    <!-- Subtext of a settings section -->
+    <string name="server_settings_subtext">URL, username, password</string>
     <!-- Title of a settings section -->
     <string name="client">User interface</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_interface_settings_subtext">App language, theme, font size</string>
     <!-- Title of a settings section -->
     <string name="maps">Maps</string>
+    <!-- Subtext of a settings section -->
+    <string name="maps_settings_subtext">Basemap, styles, layers</string>
     <!-- Title of a settings section -->
     <string name="form_management_preferences">Form management</string>
+    <!-- Subtext of a settings section -->
+    <string name="form_management_settings_subtext">Auto-update, auto-send, auto-delete</string>
     <!-- Title of a settings section -->
     <string name="user_and_device_identity_title">User and device identity</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_and_device_identity_settings_subtext">Username, phone number, device ID</string>
     <!-- Title of a settings section only available in beta or development builds. -->
     <string name="experimental">Experimental</string>
 
@@ -835,7 +845,9 @@
     <string name="form_entry">Uncheck to hide from Form Entry</string>
 
     <string name="project_configuration">Project Configuration</string>
-    <string name="reset_settings_dialog">Reset project…</string>
+    <string name="reset_project_settings_title">Reset</string>
+    <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
+    <string name="delete_project">Delete</string>
     <string name="select_all">Select All</string>
     <string name="clear_all">Clear All</string>
     <string name="reset_settings">All settings (internal settings, saved settings)</string>
@@ -856,11 +868,11 @@
 
     <string name="user_access_control">User Access Control</string>
     <string name="main_menu_settings">Main Menu Settings</string>
-    <string name="main_menu_settings_summary">Tap to manage main menu items</string>
+    <string name="main_menu_settings_summary">Show or hide buttons</string>
     <string name="user_settings">User Settings</string>
-    <string name="user_setting_summary">Tap to manage general settings items</string>
+    <string name="user_setting_summary">Show or hide settings</string>
     <string name="form_entry_setting">Form Entry Settings</string>
-    <string name="form_entry_settings_summary">Tap to manage form entry items</string>
+    <string name="form_entry_settings_summary">Show or hide actions</string>
 
     <!-- Name of a setting that determines whether users can navigate backwards in a form -->
     <string name="moving_backwards_title">Moving backwards</string>
@@ -926,7 +938,8 @@
      # SETTINGS IMPORT
      ##############################################
      -->
-    <string name="configure_via_qr_code">Configure via QR code</string>
+    <string name="reconfigure_with_qr_code_settings_title">Reconfigure with QR code</string>
+    <string name="reconfigure_with_qr_code_settings_subtext">Replace all existing settings</string>
     <string name="qr_code">QR code configuration</string>
     <string name="scan_qr_code_fragment_title">Scan</string>
     <string name="view_qr_code_fragment_title">QR Code</string>
@@ -993,7 +1006,6 @@
     <string name="switched_project">Switched to %s</string>
     <string name="using_project">Using %s</string>
     <string name="switch_to_project">Switch to %s</string>
-    <string name="delete_project">Delete project</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>

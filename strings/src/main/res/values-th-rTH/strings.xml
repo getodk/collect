@@ -395,7 +395,7 @@
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
-  <string name="reset_settings_dialog">ตั้งค่าใหม่…</string>
+  <string name="reset_project_settings_title">ตั้งค่าใหม่…</string>
   <string name="select_all">เลือกทั้งหมด</string>
   <string name="clear_all">ลบทั้งหมด</string>
   <string name="reset_settings">ค่าการติดตั้งทั้งหมด(การตั้งค่าภายใน, ค่าที่บันทึกไว้)</string>

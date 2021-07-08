@@ -10,37 +10,40 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/general_preferences">
 
     <Preference
-        android:icon="@drawable/ic_cloud"
+        android:icon="@drawable/ic_outline_cloud_24"
         android:key="protocol"
         android:title="@string/server_settings_title"
-        app:iconSpaceReserved="false" />
+        android:summary="@string/server_settings_subtext" />
+
     <Preference
-        android:icon="@drawable/ic_phonelink_setup"
+        android:icon="@drawable/ic_outline_phonelink_setup_24"
         android:key="user_interface"
         android:title="@string/client"
-        app:iconSpaceReserved="false" />
+        android:summary="@string/user_interface_settings_subtext" />
+
     <Preference
-        android:icon="@drawable/ic_map_accent_color"
+        android:icon="@drawable/ic_outline_map_24"
         android:key="maps"
         android:title="@string/maps"
-        app:iconSpaceReserved="false" />
+        android:summary="@string/maps_settings_subtext" />
+
     <Preference
-        android:icon="@drawable/ic_assignment"
+        android:icon="@drawable/ic_outline_assignment_24"
         android:key="form_management"
         android:title="@string/form_management_preferences"
-        app:iconSpaceReserved="false" />
+        android:summary="@string/form_management_settings_subtext" />
+
     <Preference
-        android:icon="@drawable/ic_face"
+        android:icon="@drawable/ic_outline_face_24"
         android:key="user_and_device_identity"
         android:title="@string/user_and_device_identity_title"
-        app:iconSpaceReserved="false" />
+        android:summary="@string/user_and_device_identity_settings_subtext" />
+
     <Preference
-        android:icon="@drawable/ic_baseline_warning_24"
+        android:icon="@drawable/ic_outline_warning_24"
         android:key="experimental"
-        android:title="@string/experimental"
-        app:iconSpaceReserved="false" />
+        android:title="@string/experimental" />
 </PreferenceScreen>

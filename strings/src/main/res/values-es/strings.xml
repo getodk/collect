@@ -689,7 +689,7 @@
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="project_configuration">Configuración del proyecto</string>
-  <string name="reset_settings_dialog">Restablecer aplicación</string>
+  <string name="reset_project_settings_title">Restablecer aplicación</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
   <string name="reset_settings">Todos los ajustes  (Ajustes internos, ajustes guardados)</string>
@@ -768,7 +768,7 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="configure_via_qr_code">Configurar mediante código QR</string>
+  <string name="reconfigure_with_qr_code_settings_title">Configurar mediante código QR</string>
   <string name="qr_code">Configuración del Código QR</string>
   <string name="scan_qr_code_fragment_title">Escanear</string>
   <string name="view_qr_code_fragment_title">Código QR</string>

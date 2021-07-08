@@ -650,7 +650,7 @@
   <string name="found_in_main">ప్రధాన మెనూ నుండి దాచడానికి ఎంపిక చేయకండి</string>
   <string name="found_in_settings">సాధారణ సెట్టింగ్‌ల నుండి దాచడానికి సెలెక్ట్  చేయవద్దు</string>
   <string name="form_entry">ఫారం ఎంట్రీ నుండి దాచడానికి ఎంపిక చేయవద్దు</string>
-  <string name="reset_settings_dialog">దరఖాస్తును రీసెట్ చేయండి…</string>
+  <string name="reset_project_settings_title">దరఖాస్తును రీసెట్ చేయండి…</string>
   <string name="select_all">అన్నీ ఎంపిక చేసుకొండి</string>
   <string name="clear_all">అన్నీ క్లియర్ చేయండి</string>
   <string name="reset_settings">అన్ని సెట్టింగ్‌లు (అంతర్గత సెట్టింగ్‌లు, సేవ్ చేసిన సెట్టింగ్‌లు)</string>
