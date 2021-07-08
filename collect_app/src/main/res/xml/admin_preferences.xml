@@ -38,6 +38,13 @@
             app:iconSpaceReserved="false"
             app:persistent="false"/>
 
+
+        <PreferenceScreen
+            android:icon="@drawable/ic_outline_qr_code_scanner_24"
+            android:key="import_settings"
+            android:title="@string/reconfigure_with_qr_code_settings_title"
+            android:summary="@string/reconfigure_with_qr_code_settings_subtext"/>
+
         <org.odk.collect.android.preferences.dialogs.ResetDialogPreference
             android:icon="@drawable/ic_outline_refresh_24"
             android:dialogTitle="@string/reset_settings_dialog_title"
@@ -46,11 +53,6 @@
             android:positiveButtonText="@string/reset_settings_button_reset"
             android:title="@string/reset_project_settings_title"
             android:summary="@string/reset_project_settings_subtext" />
-
-        <PreferenceScreen
-            android:key="import_settings"
-            android:title="@string/configure_via_qr_code"
-            app:iconSpaceReserved="false" />
 
         <PreferenceScreen
             android:icon="@drawable/ic_outline_delete_24"

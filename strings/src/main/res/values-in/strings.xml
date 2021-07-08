@@ -764,7 +764,7 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="configure_via_qr_code">Konfigurasi melalui kode QR</string>
+  <string name="reconfigure_with_qr_code_settings_title">Konfigurasi melalui kode QR</string>
   <string name="qr_code">Konfigurasi kode QR</string>
   <string name="scan_qr_code_fragment_title">Pemindaian</string>
   <string name="view_qr_code_fragment_title">Kode QR</string>

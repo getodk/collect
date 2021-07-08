@@ -764,7 +764,7 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="configure_via_qr_code">QR コードから設定</string>
+  <string name="reconfigure_with_qr_code_settings_title">QR コードから設定</string>
   <string name="qr_code">QR コード設定</string>
   <string name="scan_qr_code_fragment_title">スキャン</string>
   <string name="view_qr_code_fragment_title">QR コード</string>

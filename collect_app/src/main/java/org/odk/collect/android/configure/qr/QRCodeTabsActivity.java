@@ -67,7 +67,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, analytics, currentProjectProvider.getCurrentProject());
         setContentView(R.layout.tabs_layout);
 
-        initToolbar(getString(R.string.configure_via_qr_code));
+        initToolbar(getString(R.string.reconfigure_with_qr_code_settings_title));
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
 
         permissionsProvider.requestCameraPermission(this, new PermissionListener() {

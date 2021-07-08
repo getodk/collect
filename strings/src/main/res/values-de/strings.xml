@@ -768,7 +768,7 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="configure_via_qr_code">Konfigurieren via QR-Code</string>
+  <string name="reconfigure_with_qr_code_settings_title">Konfigurieren via QR-Code</string>
   <string name="qr_code">QR-Code-Konfiguration</string>
   <string name="scan_qr_code_fragment_title">Scannen</string>
   <string name="view_qr_code_fragment_title">QR-Code</string>
