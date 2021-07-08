@@ -85,13 +85,13 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public MainMenuPage deleteProject() {
-        clickOnString(R.string.delete_project);
+        scrollToRecyclerViewItemAndClickText(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
         return new MainMenuPage();
     }
 
     public FirstLaunchPage deleteLastProject() {
-        clickOnString(R.string.delete_project);
+        scrollToRecyclerViewItemAndClickText(R.string.delete_project);
         clickOnString(R.string.delete_project_yes);
         return new FirstLaunchPage();
     }
