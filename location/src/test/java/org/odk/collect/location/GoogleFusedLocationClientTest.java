@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,8 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.testshared.LocationTestUtils;
-import org.odk.collect.location.GoogleFusedLocationClient;
-import org.odk.collect.location.LocationClient;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -1,17 +1,13 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.location.Location;
 import android.location.LocationManager;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.common.collect.ImmutableList;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.testshared.LocationTestUtils;
-import org.odk.collect.location.AndroidLocationClient;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +15,7 @@ import java.util.List;
 import static android.location.LocationManager.GPS_PROVIDER;
 import static android.location.LocationManager.NETWORK_PROVIDER;
 import static android.location.LocationManager.PASSIVE_PROVIDER;
+import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
@@ -31,6 +28,7 @@ import static org.odk.collect.location.LocationClient.Priority.PRIORITY_BALANCED
 import static org.odk.collect.location.LocationClient.Priority.PRIORITY_HIGH_ACCURACY;
 import static org.odk.collect.location.LocationClient.Priority.PRIORITY_LOW_POWER;
 import static org.odk.collect.location.LocationClient.Priority.PRIORITY_NO_POWER;
+import static org.odk.collect.testshared.LocationTestUtils.createLocation;
 
 @RunWith(AndroidJUnit4.class)
 public class AndroidLocationClientTest {
@@ -47,7 +45,7 @@ public class AndroidLocationClientTest {
     @Test
     public void startingWithProvidersEnabledShouldCallStartAndStop() {
 
-        List<String> providers = ImmutableList.of(GPS_PROVIDER, NETWORK_PROVIDER);
+        List<String> providers = asList(GPS_PROVIDER, NETWORK_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(providers);
 
         TestClientListener testListener = new TestClientListener();
@@ -66,8 +64,7 @@ public class AndroidLocationClientTest {
 
     @Test
     public void startingWithoutProvidersEnabledShouldCallStartFailureAndStop() {
-
-        List<String> providers = ImmutableList.of();
+        List<String> providers = asList();
         when(locationManager.getProviders(true)).thenReturn(providers);
 
         TestClientListener testListener = new TestClientListener();
@@ -88,7 +85,7 @@ public class AndroidLocationClientTest {
 
     @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
-        List<String> providers = ImmutableList.of(GPS_PROVIDER, NETWORK_PROVIDER);
+        List<String> providers = asList(GPS_PROVIDER, NETWORK_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(providers);
 
         androidLocationClient.start();
@@ -138,8 +135,7 @@ public class AndroidLocationClientTest {
 
     @Test
     public void passiveProviderOnlyShouldFailOnHighAndBalancedPriorities() {
-
-        List<String> highAccuracyProviders = ImmutableList.of(PASSIVE_PROVIDER);
+        List<String> highAccuracyProviders = asList(PASSIVE_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
@@ -188,8 +184,7 @@ public class AndroidLocationClientTest {
 
     @Test
     public void networkProviderOnlyShouldFailOnNoPowerPriority() {
-
-        List<String> highAccuracyProviders = ImmutableList.of(NETWORK_PROVIDER);
+        List<String> highAccuracyProviders = asList(NETWORK_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
@@ -239,8 +234,7 @@ public class AndroidLocationClientTest {
 
     @Test
     public void gpsProviderOnlyShouldFailOnLowAndNoPowerPriorities() {
-
-        List<String> highAccuracyProviders = ImmutableList.of(GPS_PROVIDER);
+        List<String> highAccuracyProviders = asList(GPS_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
@@ -290,7 +284,6 @@ public class AndroidLocationClientTest {
 
     @Test
     public void getLastLocationShouldReturnCorrectFromCorrectProviderForPriority() {
-
         // Set-up mock Locations: -------------------------------------------------------------- //
 
         Location gpsLocation = newMockLocation();
@@ -311,12 +304,12 @@ public class AndroidLocationClientTest {
 
         // W/ GPS
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(GPS_PROVIDER, NETWORK_PROVIDER));
+                .thenReturn(asList(GPS_PROVIDER, NETWORK_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), gpsLocation);
 
         // W/out GPS:
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(NETWORK_PROVIDER));
+                .thenReturn(asList(NETWORK_PROVIDER));
 
         assertSame(androidLocationClient.getLastLocation(), networkLocation);
 
@@ -326,12 +319,12 @@ public class AndroidLocationClientTest {
 
         // W/ both (should be Network)
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(GPS_PROVIDER, NETWORK_PROVIDER));
+                .thenReturn(asList(GPS_PROVIDER, NETWORK_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), networkLocation);
 
         // W/out Network
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(GPS_PROVIDER));
+                .thenReturn(asList(GPS_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), gpsLocation);
 
         // Low Power Accuracy: -------------------------------------------------------------- //
@@ -341,12 +334,12 @@ public class AndroidLocationClientTest {
         // W/ Network
 
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(NETWORK_PROVIDER, PASSIVE_PROVIDER));
+                .thenReturn(asList(NETWORK_PROVIDER, PASSIVE_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), networkLocation);
 
         // W/out Network:
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(PASSIVE_PROVIDER));
+                .thenReturn(asList(PASSIVE_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), passiveLocation);
 
         // No Power: -------------------------------------------------------------- //
@@ -354,12 +347,12 @@ public class AndroidLocationClientTest {
 
         // W/ Passive:
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.of(PASSIVE_PROVIDER));
+                .thenReturn(asList(PASSIVE_PROVIDER));
         assertSame(androidLocationClient.getLastLocation(), passiveLocation);
 
         // W/out any Providers:
         when(locationManager.getProviders(true))
-                .thenReturn(ImmutableList.<String>of());
+                .thenReturn(asList());
 
         assertNull(androidLocationClient.getLastLocation());
     }
@@ -378,7 +371,7 @@ public class AndroidLocationClientTest {
         TestLocationListener listener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(listener);
 
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
+        Location location = createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
         androidLocationClient.onLocationChanged(location);
 
         assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
@@ -393,7 +386,7 @@ public class AndroidLocationClientTest {
         TestLocationListener listener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(listener);
 
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        Location location = createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
         androidLocationClient.onLocationChanged(location);
 
         assertThat(listener.getLastLocation().getAccuracy(), is(0.0f));
@@ -403,7 +396,7 @@ public class AndroidLocationClientTest {
     public void whenLastKnownLocationAccuracyIsNegative_shouldBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
+        Location location = createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
         when(locationManager.getLastKnownLocation(GPS_PROVIDER)).thenReturn(location);
 
         assertThat(androidLocationClient.getLastLocation().getAccuracy(), is(0.0f));
@@ -413,7 +406,7 @@ public class AndroidLocationClientTest {
     public void whenLastKnownLocationIsMocked_shouldAccuracyBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        Location location = createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
         when(locationManager.getLastKnownLocation(GPS_PROVIDER)).thenReturn(location);
 
         assertThat(androidLocationClient.getLastLocation().getAccuracy(), is(0.0f));

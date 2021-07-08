@@ -12,20 +12,16 @@
  * the License.
  */
 
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.content.Context;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
-import org.odk.collect.location.AndroidLocationClient;
-import org.odk.collect.location.GoogleFusedLocationClient;
-import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,7 +39,7 @@ public class LocationClientProviderTest {
         when(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.SUCCESS);
 
         LocationClient client = LocationClientProvider.getClient(context, () -> googleFusedLocationClient, googleApiAvailability);
-        assertThat(client, is(googleFusedLocationClient));
+        MatcherAssert.assertThat(client, is(googleFusedLocationClient));
     }
 
     @Test
@@ -51,6 +47,6 @@ public class LocationClientProviderTest {
         when(googleApiAvailability.isGooglePlayServicesAvailable(any())).thenReturn(ConnectionResult.API_UNAVAILABLE);
 
         LocationClient client = LocationClientProvider.getClient(context, () -> googleFusedLocationClient, googleApiAvailability);
-        assertThat(client, instanceOf(AndroidLocationClient.class));
+        MatcherAssert.assertThat(client, instanceOf(AndroidLocationClient.class));
     }
 }

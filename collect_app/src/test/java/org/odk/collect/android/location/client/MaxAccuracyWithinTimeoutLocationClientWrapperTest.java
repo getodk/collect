@@ -4,6 +4,8 @@ import android.location.Location;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.location.LocationListener;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,26 +13,28 @@ import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.odk.collect.testshared.LocationTestUtils.createLocation;
 import static org.robolectric.shadows.ShadowSystemClock.advanceBy;
 
 @RunWith(AndroidJUnit4.class)
 public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
     private FakeLocationClient fakeLocationClient;
-    private TestLocationListener testLocationListener;
+    private LocationListener locationListener;
 
     private MaxAccuracyWithinTimeoutLocationClientWrapper maxAccuracyLocationClient;
 
     @Before
     public void setUp() {
         fakeLocationClient = new FakeLocationClient();
-        testLocationListener = new TestLocationListener();
+        locationListener = mock(LocationListener.class);
 
-        maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(fakeLocationClient, testLocationListener);
+        maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(fakeLocationClient, locationListener);
     }
 
     @Test
@@ -41,7 +45,7 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
 
-        assertEquals(location, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(location);
     }
 
     @Test
@@ -53,7 +57,7 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
 
-        assertNull(testLocationListener.getLastLocation());
+        verify(locationListener, never()).onLocationChanged(any());
     }
 
     @Test
@@ -63,15 +67,15 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
 
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
-        assertEquals(location, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(location);
 
         Location moreAccurateLocation = createLocation("GPS", 1, 1, 1, 2);
         fakeLocationClient.receiveFix(moreAccurateLocation);
-        assertEquals(moreAccurateLocation, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(moreAccurateLocation);
 
         Location lessAccurateLocation = createLocation("GPS", 1, 1, 1, 10);
         fakeLocationClient.receiveFix(lessAccurateLocation);
-        assertEquals(moreAccurateLocation, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(moreAccurateLocation);
     }
 
     @Test
@@ -81,11 +85,11 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
 
         Location locationWithoutAccuracy = createLocation("GPS", 1, 1, 1);
         fakeLocationClient.receiveFix(locationWithoutAccuracy);
-        assertEquals(locationWithoutAccuracy, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(locationWithoutAccuracy);
 
         Location locationWithAccuracy = createLocation("GPS", 5, 5, 5, 100);
         fakeLocationClient.receiveFix(locationWithAccuracy);
-        assertEquals(locationWithAccuracy, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(locationWithAccuracy);
     }
 
     @Test
@@ -95,11 +99,11 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
 
         Location locationWithAccuracy = createLocation("GPS", 5, 5, 5, 100);
         fakeLocationClient.receiveFix(locationWithAccuracy);
-        assertEquals(locationWithAccuracy, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(locationWithAccuracy);
 
         Location locationWithoutAccuracy = createLocation("GPS", 1, 1, 1);
         fakeLocationClient.receiveFix(locationWithoutAccuracy);
-        assertEquals(locationWithAccuracy, testLocationListener.getLastLocation());
+        verify(locationListener, never()).onLocationChanged(locationWithoutAccuracy);
     }
 
     @Test
@@ -109,13 +113,13 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
 
         Location location = createLocation("GPS", 1, 1, 1, 2);
         fakeLocationClient.receiveFix(location);
-        assertEquals(location, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(location);
 
         maxAccuracyLocationClient.requestLocationUpdates(5);
 
         Location lessAccurateLocation = createLocation("GPS", 1, 1, 1, 10);
         fakeLocationClient.receiveFix(lessAccurateLocation);
-        assertEquals(lessAccurateLocation, testLocationListener.getLastLocation());
+        verify(locationListener).onLocationChanged(lessAccurateLocation);
     }
 
     @Test
@@ -132,7 +136,7 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapperTest {
         // verify that if the location client is stopped, location updates aren't sent
         Location location = createLocation("GPS", 1, 1, 1, 100);
         fakeLocationClient.receiveFix(location);
-        assertNull(testLocationListener.getLastLocation());
+        verify(locationListener, never()).onLocationChanged(any());
     }
 
     @Test

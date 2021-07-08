@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -45,4 +51,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation project(':testshared')
+    testImplementation 'org.mockito:mockito-core:3.9.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'androidx.test.ext:junit:1.1.3'
 }
