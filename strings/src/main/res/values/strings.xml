@@ -655,14 +655,24 @@
 
     <!-- Title of a settings section -->
     <string name="server_settings_title">Server</string>
+    <!-- Subtext of a settings section -->
+    <string name="server_settings_subtext">URL, username, password</string>
     <!-- Title of a settings section -->
     <string name="client">User interface</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_interface_settings_subtext">App language, theme, font size</string>
     <!-- Title of a settings section -->
     <string name="maps">Maps</string>
+    <!-- Subtext of a settings section -->
+    <string name="maps_settings_subtext">Basemap, styles, layers</string>
     <!-- Title of a settings section -->
     <string name="form_management_preferences">Form management</string>
+    <!-- Subtext of a settings section -->
+    <string name="form_management_settings_subtext">Auto-update, auto-send, auto-delete</string>
     <!-- Title of a settings section -->
     <string name="user_and_device_identity_title">User and device identity</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_and_device_identity_settings_subtext">Username, phone number, device ID</string>
     <!-- Title of a settings section only available in beta or development builds. -->
     <string name="experimental">Experimental</string>
 
