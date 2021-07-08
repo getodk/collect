@@ -3,15 +3,10 @@ package org.odk.collect.android.support.pages;
 import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.core.StringEndsWith.endsWith;
 
 public class AdminSettingsPage extends Page<AdminSettingsPage> {
 
@@ -60,28 +55,6 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     public QRCodePage clickConfigureQR() {
         clickOnString(R.string.reconfigure_with_qr_code_settings_title);
         return new QRCodePage().assertOnPage();
-    }
-
-    public AdminSettingsPage setProjectName(String projectName) {
-        clickOnString(R.string.project_name);
-        inputText(projectName);
-        clickOKOnDialog();
-        return this;
-    }
-
-    public AdminSettingsPage setProjectIcon(String projectIcon) {
-        clickOnString(R.string.project_icon);
-        onView(withClassName(endsWith("EditText"))).perform(replaceText(""));
-        onView(withClassName(endsWith("EditText"))).perform(typeText(projectIcon));
-        clickOKOnDialog();
-        return this;
-    }
-
-    public AdminSettingsPage setProjectColor(String projectColor) {
-        clickOnString(R.string.project_color);
-        onView(withContentDescription(R.string.hex_color)).perform(replaceText(projectColor));
-        clickOKOnDialog();
-        return this;
     }
 
     public MainMenuPage deleteProject() {

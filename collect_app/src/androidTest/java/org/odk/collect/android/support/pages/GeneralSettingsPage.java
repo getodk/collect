@@ -24,6 +24,11 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return this;
     }
 
+    public ProjectDisplayPage clickProjectDisplay() {
+        clickOnString(R.string.project_display_title);
+        return new ProjectDisplayPage().assertOnPage();
+    }
+
     public UserInterfacePage clickOnUserInterface() {
         clickOnString(R.string.client);
         return new UserInterfacePage().assertOnPage();
