@@ -573,7 +573,7 @@
   <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
   <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
   <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
-  <string name="reset_settings_dialog">Återställ programmet…</string>
+  <string name="reset_project_settings_title">Återställ programmet…</string>
   <string name="select_all">Välj alla</string>
   <string name="clear_all">Rensa alla</string>
   <string name="reset_settings">Alla inställningar (interna inställningar, sparade inställningar)</string>

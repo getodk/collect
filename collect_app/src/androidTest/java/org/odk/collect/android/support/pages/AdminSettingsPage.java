@@ -48,7 +48,7 @@ public class AdminSettingsPage extends Page<AdminSettingsPage> {
     }
 
     public AdminSettingsPage clickOnResetApplication() {
-        clickOnString(R.string.reset_settings_dialog);
+        clickOnString(R.string.reset_project_settings_title);
         return this;
     }
 

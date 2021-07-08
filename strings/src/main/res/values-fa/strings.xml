@@ -372,7 +372,7 @@
   <string name="admin_password_disabled">پسورد Admin غیر فعال گردید</string>
   <string name="admin_password_incorrect">ببخشید، پسورد نادرست است</string>
   <string name="show_password">نشان دادن پسورد</string>
-  <string name="reset_settings_dialog">تنظیم مجدد درخواست… </string>
+  <string name="reset_project_settings_title">تنظیم مجدد درخواست… </string>
   <string name="select_all">انتخاب همه</string>
   <string name="clear_all">پاک کردن همه</string>
   <string name="reset_settings">تمام تنظیمات (تنظیمات داخلی، تنظیمات حفظ شده)</string>

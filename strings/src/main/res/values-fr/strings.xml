@@ -689,7 +689,7 @@
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
   <string name="project_configuration">Configuration du projet</string>
-  <string name="reset_settings_dialog">Réinitialiser l\'application …</string>
+  <string name="reset_project_settings_title">Réinitialiser l\'application …</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>
   <string name="reset_settings">Tous les paramètres (configuration interne, paramètres enregistrés)</string>

@@ -685,7 +685,7 @@
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
-  <string name="reset_settings_dialog">アプリケーションのリセット…</string>
+  <string name="reset_project_settings_title">アプリケーションのリセット…</string>
   <string name="select_all">すべて選択</string>
   <string name="clear_all">すべてクリア</string>
   <string name="reset_settings">すべての設定 (内部設定、保存された設定)</string>

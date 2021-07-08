@@ -449,7 +449,7 @@
   <string name="found_in_main">मुख्य मेनू से छुपाने के लिए अनचेक करें</string>
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
-  <string name="reset_settings_dialog">एप्लिकेशन रीसेट करें …</string>
+  <string name="reset_project_settings_title">एप्लिकेशन रीसेट करें …</string>
   <string name="select_all">सभी का चयन करे</string>
   <string name="clear_all">सभी साफ करें</string>
   <string name="reset_settings">सभी सेटिंग (आंतरिक सेटिंग, संरक्षित  सेटिंग)</string>

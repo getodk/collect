@@ -689,7 +689,7 @@
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="project_configuration">Projekt-Konfiguration</string>
-  <string name="reset_settings_dialog">App zurücksetzen…</string>
+  <string name="reset_project_settings_title">App zurücksetzen…</string>
   <string name="select_all">Alle auswählen</string>
   <string name="clear_all">Auswahl aufheben</string>
   <string name="reset_settings">Alle Einstellungen (interne Einstellungen, gespeicherte Einstellungen)</string>

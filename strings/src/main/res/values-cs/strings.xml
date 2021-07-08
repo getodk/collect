@@ -695,7 +695,7 @@
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Formulářů</string>
   <string name="project_configuration">Konfigurace projektu</string>
-  <string name="reset_settings_dialog">Resetovat aplikaci…</string>
+  <string name="reset_project_settings_title">Resetovat aplikaci…</string>
   <string name="select_all">Vybrat vše</string>
   <string name="clear_all">Vymazat vše</string>
   <string name="reset_settings">Všechna nastavení (interní nastavení, uložená nastavení)</string>

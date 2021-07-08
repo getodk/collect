@@ -469,7 +469,7 @@
   <string name="show_password">Vis kodeord</string>
   <string name="found_in_main">Fjern markering for at skjule fra hovedmenu </string>
   <string name="found_in_settings">Fjern markering for at skjule fra Generelle indstillinger</string>
-  <string name="reset_settings_dialog">Nulstil applikation…</string>
+  <string name="reset_project_settings_title">Nulstil applikation…</string>
   <string name="select_all">Vælg alle</string>
   <string name="clear_all">Ryd alle</string>
   <string name="reset_settings_button_reset">Nulstil</string>

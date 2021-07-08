@@ -558,7 +558,7 @@
   <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
-  <string name="reset_settings_dialog">Сброс приложения…</string>
+  <string name="reset_project_settings_title">Сброс приложения…</string>
   <string name="select_all">Выбрать всё</string>
   <string name="clear_all">Очистить всё</string>
   <string name="reset_settings">Все настройки (внутренние настройки, сохранённые настройки)</string>

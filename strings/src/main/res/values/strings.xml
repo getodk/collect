@@ -845,7 +845,8 @@
     <string name="form_entry">Uncheck to hide from Form Entry</string>
 
     <string name="project_configuration">Project Configuration</string>
-    <string name="reset_settings_dialog">Reset project…</string>
+    <string name="reset_project_settings_title">Reset</string>
+    <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
     <string name="select_all">Select All</string>
     <string name="clear_all">Clear All</string>
     <string name="reset_settings">All settings (internal settings, saved settings)</string>

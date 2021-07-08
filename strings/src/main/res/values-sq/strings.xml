@@ -477,7 +477,7 @@
   <string name="found_in_main">Hiq përzgjedhjen për ta fshehur nga Menuja Kryesore</string>
   <string name="found_in_settings">Hiq përzgjedhjen për ta fshehur nga Parametrat e Përgjithshëm</string>
   <string name="form_entry">Hiq përzgjedhjen për ta fshehur nga Form Entry</string>
-  <string name="reset_settings_dialog">Rivendos aplikacionin…</string>
+  <string name="reset_project_settings_title">Rivendos aplikacionin…</string>
   <string name="select_all">Zgjidh të gjitha</string>
   <string name="clear_all">Pastro të gjitha</string>
   <string name="reset_settings">Të gjithë parametrat (paramterat e brendshëm, parametrat e ruajtur)</string>

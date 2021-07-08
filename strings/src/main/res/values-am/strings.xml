@@ -353,7 +353,7 @@
   <string name="show_password">የይለፍ ቃሉን አሳይ</string>
   <string name="found_in_main">ከመደበኛው ምናሌ ለመደበቅ አትምረጥ</string>
   <string name="found_in_settings">ከጠቅላላ ቅንብሮች ለመደበቅ አትምረጥ</string>
-  <string name="reset_settings_dialog">መተግበሪያዉን ዳግም አስጀምር …</string>
+  <string name="reset_project_settings_title">መተግበሪያዉን ዳግም አስጀምር …</string>
   <string name="select_all">ሁሉንም ምረጥ</string>
   <string name="clear_all">ሁሉንም ያፅዱ</string>
   <string name="reset_settings_dialog_title">ምን ዳግም ለመጀመር ይምረጡ</string>

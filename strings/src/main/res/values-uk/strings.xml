@@ -603,7 +603,7 @@
   <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
   <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
-  <string name="reset_settings_dialog">Скинути програму…</string>
+  <string name="reset_project_settings_title">Скинути програму…</string>
   <string name="select_all">Обрати всі</string>
   <string name="clear_all">Зняти всі позначки</string>
   <string name="reset_settings">Всі налаштування (внутрішні налаштування, збережені налаштування)</string>

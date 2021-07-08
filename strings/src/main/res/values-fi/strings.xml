@@ -689,7 +689,7 @@
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="project_configuration">Projektikonfiguraatio</string>
-  <string name="reset_settings_dialog">Palauta sovellus alkutilaan…</string>
+  <string name="reset_project_settings_title">Palauta sovellus alkutilaan…</string>
   <string name="select_all">Valitse kaikki</string>
   <string name="clear_all">Tyhjennä kaikki</string>
   <string name="reset_settings">Kaikki asetukset (sisäiset asetukset, tallennetut asetukset)</string>

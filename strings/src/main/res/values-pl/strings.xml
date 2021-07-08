@@ -644,7 +644,7 @@
   <string name="found_in_main">Odznacz aby ukryć w Głównym Menu</string>
   <string name="found_in_settings">Odznacz aby ukryć w Ogólnych Ustawieniach</string>
   <string name="form_entry">Odznacz aby ukryć z Wypełniania Formularza</string>
-  <string name="reset_settings_dialog">Resetuj aplikację…</string>
+  <string name="reset_project_settings_title">Resetuj aplikację…</string>
   <string name="select_all">Zaznacz Wszystkie</string>
   <string name="clear_all">Odznacz Wszystkie</string>
   <string name="reset_settings">Wszystkie ustawienia (ustawienia wewnętrzne, ustawienia zapisane)</string>

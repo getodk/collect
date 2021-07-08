@@ -603,7 +603,7 @@
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
   <string name="found_in_settings">Uklonite oznaku da biste isključili iz opštih podešavanja</string>
   <string name="form_entry">Ukloni oznaku kako bi sakrio stavku iz Form Entry</string>
-  <string name="reset_settings_dialog">Resetuj aplikaciju…</string>
+  <string name="reset_project_settings_title">Resetuj aplikaciju…</string>
   <string name="select_all">Obilježi sve</string>
   <string name="clear_all">Očisti sve</string>
   <string name="reset_settings">Sva podeševanja (interna podešavanja, sačuvana podešavanja)</string>

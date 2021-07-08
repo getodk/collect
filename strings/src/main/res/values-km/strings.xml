@@ -561,7 +561,7 @@
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
-  <string name="reset_settings_dialog">កំណត់កម្មវិធីឡើងវិញ</string>
+  <string name="reset_project_settings_title">កំណត់កម្មវិធីឡើងវិញ</string>
   <string name="select_all">ជ្រើសរើសទាំងអស់</string>
   <string name="clear_all">លុបចេញទាំងអស់</string>
   <string name="reset_settings">ការកំណត់ទាំងអស់ (ការកំណត់ខាងក្នុង, ការកំណត់ដែលរក្សាទុក)</string>

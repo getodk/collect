@@ -395,7 +395,7 @@
   <string name="change_admin_password">Muuda administraatori salasõna</string>
   <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
   <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
-  <string name="reset_settings_dialog">Rakenduse lähtestamine…</string>
+  <string name="reset_project_settings_title">Rakenduse lähtestamine…</string>
   <string name="select_all">Vali kõik</string>
   <string name="clear_all">Eemalda kõik</string>
   <string name="reset_settings">Kõik seaded (sisemised seaded, salvestatud seaded)</string>
