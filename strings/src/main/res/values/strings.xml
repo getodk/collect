@@ -998,7 +998,8 @@
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
     <string name="cannot_delete_project_title">Project can\'t be deleted</string>
-    <string name="cannot_delete_project_message">You have unsent submissions. To delete the project, you must first send or delete those submissions.</string>
+    <string name="cannot_delete_project_message_one">You have unsent submissions. To delete the project, you must first send or delete those submissions.</string>
+    <string name="cannot_delete_project_message_two">Background jobs are running. Please try again later.</string>
     <string name="or">OR</string>
     <string name="hex_color">Hex color</string>
     <string name="invalid_hex_code">Invalid hex code</string>

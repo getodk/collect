@@ -40,6 +40,7 @@ import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragment
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.DeleteProjectResult.DeletedSuccessfully
+import org.odk.collect.android.projects.DeleteProjectResult.RunningBackgroundJobs
 import org.odk.collect.android.projects.DeleteProjectResult.UnsentInstances
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.utilities.DialogUtils
@@ -236,7 +237,14 @@ class AdminPreferencesFragment :
             is UnsentInstances -> {
                 AlertDialog.Builder(requireActivity())
                     .setTitle(R.string.cannot_delete_project_title)
-                    .setMessage(R.string.cannot_delete_project_message)
+                    .setMessage(R.string.cannot_delete_project_message_one)
+                    .setPositiveButton(R.string.ok, null)
+                    .show()
+            }
+            is RunningBackgroundJobs -> {
+                AlertDialog.Builder(requireActivity())
+                    .setTitle(R.string.cannot_delete_project_title)
+                    .setMessage(R.string.cannot_delete_project_message_two)
                     .setPositiveButton(R.string.ok, null)
                     .show()
             }

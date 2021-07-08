@@ -595,8 +595,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectDeleter providesProjectDeleter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, FormUpdateScheduler formUpdateScheduler, InstanceSubmitScheduler instanceSubmitScheduler, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider) {
-        return new ProjectDeleter(projectsRepository, currentProjectProvider, formUpdateScheduler, instanceSubmitScheduler, instancesRepositoryProvider.get(), storagePathProvider.getProjectRootDirPath(currentProjectProvider.getCurrentProject().getUuid()));
+    public ProjectDeleter providesProjectDeleter(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider, FormUpdateScheduler formUpdateScheduler, InstanceSubmitScheduler instanceSubmitScheduler, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider, ChangeLockProvider changeLockProvider) {
+        return new ProjectDeleter(projectsRepository, currentProjectProvider, formUpdateScheduler, instanceSubmitScheduler, instancesRepositoryProvider.get(), storagePathProvider.getProjectRootDirPath(currentProjectProvider.getCurrentProject().getUuid()), changeLockProvider);
     }
 
     @Provides
