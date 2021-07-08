@@ -66,22 +66,22 @@
         app:iconSpaceReserved="false">
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_menu_24"
             android:key="main_menu"
             android:summary="@string/main_menu_settings_summary"
-            android:title="@string/main_menu_settings"
-            app:iconSpaceReserved="false" />
+            android:title="@string/main_menu_settings" />
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_settings_24"
             android:key="user_settings"
             android:summary="@string/user_setting_summary"
-            android:title="@string/user_settings"
-            app:iconSpaceReserved="false" />
+            android:title="@string/user_settings" />
 
         <PreferenceScreen
+            android:icon="@drawable/ic_outline_assignment_24"
             android:key="form_entry"
             android:summary="@string/form_entry_settings_summary"
-            android:title="@string/form_entry_setting"
-            app:iconSpaceReserved="false" />
+            android:title="@string/form_entry_setting" />
 
     </PreferenceCategory>
 </PreferenceScreen>
