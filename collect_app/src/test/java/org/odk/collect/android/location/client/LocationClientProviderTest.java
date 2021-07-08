@@ -20,9 +20,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.odk.collect.location.AndroidLocationClient;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
@@ -32,19 +29,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 public class LocationClientProviderTest {
 
-    @Mock
-    private Context context;
-
-    @Mock
-    private GoogleApiAvailability googleApiAvailability;
-
-    @Mock
-    private GoogleFusedLocationClient googleFusedLocationClient;
+    private final Context context = mock(Context.class);
+    private final GoogleApiAvailability googleApiAvailability = mock(GoogleApiAvailability.class);
+    private final GoogleFusedLocationClient googleFusedLocationClient = mock(GoogleFusedLocationClient.class);
 
     @Test
     public void fusedLocationClient_returnedWhenPlayServicesAvailable() {
