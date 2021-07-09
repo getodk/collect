@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -29,7 +31,9 @@ import org.odk.collect.android.utilities.ThemeUtils;
 
 import javax.inject.Inject;
 
-public class GeneralPreferencesActivity extends CollectAbstractActivity {
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+
+public class GeneralPreferencesActivity extends CollectAbstractActivity implements ResetSettingsResultDialog.ResetSettingsResultDialogListener {
 
     public static final String TAG = "GeneralPreferencesFragment";
     public static final String INTENT_KEY_ADMIN_MODE = "adminMode";
@@ -72,6 +76,11 @@ public class GeneralPreferencesActivity extends CollectAbstractActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onDialogClosed() {
+        startActivityAndCloseAllOthers(this, MainMenuActivity.class);
     }
 
     public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {

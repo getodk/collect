@@ -52,6 +52,7 @@ class GeneralPreferencesFragment :
         findPreference<Preference>("form_management")!!.onPreferenceClickListener = this
         findPreference<Preference>("user_and_device_identity")!!.onPreferenceClickListener = this
         findPreference<Preference>("experimental")!!.onPreferenceClickListener = this
+        findPreference<Preference>("project_management")!!.onPreferenceClickListener = this
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
 
         if (!isInAdminMode) {
@@ -94,6 +95,7 @@ class GeneralPreferencesFragment :
             "form_management" -> FormManagementPreferencesFragment()
             "user_and_device_identity" -> IdentityPreferencesFragment()
             "experimental" -> ExperimentalPreferencesFragment()
+            "project_management" -> ProjectManagementPreferencesFragment()
             else -> null
         }
     }

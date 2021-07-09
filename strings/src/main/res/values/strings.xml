@@ -681,6 +681,10 @@
     <string name="experimental">Experimental</string>
 
     <string name="protected_settings">Protected</string>
+    <!-- Title of a settings section -->
+    <string name="project_management_section_title">Project management</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_management_section_subtext">Reconfigure, reset, delete</string>
     <string name="set_admin_password">Set admin password</string>
 
     <string name="server_preferences">Server Settings</string>
@@ -851,7 +855,6 @@
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
 
-    <string name="project_configuration">Project Configuration</string>
     <string name="reset_project_settings_title">Reset</string>
     <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
     <string name="delete_project">Delete</string>

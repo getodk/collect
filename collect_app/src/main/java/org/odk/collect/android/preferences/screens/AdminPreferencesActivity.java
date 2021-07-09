@@ -20,12 +20,9 @@ import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
-import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 /**
@@ -36,8 +33,7 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
  *         option)
  */
 public class AdminPreferencesActivity extends CollectAbstractActivity implements
-        MovingBackwardsDialog.MovingBackwardsDialogListener,
-        ResetSettingsResultDialog.ResetSettingsResultDialogListener {
+        MovingBackwardsDialog.MovingBackwardsDialogListener {
     public static final String TAG = "AdminPreferencesFragment";
 
     @Override
@@ -64,10 +60,5 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
     public void preventOtherWaysOfEditingForm() {
         AdminPreferencesFragment fragment = (AdminPreferencesFragment) getSupportFragmentManager().findFragmentByTag(TAG);
         fragment.preventOtherWaysOfEditingForm();
-    }
-
-    @Override
-    public void onDialogClosed() {
-        startActivityAndCloseAllOthers(this, MainMenuActivity.class);
     }
 }

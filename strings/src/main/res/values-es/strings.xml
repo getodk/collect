@@ -688,7 +688,6 @@
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
-  <string name="project_configuration">Configuración del proyecto</string>
   <string name="reset_project_settings_title">Restablecer aplicación</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
