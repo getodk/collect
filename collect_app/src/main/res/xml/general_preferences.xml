@@ -59,15 +59,15 @@ limitations under the License.
         app:iconSpaceReserved="false">
 
         <Preference
+            android:icon="@drawable/ic_outline_vpn_key_24"
+            android:key="admin_password"
+            android:title="@string/set_admin_password" />
+
+        <Preference
             android:icon="@drawable/ic_outline_settings_applications_24"
             android:key="project_management"
             android:title="@string/project_management_section_title"
             android:summary="@string/project_management_section_subtext"/>
-
-        <Preference
-            android:icon="@drawable/ic_outline_vpn_key_24"
-            android:key="admin_password"
-            android:title="@string/set_admin_password" />
 
     </PreferenceCategory>
 </PreferenceScreen>
