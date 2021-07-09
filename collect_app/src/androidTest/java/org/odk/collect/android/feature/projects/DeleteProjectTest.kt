@@ -29,7 +29,8 @@ class DeleteProjectTest {
 
             // Delete Turtle nesting project
             .openProjectSettings()
-            .clickAdminSettings()
+            .clickGeneralSettings()
+            .clickProjectManagement()
             .deleteProject()
 
             // Assert switching to Turtle nesting
@@ -38,7 +39,8 @@ class DeleteProjectTest {
 
             // Delete Demo project
             .openProjectSettings()
-            .clickAdminSettings()
+            .clickGeneralSettings()
+            .clickProjectManagement()
             .deleteLastProject()
     }
 }

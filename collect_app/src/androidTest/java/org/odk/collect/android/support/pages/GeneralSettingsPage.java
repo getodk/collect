@@ -29,6 +29,11 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return new ProjectDisplayPage().assertOnPage();
     }
 
+    public ProjectManagementPage clickProjectManagement() {
+        clickOnString(R.string.project_management_section_title);
+        return new ProjectManagementPage().assertOnPage();
+    }
+
     public UserInterfacePage clickOnUserInterface() {
         clickOnString(R.string.client);
         return new UserInterfacePage().assertOnPage();

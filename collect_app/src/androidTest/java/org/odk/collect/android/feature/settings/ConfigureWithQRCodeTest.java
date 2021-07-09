@@ -87,7 +87,8 @@ public class ConfigureWithQRCodeTest {
     public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
         QRCodePage qrCodePage = rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR();
 
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
@@ -105,7 +106,8 @@ public class ConfigureWithQRCodeTest {
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
         rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
@@ -123,7 +125,8 @@ public class ConfigureWithQRCodeTest {
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
-                .clickAdminSettingsWithPassword("blah")
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_admin_password)
@@ -145,7 +148,8 @@ public class ConfigureWithQRCodeTest {
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_server_password)
