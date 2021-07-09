@@ -590,8 +590,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Адміністрування</string>
-  <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="enter_new_password">Введіть новий пароль</string>
   <string name="admin_password">Пароль адміністратора</string>
   <string name="admin_password_changed">Пароль адміністратора успішно змінено</string>

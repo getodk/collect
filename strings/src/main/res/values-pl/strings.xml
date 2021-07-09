@@ -631,8 +631,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Ustawienia Administratora</string>
-  <string name="admin_access_settings">Naciśnij aby mieć dostęp do ustawień administratora</string>
   <string name="enter_new_password">Wprowadź nowe hasło</string>
   <string name="admin_password">Hasło Administratora</string>
   <string name="admin_password_changed">Hasło administratora zostało zmienione</string>

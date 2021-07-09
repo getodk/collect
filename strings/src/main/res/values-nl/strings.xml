@@ -407,8 +407,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admin Settings</string>
-  <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="enter_new_password">Nieuw wachtwoord</string>
   <string name="admin_password">Admin wachtwoord</string>
   <string name="admin_password_changed">Admin wachtwoord gewijgd</string>

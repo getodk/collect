@@ -578,8 +578,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Mipangilio ya msimamizi</string>
-  <string name="admin_access_settings">Bofya kwa upatikanaji wa mipangilio ya msimamizi</string>
   <string name="enter_new_password">Ingiza nenosiri jipya</string>
   <string name="admin_password">Nenosiri la msimamizi</string>
   <string name="admin_password_changed">Nenosiri la msimamizi limebadilishwa kwa ufanisi</string>

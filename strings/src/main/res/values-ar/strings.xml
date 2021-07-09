@@ -687,8 +687,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">إعدادات المدير</string>
-  <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
   <string name="admin_password">كلمة مرور المدير</string>
   <string name="admin_password_changed">تمّ تغيير كلمة مرور المدير بنجاح</string>

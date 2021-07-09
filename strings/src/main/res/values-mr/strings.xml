@@ -424,8 +424,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">प्रशासन सेटिंग्ज</string>
-  <string name="admin_access_settings">सेटिंग्जमध्ये प्रशासकीय प्रवेशासाठी टॅप करा</string>
   <string name="enter_new_password">नवीन संकेतशब्द प्रविष्ट करा</string>
   <string name="admin_password">प्रशासन संकेतशब्द</string>
   <string name="admin_password_changed">प्रशासक संकेतशब्द यशस्वीरित्या बदलला</string>

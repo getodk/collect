@@ -672,8 +672,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">管理者設定</string>
-  <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="admin_password">管理者パスワード</string>
   <string name="admin_password_changed">管理者パスワードが変更されました</string>

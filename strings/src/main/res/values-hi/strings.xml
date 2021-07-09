@@ -436,8 +436,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">एडमिन सेटिंग</string>
-  <string name="admin_access_settings">सेटिंग तक एडमिन पहुंच के लिए टैप करें</string>
   <string name="enter_new_password"> नया पासवर्ड दर्ज करें </string>
   <string name="admin_password">एडमिन पासवर्ड </string>
   <string name="admin_password_changed">एडमिन पासवर्ड सफलतापूर्वक बदल दिया गया</string>

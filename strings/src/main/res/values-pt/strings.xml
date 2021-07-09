@@ -667,8 +667,6 @@ Escolher Imagem</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Configurações Administrativas</string>
-  <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="enter_new_password">Digite a nova senha</string>
   <string name="admin_password">Senha Administrativa</string>
   <string name="admin_password_changed">Senha administrativa alterada com sucesso</string>

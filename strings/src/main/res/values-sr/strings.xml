@@ -590,8 +590,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administratorska podešavanja</string>
-  <string name="admin_access_settings">Pritisni za administratorski pristup podešavanjima</string>
   <string name="enter_new_password">Ukucaj novu lozinku</string>
   <string name="admin_password">Administratorska lozinka</string>
   <string name="admin_password_changed">Administratorska lozinka je uspješno promijenjena</string>

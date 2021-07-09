@@ -681,8 +681,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administrátorská nastavení</string>
-  <string name="admin_access_settings">Klepněte pro administrátorský přístup do Nastavení</string>
   <string name="enter_new_password">Zadejte nové heslo</string>
   <string name="admin_password">Heslo správce</string>
   <string name="admin_password_changed">Administrátorské heslo úspěšně změněno</string>

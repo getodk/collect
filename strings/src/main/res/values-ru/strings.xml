@@ -545,8 +545,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Администрирование</string>
-  <string name="admin_access_settings">Административный доступ к настройкам</string>
   <string name="enter_new_password">Укажите новый пароль</string>
   <string name="admin_password">Пароль администратора</string>
   <string name="admin_password_changed">Пароль администратора успешно изменён</string>

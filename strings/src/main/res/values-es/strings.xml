@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Opciones de administrador</string>
-  <string name="admin_access_settings">Pulsa para entrar en Configuración</string>
   <string name="enter_new_password">Entrar nueva contraseña</string>
   <string name="admin_password">Contraseña de Administrador</string>
   <string name="admin_password_changed">Contraseña Administrador cambiada correctamente</string>

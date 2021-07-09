@@ -9,7 +9,7 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,UnusedResources" tools:locale="en">
     <!-- Text for an action button on the main screen. -->
     <string name="enter_data">Fill Blank Form</string>
     <!-- Text for an action button on the main screen. -->
@@ -845,8 +845,6 @@
      # ADMIN SETTINGS
      ##############################################
      -->
-    <string name="admin_preferences">Admin Settings</string>
-    <string name="admin_access_settings">Tap for admin access to settings</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="admin_password">Admin Password</string>
     <string name="admin_password_changed">Admin password successfully changed</string>

@@ -672,8 +672,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Pengaturan Admin</string>
-  <string name="admin_access_settings">Sentuh untuk mengakses pengaturan umum oleh admin</string>
   <string name="enter_new_password">Masukan Kata Sandi Baru</string>
   <string name="admin_password">Kata Sandi Admin</string>
   <string name="admin_password_changed">Kata sandi admin berhasil diubah</string>

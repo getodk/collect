@@ -557,8 +557,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ایڈمن سیٹنگز</string>
-  <string name="admin_access_settings">سیٹنگز تک ایڈمن کی رسائی کے لئے دبائیں</string>
   <string name="enter_new_password">نیا پاس ورڈ درج کریں</string>
   <string name="admin_password">ایڈمن پاس ورڈ </string>
   <string name="admin_password_changed">ایڈمن کا پاس ورڈ کامیابی سے بدلا گیا</string>

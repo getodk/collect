@@ -31,11 +31,8 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
-import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.Action;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -43,7 +40,6 @@ import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.ToastUtils;
 
 import javax.inject.Inject;
 
@@ -56,7 +52,7 @@ import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity implements AdminPasswordDialogFragment.AdminPasswordDialogCallback {
+public class MainMenuActivity extends CollectAbstractActivity {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -270,17 +266,5 @@ public class MainMenuActivity extends CollectAbstractActivity implements AdminPa
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    }
-
-    @Override
-    public void onCorrectAdminPassword(Action action) {
-        if (action == Action.ADMIN_SETTINGS) {
-            startActivity(new Intent(this, AdminPreferencesActivity.class));
-        }
-    }
-
-    @Override
-    public void onIncorrectAdminPassword() {
-        ToastUtils.showShortToast(R.string.admin_password_incorrect);
     }
 }

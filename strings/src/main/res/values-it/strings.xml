@@ -594,8 +594,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Impostazioni Amministratore</string>
-  <string name="admin_access_settings">Regola parametri accesso dell\'Amministratore</string>
   <string name="enter_new_password">Inserire nuova password</string>
   <string name="admin_password">Password di amministratore</string>
   <string name="admin_password_changed">Password dell\'Amministratore cambiata con successo</string>

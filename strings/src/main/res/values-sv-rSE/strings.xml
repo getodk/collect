@@ -560,8 +560,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administratörsinställningar</string>
-  <string name="admin_access_settings">Knacka för administratörstillgång till inställningarna</string>
   <string name="enter_new_password">Ange nytt lösenord</string>
   <string name="admin_password">Administratörslösenord</string>
   <string name="admin_password_changed">Administratörslösenordet har ändrats</string>

@@ -464,8 +464,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Parametrat e Administratorit</string>
-  <string name="admin_access_settings">Akseso parametrat si administrator</string>
   <string name="enter_new_password">Vendos fjalëkalim të ri</string>
   <string name="admin_password">Fjalëkalimi i Administratorit</string>
   <string name="admin_password_changed">Fjalëkalimi i Administratorit u ndryshua me sukses</string>

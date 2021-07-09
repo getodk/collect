@@ -272,8 +272,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administratoriaus nuostatos</string>
-  <string name="admin_access_settings">Spustelėkite norėdami keisti administratoriaus nuostatas</string>
   <string name="enter_new_password">Įveskite naują slaptažodį</string>
   <string name="admin_password_changed">Administratoriaus slaptažodis sėkmingai pakeistas</string>
   <string name="admin_password_disabled">Administratoriaus slaptažodis išjungtas</string>

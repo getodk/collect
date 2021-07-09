@@ -23,18 +23,6 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         return GeneralSettingsPage().assertOnPage()
     }
 
-    fun clickAdminSettings(): AdminSettingsPage {
-        clickOnString(R.string.admin_preferences)
-        return AdminSettingsPage().assertOnPage()
-    }
-
-    fun clickAdminSettingsWithPassword(password: String?): AdminSettingsPage {
-        clickOnString(R.string.admin_preferences)
-        inputText(password)
-        clickOKOnDialog()
-        return AdminSettingsPage().assertOnPage()
-    }
-
     fun clickAbout(): AboutPage {
         clickOnString(R.string.about_preferences)
         return AboutPage().assertOnPage()

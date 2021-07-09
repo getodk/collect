@@ -292,8 +292,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Izinhlelo zokusingathwa komsebenzi</string>
-  <string name="admin_access_settings">Thinta ukufinyelela ezinhlelweni zokusingathwa komsebenzi</string>
   <string name="enter_new_password">Faka inombolomfihlo entsha</string>
   <string name="admin_password_changed">Inombolomfihlo yokusingathwa komsebenzi ishintshwe ngempumelelo</string>
   <string name="admin_password_disabled">Inombolomfihlo yokusingathwa komsebenzi ivinjiwe</string>

@@ -457,8 +457,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administrationsindstillinger</string>
-  <string name="admin_access_settings">Tryk for adgang til administrationsindstillinger</string>
   <string name="enter_new_password">Angiv ny adgangskode</string>
   <string name="admin_password">Administrator-adgangskode</string>
   <string name="admin_password_changed">Administrator-adgangskode ændret</string>

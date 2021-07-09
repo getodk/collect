@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admineinstellungen</string>
-  <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="admin_password">Admin-Passwort</string>
   <string name="admin_password_changed">Admin-Passwort erfolgreich geändert</string>

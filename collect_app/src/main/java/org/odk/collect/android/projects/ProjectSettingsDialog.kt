@@ -17,11 +17,8 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
 import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.projects.Project
@@ -29,9 +26,6 @@ import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class ProjectSettingsDialog : DialogFragment() {
-
-    @Inject
-    lateinit var adminPasswordProvider: AdminPasswordProvider
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
@@ -72,25 +66,6 @@ class ProjectSettingsDialog : DialogFragment() {
 
         binding.generalSettingsButton.setOnClickListener {
             startActivity(Intent(requireContext(), GeneralPreferencesActivity::class.java))
-            dismiss()
-        }
-
-        binding.adminSettingsButton.setOnClickListener {
-            if (adminPasswordProvider.isAdminPasswordSet) {
-                val args = Bundle().also {
-                    it.putSerializable(
-                        AdminPasswordDialogFragment.ARG_ACTION,
-                        AdminPasswordDialogFragment.Action.ADMIN_SETTINGS
-                    )
-                }
-                DialogUtils.showIfNotShowing(
-                    AdminPasswordDialogFragment::class.java,
-                    args,
-                    requireActivity().supportFragmentManager
-                )
-            } else {
-                startActivity(Intent(requireContext(), AdminPreferencesActivity::class.java))
-            }
             dismiss()
         }
 

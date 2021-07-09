@@ -548,8 +548,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ការកំណត់របស់ Admin</string>
-  <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
   <string name="admin_password_changed">ពាក្យសម្ងាត់របស់ Admin បានផ្លាស់ប្តូរដោយជោគជ័យ</string>

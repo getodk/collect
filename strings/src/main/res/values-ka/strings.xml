@@ -331,8 +331,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ადმინისტრატორის პაროლი</string>
-  <string name="admin_access_settings">დააჭირეთ პარამეტრებისადმი ადმინისტრატორის სახელით შესვლისთვის</string>
   <string name="enter_new_password">შეიყვანეთ ახალი პაროლი</string>
   <string name="admin_password">ადმინისტრატორის პაროლი</string>
   <string name="admin_password_changed">ადმინისტრატორის პაროლი წარმატებით შეიცვალა</string>

@@ -345,8 +345,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Setări administrator</string>
-  <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="admin_password">Parola administratorului</string>
   <string name="admin_password_changed">Parola de administrator a fost schimbată cu succes</string>

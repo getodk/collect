@@ -384,8 +384,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administraatori seaded</string>
-  <string name="admin_access_settings">Administraatori seadetele ligipääsuks puudutage</string>
   <string name="enter_new_password">Sisesta uus salasõna</string>
   <string name="admin_password">Administraatori salasõna</string>
   <string name="admin_password_changed">Administraatori salasõna muutmine õnnestus</string>

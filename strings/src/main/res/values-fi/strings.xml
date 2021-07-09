@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Pääkäyttäjän asetukset</string>
-  <string name="admin_access_settings">Napsauta saadaksesi pääkäyttäjäoikeudet asetuksiin</string>
   <string name="enter_new_password">Syötä uusi salasana</string>
   <string name="admin_password">Pääkäyttäjän salasana</string>
   <string name="admin_password_changed">Pääkäyttäjän salasana vaihdettu</string>

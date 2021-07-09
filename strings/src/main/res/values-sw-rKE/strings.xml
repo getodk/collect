@@ -314,8 +314,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Settings za admin</string>
-  <string name="admin_access_settings">bonyeza ili upenye kama admin</string>
   <string name="enter_new_password">Weka password mpya</string>
   <string name="admin_password_changed">Password ya msimamizi imebadilishwa vyema</string>
   <string name="admin_password_disabled">Password ya msimamizi imefungwa</string>

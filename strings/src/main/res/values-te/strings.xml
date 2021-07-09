@@ -637,8 +637,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">అడ్మిన్ సెట్టింగ్‌లు</string>
-  <string name="admin_access_settings">సెట్టింగ్‌లకు అడ్మిన్ యాక్సెస్ కోసం నొక్కండి</string>
   <string name="enter_new_password">క్రొత్త పాస్‌వర్డ్‌ను నమోదు చేయండి</string>
   <string name="admin_password">అడ్మిన్ పాస్‌వర్డ్‌</string>
   <string name="admin_password_changed">అడ్మిన్ పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది</string>
