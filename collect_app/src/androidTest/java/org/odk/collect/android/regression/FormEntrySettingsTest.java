@@ -11,7 +11,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.AdminSettingsPage;
+import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -40,7 +40,8 @@ public class FormEntrySettingsTest {
                 .pressBack(new GeneralSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickAccessControl()
                 .clickFormEntrySettings()
                 .clickMovingBackwards()
                 .assertText(R.string.moving_backwards_disabled_title)
@@ -48,7 +49,8 @@ public class FormEntrySettingsTest {
                 .assertText(R.string.no)
                 .clickOnString(R.string.yes)
                 .checkIfSaveFormOptionIsDisabled()
-                .pressBack(new AdminSettingsPage())
+                .pressBack(new AccessControlPage())
+                .pressBack(new GeneralSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()

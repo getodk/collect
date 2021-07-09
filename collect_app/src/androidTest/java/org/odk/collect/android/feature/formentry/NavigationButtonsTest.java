@@ -22,7 +22,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.AdminSettingsPage;
+import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
@@ -59,11 +59,13 @@ public class NavigationButtonsTest {
     public void whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickAccessControl()
                 .clickFormEntrySettings()
                 .clickMovingBackwards()
                 .clickOnString(R.string.yes)
-                .pressBack(new AdminSettingsPage())
+                .pressBack(new AccessControlPage())
+                .pressBack(new GeneralSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .copyForm("two-question.xml")

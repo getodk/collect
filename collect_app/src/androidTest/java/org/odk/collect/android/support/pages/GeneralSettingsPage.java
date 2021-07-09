@@ -25,13 +25,18 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
     }
 
     public ProjectDisplayPage clickProjectDisplay() {
-        clickOnString(R.string.project_display_title);
+        scrollToRecyclerViewItemAndClickText(R.string.project_display_title);
         return new ProjectDisplayPage().assertOnPage();
     }
 
     public ProjectManagementPage clickProjectManagement() {
-        clickOnString(R.string.project_management_section_title);
+        scrollToRecyclerViewItemAndClickText(R.string.project_management_section_title);
         return new ProjectManagementPage().assertOnPage();
+    }
+
+    public AccessControlPage clickAccessControl() {
+        scrollToRecyclerViewItemAndClickText(R.string.access_control_section_title);
+        return new AccessControlPage().assertOnPage();
     }
 
     public UserInterfacePage clickOnUserInterface() {

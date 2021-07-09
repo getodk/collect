@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
@@ -32,8 +31,7 @@ import static org.odk.collect.android.preferences.screens.GeneralPreferencesActi
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  *         option)
  */
-public class AdminPreferencesActivity extends CollectAbstractActivity implements
-        MovingBackwardsDialog.MovingBackwardsDialogListener {
+public class AdminPreferencesActivity extends CollectAbstractActivity {
     public static final String TAG = "AdminPreferencesFragment";
 
     @Override
@@ -54,11 +52,5 @@ public class AdminPreferencesActivity extends CollectAbstractActivity implements
                     .add(R.id.preferences_fragment_container, fragment, TAG)
                     .commit();
         }
-    }
-
-    @Override
-    public void preventOtherWaysOfEditingForm() {
-        AdminPreferencesFragment fragment = (AdminPreferencesFragment) getSupportFragmentManager().findFragmentByTag(TAG);
-        fragment.preventOtherWaysOfEditingForm();
     }
 }

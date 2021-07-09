@@ -21,6 +21,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBackwardsDialogListener
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.OnBackPressedListener
@@ -28,7 +29,11 @@ import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.utilities.ThemeUtils
 import javax.inject.Inject
 
-class GeneralPreferencesActivity : CollectAbstractActivity(), ResetSettingsResultDialogListener {
+class GeneralPreferencesActivity :
+    CollectAbstractActivity(),
+    ResetSettingsResultDialogListener,
+    MovingBackwardsDialogListener {
+
     private var onBackPressedListener: OnBackPressedListener? = null
 
     @Inject
@@ -67,6 +72,11 @@ class GeneralPreferencesActivity : CollectAbstractActivity(), ResetSettingsResul
 
     override fun onDialogClosed() {
         ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
+    }
+
+    override fun preventOtherWaysOfEditingForm() {
+        val fragment = supportFragmentManager.findFragmentByTag(TAG) as GeneralPreferencesFragment
+        fragment.preventOtherWaysOfEditingForm()
     }
 
     fun setOnBackPressedListener(onBackPressedListener: OnBackPressedListener?) {

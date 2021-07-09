@@ -11,7 +11,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.AdminSettingsPage;
+import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.GeneralSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ResetApplicationDialog;
@@ -79,10 +79,12 @@ public class ResetApplicationTest {
         //TestCase2
         new MainMenuPage()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickAccessControl()
                 .openUserSettings()
                 .uncheckServerOption()
-                .pressBack(new AdminSettingsPage())
+                .pressBack(new AccessControlPage())
+                .pressBack(new GeneralSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
