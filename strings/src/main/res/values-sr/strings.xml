@@ -621,7 +621,6 @@
   <string name="reset_blank_forms_result">Prazni formulari :: %s</string>
   <string name="reset_layers_result">Slojevi mape :: %s</string>
   <string name="reset_cache_result">Keš za ulčitavanje formulara :: %s</string>
-  <string name="user_access_control">Kontrola korisničkog pristupa</string>
   <string name="main_menu_settings">Podešavanja glavnog menija</string>
   <string name="main_menu_settings_summary">Dodirni za upravljanje stavkama glavnog menija</string>
   <string name="user_settings">Korisnička podešavanja</string>

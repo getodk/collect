@@ -706,7 +706,6 @@
   <string name="reset_blank_forms_result">Formulaires vierges :: %s</string>
   <string name="reset_layers_result">Couches cartographiques :: %s</string>
   <string name="reset_cache_result">Cache pour chargement de formulaire :: %s</string>
-  <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
   <string name="main_menu_settings">Paramètres du Menu principal</string>
   <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>
   <string name="user_settings">Paramètres utilisateurs</string>

@@ -588,7 +588,6 @@
   <string name="reset_blank_forms_result">خالی فارم  :: %s</string>
   <string name="reset_layers_result">میپ لیؑیرز:: %s</string>
   <string name="reset_cache_result">فارم لوڈ کیشے::%s</string>
-  <string name="user_access_control">یوزر ایکسیس کنٹرول </string>
   <string name="main_menu_settings">مین مینو سیٹنگز </string>
   <string name="main_menu_settings_summary">مین مینوآئٹمز کو مینیج کرنے کیلئے ٹیپ کریں</string>
   <string name="user_settings">یوزر سیٹنگز </string>

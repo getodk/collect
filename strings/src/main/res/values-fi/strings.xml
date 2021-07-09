@@ -706,7 +706,6 @@
   <string name="reset_blank_forms_result">Tyhjät lomakkeet :: %s</string>
   <string name="reset_layers_result">Karttatasot :: %s</string>
   <string name="reset_cache_result">Lomakkeiden latausvälimuisti :: %s</string>
-  <string name="user_access_control">Käyttäjän pääsynvalvonta</string>
   <string name="main_menu_settings">Päävalikkoasetukset</string>
   <string name="main_menu_settings_summary">Napsauta asettaaksesi päävalikon kohtia</string>
   <string name="user_settings">Käyttäjäasetukset</string>

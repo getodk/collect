@@ -703,7 +703,6 @@
   <string name="reset_blank_forms_result">空のフォーム :: %s</string>
   <string name="reset_layers_result">地図レイヤー :: %s</string>
   <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
-  <string name="user_access_control">ユーザーアクセスコントロール</string>
   <string name="main_menu_settings">メインメニュー設定</string>
   <string name="main_menu_settings_summary">タップしてメインメニュー項目を管理</string>
   <string name="user_settings">ユーザー設定</string>

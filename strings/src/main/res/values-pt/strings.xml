@@ -698,7 +698,6 @@ Escolher Imagem</string>
   <string name="reset_blank_forms_result">Formulários em branco :: %s</string>
   <string name="reset_layers_result">Layers do mapa :: %s</string>
   <string name="reset_cache_result">Carga do cache do formulário :: %s</string>
-  <string name="user_access_control">Controle de Acesso de Usuários</string>
   <string name="main_menu_settings">Configurações de Menu Principal</string>
   <string name="main_menu_settings_summary">Toque para gerenciar itens de menu</string>
   <string name="user_settings">Configurações de Usuário</string>

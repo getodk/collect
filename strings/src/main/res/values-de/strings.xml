@@ -706,7 +706,6 @@
   <string name="reset_blank_forms_result">Leere Formulare :: %s</string>
   <string name="reset_layers_result">Kartenebenen :: %s</string>
   <string name="reset_cache_result">Formular-Cache :: %s</string>
-  <string name="user_access_control">Benutzerzugriffskontrolle</string>
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
   <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
   <string name="user_settings">Benutzer-Einstellungen</string>

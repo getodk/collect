@@ -706,7 +706,6 @@
   <string name="reset_blank_forms_result">Formularios en blanco :: %s</string>
   <string name="reset_layers_result">Capas de mapa :: %s</string>
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
-  <string name="user_access_control">Control de acceso a usuario</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
   <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
   <string name="user_settings">Ajustes de usuario</string>

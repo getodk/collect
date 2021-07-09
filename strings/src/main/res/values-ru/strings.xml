@@ -575,7 +575,6 @@
   <string name="reset_saved_forms_result">Сохранённые опросы: %s</string>
   <string name="reset_blank_forms_result">Бланки опросников: %s</string>
   <string name="reset_layers_result">Слои карт: %s</string>
-  <string name="user_access_control">Контроль доступа пользователя</string>
   <string name="main_menu_settings">Кнопки главного меню…</string>
   <string name="main_menu_settings_summary"> Доступ к кнопкам в главном меню</string>
   <string name="user_settings">Видимость настроек</string>

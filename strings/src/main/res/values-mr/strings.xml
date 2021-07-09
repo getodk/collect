@@ -455,7 +455,6 @@
   <string name="reset_blank_forms_result">रिक्त फॉर्म :: %s</string>
   <string name="reset_layers_result">नकाशा स्तर :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कॅशे :: %s</string>
-  <string name="user_access_control">वापरकर्ता प्रवेश नियंत्रण</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्ज</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
   <string name="user_settings">वापरकर्ता सेटिंग्ज</string>

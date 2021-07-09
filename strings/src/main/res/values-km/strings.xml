@@ -579,7 +579,6 @@
   <string name="reset_blank_forms_result">សំណុំបែបបទទទេ :: %s</string>
   <string name="reset_layers_result">ស្រទាប់ផែនទី :: %s</string>
   <string name="reset_cache_result">ទម្រង់ផ្ទុកខាឆឹះ :: %s</string>
-  <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
   <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
   <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
   <string name="user_settings">ការកំណត់របស់អ្នកប្រើប្រាស់</string>

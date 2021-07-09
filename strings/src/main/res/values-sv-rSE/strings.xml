@@ -591,7 +591,6 @@
   <string name="reset_blank_forms_result">Tomma formulär :: %s</string>
   <string name="reset_layers_result">Kartlager :: %s</string>
   <string name="reset_cache_result">Formulär cache :: %s</string>
-  <string name="user_access_control">Åtkomstkontroll för användare</string>
   <string name="main_menu_settings">Inställningar för huvudmenyn</string>
   <string name="main_menu_settings_summary">Klicka för att hantera val i huvudmenyn</string>
   <string name="user_settings">Användarinställningar</string>

@@ -668,7 +668,6 @@
   <string name="reset_blank_forms_result">ఖాళీ ఫారంలు ::%s</string>
   <string name="reset_layers_result">మ్యాప్ లేయర్స్ ::%s</string>
   <string name="reset_cache_result">ఫారం లోడ్ cache ::%s</string>
-  <string name="user_access_control">వినియోగదారు ప్రాప్యత నియంత్రణ.</string>
   <string name="main_menu_settings">ప్రధాన మెనూ సెట్టింగులు</string>
   <string name="main_menu_settings_summary">ప్రధాన మెను అంశాలను నిర్వహించడానికి నొక్కండి</string>
   <string name="user_settings">వినియోగదారుడి సెట్టింగులు</string>

@@ -681,11 +681,15 @@
     <string name="experimental">Experimental</string>
 
     <string name="protected_settings">Protected</string>
+    <string name="set_admin_password">Set admin password</string>
     <!-- Title of a settings section -->
     <string name="project_management_section_title">Project management</string>
     <!-- Subtext of a settings section -->
     <string name="project_management_section_subtext">Reconfigure, reset, delete</string>
-    <string name="set_admin_password">Set admin password</string>
+    <!-- Title of a settings section -->
+    <string name="access_control_section_title">Access control</string>
+    <!-- Subtext of a settings section -->
+    <string name="access_control_section_subtext">Limit user interface</string>
 
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
@@ -876,7 +880,6 @@
     <string name="reset_layers_result">Map layers :: %s</string>
     <string name="reset_cache_result">Form load cache :: %s</string>
 
-    <string name="user_access_control">User Access Control</string>
     <string name="main_menu_settings">Main Menu Settings</string>
     <string name="main_menu_settings_summary">Show or hide buttons</string>
     <string name="user_settings">User Settings</string>

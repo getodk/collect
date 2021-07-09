@@ -52,8 +52,9 @@ class GeneralPreferencesFragment :
         findPreference<Preference>("form_management")!!.onPreferenceClickListener = this
         findPreference<Preference>("user_and_device_identity")!!.onPreferenceClickListener = this
         findPreference<Preference>("experimental")!!.onPreferenceClickListener = this
-        findPreference<Preference>("project_management")!!.onPreferenceClickListener = this
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
+        findPreference<Preference>("project_management")!!.onPreferenceClickListener = this
+        findPreference<Preference>("access_control")!!.onPreferenceClickListener = this
 
         if (!isInAdminMode) {
             setPreferencesVisibility()
@@ -96,6 +97,7 @@ class GeneralPreferencesFragment :
             "user_and_device_identity" -> IdentityPreferencesFragment()
             "experimental" -> ExperimentalPreferencesFragment()
             "project_management" -> ProjectManagementPreferencesFragment()
+            "access_control" -> AccessControlPreferencesFragment()
             else -> null
         }
     }

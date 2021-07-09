@@ -625,7 +625,6 @@
   <string name="reset_blank_forms_result">Form vuoti :: %s</string>
   <string name="reset_layers_result">Livelli della mappa :: %s</string>
   <string name="reset_cache_result">Cache di caricamento dei moduli :: %s</string>
-  <string name="user_access_control">Controllo Accesso Utente</string>
   <string name="main_menu_settings">Parametri Menu Principale</string>
   <string name="main_menu_settings_summary">Tocca per gestire elementi menu principale</string>
   <string name="user_settings">Impostazioni utente</string>

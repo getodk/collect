@@ -69,5 +69,11 @@ limitations under the License.
             android:title="@string/project_management_section_title"
             android:summary="@string/project_management_section_subtext"/>
 
+        <Preference
+            android:icon="@drawable/ic_outline_lock_24"
+            android:key="access_control"
+            android:title="@string/access_control_section_title"
+            android:summary="@string/access_control_section_subtext"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

@@ -609,7 +609,6 @@
   <string name="reset_blank_forms_result">Fomu tupu :: %s</string>
   <string name="reset_layers_result">Safu za ramani :: %s</string>
   <string name="reset_cache_result">Fomu ya takwimu za muda mfupi :: %s</string>
-  <string name="user_access_control">Dhibiti ya ufikivu wa mtumiaji</string>
   <string name="main_menu_settings">Mipangilio ya menyu kuu</string>
   <string name="main_menu_settings_summary">Bofya ili kudhibiti vitu muhimu vya menyu kuu</string>
   <string name="user_settings">Mipangilio ya mtumiaji</string>

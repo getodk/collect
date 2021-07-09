@@ -621,7 +621,6 @@
   <string name="reset_blank_forms_result">Незаповнені анкети :: %s</string>
   <string name="reset_layers_result">Шари карт :: %s</string>
   <string name="reset_cache_result">Кеш завантаження анкет :: %s</string>
-  <string name="user_access_control">Контроль Доступу Користувачів</string>
   <string name="main_menu_settings">Налаштування Головного Меню</string>
   <string name="main_menu_settings_summary">Натисніть для управління пунктами головного меню</string>
   <string name="user_settings">Користувацькі Налаштування</string>
