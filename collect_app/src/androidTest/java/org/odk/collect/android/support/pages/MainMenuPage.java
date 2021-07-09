@@ -26,7 +26,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     @Override
     public MainMenuPage assertOnPage() {
         return waitFor(() -> {
-            onView(withText(containsString(getTranslatedString(R.string.app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
+            onView(withText(containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });
     }
