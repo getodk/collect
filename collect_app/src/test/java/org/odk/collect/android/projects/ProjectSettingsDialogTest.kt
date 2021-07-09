@@ -22,7 +22,7 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -111,7 +111,7 @@ class ProjectSettingsDialogTest {
             assertThat(it.dialog, `is`(nullValue()))
             assertThat(
                 Intents.getIntents()[0],
-                hasComponent(GeneralPreferencesActivity::class.java.name)
+                hasComponent(ProjectPreferencesActivity::class.java.name)
             )
             Intents.release()
         }

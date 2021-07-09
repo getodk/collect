@@ -13,7 +13,7 @@ import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 //Issue NODK-243
@@ -37,7 +37,7 @@ public class FormEntrySettingsTest {
                 .openFormManagement()
                 .openConstraintProcessing()
                 .clickOnString(R.string.constraint_behavior_on_finalize)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
@@ -50,7 +50,7 @@ public class FormEntrySettingsTest {
                 .clickOnString(R.string.yes)
                 .checkIfSaveFormOptionIsDisabled()
                 .pressBack(new AccessControlPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
@@ -59,7 +59,7 @@ public class FormEntrySettingsTest {
                 .checkIfConstraintProcessingIsDisabled()
                 .assertTextDoesNotExist(R.string.constraint_behavior_on_finalize)
                 .assertText(R.string.constraint_behavior_on_swipe)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .checkIfElementIsGone(R.id.review_data)
                 .startBlankForm("All widgets")

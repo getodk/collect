@@ -31,7 +31,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.ProjectPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)

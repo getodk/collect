@@ -7,8 +7,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
-import org.odk.collect.android.support.pages.GeneralSettingsPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 
 class SwitchProjectTest {
 
@@ -89,7 +89,7 @@ class SwitchProjectTest {
             .clickOnURL()
             .assertText("https://demo.getodk.org")
             .clickOKOnDialog()
-            .pressBack(GeneralSettingsPage())
+            .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
 
             // Check forms

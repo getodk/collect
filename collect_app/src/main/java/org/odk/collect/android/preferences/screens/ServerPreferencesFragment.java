@@ -60,7 +60,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SELECTED_
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment implements OnBackPressedListener {
+public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
@@ -86,7 +86,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        ((GeneralPreferencesActivity) context).setOnBackPressedListener(this);
+        ((ProjectPreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     @Override
@@ -312,7 +312,7 @@ public class ServerPreferencesFragment extends BaseGeneralPreferencesFragment im
     }
 
     private void continueOnBackPressed() {
-        ((GeneralPreferencesActivity) getActivity()).setOnBackPressedListener(null);
+        ((ProjectPreferencesActivity) getActivity()).setOnBackPressedListener(null);
         getActivity().onBackPressed();
     }
 

@@ -29,8 +29,8 @@ import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
 import javax.inject.Inject
 
-class GeneralPreferencesFragment :
-    BaseGeneralPreferencesFragment(),
+class ProjectPreferencesFragment :
+    BaseProjectPreferencesFragment(),
     Preference.OnPreferenceClickListener {
 
     @Inject
@@ -43,7 +43,7 @@ class GeneralPreferencesFragment :
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        setPreferencesFromResource(R.xml.general_preferences, rootKey)
+        setPreferencesFromResource(R.xml.project_preferences, rootKey)
 
         findPreference<Preference>("protocol")!!.onPreferenceClickListener = this
         findPreference<Preference>("project_display")!!.onPreferenceClickListener = this

@@ -60,13 +60,13 @@ import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog;
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.screens.BaseAdminPreferencesFragment;
-import org.odk.collect.android.preferences.screens.BaseGeneralPreferencesFragment;
+import org.odk.collect.android.preferences.screens.BaseProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.BasePreferencesFragment;
 import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragment;
 import org.odk.collect.android.preferences.screens.FormManagementPreferencesFragment;
 import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragment;
-import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
-import org.odk.collect.android.preferences.screens.GeneralPreferencesFragment;
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
+import org.odk.collect.android.preferences.screens.ProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectDisplayPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectManagementPreferencesFragment;
@@ -214,7 +214,7 @@ public interface AppDependencyComponent {
 
     void inject(QRCodeScannerFragment qrCodeScannerFragment);
 
-    void inject(GeneralPreferencesActivity generalPreferencesActivity);
+    void inject(ProjectPreferencesActivity projectPreferencesActivity);
 
     void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
 
@@ -236,7 +236,7 @@ public interface AppDependencyComponent {
 
     void inject(InstanceUploaderActivity instanceUploaderActivity);
 
-    void inject(GeneralPreferencesFragment generalPreferencesFragment);
+    void inject(ProjectPreferencesFragment projectPreferencesFragment);
 
     void inject(DeleteSavedFormActivity deleteSavedFormActivity);
 
@@ -266,7 +266,7 @@ public interface AppDependencyComponent {
 
     void inject(ThemeUtils themeUtils);
 
-    void inject(BaseGeneralPreferencesFragment baseGeneralPreferencesFragment);
+    void inject(BaseProjectPreferencesFragment baseProjectPreferencesFragment);
 
     void inject(BaseAdminPreferencesFragment baseAdminPreferencesFragment);
 

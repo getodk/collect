@@ -17,7 +17,7 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
@@ -65,7 +65,7 @@ class ProjectSettingsDialog : DialogFragment() {
         }
 
         binding.generalSettingsButton.setOnClickListener {
-            startActivity(Intent(requireContext(), GeneralPreferencesActivity::class.java))
+            startActivity(Intent(requireContext(), ProjectPreferencesActivity::class.java))
             dismiss()
         }
 

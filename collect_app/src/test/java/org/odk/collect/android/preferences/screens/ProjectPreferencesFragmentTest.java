@@ -16,10 +16,10 @@ import org.odk.collect.shared.Settings;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.ProjectPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @RunWith(AndroidJUnit4.class)
-public class GeneralPreferencesFragmentTest {
+public class ProjectPreferencesFragmentTest {
     private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
 
     @Before
@@ -30,7 +30,7 @@ public class GeneralPreferencesFragmentTest {
 
     @Test
     public void whenServerPreferenceEnabled_shouldBeVisibleWhenOpenedFromGeneralPreferences() {
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(GeneralKeys.KEY_PROTOCOL).isVisible(), equalTo(true)));
     }
 
@@ -39,7 +39,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(GeneralKeys.KEY_PROTOCOL).isVisible(), equalTo(true)));
     }
 
@@ -47,7 +47,7 @@ public class GeneralPreferencesFragmentTest {
     public void whenServerPreferenceDisabled_shouldBeHiddenWhenOpenedFromGeneralPreferences() {
         adminSettings.save(AdminKeys.KEY_CHANGE_SERVER, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(GeneralKeys.KEY_PROTOCOL), nullValue()));
     }
 
@@ -58,7 +58,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(GeneralKeys.KEY_PROTOCOL).isVisible(), equalTo(true)));
     }
 
@@ -70,7 +70,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_NAVIGATION, false);
         adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_interface"),  nullValue()));
     }
 
@@ -82,7 +82,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_NAVIGATION, true);
         adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_interface").isVisible(), equalTo(true)));
     }
 
@@ -97,13 +97,13 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_interface").isVisible(), equalTo(true)));
     }
 
     @Test
     public void whenMapsPreferenceEnabled_shouldBeVisibleWhenOpenedFromGeneralPreferences() {
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(AdminKeys.KEY_MAPS).isVisible(), equalTo(true)));
     }
 
@@ -112,7 +112,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(AdminKeys.KEY_MAPS).isVisible(), equalTo(true)));
     }
 
@@ -120,7 +120,7 @@ public class GeneralPreferencesFragmentTest {
     public void whenMapsPreferenceDisabled_shouldBeHiddenWhenOpenedFromGeneralPreferences() {
         adminSettings.save(AdminKeys.KEY_MAPS, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(AdminKeys.KEY_MAPS), nullValue()));
     }
 
@@ -131,7 +131,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference(AdminKeys.KEY_MAPS).isVisible(), equalTo(true)));
     }
 
@@ -150,7 +150,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
         adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management"),  nullValue()));
     }
 
@@ -168,7 +168,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false);
         adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management").isVisible(), equalTo(true)));
     }
 
@@ -189,7 +189,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("form_management").isVisible(), equalTo(true)));
     }
 
@@ -198,7 +198,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
         adminSettings.save(AdminKeys.KEY_ANALYTICS, false);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_and_device_identity"),  nullValue()));
     }
 
@@ -207,7 +207,7 @@ public class GeneralPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false);
         adminSettings.save(AdminKeys.KEY_ANALYTICS, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_and_device_identity").isVisible(), equalTo(true)));
     }
 
@@ -219,7 +219,7 @@ public class GeneralPreferencesFragmentTest {
         Bundle args = new Bundle();
         args.putBoolean(INTENT_KEY_ADMIN_MODE, true);
 
-        FragmentScenario<GeneralPreferencesFragment> scenario = FragmentScenario.launch(GeneralPreferencesFragment.class, args);
+        FragmentScenario<ProjectPreferencesFragment> scenario = FragmentScenario.launch(ProjectPreferencesFragment.class, args);
         scenario.onFragment(fragment -> assertThat(fragment.findPreference("user_and_device_identity").isVisible(), equalTo(true)));
     }
 }

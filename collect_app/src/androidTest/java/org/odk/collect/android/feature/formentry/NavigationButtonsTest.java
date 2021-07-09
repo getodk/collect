@@ -23,7 +23,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.AccessControlPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 public class NavigationButtonsTest {
@@ -65,7 +65,7 @@ public class NavigationButtonsTest {
                 .clickMovingBackwards()
                 .clickOnString(R.string.yes)
                 .pressBack(new AccessControlPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .copyForm("two-question.xml")
@@ -91,7 +91,7 @@ public class NavigationButtonsTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickSwipes()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .copyForm("two-question.xml")
 

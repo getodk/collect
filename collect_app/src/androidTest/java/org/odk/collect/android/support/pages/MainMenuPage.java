@@ -116,7 +116,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnURL()
                 .inputText(url)
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 
@@ -126,7 +126,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.manual)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 
@@ -136,7 +136,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 
@@ -146,7 +146,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 
@@ -156,7 +156,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
                 .clickOnString(R.string.wifi_cellular_autosend)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 
@@ -172,7 +172,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickOnServerType()
                 .clickOnString(R.string.server_platform_google_sheets)
                 .clickOnString(R.string.selected_google_account_text)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
 

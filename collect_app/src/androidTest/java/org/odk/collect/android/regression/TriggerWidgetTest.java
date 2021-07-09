@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 //Issue NODK-415
@@ -37,7 +37,7 @@ public class TriggerWidgetTest {
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("Guidance Form Sample")
                 .assertText("Guidance text")
@@ -54,7 +54,7 @@ public class TriggerWidgetTest {
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("Guidance Form Sample")
                 .checkIsIdDisplayed(R.id.help_icon)

@@ -105,9 +105,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public GeneralSettingsPage clickGeneralSettings() {
+    public ProjectSettingsPage clickGeneralSettings() {
         onView(withText(getTranslatedString(R.string.project_settings))).perform(click());
-        return new GeneralSettingsPage().assertOnPage();
+        return new ProjectSettingsPage().assertOnPage();
     }
 
     public FormEntryPage checkAreNavigationButtonsDisplayed() {

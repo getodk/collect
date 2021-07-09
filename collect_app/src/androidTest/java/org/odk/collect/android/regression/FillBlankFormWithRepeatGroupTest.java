@@ -13,7 +13,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 //Issue NODK-247
@@ -54,7 +54,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new FormEntryPage("TestRepeat"))
                 .clickForwardButton()
                 .clickOnDoNotAddGroup()
@@ -186,7 +186,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankFormWithRepeatGroup("RepeatGroupAndGroup", "G1")
                 .clickOnDoNotAdd(new FormEntryPage("RepeatGroupAndGroup"))

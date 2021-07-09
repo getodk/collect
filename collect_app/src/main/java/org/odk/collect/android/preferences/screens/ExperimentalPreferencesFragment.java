@@ -12,7 +12,7 @@ import org.odk.collect.android.preferences.keys.GeneralKeys;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
-public class ExperimentalPreferencesFragment extends BaseGeneralPreferencesFragment {
+public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragment {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

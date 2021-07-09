@@ -17,7 +17,7 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity;
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -123,7 +123,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             if (audioRecorder.isRecording()) {
                 DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
-                Intent pref = new Intent(activity, GeneralPreferencesActivity.class);
+                Intent pref = new Intent(activity, ProjectPreferencesActivity.class);
                 activity.startActivityForResult(pref, ApplicationConstants.RequestCodes.CHANGE_SETTINGS);
             }
 

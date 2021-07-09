@@ -29,7 +29,7 @@ import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.utilities.ThemeUtils
 import javax.inject.Inject
 
-class GeneralPreferencesActivity :
+class ProjectPreferencesActivity :
     CollectAbstractActivity(),
     ResetSettingsResultDialogListener,
     MovingBackwardsDialogListener {
@@ -47,7 +47,7 @@ class GeneralPreferencesActivity :
         setTitle(R.string.project_settings)
 
         if (savedInstanceState == null) {
-            val fragment: Fragment = GeneralPreferencesFragment()
+            val fragment: Fragment = ProjectPreferencesFragment()
             fragment.arguments = intent.extras
             supportFragmentManager
                 .beginTransaction()
@@ -75,7 +75,7 @@ class GeneralPreferencesActivity :
     }
 
     override fun preventOtherWaysOfEditingForm() {
-        val fragment = supportFragmentManager.findFragmentByTag(TAG) as GeneralPreferencesFragment
+        val fragment = supportFragmentManager.findFragmentByTag(TAG) as ProjectPreferencesFragment
         fragment.preventOtherWaysOfEditingForm()
     }
 

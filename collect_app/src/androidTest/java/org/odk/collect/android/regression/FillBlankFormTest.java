@@ -23,7 +23,7 @@ import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class FillBlankFormTest {
                 .clickOnUserInterface()
                 .clickNavigation()
                 .clickUseSwipesAndButtons()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new FormEntryPage("All widgets"))
                 .checkAreNavigationButtonsDisplayed();
     }

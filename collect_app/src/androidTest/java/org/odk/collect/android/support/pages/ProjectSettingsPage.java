@@ -16,10 +16,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
-public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
+public class ProjectSettingsPage extends Page<ProjectSettingsPage> {
 
     @Override
-    public GeneralSettingsPage assertOnPage() {
+    public ProjectSettingsPage assertOnPage() {
         assertText(R.string.project_settings);
         return this;
     }
@@ -44,17 +44,17 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return new UserInterfacePage().assertOnPage();
     }
 
-    public GeneralSettingsPage openFormManagement() {
+    public ProjectSettingsPage openFormManagement() {
         clickOnString(R.string.form_management_preferences);
         return this;
     }
 
-    public GeneralSettingsPage openConstraintProcessing() {
+    public ProjectSettingsPage openConstraintProcessing() {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.constraint_behavior_title));
         return this;
     }
 
-    public GeneralSettingsPage openShowGuidanceForQuestions() {
+    public ProjectSettingsPage openShowGuidanceForQuestions() {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.guidance_hint_title));
         return this;
     }
@@ -75,53 +75,53 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return new UserAndDeviceIdentitySettingsPage().assertOnPage();
     }
 
-    public GeneralSettingsPage checkIfServerOptionIsDisplayed() {
+    public ProjectSettingsPage checkIfServerOptionIsDisplayed() {
         onView(withText(getTranslatedString(R.string.server_settings_title))).check(matches(isDisplayed()));
         return this;
     }
 
-    public GeneralSettingsPage checkIfUserInterfaceOptionIsDisplayed() {
+    public ProjectSettingsPage checkIfUserInterfaceOptionIsDisplayed() {
         onView(withText(getTranslatedString(R.string.client))).check(matches(isDisplayed()));
         return this;
     }
 
-    public GeneralSettingsPage checkIfMapsOptionIsDisplayed() {
+    public ProjectSettingsPage checkIfMapsOptionIsDisplayed() {
         onView(withText(getTranslatedString(R.string.maps))).check(matches(isDisplayed()));
         return this;
     }
 
-    public GeneralSettingsPage checkIfFormManagementOptionIsDisplayed() {
+    public ProjectSettingsPage checkIfFormManagementOptionIsDisplayed() {
         onView(withText(getTranslatedString(R.string.form_management_preferences))).check(matches(isDisplayed()));
         return this;
     }
 
-    public GeneralSettingsPage checkIfUserAndDeviceIdentityIsDisplayed() {
+    public ProjectSettingsPage checkIfUserAndDeviceIdentityIsDisplayed() {
         onView(withText(getTranslatedString(R.string.user_and_device_identity_title))).check(matches(isDisplayed()));
         return this;
     }
 
-    public GeneralSettingsPage scrollToConstraintProcessing() {
+    public ProjectSettingsPage scrollToConstraintProcessing() {
         onView(withId(R.id.recycler_view)).perform(RecyclerViewActions
                 .actionOnItem(hasDescendant(withText(getTranslatedString(R.string.constraint_behavior_title))), scrollTo()));
         return this;
     }
 
-    public GeneralSettingsPage checkIfConstraintProcessingIsDisabled() {
+    public ProjectSettingsPage checkIfConstraintProcessingIsDisabled() {
         onView(withText(getTranslatedString(R.string.constraint_behavior_title))).check(matches(not(isEnabled())));
         return this;
     }
 
-    public GeneralSettingsPage clickOnAutoSend() {
+    public ProjectSettingsPage clickOnAutoSend() {
         clickOnString(R.string.autosend_selector_title);
         return this;
     }
 
-    public GeneralSettingsPage clickOnDefaultToFinalized() {
+    public ProjectSettingsPage clickOnDefaultToFinalized() {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.default_completed));
         return this;
     }
 
-    public GeneralSettingsPage checkIfServerOptionIsNotDisplayed() {
+    public ProjectSettingsPage checkIfServerOptionIsNotDisplayed() {
         onView(withText("Server")).check(doesNotExist());
         return this;
     }
@@ -136,7 +136,7 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         return new ExperimentalPage().assertOnPage();
     }
 
-    public GeneralSettingsPage setAdminPassword(String password) {
+    public ProjectSettingsPage setAdminPassword(String password) {
         scrollToRecyclerViewItemAndClickText(R.string.set_admin_password);
         inputText(password);
         clickOKOnDialog();

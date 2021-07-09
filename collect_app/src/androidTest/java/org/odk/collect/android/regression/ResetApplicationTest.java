@@ -12,7 +12,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AccessControlPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ResetApplicationDialog;
 
@@ -84,7 +84,7 @@ public class ResetApplicationTest {
                 .openUserSettings()
                 .uncheckServerOption()
                 .pressBack(new AccessControlPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
@@ -125,7 +125,7 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText("español")
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
@@ -155,7 +155,7 @@ public class ResetApplicationTest {
                 .clickOnString(R.string.wifi_autosend)
                 .assertText(R.string.wifi_autosend)
                 .clickOnDefaultToFinalized()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
@@ -174,7 +174,7 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .openFormManagement()
                 .assertText(R.string.off)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()

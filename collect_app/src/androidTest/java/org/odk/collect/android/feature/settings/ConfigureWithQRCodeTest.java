@@ -27,7 +27,7 @@ import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.StubBarcodeViewDecoder;
 import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -144,7 +144,7 @@ public class ConfigureWithQRCodeTest {
                 .clickServerPassword()
                 .inputText("blah")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
