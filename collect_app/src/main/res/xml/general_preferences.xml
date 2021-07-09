@@ -58,5 +58,10 @@ limitations under the License.
         android:title="@string/protected_settings"
         app:iconSpaceReserved="false">
 
+        <Preference
+            android:icon="@drawable/ic_outline_vpn_key_24"
+            android:key="admin_password"
+            android:title="@string/set_admin_password" />
+
     </PreferenceCategory>
 </PreferenceScreen>

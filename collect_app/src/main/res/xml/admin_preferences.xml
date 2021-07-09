@@ -9,11 +9,6 @@
         app:iconSpaceReserved="false">
     </Preference>
 
-    <Preference
-        android:key="admin_password"
-        android:title="@string/admin_password"
-        app:iconSpaceReserved="false" />
-
     <PreferenceCategory android:title="@string/project_configuration"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"

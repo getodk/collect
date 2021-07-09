@@ -26,7 +26,6 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
 import org.odk.collect.android.preferences.keys.AdminKeys
@@ -34,7 +33,6 @@ import org.odk.collect.android.projects.DeleteProjectResult.DeletedSuccessfully
 import org.odk.collect.android.projects.DeleteProjectResult.RunningBackgroundJobs
 import org.odk.collect.android.projects.DeleteProjectResult.UnsentInstances
 import org.odk.collect.android.projects.ProjectDeleter
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.utilities.ToastUtils.showLongToast
 import javax.inject.Inject
@@ -54,7 +52,6 @@ class AdminPreferencesFragment :
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.admin_preferences, rootKey)
         findPreference<Preference>("odk_preferences")!!.onPreferenceClickListener = this
-        findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(AdminKeys.KEY_IMPORT_SETTINGS)!!.onPreferenceClickListener = this
         findPreference<Preference>("main_menu")!!.onPreferenceClickListener = this
         findPreference<Preference>("user_settings")!!.onPreferenceClickListener = this
@@ -86,9 +83,6 @@ class AdminPreferencesFragment :
                     intent.putExtra(GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE, true)
                     startActivity(intent)
                 }
-                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(
-                    ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
-                )
                 AdminKeys.KEY_IMPORT_SETTINGS -> {
                     val pref = Intent(activity, QRCodeTabsActivity::class.java)
                     startActivity(pref)

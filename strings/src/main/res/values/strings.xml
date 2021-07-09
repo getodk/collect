@@ -681,6 +681,8 @@
     <string name="experimental">Experimental</string>
 
     <string name="protected_settings">Protected</string>
+    <string name="set_admin_password">Set admin password</string>
+
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
     <string name="type">Type</string>

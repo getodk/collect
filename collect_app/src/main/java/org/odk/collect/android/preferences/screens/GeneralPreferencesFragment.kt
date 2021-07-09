@@ -17,11 +17,14 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
 import javax.inject.Inject
@@ -49,6 +52,7 @@ class GeneralPreferencesFragment :
         findPreference<Preference>("form_management")!!.onPreferenceClickListener = this
         findPreference<Preference>("user_and_device_identity")!!.onPreferenceClickListener = this
         findPreference<Preference>("experimental")!!.onPreferenceClickListener = this
+        findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
 
         if (!isInAdminMode) {
             setPreferencesVisibility()
@@ -60,18 +64,25 @@ class GeneralPreferencesFragment :
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         if (MultiClickGuard.allowClick(javaClass.name)) {
-            val basePreferenceFragment = getPreferenceFragment(preference.key)
-            if (basePreferenceFragment != null) {
-                basePreferenceFragment.arguments = arguments
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.preferences_fragment_container, basePreferenceFragment)
-                    .addToBackStack(null)
-                    .commit()
+            when (preference.key) {
+                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(
+                    ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
+                )
+                else -> displayPreferences(getPreferenceFragment(preference.key))
             }
             return true
         }
         return false
+    }
+
+    private fun displayPreferences(fragment: Fragment?) {
+        if (fragment != null) {
+            fragment.arguments = arguments
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.preferences_fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun getPreferenceFragment(preferenceKey: String): PreferenceFragmentCompat? {
