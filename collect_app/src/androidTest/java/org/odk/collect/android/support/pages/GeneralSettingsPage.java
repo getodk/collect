@@ -125,4 +125,11 @@ public class GeneralSettingsPage extends Page<GeneralSettingsPage> {
         onView(withText(getTranslatedString(R.string.experimental))).perform(click());
         return new ExperimentalPage().assertOnPage();
     }
+
+    public GeneralSettingsPage setAdminPassword(String password) {
+        scrollToRecyclerViewItemAndClickText(R.string.set_admin_password);
+        inputText(password);
+        clickOKOnDialog();
+        return this;
+    }
 }

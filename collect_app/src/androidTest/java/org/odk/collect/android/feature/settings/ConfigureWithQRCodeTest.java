@@ -118,10 +118,8 @@ public class ConfigureWithQRCodeTest {
     public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
         rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
-                .clickOnString(R.string.admin_password)
-                .inputText("blah")
-                .clickOKOnDialog()
+                .clickGeneralSettings()
+                .setAdminPassword("blah")
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
