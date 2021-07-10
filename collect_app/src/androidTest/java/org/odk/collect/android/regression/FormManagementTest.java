@@ -14,7 +14,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 //Issue NODK-237
@@ -45,7 +45,7 @@ public class FormManagementTest {
                 .openFormManagement()
                 .openConstraintProcessing()
                 .clickOnString(R.string.constraint_behavior_on_finalize)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new FormEntryPage("OnePageFormValid"))
                 .swipeToNextQuestion()
                 .swipeToEndScreen()
@@ -62,7 +62,7 @@ public class FormManagementTest {
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("hints textq")
                 .assertText("1 very very very very very very very very very very long text")
@@ -79,7 +79,7 @@ public class FormManagementTest {
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("hints textq")
                 .checkIsIdDisplayed(R.id.help_icon)

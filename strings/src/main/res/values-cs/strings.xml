@@ -538,7 +538,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Obecná nastavení</string>
+  <string name="project_settings">Obecná nastavení</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->
@@ -681,8 +681,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administrátorská nastavení</string>
-  <string name="admin_access_settings">Klepněte pro administrátorský přístup do Nastavení</string>
   <string name="enter_new_password">Zadejte nové heslo</string>
   <string name="admin_password">Heslo správce</string>
   <string name="admin_password_changed">Administrátorské heslo úspěšně změněno</string>
@@ -694,7 +692,6 @@
   <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Formulářů</string>
-  <string name="project_configuration">Konfigurace projektu</string>
   <string name="reset_project_settings_title">Resetovat aplikaci…</string>
   <string name="select_all">Vybrat vše</string>
   <string name="clear_all">Vymazat vše</string>
@@ -713,7 +710,6 @@
   <string name="reset_blank_forms_result">Prázdné formuláře: %s</string>
   <string name="reset_layers_result">Mapové vrstvy :: %s</string>
   <string name="reset_cache_result">Mezipaměť pro načtení formuláře :: %s</string>
-  <string name="user_access_control">Řízení přístupu uživatelů</string>
   <string name="main_menu_settings">Nastavení hlavního menu</string>
   <string name="main_menu_settings_summary">Klepnutím spravovat položky hlavní nabídky</string>
   <string name="user_settings">Uživatelské nastavení</string>

@@ -529,7 +529,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">全般設定</string>
+  <string name="project_settings">全般設定</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">サーバー</string>
   <!--Title of a settings section-->
@@ -672,8 +672,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">管理者設定</string>
-  <string name="admin_access_settings">タップして設定に管理者アクセスします</string>
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="admin_password">管理者パスワード</string>
   <string name="admin_password_changed">管理者パスワードが変更されました</string>
@@ -703,7 +701,6 @@
   <string name="reset_blank_forms_result">空のフォーム :: %s</string>
   <string name="reset_layers_result">地図レイヤー :: %s</string>
   <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
-  <string name="user_access_control">ユーザーアクセスコントロール</string>
   <string name="main_menu_settings">メインメニュー設定</string>
   <string name="main_menu_settings_summary">タップしてメインメニュー項目を管理</string>
   <string name="user_settings">ユーザー設定</string>

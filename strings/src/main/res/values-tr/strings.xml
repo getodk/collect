@@ -185,7 +185,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Genel Ayarlar</string>
+  <string name="project_settings">Genel Ayarlar</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -244,8 +244,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Yönetici Ayarlari</string>
-  <string name="admin_access_settings">Yöbetici Ayarlari için Tap</string>
   <string name="enter_new_password">Yeni Şifreyi Giriniz</string>
   <string name="admin_password_changed">Yönetici Şifresi Başarili şekilde Değiştirildi</string>
   <string name="admin_password_disabled">Yönetici Şifresi Kapatılmış</string>

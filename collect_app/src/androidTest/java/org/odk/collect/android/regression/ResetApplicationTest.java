@@ -11,8 +11,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.AdminSettingsPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.AccessControlPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ResetApplicationDialog;
 
@@ -33,7 +33,8 @@ public class ResetApplicationTest {
         //TestCase1
         new MainMenuPage()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickOnResetApplication()
                 .assertText(R.string.reset_settings_dialog_title)
                 .assertDisabled(R.string.reset_settings_button_reset)
@@ -57,7 +58,8 @@ public class ResetApplicationTest {
                 .assertText("All widgets")
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickOnResetApplication()
                 .assertDisabled(R.string.reset_settings_button_reset)
                 .clickOnString(R.string.reset_saved_forms)
@@ -77,17 +79,20 @@ public class ResetApplicationTest {
         //TestCase2
         new MainMenuPage()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickAccessControl()
                 .openUserSettings()
                 .uncheckServerOption()
-                .pressBack(new AdminSettingsPage())
+                .pressBack(new AccessControlPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
                 .clickGeneralSettings()
                 .checkIfServerOptionIsNotDisplayed()
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
@@ -120,10 +125,11 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .clickOnUserInterface()
                 .assertText("español")
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
@@ -149,7 +155,7 @@ public class ResetApplicationTest {
                 .clickOnString(R.string.wifi_autosend)
                 .assertText(R.string.wifi_autosend)
                 .clickOnDefaultToFinalized()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
@@ -157,7 +163,8 @@ public class ResetApplicationTest {
                 .assertMarkFinishedIsNotSelected()
                 .clickSaveAndExit()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
@@ -167,7 +174,7 @@ public class ResetApplicationTest {
                 .clickGeneralSettings()
                 .openFormManagement()
                 .assertText(R.string.off)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("All widgets")
                 .clickGoToArrow()

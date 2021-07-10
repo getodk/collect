@@ -544,7 +544,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">الإعدادات العامة</string>
+  <string name="project_settings">الإعدادات العامة</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">الخادم</string>
   <!--Title of a settings section-->
@@ -687,8 +687,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">إعدادات المدير</string>
-  <string name="admin_access_settings">انقر للوصول الى اعدادات المدير</string>
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
   <string name="admin_password">كلمة مرور المدير</string>
   <string name="admin_password_changed">تمّ تغيير كلمة مرور المدير بنجاح</string>
@@ -718,7 +716,6 @@
   <string name="reset_blank_forms_result">الاستمارات الفارغة  :: %s</string>
   <string name="reset_layers_result">طبقات الخرائط  :: %s</string>
   <string name="reset_cache_result">التخزين المؤقت للنماذج المحملة  :: %s</string>
-  <string name="user_access_control">قيود المستخدم</string>
   <string name="main_menu_settings">إعدادات القائمة الرئيسة</string>
   <string name="main_menu_settings_summary">إنقر لإدارة عناصر القائمة الرئيسية</string>
   <string name="user_settings">إعدادات المستخدم</string>

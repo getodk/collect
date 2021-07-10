@@ -298,7 +298,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Configuració general</string>
+  <string name="project_settings">Configuració general</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -378,8 +378,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Opcions d\'Administrador</string>
-  <string name="admin_access_settings">Polsa per entrar a Configuració</string>
   <string name="enter_new_password">Entrar nova clau d\'accés</string>
   <string name="admin_password">Clau d\'administrador</string>
   <string name="admin_password_changed">Clau d\'accés d\'Administrador canviat</string>

@@ -218,7 +218,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">မူလပံုစံအားေျပာင္းရန္</string>
+  <string name="project_settings">မူလပံုစံအားေျပာင္းရန္</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -280,8 +280,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">စီမံခန့္ခြဲမွု ပံုစံမ်ား</string>
-  <string name="admin_access_settings">စီမံခန့္ခြဲမွုပံုစံအား ေဆာင္ရြက္ႏိုင္ရန္ ႏွိပ္ပါ</string>
   <string name="enter_new_password">လ်ိဳ့၀ွက္နံပါတ္ အသစ္ထည့္သြင္းရန္</string>
   <string name="admin_password_changed">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) အား ေျပာင္းလဲၿပီးပါၿပီ</string>
   <string name="admin_password_disabled">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္(Admin Password) မေဆာင္ရြက္ႏိုင္ပါ</string>

@@ -17,7 +17,7 @@ limitations under the License.
 
     <item
         android:id="@+id/menu_preferences"
-        android:title="@string/general_preferences"
+        android:title="@string/project_settings"
         app:showAsAction="never" />
 
     <item

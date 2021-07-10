@@ -249,7 +249,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Algemene Verstellings</string>
+  <string name="project_settings">Algemene Verstellings</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -319,8 +319,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admin Verstellings</string>
-  <string name="admin_access_settings">Raak hier vir admin toegang na Verstellings</string>
   <string name="enter_new_password">Voer nuwe wagwoord in</string>
   <string name="admin_password_changed">Admin wagwoord suksesvol verander</string>
   <string name="admin_password_disabled">Admin wagwoord afgeskakel.</string>

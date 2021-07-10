@@ -15,9 +15,9 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity;
 import org.odk.collect.android.utilities.ProjectResetter;
 
 import java.util.ArrayList;
@@ -207,14 +207,14 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                 resultMessage.append("\n\n");
             }
         }
-        if (!((AdminPreferencesActivity) context).isInstanceStateSaved()) {
-            ((AdminPreferencesActivity) context).runOnUiThread(() -> {
+        if (!((CollectAbstractActivity) context).isInstanceStateSaved()) {
+            ((CollectAbstractActivity) context).runOnUiThread(() -> {
                 if (resetActions.contains(RESET_PREFERENCES)) {
-                    ((AdminPreferencesActivity) context).recreate();
+                    ((CollectAbstractActivity) context).recreate();
                 }
                 ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
                 try {
-                    resetSettingsResultDialog.show(((AdminPreferencesActivity) context).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+                    resetSettingsResultDialog.show(((CollectAbstractActivity) context).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
                 } catch (ClassCastException e) {
                     Timber.i(e);
                 }

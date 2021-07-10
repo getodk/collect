@@ -250,7 +250,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Endre innstillinger</string>
+  <string name="project_settings">Endre innstillinger</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -323,8 +323,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admin Settings</string>
-  <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="enter_new_password">Enter new password</string>
   <string name="admin_password_changed">Admin password successfully changed</string>
   <string name="admin_password_disabled">Admin password disabled</string>

@@ -14,7 +14,7 @@ import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
@@ -82,7 +82,7 @@ public class SendFinalizedFormTest {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.delete_after_send)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .copyForm("one-question.xml")

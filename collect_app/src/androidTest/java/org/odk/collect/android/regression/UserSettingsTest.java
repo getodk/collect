@@ -27,7 +27,8 @@ public class UserSettingsTest {
         //TestCase1
         new MainMenuPage()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickAccessControl()
                 .openUserSettings()
                 .assertTextDoesNotExist("Type")
                 .assertTextDoesNotExist("Submission transport")

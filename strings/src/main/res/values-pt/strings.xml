@@ -524,7 +524,7 @@ Escolher Imagem</string>
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Alterar configuração</string>
+  <string name="project_settings">Alterar configuração</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor</string>
   <!--Title of a settings section-->
@@ -667,8 +667,6 @@ Escolher Imagem</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Configurações Administrativas</string>
-  <string name="admin_access_settings">Toque para acesso administrativo às configurações</string>
   <string name="enter_new_password">Digite a nova senha</string>
   <string name="admin_password">Senha Administrativa</string>
   <string name="admin_password_changed">Senha administrativa alterada com sucesso</string>
@@ -698,7 +696,6 @@ Escolher Imagem</string>
   <string name="reset_blank_forms_result">Formulários em branco :: %s</string>
   <string name="reset_layers_result">Layers do mapa :: %s</string>
   <string name="reset_cache_result">Carga do cache do formulário :: %s</string>
-  <string name="user_access_control">Controle de Acesso de Usuários</string>
   <string name="main_menu_settings">Configurações de Menu Principal</string>
   <string name="main_menu_settings_summary">Toque para gerenciar itens de menu</string>
   <string name="user_settings">Configurações de Usuário</string>

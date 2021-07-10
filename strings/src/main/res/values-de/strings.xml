@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Allgemeine Einstellungen</string>
+  <string name="project_settings">Allgemeine Einstellungen</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->
@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admineinstellungen</string>
-  <string name="admin_access_settings">Adminzugriff auf die Einstellungen</string>
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="admin_password">Admin-Passwort</string>
   <string name="admin_password_changed">Admin-Passwort erfolgreich geändert</string>
@@ -688,7 +686,6 @@
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
-  <string name="project_configuration">Projekt-Konfiguration</string>
   <string name="reset_project_settings_title">App zurücksetzen…</string>
   <string name="select_all">Alle auswählen</string>
   <string name="clear_all">Auswahl aufheben</string>
@@ -707,7 +704,6 @@
   <string name="reset_blank_forms_result">Leere Formulare :: %s</string>
   <string name="reset_layers_result">Kartenebenen :: %s</string>
   <string name="reset_cache_result">Formular-Cache :: %s</string>
-  <string name="user_access_control">Benutzerzugriffskontrolle</string>
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
   <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
   <string name="user_settings">Benutzer-Einstellungen</string>

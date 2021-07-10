@@ -297,7 +297,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Splošne nastavitve</string>
+  <string name="project_settings">Splošne nastavitve</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Uporabniški vmesnik</string>
@@ -390,8 +390,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Admin nastavitve</string>
-  <string name="admin_access_settings">Klikni za admin dostop do nastavitev</string>
   <string name="enter_new_password">Vnesi novo geslo</string>
   <string name="admin_password">Admin geslo</string>
   <string name="admin_password_changed">Admin geslo uspešno spremenjeno</string>

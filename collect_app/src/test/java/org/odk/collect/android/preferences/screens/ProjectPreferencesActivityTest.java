@@ -20,17 +20,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.screens.GeneralPreferencesActivity.INTENT_KEY_ADMIN_MODE;
+import static org.odk.collect.android.preferences.screens.ProjectPreferencesActivity.INTENT_KEY_ADMIN_MODE;
 
 @LooperMode(LooperMode.Mode.PAUSED)
 @RunWith(ParameterizedRobolectricTestRunner.class)
-public class GeneralPreferencesActivityTest {
+public class ProjectPreferencesActivityTest {
 
-    private GeneralPreferencesFragment generalPreferencesFragment;
-    private ActivityController<GeneralPreferencesActivity> activityController;
+    private ProjectPreferencesFragment projectPreferencesFragment;
+    private ActivityController<ProjectPreferencesActivity> activityController;
     private final boolean accessedFromAdminSettings;
 
-    public GeneralPreferencesActivityTest(boolean accessedFromAdminSettings) {
+    public ProjectPreferencesActivityTest(boolean accessedFromAdminSettings) {
         this.accessedFromAdminSettings = accessedFromAdminSettings;
     }
 
@@ -48,17 +48,17 @@ public class GeneralPreferencesActivityTest {
         Intent intent = new Intent();
         intent.putExtra(INTENT_KEY_ADMIN_MODE, accessedFromAdminSettings);
         activityController = Robolectric
-                .buildActivity(GeneralPreferencesActivity.class, intent)
+                .buildActivity(ProjectPreferencesActivity.class, intent)
                 .setup();
 
-        generalPreferencesFragment = (GeneralPreferencesFragment) activityController.get()
+        projectPreferencesFragment = (ProjectPreferencesFragment) activityController.get()
                 .getSupportFragmentManager()
                 .findFragmentById(R.id.preferences_fragment_container);
     }
 
     @Test
     public void whenGeneralPreferencesDisplayed_shouldIsInAdminModeValueBePassedToFragment() {
-        assertThat(generalPreferencesFragment.isInAdminMode(), is(accessedFromAdminSettings));
+        assertThat(projectPreferencesFragment.isInAdminMode(), is(accessedFromAdminSettings));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("protocol");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         ServerPreferencesFragment preferences
@@ -82,7 +82,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("user_interface");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         UserInterfacePreferencesFragment preferences
@@ -98,7 +98,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("maps");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         MapsPreferencesFragment preferences
@@ -114,7 +114,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("form_management");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         FormManagementPreferencesFragment preferences
@@ -130,7 +130,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("user_and_device_identity");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         IdentityPreferencesFragment preferences
@@ -146,7 +146,7 @@ public class GeneralPreferencesActivityTest {
         Preference preference = mock(Preference.class);
         when(preference.getKey()).thenReturn("experimental");
 
-        generalPreferencesFragment.onPreferenceClick(preference);
+        projectPreferencesFragment.onPreferenceClick(preference);
         activityController.resume();
 
         ExperimentalPreferencesFragment preferences

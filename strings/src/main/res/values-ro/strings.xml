@@ -271,7 +271,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Modificați setările</string>
+  <string name="project_settings">Modificați setările</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -345,8 +345,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Setări administrator</string>
-  <string name="admin_access_settings">Atingeți pentru accesul ca administrator la setări</string>
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="admin_password">Parola administratorului</string>
   <string name="admin_password_changed">Parola de administrator a fost schimbată cu succes</string>

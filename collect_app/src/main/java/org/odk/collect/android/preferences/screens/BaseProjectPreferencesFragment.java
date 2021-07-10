@@ -12,7 +12,7 @@ import org.odk.collect.android.preferences.source.SettingsStore;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public abstract class BaseGeneralPreferencesFragment extends BasePreferencesFragment {
+public abstract class BaseProjectPreferencesFragment extends BasePreferencesFragment {
 
     @Inject
     @Named("GENERAL_SETTINGS_STORE")

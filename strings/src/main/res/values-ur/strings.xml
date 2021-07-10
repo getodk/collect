@@ -425,7 +425,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">جنرل سیٹنگز</string>
+  <string name="project_settings">جنرل سیٹنگز</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور </string>
   <!--Title of a settings section-->
@@ -557,8 +557,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ایڈمن سیٹنگز</string>
-  <string name="admin_access_settings">سیٹنگز تک ایڈمن کی رسائی کے لئے دبائیں</string>
   <string name="enter_new_password">نیا پاس ورڈ درج کریں</string>
   <string name="admin_password">ایڈمن پاس ورڈ </string>
   <string name="admin_password_changed">ایڈمن کا پاس ورڈ کامیابی سے بدلا گیا</string>
@@ -588,7 +586,6 @@
   <string name="reset_blank_forms_result">خالی فارم  :: %s</string>
   <string name="reset_layers_result">میپ لیؑیرز:: %s</string>
   <string name="reset_cache_result">فارم لوڈ کیشے::%s</string>
-  <string name="user_access_control">یوزر ایکسیس کنٹرول </string>
   <string name="main_menu_settings">مین مینو سیٹنگز </string>
   <string name="main_menu_settings_summary">مین مینوآئٹمز کو مینیج کرنے کیلئے ٹیپ کریں</string>
   <string name="user_settings">یوزر سیٹنگز </string>

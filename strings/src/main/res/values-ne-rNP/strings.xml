@@ -306,7 +306,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">जनरल सेटिङ्स </string>
+  <string name="project_settings">जनरल सेटिङ्स </string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">प्रयोगकर्ता अन्तरक्रिया पृष्‍ठ</string>
@@ -401,8 +401,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">एडमिन सेटिङ्स</string>
-  <string name="admin_access_settings">सेटिंग मा प्रशासक प्रवेशको लागि थिच्नुहोस्</string>
   <string name="enter_new_password">नयाँ पासवर्ड हाल्नुहोस्</string>
   <string name="admin_password">प्रशासक पासवर्ड</string>
   <string name="admin_password_changed">प्रशासक पासवर्ड सफलतापूर्वक परिवर्तन भयो</string>

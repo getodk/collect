@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Cambiar la configuración</string>
+  <string name="project_settings">Cambiar la configuración</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor - Usuario</string>
   <!--Title of a settings section-->
@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Opciones de administrador</string>
-  <string name="admin_access_settings">Pulsa para entrar en Configuración</string>
   <string name="enter_new_password">Entrar nueva contraseña</string>
   <string name="admin_password">Contraseña de Administrador</string>
   <string name="admin_password_changed">Contraseña Administrador cambiada correctamente</string>
@@ -688,7 +686,6 @@
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
-  <string name="project_configuration">Configuración del proyecto</string>
   <string name="reset_project_settings_title">Restablecer aplicación</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
@@ -707,7 +704,6 @@
   <string name="reset_blank_forms_result">Formularios en blanco :: %s</string>
   <string name="reset_layers_result">Capas de mapa :: %s</string>
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
-  <string name="user_access_control">Control de acceso a usuario</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
   <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
   <string name="user_settings">Ajustes de usuario</string>

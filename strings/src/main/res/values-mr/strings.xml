@@ -320,7 +320,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">सामान्य सेटिंग्ज</string>
+  <string name="project_settings">सामान्य सेटिंग्ज</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">सर्व्हर</string>
   <!--Title of a settings section-->
@@ -424,8 +424,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">प्रशासन सेटिंग्ज</string>
-  <string name="admin_access_settings">सेटिंग्जमध्ये प्रशासकीय प्रवेशासाठी टॅप करा</string>
   <string name="enter_new_password">नवीन संकेतशब्द प्रविष्ट करा</string>
   <string name="admin_password">प्रशासन संकेतशब्द</string>
   <string name="admin_password_changed">प्रशासक संकेतशब्द यशस्वीरित्या बदलला</string>
@@ -455,7 +453,6 @@
   <string name="reset_blank_forms_result">रिक्त फॉर्म :: %s</string>
   <string name="reset_layers_result">नकाशा स्तर :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कॅशे :: %s</string>
-  <string name="user_access_control">वापरकर्ता प्रवेश नियंत्रण</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्ज</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आयटम व्यवस्थापित करण्यासाठी टॅप करा</string>
   <string name="user_settings">वापरकर्ता सेटिंग्ज</string>

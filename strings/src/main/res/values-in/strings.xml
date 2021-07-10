@@ -529,7 +529,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Pengaturan Umum</string>
+  <string name="project_settings">Pengaturan Umum</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->
@@ -672,8 +672,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Pengaturan Admin</string>
-  <string name="admin_access_settings">Sentuh untuk mengakses pengaturan umum oleh admin</string>
   <string name="enter_new_password">Masukan Kata Sandi Baru</string>
   <string name="admin_password">Kata Sandi Admin</string>
   <string name="admin_password_changed">Kata sandi admin berhasil diubah</string>
@@ -703,7 +701,6 @@
   <string name="reset_blank_forms_result">Formulir kosong :: %s</string>
   <string name="reset_layers_result">Lapisan peta :: %s</string>
   <string name="reset_cache_result">Cache formulir yang dimuat :: %s</string>
-  <string name="user_access_control">Kontrol Akses Pengguna</string>
   <string name="main_menu_settings">Pengaturan Menu Utama</string>
   <string name="main_menu_settings_summary">Sentuh untuk mengelola item menu utama</string>
   <string name="user_settings">Pengaturan Pengguna</string>

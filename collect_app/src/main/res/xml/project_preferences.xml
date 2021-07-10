@@ -10,13 +10,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/general_preferences">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/project_settings">
 
     <Preference
         android:icon="@drawable/ic_outline_cloud_24"
         android:key="protocol"
         android:title="@string/server_settings_title"
         android:summary="@string/server_settings_subtext" />
+
+    <Preference
+        android:icon="@drawable/ic_outline_color_lens_24"
+        android:key="project_display"
+        android:title="@string/project_display_title"
+        android:summary="@string/project_display_subtext" />
 
     <Preference
         android:icon="@drawable/ic_outline_phonelink_setup_24"
@@ -46,4 +53,27 @@ limitations under the License.
         android:icon="@drawable/ic_outline_warning_24"
         android:key="experimental"
         android:title="@string/experimental" />
+
+    <PreferenceCategory
+        android:title="@string/protected_settings"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:icon="@drawable/ic_outline_vpn_key_24"
+            android:key="admin_password"
+            android:title="@string/set_admin_password" />
+
+        <Preference
+            android:icon="@drawable/ic_outline_settings_applications_24"
+            android:key="project_management"
+            android:title="@string/project_management_section_title"
+            android:summary="@string/project_management_section_subtext"/>
+
+        <Preference
+            android:icon="@drawable/ic_outline_lock_24"
+            android:key="access_control"
+            android:title="@string/access_control_section_title"
+            android:summary="@string/access_control_section_subtext"/>
+
+    </PreferenceCategory>
 </PreferenceScreen>

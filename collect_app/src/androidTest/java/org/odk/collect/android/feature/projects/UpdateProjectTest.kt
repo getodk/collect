@@ -5,8 +5,8 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
-import org.odk.collect.android.support.pages.GeneralSettingsPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 
 class UpdateProjectTest {
 
@@ -23,10 +23,12 @@ class UpdateProjectTest {
             .assertProjectIcon("D")
             .openProjectSettings()
             .assertCurrentProject("Demo project", "demo.getodk.org")
-            .clickAdminSettings()
+            .clickGeneralSettings()
+            .clickProjectDisplay()
             .setProjectName("Project X")
             .setProjectIcon("XY")
             .setProjectColor("cccccc")
+            .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .openProjectSettings()
             .clickGeneralSettings()
@@ -34,7 +36,7 @@ class UpdateProjectTest {
             .clickServerUsername()
             .inputText("Anna")
             .clickOKOnDialog()
-            .pressBack(GeneralSettingsPage())
+            .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
 
             .assertProjectIcon("X")

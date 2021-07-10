@@ -9,7 +9,7 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,UnusedResources" tools:locale="en">
     <!-- Text for an action button on the main screen. -->
     <string name="enter_data">Fill Blank Form</string>
     <!-- Text for an action button on the main screen. -->
@@ -651,12 +651,16 @@
     # GENERAL SETTINGS
     ##############################################
     -->
-    <string name="general_preferences">General Settings</string>
+    <string name="project_settings">Project settings</string>
 
     <!-- Title of a settings section -->
     <string name="server_settings_title">Server</string>
     <!-- Subtext of a settings section -->
     <string name="server_settings_subtext">URL, username, password</string>
+    <!-- Title of a settings section -->
+    <string name="project_display_title">Project display</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_display_subtext">Name, icon, color</string>
     <!-- Title of a settings section -->
     <string name="client">User interface</string>
     <!-- Subtext of a settings section -->
@@ -675,6 +679,17 @@
     <string name="user_and_device_identity_settings_subtext">Username, phone number, device ID</string>
     <!-- Title of a settings section only available in beta or development builds. -->
     <string name="experimental">Experimental</string>
+
+    <string name="protected_settings">Protected</string>
+    <string name="set_admin_password">Set admin password</string>
+    <!-- Title of a settings section -->
+    <string name="project_management_section_title">Project management</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_management_section_subtext">Reconfigure, reset, delete</string>
+    <!-- Title of a settings section -->
+    <string name="access_control_section_title">Access control</string>
+    <!-- Subtext of a settings section -->
+    <string name="access_control_section_subtext">Limit user interface</string>
 
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
@@ -830,8 +845,6 @@
      # ADMIN SETTINGS
      ##############################################
      -->
-    <string name="admin_preferences">Admin Settings</string>
-    <string name="admin_access_settings">Tap for admin access to settings</string>
     <string name="enter_new_password">Enter new password</string>
     <string name="admin_password">Admin Password</string>
     <string name="admin_password_changed">Admin password successfully changed</string>
@@ -844,7 +857,6 @@
     <string name="found_in_settings">Uncheck to hide from General Settings</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
 
-    <string name="project_configuration">Project Configuration</string>
     <string name="reset_project_settings_title">Reset</string>
     <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
     <string name="delete_project">Delete</string>
@@ -866,7 +878,6 @@
     <string name="reset_layers_result">Map layers :: %s</string>
     <string name="reset_cache_result">Form load cache :: %s</string>
 
-    <string name="user_access_control">User Access Control</string>
     <string name="main_menu_settings">Main Menu Settings</string>
     <string name="main_menu_settings_summary">Show or hide buttons</string>
     <string name="user_settings">User Settings</string>
@@ -998,6 +1009,7 @@
      ##############################################
      -->
     <string name="projects">Projects</string>
+    <string name="settings">Settings</string>
     <string name="add_project">Add project</string>
     <string name="add">Add</string>
     <string name="project_name">Project name</string>

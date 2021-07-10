@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 @RunWith(AndroidJUnit4.class)
@@ -41,7 +41,7 @@ public class HideOldVersionsTest {
                 .clickGeneralSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.hide_old_form_versions_setting_title)
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .copyForm("one-question.xml")

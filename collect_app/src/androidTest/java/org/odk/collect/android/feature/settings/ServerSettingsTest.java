@@ -12,7 +12,7 @@ import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,7 +51,7 @@ public class ServerSettingsTest {
                 .inputText("netsky")
                 .clickOKOnDialog()
                 .assertText("********")
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .clickGetBlankForm()

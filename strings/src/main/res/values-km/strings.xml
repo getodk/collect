@@ -418,7 +418,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">ការកំណត់ទូទៅ</string>
+  <string name="project_settings">ការកំណត់ទូទៅ</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">ម៉ាស៊ីនមេ</string>
   <!--Title of a settings section-->
@@ -548,8 +548,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ការកំណត់របស់ Admin</string>
-  <string name="admin_access_settings">ប៉ះសម្រាប់កំណត់ដំណើរការរបស់ Admin</string>
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
   <string name="admin_password_changed">ពាក្យសម្ងាត់របស់ Admin បានផ្លាស់ប្តូរដោយជោគជ័យ</string>
@@ -579,7 +577,6 @@
   <string name="reset_blank_forms_result">សំណុំបែបបទទទេ :: %s</string>
   <string name="reset_layers_result">ស្រទាប់ផែនទី :: %s</string>
   <string name="reset_cache_result">ទម្រង់ផ្ទុកខាឆឹះ :: %s</string>
-  <string name="user_access_control">ការត្រួតពិនិត្យការចូលប្រើរបស់អ្នកប្រើ</string>
   <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
   <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
   <string name="user_settings">ការកំណត់របស់អ្នកប្រើប្រាស់</string>

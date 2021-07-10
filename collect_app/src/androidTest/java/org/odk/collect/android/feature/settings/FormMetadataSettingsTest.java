@@ -16,7 +16,7 @@ import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage;
@@ -60,7 +60,7 @@ public class FormMetadataSettingsTest {
                 .clickOKOnDialog()
                 .assertPreference(R.string.phone_number, "664615")
                 .pressBack(new UserAndDeviceIdentitySettingsPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino", "chino@whitepony.com", "664615");
@@ -75,7 +75,7 @@ public class FormMetadataSettingsTest {
                 .clickServerUsername()
                 .inputText("Chino")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Chino")
@@ -89,7 +89,7 @@ public class FormMetadataSettingsTest {
                 .inputText("Stephen")
                 .clickOKOnDialog()
                 .pressBack(new UserAndDeviceIdentitySettingsPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .startBlankForm("Metadata")
                 .assertText("Stephen");

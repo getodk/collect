@@ -18,7 +18,7 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.FormManagementPage;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.List;
@@ -107,7 +107,7 @@ public class FormManagementSettingsTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
 
-        page.pressBack(new GeneralSettingsPage())
+        page.pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertText("One Question Updated");

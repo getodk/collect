@@ -231,7 +231,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">设置</string>
+  <string name="project_settings">设置</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">用户界面</string>
@@ -302,8 +302,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">管理员设置</string>
-  <string name="admin_access_settings">点击进入管理员设置</string>
   <string name="enter_new_password">输入新密码</string>
   <string name="admin_password">管理员密码</string>
   <string name="admin_password_changed">管理员密码已成功修改</string>

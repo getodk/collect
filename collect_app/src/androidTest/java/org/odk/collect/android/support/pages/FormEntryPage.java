@@ -105,9 +105,9 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public GeneralSettingsPage clickGeneralSettings() {
-        onView(withText(getTranslatedString(R.string.general_preferences))).perform(click());
-        return new GeneralSettingsPage().assertOnPage();
+    public ProjectSettingsPage clickGeneralSettings() {
+        onView(withText(getTranslatedString(R.string.project_settings))).perform(click());
+        return new ProjectSettingsPage().assertOnPage();
     }
 
     public FormEntryPage checkAreNavigationButtonsDisplayed() {
@@ -313,7 +313,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public OkDialog clickGeneralSettingsWhileRecording() {
-        onView(withText(getTranslatedString(R.string.general_preferences))).perform(click());
+        onView(withText(getTranslatedString(R.string.project_settings))).perform(click());
         OkDialog okDialog = new OkDialog().assertOnPage();
         assertText(R.string.recording_warning);
         return okDialog;

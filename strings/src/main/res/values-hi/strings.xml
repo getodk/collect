@@ -331,7 +331,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">सामान्य सेटिंग्स</string>
+  <string name="project_settings">सामान्य सेटिंग्स</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">सर्वर</string>
   <!--Title of a settings section-->
@@ -436,8 +436,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">एडमिन सेटिंग</string>
-  <string name="admin_access_settings">सेटिंग तक एडमिन पहुंच के लिए टैप करें</string>
   <string name="enter_new_password"> नया पासवर्ड दर्ज करें </string>
   <string name="admin_password">एडमिन पासवर्ड </string>
   <string name="admin_password_changed">एडमिन पासवर्ड सफलतापूर्वक बदल दिया गया</string>
@@ -467,7 +465,6 @@
   <string name="reset_blank_forms_result">खाली  फॉर्म:: %s</string>
   <string name="reset_layers_result">मानचित्र लेयरें :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कैश :: %s</string>
-  <string name="user_access_control">प्रयोगकर्ता एक्सेस नियंत्रण</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्स</string>
   <string name="main_menu_settings_summary">मुख्य मेनू आइटम मैनेज करने के लिए टैप करें</string>
   <string name="user_settings">प्रयोगकर्ता सेटिंग</string>

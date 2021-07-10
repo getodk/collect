@@ -16,7 +16,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.StubOpenRosaServer;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ServerSettingsPage;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -58,7 +58,7 @@ public class CustomServerPathsTest {
                 .clickOKOnDialog()
                 .assertText("/customPath")
                 .pressBack(new ServerSettingsPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .clickGetBlankForm()
@@ -86,7 +86,7 @@ public class CustomServerPathsTest {
                 .clickOKOnDialog()
                 .assertText("/customPath")
                 .pressBack(new ServerSettingsPage())
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .clickSendFinalizedForm(1)

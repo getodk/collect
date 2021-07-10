@@ -295,7 +295,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">ตั้งค่าทั่วไป</string>
+  <string name="project_settings">ตั้งค่าทั่วไป</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -383,8 +383,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">ตั้งค่าสำหรับผู้ควบคุมระบบ</string>
-  <string name="admin_access_settings">Tap for admin access to settings</string>
   <string name="enter_new_password">ใส่รหัสผ่านใหม่</string>
   <string name="admin_password">รหัสผ่านของผู้ดูแลระบบ</string>
   <string name="admin_password_changed">เปลี่ยนรหัสผ่านของผู้ควบคุมระบบเรียบร้อยแล้ว</string>

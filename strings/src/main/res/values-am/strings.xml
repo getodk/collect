@@ -268,7 +268,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">አጠቃላይ ቅንብሮች</string>
+  <string name="project_settings">አጠቃላይ ቅንብሮች</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <string name="client">የተጠቃሚ በይነገጽ</string>
@@ -342,7 +342,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">የአስተዳዳሪ ቅንጅቶች</string>
   <string name="enter_new_password">አዲስ የይለፍ ቃል ያስገቡ</string>
   <string name="admin_password">የአስተዳዳሪ ይለፍ ቃል</string>
   <string name="admin_password_changed">የአስተዳዳሪ የይለፍ ቃል በተሳካ ሁኔታ ተለውጧል</string>

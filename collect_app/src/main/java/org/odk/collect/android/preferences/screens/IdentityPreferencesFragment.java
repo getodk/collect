@@ -32,7 +32,7 @@ import javax.inject.Inject;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_ANALYTICS;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
-public class IdentityPreferencesFragment extends BaseGeneralPreferencesFragment {
+public class IdentityPreferencesFragment extends BaseProjectPreferencesFragment {
 
     @Inject
     Analytics analytics;

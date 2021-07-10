@@ -247,7 +247,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">ການ​ຕັ້ງ​ຄ່າ​ທົ່ວ​ໄປ</string>
+  <string name="project_settings">ການ​ຕັ້ງ​ຄ່າ​ທົ່ວ​ໄປ</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -317,8 +317,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">​ການຕັ້ງຄ່າສຳລັບຜູ້​ບໍ​ລິ​ຫານລະບົບ</string>
-  <string name="admin_access_settings">​​ແຕະ​ເພື່ອ​ໃຫ້​ຜູ້​ບໍ​ລິ​ຫານລະ​ບົບເຂົ້າ​ຫາ​ການ​ຕັ້ງ​ຄ່າ</string>
   <string name="enter_new_password">​ປ້ອນລະຫັດຜ່ານໃໝ່</string>
   <string name="admin_password_changed">ລະຫັດຜ່ານຂອງຜູ້ຄວບຄຸມລະບົບ​ໄດ້​ປ່ຽນສຳເລັດແລ້ວ</string>
   <string name="admin_password_disabled">ລະ​ຫັດ​ຜ່ານ​ຂອງ​ຜູ້​ຄວບ​ຄຸມ​ລະ​ບົບ​ບໍ່​ໄດ້​ເປີດ​ນຳ​ໃຊ້</string>

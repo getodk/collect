@@ -219,7 +219,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">عمومی بدلیوں کی آپشن</string>
+  <string name="project_settings">عمومی بدلیوں کی آپشن</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -289,8 +289,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">منتظم کا دیا ہوا ترتیب</string>
-  <string name="admin_access_settings">منتظم کا سیتتینگز کی رسائی دبایئں۔</string>
   <string name="enter_new_password">نیا شناختی لفظ درج کریں</string>
   <string name="admin_password_changed">منتظم کا شناختی لفظ کامیابی سے بدلا گیا</string>
   <string name="admin_password_disabled">منتظم کا شناختے لفظ غیر موءثر کیا گیا۔</string>

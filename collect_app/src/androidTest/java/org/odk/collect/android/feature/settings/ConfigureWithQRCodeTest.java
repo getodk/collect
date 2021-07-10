@@ -27,7 +27,7 @@ import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.StubBarcodeViewDecoder;
 import org.odk.collect.android.support.TestScheduler;
-import org.odk.collect.android.support.pages.GeneralSettingsPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -87,7 +87,8 @@ public class ConfigureWithQRCodeTest {
     public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
         QRCodePage qrCodePage = rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR();
 
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
@@ -105,7 +106,8 @@ public class ConfigureWithQRCodeTest {
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
         rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .assertImageViewShowsImage(R.id.ivQRcode, BitmapFactory.decodeResource(
@@ -118,14 +120,13 @@ public class ConfigureWithQRCodeTest {
     public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
         rule.startAtMainMenu()
                 .openProjectSettings()
-                .clickAdminSettings()
-                .clickOnString(R.string.admin_password)
-                .inputText("blah")
-                .clickOKOnDialog()
+                .clickGeneralSettings()
+                .setAdminPassword("blah")
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
-                .clickAdminSettingsWithPassword("blah")
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_admin_password)
@@ -143,11 +144,12 @@ public class ConfigureWithQRCodeTest {
                 .clickServerPassword()
                 .inputText("blah")
                 .clickOKOnDialog()
-                .pressBack(new GeneralSettingsPage())
+                .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
                 .openProjectSettings()
-                .clickAdminSettings()
+                .clickGeneralSettings()
+                .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
                 .clickOnString(R.string.qrcode_with_server_password)

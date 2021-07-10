@@ -1,6 +1,5 @@
 package org.odk.collect.android.projects
 
-import android.os.Bundle
 import androidx.core.view.children
 import androidx.lifecycle.ViewModel
 import androidx.test.espresso.Espresso.onView
@@ -20,14 +19,10 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
-import org.odk.collect.android.preferences.screens.AdminPreferencesActivity
-import org.odk.collect.android.preferences.screens.GeneralPreferencesActivity
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -106,7 +101,7 @@ class ProjectSettingsDialogTest {
     }
 
     @Test
-    fun `General settings should be started after clicking on the 'General Settings' button`() {
+    fun `Project settings should be started after clicking on the 'Settings' button`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
         scenario.onFragment {
             Intents.init()
@@ -116,45 +111,9 @@ class ProjectSettingsDialogTest {
             assertThat(it.dialog, `is`(nullValue()))
             assertThat(
                 Intents.getIntents()[0],
-                hasComponent(GeneralPreferencesActivity::class.java.name)
+                hasComponent(ProjectPreferencesActivity::class.java.name)
             )
             Intents.release()
-        }
-    }
-
-    @Test
-    fun `Admin settings should be started after clicking on the 'Admin Settings' button`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
-        scenario.onFragment {
-            Intents.init()
-            assertThat(it.dialog!!.isShowing, `is`(true))
-            it.binding.adminSettingsButton.performClick()
-            RobolectricHelpers.runLooper()
-            assertThat(it.dialog, `is`(nullValue()))
-            assertThat(
-                Intents.getIntents()[0],
-                hasComponent(AdminPreferencesActivity::class.java.name)
-            )
-            Intents.release()
-        }
-    }
-
-    @Test
-    fun `A user should be asked for password if set when opening Admin settings`() {
-        val args = Bundle()
-        args.putBoolean(ProgressDialogFragment.CANCELABLE, false)
-
-        whenever(adminPasswordProvider.isAdminPasswordSet).thenReturn(true)
-
-        val scenario = DialogFragmentTest.launchDialogFragment(ProjectSettingsDialog::class.java)
-        scenario.onFragment {
-            it.binding.adminSettingsButton.performClick()
-            assertThat(
-                it.activity!!.supportFragmentManager.findFragmentByTag(
-                    AdminPasswordDialogFragment::class.java.name
-                ),
-                `is`(notNullValue())
-            )
         }
     }
 

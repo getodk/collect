@@ -219,7 +219,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">সাধারন সেটীংস।</string>
+  <string name="project_settings">সাধারন সেটীংস।</string>
   <!--Title of a settings section-->
   <!--Title of a settings section-->
   <!--Title of a settings section-->
@@ -283,8 +283,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">অ্যাডমিনের পছন্দ</string>
-  <string name="admin_access_settings">অ্যাডমিনের settings</string>
   <string name="enter_new_password">পাসওয়ার্ড দিন।</string>
   <string name="admin_password_changed">অ্যাডমিনের পাসওয়ার্ড পরিবর্তন</string>
   <string name="admin_password_disabled">অ্যাডমিনের পাসওয়ার্ড disabled</string>

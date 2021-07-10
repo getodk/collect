@@ -344,7 +344,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Parametrat e përgjithshëm</string>
+  <string name="project_settings">Parametrat e përgjithshëm</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->
@@ -464,8 +464,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Parametrat e Administratorit</string>
-  <string name="admin_access_settings">Akseso parametrat si administrator</string>
   <string name="enter_new_password">Vendos fjalëkalim të ri</string>
   <string name="admin_password">Fjalëkalimi i Administratorit</string>
   <string name="admin_password_changed">Fjalëkalimi i Administratorit u ndryshua me sukses</string>
@@ -495,7 +493,6 @@
   <string name="reset_blank_forms_result">Formularë bosh :: %s</string>
   <string name="reset_layers_result">Shtresat e hartës :: %s</string>
   <string name="reset_cache_result">Cache ngarkimi i formularëve :: %s</string>
-  <string name="user_access_control">Kontrolli i aksesi të përdoruesit</string>
   <string name="main_menu_settings">Parametrat e Menusë Kryesore</string>
   <string name="main_menu_settings_summary">Administro elementët e menusë kryesore</string>
   <string name="user_settings">Parametrat e përdoruesit</string>

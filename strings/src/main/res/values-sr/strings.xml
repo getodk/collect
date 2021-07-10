@@ -459,7 +459,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Opšta podešavanja</string>
+  <string name="project_settings">Opšta podešavanja</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Title of a settings section-->
@@ -590,8 +590,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Administratorska podešavanja</string>
-  <string name="admin_access_settings">Pritisni za administratorski pristup podešavanjima</string>
   <string name="enter_new_password">Ukucaj novu lozinku</string>
   <string name="admin_password">Administratorska lozinka</string>
   <string name="admin_password_changed">Administratorska lozinka je uspješno promijenjena</string>
@@ -621,7 +619,6 @@
   <string name="reset_blank_forms_result">Prazni formulari :: %s</string>
   <string name="reset_layers_result">Slojevi mape :: %s</string>
   <string name="reset_cache_result">Keš za ulčitavanje formulara :: %s</string>
-  <string name="user_access_control">Kontrola korisničkog pristupa</string>
   <string name="main_menu_settings">Podešavanja glavnog menija</string>
   <string name="main_menu_settings_summary">Dodirni za upravljanje stavkama glavnog menija</string>
   <string name="user_settings">Korisnička podešavanja</string>

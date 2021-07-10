@@ -532,7 +532,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Paramètres généraux</string>
+  <string name="project_settings">Paramètres généraux</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Serveur</string>
   <!--Title of a settings section-->
@@ -675,8 +675,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Paramètres administrateur</string>
-  <string name="admin_access_settings">Appuyer pour obtenir l\'accès administrateur aux paramètres</string>
   <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
   <string name="admin_password">Mot de passe de l\'administrateur</string>
   <string name="admin_password_changed">Mot de passe administrateur modifié avec succès</string>
@@ -688,7 +686,6 @@
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
-  <string name="project_configuration">Configuration du projet</string>
   <string name="reset_project_settings_title">Réinitialiser l\'application …</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>
@@ -707,7 +704,6 @@
   <string name="reset_blank_forms_result">Formulaires vierges :: %s</string>
   <string name="reset_layers_result">Couches cartographiques :: %s</string>
   <string name="reset_cache_result">Cache pour chargement de formulaire :: %s</string>
-  <string name="user_access_control">Contrôle d\'Accès Utilisateur</string>
   <string name="main_menu_settings">Paramètres du Menu principal</string>
   <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>
   <string name="user_settings">Paramètres utilisateurs</string>

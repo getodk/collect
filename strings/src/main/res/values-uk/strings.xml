@@ -459,7 +459,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Загальні налаштування</string>
+  <string name="project_settings">Загальні налаштування</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Сервер</string>
   <!--Title of a settings section-->
@@ -590,8 +590,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Адміністрування</string>
-  <string name="admin_access_settings">Клікніть для адміністративного доступу до налаштувань</string>
   <string name="enter_new_password">Введіть новий пароль</string>
   <string name="admin_password">Пароль адміністратора</string>
   <string name="admin_password_changed">Пароль адміністратора успішно змінено</string>
@@ -621,7 +619,6 @@
   <string name="reset_blank_forms_result">Незаповнені анкети :: %s</string>
   <string name="reset_layers_result">Шари карт :: %s</string>
   <string name="reset_cache_result">Кеш завантаження анкет :: %s</string>
-  <string name="user_access_control">Контроль Доступу Користувачів</string>
   <string name="main_menu_settings">Налаштування Головного Меню</string>
   <string name="main_menu_settings_summary">Натисніть для управління пунктами головного меню</string>
   <string name="user_settings">Користувацькі Налаштування</string>

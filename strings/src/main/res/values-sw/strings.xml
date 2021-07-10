@@ -445,7 +445,7 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="general_preferences">Mpangilio wa jumla</string>
+  <string name="project_settings">Mpangilio wa jumla</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Seva</string>
   <!--Title of a settings section-->
@@ -578,8 +578,6 @@
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
-  <string name="admin_preferences">Mipangilio ya msimamizi</string>
-  <string name="admin_access_settings">Bofya kwa upatikanaji wa mipangilio ya msimamizi</string>
   <string name="enter_new_password">Ingiza nenosiri jipya</string>
   <string name="admin_password">Nenosiri la msimamizi</string>
   <string name="admin_password_changed">Nenosiri la msimamizi limebadilishwa kwa ufanisi</string>
@@ -609,7 +607,6 @@
   <string name="reset_blank_forms_result">Fomu tupu :: %s</string>
   <string name="reset_layers_result">Safu za ramani :: %s</string>
   <string name="reset_cache_result">Fomu ya takwimu za muda mfupi :: %s</string>
-  <string name="user_access_control">Dhibiti ya ufikivu wa mtumiaji</string>
   <string name="main_menu_settings">Mipangilio ya menyu kuu</string>
   <string name="main_menu_settings_summary">Bofya ili kudhibiti vitu muhimu vya menyu kuu</string>
   <string name="user_settings">Mipangilio ya mtumiaji</string>

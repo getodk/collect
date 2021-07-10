@@ -46,7 +46,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
-public class FormManagementPreferencesFragment extends BaseGeneralPreferencesFragment {
+public class FormManagementPreferencesFragment extends BaseProjectPreferencesFragment {
 
     @Inject
     Analytics analytics;
