@@ -32,10 +32,14 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.location.Location;
+import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
+import org.odk.collect.location.tracker.LocationTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,10 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     @Inject
     MapProvider mapProvider;
+
+    private LocationTracker locationTracker;
+    private boolean useNewLocationTracker;
+
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -112,6 +120,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
+
+        useNewLocationTracker = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_USE_LOCATION_TRACKER);
+        locationTracker = new ForegroundServiceLocationTracker(this);
 
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
@@ -163,6 +174,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
+
+        locationTracker.stop();
         super.onDestroy();
     }
 
@@ -213,7 +226,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         });
 
         recordButton = findViewById(R.id.record_button);
-        recordButton.setOnClickListener(v -> recordPoint());
+        recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
             MapsPreferencesFragment.showReferenceLayerDialog(this);
@@ -329,7 +342,29 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            startScheduler(INTERVAL_OPTIONS[intervalIndex]);
+            if (useNewLocationTracker) {
+                locationTracker.start();
+
+                schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
+                    Location currentLocation = locationTracker.getCurrentLocation();
+
+                    if (currentLocation != null) {
+                        MapPoint currentMapPoint = new MapPoint(
+                                currentLocation.getLatitude(),
+                                currentLocation.getLongitude(),
+                                currentLocation.getAltitude(),
+                                currentLocation.getAccuracy()
+                        );
+
+                        recordPoint(currentMapPoint);
+                    }
+                }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+            } else {
+                schedulerHandler = scheduler.scheduleAtFixedRate(
+                        () -> runOnUiThread(() -> {
+                            recordPoint(map.getGpsLocation());
+                        }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+            }
         }
         updateUi();
     }
@@ -369,11 +404,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         this.accuracyThresholdIndex = accuracyThresholdIndex;
     }
 
-    public void startScheduler(int intervalSeconds) {
-        schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(this::recordPoint), 0, intervalSeconds, TimeUnit.SECONDS);
-    }
-
     private void onClick(MapPoint point) {
         if (inputActive && !recordingEnabled) {
             map.appendPointToPoly(featureId, point);
@@ -396,8 +426,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         updateUi();
     }
 
-    private void recordPoint() {
-        MapPoint point = map.getGpsLocation();
+    private void recordPoint(MapPoint point) {
         if (point != null && isLocationAcceptable(point)) {
             map.appendPointToPoly(featureId, point);
             updateUi();

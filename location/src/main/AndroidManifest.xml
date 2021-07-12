@@ -5,4 +5,10 @@
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
         android:maxSdkVersion="22" />
+
+    <application>
+        <service
+            android:name=".tracker.LocationTrackerService"
+            android:foregroundServiceType="location" />
+    </application>
 </manifest>
