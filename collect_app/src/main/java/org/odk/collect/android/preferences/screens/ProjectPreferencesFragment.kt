@@ -49,27 +49,27 @@ class ProjectPreferencesFragment :
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.project_preferences, rootKey)
 
-        findPreference<Preference>("protocol")!!.onPreferenceClickListener = this
-        findPreference<Preference>("project_display")!!.onPreferenceClickListener = this
-        findPreference<Preference>("user_interface")!!.onPreferenceClickListener = this
-        findPreference<Preference>("maps")!!.onPreferenceClickListener = this
-        findPreference<Preference>("form_management")!!.onPreferenceClickListener = this
-        findPreference<Preference>("user_and_device_identity")!!.onPreferenceClickListener = this
-        findPreference<Preference>("experimental")!!.onPreferenceClickListener = this
+        findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
-        findPreference<Preference>("project_management")!!.onPreferenceClickListener = this
-        findPreference<Preference>("access_control")!!.onPreferenceClickListener = this
+        findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
 
         if (!isInAdminMode) {
             setPreferencesVisibility()
         }
         if (versionInformation.isRelease) {
-            findPreference<Preference>("experimental")!!.isVisible = false
+            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
 
         if (adminPasswordProvider.isAdminPasswordSet) {
-            findPreference<Preference>("project_management")!!.isEnabled = false
-            findPreference<Preference>("access_control")!!.isEnabled = false
+            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isEnabled = false
+            findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isEnabled = false
         }
     }
 
@@ -98,15 +98,15 @@ class ProjectPreferencesFragment :
 
     private fun getPreferenceFragment(preferenceKey: String): PreferenceFragmentCompat? {
         return when (preferenceKey) {
-            "protocol" -> ServerPreferencesFragment()
-            "project_display" -> ProjectDisplayPreferencesFragment()
-            "user_interface" -> UserInterfacePreferencesFragment()
-            "maps" -> MapsPreferencesFragment()
-            "form_management" -> FormManagementPreferencesFragment()
-            "user_and_device_identity" -> IdentityPreferencesFragment()
-            "experimental" -> ExperimentalPreferencesFragment()
-            "project_management" -> ProjectManagementPreferencesFragment()
-            "access_control" -> AccessControlPreferencesFragment()
+            PROTOCOL_PREFERENCE_KEY -> ServerPreferencesFragment()
+            PROJECT_DISPLAY_PREFERENCE_KEY -> ProjectDisplayPreferencesFragment()
+            USER_INTERFACE_PREFERENCE_KEY -> UserInterfacePreferencesFragment()
+            MAPS_PREFERENCE_KEY -> MapsPreferencesFragment()
+            FORM_MANAGEMENT_PREFERENCE_KEY -> FormManagementPreferencesFragment()
+            USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> IdentityPreferencesFragment()
+            EXPERIMENTAL_PREFERENCE_KEY -> ExperimentalPreferencesFragment()
+            PROJECT_MANAGEMENT_PREFERENCE_KEY -> ProjectManagementPreferencesFragment()
+            ACCESS_CONTROL_PREFERENCE_KEY -> AccessControlPreferencesFragment()
             else -> null
         }
     }
@@ -114,20 +114,20 @@ class ProjectPreferencesFragment :
     private fun setPreferencesVisibility() {
         val preferenceScreen = preferenceScreen
         if (!hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
-            preferenceScreen.removePreference(findPreference("protocol"))
+            preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
         }
         if (!hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-            preferenceScreen.removePreference(findPreference("user_interface"))
+            preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
         }
         val mapsScreenEnabled = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MAPS)
         if (!mapsScreenEnabled) {
-            preferenceScreen.removePreference(findPreference("maps"))
+            preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
         }
         if (!hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-            preferenceScreen.removePreference(findPreference("form_management"))
+            preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
         }
         if (!hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
-            preferenceScreen.removePreference(findPreference("user_and_device_identity"))
+            preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
         }
     }
 
@@ -145,5 +145,17 @@ class ProjectPreferencesFragment :
         val fragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
         fragment.preventOtherWaysOfEditingForm()
+    }
+
+    companion object {
+        private const val PROTOCOL_PREFERENCE_KEY = "protocol"
+        private const val PROJECT_DISPLAY_PREFERENCE_KEY = "project_display"
+        private const val USER_INTERFACE_PREFERENCE_KEY = "user_interface"
+        private const val MAPS_PREFERENCE_KEY = "maps"
+        private const val FORM_MANAGEMENT_PREFERENCE_KEY = "form_management"
+        private const val USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY = "user_and_device_identity"
+        private const val EXPERIMENTAL_PREFERENCE_KEY = "experimental"
+        private const val PROJECT_MANAGEMENT_PREFERENCE_KEY = "project_management"
+        private const val ACCESS_CONTROL_PREFERENCE_KEY = "access_control"
     }
 }
