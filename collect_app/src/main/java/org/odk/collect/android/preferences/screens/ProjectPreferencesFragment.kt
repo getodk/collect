@@ -17,11 +17,15 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -43,6 +47,7 @@ class ProjectPreferencesFragment :
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -81,6 +86,24 @@ class ProjectPreferencesFragment :
                 )
                 else -> displayPreferences(getPreferenceFragment(preference.key))
             }
+            return true
+        }
+        return false
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        if (adminPasswordProvider.isAdminPasswordSet) {
+            menu.findItem(R.id.menu_locked).isVisible = true
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.project_preferences_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_locked) {
+            DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
             return true
         }
         return false
