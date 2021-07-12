@@ -13,7 +13,7 @@ interface LocationTracker {
     fun getCurrentLocation(): Location?
 
     /**
-     * Starts tracking the device's location at a fixed interval (5s)
+     * Starts tracking the device's location at a fixed interval
      */
     fun start()
 
