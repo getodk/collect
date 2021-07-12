@@ -345,6 +345,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             if (useNewLocationTracker) {
                 locationTracker.start();
 
+                recordPoint(map.getGpsLocation());
                 schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
                     Location currentLocation = locationTracker.getCurrentLocation();
 
@@ -358,7 +359,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
                         recordPoint(currentMapPoint);
                     }
-                }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+                }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
             } else {
                 schedulerHandler = scheduler.scheduleAtFixedRate(
                         () -> runOnUiThread(() -> {
