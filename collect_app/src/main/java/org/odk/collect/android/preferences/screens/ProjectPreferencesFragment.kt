@@ -28,6 +28,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.AdminPasswordViewModel
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
+import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
@@ -51,6 +52,20 @@ class ProjectPreferencesFragment :
         DaggerUtils.getComponent(context).inject(this)
         setHasOptionsMenu(true)
 
+        val changeAdminPasswordViewModel = ViewModelProvider(requireActivity()).get(
+            ChangeAdminPasswordViewModel::class.java
+        )
+        changeAdminPasswordViewModel.passwordEnabled.observe(
+            this,
+            { isPasswordEnabled: Boolean ->
+                if (isPasswordEnabled) {
+                    isPasswordEntered = true
+                }
+                isPasswordSet = isPasswordEnabled
+                requireActivity().invalidateOptionsMenu()
+            }
+        )
+
         val adminPasswordViewModel = ViewModelProvider(requireActivity()).get(
             AdminPasswordViewModel::class.java
         )
@@ -58,7 +73,7 @@ class ProjectPreferencesFragment :
             this,
             { isPasswordCorrect: Boolean ->
                 if (isPasswordCorrect) {
-                    isAdminMode = true
+                    isPasswordEntered = true
                     requireActivity().invalidateOptionsMenu()
                 } else {
                     ToastUtils.showShortToast(R.string.admin_password_incorrect)
@@ -88,6 +103,9 @@ class ProjectPreferencesFragment :
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
+        if (adminPasswordProvider.isAdminPasswordSet) {
+            isPasswordSet = true
+        }
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -101,22 +119,23 @@ class ProjectPreferencesFragment :
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
                 AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> {
-                    if (adminPasswordProvider.isAdminPasswordSet && !isAdminMode) {
+                    if (isPasswordSet && !isPasswordEntered) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         DialogUtils.showIfNotShowing(
                             ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
-                        )                    }
+                        )
+                    }
                 }
                 PROJECT_MANAGEMENT_PREFERENCE_KEY -> {
-                    if (adminPasswordProvider.isAdminPasswordSet && !isAdminMode) {
+                    if (isPasswordSet && !isPasswordEntered) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         displayPreferences(ProjectManagementPreferencesFragment())
                     }
                 }
                 ACCESS_CONTROL_PREFERENCE_KEY -> {
-                    if (adminPasswordProvider.isAdminPasswordSet && !isAdminMode) {
+                    if (isPasswordSet && !isPasswordEntered) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         displayPreferences(AccessControlPreferencesFragment())
@@ -129,8 +148,8 @@ class ProjectPreferencesFragment :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (adminPasswordProvider.isAdminPasswordSet) {
-            if (isAdminMode) {
+        if (isPasswordSet) {
+            if (isPasswordEntered) {
                 menu.findItem(R.id.menu_unlocked).isVisible = true
             } else {
                 menu.findItem(R.id.menu_locked).isVisible = true
@@ -152,7 +171,7 @@ class ProjectPreferencesFragment :
 
     override fun onDestroy() {
         super.onDestroy()
-        isAdminMode = false
+        isPasswordEntered = false
     }
 
     private fun displayPreferences(fragment: Fragment?) {
@@ -212,6 +231,7 @@ class ProjectPreferencesFragment :
         private const val PROJECT_MANAGEMENT_PREFERENCE_KEY = "project_management"
         private const val ACCESS_CONTROL_PREFERENCE_KEY = "access_control"
 
-        var isAdminMode = false
+        var isPasswordSet = false
+        var isPasswordEntered = false
     }
 }

@@ -9,6 +9,10 @@ import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -26,6 +30,8 @@ class ChangeAdminPasswordDialog : DialogFragment() {
     lateinit var softKeyboardController: SoftKeyboardController
 
     lateinit var binding: PasswordDialogLayoutBinding
+
+    val model: ChangeAdminPasswordViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -57,13 +63,24 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
                 if (password.isEmpty()) {
                     showShortToast(R.string.admin_password_disabled)
+                    model.passwordEnabled(false)
                 } else {
                     showShortToast(R.string.admin_password_changed)
+                    model.passwordEnabled(true)
                 }
                 dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .setCancelable(false)
             .create()
+    }
+}
+
+class ChangeAdminPasswordViewModel : ViewModel() {
+    private val _passwordEnabled = MutableLiveData<Boolean>()
+    val passwordEnabled: LiveData<Boolean> = _passwordEnabled
+
+    fun passwordEnabled(isPasswordEnabled: Boolean) {
+        _passwordEnabled.value = isPasswordEnabled
     }
 }
