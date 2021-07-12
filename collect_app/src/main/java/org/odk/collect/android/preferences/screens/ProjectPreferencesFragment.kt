@@ -100,9 +100,14 @@ class ProjectPreferencesFragment :
                 FORM_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(FormManagementPreferencesFragment())
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
-                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(
-                    ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
-                )
+                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> {
+                    if (adminPasswordProvider.isAdminPasswordSet && !isAdminMode) {
+                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
+                    } else {
+                        DialogUtils.showIfNotShowing(
+                            ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
+                        )                    }
+                }
                 PROJECT_MANAGEMENT_PREFERENCE_KEY -> {
                     if (adminPasswordProvider.isAdminPasswordSet && !isAdminMode) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
