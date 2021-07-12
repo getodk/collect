@@ -75,6 +75,7 @@ class ProjectPreferencesFragment :
                 if (isPasswordCorrect) {
                     isPasswordEntered = true
                     requireActivity().invalidateOptionsMenu()
+                    setupPrefs()
                 } else {
                     ToastUtils.showShortToast(R.string.admin_password_incorrect)
                 }
@@ -84,7 +85,19 @@ class ProjectPreferencesFragment :
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        setPreferencesFromResource(R.xml.project_preferences, rootKey)
+        setupPrefs()
+
+        if (versionInformation.isRelease) {
+            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
+        }
+        if (adminPasswordProvider.isAdminPasswordSet) {
+            isPasswordSet = true
+        }
+    }
+
+    private fun setupPrefs() {
+        preferenceScreen = null
+        addPreferencesFromResource(R.xml.project_preferences)
 
         findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
@@ -96,16 +109,6 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
-
-        if (!isInAdminMode) {
-            setPreferencesVisibility()
-        }
-        if (versionInformation.isRelease) {
-            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
-        }
-        if (adminPasswordProvider.isAdminPasswordSet) {
-            isPasswordSet = true
-        }
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -184,36 +187,6 @@ class ProjectPreferencesFragment :
         }
     }
 
-    private fun setPreferencesVisibility() {
-        val preferenceScreen = preferenceScreen
-        if (!hasAtleastOneSettingEnabled(AdminKeys.serverKeys)) {
-            preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
-        }
-        if (!hasAtleastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-            preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
-        }
-        val mapsScreenEnabled = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MAPS)
-        if (!mapsScreenEnabled) {
-            preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
-        }
-        if (!hasAtleastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-            preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
-        }
-        if (!hasAtleastOneSettingEnabled(AdminKeys.identityKeys)) {
-            preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
-        }
-    }
-
-    private fun hasAtleastOneSettingEnabled(keys: Collection<String>): Boolean {
-        for (key in keys) {
-            val value = settingsProvider.getAdminSettings().getBoolean(key)
-            if (value) {
-                return true
-            }
-        }
-        return false
-    }
-
     fun preventOtherWaysOfEditingForm() {
         val fragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
@@ -230,8 +203,5 @@ class ProjectPreferencesFragment :
         private const val EXPERIMENTAL_PREFERENCE_KEY = "experimental"
         private const val PROJECT_MANAGEMENT_PREFERENCE_KEY = "project_management"
         private const val ACCESS_CONTROL_PREFERENCE_KEY = "access_control"
-
-        var isPasswordSet = false
-        var isPasswordEntered = false
     }
 }
