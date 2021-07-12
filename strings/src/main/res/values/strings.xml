@@ -9,7 +9,7 @@
     the specific language governing permissions and limitations under the
     License.
 -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,UnusedResources" tools:locale="en">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <!-- Text for an action button on the main screen. -->
     <string name="enter_data">Fill Blank Form</string>
     <!-- Text for an action button on the main screen. -->
