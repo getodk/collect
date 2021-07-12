@@ -24,6 +24,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
@@ -35,6 +36,9 @@ class ProjectPreferencesFragment :
 
     @Inject
     lateinit var versionInformation: VersionInformation
+
+    @Inject
+    lateinit var adminPasswordProvider: AdminPasswordProvider
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,6 +65,11 @@ class ProjectPreferencesFragment :
         }
         if (versionInformation.isRelease) {
             findPreference<Preference>("experimental")!!.isVisible = false
+        }
+
+        if (adminPasswordProvider.isAdminPasswordSet) {
+            findPreference<Preference>("project_management")!!.isEnabled = false
+            findPreference<Preference>("access_control")!!.isEnabled = false
         }
     }
 
