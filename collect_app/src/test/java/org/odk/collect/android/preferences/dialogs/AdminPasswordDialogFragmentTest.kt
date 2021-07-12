@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Looper
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,7 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment.AdminPasswordDialogCallback
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestActivityScenario
@@ -31,7 +31,7 @@ class AdminPasswordDialogFragmentTest {
     }
 
     @Test
-    fun enteringPassword_andClickingOK_callsOnCorrectAdminPassword() {
+    fun `Entering correct password sets isPasswordCorrect value in view model to true`() {
         val activityScenario = TestActivityScenario.launch(
             SpyAdminPasswordDialogCallbackActivity::class.java
         )
@@ -42,16 +42,12 @@ class AdminPasswordDialogFragmentTest {
             fragment.binding.editText.setText("password")
             (fragment.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             Shadows.shadowOf(Looper.getMainLooper()).idle()
-            assertThat(activity.onCorrectAdminPasswordCalled, equalTo(true))
-            assertThat(
-                activity.onIncorrectAdminPasswordCalled,
-                equalTo(false)
-            )
+            assertThat(activity.isPasswordCorrect, equalTo(true))
         }
     }
 
     @Test
-    fun enteringIncorrectPassword_andClickingOK_callsOnInCorrectAdminPassword() {
+    fun `Entering incorrect password sets isPasswordCorrect value in view model to false`() {
         val activityScenario = TestActivityScenario.launch(
             SpyAdminPasswordDialogCallbackActivity::class.java
         )
@@ -62,36 +58,7 @@ class AdminPasswordDialogFragmentTest {
             fragment.binding.editText.setText("not the password")
             (fragment.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             Shadows.shadowOf(Looper.getMainLooper()).idle()
-            assertThat(activity.onCorrectAdminPasswordCalled, equalTo(false))
-            assertThat(
-                activity.onIncorrectAdminPasswordCalled,
-                equalTo(true)
-            )
-        }
-    }
-
-    @Test
-    fun afterRecreating_enteringPassword_andClickingOK_callsOnCorrectAdminPasswordWithAction() {
-        val activityScenario = TestActivityScenario.launch(
-            SpyAdminPasswordDialogCallbackActivity::class.java
-        )
-        activityScenario.onActivity { activity: SpyAdminPasswordDialogCallbackActivity ->
-            val fragment = AdminPasswordDialogFragment()
-            fragment.show(activity.supportFragmentManager, "tag")
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-        }
-        activityScenario.recreate()
-        activityScenario.onActivity { activity: SpyAdminPasswordDialogCallbackActivity ->
-            val fragment =
-                activity.supportFragmentManager.findFragmentByTag("tag") as AdminPasswordDialogFragment?
-            fragment!!.binding.editText.setText("password")
-            (fragment.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
-            Shadows.shadowOf(Looper.getMainLooper()).idle()
-            assertThat(activity.onCorrectAdminPasswordCalled, equalTo(true))
-            assertThat(
-                activity.onIncorrectAdminPasswordCalled,
-                equalTo(false)
-            )
+            assertThat(activity.isPasswordCorrect, equalTo(false))
         }
     }
 
@@ -105,21 +72,22 @@ class AdminPasswordDialogFragmentTest {
         }
     }
 
-    private class SpyAdminPasswordDialogCallbackActivity : FragmentActivity(), AdminPasswordDialogCallback {
-        var onCorrectAdminPasswordCalled = false
-        var onIncorrectAdminPasswordCalled = false
+    private class SpyAdminPasswordDialogCallbackActivity : FragmentActivity() {
+        var isPasswordCorrect = false
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             setTheme(R.style.Theme_AppCompat) // Needed for androidx.appcompat.app.AlertDialog
-        }
 
-        override fun onCorrectAdminPassword() {
-            onCorrectAdminPasswordCalled = true
-        }
-
-        override fun onIncorrectAdminPassword() {
-            onIncorrectAdminPasswordCalled = true
+            val adminPasswordViewModel = ViewModelProvider(this).get(
+                AdminPasswordViewModel::class.java
+            )
+            adminPasswordViewModel.passwordEntered.observe(
+                this,
+                { isPasswordCorrect: Boolean ->
+                    this.isPasswordCorrect = isPasswordCorrect
+                }
+            )
         }
     }
 }

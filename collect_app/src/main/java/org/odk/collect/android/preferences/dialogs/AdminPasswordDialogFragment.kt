@@ -9,6 +9,10 @@ import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AdminPasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -17,8 +21,6 @@ import org.odk.collect.android.utilities.SoftKeyboardController
 import javax.inject.Inject
 
 class AdminPasswordDialogFragment : DialogFragment() {
-    private var callback: AdminPasswordDialogCallback? = null
-
     @Inject
     lateinit var adminPasswordProvider: AdminPasswordProvider
 
@@ -27,12 +29,11 @@ class AdminPasswordDialogFragment : DialogFragment() {
 
     lateinit var binding: AdminPasswordDialogLayoutBinding
 
+    val model: AdminPasswordViewModel by activityViewModels()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
-        if (context is AdminPasswordDialogCallback) {
-            callback = context
-        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -55,18 +56,22 @@ class AdminPasswordDialogFragment : DialogFragment() {
             .setTitle(getString(R.string.enter_admin_password))
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 if (adminPasswordProvider.adminPassword == binding.editText.text.toString()) {
-                    callback?.onCorrectAdminPassword()
+                    model.passwordEntered(true)
                 } else {
-                    callback?.onIncorrectAdminPassword()
+                    model.passwordEntered(false)
                 }
                 dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .create()
     }
+}
 
-    interface AdminPasswordDialogCallback {
-        fun onCorrectAdminPassword()
-        fun onIncorrectAdminPassword()
+class AdminPasswordViewModel : ViewModel() {
+    private val _passwordEntered = MutableLiveData<Boolean>()
+    val passwordEntered: LiveData<Boolean> = _passwordEntered
+
+    fun passwordEntered(isPasswordCorrect: Boolean) {
+        _passwordEntered.value = isPasswordCorrect
     }
 }
