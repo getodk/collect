@@ -22,7 +22,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
@@ -71,20 +70,35 @@ class ProjectPreferencesFragment :
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
-
-        if (adminPasswordProvider.isAdminPasswordSet) {
-            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isEnabled = false
-            findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isEnabled = false
-        }
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         if (MultiClickGuard.allowClick(javaClass.name)) {
             when (preference.key) {
+                PROTOCOL_PREFERENCE_KEY -> displayPreferences(ServerPreferencesFragment())
+                PROJECT_DISPLAY_PREFERENCE_KEY -> displayPreferences(ProjectDisplayPreferencesFragment())
+                USER_INTERFACE_PREFERENCE_KEY -> displayPreferences(UserInterfacePreferencesFragment())
+                MAPS_PREFERENCE_KEY -> displayPreferences(MapsPreferencesFragment())
+                FORM_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(FormManagementPreferencesFragment())
+                USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
+                EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
                 AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(
                     ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
                 )
-                else -> displayPreferences(getPreferenceFragment(preference.key))
+                PROJECT_MANAGEMENT_PREFERENCE_KEY -> {
+                    if (adminPasswordProvider.isAdminPasswordSet) {
+                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
+                    } else {
+                        displayPreferences(ProjectManagementPreferencesFragment())
+                    }
+                }
+                ACCESS_CONTROL_PREFERENCE_KEY -> {
+                    if (adminPasswordProvider.isAdminPasswordSet) {
+                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
+                    } else {
+                        displayPreferences(AccessControlPreferencesFragment())
+                    }
+                }
             }
             return true
         }
@@ -116,21 +130,6 @@ class ProjectPreferencesFragment :
                 .replace(R.id.preferences_fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
-        }
-    }
-
-    private fun getPreferenceFragment(preferenceKey: String): PreferenceFragmentCompat? {
-        return when (preferenceKey) {
-            PROTOCOL_PREFERENCE_KEY -> ServerPreferencesFragment()
-            PROJECT_DISPLAY_PREFERENCE_KEY -> ProjectDisplayPreferencesFragment()
-            USER_INTERFACE_PREFERENCE_KEY -> UserInterfacePreferencesFragment()
-            MAPS_PREFERENCE_KEY -> MapsPreferencesFragment()
-            FORM_MANAGEMENT_PREFERENCE_KEY -> FormManagementPreferencesFragment()
-            USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> IdentityPreferencesFragment()
-            EXPERIMENTAL_PREFERENCE_KEY -> ExperimentalPreferencesFragment()
-            PROJECT_MANAGEMENT_PREFERENCE_KEY -> ProjectManagementPreferencesFragment()
-            ACCESS_CONTROL_PREFERENCE_KEY -> AccessControlPreferencesFragment()
-            else -> null
         }
     }
 
