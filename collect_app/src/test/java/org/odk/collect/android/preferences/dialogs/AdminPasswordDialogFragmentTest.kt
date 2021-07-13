@@ -80,7 +80,7 @@ class AdminPasswordDialogFragmentTest {
             setTheme(R.style.Theme_AppCompat) // Needed for androidx.appcompat.app.AlertDialog
 
             val adminPasswordViewModel = ViewModelProvider(this).get(
-                AdminPasswordViewModel::class.java
+                EnterAdminPasswordViewModel::class.java
             )
             adminPasswordViewModel.passwordEntered.observe(
                 this,

@@ -26,9 +26,9 @@ import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
-import org.odk.collect.android.preferences.dialogs.AdminPasswordViewModel
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordViewModel
+import org.odk.collect.android.preferences.dialogs.EnterAdminPasswordViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
@@ -51,10 +51,10 @@ class ProjectPreferencesFragment :
         val changeAdminPasswordViewModel = ViewModelProvider(requireActivity()).get(
             ChangeAdminPasswordViewModel::class.java
         )
-        changeAdminPasswordViewModel.passwordEnabled.observe(
+        changeAdminPasswordViewModel.passwordSet.observe(
             this,
-            { isPasswordEnabled: Boolean ->
-                if (isPasswordEnabled) {
+            { isPasswordSet: Boolean ->
+                if (isPasswordSet) {
                     projectPreferencesViewModel.setStateUnlocked()
                 } else {
                     projectPreferencesViewModel.setStateNotProtected()
@@ -63,16 +63,16 @@ class ProjectPreferencesFragment :
             }
         )
 
-        val adminPasswordViewModel = ViewModelProvider(requireActivity()).get(
-            AdminPasswordViewModel::class.java
+        val enterAdminPasswordViewModel = ViewModelProvider(requireActivity()).get(
+            EnterAdminPasswordViewModel::class.java
         )
-        adminPasswordViewModel.passwordEntered.observe(
+        enterAdminPasswordViewModel.passwordEntered.observe(
             this,
             { isPasswordCorrect: Boolean ->
                 if (isPasswordCorrect) {
                     projectPreferencesViewModel.setStateUnlocked()
                     requireActivity().invalidateOptionsMenu()
-                    setupPrefs()
+                    setupPreferences()
                 } else {
                     ToastUtils.showShortToast(R.string.admin_password_incorrect)
                 }
@@ -82,14 +82,14 @@ class ProjectPreferencesFragment :
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        setupPrefs()
+        setupPreferences()
 
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
     }
 
-    private fun setupPrefs() {
+    private fun setupPreferences() {
         preferenceScreen = null
         addPreferencesFromResource(R.xml.project_preferences)
 
@@ -145,15 +145,19 @@ class ProjectPreferencesFragment :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (projectPreferencesViewModel.isStateLocked()) {
-            menu.findItem(R.id.menu_locked).isVisible = true
-            menu.findItem(R.id.menu_unlocked).isVisible = false
-        } else if (projectPreferencesViewModel.isStateUnlocked()) {
-            menu.findItem(R.id.menu_locked).isVisible = false
-            menu.findItem(R.id.menu_unlocked).isVisible = true
-        } else {
-            menu.findItem(R.id.menu_locked).isVisible = false
-            menu.findItem(R.id.menu_unlocked).isVisible = false
+        when {
+            projectPreferencesViewModel.isStateLocked() -> {
+                menu.findItem(R.id.menu_locked).isVisible = true
+                menu.findItem(R.id.menu_unlocked).isVisible = false
+            }
+            projectPreferencesViewModel.isStateUnlocked() -> {
+                menu.findItem(R.id.menu_locked).isVisible = false
+                menu.findItem(R.id.menu_unlocked).isVisible = true
+            }
+            else -> {
+                menu.findItem(R.id.menu_locked).isVisible = false
+                menu.findItem(R.id.menu_unlocked).isVisible = false
+            }
         }
     }
 

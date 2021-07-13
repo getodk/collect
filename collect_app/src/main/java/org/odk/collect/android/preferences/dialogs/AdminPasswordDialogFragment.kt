@@ -29,7 +29,7 @@ class AdminPasswordDialogFragment : DialogFragment() {
 
     lateinit var binding: AdminPasswordDialogLayoutBinding
 
-    val model: AdminPasswordViewModel by activityViewModels()
+    val modelEnter: EnterAdminPasswordViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,9 +56,9 @@ class AdminPasswordDialogFragment : DialogFragment() {
             .setTitle(getString(R.string.enter_admin_password))
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 if (adminPasswordProvider.adminPassword == binding.editText.text.toString()) {
-                    model.passwordEntered(true)
+                    modelEnter.passwordEntered(true)
                 } else {
-                    model.passwordEntered(false)
+                    modelEnter.passwordEntered(false)
                 }
                 dismiss()
             }
@@ -67,7 +67,7 @@ class AdminPasswordDialogFragment : DialogFragment() {
     }
 }
 
-class AdminPasswordViewModel : ViewModel() {
+class EnterAdminPasswordViewModel : ViewModel() {
     private val _passwordEntered = MutableLiveData<Boolean>()
     val passwordEntered: LiveData<Boolean> = _passwordEntered
 

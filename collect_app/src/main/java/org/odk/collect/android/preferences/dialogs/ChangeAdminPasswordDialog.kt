@@ -63,10 +63,10 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
                 if (password.isEmpty()) {
                     showShortToast(R.string.admin_password_disabled)
-                    model.passwordEnabled(false)
+                    model.passwordSet(false)
                 } else {
                     showShortToast(R.string.admin_password_changed)
-                    model.passwordEnabled(true)
+                    model.passwordSet(true)
                 }
                 dismiss()
             }
@@ -77,10 +77,10 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 }
 
 class ChangeAdminPasswordViewModel : ViewModel() {
-    private val _passwordEnabled = MutableLiveData<Boolean>()
-    val passwordEnabled: LiveData<Boolean> = _passwordEnabled
+    private val _passwordSet = MutableLiveData<Boolean>()
+    val passwordSet: LiveData<Boolean> = _passwordSet
 
-    fun passwordEnabled(isPasswordEnabled: Boolean) {
-        _passwordEnabled.value = isPasswordEnabled
+    fun passwordSet(isPasswordSet: Boolean) {
+        _passwordSet.value = isPasswordSet
     }
 }
