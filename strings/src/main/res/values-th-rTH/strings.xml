@@ -110,6 +110,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -295,14 +296,24 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">ตั้งค่าทั่วไป</string>
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">แผนที่</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">ตั้งค่าเซิร์ฟเวอร์</string>
   <!--Label for server type setting-->
   <string name="server_url">URL</string>
@@ -393,7 +404,7 @@
   <string name="show_password">แสดงรหัสผ่าน</string>
   <string name="found_in_main">ปล่อยว่างเพื่อซ่อนจากเมนูหลัก</string>
   <string name="found_in_settings">ปล่อยว่างเพื่อซ่อนจากเมนูตั้งค่าทั่วไป</string>
-  <string name="reset_project_settings_title">ตั้งค่าใหม่…</string>
+  <string name="reset_project_settings_title">ตั้งค่าใหม่</string>
   <string name="select_all">เลือกทั้งหมด</string>
   <string name="clear_all">ลบทั้งหมด</string>
   <string name="reset_settings">ค่าการติดตั้งทั้งหมด(การตั้งค่าภายใน, ค่าที่บันทึกไว้)</string>
@@ -465,6 +476,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

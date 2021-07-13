@@ -148,6 +148,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -425,18 +426,28 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">جنرل سیٹنگز</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور </string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">یوزر انٹرفیس</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">نقشہ جات</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">فارم مینجمنٹ</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">صارف اور ڈیوائس کی شناخت</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">سرور کی ترتیب</string>
   <!--Label for server type setting-->
   <string name="type">قسم</string>
@@ -568,7 +579,7 @@
   <string name="found_in_main">نشان ہٹا کرکے مرکزی فہرست سے ہٹا دیں</string>
   <string name="found_in_settings">نشانی ہٹاکر جنرل سیٹنگز سے ہٹا دیں۔</string>
   <string name="form_entry">فارم اندراج سے چھپانے کے لئے انچیک کریں</string>
-  <string name="reset_project_settings_title">ری سیٹ ایپلیکیشن </string>
+  <string name="reset_project_settings_title">ریس سیٹ کریں</string>
   <string name="select_all">تمام منتخب کریں</string>
   <string name="clear_all">تمام کو صاف کریں</string>
   <string name="reset_settings">تمام سیٹنگز(اندرونی سیٹنگز، محفوظ کردہ سیٹنگز)</string>
@@ -587,11 +598,8 @@
   <string name="reset_layers_result">میپ لیؑیرز:: %s</string>
   <string name="reset_cache_result">فارم لوڈ کیشے::%s</string>
   <string name="main_menu_settings">مین مینو سیٹنگز </string>
-  <string name="main_menu_settings_summary">مین مینوآئٹمز کو مینیج کرنے کیلئے ٹیپ کریں</string>
   <string name="user_settings">یوزر سیٹنگز </string>
-  <string name="user_setting_summary">جنرل سیٹنگزآئٹمز کو مینیج کرنے کیلئے ٹیپ کریں</string>
   <string name="form_entry_setting">فارم انٹری سیٹنگز </string>
-  <string name="form_entry_settings_summary">فارم میں اندراج آئٹمزکو مینیج کرنے کیلئے ٹیپ کریں</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">پیچھے کی طرف حرکت کرنا </string>
   <string name="moving_backwards_disabled_title">پیچھے کی طرف حرکت غیر فعال </string>
@@ -685,6 +693,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

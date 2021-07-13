@@ -154,6 +154,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -459,17 +460,27 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Opšta podešavanja</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Korisnički interfejs </string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Upravljanje formularima</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identitet uređaja i korisnika</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Podešavanje servera</string>
   <!--Label for server type setting-->
   <string name="type">Vrsta</string>
@@ -601,7 +612,7 @@
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
   <string name="found_in_settings">Uklonite oznaku da biste isključili iz opštih podešavanja</string>
   <string name="form_entry">Ukloni oznaku kako bi sakrio stavku iz Form Entry</string>
-  <string name="reset_project_settings_title">Resetuj aplikaciju…</string>
+  <string name="reset_project_settings_title">Resetuj</string>
   <string name="select_all">Obilježi sve</string>
   <string name="clear_all">Očisti sve</string>
   <string name="reset_settings">Sva podeševanja (interna podešavanja, sačuvana podešavanja)</string>
@@ -620,11 +631,8 @@
   <string name="reset_layers_result">Slojevi mape :: %s</string>
   <string name="reset_cache_result">Keš za ulčitavanje formulara :: %s</string>
   <string name="main_menu_settings">Podešavanja glavnog menija</string>
-  <string name="main_menu_settings_summary">Dodirni za upravljanje stavkama glavnog menija</string>
   <string name="user_settings">Korisnička podešavanja</string>
-  <string name="user_setting_summary">Dodirni za upravljanje opštim podešavanjima stavki</string>
   <string name="form_entry_setting">Podešavanje ispunjavanja formulara</string>
-  <string name="form_entry_settings_summary">Dodirni za  upravljanje stavkama formulara</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Idi nazad</string>
   <string name="moving_backwards_disabled_title">Povratak nazad onemogućen</string>
@@ -724,6 +732,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

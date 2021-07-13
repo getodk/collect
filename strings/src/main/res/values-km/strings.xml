@@ -142,6 +142,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -418,18 +419,28 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">ការកំណត់ទូទៅ</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">ម៉ាស៊ីនមេ</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">ចំណុច​ប្រទាក់​អ្នក​ប្រើប្រាស់​</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">ផែនទី</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">ការគ្រប់គ្រងទម្រង់</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">អត្តសញ្ញាណ​អ្នក​ប្រើ​ប្រាស់ និងឧបករណ៍</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
   <!--Label for server type setting-->
   <string name="type">ប្រភេទ</string>
@@ -559,7 +570,7 @@
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="found_in_settings">ដោះធីក​ដើម្បី​លាក់ចេញ​ពីការ​កំណត់ទូទៅ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
-  <string name="reset_project_settings_title">កំណត់កម្មវិធីឡើងវិញ</string>
+  <string name="reset_project_settings_title">កំណត់ឡើងវិញ</string>
   <string name="select_all">ជ្រើសរើសទាំងអស់</string>
   <string name="clear_all">លុបចេញទាំងអស់</string>
   <string name="reset_settings">ការកំណត់ទាំងអស់ (ការកំណត់ខាងក្នុង, ការកំណត់ដែលរក្សាទុក)</string>
@@ -578,11 +589,8 @@
   <string name="reset_layers_result">ស្រទាប់ផែនទី :: %s</string>
   <string name="reset_cache_result">ទម្រង់ផ្ទុកខាឆឹះ :: %s</string>
   <string name="main_menu_settings">ការកំណត់ផ្ទាំងមេមីនុយ</string>
-  <string name="main_menu_settings_summary">ប៉ះ​ដើម្បី​គ្រប់គ្រង​ធាតុ​នៃផ្ទាំងមេមីនុយ</string>
   <string name="user_settings">ការកំណត់របស់អ្នកប្រើប្រាស់</string>
-  <string name="user_setting_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រងធាតុ​នៃ​ការ​កំណត់​ទូទៅ</string>
   <string name="form_entry_setting">ការ​កំណត់​នៃ​ទម្រង់​បញ្ជូល</string>
-  <string name="form_entry_settings_summary">ប៉ះ​ដើម្បី​គ្រប់​គ្រង​ធាតុនៃទម្រង់បញ្ជូលទិន្នន័យ</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">កំពុងរំកិលថយក្រោយ</string>
   <string name="moving_backwards_disabled_title">ការរំកិលថយក្រោយមិនបានអនុញ្ញាតិ</string>
@@ -677,6 +685,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

@@ -161,6 +161,7 @@
   <string name="answer_file_copy_failed_message">メディアはフォームに添付できませんでしたが %1$s にあります</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">録音が無効になりました。 %s で有効にしてください</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -529,19 +530,29 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">全般設定</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">サーバー</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">ユーザーインターフェイス</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">地図</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">フォーム管理</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">ユーザーとデバイスの識別</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">実験的</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">サーバー設定</string>
   <!--Label for server type setting-->
   <string name="type">種類</string>
@@ -683,7 +694,8 @@
   <string name="found_in_main">チェックを外すとメインメニューから非表示にします</string>
   <string name="found_in_settings">チェックを外すと全般設定から非表示にします</string>
   <string name="form_entry">チェックを外すとフォーム入力から非表示にします</string>
-  <string name="reset_project_settings_title">アプリケーションのリセット…</string>
+  <string name="reset_project_settings_title">リセット</string>
+  <string name="delete_project">削除</string>
   <string name="select_all">すべて選択</string>
   <string name="clear_all">すべてクリア</string>
   <string name="reset_settings">すべての設定 (内部設定、保存された設定)</string>
@@ -702,11 +714,8 @@
   <string name="reset_layers_result">地図レイヤー :: %s</string>
   <string name="reset_cache_result">フォーム読み込みキャッシュ :: %s</string>
   <string name="main_menu_settings">メインメニュー設定</string>
-  <string name="main_menu_settings_summary">タップしてメインメニュー項目を管理</string>
   <string name="user_settings">ユーザー設定</string>
-  <string name="user_setting_summary">タップして全般設定項目を管理</string>
   <string name="form_entry_setting">フォーム入力設定</string>
-  <string name="form_entry_settings_summary">タップしてフォーム入力項目を管理</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">後ろへの移動</string>
   <string name="moving_backwards_disabled_title">後ろへの移動は無効です</string>
@@ -761,7 +770,6 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">QR コードから設定</string>
   <string name="qr_code">QR コード設定</string>
   <string name="scan_qr_code_fragment_title">スキャン</string>
   <string name="view_qr_code_fragment_title">QR コード</string>
@@ -816,6 +824,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

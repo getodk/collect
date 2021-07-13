@@ -161,6 +161,8 @@
   <string name="answer_file_copy_failed_message">Le fichier n\'a pas pu être attaché au formulaire mais est disponible à %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Enregistrement désactivé. Activez depuis %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Ce formulaire rempli ne peut pas être ouvert parce qu\'il a été supprimé hors de l\'application.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -532,19 +534,37 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Paramètres généraux</string>
+  <string name="project_settings">Paramètres de projet</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Serveur</string>
+  <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, utilisateur, mot de passe</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Nom, icône, couleur</string>
   <!--Title of a settings section-->
   <string name="client">Interface utilisateur</string>
+  <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Langue, thème, taille de police</string>
   <!--Title of a settings section-->
   <string name="maps">Cartes</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Gestion des formulaires</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identité de l\'utilisateur et de l\'appareil</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimental</string>
+  <string name="protected_settings">Protégé</string>
+  <string name="set_admin_password">Configurer mot de passe d\'administration</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <string name="access_control_section_title">Contrôle d\'accès</string>
+  <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Limiter l\'interface utilisateur</string>
   <string name="server_preferences">Serveur</string>
   <!--Label for server type setting-->
   <string name="type">Type</string>
@@ -661,6 +681,7 @@
   <string name="instance_sync_summary">Impacte sur les formulaires ajoutés directement au dossier instances.</string>
   <string name="analytics_preferences">Données d\'utilisation</string>
   <string name="analytics">Collecter des données d\'utilisation anonymes</string>
+  <string name="analytics_summary">Les données anonymes d\'utilisation aident l\'équipe ODK à prioriser les correctifs et les fonctionnalités</string>
   <string name="form_metadata_title">Métadonnées du formulaire</string>
   <string name="form_metadata">Métadonnées du formulaire</string>
   <string name="form_metadata_summary">Ces valeurs seront ajoutées aux formulaires qui ont des champs pré-chargés d\'utilisateur, de courrier électronique et / ou de téléphone pour identifier la personne qui soumet des données.</string>
@@ -686,7 +707,8 @@
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
-  <string name="reset_project_settings_title">Réinitialiser l\'application …</string>
+  <string name="reset_project_settings_title">Réinitialiser</string>
+  <string name="delete_project">Supprimer</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>
   <string name="reset_settings">Tous les paramètres (configuration interne, paramètres enregistrés)</string>
@@ -705,11 +727,11 @@
   <string name="reset_layers_result">Couches cartographiques :: %s</string>
   <string name="reset_cache_result">Cache pour chargement de formulaire :: %s</string>
   <string name="main_menu_settings">Paramètres du Menu principal</string>
-  <string name="main_menu_settings_summary">Appuyez pour gérer les éléments du Menu Principal</string>
+  <string name="main_menu_settings_summary">Montrer ou cacher boutons</string>
   <string name="user_settings">Paramètres utilisateurs</string>
-  <string name="user_setting_summary">Appuyez pour gérer les paramètres généraux</string>
+  <string name="user_setting_summary">Montrer ou cacher paramètres</string>
   <string name="form_entry_setting">Paramètres d\'entrée du formulaire</string>
-  <string name="form_entry_settings_summary">Appuyez pour gérer les éléments du formulaire</string>
+  <string name="form_entry_settings_summary">Montrer ou cacher actions</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">mouvement en recul</string>
   <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
@@ -764,7 +786,6 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">Configurer par code QR</string>
   <string name="qr_code">Configuration par code QR</string>
   <string name="scan_qr_code_fragment_title">Lire code</string>
   <string name="view_qr_code_fragment_title">Code QR</string>
@@ -811,6 +832,7 @@
      # Projects
      ##############################################-->
   <string name="projects">Projets</string>
+  <string name="settings">Paramètres</string>
   <string name="add_project">Ajouter un projet</string>
   <string name="add">Ajouter</string>
   <string name="project_name">Nom du projet</string>
@@ -818,15 +840,25 @@
   <string name="project_color">Couleur du projet </string>
   <string name="delete_project_yes">Oui</string>
   <string name="delete_project_no">Non</string>
+  <string name="or">OU</string>
+  <string name="hex_color">Couleur hex</string>
+  <string name="invalid_hex_code">Code de couleur hex n\'est pas valide</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">La collecte de données\nsans frontières</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <string name="configure_with_qr_code">Configurer par QR code</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Saisir les détails du projet</string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Mon projet utilise Google Drive.</string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Configurer</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">Pas encore de projet?</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">Essayer une démo</string>
 </resources>

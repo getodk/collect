@@ -157,6 +157,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -499,19 +500,29 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">సాధారణ సెట్టింగులు</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">సర్వర్</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">యూజర్ ఇంటర్ఫేస్</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">మ్యాప్స్</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">ఫారం నిర్వహణ</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">వినియోగదారు, పరికరం గుర్తింపు</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">ప్రయోగాత్మక</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">సర్వర్ సెట్టింగులు</string>
   <!--Label for server type setting-->
   <string name="type">టైపు</string>
@@ -648,7 +659,7 @@
   <string name="found_in_main">ప్రధాన మెనూ నుండి దాచడానికి ఎంపిక చేయకండి</string>
   <string name="found_in_settings">సాధారణ సెట్టింగ్‌ల నుండి దాచడానికి సెలెక్ట్  చేయవద్దు</string>
   <string name="form_entry">ఫారం ఎంట్రీ నుండి దాచడానికి ఎంపిక చేయవద్దు</string>
-  <string name="reset_project_settings_title">దరఖాస్తును రీసెట్ చేయండి…</string>
+  <string name="reset_project_settings_title">రీసెట్</string>
   <string name="select_all">అన్నీ ఎంపిక చేసుకొండి</string>
   <string name="clear_all">అన్నీ క్లియర్ చేయండి</string>
   <string name="reset_settings">అన్ని సెట్టింగ్‌లు (అంతర్గత సెట్టింగ్‌లు, సేవ్ చేసిన సెట్టింగ్‌లు)</string>
@@ -667,11 +678,8 @@
   <string name="reset_layers_result">మ్యాప్ లేయర్స్ ::%s</string>
   <string name="reset_cache_result">ఫారం లోడ్ cache ::%s</string>
   <string name="main_menu_settings">ప్రధాన మెనూ సెట్టింగులు</string>
-  <string name="main_menu_settings_summary">ప్రధాన మెను అంశాలను నిర్వహించడానికి నొక్కండి</string>
   <string name="user_settings">వినియోగదారుడి సెట్టింగులు</string>
-  <string name="user_setting_summary">సాధారణ సెట్టింగ్‌ల అంశాలను నిర్వహించడానికి నొక్కండి</string>
   <string name="form_entry_setting">ఫారం ఎంట్రీ సెట్టింగులు</string>
-  <string name="form_entry_settings_summary">ఫారమ్ ఎంట్రీ అంశాలను నిర్వహించడానికి నొక్కండి</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">వెనుకకు వెలుతోంది</string>
   <string name="moving_backwards_disabled_title">వెనుకకు వెళ్లడం నిలిపివేయబడింది</string>
@@ -775,6 +783,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

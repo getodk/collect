@@ -54,6 +54,7 @@
   <string name="no_items_display_forms">Niente da visualizzare.\n\nProva a caricare e riempire un modulo vuoto.</string>
   <string name="no_items_display_sent_forms">Nessun elemento visualizzabile.\n\nProva ad inviare i moduli completati prima di visualizzarli.</string>
   <string name="no_items_display_instances">Nessuna visualizzazione disponibile.\n\nCerca di completare i moduli salvati prima dell\'invio.</string>
+  <string name="not_granted_permission">L\'attività che stai tentando di avviare richiede un\'autorizzazione che non viene concessa.</string>
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
   <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
@@ -154,8 +155,12 @@
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Impossibile avviare la registrazione. </string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Il microfono è già in uso.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">I media non possono essere allegati al formulario ma sono disponibili all\'indirizzo %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Registrazione disabilitata. Abilita in %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -189,6 +194,7 @@
   <string name="error_front_camera_unavailable">Fotocamera frontale non disponibile in questo dispositivo</string>
   <string name="camera_error">Questo dispositivo non supporta la Camera2 API.</string>
   <string name="annotate_image">Annota Immagine</string>
+  <string name="invalid_file_type">L\'applicazione ha restituito un tipo di file non valido</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Salva e Chiudi</string>
   <string name="signature_capture">Firma</string>
@@ -205,23 +211,36 @@
   <string name="play_video">Riproduci Video</string>
   <string name="choose_file">Seleziona File</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Elimina</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Registra Suono</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Seleziona Suono</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Metti in pausa</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Riprendi</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Registra un audio</string>
+  <string name="background_audio_permission_explanation">Questo formulario registra l\'audio in sottofondo. Devi concedere l\'autorizzazione per utilizzare il microfono. In caso contrario, non sarà possibile aprire questo formulario.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Questo formulario richiede la registrazione dell\'audio in background. Disabilitarlo interromperà la registrazione e scarterà l\'audio esistente. Sei sicuro di voler procedere?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Disabilita registrazione</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Eliminare il file?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Stop</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Registrando…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Registrazione audio</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">Riproduci audio</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Salvando il file</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
   <string name="recording_warning">Devi interrompere la registrazione prima di uscire da questa schermata. </string>
   <string name="error_attaching_binary_file">Si è verificato un errore mentre allegavi: %s</string>
@@ -257,6 +276,7 @@
   <string name="accept_bearing">Registra Bussola</string>
   <string name="bearing">Orientamento: %.3f </string>
   <string name="direction">Direzione: %s</string>
+  <string name="bearing_lack_of_sensors">Impossibile rilevare il rilevamento: nel dispositivo mancano l\'accelerometro, il sensore di campo magnetico o entrambi.</string>
   <string name="select_date">Seleziona una data</string>
   <string name="select_time">Seleziona un orario</string>
   <string name="no_date_selected">Nessuna data selezionata</string>
@@ -291,7 +311,26 @@
   <string name="islamic_month_2">Safar</string>
   <string name="islamic_month_3">Rabi\' al-awwal</string>
   <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
   <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -299,6 +338,7 @@
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
   <string name="file_missing">File: %s manca.</string>
   <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity">Inserisci identità</string>
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <string name="identity">Identità</string>
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
@@ -338,16 +378,21 @@
   <string name="topographic">Topografico</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="carto_map_style_positron">Posizione</string>
+  <string name="carto_map_style_dark_matter">Scuro è importante</string>
   <string name="reference_layer">Livello di riferimento</string>
+  <string name="layer_data_file">File di dati del livello</string>
   <string name="view_change_location">Vedi o Cambia Posizione</string>
   <string name="change_location">Cambiare Localizzazione</string>
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="location_accuracy">Precisione: %1$s m</string>
+  <string name="location_provider">Fornitore di posizione: %s</string>
   <string name="getting_location">Posizionamento in corso</string>
   <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
+  <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
+  <string name="location_providers_disabled_dialog_message">Questo formulario vuole monitorare la tua posizione ma i fornitori di servizi di localizzazione sono disabilitati. Si prega di abilitare nelle impostazioni di Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Vai a impostazioni</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -355,6 +400,8 @@
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
+  <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>
+  <string name="geotrace_view_read_only">Visualizza Geo-tracciatura</string>
   <string name="get_shape">Inizia Geo-contorno</string>
   <string name="get_trace">Inizia Geo-tracciatura</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
@@ -397,6 +444,10 @@
     <item quantity="one">%dmetri</item>
     <item quantity="other">%d metri</item>
   </plurals>
+  <string name="location_status_searching">Sto ricercando la posizione, prego attendere…</string>
+  <string name="location_status_accuracy">Precisione della posizione GPS%.2f m</string>
+  <string name="location_status_acceptable">Precisione posizione: %.2fm (accettabile)</string>
+  <string name="location_status_unacceptable">Precisione posizione: %.2fm (inaccettabile)</string>
   <string name="collection_status_paused">Punti inseriti: %d</string>
   <string name="collection_status_placement">Punti inseriti: %d (tocca per inserire punti)</string>
   <string name="collection_status_manual">Punti inseriti: %d (salvataggio manuale)</string>
@@ -409,7 +460,9 @@
   <string name="discard">Annulla</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
+  <string name="geometry_status">Formulari salvati:%d (%d mostrati sulla mappa)</string>
   <!--Name of an action button-->
+  <string name="view_data">Visualizza modulo salvato</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -444,6 +497,11 @@
   <string name="version">Versione:</string>
   <string name="form_updates_available">Aggiornamenti Modulo disponibili</string>
   <string name="newer_version_of_a_form_info">Questo è un aggiornamento di un form che hai già</string>
+  <string name="form_update_error">Aggiornamento Formulario fallito</string>
+  <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
+  <string name="report_to_project_lead">Se continui ad avere questo problema, segnalalo alla persona che ti ha chiesto di raccogliere i dati.</string>
+  <string name="failure">Errore</string>
+  <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -463,18 +521,29 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Impostazioni Generali</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Interfaccia utente</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">Mappe</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Gestione modulo</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identità user e dispositivo</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">Sperimentale</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Impostazioni Server</string>
   <!--Label for server type setting-->
   <string name="type">Tipo</string>
@@ -488,6 +557,7 @@
   <string name="change_password">Password ODK</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
+  <string name="custom_server_paths">Percorsi server personalizzati</string>
   <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
   <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
   <string name="formlist_url">Percorso Elenco Moduli</string>
@@ -498,8 +568,10 @@
   <string name="google_sheets_url">URL di destinazione predefinito</string>
   <!--Description for Fallback submission URL setting-->
   <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
+  <string name="app_theme">Tema</string>
   <string name="theme_light">Tema chiaro</string>
   <string name="theme_dark">Tema scuro</string>
+  <string name="theme_magenta">Tema Magenta</string>
   <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
@@ -527,10 +599,15 @@
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Aggiornamento Modulo</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">Modalità di aggiornamento formulario vuoto </string>
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">Manuale</string>
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">Solo formulari scaricati in precedenza</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">Abbina esattamente il server</string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">Frequenza di aggiornamento automatico</string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_fifteen_minutes">Ogni 15 minuti</string>
   <!--Frequency for requesting blank form updates from the server-->
@@ -576,11 +653,13 @@
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <string name="guidance_yes_collapsed">Sì - compatta</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Usa un\'app esterna per la registrazione audio</string>
   <string name="form_import_category">Importa modulo</string>
   <string name="instance_sync">Finalizza moduli per importazione</string>
   <string name="instance_sync_summary">Riguarda un modulo aggiunto direttamente alla cartella esempi</string>
   <string name="analytics_preferences">Dati sull\'utilizzo</string>
   <string name="analytics">Raccolta di dati anonimi sull\'utilizzo</string>
+  <string name="analytics_summary">La raccolta di dati anonimi sull\'utilizzo aiuta il team di ODK a dare priorità a certe funzioni e fix</string>
   <string name="form_metadata_title">Metadati del Modulo</string>
   <string name="form_metadata">Metadati del modulo</string>
   <string name="form_metadata_summary">Questi valori vengono precompilati nei moduli provvisti di nome utente, email e/o numero di telefono e servono ad identificare la persona che invia i dati.</string>
@@ -591,6 +670,7 @@
   <string name="device_defined">Definito dal dispositivo</string>
   <string name="device_id">ID Dispositivo</string>
   <!--Displayed when a device property such as the phone number is not available-->
+  <string name="preference_not_available">Non disponibile</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -605,7 +685,8 @@
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
-  <string name="reset_project_settings_title">Reimpostare l\'applicazione</string>
+  <string name="reset_project_settings_title">Reimposta</string>
+  <string name="delete_project">Elimina</string>
   <string name="select_all">Seleziona tutto</string>
   <string name="clear_all">Deseleziona tutto</string>
   <string name="reset_settings">Tutte le impostazioni (impostazioni di base, impostazioni salvate)</string>
@@ -624,11 +705,8 @@
   <string name="reset_layers_result">Livelli della mappa :: %s</string>
   <string name="reset_cache_result">Cache di caricamento dei moduli :: %s</string>
   <string name="main_menu_settings">Parametri Menu Principale</string>
-  <string name="main_menu_settings_summary">Tocca per gestire elementi menu principale</string>
   <string name="user_settings">Impostazioni utente</string>
-  <string name="user_setting_summary">Tocca per gestire elementi parametri generali</string>
   <string name="form_entry_setting">Settaggi Modulo Ingresso</string>
-  <string name="form_entry_settings_summary">Tocca per gestire elementi modulo inserimento</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Sfoglia indietro</string>
   <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
@@ -657,7 +735,10 @@
   <string name="missing_submission_url">Sottomissione URL mancante</string>
   <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
   <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
+  <string name="google_sheets_encrypted_message">I moduli crittografati non possono essere inviati a Fogli Google.</string>
+  <string name="missing_google_account_dialog_desc">Per inviare formulari tramite Fogli Google devi configurare il tuo account Google nelle impostazioni del server.</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="instance_upload_cancelled">Caricamento dell\'istanza annullato</string>
   <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
   <string name="missing_google_account_dialog_title">Account Google non specificato</string>
   <string name="multiple_media_folders_detected_notification">Più di una cartella media rilevata, si prega di rimuovere una e riprovare</string>
@@ -670,6 +751,7 @@
   <string name="leave_a_review">Lascia un commento su Play Store</string>
   <string name="leave_a_review_msg">Il tuo commento (speriamo positivo) aumenta la visibilità dell\'applicazione su Play Store</string>
   <string name="odk_website">Visitare il sito web ODK</string>
+  <string name="odk_website_summary">ODK viene utilizzato per raccogliere dati per il bene sociale in ambienti difficili.</string>
   <string name="odk_forum">Collegati al forum di ODK</string>
   <string name="odk_forum_summary">Entra nel forum per avere supporto, richiedere caratteristiche, contribuire a codificare/tradurre!</string>
   <string name="all_open_source_licenses">Librerie/Licenze open source</string>
@@ -678,6 +760,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="qr_code">Configurazione con codice QR</string>
+  <string name="scan_qr_code_fragment_title">Scansionare</string>
   <string name="view_qr_code_fragment_title">Codice QR</string>
   <string name="import_qrcode_sd">Importare codice QR</string>
   <string name="successfully_imported_settings">Impostazioni importate con successo</string>
@@ -694,6 +777,7 @@
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
+  <string name="corrupt_imported_preferences_error">Le impostazioni attuali sono danneggiate. Dalle impostazioni di amministrazione, ripristinare le impostazioni o importare quelle funzionanti.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -716,19 +800,45 @@
   <string name="fs_file_copy_error">Non puoi copiare \'%1$s\' in \'%2$s\'. Motivo: %3$s</string>
   <string name="survey_multiple_forms_error">Hai scaricato due diversi Moduli ma con lo stesso nome ID e versione. Potrebbe essere lo stesso Modulo scaricato in momenti diversi o con Server diversi. In ogni caso devi cancellarne uno.</string>
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
+  <string name="background_audio_help">Questo formulario registra l\'audio dal microfono del tuo dispositivo.\n\nPuoi utilizzare l\'indicatore del volume per assicurarti che il microfono sia abbastanza vicino al suono che devi registrare.\n\nPer interrompere la registrazione esci da questo formulario.\n\ nPer maggiori informazioni contatta la persona che ti ha chiesto di raccogliere i dati.</string>
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="projects">Progetti</string>
+  <string name="add_project">Aggiungere progetto</string>
   <string name="add">Aggiungere</string>
+  <string name="project_name">Nome Progetto</string>
+  <string name="project_icon">Icona del progetto</string>
+  <string name="project_color">Colore Progetto</string>
+  <string name="switched_project">Cambiato a %s</string>
+  <string name="using_project">Usando %s</string>
+  <string name="switch_to_project">Cambia a %s</string>
+  <string name="delete_project_confirm_message">Tutti i formulari vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
   <string name="delete_project_yes">Sì</string>
   <string name="delete_project_no">No</string>
+  <string name="cannot_delete_project_title">Il progetto non può essere cancellato</string>
+  <string name="cannot_delete_project_message_one">Hai invii non inviati. Per eliminare il progetto, devi prima inviare o eliminare tali invii.</string>
+  <string name="or">O</string>
+  <string name="hex_color">Colore esadecimale</string>
+  <string name="invalid_hex_code">Invalido colore esadecimale</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">Raccogli dati\novunque</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">Configurare attraverso codice QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">Inserisci manualmente i dettagli del progetto</string>
+  <string name="project_config_tip">Dopo aver aggiunto il progetto, puoi configurarlo in Impostazioni generali e Impostazioni amministratore</string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Il mio progetto utilizza Google Drive.</string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Configurare</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">Non hai ancora un Progetto?</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">Prova una demo</string>
+  <string name="scan_configuration_qr_code">Scansiona codice QR</string>
 </resources>

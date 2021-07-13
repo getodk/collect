@@ -130,6 +130,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -331,17 +332,27 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">सामान्य सेटिंग्स</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">सर्वर</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">यूजर इंटरफेस</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">फॉर्म मैनेजमेंट</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">प्रयोगकर्ता और डिवाइस पहचान</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">सर्वर सेटिंग</string>
   <!--Label for server type setting-->
   <string name="type">प्रकार</string>
@@ -447,7 +458,7 @@
   <string name="found_in_main">मुख्य मेनू से छुपाने के लिए अनचेक करें</string>
   <string name="found_in_settings">सामान्य सेटिंग्स से छुपाने के लिए अनचेक करें</string>
   <string name="form_entry">फॉर्म एंट्री से छुपाने के लिए चेक हटायें</string>
-  <string name="reset_project_settings_title">एप्लिकेशन रीसेट करें …</string>
+  <string name="reset_project_settings_title">रीसेट</string>
   <string name="select_all">सभी का चयन करे</string>
   <string name="clear_all">सभी साफ करें</string>
   <string name="reset_settings">सभी सेटिंग (आंतरिक सेटिंग, संरक्षित  सेटिंग)</string>
@@ -466,11 +477,8 @@
   <string name="reset_layers_result">मानचित्र लेयरें :: %s</string>
   <string name="reset_cache_result">फॉर्म लोड कैश :: %s</string>
   <string name="main_menu_settings">मुख्य मेनू सेटिंग्स</string>
-  <string name="main_menu_settings_summary">मुख्य मेनू आइटम मैनेज करने के लिए टैप करें</string>
   <string name="user_settings">प्रयोगकर्ता सेटिंग</string>
-  <string name="user_setting_summary">सामान्य सेटिंग्स आइटम मैनेज करने के लिए टैप करें</string>
   <string name="form_entry_setting">फॉर्म एंट्री सेटिंग</string>
-  <string name="form_entry_settings_summary">फॉर्म एंट्री आइटम मैनेज करने के लिए टैप करें</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">पीछे की ओर बढ़ रहा है</string>
   <string name="yes">हाँ</string>
@@ -545,6 +553,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

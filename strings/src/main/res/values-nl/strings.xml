@@ -132,6 +132,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -303,15 +304,25 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Instellingen</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Gebruikersinterface</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Server</string>
   <!--Label for server type setting-->
   <string name="type">Type</string>
@@ -417,6 +428,7 @@
   <string name="show_password">Wachtwoord tonen</string>
   <string name="found_in_main">Uitvinken om te verbergen in hoofdmenu</string>
   <string name="found_in_settings">Uitvinken om te verbergen in algemene instellingen</string>
+  <string name="reset_project_settings_title">Reset</string>
   <string name="select_all">Selecteer Alles</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_settings_result">Alle instellingen ::%s</string>
@@ -452,7 +464,6 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">Configueer via QR code</string>
   <string name="share">Deel</string>
   <!--##############################################
      # MISC
@@ -486,6 +497,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

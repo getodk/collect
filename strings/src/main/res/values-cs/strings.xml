@@ -161,6 +161,8 @@
   <string name="answer_file_copy_failed_message">Médium nelze připojit k formuláři, ale je k dispozici na %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Nahrávání zakázáno. Povolit v %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Vyplněný formulář byl smazán!</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -538,19 +540,43 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Obecná nastavení</string>
+  <string name="project_settings">Nastavení projektu</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
+  <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, uživatelské jméno, heslo</string>
+  <!--Title of a settings section-->
+  <string name="project_display_title">Zobrazení projektu</string>
+  <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Název, ikona, barva</string>
   <!--Title of a settings section-->
   <string name="client">Uživatelské rozhraní</string>
+  <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Jazyk aplikace, téma, velikost písma</string>
   <!--Title of a settings section-->
   <string name="maps">Mapy</string>
+  <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Podkladová mapa, styly, vrstvy</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Správa formulářů</string>
+  <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Automatická aktualizace, automatické odesílání, automatické mazání</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identita uživatele a zařízení</string>
+  <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Uživatelské jméno, telefonní číslo, ID zařízení</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimentální</string>
+  <string name="protected_settings">Chráněné</string>
+  <string name="set_admin_password">Nastavení hesla správce</string>
+  <!--Title of a settings section-->
+  <string name="project_management_section_title">Řízení projektu</string>
+  <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Překonfigurování, resetování, odstranění</string>
+  <!--Title of a settings section-->
+  <string name="access_control_section_title">Řízení přístupu</string>
+  <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Omezení uživatelského rozhraní</string>
   <string name="server_preferences">Nastavení serveru</string>
   <!--Label for server type setting-->
   <string name="type">Typ</string>
@@ -667,6 +693,7 @@
   <string name="instance_sync_summary">Ovlivňuje formuláře přidávané přímo do složky instance.</string>
   <string name="analytics_preferences">Údaje o použití</string>
   <string name="analytics">Shromažďujte anonymní údaje o použití</string>
+  <string name="analytics_summary">Anonymní údaje o používání pomáhají týmu ODK stanovit priority oprav a funkcí.</string>
   <string name="form_metadata_title">Metadata formulářů</string>
   <string name="form_metadata">Metadata formulářů</string>
   <string name="form_metadata_summary">Tyto hodnoty budou přidány do formulářů, které obsahují uživatelské jméno, e-mail a / nebo telefonem předem vyplněná pole pro identifikaci odesílající osoby.</string>
@@ -692,7 +719,9 @@
   <string name="found_in_main">Zobrazit v Hlavní nabídce</string>
   <string name="found_in_settings">Zobrazit v Obecném nastavení</string>
   <string name="form_entry">Odškrtnout, chcete-li skrýt z nabídky Formulářů</string>
-  <string name="reset_project_settings_title">Resetovat aplikaci…</string>
+  <string name="reset_project_settings_title">Reset</string>
+  <string name="reset_project_settings_subtext">Vyberte si z nastavení, formulářů, dat</string>
+  <string name="delete_project">Vymazat</string>
   <string name="select_all">Vybrat vše</string>
   <string name="clear_all">Vymazat vše</string>
   <string name="reset_settings">Všechna nastavení (interní nastavení, uložená nastavení)</string>
@@ -711,11 +740,11 @@
   <string name="reset_layers_result">Mapové vrstvy :: %s</string>
   <string name="reset_cache_result">Mezipaměť pro načtení formuláře :: %s</string>
   <string name="main_menu_settings">Nastavení hlavního menu</string>
-  <string name="main_menu_settings_summary">Klepnutím spravovat položky hlavní nabídky</string>
+  <string name="main_menu_settings_summary">Zobrazení nebo skrytí tlačítek</string>
   <string name="user_settings">Uživatelské nastavení</string>
-  <string name="user_setting_summary">Klepnutím spravovat obecné položky nastavení</string>
+  <string name="user_setting_summary">Zobrazení nebo skrytí nastavení</string>
   <string name="form_entry_setting">Nastavení vstupních formulářů</string>
-  <string name="form_entry_settings_summary">Klepnutím na položku spravujete položky formuláře</string>
+  <string name="form_entry_settings_summary">Zobrazení nebo skrytí akcí</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Posun zpět</string>
   <string name="moving_backwards_disabled_title">Posun zpět je zakázán</string>
@@ -770,7 +799,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">Konfigurovat pomocí QR kódu</string>
+  <string name="reconfigure_with_qr_code_settings_title">Rekonfigurace pomocí kódu QR</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Nahrazení všech stávajících nastavení</string>
   <string name="qr_code">QR kódová konfigurace</string>
   <string name="scan_qr_code_fragment_title">Snímat</string>
   <string name="view_qr_code_fragment_title">QR kód</string>
@@ -817,6 +847,7 @@
      # Projects
      ##############################################-->
   <string name="projects">Projekty</string>
+  <string name="settings">Nastavení</string>
   <string name="add_project">Přidat projekt</string>
   <string name="add">Přidat</string>
   <string name="project_name">Název projektu</string>
@@ -825,19 +856,33 @@
   <string name="switched_project">Přepnuto na %s</string>
   <string name="using_project">S pomocí %s</string>
   <string name="switch_to_project">Přepnout na %s</string>
-  <string name="delete_project">Smazat projekt</string>
-  <string name="delete_project_confirm_message">Opravdu chcete odstranit aktuální projekt?</string>
+  <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
   <string name="delete_project_yes">Ano</string>
   <string name="delete_project_no">Ne</string>
+  <string name="cannot_delete_project_title">Projekt nelze smazat</string>
+  <string name="cannot_delete_project_message_one">Máte neodeslaná podání. Chcete-li projekt odstranit, musíte nejprve odeslat nebo odstranit tato podání.</string>
+  <string name="cannot_delete_project_message_two">Probíhají úlohy na pozadí. Zkuste to prosím později.</string>
+  <string name="or">OR</string>
+  <string name="hex_color">Hex color</string>
+  <string name="invalid_hex_code">Neplatný hexadecimální kód</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">Sběr dat\nkdekoli</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <string name="configure_with_qr_code">Nakonfigurujte pomocí QR kódu</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ručně zadejte podrobnosti projektu</string>
+  <string name="project_config_tip">Po přidání projektu jej můžete nakonfigurovat v části Obecná nastavení a Nastavení správce.</string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Můj projekt používá Google Drive.</string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Konfigurovat</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">Ještě nemáte žádný projekt?</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">Vyzkoušejte si demo</string>
+  <string name="scan_configuration_qr_code">Naskenování konfiguračního kódu QR</string>
 </resources>

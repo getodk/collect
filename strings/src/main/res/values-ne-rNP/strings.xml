@@ -114,6 +114,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -306,16 +307,26 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">जनरल सेटिङ्स </string>
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">प्रयोगकर्ता अन्तरक्रिया पृष्‍ठ</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">फारम व्यवस्थापन</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">प्रयोगकर्ता तथा यन्त्र पहिचान</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">सर्भर सेटिङ्स</string>
   <!--Label for server type setting-->
   <string name="server_url">URL</string>
@@ -411,6 +422,7 @@
   <string name="show_password">पासवर्ड देखाउन</string>
   <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
   <string name="found_in_settings">जेनेरल सेटिंगमा नदेखाउनको लागि ठीक चिन्ह हटाउनुहोस् </string>
+  <string name="reset_project_settings_title">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="select_all">सबै छान्नुहोस्</string>
   <string name="clear_all">सबै मेटाउनु होस्</string>
   <string name="reset_settings_result">सबै  सेटिङहरू::%s </string>
@@ -491,6 +503,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>
