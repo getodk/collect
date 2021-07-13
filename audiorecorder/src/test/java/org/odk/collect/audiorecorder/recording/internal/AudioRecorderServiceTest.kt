@@ -21,6 +21,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -64,8 +65,14 @@ class AudioRecorderServiceTest {
 
         val notification = shadowOf(service.get()).lastForegroundNotification
         assertThat(notification, not(nullValue()))
-        assertThat(shadowOf(notification).contentTitle, equalTo(application.getString(R.string.recording)))
-        assertThat(shadowOf(notification.contentIntent).savedIntent.component?.className, equalTo(ReturnToAppActivity::class.qualifiedName))
+        assertThat(
+            shadowOf(notification).contentTitle,
+            equalTo(application.getString(R.string.recording))
+        )
+        assertThat(
+            shadowOf(notification.contentIntent).savedIntent.component?.className,
+            equalTo(ReturnToAppActivity::class.qualifiedName)
+        )
     }
 
     @Test
@@ -91,20 +98,33 @@ class AudioRecorderServiceTest {
         val service = startAction("456")
 
         val notificationId = shadowOf(service.get()).lastForegroundNotificationId
-        val notificationManager = application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val shadowNotificationManager = shadowOf(notificationManager)
 
         scheduler.runForeground(0)
-        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:00"))
+        assertThat(
+            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            equalTo("00:00")
+        )
 
         scheduler.runForeground(500)
-        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:00"))
+        assertThat(
+            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            equalTo("00:00")
+        )
 
         scheduler.runForeground(1000)
-        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:01"))
+        assertThat(
+            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            equalTo("00:01")
+        )
 
         scheduler.runForeground(2000)
-        assertThat(shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText, equalTo("00:02"))
+        assertThat(
+            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            equalTo("00:02")
+        )
     }
 
     @Test
@@ -286,16 +306,13 @@ class AudioRecorderServiceTest {
     }
 
     private fun startService(intent: Intent): ServiceController<AudioRecorderService> {
-        return serviceInstance.let {
-            if (it == null) {
-                val serviceController = buildService(AudioRecorderService::class.java, intent)
-                    .create()
-                    .startCommand(0, 0)
-                serviceInstance = serviceController
-                serviceController
+        return serviceInstance.let { instance ->
+            if (instance == null) {
+                RobolectricHelpers.startService(AudioRecorderService::class.java, intent).also {
+                    serviceInstance = it
+                }
             } else {
-                it.withIntent(intent)
-                    .startCommand(0, 0)
+                RobolectricHelpers.startService(instance, intent)
             }
         }
     }

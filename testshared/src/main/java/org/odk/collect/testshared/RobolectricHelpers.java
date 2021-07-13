@@ -1,5 +1,8 @@
 package org.odk.collect.testshared;
 
+import android.app.Application;
+import android.app.Service;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
@@ -19,17 +22,22 @@ import androidx.test.core.app.ApplicationProvider;
 
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.android.controller.ServiceController;
 import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.os.Looper.getMainLooper;
 import static org.robolectric.Shadows.shadowOf;
 
 public class RobolectricHelpers {
+
+    public static Map<Class, ServiceController> services = new HashMap<>();
 
     private RobolectricHelpers() {
     }
@@ -126,5 +134,50 @@ public class RobolectricHelpers {
 
     public static void runLooper() {
         shadowOf(getMainLooper()).idle();
+    }
+
+    public static void runServices() {
+        runServices(false);
+    }
+
+    public static void clearServices() {
+        services.clear();
+    }
+
+    public static void runServices(boolean keepServices) {
+        Application application = ApplicationProvider.getApplicationContext();
+
+        while (shadowOf(application).peekNextStartedService() != null) {
+            Intent intent = shadowOf(application).getNextStartedService();
+
+            Class serviceClass;
+            try {
+                serviceClass = Class.forName(intent.getComponent().getClassName());
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (keepServices) {
+                if (services.containsKey(serviceClass)) {
+                    startService(services.get(serviceClass), intent);
+                } else {
+                    ServiceController serviceController = startService(serviceClass, intent);
+                    services.put(serviceClass, serviceController);
+                }
+            } else {
+                startService(serviceClass, intent);
+            }
+        }
+    }
+
+    public static <T extends Service> ServiceController<T> startService(Class<T> serviceClass, Intent intent) {
+        return Robolectric.buildService(serviceClass, intent)
+                .create()
+                .startCommand(0, 0);
+    }
+
+    public static <T extends Service> ServiceController<T> startService(ServiceController<T> serviceController, Intent intent) {
+        return serviceController.withIntent(intent)
+                .startCommand(0, 0);
     }
 }
