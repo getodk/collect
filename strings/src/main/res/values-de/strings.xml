@@ -161,6 +161,8 @@
   <string name="answer_file_copy_failed_message">Mediendatei konnte nicht an das Formular angehängt werden. Aber ist hier verfügbar: %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Aufnahme deaktiviert. Aktivieren über %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Ausgefülltes Formular wurde gelöscht!</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -532,20 +534,44 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Allgemeine Einstellungen</string>
+  <string name="project_settings">Projekt-Einstellungen</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
+  <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, Benutzername, Passwort</string>
+  <!--Title of a settings section-->
+  <string name="project_display_title">Projekt-Anzeige</string>
+  <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Name, Icon, Farbe</string>
   <!--Title of a settings section-->
   <string name="client">Bedienung</string>
+  <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">App-Sprache, Theme, Schriftgröße</string>
   <!--Title of a settings section-->
   <string name="maps">Karten</string>
+  <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Basiskarte, Stile, Ebenen</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Formularverwaltung</string>
+  <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Auto-Update, Auto-Senden, Auto-Löschen</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Benutzer- und Geräteidentität</string>
+  <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Benutzername, Telefonnummer, Geräte-ID</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimentell</string>
-  <string name="server_preferences">Servereinstellungen</string>
+  <string name="protected_settings">Geschützt</string>
+  <string name="set_admin_password">Admin-Passwort setzen</string>
+  <!--Title of a settings section-->
+  <string name="project_management_section_title">Projektverwaltung</string>
+  <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Umkonfigurieren, Reset, Löschen</string>
+  <!--Title of a settings section-->
+  <string name="access_control_section_title">Zugriffskontrolle</string>
+  <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Bedienung beschränken</string>
+  <string name="server_preferences">Server-Einstellungen</string>
   <!--Label for server type setting-->
   <string name="type">Typ</string>
   <string name="server_url">URL</string>
@@ -621,7 +647,7 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="automatic_download">Automatischer Download</string>
   <string name="automatic_download_summary">Automatisch aktualisierte Versionen von Formularen herunterladen</string>
-  <string name="hide_old_form_versions_setting_title">Alte Formular-Versionen verbergen</string>
+  <string name="hide_old_form_versions_setting_title">Alte Formular-Versionen ausblenden</string>
   <string name="hide_old_form_versions_setting_summary">Nur die neueste Version wird in \"Leeres Formular ausfüllen\" angezeigt</string>
   <string name="form_submission_category">Formularübermittlung</string>
   <string name="autosend_selector_title">Auto-Send</string>
@@ -661,6 +687,7 @@
   <string name="instance_sync_summary">Betrifft Formulare, die direkt dem instances-Ordner hinzugefügt werden.</string>
   <string name="analytics_preferences">Nutzungsdaten</string>
   <string name="analytics">Anonyme Nutzungsdaten sammeln</string>
+  <string name="analytics_summary">Anonyme Nutzungsdaten helfen dem ODK-Team Fehlerbehebungen und neue Funktionen zu priorisieren.</string>
   <string name="form_metadata_title">Formular-Metadaten</string>
   <string name="form_metadata">Formular-Metadaten</string>
   <string name="form_metadata_summary">Diese Werte werden Formularen hinzugefügt, die Usernamen, E-Mail und/oder durch das Telefon vorbelegte Felder beinhalten, um die Person zu identifizieren, die Daten eingibt.</string>
@@ -686,7 +713,9 @@
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
-  <string name="reset_project_settings_title">App zurücksetzen…</string>
+  <string name="reset_project_settings_title">Zurücksetzen (Reset)</string>
+  <string name="reset_project_settings_subtext">Wähle aus Einstellungen, Formulare, Daten</string>
+  <string name="delete_project">Löschen</string>
   <string name="select_all">Alle auswählen</string>
   <string name="clear_all">Auswahl aufheben</string>
   <string name="reset_settings">Alle Einstellungen (interne Einstellungen, gespeicherte Einstellungen)</string>
@@ -705,11 +734,11 @@
   <string name="reset_layers_result">Kartenebenen :: %s</string>
   <string name="reset_cache_result">Formular-Cache :: %s</string>
   <string name="main_menu_settings">Haupt-Menü-Einstellungen</string>
-  <string name="main_menu_settings_summary">Berühren, um Haupt-Menüpunkte zu verwalten</string>
+  <string name="main_menu_settings_summary">Buttons anzeigen oder ausblenden</string>
   <string name="user_settings">Benutzer-Einstellungen</string>
-  <string name="user_setting_summary">Berühren, um allgemeine Einstellungen zu verwalten</string>
+  <string name="user_setting_summary">Einstellungen anzeigen oder ausblenden</string>
   <string name="form_entry_setting">Eingabe-Einstellungen</string>
-  <string name="form_entry_settings_summary">Berühren, um Formulareinträge zu verwalten</string>
+  <string name="form_entry_settings_summary">Aktionen anzeigen oder ausblenden</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Rückwärts bewegen</string>
   <string name="moving_backwards_disabled_title">Rückwärts bewegen deaktiviert</string>
@@ -734,7 +763,7 @@
   <string name="reading_files">Lese Dateien</string>
   <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
-  <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
+  <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Allgemeinen Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="missing_submission_url">Fehlende Übermittlungs-URL</string>
@@ -764,7 +793,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">Konfigurieren via QR-Code</string>
+  <string name="reconfigure_with_qr_code_settings_title">Mit QR-Code rekonfigurieren</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Alle bestehenden Einstellungen ersetzen</string>
   <string name="qr_code">QR-Code-Konfiguration</string>
   <string name="scan_qr_code_fragment_title">Scannen</string>
   <string name="view_qr_code_fragment_title">QR-Code</string>
@@ -811,6 +841,7 @@
      # Projects
      ##############################################-->
   <string name="projects">Projekte</string>
+  <string name="settings">Einstellungen</string>
   <string name="add_project">Projekt hinzufügen</string>
   <string name="add">Hinzufügen</string>
   <string name="project_name">Projekt-Name</string>
@@ -819,12 +850,15 @@
   <string name="switched_project">Gewechselt zu %s</string>
   <string name="using_project">Verwende %s</string>
   <string name="switch_to_project">Wechseln zu %s</string>
-  <string name="delete_project">Projekt löschen</string>
-  <string name="delete_project_confirm_message">Sind Sie sicher, dass Sie das aktuelle Projekt löschen möchten?</string>
+  <string name="delete_project_confirm_message">Alle Blanko-Formulare, Übermittlung und Einstellungen werden dauerhaft gelöscht. </string>
   <string name="delete_project_yes">Ja</string>
   <string name="delete_project_no">Nein</string>
+  <string name="cannot_delete_project_title">Projekt kann nicht gelöscht werden</string>
+  <string name="cannot_delete_project_message_one">Sie haben ungesendete Übermittlungen. Um dieses Projekt zu löschen, müssen Sie zuerst diese Übermittlungen abschicken oder löschen. </string>
+  <string name="cannot_delete_project_message_two">Hintergrundprozesse laufen. Bitte versuchen Sie es später nochmal. </string>
   <string name="or">ODER</string>
   <string name="hex_color">Hex-Farbe</string>
+  <string name="invalid_hex_code">Ungültiger Hex-Code</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
@@ -835,6 +869,11 @@
   <string name="configure_with_qr_code">Mit QR-Code konfigurieren</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Projektdetails manuell eingeben</string>
+  <string name="project_config_tip">Nachdem Sie Ihr Projekt hinzugefügt haben, können Sie es in den Allgemeinen und Admin-Einstellungen konfigurieren. </string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Mein Projekt benutzt Google Drive. </string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Konfigurieren</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Noch kein eigenes Projekt?</string>
   <!--Preceded by "Don't have a project yet?" question-->

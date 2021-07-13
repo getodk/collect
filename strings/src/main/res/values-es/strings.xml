@@ -161,6 +161,7 @@
   <string name="answer_file_copy_failed_message">Los archivos multimedia no se pudieron adjuntar al formulario, pero están disponibles en %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Grabación deshabilitada. Habilitar en %s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -532,19 +533,29 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Cambiar la configuración</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor - Usuario</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Interfaz de usuario</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">Mapas</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Manejo de formularios</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Metadatos del formulario</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimental</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Configuración del Servidor</string>
   <!--Label for server type setting-->
   <string name="type">Tipo</string>
@@ -661,6 +672,7 @@
   <string name="instance_sync_summary">Afecta los formularios agregados directamente a la carpeta de instances</string>
   <string name="analytics_preferences">Datos de uso</string>
   <string name="analytics">Recolectar datos de uso anónimos</string>
+  <string name="analytics_summary">Los datos de uso anónimos ayudan al equipo de ODK a priorizar las correcciones y las funciones.</string>
   <string name="form_metadata_title">Metadatos del formulario</string>
   <string name="form_metadata">Metadatos del formulario</string>
   <string name="form_metadata_summary">Estos valores se incluyen en los formularios que tienen precargados los campos de nombre de usuario, email y/o teléfono para identificar a la persona que envía los datos.</string>
@@ -686,7 +698,8 @@
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
-  <string name="reset_project_settings_title">Restablecer aplicación</string>
+  <string name="reset_project_settings_title">Restablecer</string>
+  <string name="delete_project">Eliminar</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
   <string name="reset_settings">Todos los ajustes  (Ajustes internos, ajustes guardados)</string>
@@ -705,11 +718,8 @@
   <string name="reset_layers_result">Capas de mapa :: %s</string>
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
-  <string name="main_menu_settings_summary">Seleccione para administrar las opciones del Menú Principal</string>
   <string name="user_settings">Ajustes de usuario</string>
-  <string name="user_setting_summary">Toca para administrar ajustes generales</string>
   <string name="form_entry_setting">Configuración de entrada de formularios</string>
-  <string name="form_entry_settings_summary">Toca para administrar elementos de entrada de formulario</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
@@ -764,7 +774,6 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
-  <string name="reconfigure_with_qr_code_settings_title">Configurar mediante código QR</string>
   <string name="qr_code">Configuración del Código QR</string>
   <string name="scan_qr_code_fragment_title">Escanear</string>
   <string name="view_qr_code_fragment_title">Código QR</string>
@@ -820,12 +829,14 @@
   <string name="switched_project">Cambiado a %s</string>
   <string name="using_project">Usando %s</string>
   <string name="switch_to_project">Cambiar a %s</string>
-  <string name="delete_project">Eliminar proyecto</string>
-  <string name="delete_project_confirm_message">¿Está seguro de que desea eliminar el proyecto actual?</string>
+  <string name="delete_project_confirm_message">Todos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
   <string name="delete_project_yes">Si</string>
   <string name="delete_project_no">No</string>
+  <string name="cannot_delete_project_title">El proyecto no se puede eliminar</string>
+  <string name="cannot_delete_project_message_one">Tiene envíos sin enviar. Para eliminar el proyecto, primero debe enviar o eliminar esos envíos.</string>
   <string name="or">O</string>
   <string name="hex_color">Color en Hex</string>
+  <string name="invalid_hex_code">Código hexadecimal no válido</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
@@ -836,6 +847,11 @@
   <string name="configure_with_qr_code">Configure mediante código QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ingrese manualmente los detalles del proyecto</string>
+  <string name="project_config_tip">Después de agregar su proyecto, puede configurarlo en Configuración general y de administrador</string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Mi proyecto usa Google Drive.</string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Configurar</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">¿Aún no tienes un proyecto?</string>
   <!--Preceded by "Don't have a project yet?" question-->

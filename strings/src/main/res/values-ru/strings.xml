@@ -148,6 +148,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -414,18 +415,28 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Настройки</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Сервер</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Интерфейс</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">Карты</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Управление опросниками</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">ID пользователя и устройства</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Настройки сервера</string>
   <!--Label for server type setting-->
   <string name="type">Платформа</string>
@@ -556,7 +567,7 @@
   <string name="found_in_main">Снимите галочку, чтобы скрыть пункт в главном меню</string>
   <string name="found_in_settings">Снимите галочку, чтобы скрыть пункт в настройках</string>
   <string name="form_entry">Снимите галочку, чтобы скрыть пункт при заполнении опросника</string>
-  <string name="reset_project_settings_title">Сброс приложения…</string>
+  <string name="reset_project_settings_title">Сброс</string>
   <string name="select_all">Выбрать всё</string>
   <string name="clear_all">Очистить всё</string>
   <string name="reset_settings">Все настройки (внутренние настройки, сохранённые настройки)</string>
@@ -574,11 +585,8 @@
   <string name="reset_blank_forms_result">Бланки опросников: %s</string>
   <string name="reset_layers_result">Слои карт: %s</string>
   <string name="main_menu_settings">Кнопки главного меню…</string>
-  <string name="main_menu_settings_summary"> Доступ к кнопкам в главном меню</string>
   <string name="user_settings">Видимость настроек</string>
-  <string name="user_setting_summary">Доступ к общими настройками пользователя</string>
   <string name="form_entry_setting">Настройки ввода опросников</string>
-  <string name="form_entry_settings_summary">Доступ к управлению бланка опросника</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Возвращение назад</string>
   <string name="moving_backwards_disabled_title">Возвращение назад запрещено</string>
@@ -674,6 +682,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

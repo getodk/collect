@@ -152,6 +152,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -459,17 +460,27 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Загальні налаштування</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Сервер</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Користувацький інтерфейс</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Управління анкетою</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Ідентифікація користувача та пристрою</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Налаштування сервера</string>
   <!--Label for server type setting-->
   <string name="type">Тип</string>
@@ -601,7 +612,7 @@
   <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
   <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
-  <string name="reset_project_settings_title">Скинути програму…</string>
+  <string name="reset_project_settings_title">Скинути</string>
   <string name="select_all">Обрати всі</string>
   <string name="clear_all">Зняти всі позначки</string>
   <string name="reset_settings">Всі налаштування (внутрішні налаштування, збережені налаштування)</string>
@@ -620,11 +631,8 @@
   <string name="reset_layers_result">Шари карт :: %s</string>
   <string name="reset_cache_result">Кеш завантаження анкет :: %s</string>
   <string name="main_menu_settings">Налаштування Головного Меню</string>
-  <string name="main_menu_settings_summary">Натисніть для управління пунктами головного меню</string>
   <string name="user_settings">Користувацькі Налаштування</string>
-  <string name="user_setting_summary">Натисніть для управління пунктами загальних налаштувань</string>
   <string name="form_entry_setting">Налашувати Заповнити Анкету</string>
-  <string name="form_entry_settings_summary">Натисніть для управління пунктами заповнити анкету</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Переміщення назад</string>
   <string name="moving_backwards_disabled_title">Переміщення назад відключене</string>
@@ -721,6 +729,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

@@ -155,6 +155,7 @@
   <!--Text displayed when user tries to start recording while the mic is already in use-->
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <!--Error displayed when opened filled form has been deleted on disk-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -445,18 +446,28 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
-  <string name="project_settings">Mpangilio wa jumla</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Seva</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="client">Kiolesura \"interface\" cha mtumiaji</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="maps">Ramani</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="form_management_preferences">Usimamizi wa fomu</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Utambulisho wa mtumiaji na kifaa </string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <string name="server_preferences">Mipangilio ya seva</string>
   <!--Label for server type setting-->
   <string name="type">Aina</string>
@@ -589,7 +600,7 @@
   <string name="found_in_main">Ondoa alama ili kuficha kutoka kwenye orodha kuu</string>
   <string name="found_in_settings">Ondoa alama ili kuficha kutoka kwenye mipangilio kuu</string>
   <string name="form_entry">Ondoa alama kuficha  kujaza fomu</string>
-  <string name="reset_project_settings_title">Rekebisha programu …</string>
+  <string name="reset_project_settings_title">Rekebisha upya</string>
   <string name="select_all">Chagua zote</string>
   <string name="clear_all">Futa zote</string>
   <string name="reset_settings">Mipangilio yote (mipangilio ya ndani, mipangilio iliyohifadhiwa)</string>
@@ -608,11 +619,8 @@
   <string name="reset_layers_result">Safu za ramani :: %s</string>
   <string name="reset_cache_result">Fomu ya takwimu za muda mfupi :: %s</string>
   <string name="main_menu_settings">Mipangilio ya menyu kuu</string>
-  <string name="main_menu_settings_summary">Bofya ili kudhibiti vitu muhimu vya menyu kuu</string>
   <string name="user_settings">Mipangilio ya mtumiaji</string>
-  <string name="user_setting_summary">Bofya ili kudhibiti mipangilio ya vitu kwa ujumla</string>
   <string name="form_entry_setting">Unda mipangilio ya kuingia</string>
-  <string name="form_entry_settings_summary">Bofya kudhibiti muundo wa kuingiza vitu</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Kusonga nyuma</string>
   <string name="moving_backwards_disabled_title">Kusonga nyuma kumesitishwa</string>
@@ -708,6 +716,8 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
 </resources>

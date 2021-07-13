@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Tangira gutegura ifishi nshya</string>
+  <string name="enter_data">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Tangira gutegura ifishi nshya</string>
+  <string name="enter_data_button">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Guhindura amakuru yoherejwe</string>
+  <string name="review_data">Guhindura inyandiko shingiro cg ngenderwaho ibika.</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <string name="review_data_button">Guhindura amakuru yoherejwe (%s)</string>
   <!--Text for an action button on the main screen.-->
@@ -17,31 +17,51 @@
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <string name="view_sent_forms_button">Reba ibyo umaze kohereza(1%s)</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Fungura form utangiraho amakuru.</string>
+  <string name="get_forms">Fungura inyandiko shingiro cg ngenderwaho.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Siba Fomu wa Sevinze</string>
+  <string name="manage_files">Siba inyandiko shingiro cg ngenderwaho wa bitse.</string>
+  <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">Iki gihe Byongeweho.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">Bibitswe iki gihe</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">Birangije gukorwa iki gihe</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">Byoherejwe iki gihe</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">Kohereza ntibyakunze iki gihe</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">Bisibwe iki gihe</string>
+  <string name="submission_deleted">Ibyo mwohereje byasibwe </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_form">Fomu yasibwe</string>
+  <string name="modified_on_date_at_time">\'Byahinduwe kuri\' EEE, MMM dd, yyyy\'kuri\' HH: mm</string>
+  <string name="encrypted_form">Inyandiko shingiro cg ngenderwaho itagaragara cg ihishe.</string>
+  <string name="deleted_form">Inyandiko shingiro cg ngenderwaho yasibwe</string>
   <string name="sort_the_list">Shyira urutonde ku murongo</string>
   <string name="sort_by">Shyira ku rutonde</string>
-  <string name="sort_by_name_asc">Izina, uva kuri A ujya kuri Z</string>
-  <string name="sort_by_name_desc">Izina, uva kuri Z ujya kuri A </string>
-  <string name="sort_by_date_asc">Itariki, here ku iheruka </string>
-  <string name="sort_by_date_desc">Itariki, here kuya kera </string>
+  <string name="sort_by_name_asc">Urutonde rwamazina, uva kuri A ujya kuri Z</string>
+  <string name="sort_by_name_desc">Urutonde rwamazina, uva kuri Z ujya kuri A </string>
+  <string name="sort_by_date_asc">Itariki yanyuma iheruka </string>
+  <string name="sort_by_date_desc">Itariki, yabanjirije iyanyuma iheruka.</string>
   <string name="sort_by_status_asc">Ukobimeze, byarangiye bwambere</string>
+  <string name="sort_by_status_desc">Aho bigeze, ntibyarangiye</string>
+  <string name="filter_the_list">Hisha urutonde</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Shakisha</string>
   <string name="no_items_display">Ntibibashije kuboneka</string>
+  <string name="no_items_display_forms">Ntakintu byerekana./n/n gerageza gushaka kandi wuzuzuze form iriho ubusa. </string>
+  <string name="no_items_display_sent_forms">Ntakibashije kugaragara.\n\n gerageza wohereze form zarangiye mbere yuko zisuzumwa.</string>
+  <string name="no_items_display_instances">Ntakintu byerekana./n/n gerageza gushaka kandi wuzuzuze form iriho ubusa. </string>
   <string name="not_granted_permission">Igikorwa mugerageza gutangira kirasaba uruhushya, kandi ntirwatanzwe</string>
   <string name="storage_runtime_permission_denied_title">Uburenganzira ku bubiko</string>
   <string name="storage_runtime_permission_denied_desc">Udafite ubwo burenganzira Collect ntabwo ishobora kwemera form cg ibike amakuru. Ongera ufungure iyo application mugihe ufite ubwo burenganzira</string>
+  <string name="location_runtime_permissions_denied_title">Uburenganzira bwokwerekana location </string>
+  <string name="location_runtime_permissions_denied_desc">Udafite ubwo burenganzira, Collect ntiyarikodinga location yawe. Mwongere igihe muzaba mubasha gutanga ubwo burenganzira</string>
+  <string name="camera_runtime_permission_denied_title">Ha uruhushya Camera</string>
+  <string name="camera_runtime_permission_denied_desc">Utatanze uruhushya porogaramu ntibasha gukoresha Camera bityo ongera kugerageza nyuma yuko uhaye uruhushya porogaramu</string>
+  <string name="record_audio_runtime_permission_denied_title">Rikodinga uburenganzira bwa odiyo </string>
   <string name="record_audio_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Mwakongera igihe mwaba mubonye ubwo burenganzira. </string>
   <string name="get_accounts_runtime_permission_denied_title">Kubona uburenganzira kuri konte </string>
   <string name="get_accounts_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Wongere igihe uzaba wahawe ubwo burenganzira </string>
@@ -51,14 +71,22 @@
     # FILL BLANK FORM
     ##############################################-->
   <string name="instance_scan_count">%1$d Form zashyizwemo</string>
-  <string name="finished_disk_scan">Kugenzura byarangiye. Ibyo mwatanze byose byabitswe </string>
+  <string name="finished_disk_scan">Kugenzura byarangiye. Ibyo mwatanze byose byabitswe.</string>
+  <string name="xform_parse_error">Ingorane z\'ikosa kuri fomu %1$s : %2$s ni ibitabonetse cyangwa bituzuye</string>
   <string name="loading_form">Kuzuza form </string>
+  <string name="survey_loading_reading_form_message">Porogaramu irasoma ubusobanuro bwa fomu</string>
+  <string name="survey_loading_reading_data_message">Porogaramu irasoma amakuru y\'igenzura.</string>
+  <string name="survey_loading_reading_csv_message">Usome ububiko bwa CSV </string>
+  <string name="parse_error">Ihangane, ntibikunze kugenzura amakuru ari mu ifishi</string>
   <string name="loading_form_failed">Habayeho ikibazo ubwo wuzuzaga form. Mwongere mugerageze. </string>
+  <string name="parent_form_not_present">Ntibikunze guhindura ifishi bitewe nuko ifishi ya mbere yasibwe. \'%1$s\' </string>
   <string name="cannot_edit_completed_form">Iyi form ntabwo ushobora kugira icyo uhindura mugihe byerekanyeko yarangiye. Ishobora kuba yerekana amakuru mu buryo butagaragara. </string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">Ibyo utasevinze byabashije kwisevinga!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">Hindura ururimi </string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">Jya kubyo ugomba gukora</string>
   <!--Text for button displayed in the form filling menu to save the form-->
   <string name="save_all_answers">Bika amakuru</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
@@ -73,11 +101,13 @@
   <string name="repeatable_group_label">Itsinda ryisubiramo </string>
   <string name="exit">Sohokamo</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">Ongera \'1%s\' </string>
   <string name="add_repeat">Shyiramo</string>
   <string name="dont_add_repeat">Wishyiraho ibindi</string>
   <string name="add_another_menu">Shyiraho ibindi </string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">Gukosora ibyo wanditse </string>
+  <string name="clearanswer_confirm">Siba igisubizo \'%s\'</string>
   <string name="clear_answer">Siba ibyo wanditse</string>
   <string name="clear_answer_ask">Dukuremo ibyo wanditse? </string>
   <string name="clear_answer_no">Bikuremo</string>
@@ -85,49 +115,88 @@
   <string name="discard_group">Kuramo itsinda </string>
   <string name="delete_repeat">Kuramo itsinda </string>
   <string name="delete_repeat_ask">Dukuremo iri tsinda? </string>
+  <string name="delete_repeat_confirm">Siba itsinda ryose ndetse n\'udutsinda duto turibarizwamo \'%s\'</string>
   <string name="delete_repeat_no">Bikuremo</string>
   <string name="invalid_answer_error">Mwihangane, ibyo mwanditse sibyo! </string>
+  <string name="required_answer_error">Ugomba gutanga igisubizo</string>
+  <string name="invalid_space_in_answer_singular">Ikitonderwa: wasize umwanya mubyo wanditse 1%s</string>
+  <string name="invalid_space_in_answer_plural">Ikitonderwa: wasize umwanya mubyo wanditse 1%s</string>
+  <string name="too_complex_form">Iyi  fishi iremereye tabuleti yawe, gerageza kugira ibyo ugabanyamo.</string>
+  <string name="survey_internal_error">Porogaramu yahuye n\'ikibazo cyo kutagaragaza amakuru.</string>
+  <string name="save_enter_data_description">ugeze ku iherezo rya 1%s</string>
   <string name="save_form_as">Ita izina iyi form </string>
   <string name="save_as_error">Izina wemeje ntirigomba kuba ririho ubusa! </string>
   <string name="mark_finished">Emezako form wayisoje </string>
   <string name="quit_entry">Bika amakuru, ubundi uvemo</string>
   <string name="data_saved_error">Mwihangane, kubika amakuru byanze! </string>
   <string name="data_saved_ok">Amakuru yabitswe! </string>
+  <string name="save_point_error">Ikosa mukwisevinga biragaruka: %s</string>
   <!--Dialog title when exiting a form. The name of the form will be included-->
+  <string name="quit_application">Sohoka 1%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&amp;lt,nta nyandiko shingiro yagiyemo&amp;gt;</string>
   <string name="do_not_save">Irengagize ibyahindutse</string>
   <string name="keep_changes">Bika ibyo wahinduye</string>
-  <string name="saving_form">Kubika amakuru</string>
+  <string name="saving_form">Ibika ry\'amakuru yinyandiko shingiro.</string>
+  <string name="survey_saving_validating_message">Porogaramu iragenzura amakuru yatanzwe</string>
   <string name="survey_saving_collecting_message">Gukusanya amakuru</string>
   <string name="survey_saving_saving_message">Kubika kuri SD card </string>
+  <string name="survey_saving_finalizing_message">Birikurangira bijya mububiko</string>
   <string name="survey_saving_encrypting_message">Guhisha amakuru</string>
+  <string name="not_exactly_one_record_for_this_instance">Kuri ubu ntabwo ari icy\'ibitsemo kimwe!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">Nta fomu itujujwe ihura n\'iyi jr_form_id.</string>
+  <string name="no_form_id_specified">Nta ndanga fomu yerekanwe??</string>
+  <string name="phone_does_not_support_rsa">Tabuleti ntishoboye kurangiza iki gikorwa</string>
+  <string name="invalid_rsa_public_key">Imibare yatanzwe siyo</string>
+  <string name="encryption_error_message">Ifishi ntiyigeze yemezwa yuko yarangiye 1%s</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">Link uriho siyo: %s</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">Link uriho ntibashije kuboneka %s</string>
   <!--Text displayed when audio recording fails to start-->
   <string name="start_recording_failed">Kurikodinga byanze</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Mikoro isanzwe iri gukoreshwa</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">Aya makuru ntashoboye gushyirwa mu ifishi ariko ushobora kuyasanga 1%1$s </string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Gufata amajwi byahagaritse. biraza gukunda muri 1%s</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Inyandiko shingiro yujujwe yarasibwe.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="launch_app">Bitangize</string>
+  <string name="activity_not_found">Nta gikorwa kigaragaraga gishakirwa igisubizo 1%s</string>
   <string name="no_app">Ibyo mwasabye ntibiboneka. Nimubyandikemo bisanzwe</string>
   <string name="null_intent_value">Ntabwo habashije kuboneka amakuru mwifuzaga </string>
+  <string name="launch_printer">Tangira Gucapa</string>
+  <string name="no_printer">Imashini icapa wahisemo ntiwemerewe kuyikoresha aka kanya. yinsitare ubone kuyikoresha</string>
+  <string name="open_url">Fungura Url</string>
+  <string name="capture_osm">Tangiza OpenMapKit </string>
+  <string name="recapture_osm">Subiramo ibyagaragajwe kuri OSM.</string>
+  <string name="edited_osm_file">Hindura ububiko bwa OSM XML</string>
+  <string name="invalid_osm_data">Mugihe hari ibitagenze neza. Ibyagaragajwe kuri OSM ntibihabwa agaciro.</string>
+  <string name="alert">ba maso</string>
   <string name="install_openmapkit">Nimushyire OpenMapKit muri tablet yanyu!</string>
+  <string name="get_barcode">Fata Barcode</string>
   <string name="replace_barcode">Hindura Barcode</string>
-  <string name="open_file">Fungura dokima </string>
+  <string name="barcode_scanner_prompt">Shyira Barcode muri urwo rukiramende</string>
+  <string name="open_file">Fungura ubwo bubiko</string>
   <string name="rank_items">Shyira ku murongo/Tondeka</string>
-  <string name="svg_file_does_not_exist">Dokima ya SVG ntabwo iboneka! </string>
+  <string name="number_picker_title">Agafata mibare</string>
+  <string name="invalid_range_widget">Ibyo wagaragaje muri ubu buryo ntagaciro byahawe! </string>
+  <string name="svg_file_does_not_exist">Ububiko bwa SVG ntabwo buboneka! </string>
   <string name="capture_image">Fata ifoto </string>
-  <string name="choose_image">Hitamo ifoto </string>
-  <string name="selected_invalid_image">Ibyo mwahisemo si ifoto yukuri</string>
+  <string name="choose_image">Hitamo Ishusho</string>
+  <string name="selected_invalid_image">Ifoto wahisemo mububiko si ifoto yukuri</string>
   <string name="view_image">Reba ifoto </string>
   <string name="take_picture_instruction">Kora kuri screen ufate ifoto </string>
   <string name="error_front_camera_unavailable">Ifoto y\'imbere ntabwo iboneka kuri iki gikoresho</string>
+  <string name="camera_error">Iyi Tablet ntabwo yemera Camera2 API</string>
   <string name="annotate_image">Andika ku ifoto </string>
-  <string name="invalid_file_type">Byerekanye dokima itariyo </string>
+  <string name="invalid_file_type">Saba kugarura ubwoko bw\'ububiko butaribwo </string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Bika, hanyuma ufunge</string>
   <string name="signature_capture">Gufata sinya</string>
@@ -154,11 +223,14 @@
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Komeza</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Fata audio</string>
+  <string name="record_audio">Fata amajwi</string>
+  <string name="background_audio_permission_explanation">Ubu buryo bubika amajwi kuri iyi gahunda. Ugomba gufungura insakazamajwi yawe, iyo utabikoze iyi gahunda ntifunguka.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Ubu buryo busaba kubika amajwi kuri iyi gahunda. Kutayikoresha bihagarika kubika amajwi kandi bigahanagura n\'ayarariho. Urashaka gukomeza?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <string name="disable_recording">Hagarika kurikodinga </string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">Iyandikwa ntiriratangira ako kanya. Banza wongere ufungure aho kwandika.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Siba dokima </string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
@@ -174,6 +246,8 @@
   <!--Text to let the user know a file is being saved-->
   <string name="saving_file">Kubika dokima </string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Banza uhagarike gufata amajwi mbere yo kuva kuri ino paji</string>
+  <string name="error_attaching_binary_file">Hagaragaye ikibazo mu gihe hageragezwaga guhuza amakuru 1%s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Hitamo</string>
   <string name="select_answer">Hitamo Igisubizo</string>
@@ -184,13 +258,34 @@
   <string name="selected">Ibyatoranijwe</string>
   <string name="trigger">Ok. Ngaho komeza</string>
   <string name="ext_file_no_data_error">Dokima nta makuru arimo</string>
+  <string name="ext_conflicting_columns_error">Amakuru agaragara mu buryo buhagaze arahura neza 1%s</string>
+  <string name="ext_sortBy_numeric_error">Akadirishya uhitamo gakoreshwamo imibare gusa. Iyo wibeshye aba ari \'%s\'</string>
+  <string name="ext_search_wrong_arguments_error">Ikosa ryagaragaye mumikorere yishakisha(): Imikorere isaba ubusobanuro kuri 1, 4 cyangwa 6.</string>
+  <string name="ext_search_wrong_function_error">Ikosa ryagaragaye mumikorere yishakisha(): Imikorere ntizwi \'%s\'.</string>
+  <string name="ext_search_bad_function_error">Ikosa ryagaragaye mumikorere yishakisha(): \'%s\' Ntabwo yahawe agaciro nk\'imikorere.</string>
+  <string name="ext_search_return_error">Ishakisha riratanga uburyo bwa \'%s\'.</string>
+  <string name="ext_import_generic_error">Kuzana amakuru ntibyakunze 1%1$s. Impamvu: 2%2$s</string>
+  <string name="ext_import_progress_message">Amakuru ari gutunganywa \'1%1$s\', ba wihanganye gato \'2%2$s\'</string>
   <string name="ext_import_cancelled_message">Gusoma amakuru mwarimwakuyemo!</string>
   <string name="ext_import_finalizing_message">Gusoza amakuru mwarimwashyizemo </string>
   <string name="ext_import_completed_message">Gusoma amakuru byarangiye! </string>
+  <string name="ext_not_initialized_error">Ibika ry\'ikusanyamakuru ntabwo ryavuguruwe.</string>
+  <string name="ext_import_csv_missing_error">Amakuru mwashakaga kuri 1%1$s ntabwo yabashije kuboneka. Birashoboka ko mwibagiwe gushyiramo 2%2$s.csv file muri form yawe? </string>
+  <string name="ext_search_generic_error">Ikosa ryagaragaye mu rutonde  rwimikorere mwishakisha():%s</string>
+  <string name="ext_assign_value_error">Ntibyakunze gushyiraho aya makuru \"%s\"</string>
+  <string name="parser_exception">Uretse gusa ubusesenguzi bugaragazwa n\'iyi nzira ya X: \"%s\"</string>
+  <string name="get_bearing">Andika ibyo uhawe.</string>
+  <string name="replace_bearing">Simbura ibyo uhawe.</string>
+  <string name="getting_bearing">Kanda hazunguruke ibyanditswe.</string>
+  <string name="accept_bearing">Andika ibyo uhawe.</string>
+  <string name="bearing">Ingano cg intera ya:%.3f</string>
+  <string name="direction">Icyerekezo: \"1%s\"</string>
+  <string name="bearing_lack_of_sensors">Ingano ntabwo yakiriwe: haraburamo igipimo cy\'ubwiyongere n\'igipimo cya rukuruzi cyangwa byombi.</string>
   <string name="select_date">Hitamo itariki </string>
   <string name="select_time">Hitamo igihe </string>
   <string name="no_date_selected">Nta tariki yatoranijwe </string>
   <string name="no_time_selected">Nta gihe cyatoranijwe</string>
+  <string name="ethiopian_month_1">Isozwa cg Impera ry\'igihe cy\'imvura.</string>
   <string name="ethiopian_month_2">Tikimt </string>
   <string name="ethiopian_month_3">Hidar </string>
   <string name="ethiopian_month_4">Tahsas </string>
@@ -241,8 +336,11 @@
   <string name="persian_month_11">Bahman</string>
   <string name="persian_month_12">Esfand</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">\"1%1$s\" (\"2%2$s\")</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">Ntibyemewe 1%s</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">Irabura 1%s</string>
   <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <string name="enter_identity">Andika amazina yawe</string>
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
@@ -271,27 +369,108 @@
   <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Position</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">Indangamimerere igaragaza amakuru.</string>
   <string name="basemap_source">Aho byatangiriye</string>
-  <string name="basemap_source_unavailable">Mwihangane.1%s basemaps ntabashije kuboneka muri telefone yawe.Twagusaba guhitamo indi muri general setting yawe&gt;ikarita</string>
+  <string name="basemap_source_unavailable">Mwihangane.%s y\'ikarita yibanze ntabashije kuboneka muri telefone yawe.Twagusaba guhitamo indi mu igenamitere rusange yawe&gt;ikarita</string>
   <string name="map_style_label">1%s imiterere ya ikarita</string>
   <string name="streets">Imihanda</string>
+  <string name="terrain">Ubutaka</string>
+  <string name="hybrid">Ibituburano</string>
+  <string name="satellite">Icyogajuru.</string>
+  <string name="light">Itara</string>
   <string name="dark">Ubwijima</string>
   <string name="outdoors">ikirere</string>
+  <string name="topographic">Amakuru y\'aho uhagaze</string>
   <string name="google_play_services_error_occured">Ntibishoka ko ukoresha ikarita iranga ahantu.Reba ko waba ufite google play muri telefone yawe</string>
+  <string name="carto_map_style_positron">Utunyangingo.</string>
+  <string name="carto_map_style_dark_matter">Ibibazo bidasobanutse cg byijimye.</string>
+  <string name="reference_layer">Indangakitegererezo.</string>
+  <string name="layer_data_caption_none">Nta bubiko shingiro buhari bugaragaza %1$s mu gihe hari amakuru fatizo ashingiye kuri %2$s</string>
+  <string name="layer_data_caption">Haruguru aha habanje ububiko bwose bugaragaza %1$s mu gihe hari amakuru fatizo ashingiye kuri %2$s</string>
+  <string name="layer_data_file">Ububiko bw\'amakuru shingiro.</string>
   <string name="view_change_location">Kora igenzura cyangwa uhindure ujye ahandi</string>
   <string name="change_location">Hindura ujye ahandi</string>
+  <string name="record_geopoint">Irabika amakuru</string>
+  <string name="location_accuracy">Birizewe: %1$s m</string>
+  <string name="location_provider">Igitanga aho uri ubu: %s</string>
   <string name="getting_location">Iri gushakicyisha icyerekezo</string>
+  <string name="get_location">Fata amakuru y\'ahantu</string>
+  <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
+  <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
+  <string name="location_metadata">Saterite iraboneka: %1$d /24\n\nIgihe
+Hashize: %2$s</string>
+  <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
+  <string name="location_providers_disabled_dialog_message">Iyi nyandiko shingiro irashaka kugenzura aho uherereye, ariko banyirigikorwa baho ntabwo bemejwe. Usabwa kwemeza igenamiterere ya Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">Jya mu igenamiterere</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">Kugenzu Icyerezo </string>
+  <string name="background_location_disabled">Iyi form ishaka kwerekana aho uherereye ariko ntiwabifunguye. Yishyireho 1%1$s murutonde ruri hejuru.</string>
+  <string name="background_location_enabled">Iyi form iri kwerekana aho uherereye.Ushobobora kubihagarika muri 1%1$s unyuze ku rutonde ruri hejuru aha</string>
+  <string name="save_point">Bika amakuru y\'ahantu</string>
+  <string name="get_point">Reba amakuru y\'ahantu</string>
+  <string name="geopoint_view_read_only">Reba amakuru y\'ahantu</string>
+  <string name="geoshape_view_read_only">Garagaza imiterere yahantu.</string>
+  <string name="geotrace_view_read_only">Garagaza ikimenyetso kiranga ahantu.</string>
+  <string name="get_shape">Tangira cg Shushanya imiterere yahantu.</string>
+  <string name="get_trace">Tangira cg Shakisha ibimenyetso biranga ahantu.</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="geoshape_title">Geoshape!</string>
+  <string name="input_method">Uburyo bwo kwinjiza amakuru</string>
+  <string name="start">Tangira</string>
+  <string name="enable_gps">Emeza GPS</string>
+  <string name="geotrace_title">Ibimenyetso biranga ahantu.</string>
+  <string name="gps_enable_message">GPS irafunze kuri tabuleti yawe. urifuza kuyifungura?</string>
+  <string name="geo_clear_warning">Byamaze gutungana. Murifuza kubisiba? </string>
+  <string name="geo_exit_warning">Siba ibyari byamaze guhindurwa ubundi usubire kuri porogaramu ya ODK</string>
+  <string name="polygon_validator">Bigomba kuba bifite byibuze ibintu 3 kugirango bikore Polygon </string>
+  <string name="polyline_validator">Bigomba kugira ibintu byibuze 2 kugirango bikore Polyline </string>
   <string name="clear">Siba </string>
+  <string name="placement_mode">Ishyirwa mu bikorwa n\'ihitamo.</string>
+  <string name="manual_mode">Ubryo bw\'umwihariko mu kubika neza ibyafashwe.</string>
+  <string name="automatic_mode">Uburyo bwoguhita birikodinga aho uherereye</string>
+  <string name="recording_interval">Rikodinga intera</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d second</item>
+    <item quantity="other">%d seconds</item>
+  </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d minute</item>
+    <item quantity="other">%d minutes</item>
+  </plurals>
+  <string name="accuracy_requirement">Icyerekana ko aribyo</string>
   <string name="none">Ntacyo</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="one">%d meter</item>
+    <item quantity="other">%d meters</item>
+  </plurals>
+  <string name="location_status_searching">Mwihangane Iracyashakisha location/icyerekezo</string>
+  <string name="location_status_accuracy">Indangahantu nyayo: %.2f m.</string>
+  <string name="location_status_acceptable">Indangahantu nyayo: %.2f m (yemewe)</string>
+  <string name="location_status_unacceptable">Indangahantu nyayo: %.2f m (itemewe)</string>
+  <string name="collection_status_paused">Ikimenyetso ndangahantu kinjiye:%d .</string>
+  <string name="collection_status_placement">Ikimenyetso ndangahantu kinjiye: %d (kanda mumwanya w\'ikimenyetso ndangahantu)</string>
+  <string name="collection_status_manual">Ikimenyetso ndangahantu kinjiye: %d (mu buryo busanzwe)</string>
+  <string name="collection_status_auto_seconds">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri segonda ibi %2$d)</string>
+  <string name="collection_status_auto_minutes">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri munota ibi %2$d)</string>
+  <string name="collection_status_auto_seconds_accuracy">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri segonda %2$d, kundengo ya %3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">Ikimenyetso ndangahantu kinjiye: %1$d (andika buri munota %2$d, kundengo ya %3$d m)</string>
+  <string name="geopoint_instruction">Kanda umare umwanya kugirango ushyiremo mark cg ukore kuri buto ya marker</string>
+  <string name="geopoint_no_draggable_instruction">Kanda hano wemeze.</string>
+  <string name="discard">Kuraho cg Jugunya.</string>
+  <string name="geoshape_view_change_location">Garagaza cg Uhindure imiterere yahantu.</string>
+  <string name="geotrace_view_change_location">Garagaza cg Uhindure ikimenyetso ndangahantu.</string>
+  <string name="geometry_status">Bika neza ibyanditswe: %d (bigaragara ku ikarita %d)</string>
   <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
   <!--##############################################
@@ -300,61 +479,215 @@
   <string name="uploading_data">Kohereza Form </string>
   <string name="noselect_error">Mwihangane, nta form mwigeze muhitamo! </string>
   <string name="no_connection">Nta internet ihari </string>
+  <string name="sending_items">Porogaramu iri kohereza 1%1$s muri 2%2$s y\'ifishi</string>
   <string name="send_selected_data">Ohereza ibyo wahisemo</string>
+  <string name="server_auth_credentials">Izina cyangwa se ijambo banga sibyo 1%s</string>
+  <string name="server_requires_auth">Server irasaba Authentication </string>
+  <string name="no_forms_uploaded">Nta fishi yigeze yoherezwa.</string>
+  <string name="upload_results">Ohereza ibyakozwe.</string>
   <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
   <string name="change_view">Hindura uko bigaragara </string>
+  <string name="show_sent_and_unsent_forms">Erekana Form zagiye na form zitagiye</string>
   <string name="show_unsent_forms">Erekana form zitagiye</string>
+  <string name="media_upload_error">Mugukurura amajwi ntaboneke mu bubiko, ntabwo abarimo ku: %1$s</string>
+  <string name="send_in_progress">Ohereza ibyagaragajwe bitaremezwa, hita wongera ugerageze.</string>
+  <string name="odk_permissions_fail">ODK ihita yohereza ibitemejwe, izere neza niba wemeje ibisabwa byose.</string>
+  <string name="odk_auto_note">ODK yohereje ibisubizo</string>
+  <string name="odk_auto_download_notification_title">ODK yadawunirodinze ibisubizo</string>
+  <string name="notification_error">Birerekanako habayeho ikosa</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
+  <string name="refresh">Rifureshinga </string>
+  <string name="download">Byatoranijwe</string>
+  <string name="download_forms_result">Bika ibisubizo kuri Tabuleti</string>
+  <string name="downloading_data">Kwihuza na Server </string>
+  <string name="fetching_file">Akira %1$s.\n\n y\'inyandiko shingiro %2$s ya %3$s inyandiko shingiro (zose).</string>
+  <string name="form_download_progress">%1$s. Akira ububiko bw\'amajwi: %2$s ya %3$s</string>
+  <string name="version">Urutonde rw\'ibibazo/form(ariko biteganywa kugenda z\'ihabwa nimero bitewe n\' impinduka ikozwe ho nyuma y\'uko yahawe aba atanga amakuru)</string>
+  <string name="form_updates_available">Ubu wabona ifishi igezweho</string>
+  <string name="newer_version_of_a_form_info">Aya ni amakuru agezweho ku ifishi ufite</string>
+  <string name="form_update_error">Gushyira ifishi ku gihe ntibyakunze</string>
+  <string name="form_update_succeeded">Gushyira ku gihe ifishi byagenze neza</string>
+  <string name="report_to_project_lead">Mu gihe ukomeje guhura niki kibazo, baza uwagusabye gutanga aya makuru</string>
+  <string name="unreachable_error">Collect ntibasha kugera kuri seriveri kuri %s. Ese winjijemo linki neza</string>
+  <string name="security_error">Collect ntibasha guhura na seriveri kuri %s. Ese winjijemo linki neza</string>
+  <string name="server_error">Seriveri %1$s irerekana kode %2$s.</string>
+  <string name="invalid_response">Server 1%s yatanze amakuru atariyo </string>
+  <string name="failure">Ntibyakunze</string>
+  <string name="load_remote_form_error">Kubika amakuru ari mu ifishi kuri tabuleti ntibyakunze</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
   <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">Ifishi zibitse</string>
   <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">Ifishi zitarimo ikintu</string>
+  <string name="delete_confirm">Siba %s ifishi</string>
+  <string name="delete_file">Siba icyo utoranije</string>
+  <string name="delete_no">Ntubisibe</string>
+  <string name="delete_yes">Siba ifishi</string>
+  <string name="file_deleted_error">Ihangane, %1$s muri %2$s z\' Ifishi wahisemo ntizabashije gusibwa.</string>
+  <string name="form_delete_message">Ifishi wahisemo ziri gusibwa</string>
+  <string name="deleting_form_dialog_update_message">Ifishi zimaze gusibwa ni %1$d muri %2$d</string>
+  <string name="file_deleted_ok">Ifishi %s zamaze gusibwa</string>
+  <string name="file_delete_in_progress">Ihangane, Igikorwa cyo gusiba ifishi kiracyari gukorwa</string>
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
+  <string name="project_settings">Settings za project</string>
   <!--Title of a settings section-->
+  <string name="server_settings_title">Ububiko</string>
+  <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">Link, username, password</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">Uko project igaragara</string>
+  <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Izina, ikirango, ibara</string>
   <!--Title of a settings section-->
+  <string name="client">Aho umuntu akorera </string>
+  <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Ururimi rwa application, Intego ,ingano y\'inyandiko</string>
   <!--Title of a settings section-->
+  <string name="maps">Ikarita</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="form_management_preferences">Gucunga neza inyandiko shingiro</string>
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">Ukoresha n\'ikiranga igikoresho</string>
+  <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">Ubunararibonye</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
+  <string name="server_preferences">Igenamiterere ya musakaza</string>
   <!--Label for server type setting-->
+  <string name="type">Ubwoko</string>
+  <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">Server URL</string>
+  <string name="url_error">Mwihangane URL ntabwo ariyo</string>
+  <string name="username">Izina ry\'uyikoresha.</string>
+  <string name="change_username">Izina ry\'ukoresha ODK</string>
+  <string name="password">Umubarebanga cyangwa se Ijambobanga</string>
+  <string name="change_password">Ijambo banga rya ODK</string>
+  <string name="password_error_whitespace">Mu ijambobanga ahantu hariho ubusa ntibyemewe </string>
+  <string name="username_error_whitespace">Kuzuza ahantu hariho ubusa ntabwo byemewe mu izina ugomba gukoresha </string>
+  <string name="custom_server_paths">Hindura inzira za Server </string>
+  <string name="legacy_custom_server_paths_summary">Izasibwa mu nyandiko shingiro izaza. Musabwa gukoresha/ urutonde rw\'inyandiko shingiro na/ uruheherekane rwabyo ku kigega kibika amakuru yose.</string>
+  <string name="change_formlist_url">Inzira igaragaza urutonde rw\'inyandiko shingiro ( Ushireho URL)</string>
+  <string name="change_submission_url">Uburyo bwokohereza (ongera kuri URL)</string>
+  <string name="formlist_url">Inzira igaragaza urutonde rw\'inyandiko shingiro.</string>
+  <string name="submission_url">Inzira zokwohereza</string>
+  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
+  <string name="selected_google_account_text">Konte kuri Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">Linki y\'ububiko bw\'ibyoherejwe bitagira linki</string>
   <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">Inyandiko shingiro igaragaza URL ngenderwaho. Iyo itabikora, iyo URL izakoreshwa.</string>
+  <string name="app_theme">Isanganyamatsiko</string>
+  <string name="theme_light">Urumuri rw\'insanganyamatsiko.</string>
+  <string name="theme_dark">Umwijima w\'isanganyamatsiko.</string>
+  <string name="theme_magenta">Isanganyamatsiko rya Magenta.</string>
   <string name="language">Ururimi</string>
+  <string name="use_device_language">Kurikiza imikorere y\'igikoresho</string>
   <string name="font_size">Ingano y\'amagambo</string>
   <string name="change_font_size">Ingano y\'amagambo</string>
+  <string name="font_size_extra_large">Nini cyane</string>
+  <string name="font_size_large">Nini</string>
+  <string name="font_size_medium">Iri mu rugero</string>
+  <string name="font_size_small">Ntoya</string>
+  <string name="font_size_extra_small">Nto cyane</string>
+  <string name="navigation">Kogoga</string>
+  <string name="swipe_navigation">Koresha uburyo bwo kunyereza ujyana hirya</string>
+  <string name="buttons_navigation">Koresha buto ijyana imbere/isubira inyuma</string>
+  <string name="swipe_buttons_navigation">Koresha kunyereza na za buto</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Ibikurikira</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Subira inyuma </string>
+  <string name="show_splash_title">Mugaragaza ecran</string>
+  <string name="show_splash_summary">Erekana itangira ry\'igenamikorere.</string>
+  <string name="splash_path">Guhitamo amashusho</string>
+  <string name="default_splash_path">ODK Default</string>
   <string name="select_another_image">Hitamo indi foto </string>
+  <string name="use_odk_default">Koresha ifoto</string>
   <string name="change_splash_path">Hindura ifoto </string>
   <!--Heading for the settings category about updating blank forms-->
+  <string name="form_update_category">Amakuru kuri form</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">Uburyo bwa Form iriho ubusa</string>
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">Imfashanyigisho</string>
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">Inyandiko shingiro yakuwe mububiko nyuma gusa.</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">Ibihuye neza na server </string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">Inshuro z\'ivugurura ryikora</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">Buri minota 15</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">Buri saha</string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_six_hours">Buri nyuma y\'amasaha atandatu </string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_24_hours">Buri nyuma y\'amasaha 24</string>
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">Kwidawunilodinga </string>
+  <string name="automatic_download_summary">Guhita bidawunilodinga versions nshya ya forms </string>
   <string name="hide_old_form_versions_setting_title">Hisha amakuru ya form imaze igihe kinini </string>
+  <string name="hide_old_form_versions_setting_summary">Hazagaragazwa gusa inyandiko shingiro yanyuma itujujwe.</string>
   <string name="form_submission_category">Kohereza Form </string>
+  <string name="autosend_selector_title">Kwiyohereza</string>
+  <string name="autosend">Kwiyohereza</string>
+  <string name="off">Irafunze</string>
+  <string name="wifi_autosend">Wifi yonyine</string>
+  <string name="cellular_autosend">Interineti ya Tabuleti yonyine</string>
+  <string name="wifi_cellular_autosend">Wifi ndetse na Interineti ya tabuleti</string>
   <string name="delete_after_send">Gusiba nyuma yokohereza </string>
+  <string name="delete_after_send_summary">Nyuma yo kohereza form na media kukicaro Ushobora guhita ubisiba.</string>
   <string name="form_filling_category">Kuzuza Form </string>
+  <string name="default_completed">Kubura gusoza.</string>
+  <string name="default_completed_summary">Garagaza inyandiko shingiro yasojwe itagaragara cg yabuze.</string>
+  <string name="constraint_behavior_title">Gukemura uburyo bwintegeko.</string>
+  <string name="constraint_behavior">Imyitwarire yo gukemura uburyo bwintegeko</string>
+  <string name="constraint_behavior_on_swipe">Kwemeza uburyo bw\'ikubura ryihuse.</string>
+  <string name="constraint_behavior_on_finalize">Komeza ugaragaze iyemezwa kugeza usoje.</string>
+  <string name="high_resolution_title">Amashusho nyayo murwego rwohejuru.</string>
+  <string name="high_resolution_summary">Emeza ibikamashusho kuburyo buhanitse.</string>
+  <string name="image_size_title">Ingano y\'ifoto</string>
+  <string name="image_size_dialog_title">Kumuzenguruko w\'ishusho hagaragare udushusho duto.</string>
+  <string name="image_size_large">Nini (3072px)</string>
+  <string name="image_size_medium">Iri mu rugero (2048 px)</string>
+  <string name="image_size_small">Ntoya (1024 px)</string>
+  <string name="image_size_very_small">Ntoya cyane (640 px)</string>
+  <string name="image_size_original">Ingano yumwimerere kuva kuri kamera (isanzwe)</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">Erekana ubuyobozi kubibazo</string>
   <string name="guidance_no">Oya</string>
+  <string name="guidance_yes">Yego-burigihe bigarara</string>
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <string name="guidance_yes_collapsed">Yego - yaguye</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">Kwifashisha APP y\'indi mugufata amajwi</string>
+  <string name="form_import_category">Gurura cg shaka inyandiko shingiro.</string>
+  <string name="instance_sync">Rangiza kuzuza neza inyandiko shingiro yakuruwe cg yashatswe.</string>
+  <string name="instance_sync_summary">Shyiraho akamenyetso bwangu kunyandiko shingiro kuri urwo rukurikirane mbumbe rw\'amakuru.</string>
+  <string name="analytics_preferences">Ingano ya interineti yakoreshejwe</string>
+  <string name="analytics">Kusanya amakuru yo gukoresha atazwi</string>
+  <string name="analytics_summary">Amakuru yo gukoresha atazwi afasha itsinda rya ODK gushyira imbere gukosora </string>
+  <string name="form_metadata_title">Inyandiko shingiro mbumbe y\'urukurikirane rw\'amakuru yatanzwe.</string>
+  <string name="form_metadata">Inyandiko shingiro mbumbe y\'urukurikirane rw\'amakuru yatanzwe.</string>
+  <string name="form_metadata_summary">Ako gaciro kose kongerwa ku nyandiko shingiro gafite izina rikoresha, email na/ cg telefone yinjijwe kare igaragaza umuntu wohereje amakuru.</string>
+  <string name="user_defined">Umukoresha-asobanuwe</string>
+  <string name="phone_number">numero ya telefoni</string>
+  <string name="email">umwirondoro wa Imeyili</string>
+  <string name="invalid_email_address">Imeyili siyo</string>
+  <string name="device_defined">Igikoresho cyasobanuwe</string>
   <string name="device_id">Ibiranga igikoresho </string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Ntabwo bihari </string>
@@ -362,30 +695,111 @@
      # ADMIN SETTINGS
      ##############################################-->
   <string name="enter_new_password">Shyiramo ijambobanga rishya </string>
+  <string name="admin_password">Ijambo ry\'ibanga ry\'umuyobozi</string>
+  <string name="admin_password_changed">Ijambo ryibanga rya admin ryahinduwe neza</string>
+  <string name="admin_password_disabled">Ijambo ryibanga ryahagaritswe</string>
   <string name="admin_password_incorrect">Mwihangane, ijambo banga siryo! </string>
+  <string name="enter_admin_password">Andika ijambo ryibanga rya Admin </string>
+  <string name="change_admin_password">Hindura ijambo ryibanga  rya admin</string>
+  <string name="show_password">garagaza ijambobanga</string>
+  <string name="found_in_main">Kutemeza bihisha uhereye k\'urutonde rw\'ibanze cg fatizo.</string>
+  <string name="found_in_settings">Kutemeza bihisha uhereye ku igenamitere rusange</string>
+  <string name="form_entry">Ntuhitemo inyandiko shingiro ihishwe ahubwo uyinjize.</string>
+  <string name="reset_project_settings_title">Hindura</string>
+  <string name="delete_project">Siba</string>
+  <string name="select_all">Hitamo byose</string>
   <string name="clear_all">Siba byose</string>
+  <string name="reset_settings">Igenamiterere zose ( izimbere, izabitswe)</string>
+  <string name="reset_saved_forms">Inyandiko shingiro zabitswe (Urukurikirane rw\'imbumbe z\'inyankiko z\'amakuru, Urukurikirane rw\'amakuru fatizo yibanze)</string>
+  <string name="reset_blank_forms">Inyandiko shingiro zitujujwe (Imbumbe z\'inyankiko shingiro, amakuru fatizo yinyandiko shingiro yibanze kumbumbe zinzweho)</string>
+  <string name="reset_layers">Shushanya ikarita (Ukore ububiko bwayo)</string>
+  <string name="reset_cache">Hisha aho wohereje inyandiko shingiro (Hisha ububiko bw\'izo nyandiko)</string>
+  <string name="reset_settings_dialog_title">Hitamo ibyo ushaka kongera gutangiza.</string>
   <string name="reset_settings_button_reset">Hindura</string>
+  <string name="reset_in_progress">Kongera gukora igenamiterere.</string>
+  <string name="reset_app_state_result">Ongera utangize ibyakonzwe.</string>
+  <string name="reset_app_state_warning">Ibyo wahisemo byose biravamo burundu. Nturi bubashe gusubira inyuma</string>
+  <string name="reset_settings_result">Igenamiterere zose::%s</string>
+  <string name="reset_saved_forms_result">Ifishi zibitse 1%s</string>
+  <string name="reset_blank_forms_result">Ifishi zitarimo ikintu 1%s</string>
+  <string name="reset_layers_result">Shushanya ikarita:: %s</string>
+  <string name="reset_cache_result">Hisha ipakirwa ry\'inyandiko shingiro::%s</string>
+  <string name="main_menu_settings">Igenamiterere ry\'urutonde fatizo</string>
+  <string name="user_settings">Ikoreshwa ry\'igenamiterere.</string>
+  <string name="form_entry_setting">Igenamiterere ku kwinjiza inyandiko shingiro.</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">Gusubira inyuma</string>
+  <string name="moving_backwards_disabled_title">Gusubira inyuma ntibikunda</string>
+  <string name="moving_backwards_disabled_message">Shyiraho igikoresho gicunga kugira ngo ubuze kwinjira abakoresha nabi igenamitarere?\n\n Ibyahinduwe ni:\n\u2022 Kutemeza ibyahindutse ku nyandiko shingiro ibitswe\n\u2022 Kutemeza ibyinjijwe nyuma\n\u2022 Garagaza ibyakozwe ku mbogamizi zabaye mwihitamo ryhuse kandi risobanutse.</string>
   <string name="yes">Yego</string>
   <string name="no">Oya</string>
+  <string name="moving_backwards_enabled_title">Gusubira inyuma byemejwe</string>
+  <string name="moving_backwards_enabled_message">Mushobora gusura ku igenamiterere kuburyo bukurikira:\n\u2022 Guhindura inyandiko shingiroibitswe\n\u2022 Kubika inyandiko shingiro\n\u2022 Garagaza ibyinjijwe nyma\n\u2022 Imbogamizi z\'ibyakozwe.</string>
   <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Bika amakuru</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">Ibyo nasangijwe</string>
   <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">Bika kuri tabuleti ibyo wahisemo</string>
   <string name="go_back">Subira inyuma </string>
+  <string name="google_auth_io_exception_msg">Ntabwo ushobora guhamaraga API. Niba ukurikize uko ahantu hateye, usabwa gusubira kumushinga wa readme cg somiwanjye</string>
+  <string name="reading_files">Usobanukirwe n\'ububiko</string>
+  <string name="drive_get_file">Akira %1$s n\'ububiko bw\'amajwi.</string>
+  <string name="no_google_account">Ntago wahisemo email</string>
+  <string name="google_set_account">Wahisemo urupapurombare rwa Google nka musakaza, Hitamo konti ya Google cg email yawe ijyanye n\'igenamiterere rusange, ubone gukomeza</string>
+  <string name="google_search_browse">Shakisha ama fomu. Cyangwa uhitemo \'My Drive\' hepfo kugirango ubashe urebe.</string>
+  <string name="invalid_sheet_id">Indangarupapurombare itemejwe: %1$s</string>
+  <string name="missing_submission_url">Haraburamo kohereza URL</string>
+  <string name="google_sheets_access_denied">Ntibikunda kuyinjiramo.Wareba niba nyiri form yaguhaye uburenganzira bwo kuyinjiramo no kuba haricyo wahindura.</string>
+  <string name="google_sheets_missing_columns">Haraburamo utuyira mu rupapurombare rukurikira: %1$s</string>
+  <string name="google_sheets_encrypted_message">Forms zifungurwa n\'ijambo banga ntago zemewe koherezwa muri Google Sheets</string>
+  <string name="missing_google_account_dialog_desc">Kugirango wohereza inyandiko shingiro ukoresheje urupapurombara rwa Google  ugomba kubanza gushyiramo email yawe muri Musakaza ry\'igenamiterere </string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="instance_upload_cancelled">Inzego ngenderwaho zitakunze mwiyoherezwa.</string>
+  <string name="no_columns_to_upload">Nta tuyira twabonetse mu iyoherezwa ryinyandiko shingiro.</string>
+  <string name="missing_google_account_dialog_title">Konti ya google ntiyahinduwe</string>
+  <string name="multiple_media_folders_detected_notification">Hejuru y\'imbumbe y\'ububiko bumwe bw\'amajwi bwagaragaye, usabwa gusiba bumwe noneho ugasubiramo.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
+  <string name="about_preferences">Kuri</string>
+  <string name="tell_your_friends">Gusangiza ODK Collect</string>
+  <string name="tell_your_friends_msg">Abo mukorana baracyakusanyiriza amakuru mu mpapuro? Bahe ODK collect</string>
+  <string name="leave_a_review">Tanga igitekerezo cyawe muri play store</string>
+  <string name="leave_a_review_msg">Igitekerezo cyawe(twizera cyiza) kiratuma application irushaho kugaragara cyane muri Play Store</string>
+  <string name="odk_website">Sura urubuga rwa ODK</string>
+  <string name="odk_website_summary">ODK ikoreshwa mugukusanya amakuru kubwimibereho myiza mubidukikije bifite ibibazo.</string>
+  <string name="odk_forum">Itabire ihuriro ry\'abakoresha ODK</string>
+  <string name="odk_forum_summary">Injira ihuriro kugirango ubone ubufasha, gusaba ibiranga, gutanga umusanzu / ibisobanuro!</string>
+  <string name="all_open_source_licenses">Gufungura amasomero yisoko / impushya</string>
+  <string name="all_open_source_licenses_msg">Duhagaze ku bitugu by\'ibihangange!</string>
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="qr_code">Kwemeza umubarendangabanga cg kode ya QR</string>
+  <string name="scan_qr_code_fragment_title">Sikana</string>
+  <string name="view_qr_code_fragment_title">QR Code</string>
+  <string name="import_qrcode_sd">Kurura umubarendangabanga cg kode ya QR</string>
+  <string name="successfully_imported_settings">Igenamiterere ryatumijwe neza</string>
+  <string name="encoding_max_limit">Umubare wanyuma ntarengwa w’inyuguti wageze: Umubarendangabanga cg kode ya QR ntishobora kubyara igenamiterere ryose.</string>
+  <string name="share">Gusangiza</string>
+  <string name="turn_on_flashlight">Cana itara</string>
+  <string name="turn_off_flashlight">Zimya itara</string>
+  <string name="qrcode_with_both_passwords">Ibigizwe n\'amakuru agaragara:  Jambobanga rya <b>muyoboyi</b> na<b>musakaza</b></string>
+  <string name="qrcode_without_passwords">Kanda wemeze Umubarendangabanga cg kode ya QR iginzwe na jambobanga  rya<b>muyobozi</b> cg <b>musakaza</b></string>
+  <string name="qrcode_with_admin_password">Ibigizwe n\'amakuru agaragara ya: Jambobanga <b>muyobozi</b> </string>
+  <string name="qrcode_with_server_password">Ibigizwe n\'amakuru agaragara ya: Jambobanga <b>musakaza</b></string>
+  <string name="server_password">Ijambo banga rya seriveri</string>
+  <string name="include_password_dialog">Ijambo ryibanga ririmo kode</string>
+  <string name="generate">Kubyaza </string>
   <string name="invalid_qrcode">Kode za QR ntabwo zirimo settings zuzuye</string>
-  <string name="corrupt_imported_preferences_error">Settings zagize ikibazo. biturutse kuri settings z\'uwayikoze, Hindura settings cgw uzanemo inshya zikora.</string>
+  <string name="qr_code_not_found">QR code y\'ishusho wakanzeho ntiyabonetse </string>
+  <string name="corrupt_imported_preferences_error">Igenamiterere zagize ikibazo. Uhereye ku igenamiterere rya Muyobozi, Hindura cg tangiza igenamiterere cg uzanemo inshya zikora. </string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -404,12 +818,13 @@
   <string name="please_wait">Rindira igihe gito</string>
   <string name="please_wait_long">Rindira. Bishobora gufata igihe gito.</string>
   <string name="fs_delete_media_path_if_file_error">Ntabwo bibasha gusibika \' %s \'. Siba iyi form n\'intoki wongere uyi downloadinge.</string>
-  <string name="fs_create_media_folder_error">Ntabubiko bubasha gukorwa \' %s \'.</string>
+  <string name="fs_create_media_folder_error">Ntabubiko mbumbe bubasha gukorwa \' %s \'.</string>
   <string name="fs_file_copy_error">Wikora copy ya %1$s kuri %2$s .
 Impamvu: %3$s</string>
   <string name="survey_multiple_forms_error">Wa downloadinze form 2 zitandukanye ariko zihuje amakuru.
 Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatandukanye. Nimba ariko bimeze, siba imwe.</string>
   <string name="select_odk_shortcut">Hitamo inzira z\'ubusamo za ODK</string>
+  <string name="background_audio_help">Iyi fomu yandika amajwi ya mikoro yigikoresho cyawe. \ n\n Ushobora gukoresha igipimo cyerekana amajwi kugirango umenye neza ko mikoro yegeranye bihagije nijwi ukeneye gufata amajwi. n\n\ Guhagarika gufata amajwi nyamuneka sohoka muri iyi fomu.n\n\ Kubindi bisobanuro nyamuneka hamagara umuntu wagusabye gukusanya amakuru.</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -422,19 +837,32 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="switched_project">Byihinduye kuri %s</string>
   <string name="using_project">Gukoresha %s</string>
   <string name="switch_to_project">Imukira kuri %s</string>
-  <string name="delete_project">Siba Project</string>
-  <string name="delete_project_confirm_message">Nibyo koko wiyemeje gusiba iyi project?</string>
+  <string name="delete_project_confirm_message">Inyandiko shingiro zose, zoherejwe n\'igenamitere sizasibwa burundu.</string>
   <string name="delete_project_yes">Yego</string>
   <string name="delete_project_no">Oya</string>
+  <string name="cannot_delete_project_title">Umushinga ntiwasibwa.</string>
+  <string name="cannot_delete_project_message_one">Ntabwo hoherejwe. Mugusiba umushinga, usabwa kohereza cg ugasiba ibyoherejwe byose.</string>
+  <string name="or">Cyangwa </string>
+  <string name="hex_color">Amabara ya Hex</string>
+  <string name="invalid_hex_code">hex code ntiyemewe</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">Kusanya amakuru/aho ariho hose</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <string name="configure_with_qr_code">Byihuze hifashishijwe kode ya QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ukoresheje amaboko injiza amakuru kuri project</string>
+  <string name="project_config_tip">Niba wamaze gushyiramo umushinga wawe, wakongera gutangiza igenamiterere rusange ni rya Muyobozi.</string>
+  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">Poroje yanjye ikoresha Google Drive</string>
+  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">Hindura</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">Nta poroje ufitemo</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">Gerageza kubyerekana</string>
+  <string name="scan_configuration_qr_code">Umubarendangabanga wemejwe kuri QR</string>
 </resources>
