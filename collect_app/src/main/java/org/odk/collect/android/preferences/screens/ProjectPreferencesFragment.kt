@@ -30,7 +30,6 @@ import org.odk.collect.android.preferences.dialogs.AdminPasswordViewModel
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
-import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.utilities.ToastUtils
@@ -44,9 +43,6 @@ class ProjectPreferencesFragment :
     @Inject
     lateinit var versionInformation: VersionInformation
 
-    @Inject
-    lateinit var adminPasswordProvider: AdminPasswordProvider
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
@@ -59,9 +55,10 @@ class ProjectPreferencesFragment :
             this,
             { isPasswordEnabled: Boolean ->
                 if (isPasswordEnabled) {
-                    isPasswordEntered = true
+                    projectPreferencesViewModel.setStateUnlocked()
+                } else {
+                    projectPreferencesViewModel.setStateNotProtected()
                 }
-                isPasswordSet = isPasswordEnabled
                 requireActivity().invalidateOptionsMenu()
             }
         )
@@ -73,7 +70,7 @@ class ProjectPreferencesFragment :
             this,
             { isPasswordCorrect: Boolean ->
                 if (isPasswordCorrect) {
-                    isPasswordEntered = true
+                    projectPreferencesViewModel.setStateUnlocked()
                     requireActivity().invalidateOptionsMenu()
                     setupPrefs()
                 } else {
@@ -89,9 +86,6 @@ class ProjectPreferencesFragment :
 
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
-        }
-        if (adminPasswordProvider.isAdminPasswordSet) {
-            isPasswordSet = true
         }
     }
 
@@ -122,7 +116,7 @@ class ProjectPreferencesFragment :
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
                 AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> {
-                    if (isPasswordSet && !isPasswordEntered) {
+                    if (projectPreferencesViewModel.isStateLocked()) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         DialogUtils.showIfNotShowing(
@@ -131,14 +125,14 @@ class ProjectPreferencesFragment :
                     }
                 }
                 PROJECT_MANAGEMENT_PREFERENCE_KEY -> {
-                    if (isPasswordSet && !isPasswordEntered) {
+                    if (projectPreferencesViewModel.isStateLocked()) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         displayPreferences(ProjectManagementPreferencesFragment())
                     }
                 }
                 ACCESS_CONTROL_PREFERENCE_KEY -> {
-                    if (isPasswordSet && !isPasswordEntered) {
+                    if (projectPreferencesViewModel.isStateLocked()) {
                         DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
                     } else {
                         displayPreferences(AccessControlPreferencesFragment())
@@ -151,12 +145,15 @@ class ProjectPreferencesFragment :
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (isPasswordSet) {
-            if (isPasswordEntered) {
-                menu.findItem(R.id.menu_unlocked).isVisible = true
-            } else {
-                menu.findItem(R.id.menu_locked).isVisible = true
-            }
+        if (projectPreferencesViewModel.isStateLocked()) {
+            menu.findItem(R.id.menu_locked).isVisible = true
+            menu.findItem(R.id.menu_unlocked).isVisible = false
+        } else if (projectPreferencesViewModel.isStateUnlocked()) {
+            menu.findItem(R.id.menu_locked).isVisible = false
+            menu.findItem(R.id.menu_unlocked).isVisible = true
+        } else {
+            menu.findItem(R.id.menu_locked).isVisible = false
+            menu.findItem(R.id.menu_unlocked).isVisible = false
         }
     }
 
@@ -170,11 +167,6 @@ class ProjectPreferencesFragment :
             return true
         }
         return false
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        isPasswordEntered = false
     }
 
     private fun displayPreferences(fragment: Fragment?) {

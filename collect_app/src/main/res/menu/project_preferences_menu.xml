@@ -5,12 +5,10 @@
     <item
         android:id="@+id/menu_locked"
         android:icon="@drawable/ic_outline_lock_24"
-        android:visible="false"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_unlocked"
         android:icon="@drawable/ic_outline_lock_open_24"
-        android:visible="false"
         app:showAsAction="always" />
 </menu>

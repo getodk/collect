@@ -6,29 +6,36 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsStore;
+import org.odk.collect.android.utilities.AdminPasswordProvider;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 public abstract class BaseProjectPreferencesFragment extends BasePreferencesFragment {
 
-    protected static boolean isPasswordSet;
-    protected static boolean isPasswordEntered;
-
     @Inject
     @Named("GENERAL_SETTINGS_STORE")
     SettingsStore generalSettingsStore;
+
+    @Inject
+    AdminPasswordProvider adminPasswordProvider;
+
+    protected ProjectPreferencesViewModel projectPreferencesViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+        projectPreferencesViewModel = new ViewModelProvider(requireActivity()).get(ProjectPreferencesViewModel.class);
+        projectPreferencesViewModel.initState(adminPasswordProvider.isAdminPasswordSet());
     }
 
     @Override
@@ -38,7 +45,9 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        removeDisabledPrefs();
+        if (projectPreferencesViewModel.isStateLocked()) {
+            removeDisabledPrefs();
+        }
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -60,10 +69,8 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     }
 
     private void removeDisabledPrefs() {
-        if (isPasswordSet && !isPasswordEntered) {
-            DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, settingsProvider.getAdminSettings());
-            preferencesRemover.remove(AdminKeys.adminToGeneral);
-            preferencesRemover.removeEmptyCategories();
-        }
+        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, settingsProvider.getAdminSettings());
+        preferencesRemover.remove(AdminKeys.adminToGeneral);
+        preferencesRemover.removeEmptyCategories();
     }
 }
