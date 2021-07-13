@@ -136,17 +136,18 @@ public class RobolectricHelpers {
         shadowOf(getMainLooper()).idle();
     }
 
-    public static void runServices() {
-        runServices(false);
-    }
-
     public static void clearServices() {
         services.clear();
+    }
+
+    public static void runServices() {
+        runServices(false);
     }
 
     public static void runServices(boolean keepServices) {
         Application application = ApplicationProvider.getApplicationContext();
 
+        // Run pending start commands
         while (shadowOf(application).peekNextStartedService() != null) {
             Intent intent = shadowOf(application).getNextStartedService();
 
@@ -166,6 +167,29 @@ public class RobolectricHelpers {
                 }
             } else {
                 startService(serviceClass, intent);
+            }
+        }
+
+        // Run pending stops - only need to stop previously started services
+        if (keepServices) {
+            while (true) {
+                Intent intent = shadowOf(application).getNextStoppedService();
+                if (intent == null) {
+                    break;
+                }
+
+                Class serviceClass;
+                try {
+                    serviceClass = Class.forName(intent.getComponent().getClassName());
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+                if (services.containsKey(serviceClass)) {
+                    services.get(serviceClass).destroy();
+                    services.remove(serviceClass);
+                }
             }
         }
     }
