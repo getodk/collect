@@ -63,11 +63,4 @@ public class GeoUtils {
             return null;
         }
     }
-
-    public static Location sanitizeAccuracy(Location location) {
-        if (location != null && (location.isFromMockProvider() || location.getAccuracy() < 0)) {
-            location.setAccuracy(0);
-        }
-        return location;
-    }
 }

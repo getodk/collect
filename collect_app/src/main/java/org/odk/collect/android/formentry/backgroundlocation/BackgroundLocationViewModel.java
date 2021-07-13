@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 class TestClientListener implements LocationClient.LocationClientListener {
 

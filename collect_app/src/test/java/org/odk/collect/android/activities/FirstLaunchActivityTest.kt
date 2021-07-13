@@ -78,7 +78,7 @@ class FirstLaunchActivityTest {
                 withText(
                     getString(
                         ApplicationProvider.getApplicationContext<Collect>(),
-                        R.string.app_name
+                        R.string.collect_app_name
                     ) + " vfake"
                 )
             ).check(matches(isDisplayed()))

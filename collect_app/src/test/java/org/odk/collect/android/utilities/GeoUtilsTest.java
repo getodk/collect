@@ -8,8 +8,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.geo.MapPoint;
-import org.odk.collect.android.location.LocationTestUtils;
 import org.odk.collect.shared.TempFiles;
+import org.odk.collect.testshared.LocationTestUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,11 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static android.location.LocationManager.GPS_PROVIDER;
 import static junit.framework.TestCase.assertNotNull;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.odk.collect.android.geo.MapFragment.KEY_REFERENCE_LAYER;
@@ -97,30 +93,5 @@ public class GeoUtilsTest {
         config.putString(KEY_REFERENCE_LAYER, "blah");
 
         assertNotNull(GeoUtils.getReferenceLayerFile(config, layersPath));
-    }
-
-    @Test
-    public void whenAccuracyIsNegative_shouldBeSetToZeroAfterSanitizing() {
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
-        Location sanitizedLocation = GeoUtils.sanitizeAccuracy(location);
-        assertThat(sanitizedLocation.getLatitude(), is(7.0));
-        assertThat(sanitizedLocation.getLongitude(), is(2.0));
-        assertThat(sanitizedLocation.getAltitude(), is(3.0));
-        assertThat(sanitizedLocation.getAccuracy(), is(0.0f));
-    }
-
-    @Test
-    public void whenLocationIsMocked_shouldAccuracyBeSetToZeroAfterSanitizing() {
-        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
-        Location sanitizedLocation = GeoUtils.sanitizeAccuracy(location);
-        assertThat(sanitizedLocation.getLatitude(), is(7.0));
-        assertThat(sanitizedLocation.getLongitude(), is(2.0));
-        assertThat(sanitizedLocation.getAltitude(), is(3.0));
-        assertThat(sanitizedLocation.getAccuracy(), is(0.0f));
-    }
-
-    @Test
-    public void whenLocationIsNull_shouldNullBeReturnedAfterSanitizing() {
-        assertThat(GeoUtils.sanitizeAccuracy(null), nullValue());
     }
 }

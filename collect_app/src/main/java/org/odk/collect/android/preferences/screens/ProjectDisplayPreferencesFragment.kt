@@ -17,7 +17,7 @@ import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.ColorPickerDialog
 import org.odk.collect.androidshared.ColorPickerViewModel
-import org.odk.collect.androidshared.OneSignTextWatcher
+import org.odk.collect.androidshared.ui.OneSignTextWatcher
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject

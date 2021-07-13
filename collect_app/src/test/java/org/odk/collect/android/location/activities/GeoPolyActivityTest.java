@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.android.location.LocationTestUtils.createLocation;
+import static org.odk.collect.testshared.LocationTestUtils.createLocation;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTest extends BaseGeoActivityTest {

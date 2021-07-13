@@ -1,12 +1,12 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.location.Location;
 
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 
 /**
  * An interface for classes that allow monitoring and retrieving the User's Location.
@@ -106,13 +106,6 @@ public interface LocationClient {
      * @param fastestUpdateInterval The minimum interval between updates (exact).
      */
     void setUpdateIntervals(long updateInterval, long fastestUpdateInterval);
-
-    /**
-     * Resets the LocationClient's updateInterval and fastestUpdateInterval.
-     * <p>
-     * Implementations that don't offer this feature should do nothing here.
-     */
-    void resetUpdateIntervals();
 
     /**
      * An interface for listening to status changes on a LocaitonClient.

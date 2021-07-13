@@ -32,9 +32,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.androidshared.AndroidSharedDependencyComponent;
-import org.odk.collect.androidshared.AndroidSharedDependencyComponentProvider;
-import org.odk.collect.androidshared.DaggerAndroidSharedDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -44,8 +41,8 @@ import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
@@ -59,8 +56,7 @@ import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_1
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
-        ProjectsDependencyComponentProvider,
-        AndroidSharedDependencyComponentProvider {
+        ProjectsDependencyComponentProvider {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -80,7 +76,6 @@ public class Collect extends Application implements
 
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
-    private AndroidSharedDependencyComponent androidSharedDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -169,10 +164,6 @@ public class Collect extends Application implements
                     }
                 })
                 .build();
-
-        androidSharedDependencyComponent = DaggerAndroidSharedDependencyComponent.builder()
-                .application(this)
-                .build();
     }
 
     @NotNull
@@ -185,12 +176,6 @@ public class Collect extends Application implements
     @Override
     public ProjectsDependencyComponent getProjectsDependencyComponent() {
         return projectsDependencyComponent;
-    }
-
-    @NotNull
-    @Override
-    public AndroidSharedDependencyComponent getAndroidSharedDependencyComponent() {
-        return androidSharedDependencyComponent;
     }
 
     @Override

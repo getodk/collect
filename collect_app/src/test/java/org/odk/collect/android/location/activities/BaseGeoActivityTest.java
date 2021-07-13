@@ -20,7 +20,7 @@ import android.content.Intent;
 
 import org.junit.Before;
 import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.location.client.LocationClientProvider;
+import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.robolectric.shadows.ShadowApplication;

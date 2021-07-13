@@ -11,7 +11,7 @@
         android:id="@+id/splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
+        android:contentDescription="@string/collect_app_name"
         android:gravity="center"
         android:padding="0dip"
         android:visibility="gone" />
@@ -27,7 +27,7 @@
         <ImageView
             android:layout_width="72dip"
             android:layout_height="72dip"
-            android:contentDescription="@string/app_name"
+            android:contentDescription="@string/collect_app_name"
             android:src="@drawable/notes" />
 
         <LinearLayout
@@ -45,7 +45,7 @@
                 android:paddingLeft="7dip"
                 android:paddingRight="7dip"
                 android:paddingStart="7dip"
-                android:text="@string/app_name"
+                android:text="@string/collect_app_name"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />

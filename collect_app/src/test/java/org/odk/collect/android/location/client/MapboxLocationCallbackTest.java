@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.odk.collect.android.geo.MapboxMapFragment;
-import org.odk.collect.android.location.LocationTestUtils;
+import org.odk.collect.testshared.LocationTestUtils;
 
 import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;

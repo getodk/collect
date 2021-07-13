@@ -14,8 +14,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClientProvider;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
@@ -60,9 +60,10 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
     public void testLocationClientLifecycle() {
 
         activityController.create();
-
-        // Activity.onStart() should call LocationClient.start().
         activityController.start();
+
+        // Activity.onResume() should call LocationClient.start().
+        activityController.resume();
         verify(locationClient).start();
 
         when(locationClient.isLocationAvailable()).thenReturn(true);
@@ -140,14 +141,14 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
     }
 
     @Test
-    public void activityShouldShutOffLocationClientWhenItStops() {
+    public void activityShouldShutOffLocationClientWhenItPauses() {
         activityController.create();
         activityController.start();
+        activityController.resume();
 
         verify(locationClient).start();
 
-        activityController.stop();
-
+        activityController.pause();
         verify(locationClient).stop();
     }
 

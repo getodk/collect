@@ -90,6 +90,9 @@ jobs:
       - run:
           name: Run projects unit tests
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 projects:testDebug
+      - run:
+          name: Run location unit tests
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 location:testDebug
 
       - store_artifacts:
           path: collect_app/build/reports

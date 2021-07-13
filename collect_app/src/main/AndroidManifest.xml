@@ -73,7 +73,7 @@ the specific language governing permissions and limitations under the License.
         android:name=".application.Collect"
         android:icon="@drawable/notes"
         android:installLocation="auto"
-        android:label="@string/app_name"
+        android:label="@string/collect_app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"

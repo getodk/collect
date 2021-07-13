@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared
+package org.odk.collect.androidshared.ui
 
 import android.widget.EditText
 import androidx.test.platform.app.InstrumentationRegistry

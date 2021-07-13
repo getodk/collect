@@ -44,7 +44,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
 
         binding.appName.text = String.format(
             "%s %s",
-            getString(R.string.app_name),
+            getString(R.string.collect_app_name),
             versionInformation.versionToDisplay
         )
 

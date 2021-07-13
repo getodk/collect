@@ -37,18 +37,18 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
-import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClientProvider;
+import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
@@ -144,11 +144,19 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override public void onStart() {
         super.onStart();
         mapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
-    @Override public void onStop() {
+    @Override public void onPause() {
+        super.onPause();
         enableLocationUpdates(false);
+    }
+
+    @Override public void onStop() {
         mapProvider.onMapFragmentStop(this);
         super.onStop();
     }
@@ -186,8 +194,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
 
-        locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
-                () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+        locationClient = LocationClientProvider.getClient(getActivity(),
+                () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
+                        .getInstance());
         locationClient.setListener(this);
 
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
@@ -416,8 +425,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void enableLocationUpdates(boolean enable) {
         if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity(), new PlayServicesChecker(),
-                    () -> new GoogleFusedLocationClient(getActivity().getApplication()));
+            locationClient = LocationClientProvider.getClient(getActivity(),
+                    () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
+                            .getInstance());
             locationClient.setListener(this);
         }
 

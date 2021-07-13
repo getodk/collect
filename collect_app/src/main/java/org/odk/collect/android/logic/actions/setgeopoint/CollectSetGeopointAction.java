@@ -24,8 +24,8 @@ import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
-import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClient;
+import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClientWrapper;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 
@@ -52,7 +52,7 @@ import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUN
 public class CollectSetGeopointAction extends SetGeopointAction implements LocationListener {
     private static final int SECONDS_TO_CONSIDER_UPDATES = 20;
 
-    private MaxAccuracyWithinTimeoutLocationClient maxAccuracyLocationClient;
+    private MaxAccuracyWithinTimeoutLocationClientWrapper maxAccuracyLocationClient;
 
     public CollectSetGeopointAction() {
         // For serialization
@@ -67,7 +67,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
     public void requestLocationUpdates() {
         // Do initialization on first location request so the client doesn't need to be serialized
         if (maxAccuracyLocationClient == null) {
-            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClient(new GoogleFusedLocationClient(Collect.getInstance()), this);
+            maxAccuracyLocationClient = new MaxAccuracyWithinTimeoutLocationClientWrapper(new GoogleFusedLocationClient(Collect.getInstance()), this);
         }
 
         // Only start acquiring location if the Collect preference allows it and Google Play
