@@ -45,7 +45,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        if (projectPreferencesViewModel.isStateLocked()) {
+        if (!projectPreferencesViewModel.isStateUnlocked()) {
             removeDisabledPrefs();
         }
         super.onViewCreated(view, savedInstanceState);
@@ -68,7 +68,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
         settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getGeneralSettings().getAll().get(key), key);
     }
 
-    private void removeDisabledPrefs() {
+    protected void removeDisabledPrefs() {
         DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, settingsProvider.getAdminSettings());
         preferencesRemover.remove(AdminKeys.adminToGeneral);
         preferencesRemover.removeEmptyCategories();

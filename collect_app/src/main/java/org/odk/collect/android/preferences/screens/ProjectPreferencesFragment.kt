@@ -56,8 +56,10 @@ class ProjectPreferencesFragment :
             { isPasswordSet: Boolean ->
                 if (isPasswordSet) {
                     projectPreferencesViewModel.setStateUnlocked()
+                    displayAllPreferences()
                 } else {
                     projectPreferencesViewModel.setStateNotProtected()
+                    removeDisabledPrefs()
                 }
                 requireActivity().invalidateOptionsMenu()
             }
@@ -72,7 +74,7 @@ class ProjectPreferencesFragment :
                 if (isPasswordCorrect) {
                     projectPreferencesViewModel.setStateUnlocked()
                     requireActivity().invalidateOptionsMenu()
-                    setupPreferences()
+                    displayAllPreferences()
                 } else {
                     ToastUtils.showShortToast(R.string.admin_password_incorrect)
                 }
@@ -82,14 +84,14 @@ class ProjectPreferencesFragment :
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        setupPreferences()
+        displayAllPreferences()
 
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
     }
 
-    private fun setupPreferences() {
+    private fun displayAllPreferences() {
         preferenceScreen = null
         addPreferencesFromResource(R.xml.project_preferences)
 
