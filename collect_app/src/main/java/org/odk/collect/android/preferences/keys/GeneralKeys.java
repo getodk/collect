@@ -58,6 +58,7 @@ public final class GeneralKeys {
     public static final String KEY_GUIDANCE_HINT = "guidance_hint";
     public static final String KEY_INSTANCE_SYNC = "instance_sync";
     public static final String KEY_FORM_UPDATE_MODE = "form_update_mode";
+    public static final String KEY_EXTERNAL_APP_RECORDING = "external_app_recording";
 
     // identity_preferences.xml
     public static final String KEY_ANALYTICS = "analytics";
@@ -96,7 +97,7 @@ public final class GeneralKeys {
 
     // experimental
     public static final String KEY_MAGENTA_THEME = "magenta";
-    public static final String KEY_EXTERNAL_APP_RECORDING = "external_app_recording";
+    public static final String KEY_USE_LOCATION_TRACKER = "use_location_tracker";
 
     public static HashMap<String, Object> getDefaults() {
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -142,6 +143,7 @@ public final class GeneralKeys {
         hashMap.put(KEY_SPLASH_PATH, Collect.getInstance().getString(R.string.default_splash_path));
         hashMap.put(KEY_MAGENTA_THEME, false);
         hashMap.put(KEY_EXTERNAL_APP_RECORDING, true);
+        hashMap.put(KEY_USE_LOCATION_TRACKER, false);
         // map_preferences.xml
         hashMap.put(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_GOOGLE);
         hashMap.put(KEY_CARTO_MAP_STYLE, "positron");
