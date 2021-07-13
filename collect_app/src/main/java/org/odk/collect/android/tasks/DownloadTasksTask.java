@@ -333,8 +333,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } catch (Exception e) {
 
                 }
-                // Send device time with request
+                // Send device time and device id with request
                 headers.put("devicetime", String.valueOf(System.currentTimeMillis()));
+                headers.put("deviceid", new PropertyManager(Collect.getInstance().getApplicationContext())
+                        .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
 
                 URI uri = URI.create(taskURL);
                 String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
