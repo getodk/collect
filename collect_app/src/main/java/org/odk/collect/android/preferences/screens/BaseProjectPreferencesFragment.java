@@ -28,14 +28,16 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Inject
     AdminPasswordProvider adminPasswordProvider;
 
+    @Inject
+    ProjectPreferencesViewModel.Factory factory;
+
     protected ProjectPreferencesViewModel projectPreferencesViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-        projectPreferencesViewModel = new ViewModelProvider(requireActivity()).get(ProjectPreferencesViewModel.class);
-        projectPreferencesViewModel.initState(adminPasswordProvider.isAdminPasswordSet());
+        projectPreferencesViewModel = new ViewModelProvider(requireActivity(), factory).get(ProjectPreferencesViewModel.class);
     }
 
     @Override
