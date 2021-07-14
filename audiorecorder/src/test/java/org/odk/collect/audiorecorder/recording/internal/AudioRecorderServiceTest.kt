@@ -21,8 +21,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.RobolectricHelpers.ServiceScenario
-import org.odk.collect.testshared.RobolectricHelpers.startService
+import org.odk.collect.testshared.ServiceScenario
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -99,25 +98,25 @@ class AudioRecorderServiceTest {
 
         scheduler.runForeground(0)
         assertThat(
-            service.foregroundNotification.contentText,
+            service.getForegroundNotification()!!.contentText,
             equalTo("00:00")
         )
 
         scheduler.runForeground(500)
         assertThat(
-            service.foregroundNotification.contentText,
+            service.getForegroundNotification()!!.contentText,
             equalTo("00:00")
         )
 
         scheduler.runForeground(1000)
         assertThat(
-            service.foregroundNotification.contentText,
+            service.getForegroundNotification()!!.contentText,
             equalTo("00:01")
         )
 
         scheduler.runForeground(2000)
         assertThat(
-            service.foregroundNotification.contentText,
+            service.getForegroundNotification()!!.contentText,
             equalTo("00:02")
         )
     }
@@ -127,7 +126,7 @@ class AudioRecorderServiceTest {
         recorder.failOnStart(Exception())
 
         val service = startService(createStartIntent("123"))
-        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
+        assertThat(service.getState(), equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -135,7 +134,7 @@ class AudioRecorderServiceTest {
         startAction("123")
         val service = stopAction()
 
-        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
+        assertThat(service.getState(), equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -158,7 +157,7 @@ class AudioRecorderServiceTest {
     fun stopAction_beforeStart_doesNothing() {
         val service = stopAction()
 
-        assertThat(service.foregroundNotification, nullValue())
+        assertThat(service.getForegroundNotification(), nullValue())
     }
 
     @Test
@@ -192,7 +191,7 @@ class AudioRecorderServiceTest {
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
-        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
+        assertThat(service.getState(), equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -204,7 +203,7 @@ class AudioRecorderServiceTest {
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
-        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
+        assertThat(service.getState(), equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -216,7 +215,7 @@ class AudioRecorderServiceTest {
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
-        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
+        assertThat(service.getState(), equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -304,11 +303,11 @@ class AudioRecorderServiceTest {
     private fun startService(intent: Intent): ServiceScenario<AudioRecorderService> {
         return serviceInstance.let { instance ->
             if (instance == null) {
-                startService(AudioRecorderService::class.java, intent).also {
+                ServiceScenario.launch(AudioRecorderService::class.java, intent).also {
                     serviceInstance = it
                 }
             } else {
-                startService(instance, intent)
+                instance.startWithNewIntent(intent)
             }
         }
     }

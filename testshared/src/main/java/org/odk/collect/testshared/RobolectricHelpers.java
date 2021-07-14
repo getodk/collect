@@ -1,10 +1,6 @@
 package org.odk.collect.testshared;
 
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
@@ -26,17 +22,14 @@ import androidx.test.core.app.ApplicationProvider;
 
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.android.controller.ServiceController;
 import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
-import org.robolectric.shadows.ShadowNotificationManager;
 import org.robolectric.shadows.util.DataSource;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static android.os.Looper.getMainLooper;
 import static org.robolectric.Shadows.shadowOf;
@@ -166,13 +159,13 @@ public class RobolectricHelpers {
 
             if (keepServices) {
                 if (services.containsKey(serviceClass)) {
-                    startService(services.get(serviceClass), intent);
+                    services.get(serviceClass).startWithNewIntent(intent);
                 } else {
-                    ServiceScenario serviceController = startService(serviceClass, intent);
+                    ServiceScenario serviceController = ServiceScenario.launch(serviceClass, intent);
                     services.put(serviceClass, serviceController);
                 }
             } else {
-                startService(serviceClass, intent);
+                ServiceScenario.launch(serviceClass, intent);
             }
         }
 
@@ -193,77 +186,10 @@ public class RobolectricHelpers {
 
 
                 if (services.containsKey(serviceClass)) {
-                    services.get(serviceClass).get().destroy();
+                    services.get(serviceClass).moveToState(Lifecycle.State.DESTROYED);
                     services.remove(serviceClass);
                 }
             }
-        }
-    }
-
-    public static <T extends Service> ServiceScenario<T> startService(Class<T> serviceClass, Intent intent) {
-        return new ServiceScenario<T>(Robolectric.buildService(serviceClass, intent)
-                .create()
-                .startCommand(0, 0));
-    }
-
-    public static <T extends Service> ServiceScenario<T> startService(ServiceScenario<T> serviceScenario, Intent intent) {
-        serviceScenario.get().withIntent(intent)
-                .startCommand(0, 0);
-
-        return serviceScenario;
-    }
-
-    public static class ServiceScenario<T extends Service> {
-
-        private final ServiceController<T> serviceController;
-
-        private ServiceScenario(ServiceController<T> serviceController) {
-            this.serviceController = serviceController;
-        }
-
-        private ServiceController<T> get() {
-            return serviceController;
-        }
-
-        public Lifecycle.State getState() {
-            if (shadowOf(serviceController.get()).isStoppedBySelf()) {
-                return Lifecycle.State.DESTROYED;
-            } else {
-                throw new IllegalArgumentException();
-            }
-        }
-
-        public void onService(Consumer<T> action) {
-            action.accept(serviceController.get());
-        }
-
-        public NotificationDetails getForegroundNotification() {
-            if (shadowOf(serviceController.get()).isLastForegroundNotificationAttached()) {
-                int lastForegroundNotificationId = shadowOf(serviceController.get()).getLastForegroundNotificationId();
-                NotificationManager notificationManager = (NotificationManager) serviceController.get().getSystemService(Context.NOTIFICATION_SERVICE);
-                ShadowNotificationManager shadowNotificationManager = shadowOf(notificationManager);
-                return new NotificationDetails(shadowNotificationManager.getNotification(lastForegroundNotificationId));
-            } else {
-                return null;
-            }
-        }
-    }
-
-    public static class NotificationDetails {
-
-        private final Notification notification;
-
-        public NotificationDetails(Notification notification) {
-            this.notification = notification;
-        }
-
-        @SuppressWarnings("PMD.StringToString") // For some reason PMD thinks CharSequence is a String
-        public String getContentText() {
-            return shadowOf(notification).getContentText().toString();
-        }
-
-        public Intent getContentIntent() {
-            return shadowOf(notification.contentIntent).getSavedIntent();
         }
     }
 }
