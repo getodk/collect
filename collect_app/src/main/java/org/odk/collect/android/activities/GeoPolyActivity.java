@@ -37,7 +37,6 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.location.Location;
-import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 
 import java.util.ArrayList;
@@ -73,7 +72,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     @Inject
     MapProvider mapProvider;
 
-    private LocationTracker locationTracker;
+    @Inject
+    LocationTracker locationTracker;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -118,8 +118,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-
-        locationTracker = new ForegroundServiceLocationTracker(this.getApplication());
 
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);

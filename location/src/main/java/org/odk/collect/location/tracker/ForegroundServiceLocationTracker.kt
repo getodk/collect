@@ -16,6 +16,7 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.R
+import org.odk.collect.location.tracker.ForegroundServiceLocationTracker.Companion.notificationIcon
 import org.odk.collect.strings.getLocalizedString
 
 private var location: Location? = null
@@ -36,6 +37,12 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 
     override fun stop() {
         application.stopService(Intent(application, LocationTrackerService::class.java))
+    }
+
+    companion object {
+
+        @JvmStatic
+        var notificationIcon: Int? = null
     }
 }
 
@@ -86,7 +93,7 @@ class LocationTrackerService : Service() {
 
     private fun createNotification() = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
         .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
-        .setSmallIcon(R.drawable.ic_baseline_location_searching_24)
+        .setSmallIcon(notificationIcon ?: R.drawable.ic_baseline_location_searching_24)
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setContentIntent(createNotificationIntent())
         .build()
