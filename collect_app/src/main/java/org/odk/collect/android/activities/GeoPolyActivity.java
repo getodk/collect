@@ -32,7 +32,6 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
@@ -75,7 +74,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     MapProvider mapProvider;
 
     private LocationTracker locationTracker;
-    private boolean useNewLocationTracker;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -121,7 +119,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        useNewLocationTracker = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_USE_LOCATION_TRACKER);
         locationTracker = new ForegroundServiceLocationTracker(this);
 
         if (savedInstanceState != null) {
@@ -342,30 +339,23 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            if (useNewLocationTracker) {
-                locationTracker.start();
+            locationTracker.start();
 
-                recordPoint(map.getGpsLocation());
-                schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
-                    Location currentLocation = locationTracker.getCurrentLocation();
+            recordPoint(map.getGpsLocation());
+            schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
+                Location currentLocation = locationTracker.getCurrentLocation();
 
-                    if (currentLocation != null) {
-                        MapPoint currentMapPoint = new MapPoint(
-                                currentLocation.getLatitude(),
-                                currentLocation.getLongitude(),
-                                currentLocation.getAltitude(),
-                                currentLocation.getAccuracy()
-                        );
+                if (currentLocation != null) {
+                    MapPoint currentMapPoint = new MapPoint(
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            currentLocation.getAltitude(),
+                            currentLocation.getAccuracy()
+                    );
 
-                        recordPoint(currentMapPoint);
-                    }
-                }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
-            } else {
-                schedulerHandler = scheduler.scheduleAtFixedRate(
-                        () -> runOnUiThread(() -> {
-                            recordPoint(map.getGpsLocation());
-                        }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
-            }
+                    recordPoint(currentMapPoint);
+                }
+            }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
         }
         updateUi();
     }
