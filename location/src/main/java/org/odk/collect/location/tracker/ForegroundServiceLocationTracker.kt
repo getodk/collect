@@ -1,10 +1,10 @@
 package org.odk.collect.location.tracker
 
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
@@ -16,10 +16,11 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.R
+import org.odk.collect.strings.getLocalizedString
 
 private var location: Location? = null
 
-class ForegroundServiceLocationTracker(private val context: Context) : LocationTracker {
+class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
     init {
         location = null // Clear static location for new instance
@@ -30,11 +31,11 @@ class ForegroundServiceLocationTracker(private val context: Context) : LocationT
     }
 
     override fun start() {
-        context.startService(Intent(context, LocationTrackerService::class.java))
+        application.startService(Intent(application, LocationTrackerService::class.java))
     }
 
     override fun stop() {
-        context.stopService(Intent(context, LocationTrackerService::class.java))
+        application.stopService(Intent(application, LocationTrackerService::class.java))
     }
 }
 
@@ -84,7 +85,7 @@ class LocationTrackerService : Service() {
     }
 
     private fun createNotification() = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-        .setContentTitle("Tracking location...")
+        .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
         .setSmallIcon(R.drawable.ic_baseline_location_searching_24)
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setContentIntent(createNotificationIntent())
@@ -97,7 +98,7 @@ class LocationTrackerService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL,
-                "Location tracking",
+                getLocalizedString(R.string.location_tracking_notification_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             )
 

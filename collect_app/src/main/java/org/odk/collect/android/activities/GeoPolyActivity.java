@@ -119,7 +119,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        locationTracker = new ForegroundServiceLocationTracker(this);
+        locationTracker = new ForegroundServiceLocationTracker(this.getApplication());
 
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
