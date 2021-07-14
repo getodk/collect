@@ -10,8 +10,6 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
@@ -20,6 +18,7 @@ import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils.showShortToast
+import org.odk.collect.androidshared.livedata.SingleEventLiveData
 import javax.inject.Inject
 
 class ChangeAdminPasswordDialog : DialogFragment() {
@@ -77,10 +76,9 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 }
 
 class ChangeAdminPasswordViewModel : ViewModel() {
-    private val _passwordSet = MutableLiveData<Boolean>()
-    val passwordSet: LiveData<Boolean> = _passwordSet
+    val passwordSet = SingleEventLiveData<Boolean>()
 
     fun passwordSet(isPasswordSet: Boolean) {
-        _passwordSet.value = isPasswordSet
+        passwordSet.value = isPasswordSet
     }
 }

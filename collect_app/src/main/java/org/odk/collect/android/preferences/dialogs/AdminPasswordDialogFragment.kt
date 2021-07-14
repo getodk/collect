@@ -10,14 +10,13 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AdminPasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
+import org.odk.collect.androidshared.livedata.SingleEventLiveData
 import javax.inject.Inject
 
 class AdminPasswordDialogFragment : DialogFragment() {
@@ -68,10 +67,9 @@ class AdminPasswordDialogFragment : DialogFragment() {
 }
 
 class EnterAdminPasswordViewModel : ViewModel() {
-    private val _passwordEntered = MutableLiveData<Boolean>()
-    val passwordEntered: LiveData<Boolean> = _passwordEntered
+    val passwordEntered = SingleEventLiveData<Boolean>()
 
     fun passwordEntered(isPasswordCorrect: Boolean) {
-        _passwordEntered.value = isPasswordCorrect
+        passwordEntered.value = isPasswordCorrect
     }
 }
