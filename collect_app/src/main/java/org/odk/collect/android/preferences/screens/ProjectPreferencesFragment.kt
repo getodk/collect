@@ -56,7 +56,7 @@ class ProjectPreferencesFragment :
             { isPasswordSet: Boolean ->
                 if (isPasswordSet) {
                     projectPreferencesViewModel.setStateUnlocked()
-                    displayAllPreferences()
+                    recreatePreferences()
                 } else {
                     projectPreferencesViewModel.setStateNotProtected()
                     removeDisabledPrefs()
@@ -74,7 +74,7 @@ class ProjectPreferencesFragment :
                 if (isPasswordCorrect) {
                     projectPreferencesViewModel.setStateUnlocked()
                     requireActivity().invalidateOptionsMenu()
-                    displayAllPreferences()
+                    recreatePreferences()
                 } else {
                     ToastUtils.showShortToast(R.string.admin_password_incorrect)
                 }
@@ -84,14 +84,15 @@ class ProjectPreferencesFragment :
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
-        displayAllPreferences()
-
-        if (versionInformation.isRelease) {
-            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
-        }
+        setPreferencesFromResource(R.xml.project_preferences, rootKey)
     }
 
-    private fun displayAllPreferences() {
+    override fun onResume() {
+        super.onResume()
+        recreatePreferences()
+    }
+
+    private fun recreatePreferences() {
         preferenceScreen = null
         addPreferencesFromResource(R.xml.project_preferences)
 
@@ -105,6 +106,10 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+
+        if (versionInformation.isRelease) {
+            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
+        }
 
         setPreferencesVisibility()
     }
