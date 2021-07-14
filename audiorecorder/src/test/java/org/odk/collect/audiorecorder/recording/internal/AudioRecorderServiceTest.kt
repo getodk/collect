@@ -1,9 +1,8 @@
 package org.odk.collect.audiorecorder.recording.internal
 
 import android.app.Application
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,11 +20,11 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.RobolectricHelpers
+import org.odk.collect.testshared.RobolectricHelpers.ServiceScenario
+import org.odk.collect.testshared.RobolectricHelpers.startService
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
-import org.robolectric.android.controller.ServiceController
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
@@ -36,7 +35,7 @@ class AudioRecorderServiceTest {
     private val scheduler = FakeScheduler()
     private val recordingRepository = RecordingRepository()
 
-    private var serviceInstance: ServiceController<AudioRecorderService>? = null
+    private var serviceInstance: ServiceScenario<AudioRecorderService>? = null
 
     @Before
     fun setup() {
@@ -97,32 +96,27 @@ class AudioRecorderServiceTest {
     fun startAction_updatesDurationOnNotificationEverySecond() {
         val service = startAction("456")
 
-        val notificationId = shadowOf(service.get()).lastForegroundNotificationId
-        val notificationManager =
-            application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val shadowNotificationManager = shadowOf(notificationManager)
-
         scheduler.runForeground(0)
         assertThat(
-            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            service.foregroundNotification.contentText,
             equalTo("00:00")
         )
 
         scheduler.runForeground(500)
         assertThat(
-            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            service.foregroundNotification.contentText,
             equalTo("00:00")
         )
 
         scheduler.runForeground(1000)
         assertThat(
-            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            service.foregroundNotification.contentText,
             equalTo("00:01")
         )
 
         scheduler.runForeground(2000)
         assertThat(
-            shadowOf(shadowNotificationManager.getNotification(notificationId)).contentText,
+            service.foregroundNotification.contentText,
             equalTo("00:02")
         )
     }
@@ -132,7 +126,7 @@ class AudioRecorderServiceTest {
         recorder.failOnStart(Exception())
 
         val service = startService(createStartIntent("123"))
-        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -140,7 +134,7 @@ class AudioRecorderServiceTest {
         startAction("123")
         val service = stopAction()
 
-        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -163,8 +157,7 @@ class AudioRecorderServiceTest {
     fun stopAction_beforeStart_doesNothing() {
         val service = stopAction()
 
-        val notification = shadowOf(service.get()).lastForegroundNotification
-        assertThat(notification, nullValue())
+        assertThat(service.foregroundNotification, nullValue())
     }
 
     @Test
@@ -198,7 +191,7 @@ class AudioRecorderServiceTest {
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
-        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -210,17 +203,19 @@ class AudioRecorderServiceTest {
         cancelIntent.action = AudioRecorderService.ACTION_CLEAN_UP
         val service = startService(cancelIntent)
 
-        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
     fun whenUserKillsAppFromTaskManager_cancelsRecorder_stopsSelf() {
         val service = startService(createStartIntent("123"))
-        service.get().onTaskRemoved(Intent())
+        service.onService {
+            it.onTaskRemoved(Intent())
+        }
 
         assertThat(recorder.isRecording(), equalTo(false))
         assertThat(recorder.wasCancelled(), equalTo(true))
-        assertThat(shadowOf(service.get()).isStoppedBySelf, equalTo(true))
+        assertThat(service.state, equalTo(Lifecycle.State.DESTROYED))
     }
 
     @Test
@@ -281,13 +276,13 @@ class AudioRecorderServiceTest {
         startService(pauseIntent)
     }
 
-    private fun stopAction(): ServiceController<AudioRecorderService> {
+    private fun stopAction(): ServiceScenario<AudioRecorderService> {
         val stopIntent = Intent(application, AudioRecorderService::class.java)
         stopIntent.action = AudioRecorderService.ACTION_STOP
         return startService(stopIntent)
     }
 
-    private fun startAction(sessionId: String): ServiceController<AudioRecorderService> {
+    private fun startAction(sessionId: String): ServiceScenario<AudioRecorderService> {
         return startService(createStartIntent(sessionId))
     }
 
@@ -305,14 +300,14 @@ class AudioRecorderServiceTest {
         return intent
     }
 
-    private fun startService(intent: Intent): ServiceController<AudioRecorderService> {
+    private fun startService(intent: Intent): ServiceScenario<AudioRecorderService> {
         return serviceInstance.let { instance ->
             if (instance == null) {
-                RobolectricHelpers.startService(AudioRecorderService::class.java, intent).also {
+                startService(AudioRecorderService::class.java, intent).also {
                     serviceInstance = it
                 }
             } else {
-                RobolectricHelpers.startService(instance, intent)
+                startService(instance, intent)
             }
         }
     }

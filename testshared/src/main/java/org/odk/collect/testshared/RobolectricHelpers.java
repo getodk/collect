@@ -1,7 +1,10 @@
 package org.odk.collect.testshared;
 
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
@@ -17,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.testing.FragmentScenario;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -26,18 +30,20 @@ import org.robolectric.android.controller.ServiceController;
 import org.robolectric.shadows.ShadowEnvironment;
 import org.robolectric.shadows.ShadowMediaMetadataRetriever;
 import org.robolectric.shadows.ShadowMediaPlayer;
+import org.robolectric.shadows.ShadowNotificationManager;
 import org.robolectric.shadows.util.DataSource;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static android.os.Looper.getMainLooper;
 import static org.robolectric.Shadows.shadowOf;
 
 public class RobolectricHelpers {
 
-    public static Map<Class, ServiceController> services = new HashMap<>();
+    public static Map<Class, ServiceScenario> services = new HashMap<>();
 
     private RobolectricHelpers() {
     }
@@ -162,7 +168,7 @@ public class RobolectricHelpers {
                 if (services.containsKey(serviceClass)) {
                     startService(services.get(serviceClass), intent);
                 } else {
-                    ServiceController serviceController = startService(serviceClass, intent);
+                    ServiceScenario serviceController = startService(serviceClass, intent);
                     services.put(serviceClass, serviceController);
                 }
             } else {
@@ -187,21 +193,72 @@ public class RobolectricHelpers {
 
 
                 if (services.containsKey(serviceClass)) {
-                    services.get(serviceClass).destroy();
+                    services.get(serviceClass).get().destroy();
                     services.remove(serviceClass);
                 }
             }
         }
     }
 
-    public static <T extends Service> ServiceController<T> startService(Class<T> serviceClass, Intent intent) {
-        return Robolectric.buildService(serviceClass, intent)
+    public static <T extends Service> ServiceScenario<T> startService(Class<T> serviceClass, Intent intent) {
+        return new ServiceScenario<T>(Robolectric.buildService(serviceClass, intent)
                 .create()
-                .startCommand(0, 0);
+                .startCommand(0, 0));
     }
 
-    public static <T extends Service> ServiceController<T> startService(ServiceController<T> serviceController, Intent intent) {
-        return serviceController.withIntent(intent)
+    public static <T extends Service> ServiceScenario<T> startService(ServiceScenario<T> serviceScenario, Intent intent) {
+        serviceScenario.get().withIntent(intent)
                 .startCommand(0, 0);
+
+        return serviceScenario;
+    }
+
+    public static class ServiceScenario<T extends Service> {
+
+        private final ServiceController<T> serviceController;
+
+        private ServiceScenario(ServiceController<T> serviceController) {
+            this.serviceController = serviceController;
+        }
+
+        private ServiceController<T> get() {
+            return serviceController;
+        }
+
+        public Lifecycle.State getState() {
+            if (shadowOf(serviceController.get()).isStoppedBySelf()) {
+                return Lifecycle.State.DESTROYED;
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
+
+        public void onService(Consumer<T> action) {
+            action.accept(serviceController.get());
+        }
+
+        public NotificationDetails getForegroundNotification() {
+            if (shadowOf(serviceController.get()).isLastForegroundNotificationAttached()) {
+                int lastForegroundNotificationId = shadowOf(serviceController.get()).getLastForegroundNotificationId();
+                NotificationManager notificationManager = (NotificationManager) serviceController.get().getSystemService(Context.NOTIFICATION_SERVICE);
+                ShadowNotificationManager shadowNotificationManager = shadowOf(notificationManager);
+                return new NotificationDetails(shadowNotificationManager.getNotification(lastForegroundNotificationId));
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public static class NotificationDetails {
+
+        private final Notification notification;
+
+        public NotificationDetails(Notification notification) {
+            this.notification = notification;
+        }
+
+        public String getContentText() {
+            return shadowOf(notification).getContentText().toString();
+        }
     }
 }
