@@ -105,6 +105,8 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+
+        setPreferencesVisibility()
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -189,6 +191,39 @@ class ProjectPreferencesFragment :
         val fragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
         fragment.preventOtherWaysOfEditingForm()
+    }
+
+    private fun setPreferencesVisibility() {
+        if (projectPreferencesViewModel.isStateUnlocked()) {
+            return
+        }
+
+        val preferenceScreen = preferenceScreen
+        if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
+            preferenceScreen.removePreference(findPreference("protocol"))
+        }
+        if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
+            preferenceScreen.removePreference(findPreference("user_interface"))
+        }
+        if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
+            preferenceScreen.removePreference(findPreference("maps"))
+        }
+        if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
+            preferenceScreen.removePreference(findPreference("form_management"))
+        }
+        if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
+            preferenceScreen.removePreference(findPreference("user_and_device_identity"))
+        }
+    }
+
+    private fun hasAtLeastOneSettingEnabled(keys: Collection<String>): Boolean {
+        for (key in keys) {
+            val value = settingsProvider.getAdminSettings().getBoolean(key)
+            if (value) {
+                return true
+            }
+        }
+        return false
     }
 
     companion object {
