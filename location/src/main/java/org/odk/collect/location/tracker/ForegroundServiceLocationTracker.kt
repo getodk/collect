@@ -2,6 +2,7 @@ package org.odk.collect.location.tracker
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.common.GoogleApiAvailability
+import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.location.GoogleFusedLocationClient
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
@@ -85,7 +87,11 @@ class LocationTrackerService : Service() {
         .setContentTitle("Tracking location...")
         .setSmallIcon(R.drawable.ic_baseline_location_searching_24)
         .setPriority(NotificationCompat.PRIORITY_LOW)
+        .setContentIntent(createNotificationIntent())
         .build()
+
+    private fun createNotificationIntent() =
+        PendingIntent.getActivity(this, 0, Intent(this, ReturnToAppActivity::class.java), 0)
 
     private fun setupNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

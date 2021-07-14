@@ -107,5 +107,4 @@ private class FakeLocationClient : LocationClient {
             locationListener?.onLocationChanged(location)
         }
     }
-
 }

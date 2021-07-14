@@ -257,8 +257,13 @@ public class RobolectricHelpers {
             this.notification = notification;
         }
 
+        @SuppressWarnings("PMD.StringToString") // For some reason PMD thinks CharSequence is a String
         public String getContentText() {
             return shadowOf(notification).getContentText().toString();
+        }
+
+        public Intent getContentIntent() {
+            return shadowOf(notification.contentIntent).getSavedIntent();
         }
     }
 }
