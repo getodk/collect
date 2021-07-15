@@ -1,6 +1,7 @@
 package org.odk.collect.location.tracker
 
 import android.app.Application
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -91,12 +92,17 @@ class LocationTrackerService : Service() {
         locationClient.stop()
     }
 
-    private fun createNotification() = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-        .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
-        .setSmallIcon(notificationIcon ?: R.drawable.ic_baseline_location_searching_24)
-        .setPriority(NotificationCompat.PRIORITY_LOW)
-        .setContentIntent(createNotificationIntent())
-        .build()
+    private fun createNotification(): Notification {
+        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+            .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setContentIntent(createNotificationIntent())
+
+        notificationIcon?.let { notification.setSmallIcon(it) }
+
+        return notification
+            .build()
+    }
 
     private fun createNotificationIntent() =
         PendingIntent.getActivity(this, 0, Intent(this, ReturnToAppActivity::class.java), 0)
