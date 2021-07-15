@@ -181,12 +181,6 @@ class ProjectPreferencesFragment :
         return false
     }
 
-    fun preventOtherWaysOfEditingForm() {
-        val fragment =
-            requireActivity().supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
-        fragment.preventOtherWaysOfEditingForm()
-    }
-
     private fun setPreferencesVisibility() {
         if (projectPreferencesViewModel.isStateUnlocked()) {
             return

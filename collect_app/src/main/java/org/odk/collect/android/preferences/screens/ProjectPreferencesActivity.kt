@@ -16,7 +16,6 @@
 package org.odk.collect.android.preferences.screens
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CollectAbstractActivity
@@ -45,15 +44,6 @@ class ProjectPreferencesActivity :
         DaggerUtils.getComponent(this).inject(this)
         setTheme(ThemeUtils(this).settingsTheme)
         setTitle(R.string.project_settings)
-
-        if (savedInstanceState == null) {
-            val fragment: Fragment = ProjectPreferencesFragment()
-            fragment.arguments = intent.extras
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.preferences_fragment_container, fragment, TAG)
-                .commit()
-        }
     }
 
     override fun onPause() {
@@ -75,15 +65,11 @@ class ProjectPreferencesActivity :
     }
 
     override fun preventOtherWaysOfEditingForm() {
-        val fragment = supportFragmentManager.findFragmentByTag(TAG) as ProjectPreferencesFragment
+        val fragment = supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
         fragment.preventOtherWaysOfEditingForm()
     }
 
     fun setOnBackPressedListener(onBackPressedListener: OnBackPressedListener?) {
         this.onBackPressedListener = onBackPressedListener
-    }
-
-    companion object {
-        const val TAG = "GeneralPreferencesFragment"
     }
 }
