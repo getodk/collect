@@ -203,7 +203,6 @@ class ProjectPreferencesFragment :
             return
         }
 
-        val preferenceScreen = preferenceScreen
         if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
             preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
         }
