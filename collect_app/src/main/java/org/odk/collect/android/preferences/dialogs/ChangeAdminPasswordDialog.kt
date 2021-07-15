@@ -10,15 +10,14 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils.showShortToast
-import org.odk.collect.androidshared.livedata.SingleEventLiveData
 import javax.inject.Inject
 
 class ChangeAdminPasswordDialog : DialogFragment() {
@@ -30,7 +29,7 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
     lateinit var binding: PasswordDialogLayoutBinding
 
-    val model: ChangeAdminPasswordViewModel by activityViewModels()
+    val projectPreferencesViewModel: ProjectPreferencesViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -62,23 +61,15 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
                 if (password.isEmpty()) {
                     showShortToast(R.string.admin_password_disabled)
-                    model.passwordSet(false)
+                    projectPreferencesViewModel.setStateNotProtected()
                 } else {
                     showShortToast(R.string.admin_password_changed)
-                    model.passwordSet(true)
+                    projectPreferencesViewModel.setStateUnlocked()
                 }
                 dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .setCancelable(false)
             .create()
-    }
-}
-
-class ChangeAdminPasswordViewModel : ViewModel() {
-    val passwordSet = SingleEventLiveData<Boolean>()
-
-    fun passwordSet(isPasswordSet: Boolean) {
-        passwordSet.value = isPasswordSet
     }
 }

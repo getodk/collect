@@ -20,19 +20,17 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
-import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordViewModel
-import org.odk.collect.android.preferences.dialogs.EnterAdminPasswordViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
-import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.data.Consumable
 import javax.inject.Inject
 
 class ProjectPreferencesFragment :
@@ -47,34 +45,19 @@ class ProjectPreferencesFragment :
         DaggerUtils.getComponent(context).inject(this)
         setHasOptionsMenu(true)
 
-        val changeAdminPasswordViewModel = ViewModelProvider(requireActivity()).get(
-            ChangeAdminPasswordViewModel::class.java
-        )
-        changeAdminPasswordViewModel.passwordSet.observe(
+        projectPreferencesViewModel.state.observe(
             this,
-            { isPasswordSet: Boolean ->
-                if (isPasswordSet) {
-                    projectPreferencesViewModel.setStateUnlocked()
-                } else {
-                    projectPreferencesViewModel.setStateNotProtected()
-                }
-                recreatePreferences()
-                requireActivity().invalidateOptionsMenu()
-            }
-        )
-
-        val enterAdminPasswordViewModel = ViewModelProvider(requireActivity()).get(
-            EnterAdminPasswordViewModel::class.java
-        )
-        enterAdminPasswordViewModel.passwordEntered.observe(
-            this,
-            { isPasswordCorrect: Boolean ->
-                if (isPasswordCorrect) {
-                    projectPreferencesViewModel.setStateUnlocked()
-                    requireActivity().invalidateOptionsMenu()
-                    recreatePreferences()
-                } else {
-                    ToastUtils.showShortToast(R.string.admin_password_incorrect)
+            { state: Consumable<ProjectPreferencesViewModel.State> ->
+                if (!state.isConsumed()) {
+                    state.consume()
+                    when (state.value) {
+                        ProjectPreferencesViewModel.State.LOCKED -> { }
+                        ProjectPreferencesViewModel.State.UNLOCKED,
+                        ProjectPreferencesViewModel.State.NOT_PROTECTED -> {
+                            recreatePreferences()
+                            requireActivity().invalidateOptionsMenu()
+                        }
+                    }
                 }
             }
         )

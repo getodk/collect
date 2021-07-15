@@ -10,13 +10,13 @@ import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AdminPasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.androidshared.livedata.SingleEventLiveData
+import org.odk.collect.android.utilities.ToastUtils
 import javax.inject.Inject
 
 class AdminPasswordDialogFragment : DialogFragment() {
@@ -28,7 +28,7 @@ class AdminPasswordDialogFragment : DialogFragment() {
 
     lateinit var binding: AdminPasswordDialogLayoutBinding
 
-    val modelEnter: EnterAdminPasswordViewModel by activityViewModels()
+    val projectPreferencesViewModel: ProjectPreferencesViewModel by activityViewModels()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,21 +55,13 @@ class AdminPasswordDialogFragment : DialogFragment() {
             .setTitle(getString(R.string.enter_admin_password))
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 if (adminPasswordProvider.adminPassword == binding.editText.text.toString()) {
-                    modelEnter.passwordEntered(true)
+                    projectPreferencesViewModel.setStateUnlocked()
                 } else {
-                    modelEnter.passwordEntered(false)
+                    ToastUtils.showShortToast(R.string.admin_password_incorrect)
                 }
                 dismiss()
             }
             .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .create()
-    }
-}
-
-class EnterAdminPasswordViewModel : ViewModel() {
-    val passwordEntered = SingleEventLiveData<Boolean>()
-
-    fun passwordEntered(isPasswordCorrect: Boolean) {
-        passwordEntered.value = isPasswordCorrect
     }
 }

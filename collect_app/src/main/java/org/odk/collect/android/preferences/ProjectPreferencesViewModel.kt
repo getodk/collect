@@ -1,8 +1,11 @@
 package org.odk.collect.android.preferences
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.utilities.AdminPasswordProvider
+import org.odk.collect.androidshared.data.Consumable
 
 class ProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider) : ViewModel() {
     enum class State {
@@ -11,30 +14,35 @@ class ProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider) 
         NOT_PROTECTED // Admin password is not set
     }
 
-    private var state: State
+    private var _state = MutableLiveData<Consumable<State>>()
+    var state: LiveData<Consumable<State>> = _state
 
     init {
-        state = if (adminPasswordProvider.isAdminPasswordSet) {
-            State.LOCKED
-        } else {
-            State.NOT_PROTECTED
-        }
+        _state.postValue(
+            if (adminPasswordProvider.isAdminPasswordSet) {
+                Consumable(State.LOCKED)
+            } else {
+                Consumable(State.NOT_PROTECTED)
+            }
+        )
     }
 
-    fun isStateLocked() = state == State.LOCKED
+    fun isStateLocked() = state.value == Consumable(State.LOCKED)
 
-    fun isStateUnlocked() = state == State.UNLOCKED
+    fun isStateUnlocked() = state.value == Consumable(State.UNLOCKED)
+
+    fun isStateNotProtected() = state.value == Consumable(State.NOT_PROTECTED)
 
     fun setStateLocked() {
-        state = State.LOCKED
+        _state.postValue(Consumable(State.LOCKED))
     }
 
     fun setStateUnlocked() {
-        state = State.UNLOCKED
+        _state.postValue(Consumable(State.UNLOCKED))
     }
 
     fun setStateNotProtected() {
-        state = State.NOT_PROTECTED
+        _state.postValue(Consumable(State.NOT_PROTECTED))
     }
 
     open class Factory(private val adminPasswordProvider: AdminPasswordProvider) : ViewModelProvider.Factory {
