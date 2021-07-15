@@ -7,6 +7,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.async.CoroutineScheduler
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.mediarecorder.AACRecordingResource
@@ -85,8 +86,7 @@ open class AudioRecorderDependencyModule {
     }
 
     @Provides
-    @Singleton
-    internal open fun providesRecordingRepository(): RecordingRepository {
-        return RecordingRepository()
+    internal open fun providesRecordingRepository(application: Application): RecordingRepository {
+        return RecordingRepository(application.getState())
     }
 }

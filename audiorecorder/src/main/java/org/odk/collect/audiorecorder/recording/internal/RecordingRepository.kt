@@ -2,15 +2,19 @@ package org.odk.collect.audiorecorder.recording.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import java.io.File
 import java.io.Serializable
 
-internal class RecordingRepository {
+internal class RecordingRepository(appState: AppState) {
 
-    private val _failedToStart = MutableLiveData<Consumable<Exception?>>(Consumable(null))
-    private val _currentSession = MutableLiveData<RecordingSession?>(null)
+    private val _failedToStart =
+        appState.get("failedToStart", MutableLiveData<Consumable<Exception?>>(Consumable(null)))
+    private val _currentSession =
+        appState.get("currentSession", MutableLiveData<RecordingSession?>(null))
+
     val currentSession: LiveData<RecordingSession?> = _currentSession
     val failedToStart: LiveData<Consumable<Exception?>> = _failedToStart
 
