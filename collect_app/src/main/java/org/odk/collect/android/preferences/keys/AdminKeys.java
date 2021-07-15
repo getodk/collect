@@ -37,7 +37,7 @@ public final class AdminKeys {
 
     public static final String KEY_MAPS                                = "maps";
 
-    private static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
+    public static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     public static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";

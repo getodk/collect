@@ -48,6 +48,55 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
+    fun `List of preferences should be updated after changing settings in protected settings`() {
+        projectPreferencesViewModel.setStateNotProtected()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(true))
+        }
+
+        adminSettings.save(AdminKeys.KEY_CHANGE_SERVER, false)
+        adminSettings.save(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
+        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
+        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
+        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(AdminKeys.KEY_MAPS, false)
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
+        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+        adminSettings.save(AdminKeys.KEY_AUTOSEND, false)
+        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false)
+        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
+        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
+        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false)
+        adminSettings.save(AdminKeys.KEY_ANALYTICS, false)
+
+        scenario.recreate()
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference("protocol"), nullValue())
+            assertThat(fragment.findPreference("project_display"), nullValue())
+            assertThat(fragment.findPreference("user_interface"), nullValue())
+            assertThat(fragment.findPreference("maps"), nullValue())
+            assertThat(fragment.findPreference("form_management"), nullValue())
+            assertThat(fragment.findPreference("user_and_device_identity"), nullValue())
+        }
+    }
+
+    @Test
     fun `If 'Server' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
@@ -107,6 +156,69 @@ class ProjectPreferencesFragmentTest {
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference("protocol"), nullValue())
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is enabled in protected settings should be visible in Locked mode`() {
+        projectPreferencesViewModel.setStateLocked()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is disabled in protected settings should be hidden in Locked mode`() {
+        adminSettings.save(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
+        projectPreferencesViewModel.setStateLocked()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference("project_display"), nullValue())
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is enabled in protected settings should be visible in Unocked mode`() {
+        projectPreferencesViewModel.setStateUnlocked()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is disabled in protected settings should be visible in Unocked mode`() {
+        adminSettings.save(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
+        projectPreferencesViewModel.setStateUnlocked()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is enabled in protected settings should be visible in NotProtected mode`() {
+        projectPreferencesViewModel.setStateNotProtected()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `If 'Project display' option is disabled in protected settings should be hidden in NotProtected mode`() {
+        adminSettings.save(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
+        projectPreferencesViewModel.setStateNotProtected()
+
+        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference("project_display"), nullValue())
         }
     }
 
@@ -271,6 +383,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one Form management preference is enabled should preference be visible in Locked mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -281,6 +394,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateLocked()
@@ -293,6 +407,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all Form management preferences are disabled should preference be hidden in Locked mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -303,8 +418,8 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
         adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -316,6 +431,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one Form management preference is enabled should preference be visible in Unlocked mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -326,6 +442,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateUnlocked()
@@ -338,6 +455,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all Form management preferences are disabled should preference be visible in Unlocked mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -348,8 +466,8 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
         adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -361,6 +479,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When at least one Form management preference is enabled should preference be visible in NotProtected mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -371,6 +490,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateNotProtected()
@@ -383,6 +503,7 @@ class ProjectPreferencesFragmentTest {
 
     @Test
     fun `When all Form management preferences are disabled should preference be hidden in NotProtected mode`() {
+        adminSettings.save(AdminKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -393,8 +514,8 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
         adminSettings.save(AdminKeys.KEY_EXTERNAL_APP_RECORDING, false)
+        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 
