@@ -3,7 +3,6 @@ package org.odk.collect.android.projects
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.support.InMemSettingsProvider
@@ -15,12 +14,6 @@ class SettingsConnectionMatcherTest {
     private val inMemSettingsProvider = InMemSettingsProvider()
     private val settingsConnectionMatcher = SettingsConnectionMatcher(inMemProjectsRepository, inMemSettingsProvider)
 
-    @Before
-    fun setUp() {
-        inMemProjectsRepository.deleteAll()
-        inMemSettingsProvider.clearAll()
-    }
-
     @Test
     fun `returns null when no projects exist`() {
         val jsonSettings = getServerSettingsJson("https://demo.getodk.org")
@@ -29,7 +22,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns a match when urls match`() {
+    fun `returns a matching project uuid when urls match`() {
         createServerProject("a uuid", "https://demo.getodk.org", "")
         val jsonSettings = getServerSettingsJson("https://demo.getodk.org")
 
@@ -45,7 +38,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns a match when urls and usernames match`() {
+    fun `returns a matching project uuid when urls and usernames match`() {
         createServerProject("a uuid", "https://demo.getodk.org", "foo")
         val jsonSettings = getServerSettingsJson("https://demo.getodk.org", "foo")
 
@@ -53,7 +46,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns a match when urls and usernames match and there are other settings that don't match`() {
+    fun `returns a matching project uuid when urls and usernames match and there are other settings that don't match`() {
         createServerProject("a uuid", "https://demo.getodk.org", "foo")
         val jsonSettings = "{ \"general\": { \"server_url\": \"https://demo.getodk.org\", \"username\": \"foo\", \"password\": \"bar\" } }"
 
@@ -69,7 +62,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns a match when protocol is Google Drive and accounts match`() {
+    fun `returns a matching project uuid when protocol is Google Drive and accounts match`() {
         createGoogleDriveProject("a uuid", "foo@bar.baz")
         val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
 
@@ -77,7 +70,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns uuid of match when there are multiple projects`() {
+    fun `returns a matching project uuid when there are multiple projects`() {
         createServerProject("a uuid", "https://demo.getodk.org", "foo")
         createGoogleDriveProject("another uuid", "foo@bar.baz")
         val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
@@ -86,7 +79,7 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns uuid of first match when there are multiple matches`() {
+    fun `returns uuid of first matching project when there are multiple matching projects`() {
         createServerProject("a uuid", "https://demo.getodk.org", "foo")
         createGoogleDriveProject("another uuid", "foo@bar.baz")
         createServerProject("uuid 3", "https://foo.org", "foo")
