@@ -84,7 +84,7 @@ class AddNewProjectTest {
     }
 
     @Test
-    fun createsDuplicateProject_whenDuplicateProjectScanned_andOptionToSwitchToExistingSelected() {
+    fun addsDuplicateProject_whenDuplicateProjectScanned_andOptionToAddDuplicateProjectSelected() {
         val page = rule.startAtMainMenu()
             .openProjectSettings()
             .clickAddProject()
@@ -92,6 +92,36 @@ class AddNewProjectTest {
         testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https://demo.getodk.org\"},\"admin\":{}}")
 
         page.assertDuplicateDialogShown()
+            .addDuplicateProject()
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .openProjectSettings()
+            .assertCurrentProject("Demo project", "demo.getodk.org")
+            .assertInactiveProject("Demo project", "demo.getodk.org")
+    }
+
+    @Test
+    fun switchesToExistingProject_whenDuplicateProjectEnteredManually_andOptionToSwitchToExistingSelected() {
+        rule.startAtMainMenu()
+            .openProjectSettings()
+            .clickAddProject()
+            .switchToManualMode()
+            .inputUrl("https://demo.getodk.org")
+            .addProjectAndAssertDuplicateDialogShown()
+            .switchToExistingProject()
+            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .openProjectSettings()
+            .assertCurrentProject("Demo project", "demo.getodk.org")
+            .assertNotInactiveProject("Demo project", "demo.getodk.org")
+    }
+
+    @Test
+    fun addsDuplicateProject_whenDuplicateProjectEnteredManually_andOptionToAddDuplicateProjectSelected() {
+        rule.startAtMainMenu()
+            .openProjectSettings()
+            .clickAddProject()
+            .switchToManualMode()
+            .inputUrl("https://demo.getodk.org")
+            .addProjectAndAssertDuplicateDialogShown()
             .addDuplicateProject()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
             .openProjectSettings()

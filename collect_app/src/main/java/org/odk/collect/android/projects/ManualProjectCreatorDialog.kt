@@ -3,6 +3,7 @@ package org.odk.collect.android.projects
 import android.accounts.AccountManager
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,13 +22,18 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 
-class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInterface.OnClickListener {
+
+    private var lastEnteredJson: String? = null
+    private var lastMatchingUuid: String? = null
+
     @Inject
     lateinit var projectCreator: ProjectCreator
 
@@ -39,6 +45,9 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
+
+    @Inject
+    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
@@ -58,9 +67,14 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
             val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails(
                 accountName
             )
+            lastEnteredJson = settingsJson
 
-            projectCreator.createNewProject(settingsJson)
-            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+            settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                lastMatchingUuid = uuid
+                DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, childFragmentManager)
+            } ?: run {
+                createProject(settingsJson)
+            }
         }
     }
 
@@ -124,10 +138,14 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 binding.usernameInputText.text?.trim().toString(),
                 binding.passwordInputText.text?.trim().toString()
             )
+            lastEnteredJson = settingsJson
 
-            projectCreator.createNewProject(settingsJson)
-            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+            settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                lastMatchingUuid = uuid
+                DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, childFragmentManager)
+            } ?: run {
+                createProject(settingsJson)
+            }
         }
     }
 
@@ -145,5 +163,24 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 }
             }
         )
+    }
+
+    private fun createProject(settingsJson: String) {
+        projectCreator.createNewProject(settingsJson)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+    }
+
+    private fun switchToProject(uuid: String) {
+        currentProjectProvider.setCurrentProject(uuid)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+    }
+
+    override fun onClick(dialog: DialogInterface?, buttonClicked: Int) {
+        when (buttonClicked) {
+            DialogInterface.BUTTON_POSITIVE -> createProject(lastEnteredJson ?: "")
+            DialogInterface.BUTTON_NEGATIVE -> lastMatchingUuid?.let { switchToProject(it) }
+        }
     }
 }

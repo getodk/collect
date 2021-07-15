@@ -49,7 +49,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInt
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     @Inject
-    lateinit var settingsUniquenessChecker: SettingsConnectionMatcher
+    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
     private var capture: CaptureManager? = null
 
@@ -140,7 +140,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInt
                     val settingsJson = CompressionUtils.decompress(barcodeResult.text)
                     lastScannedJson = settingsJson
 
-                    settingsUniquenessChecker.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                    settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
                         lastMatchingUuid = uuid
                         DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, childFragmentManager)
                     } ?: run {
