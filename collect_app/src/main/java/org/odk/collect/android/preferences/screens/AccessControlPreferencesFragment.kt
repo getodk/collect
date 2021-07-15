@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences.screens
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.MultiClickGuard
@@ -29,16 +28,6 @@ class AccessControlPreferencesFragment :
             return true
         }
         return false
-    }
-
-    private fun displayPreferences(fragment: Fragment?) {
-        if (fragment != null) {
-            fragment.arguments = arguments
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.preferences_fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     companion object {

@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import org.odk.collect.android.R
@@ -180,16 +179,6 @@ class ProjectPreferencesFragment :
             return true
         }
         return false
-    }
-
-    private fun displayPreferences(fragment: Fragment?) {
-        if (fragment != null) {
-            fragment.arguments = arguments
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.preferences_fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     fun preventOtherWaysOfEditingForm() {

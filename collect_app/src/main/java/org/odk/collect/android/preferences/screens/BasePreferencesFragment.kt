@@ -3,6 +3,7 @@ package org.odk.collect.android.preferences.screens
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.preference.DialogPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -46,5 +47,16 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
             (activity as CollectAbstractActivity).initToolbar(preferenceScreen.title)
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    protected fun displayPreferences(fragment: Fragment?) {
+        if (fragment != null) {
+            fragment.arguments = arguments
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.preferences_fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

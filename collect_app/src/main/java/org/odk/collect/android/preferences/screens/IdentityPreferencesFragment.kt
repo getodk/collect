@@ -15,7 +15,6 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import org.odk.collect.analytics.Analytics
@@ -45,12 +44,7 @@ class IdentityPreferencesFragment : BaseProjectPreferencesFragment() {
         findPreference<Preference>("form_metadata")!!.onPreferenceClickListener =
             Preference.OnPreferenceClickListener listener@{
                 if (MultiClickGuard.allowClick(javaClass.name)) {
-                    val fragment: Fragment = FormMetadataPreferencesFragment()
-                    requireActivity().supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.preferences_fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit()
+                    displayPreferences(FormMetadataPreferencesFragment())
                     return@listener true
                 }
                 false
