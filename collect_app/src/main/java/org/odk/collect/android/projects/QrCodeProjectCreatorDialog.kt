@@ -16,12 +16,14 @@ import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBindi
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
@@ -43,6 +45,11 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     @Inject
+    lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
     private var capture: CaptureManager? = null
@@ -53,6 +60,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        settingsConnectionMatcher = SettingsConnectionMatcher(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

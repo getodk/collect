@@ -21,12 +21,14 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 
@@ -45,13 +47,18 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     @Inject
-    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
-
-    @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
     @Inject
     lateinit var googleAccountsManager: GoogleAccountsManager
+
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
+    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
@@ -80,6 +87,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        settingsConnectionMatcher = SettingsConnectionMatcher(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
