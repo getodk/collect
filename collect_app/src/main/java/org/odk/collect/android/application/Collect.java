@@ -63,7 +63,7 @@ public class Collect extends Application implements
     public static String defaultSysLanguage;
     private static Collect singleton;
 
-    private AppState appState = new AppState();
+    private final AppState appState = new AppState();
 
     @Nullable
     private FormController formController;
