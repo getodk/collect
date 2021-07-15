@@ -12,4 +12,19 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
         clickOnString(R.string.configure_manually)
         return ManualProjectCreatorDialogPage().assertOnPage()
     }
+
+    fun assertDuplicateDialogShown(): QrCodeProjectCreatorDialogPage {
+        assertText(R.string.duplicate_project_details)
+        return this
+    }
+
+    fun switchToExistingProject(): MainMenuPage {
+        clickOnString(R.string.switch_to_existing)
+        return MainMenuPage().assertOnPage()
+    }
+
+    fun addDuplicateProject(): MainMenuPage {
+        clickOnString(R.string.add_duplicate_project)
+        return MainMenuPage().assertOnPage()
+    }
 }

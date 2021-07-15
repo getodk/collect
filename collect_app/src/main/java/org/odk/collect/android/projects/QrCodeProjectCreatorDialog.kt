@@ -1,6 +1,9 @@
 package org.odk.collect.android.projects
 
 import android.content.Context
+import android.content.DialogInterface
+import android.content.DialogInterface.BUTTON_NEGATIVE
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +28,10 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
-class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInterface.OnClickListener {
+
+    private var lastScannedJson: String? = null
+    private var lastMatchingUuid: String? = null
 
     @Inject
     lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
@@ -41,6 +47,9 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
 
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
+
+    @Inject
+    lateinit var settingsUniquenessChecker: SettingsConnectionMatcher
 
     private var capture: CaptureManager? = null
 
@@ -128,7 +137,15 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 }
 
                 try {
-                    handleScanningResult(barcodeResult)
+                    val settingsJson = CompressionUtils.decompress(barcodeResult.text)
+                    lastScannedJson = settingsJson
+
+                    settingsUniquenessChecker.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                        lastMatchingUuid = uuid
+                        DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, childFragmentManager)
+                    } ?: run {
+                        createProject(settingsJson)
+                    }
                 } catch (e: Exception) {
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode))
                 }
@@ -136,14 +153,27 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         )
     }
 
-    private fun handleScanningResult(result: BarcodeResult) {
-        val projectCreatedSuccessfully = projectCreator.createNewProject(CompressionUtils.decompress(result.text))
+    private fun createProject(settingsJson: String) {
+        val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
 
         if (projectCreatedSuccessfully) {
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
             ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
+        }
+    }
+
+    private fun switchToProject(uuid: String) {
+        currentProjectProvider.setCurrentProject(uuid)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+    }
+
+    override fun onClick(dialog: DialogInterface?, buttonClicked: Int) {
+        when (buttonClicked) {
+            BUTTON_POSITIVE -> createProject(lastScannedJson ?: "")
+            BUTTON_NEGATIVE -> lastMatchingUuid?.let { switchToProject(it) }
         }
     }
 }

@@ -93,6 +93,7 @@ import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
+import org.odk.collect.android.projects.SettingsConnectionMatcher;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -602,5 +603,10 @@ public class AppDependencyModule {
     @Provides
     public ProjectResetter providesProjectResetter(StoragePathProvider storagePathProvider, PropertyManager propertyManager, SettingsProvider settingsProvider, InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider) {
         return new ProjectResetter(storagePathProvider, propertyManager, settingsProvider, instancesRepositoryProvider, formsRepositoryProvider);
+    }
+
+    @Provides
+    public SettingsConnectionMatcher providesSettingsConnectionMatcher(ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
+        return new SettingsConnectionMatcher(projectsRepository, settingsProvider);
     }
 }
