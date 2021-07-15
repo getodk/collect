@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.common.GoogleApiAvailability
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.location.GoogleFusedLocationClient
 import org.odk.collect.location.Location
@@ -19,16 +20,12 @@ import org.odk.collect.location.R
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker.Companion.notificationIcon
 import org.odk.collect.strings.getLocalizedString
 
-private var location: Location? = null
+private const val LOCATION_KEY = "location"
 
 class ForegroundServiceLocationTracker(private val application: Application) : LocationTracker {
 
-    init {
-        location = null // Clear static location for new instance
-    }
-
     override fun getCurrentLocation(): Location? {
-        return location
+        return application.getState().get(LOCATION_KEY)
     }
 
     override fun start() {
@@ -70,7 +67,10 @@ class LocationTrackerService : Service() {
         locationClient.setListener(object : LocationClient.LocationClientListener {
             override fun onClientStart() {
                 locationClient.requestLocationUpdates {
-                    location = Location(it.latitude, it.longitude, it.altitude, it.accuracy)
+                    application.getState().set(
+                        LOCATION_KEY,
+                        Location(it.latitude, it.longitude, it.altitude, it.accuracy)
+                    )
                 }
             }
 
