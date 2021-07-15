@@ -43,7 +43,6 @@ class ProjectPreferencesActivity :
         setContentView(R.layout.activity_preferences_layout)
         DaggerUtils.getComponent(this).inject(this)
         setTheme(ThemeUtils(this).settingsTheme)
-        setTitle(R.string.project_settings)
     }
 
     override fun onPause() {
