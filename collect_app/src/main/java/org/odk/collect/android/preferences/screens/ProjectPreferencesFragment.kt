@@ -205,19 +205,19 @@ class ProjectPreferencesFragment :
 
         val preferenceScreen = preferenceScreen
         if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
-            preferenceScreen.removePreference(findPreference("protocol"))
+            preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
         }
         if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-            preferenceScreen.removePreference(findPreference("user_interface"))
+            preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
         }
         if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
-            preferenceScreen.removePreference(findPreference("maps"))
+            preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
         }
         if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-            preferenceScreen.removePreference(findPreference("form_management"))
+            preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
         }
         if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
-            preferenceScreen.removePreference(findPreference("user_and_device_identity"))
+            preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
         }
     }
 
