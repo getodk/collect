@@ -55,11 +55,10 @@ class ProjectPreferencesFragment :
             { isPasswordSet: Boolean ->
                 if (isPasswordSet) {
                     projectPreferencesViewModel.setStateUnlocked()
-                    recreatePreferences()
                 } else {
                     projectPreferencesViewModel.setStateNotProtected()
-                    removeDisabledPrefs()
                 }
+                recreatePreferences()
                 requireActivity().invalidateOptionsMenu()
             }
         )
@@ -188,6 +187,9 @@ class ProjectPreferencesFragment :
 
         if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
             preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
+        }
+        if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY))) {
+            preferenceScreen.removePreference(findPreference(PROJECT_DISPLAY_PREFERENCE_KEY))
         }
         if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
             preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
