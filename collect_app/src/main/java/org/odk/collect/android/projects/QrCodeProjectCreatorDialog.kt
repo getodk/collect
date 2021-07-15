@@ -1,9 +1,6 @@
 package org.odk.collect.android.projects
 
 import android.content.Context
-import android.content.DialogInterface
-import android.content.DialogInterface.BUTTON_NEGATIVE
-import android.content.DialogInterface.BUTTON_POSITIVE
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,10 +25,7 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
-class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInterface.OnClickListener {
-
-    private var lastScannedJson: String? = null
-    private var lastMatchingUuid: String? = null
+class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
 
     @Inject
     lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
@@ -138,11 +132,12 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInt
 
                 try {
                     val settingsJson = CompressionUtils.decompress(barcodeResult.text)
-                    lastScannedJson = settingsJson
 
                     settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
-                        lastMatchingUuid = uuid
-                        DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, childFragmentManager)
+                        val confirmationArgs = Bundle()
+                        confirmationArgs.putString(DuplicateProjectConfirmationKeys.SETTINGS_JSON, settingsJson)
+                        confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
+                        DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
                     } ?: run {
                         createProject(settingsJson)
                     }
@@ -153,7 +148,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInt
         )
     }
 
-    private fun createProject(settingsJson: String) {
+    override fun createProject(settingsJson: String) {
         val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
 
         if (projectCreatedSuccessfully) {
@@ -164,16 +159,9 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DialogInt
         }
     }
 
-    private fun switchToProject(uuid: String) {
+    override fun switchToProject(uuid: String) {
         currentProjectProvider.setCurrentProject(uuid)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
-    }
-
-    override fun onClick(dialog: DialogInterface?, buttonClicked: Int) {
-        when (buttonClicked) {
-            BUTTON_POSITIVE -> createProject(lastScannedJson ?: "")
-            BUTTON_NEGATIVE -> lastMatchingUuid?.let { switchToProject(it) }
-        }
     }
 }
