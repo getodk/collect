@@ -1,137 +1,159 @@
 package org.odk.collect.android.preferences.dialogs
 
-import android.content.DialogInterface
+import android.content.Context
 import android.text.InputType
-import android.view.View
-import android.widget.CheckBox
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModel
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.TestSettingsProvider.getAdminSettings
-import org.odk.collect.android.fragments.support.DialogFragmentHelpers.DialogFragmentTestActivity
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
+import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.support.TestActivityScenario
+import org.odk.collect.android.support.InMemSettingsProvider
+import org.odk.collect.android.utilities.AdminPasswordProvider
+import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
-import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowDialog
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 class ChangeAdminPasswordDialogTest {
-    private lateinit var fragmentManager: FragmentManager
-    private lateinit var dialogFragment: ChangeAdminPasswordDialog
-    private val adminSettings = getAdminSettings()
+
+    private val settingsProvider = InMemSettingsProvider()
+    private val projectPreferencesViewModel = mock<ProjectPreferencesViewModel>()
+
+    @Inject
+    lateinit var factory: ProjectPreferencesViewModel.Factory
 
     @Before
     fun setup() {
-        val activity = CollectHelpers.createThemedActivity(FragmentActivity::class.java)
-        fragmentManager = activity.supportFragmentManager
-        dialogFragment = ChangeAdminPasswordDialog()
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesSettingsProvider(context: Context?): SettingsProvider {
+                return settingsProvider
+            }
+
+            override fun providesProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider): ProjectPreferencesViewModel.Factory {
+                return object : ProjectPreferencesViewModel.Factory(adminPasswordProvider) {
+                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                        return projectPreferencesViewModel as T
+                    }
+                }
+            }
+        })
     }
 
     @Test
-    fun dialogIsCancellable() {
-        launchDialog(fragmentManager)
-        assertThat(
-            Shadows.shadowOf(dialogFragment.dialog).isCancelable,
-            equalTo(true)
-        )
-    }
-
-    @Test
-    fun clickingOkAfterSettingPassword_setsPasswordInSharedPreferences() {
-        val dialog = launchDialog(fragmentManager)
-        val passwordEditText = dialog.findViewById<EditText>(R.id.pwd_field)
-        passwordEditText!!.setText("blah")
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
-        RobolectricHelpers.runLooper()
-        assertThat(
-            adminSettings.getString(AdminKeys.KEY_ADMIN_PW),
-            equalTo("blah")
-        )
-    }
-
-    @Test
-    fun whenScreenIsRotated_passwordAndCheckboxValueIsRetained() {
-        val activityScenario = TestActivityScenario.launch(DialogFragmentTestActivity::class.java)
-        activityScenario.onActivity { activity: DialogFragmentTestActivity ->
-            val dialog = launchDialog(activity.supportFragmentManager)
-            (dialog.findViewById<View>(R.id.pwd_field) as EditText?)!!.setText("blah")
-            (dialog.findViewById<View>(R.id.checkBox2) as CheckBox?)!!.isChecked = true
-        }
-        activityScenario.recreate()
-        activityScenario.onActivity { activity: DialogFragmentTestActivity ->
-            val restoredFragment =
-                activity.supportFragmentManager.findFragmentByTag("TAG") as ChangeAdminPasswordDialog?
-            val restoredDialog = restoredFragment!!.dialog as AlertDialog?
-            assertThat(
-                (restoredDialog!!.findViewById<View>(R.id.pwd_field) as EditText?)!!.text.toString(),
-                equalTo("blah")
-            )
-            assertThat(
-                (restoredDialog.findViewById<View>(R.id.checkBox2) as CheckBox?)!!.isChecked,
-                equalTo(true)
-            )
+    fun `The dialog should be dismissed after clicking on a device back button`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            Espresso.onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
+            assertThat(it.dialog, `is`(Matchers.nullValue()))
         }
     }
 
     @Test
-    fun clickingOk_dismissesTheDialog() {
-        val dialog = launchDialog(fragmentManager)
-        assertTrue(dialog.isShowing)
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick()
-        RobolectricHelpers.runLooper()
-        assertFalse(dialog.isShowing)
-        assertTrue(Shadows.shadowOf(dialog).hasBeenDismissed())
+    fun `The dialog should be dismissed after clicking on 'OK'`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            assertThat(it.dialog!!.isShowing, `is`(true))
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(Matchers.nullValue()))
+        }
     }
 
     @Test
-    fun clickingCancel_dismissesTheDialog() {
-        val dialog = launchDialog(fragmentManager)
-        assertTrue(dialog.isShowing)
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).performClick()
-        RobolectricHelpers.runLooper()
-        assertFalse(dialog.isShowing)
-        assertTrue(Shadows.shadowOf(dialog).hasBeenDismissed())
+    fun `The dialog should be dismissed after clicking on 'CANCEL'`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            assertThat(it.dialog!!.isShowing, Matchers.`is`(true))
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(it.dialog, `is`(Matchers.nullValue()))
+        }
     }
 
     @Test
-    fun checkingShowPassword_displaysPasswordAsText() {
-        val dialog = launchDialog(fragmentManager)
-        val passwordEditText = dialog.findViewById<EditText>(R.id.pwd_field)
-        val passwordCheckBox = dialog.findViewById<CheckBox>(R.id.checkBox2)
-        passwordCheckBox!!.isChecked = true
-        assertThat(
-            passwordEditText!!.inputType,
-            equalTo(InputType.TYPE_TEXT_VARIATION_PASSWORD)
-        )
+    fun `Setting password and accepting updates the password in settings`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "")
+            it.binding.pwdField.setText("password")
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(settingsProvider.getAdminSettings().getString(AdminKeys.KEY_ADMIN_PW), `is`("password"))
+        }
     }
 
     @Test
-    fun uncheckingShowPassword_displaysPasswordAsPassword() {
-        val dialog = launchDialog(fragmentManager)
-        val passwordEditText = dialog.findViewById<EditText>(R.id.pwd_field)
-        val passwordCheckBox = dialog.findViewById<CheckBox>(R.id.checkBox2)
-        passwordCheckBox!!.isChecked = false
-        assertThat(
-            passwordEditText!!.inputType,
-            equalTo(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD)
-        )
+    fun `Setting password and canceling does not update the password in settings`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "")
+            it.binding.pwdField.setText("password")
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
+            RobolectricHelpers.runLooper()
+            assertThat(settingsProvider.getAdminSettings().getString(AdminKeys.KEY_ADMIN_PW), `is`(""))
+        }
     }
 
-    private fun launchDialog(fragmentManager: FragmentManager?): AlertDialog {
-        dialogFragment.show(fragmentManager!!, "TAG")
-        RobolectricHelpers.runLooper()
-        return ShadowDialog.getLatestDialog() as AlertDialog
+    @Test
+    fun `Setting password sets Unlocked state in view model`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            it.binding.pwdField.setText("password")
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
+            RobolectricHelpers.runLooper()
+            verify(projectPreferencesViewModel).setStateUnlocked()
+            verifyNoMoreInteractions(projectPreferencesViewModel)
+        }
+    }
+
+    @Test
+    fun `Removing password sets NotProtected state in view model`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            it.binding.pwdField.setText("")
+            (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
+            RobolectricHelpers.runLooper()
+            verify(projectPreferencesViewModel).setStateNotProtected()
+            verifyNoMoreInteractions(projectPreferencesViewModel)
+        }
+    }
+
+    @Test
+    fun `When screen is rotated password and checkbox value is retained`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            it.binding.pwdField.setText("password")
+            it.binding.checkBox2.performClick()
+            scenario.recreate()
+            assertThat(it.binding.pwdField.text.toString(), `is`("password"))
+            assertThat(it.binding.checkBox2.isChecked, `is`(true))
+        }
+    }
+
+    @Test
+    fun `'Show password' displays and hides password`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        scenario.onFragment {
+            it.binding.checkBox2.performClick()
+            assertThat(it.binding.pwdField.inputType, `is`(InputType.TYPE_TEXT_VARIATION_PASSWORD))
+            it.binding.checkBox2.performClick()
+            assertThat(it.binding.pwdField.inputType, `is`(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD))
+        }
     }
 }

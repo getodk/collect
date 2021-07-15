@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AdminPasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -21,6 +21,9 @@ import javax.inject.Inject
 
 class AdminPasswordDialogFragment : DialogFragment() {
     @Inject
+    lateinit var factory: ProjectPreferencesViewModel.Factory
+
+    @Inject
     lateinit var adminPasswordProvider: AdminPasswordProvider
 
     @Inject
@@ -28,11 +31,12 @@ class AdminPasswordDialogFragment : DialogFragment() {
 
     lateinit var binding: AdminPasswordDialogLayoutBinding
 
-    val projectPreferencesViewModel: ProjectPreferencesViewModel by activityViewModels()
+    lateinit var projectPreferencesViewModel: ProjectPreferencesViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        projectPreferencesViewModel = ViewModelProvider(requireActivity(), factory)[ProjectPreferencesViewModel::class.java]
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -17,10 +17,13 @@ import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.android.utilities.ToastUtils.showShortToast
+import org.odk.collect.android.utilities.ToastUtils
 import javax.inject.Inject
 
 class ChangeAdminPasswordDialog : DialogFragment() {
+    @Inject
+    lateinit var factory: ProjectPreferencesViewModel.Factory
+
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
@@ -29,11 +32,12 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
     lateinit var binding: PasswordDialogLayoutBinding
 
-    val projectPreferencesViewModel: ProjectPreferencesViewModel by activityViewModels()
+    lateinit var projectPreferencesViewModel: ProjectPreferencesViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        projectPreferencesViewModel = ViewModelProvider(requireActivity(), factory)[ProjectPreferencesViewModel::class.java]
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -60,11 +64,11 @@ class ChangeAdminPasswordDialog : DialogFragment() {
                 settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, password)
 
                 if (password.isEmpty()) {
-                    showShortToast(R.string.admin_password_disabled)
                     projectPreferencesViewModel.setStateNotProtected()
+                    ToastUtils.showShortToast(R.string.admin_password_disabled)
                 } else {
-                    showShortToast(R.string.admin_password_changed)
                     projectPreferencesViewModel.setStateUnlocked()
+                    ToastUtils.showShortToast(R.string.admin_password_changed)
                 }
                 dismiss()
             }

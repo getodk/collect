@@ -15,6 +15,9 @@ import java.util.TreeMap;
 public class LocaleHelper {
     public static String getLocaleCode(Settings generalSettings) {
         String localeCode = generalSettings.getString(GeneralKeys.KEY_APP_LANGUAGE);
+        if (localeCode == null) {
+            return "";
+        }
         boolean isUsingSysLanguage = localeCode.equals("");
         if (isUsingSysLanguage) {
             localeCode = Collect.defaultSysLanguage;
