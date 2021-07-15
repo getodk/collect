@@ -51,7 +51,6 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
 
     protected fun displayPreferences(fragment: Fragment?) {
         if (fragment != null) {
-            fragment.arguments = arguments
             requireActivity().supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.preferences_fragment_container, fragment)
