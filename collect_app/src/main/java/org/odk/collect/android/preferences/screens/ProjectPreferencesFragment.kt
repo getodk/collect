@@ -76,8 +76,8 @@ class ProjectPreferencesFragment :
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        updatePreferencesVisibility()
         super.onViewCreated(view, savedInstanceState)
+        updatePreferencesVisibility()
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
