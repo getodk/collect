@@ -222,9 +222,8 @@ public class FormMapActivityTest {
     public void openingEditableInstances_launchesEditActivity() {
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);
-        MapPoint failedToSend = new MapPoint(10.3, 125.6);
 
-        MapPoint[] testPoints = {editableAndFinalized, unfinalized, failedToSend};
+        MapPoint[] testPoints = {editableAndFinalized, unfinalized};
 
         for (MapPoint toTap : testPoints) {
             int featureId = map.getFeatureIdFor(toTap);
@@ -263,15 +262,20 @@ public class FormMapActivityTest {
     @Test
     public void openingUneditableInstances_launchesViewActivity() {
         MapPoint sent = new MapPoint(10.3, 125.7);
+        MapPoint failedToSend = new MapPoint(10.3, 125.6);
 
-        int featureId = map.getFeatureIdFor(sent);
+        MapPoint[] testPoints = {sent, failedToSend};
 
-        activity.onFeatureClicked(featureId);
-        clickOnOpenFormChip();
-        Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
+        for (MapPoint toTap : testPoints) {
+            int featureId = map.getFeatureIdFor(toTap);
 
-        assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
-        assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
+            activity.onFeatureClicked(featureId);
+            clickOnOpenFormChip();
+            Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
+
+            assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
+            assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(ApplicationConstants.FormModes.VIEW_SENT));
+        }
     }
 
     @Test

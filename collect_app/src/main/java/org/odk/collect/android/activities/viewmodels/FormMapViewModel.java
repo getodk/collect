@@ -122,7 +122,8 @@ public class FormMapViewModel extends ViewModel {
                     && !instance.canEditWhenComplete()) {
                 return ClickAction.NOT_VIEWABLE_TOAST;
             } else if (instance.getDbId() != null) {
-                if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)) {
+                if (instance.getStatus().equals(Instance.STATUS_SUBMITTED)
+                        || instance.getStatus().equals(Instance.STATUS_SUBMISSION_FAILED)) {
                     return ClickAction.OPEN_READ_ONLY;
                 }
                 return ClickAction.OPEN_EDIT;

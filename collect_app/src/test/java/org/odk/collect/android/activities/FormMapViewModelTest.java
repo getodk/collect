@@ -87,11 +87,12 @@ public class FormMapViewModelTest {
         assertThat(instances.get(2).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
     }
 
-    @Test public void instanceThatFailedToSend_thatCanBeEdited_hasEditableStatus() {
+    // Instances that failed to send are not editable starting in v2021.2
+    @Test public void instanceThatFailedToSend_thatCanBeEdited_hasViewableStatus() {
         FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
 
-        assertThat(instances.get(3).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_EDIT));
+        assertThat(instances.get(3).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_READ_ONLY));
     }
 
     // Sent instances should never be editable.
@@ -102,6 +103,7 @@ public class FormMapViewModelTest {
         assertThat(instances.get(4).getClickAction(), is(FormMapViewModel.ClickAction.OPEN_READ_ONLY));
     }
 
+    // E.g. encrypted forms
     @Test public void instanceThatFailedToSend_thatCantBeEdited_returnsNotViewableStatus() {
         FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         List<FormMapViewModel.MappableFormInstance> instances = viewModel.getMappableFormInstances();
