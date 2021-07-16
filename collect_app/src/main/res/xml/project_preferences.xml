@@ -56,7 +56,6 @@ limitations under the License.
 
     <PreferenceCategory
         android:title="@string/protected_settings"
-        android:key="protected_settings"
         app:iconSpaceReserved="false">
 
         <Preference

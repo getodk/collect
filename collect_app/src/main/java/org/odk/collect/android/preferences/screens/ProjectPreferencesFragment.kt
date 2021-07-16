@@ -199,7 +199,6 @@ class ProjectPreferencesFragment :
         private const val FORM_MANAGEMENT_PREFERENCE_KEY = "form_management"
         private const val USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY = "user_and_device_identity"
         private const val EXPERIMENTAL_PREFERENCE_KEY = "experimental"
-        private const val PROTECTED_SETTINGS_KEY = "protected_settings"
         private const val UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY = "unlock_protected_settings"
         private const val PROJECT_MANAGEMENT_PREFERENCE_KEY = "project_management"
         private const val ACCESS_CONTROL_PREFERENCE_KEY = "access_control"
