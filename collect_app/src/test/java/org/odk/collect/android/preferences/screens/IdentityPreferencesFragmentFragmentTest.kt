@@ -7,7 +7,6 @@ import androidx.preference.Preference
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,7 +74,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
     }
 
@@ -117,7 +116,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_FORM_METADATA), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
     }
 
@@ -138,7 +137,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
     }
 
@@ -180,7 +179,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_ANALYTICS), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
     }
 

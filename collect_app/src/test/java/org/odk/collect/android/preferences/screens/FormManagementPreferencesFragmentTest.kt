@@ -11,7 +11,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -207,14 +206,8 @@ class FormManagementPreferencesFragmentTest {
             FormManagementPreferencesFragment::class.java
         )
         scenario.onFragment { f: FormManagementPreferencesFragment ->
-            assertThat(
-                f.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
-                nullValue()
-            )
-            assertThat(
-                f.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE),
-                nullValue()
-            )
+            assertThat(f.findPreference<Preference>(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
+            assertThat(f.findPreference<Preference>(GeneralKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(false))
             val updateMode = f.findPreference<ListPreference>(GeneralKeys.KEY_FORM_UPDATE_MODE)
             updateMode!!.value = FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY.getValue(context)
             updateMode.value = FormUpdateMode.MATCH_EXACTLY.getValue(context)
@@ -260,17 +253,17 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_AUTOSEND)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(false))
         }
     }
 
@@ -364,17 +357,17 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOMATIC_UPDATE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_AUTOSEND), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_DELETE_AFTER_SEND), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_COMPLETED_DEFAULT), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_HIGH_RESOLUTION), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_IMAGE_SIZE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_GUIDANCE_HINT), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_INSTANCE_SYNC), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_AUTOSEND)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(false))
         }
     }
 }

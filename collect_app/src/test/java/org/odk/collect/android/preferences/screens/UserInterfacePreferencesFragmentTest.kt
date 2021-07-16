@@ -6,7 +6,6 @@ import androidx.preference.Preference
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,12 +74,12 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_APP_THEME), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_APP_LANGUAGE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_FONT_SIZE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_NAVIGATION), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_SHOW_SPLASH), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_SPLASH_PATH), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 
@@ -147,12 +146,12 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference(GeneralKeys.KEY_APP_THEME), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_APP_LANGUAGE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_FONT_SIZE), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_NAVIGATION), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_SHOW_SPLASH), nullValue())
-            assertThat(fragment.findPreference(GeneralKeys.KEY_SPLASH_PATH), nullValue())
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 }
