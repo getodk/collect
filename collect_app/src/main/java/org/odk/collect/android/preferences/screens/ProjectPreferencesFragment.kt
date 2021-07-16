@@ -21,6 +21,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
@@ -84,6 +85,7 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+        findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
@@ -105,29 +107,10 @@ class ProjectPreferencesFragment :
                 FORM_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(FormManagementPreferencesFragment())
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
-                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> {
-                    if (projectPreferencesViewModel.isStateLocked()) {
-                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
-                    } else {
-                        DialogUtils.showIfNotShowing(
-                            ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager
-                        )
-                    }
-                }
-                PROJECT_MANAGEMENT_PREFERENCE_KEY -> {
-                    if (projectPreferencesViewModel.isStateLocked()) {
-                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
-                    } else {
-                        displayPreferences(ProjectManagementPreferencesFragment())
-                    }
-                }
-                ACCESS_CONTROL_PREFERENCE_KEY -> {
-                    if (projectPreferencesViewModel.isStateLocked()) {
-                        DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
-                    } else {
-                        displayPreferences(AccessControlPreferencesFragment())
-                    }
-                }
+                UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY -> DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
+                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager)
+                PROJECT_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(ProjectManagementPreferencesFragment())
+                ACCESS_CONTROL_PREFERENCE_KEY -> displayPreferences(AccessControlPreferencesFragment())
             }
             return true
         }
@@ -164,27 +147,34 @@ class ProjectPreferencesFragment :
     }
 
     private fun setPreferencesVisibility() {
-        if (projectPreferencesViewModel.isStateUnlocked()) {
-            return
+        val protectedPreferences = preferenceScreen.findPreference<PreferenceCategory>(PROTECTED_SETTINGS_KEY)
+        if (projectPreferencesViewModel.isStateLocked()) {
+            protectedPreferences!!.removePreference(findPreference(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD))
+            protectedPreferences.removePreference(findPreference(PROJECT_MANAGEMENT_PREFERENCE_KEY))
+            protectedPreferences.removePreference(findPreference(ACCESS_CONTROL_PREFERENCE_KEY))
+        } else {
+            protectedPreferences!!.removePreference(findPreference(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY))
         }
 
-        if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
-            preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
-        }
-        if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY))) {
-            preferenceScreen.removePreference(findPreference(PROJECT_DISPLAY_PREFERENCE_KEY))
-        }
-        if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-            preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
-        }
-        if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
-            preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
-        }
-        if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-            preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
-        }
-        if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
-            preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
+        if (!projectPreferencesViewModel.isStateUnlocked()) {
+            if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
+                preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
+            }
+            if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY))) {
+                preferenceScreen.removePreference(findPreference(PROJECT_DISPLAY_PREFERENCE_KEY))
+            }
+            if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
+                preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
+            }
+            if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
+                preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
+            }
+            if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
+                preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
+            }
+            if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
+                preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
+            }
         }
     }
 
@@ -206,6 +196,8 @@ class ProjectPreferencesFragment :
         private const val FORM_MANAGEMENT_PREFERENCE_KEY = "form_management"
         private const val USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY = "user_and_device_identity"
         private const val EXPERIMENTAL_PREFERENCE_KEY = "experimental"
+        private const val PROTECTED_SETTINGS_KEY = "protected_settings"
+        private const val UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY = "unlock_protected_settings"
         private const val PROJECT_MANAGEMENT_PREFERENCE_KEY = "project_management"
         private const val ACCESS_CONTROL_PREFERENCE_KEY = "access_control"
     }

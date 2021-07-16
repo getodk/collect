@@ -56,7 +56,14 @@ limitations under the License.
 
     <PreferenceCategory
         android:title="@string/protected_settings"
+        android:key="protected_settings"
         app:iconSpaceReserved="false">
+
+        <Preference
+            android:icon="@drawable/ic_outline_lock_accent_24"
+            android:key="unlock_protected_settings"
+            android:title="@string/unlock_protected_settings_section_title"
+            android:summary="@string/unlock_protected_settings_section_subtext"/>
 
         <Preference
             android:icon="@drawable/ic_outline_vpn_key_accent_24"

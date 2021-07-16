@@ -681,6 +681,10 @@
     <string name="experimental">Experimental</string>
 
     <string name="protected_settings">Protected</string>
+    <!-- Title of a settings section -->
+    <string name="unlock_protected_settings_section_title">Unlock protected settings</string>
+    <!-- Subtext of a settings section -->
+    <string name="unlock_protected_settings_section_subtext">Change password, set access controls</string>
     <string name="set_admin_password">Set admin password</string>
     <!-- Title of a settings section -->
     <string name="project_management_section_title">Project management</string>
