@@ -46,8 +46,12 @@ public class AndroidShortcutsTest {
         Intent shortcutIntent = rule.launchShortcuts()
                 .selectForm("One Question");
 
+        rule.restart()
+                .startAtMainMenu(); // Need to open to be able to return here
+
         rule.launch(shortcutIntent, new FormEntryPage("One Question"))
-                .assertQuestion("what is your age");
+                .swipeToEndScreen()
+                .clickSaveAndExit();
     }
 
     @Test
@@ -65,6 +69,7 @@ public class AndroidShortcutsTest {
                 .addAndSwitchToProject("https://example.com");
 
         rule.launch(shortcutIntent, new FormEntryPage("One Question"))
-                .assertQuestion("what is your age");
+                .swipeToEndScreen()
+                .clickSaveAndExit();
     }
 }
