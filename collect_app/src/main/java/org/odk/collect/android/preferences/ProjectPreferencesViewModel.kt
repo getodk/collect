@@ -18,13 +18,11 @@ class ProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider) 
     var state: LiveData<Consumable<State>> = _state
 
     init {
-        _state.postValue(
-            if (adminPasswordProvider.isAdminPasswordSet) {
-                Consumable(State.LOCKED)
-            } else {
-                Consumable(State.NOT_PROTECTED)
-            }
-        )
+        _state.value = if (adminPasswordProvider.isAdminPasswordSet) {
+            Consumable(State.LOCKED)
+        } else {
+            Consumable(State.NOT_PROTECTED)
+        }
     }
 
     fun isStateLocked() = state.value == Consumable(State.LOCKED)
@@ -34,15 +32,15 @@ class ProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider) 
     fun isStateNotProtected() = state.value == Consumable(State.NOT_PROTECTED)
 
     fun setStateLocked() {
-        _state.postValue(Consumable(State.LOCKED))
+        _state.value = Consumable(State.LOCKED)
     }
 
     fun setStateUnlocked() {
-        _state.postValue(Consumable(State.UNLOCKED))
+        _state.value = Consumable(State.UNLOCKED)
     }
 
     fun setStateNotProtected() {
-        _state.postValue(Consumable(State.NOT_PROTECTED))
+        _state.value = Consumable(State.NOT_PROTECTED)
     }
 
     open class Factory(private val adminPasswordProvider: AdminPasswordProvider) : ViewModelProvider.Factory {
