@@ -68,7 +68,8 @@ import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.services.NotificationService;
 import org.odk.collect.android.tasks.DownloadTasksTask;                 // smap
-import org.odk.collect.android.tasks.SmapChangeOrganisationTask;
+import org.odk.collect.android.tasks.SmapChangeOrganisationTask;        // smap
+import org.odk.collect.android.smap.tasks.SubmitLocationTask;        // smap
 import org.odk.collect.android.tasks.SmapLoginTask;                     // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServicePostTask;      // smap
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;          // smap
@@ -158,6 +159,8 @@ public interface AppDependencyComponent {
     void inject(SmapLoginTask smapLoginTask);                                   // smap
 
     void inject(SmapChangeOrganisationTask smapChangeOrganisationTask);         // smap
+
+    void inject(SubmitLocationTask submitLocationTask);                         // smap
 
     void inject(SmapTaskMapFragment smapTaskMapFragment);                       // smap
 

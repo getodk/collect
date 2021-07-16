@@ -90,6 +90,23 @@ public interface OpenRosaHttpInterface {
 
     /**
      * smap
+     * Updates location
+     *
+     * @param lat Latitude
+     * @param lon longitude
+     * @param uri where to send the submissionFile and fileList
+     * @return ResponseMessageParser object that contains the response XML
+     * @throws IOException can be thrown if files do not exist
+     */
+    @NonNull
+    HttpPostResult uploadLocation(String lat,
+                                    String lon,
+                                    @NonNull URI uri,
+                                    @Nullable HttpCredentialsInterface credentials
+    ) throws IOException;
+
+    /**
+     * smap
      * Updates tasks on a Server.
      *
      * @param fileName Name of file to be submitted

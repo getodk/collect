@@ -16,6 +16,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.utilities.Constants;
 
 import java.util.ArrayList;
@@ -112,11 +113,13 @@ public class LocationReceiver  extends BroadcastReceiver {
                 /*
                  * Save the location in the database
                  */
-                if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-                    TraceUtilities.insertPoint(location);
-                    Timber.i("+++++ Insert Point");
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("locationChanged"));  // update map
-                }
+                LocationRegister lr = new LocationRegister();
+                lr.register(context, location);
+                //if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
+                //    TraceUtilities.insertPoint(location);
+                //    Timber.i("+++++ Insert Point");
+                //    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("locationChanged"));  // update map
+                //}
             }
 
         }

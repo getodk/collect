@@ -316,6 +316,43 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @Override
+    public @NonNull HttpPostResult uploadLocation(String lat,
+                                                  String lon,
+                                                  @NonNull URI uri,
+                                                  @Nullable HttpCredentialsInterface credentials
+    ) throws IOException {
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("lat", lat)
+                .add("lon", lon)
+                .build();
+
+        OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());
+
+        HttpPostResult postResult;
+        Request request = new Request.Builder()
+                .url(uri.toURL())
+                .post(formBody)
+                .build();
+
+        Response response = httpClient.makeRequest(request, new Date());
+
+        if (response.code() == 204) {
+            throw new IOException();
+        }
+
+        postResult = new HttpPostResult(
+                response.body().string(),
+                response.code(),
+                response.message());
+
+        discardEntityBytes(response);
+
+        return postResult;
+
+    }
+
+    @Override
     public @NonNull String SubmitFileForResponse(@NonNull String fileName,
                                                  @NonNull File file,
                                                  @NonNull URI uri,
