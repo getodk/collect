@@ -47,4 +47,20 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
         onView(withText(R.string.add)).perform(click())
         return MainMenuPage().assertOnPage()
     }
+
+    fun addProjectAndAssertDuplicateDialogShown(): ManualProjectCreatorDialogPage {
+        onView(withText(R.string.add)).perform(click())
+        assertText(R.string.duplicate_project_details)
+        return this
+    }
+
+    fun switchToExistingProject(): MainMenuPage {
+        clickOnString(R.string.switch_to_existing)
+        return MainMenuPage().assertOnPage()
+    }
+
+    fun addDuplicateProject(): MainMenuPage {
+        clickOnString(R.string.add_duplicate_project)
+        return MainMenuPage().assertOnPage()
+    }
 }

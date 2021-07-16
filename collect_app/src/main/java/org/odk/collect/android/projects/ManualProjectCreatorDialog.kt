@@ -21,13 +21,19 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
+import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
+import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 
-class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
+
     @Inject
     lateinit var projectCreator: ProjectCreator
 
@@ -46,6 +52,14 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var googleAccountsManager: GoogleAccountsManager
 
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
+    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
+
     private lateinit var binding: ManualProjectCreatorDialogLayoutBinding
 
     val googleAccountResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
@@ -59,14 +73,21 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 accountName
             )
 
-            projectCreator.createNewProject(settingsJson)
-            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+            settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                val confirmationArgs = Bundle()
+                confirmationArgs.putString(SETTINGS_JSON, settingsJson)
+                confirmationArgs.putString(MATCHING_PROJECT, uuid)
+                DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
+            } ?: run {
+                createProject(settingsJson)
+            }
         }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        settingsConnectionMatcher = SettingsConnectionMatcher(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -125,9 +146,14 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 binding.passwordInputText.text?.trim().toString()
             )
 
-            projectCreator.createNewProject(settingsJson)
-            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+            settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                val confirmationArgs = Bundle()
+                confirmationArgs.putString(SETTINGS_JSON, settingsJson)
+                confirmationArgs.putString(MATCHING_PROJECT, uuid)
+                DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
+            } ?: run {
+                createProject(settingsJson)
+            }
         }
     }
 
@@ -145,5 +171,17 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 }
             }
         )
+    }
+
+    override fun createProject(settingsJson: String) {
+        projectCreator.createNewProject(settingsJson)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+    }
+
+    override fun switchToProject(uuid: String) {
+        currentProjectProvider.setCurrentProject(uuid)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(org.odk.collect.projects.R.string.switched_project, currentProjectProvider.getCurrentProject().name))
     }
 }

@@ -16,16 +16,18 @@ import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBindi
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.ToastUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.projects.R
 import javax.inject.Inject
 
-class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
+class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
 
     @Inject
     lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
@@ -42,6 +44,14 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
+    lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
+
     private var capture: CaptureManager? = null
 
     private lateinit var beepManager: BeepManager
@@ -50,6 +60,7 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        settingsConnectionMatcher = SettingsConnectionMatcher(projectsRepository, settingsProvider)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -128,7 +139,16 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
                 }
 
                 try {
-                    handleScanningResult(barcodeResult)
+                    val settingsJson = CompressionUtils.decompress(barcodeResult.text)
+
+                    settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+                        val confirmationArgs = Bundle()
+                        confirmationArgs.putString(DuplicateProjectConfirmationKeys.SETTINGS_JSON, settingsJson)
+                        confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
+                        DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
+                    } ?: run {
+                        createProject(settingsJson)
+                    }
                 } catch (e: Exception) {
                     ToastUtils.showShortToast(getString(R.string.invalid_qrcode))
                 }
@@ -136,8 +156,8 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         )
     }
 
-    private fun handleScanningResult(result: BarcodeResult) {
-        val projectCreatedSuccessfully = projectCreator.createNewProject(CompressionUtils.decompress(result.text))
+    override fun createProject(settingsJson: String) {
+        val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
 
         if (projectCreatedSuccessfully) {
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
@@ -145,5 +165,11 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment() {
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
         }
+    }
+
+    override fun switchToProject(uuid: String) {
+        currentProjectProvider.setCurrentProject(uuid)
+        ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
     }
 }
