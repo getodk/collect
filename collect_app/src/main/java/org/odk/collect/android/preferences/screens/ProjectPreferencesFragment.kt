@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
@@ -50,14 +51,8 @@ class ProjectPreferencesFragment :
             { state: Consumable<ProjectPreferencesViewModel.State> ->
                 if (!state.isConsumed()) {
                     state.consume()
-                    when (state.value) {
-                        ProjectPreferencesViewModel.State.LOCKED -> { }
-                        ProjectPreferencesViewModel.State.UNLOCKED,
-                        ProjectPreferencesViewModel.State.NOT_PROTECTED -> {
-                            updatePreferencesVisibility()
-                            requireActivity().invalidateOptionsMenu()
-                        }
-                    }
+                    updatePreferencesVisibility()
+                    requireActivity().invalidateOptionsMenu()
                 }
             }
         )
@@ -80,9 +75,9 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         updatePreferencesVisibility()
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
