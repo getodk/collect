@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 
 /**
- * Can [AppState] can be used as a shared store of state that lives at an "app"/"in-memory" level
+ * [AppState] can be used as a shared store of state that lives at an "app"/"in-memory" level
  * rather than being tied to a specific component. This could be shared state between different
  * [Activity] objects or a way of communicating between a [Service] and other components.
  * [AppState] can be used as an alternative to Dagger singleton objects or static fields.
