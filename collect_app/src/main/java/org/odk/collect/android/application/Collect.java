@@ -32,6 +32,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.androidshared.data.AppState;
+import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -56,9 +58,12 @@ import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_1
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
-        ProjectsDependencyComponentProvider {
+        ProjectsDependencyComponentProvider,
+        StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
+
+    private final AppState appState = new AppState();
 
     @Nullable
     private FormController formController;
@@ -247,5 +252,11 @@ public class Collect extends Application implements
     @Override
     public Locale getLocale() {
         return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
+    }
+
+    @NotNull
+    @Override
+    public AppState getState() {
+        return appState;
     }
 }

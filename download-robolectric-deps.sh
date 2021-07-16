@@ -9,3 +9,4 @@ wget -nc https://repo1.maven.org/maven2/org/robolectric/android-all/11-robolectr
 cp robolectric-deps.properties collect_app/src/test/resources
 cp robolectric-deps.properties audiorecorder/src/test/resources
 cp robolectric-deps.properties projects/src/test/resources
+cp robolectric-deps.properties location/src/test/resources
