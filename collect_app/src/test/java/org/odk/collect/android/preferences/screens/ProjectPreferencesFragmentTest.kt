@@ -6,7 +6,6 @@ import androidx.preference.Preference
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -87,12 +86,12 @@ class ProjectPreferencesFragmentTest {
 
         scenario.recreate()
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("protocol"), nullValue())
-            assertThat(fragment.findPreference("project_display"), nullValue())
-            assertThat(fragment.findPreference("user_interface"), nullValue())
-            assertThat(fragment.findPreference("maps"), nullValue())
-            assertThat(fragment.findPreference("form_management"), nullValue())
-            assertThat(fragment.findPreference("user_and_device_identity"), nullValue())
+            assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(false))
         }
     }
 
@@ -113,7 +112,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("protocol"), nullValue())
+            assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(false))
         }
     }
 
@@ -155,7 +154,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("protocol"), nullValue())
+            assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(false))
         }
     }
 
@@ -176,7 +175,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("project_display"), nullValue())
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(false))
         }
     }
 
@@ -218,7 +217,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("project_display"), nullValue())
+            assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(false))
         }
     }
 
@@ -250,7 +249,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("user_interface"), nullValue())
+            assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(false))
         }
     }
 
@@ -314,7 +313,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("user_interface"), nullValue())
+            assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(false))
         }
     }
 
@@ -335,7 +334,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("maps"), nullValue())
+            assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(false))
         }
     }
 
@@ -377,7 +376,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("maps"), nullValue())
+            assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(false))
         }
     }
 
@@ -425,7 +424,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("form_management"), nullValue())
+            assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(false))
         }
     }
 
@@ -521,7 +520,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("form_management"), nullValue())
+            assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(false))
         }
     }
 
@@ -547,7 +546,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("user_and_device_identity"), nullValue())
+            assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(false))
         }
     }
 
@@ -599,7 +598,7 @@ class ProjectPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
-            assertThat(fragment.findPreference("user_and_device_identity"), nullValue())
+            assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(false))
         }
     }
 }
