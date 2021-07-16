@@ -21,7 +21,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
@@ -55,7 +54,7 @@ class ProjectPreferencesFragment :
                         ProjectPreferencesViewModel.State.LOCKED -> { }
                         ProjectPreferencesViewModel.State.UNLOCKED,
                         ProjectPreferencesViewModel.State.NOT_PROTECTED -> {
-                            recreatePreferences()
+                            updatePreferencesVisibility()
                             requireActivity().invalidateOptionsMenu()
                         }
                     }
@@ -67,16 +66,6 @@ class ProjectPreferencesFragment :
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.project_preferences, rootKey)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        recreatePreferences()
-    }
-
-    private fun recreatePreferences() {
-        preferenceScreen = null
-        addPreferencesFromResource(R.xml.project_preferences)
 
         findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
@@ -89,12 +78,11 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
+    }
 
-        if (versionInformation.isRelease) {
-            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
-        }
-
-        setPreferencesVisibility()
+    override fun onResume() {
+        super.onResume()
+        updatePreferencesVisibility()
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -146,35 +134,50 @@ class ProjectPreferencesFragment :
         return false
     }
 
-    private fun setPreferencesVisibility() {
-        val protectedPreferences = preferenceScreen.findPreference<PreferenceCategory>(PROTECTED_SETTINGS_KEY)
+    private fun updatePreferencesVisibility() {
+        findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible = true
+        findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = true
+        findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isVisible = true
+
         if (projectPreferencesViewModel.isStateLocked()) {
-            protectedPreferences!!.removePreference(findPreference(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD))
-            protectedPreferences.removePreference(findPreference(PROJECT_MANAGEMENT_PREFERENCE_KEY))
-            protectedPreferences.removePreference(findPreference(ACCESS_CONTROL_PREFERENCE_KEY))
+            findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible = false
+            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = false
+            findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isVisible = false
         } else {
-            protectedPreferences!!.removePreference(findPreference(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY))
+            findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = false
         }
 
         if (!projectPreferencesViewModel.isStateUnlocked()) {
             if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
-                preferenceScreen.removePreference(findPreference(PROTOCOL_PREFERENCE_KEY))
+                findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.isVisible = false
             }
             if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY))) {
-                preferenceScreen.removePreference(findPreference(PROJECT_DISPLAY_PREFERENCE_KEY))
+                findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.isVisible = false
             }
             if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
-                preferenceScreen.removePreference(findPreference(USER_INTERFACE_PREFERENCE_KEY))
+                findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.isVisible = false
             }
             if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
-                preferenceScreen.removePreference(findPreference(MAPS_PREFERENCE_KEY))
+                findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.isVisible = false
             }
             if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
-                preferenceScreen.removePreference(findPreference(FORM_MANAGEMENT_PREFERENCE_KEY))
+                findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = false
             }
             if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
-                preferenceScreen.removePreference(findPreference(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY))
+                findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.isVisible = false
             }
+        }
+
+        if (versionInformation.isRelease) {
+            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
     }
 
