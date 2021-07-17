@@ -28,6 +28,45 @@ class FormViewActionTest {
         .around(rule)
 
     @Test
+    fun opensForm() {
+        rule.startAtMainMenu()
+            .copyAndSyncForm("one-question.xml")
+
+        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uriWithoutProjectId = Uri.Builder()
+            .scheme(uri.scheme)
+            .authority(uri.authority)
+            .path(uri.path)
+            .query(null)
+            .build()
+
+        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        rule.launch(intent, FormEntryPage("One Question"))
+    }
+
+    @Test
+    fun whenFormIsNotCurrentProject_showsWarningAndExits() {
+        rule.startAtMainMenu()
+            .copyAndSyncForm("one-question.xml")
+            .addAndSwitchToProject("https://example.com")
+
+        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uriWithoutProjectId = Uri.Builder()
+            .scheme(uri.scheme)
+            .authority(uri.authority)
+            .path(uri.path)
+            .query(null)
+            .build()
+
+        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        rule.launch(intent, OkDialog())
+            .assertText(R.string.wrong_project_selected_for_form)
+            .clickOK(MainMenuPage())
+    }
+
+    @Test
     fun whenUriDoesNotHaveProjectId_andCurrentProjectIsFirstOne_opensForm() {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
