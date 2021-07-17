@@ -24,8 +24,8 @@ class CurrentProjectProvider(private val settingsProvider: SettingsProvider, pri
         }
     }
 
-    fun setCurrentProject(uuid: String) {
-        settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, uuid)
+    fun setCurrentProject(projectId: String) {
+        settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, projectId)
     }
 
     private fun getCurrentProjectId(): String? {

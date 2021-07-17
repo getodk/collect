@@ -1065,4 +1065,7 @@
     <!-- Preceded by "Don't have a project yet?" question -->
     <string name="try_demo">Try a demo</string>
     <string name="scan_configuration_qr_code">Scan configuration QR code</string>
+
+    <!-- Error shown when a user tries to open a form that's in a different project -->
+    <string name="wrong_project_selected_for_form">This form is in a different project from the one currently selected. Please switch to that project to fill out this form.</string>
 </resources>

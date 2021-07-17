@@ -8,10 +8,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.OkDialog;
 
 @RunWith(AndroidJUnit4.class)
 public class AndroidShortcutsTest {
@@ -55,7 +57,7 @@ public class AndroidShortcutsTest {
     }
 
     @Test
-    public void whenDifferentProjectSelected_canStillFillOutFormFromShortcut() {
+    public void whenDifferentProjectSelected_clickingShortcutShowsWarningAndExits() {
         rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm() // Load form
@@ -68,8 +70,8 @@ public class AndroidShortcutsTest {
                 .startAtMainMenu()
                 .addAndSwitchToProject("https://example.com");
 
-        rule.launch(shortcutIntent, new FormEntryPage("One Question"))
-                .swipeToEndScreen()
-                .clickSaveAndExit();
+        rule.launch(shortcutIntent, new OkDialog())
+                .assertText(R.string.wrong_project_selected_for_form)
+                .clickOK(new MainMenuPage());
     }
 }
