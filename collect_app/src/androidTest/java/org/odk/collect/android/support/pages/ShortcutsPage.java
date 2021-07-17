@@ -23,7 +23,6 @@ public class ShortcutsPage extends Page<ShortcutsPage> {
 
     public Intent selectForm(String formName) {
         clickOnText(formName);
-        Intent resultData = scenario.getResult().getResultData();
-        return resultData.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+        return scenario.getResult().getResultData();
     }
 }
