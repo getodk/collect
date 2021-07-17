@@ -58,7 +58,7 @@ public class DisabledPreferencesRemover {
                     throw new RuntimeException("Couldn't find preference");
                 }
 
-                parent.removePreference(preference);
+                preference.setVisible(false);
                 Timber.d("Removed %s", preference.toString());
             }
         }

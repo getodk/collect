@@ -27,7 +27,7 @@ public final class AdminKeys {
     public static final String KEY_DELETE_SAVED                 = "delete_saved";
 
     public static final String KEY_CHANGE_SERVER               = "change_server";
-
+    public static final String KEY_CHANGE_PROJECT_DISPLAY      = "change_project_display";
     public static final String KEY_APP_THEME                   = "change_app_theme";
     public static final String KEY_APP_LANGUAGE                = "change_app_language";
     public static final String KEY_CHANGE_FONT_SIZE            = "change_font_size";
@@ -37,7 +37,7 @@ public final class AdminKeys {
 
     public static final String KEY_MAPS                                = "maps";
 
-    private static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
+    public static final String KEY_FORM_UPDATE_MODE            = "form_update_mode";
     public static final String KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check";
     public static final String KEY_AUTOMATIC_UPDATE            = "automatic_update";
     public static final String KEY_HIDE_OLD_FORM_VERSIONS      = "hide_old_form_versions";
@@ -71,6 +71,7 @@ public final class AdminKeys {
      */
     public static AdminAndGeneralKeys[] adminToGeneral = {
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
+            ag(KEY_CHANGE_PROJECT_DISPLAY,     GeneralKeys.KEY_PROTOCOL),
             ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),

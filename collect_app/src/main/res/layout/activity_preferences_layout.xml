@@ -6,7 +6,8 @@
 
     <include layout="@layout/app_bar_layout"/>
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:name="org.odk.collect.android.preferences.screens.ProjectPreferencesFragment"
         android:id="@+id/preferences_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

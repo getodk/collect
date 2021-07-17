@@ -11,6 +11,10 @@
             android:title="@string/server_settings_title"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
+            android:key="change_project_display"
+            android:title="@string/project_display_title"
+            app:iconSpaceReserved="false" />
+        <CheckBoxPreference
             android:key="change_app_theme"
             android:title="@string/app_theme"
             app:iconSpaceReserved="false" />
