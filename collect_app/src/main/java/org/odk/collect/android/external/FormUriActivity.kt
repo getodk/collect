@@ -9,6 +9,7 @@ import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ThemeUtils
+import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class FormUriActivity : Activity() {
@@ -16,13 +17,17 @@ class FormUriActivity : Activity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var projectsRepository: ProjectsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setTheme(ThemeUtils(this).appTheme)
 
+        val firstProject = projectsRepository.getAll().first()
         val formUri = intent.data
-        val projectId = formUri!!.getQueryParameter("projectId")!!
+        val projectId = formUri?.getQueryParameter("projectId") ?: firstProject.uuid
 
         if (projectId == currentProjectProvider.getCurrentProject().uuid) {
             startActivity(
