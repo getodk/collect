@@ -192,7 +192,6 @@ the specific language governing permissions and limitations under the License.
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
         </activity-alias>
@@ -277,6 +276,20 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".external.FormUriActivity"
+            android:noHistory="true"
+            tools:ignore="AppLinkUrlError">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
             </intent-filter>
         </activity>
 
