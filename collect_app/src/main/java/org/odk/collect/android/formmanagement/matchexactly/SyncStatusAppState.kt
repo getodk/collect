@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement.matchexactly
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.provider.FormsProviderAPI
+import org.odk.collect.android.external.FormsProviderAPI
 import org.odk.collect.forms.FormSourceException
 import javax.inject.Singleton
 

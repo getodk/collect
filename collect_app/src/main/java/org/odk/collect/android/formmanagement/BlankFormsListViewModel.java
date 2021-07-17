@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
+import static org.odk.collect.android.external.FormsProviderAPI.getUri;
 
 public class BlankFormsListViewModel extends ViewModel {
 

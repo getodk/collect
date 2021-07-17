@@ -9,7 +9,7 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.AndroidShortcutsActivity;
+import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.support.pages.FirstLaunchPage;
 import org.odk.collect.android.support.pages.MainMenuPage;

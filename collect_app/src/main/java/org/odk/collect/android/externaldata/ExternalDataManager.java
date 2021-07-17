@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external;
+package org.odk.collect.android.externaldata;
 
 /**
  * This class handles all DB connections for the function handlers

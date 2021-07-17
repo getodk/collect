@@ -1,4 +1,4 @@
-package org.odk.collect.android.provider;
+package org.odk.collect.android.external;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -38,9 +38,9 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.FormsProviderAPI.getUri;
+import static org.odk.collect.android.external.FormsProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.FormsProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.external.FormsProviderAPI.getUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {

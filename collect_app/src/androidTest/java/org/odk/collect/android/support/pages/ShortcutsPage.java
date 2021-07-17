@@ -5,7 +5,7 @@ import android.content.Intent;
 import androidx.test.core.app.ActivityScenario;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.AndroidShortcutsActivity;
+import org.odk.collect.android.external.AndroidShortcutsActivity;
 
 public class ShortcutsPage extends Page<ShortcutsPage> {
 

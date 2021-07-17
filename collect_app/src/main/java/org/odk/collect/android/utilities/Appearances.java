@@ -21,7 +21,7 @@ import android.content.res.Configuration;
 import androidx.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.externaldata.ExternalDataUtil;
 
 import java.util.Locale;
 

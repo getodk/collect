@@ -31,7 +31,7 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;

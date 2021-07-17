@@ -26,7 +26,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.external.ExternalDataUtil;
+import org.odk.collect.android.externaldata.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fastexternalitemset.XPathParseTool;
 import org.odk.collect.android.widgets.QuestionWidget;

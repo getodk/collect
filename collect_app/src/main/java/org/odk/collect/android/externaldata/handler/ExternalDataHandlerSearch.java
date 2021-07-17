@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external.handler;
+package org.odk.collect.android.externaldata.handler;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,10 +27,10 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
-import org.odk.collect.android.external.ExternalDataManager;
-import org.odk.collect.android.external.ExternalDataUtil;
-import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
-import org.odk.collect.android.external.ExternalSelectChoice;
+import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.externaldata.ExternalDataUtil;
+import org.odk.collect.android.externaldata.ExternalSQLiteOpenHelper;
+import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.util.ArrayList;

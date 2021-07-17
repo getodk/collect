@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.external;
 
 import android.content.Intent;
 import android.os.Bundle;

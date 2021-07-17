@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.provider;
+package org.odk.collect.android.external;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -48,9 +48,9 @@ import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceF
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.getUri;
+import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.external.InstanceProviderAPI.getUri;
 
 public class InstanceProvider extends ContentProvider {
 

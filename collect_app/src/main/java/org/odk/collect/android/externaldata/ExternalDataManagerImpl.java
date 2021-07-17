@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external;
+package org.odk.collect.android.externaldata;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;

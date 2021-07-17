@@ -19,7 +19,7 @@ import android.os.AsyncTask;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.external.FormsProviderAPI;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 /**

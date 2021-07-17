@@ -42,7 +42,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.external.FormsProviderAPI;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;

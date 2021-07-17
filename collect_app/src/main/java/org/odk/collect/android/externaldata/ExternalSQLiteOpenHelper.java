@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external;
+package org.odk.collect.android.externaldata;
 
 import android.content.ContentValues;
 import android.database.Cursor;

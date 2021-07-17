@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.external.handler;
+package org.odk.collect.android.externaldata.handler;
 
 /**
  * Author: Meletis Margaritis

@@ -174,11 +174,11 @@ the specific language governing permissions and limitations under the License.
          -->
 
         <provider
-            android:name=".provider.FormsProvider"
+            android:name=".external.FormsProvider"
             android:authorities="org.odk.collect.android.provider.odk.forms"
             android:exported="true" />
         <provider
-            android:name=".provider.InstanceProvider"
+            android:name=".external.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
 
@@ -270,7 +270,7 @@ the specific language governing permissions and limitations under the License.
 
         <!-- Enable Shortcuts for Command Actions -->
         <activity
-            android:name=".activities.AndroidShortcutsActivity"
+            android:name=".external.AndroidShortcutsActivity"
             android:label="ODK Form"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>

@@ -1,4 +1,4 @@
-package org.odk.collect.android.provider;
+package org.odk.collect.android.external;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -39,9 +39,9 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.provider.InstanceProviderAPI.getUri;
+import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_TYPE;
+import static org.odk.collect.android.external.InstanceProviderAPI.getUri;
 import static org.odk.collect.forms.instances.Instance.STATUS_COMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;

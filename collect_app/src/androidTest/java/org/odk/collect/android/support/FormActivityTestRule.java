@@ -11,7 +11,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.external.FormsProviderAPI;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.Form;
 
