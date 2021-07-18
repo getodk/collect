@@ -146,6 +146,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     private String mProgressMsg;
     public DownloadTasksTask mDownloadTasks;
+    private Activity currentActivity;
 
     SurveyDataViewModel model;
     private MainTaskListener listener = null;
@@ -242,23 +243,27 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
 
         // Start the location service
+        currentActivity = this;
         permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override public void granted() {
 
-                /*
-                 * Start a foreground service
-                 */
-                mLocationService = new LocationService(Collect.getInstance().getApplicationContext());
-                mLocationServiceIntent = new Intent(Collect.getInstance().getApplicationContext(), mLocationService.getClass());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(mLocationServiceIntent);
-                } else {
-                    startService(mLocationServiceIntent);
-                }
+                permissionsProvider.requestBackgroundLocationPermissions(currentActivity, new PermissionListener() {
+                    @Override
+                    public void granted() {
+                        startLocationService();
+                    }
+
+                    @Override
+                    public void denied() {
+                        startLocationService();     // Start the service anyway it will only work when the app is in the foreground
+                    }
+                });
+
             }
 
             @Override public void denied() { }
         });
+
 
         LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, null, settingsImporter);
         if (legacySettingsFileImporter.importFromFile()) {
@@ -282,7 +287,19 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         stateChanged();
 
     }
+    /*
+     * Start a foreground service
+     */
+    public void startLocationService() {
 
+                mLocationService = new LocationService();
+                mLocationServiceIntent = new Intent(Collect.getInstance().getApplicationContext(), mLocationService.getClass());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(mLocationServiceIntent);
+                } else {
+                    startService(mLocationServiceIntent);
+                }
+        }
     /*
      * Do all the actions required on create or rotate
      */

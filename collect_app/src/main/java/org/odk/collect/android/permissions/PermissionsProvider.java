@@ -158,6 +158,22 @@ public class PermissionsProvider {
         }, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
+    // smap
+    public void requestBackgroundLocationPermissions(Activity activity, @NonNull PermissionListener action) {
+        requestPermissions(activity, new PermissionListener() {
+            @Override
+            public void granted() {
+                action.granted();
+            }
+
+            @Override
+            public void denied() {
+                showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
+                        R.string.smap_background_location_permission_denied, R.drawable.ic_room_black_24dp, action);
+            }
+        }, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+    }
+
     public void requestRecordAudioPermission(Activity activity, @NonNull PermissionListener action) {
         requestPermissions(activity, new PermissionListener() {
             @Override

@@ -35,8 +35,6 @@ import com.google.android.gms.location.LocationServices;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.receivers.LocationReceiver;
 import org.odk.collect.android.utilities.Constants;
@@ -44,12 +42,8 @@ import org.odk.collect.android.utilities.Constants;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.inject.Inject;
-
 import androidx.core.app.NotificationCompat;
 import timber.log.Timber;
-
-import static java.lang.StrictMath.abs;
 
 /**
  * Created by neilpenman on 2018-01-11.
@@ -68,8 +62,6 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     String FG_CHANNEL_ID = "smap_foreground_channel";
 
     public LocationService() {
-    }
-    public LocationService(Context applicationContext) {
         super();
     }
 
