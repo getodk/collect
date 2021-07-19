@@ -19,6 +19,7 @@ import org.odk.collect.android.widgets.items.SelectOneWidget;
 
 import java.util.List;
 import java.util.function.BiPredicate;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import timber.log.Timber;
@@ -96,6 +97,85 @@ public class SelectOneWidgetUtils {
 
         } catch (JavaRosaException e) {
             Timber.d(e);
+        }
+    }
+
+    public static void checkFastExternalCascadeInFieldList(FormIndex lastChangedIndex,
+                                                           FormEntryPrompt[] questionsAfterSave) {
+        //Quit immediately if no FEI questions
+        boolean hasFastExternal = false;
+        for (FormEntryPrompt question : questionsAfterSave) {
+            hasFastExternal |= question.getFormElement()
+                    .getAdditionalAttribute(null, "query") == null;
+        }
+        if (!hasFastExternal) {
+            return;
+        }
+        FormController fc = Collect.getInstance().getFormController();
+        //Formality
+        if (fc == null) {
+            return;
+        }
+        //Find the index in the field list
+        FormIndex seekIndex = lastChangedIndex;
+        FormIndex nextLevel;
+        int offset = 1;
+        for (; (nextLevel = seekIndex.getNextLevel()) != null; offset++) {
+            seekIndex = nextLevel;
+        }
+        //Read and remember its name, used across iterations
+        String matchIndexName = "(\\w+) .+";
+        String precedingMemberName = seekIndex.getReference()
+                .getSubReference(offset).toShortString()
+                .replaceAll(matchIndexName, "$1");
+        //Also used across iterations
+        String skippedName = BAD_NAME;
+
+        //Mini method
+        Function<FormEntryPrompt, String> getQuestionName = q ->
+                q.getQuestion().getBind().getReference().toString()
+                        .replaceAll(".+/([^/]+)$", "$1");
+
+        //Find first question after updated
+        int questionAt = 0;
+        String questionName;
+        for (; questionAt < questionsAfterSave.length; questionAt++) {
+            questionName = getQuestionName.apply(questionsAfterSave[questionAt]);
+            if (questionName.equals(precedingMemberName)) {
+                break;
+            }
+        }
+
+        //Check each subsequent question
+        for (questionAt++; questionAt < questionsAfterSave.length; questionAt++) {
+            //Get question
+            FormEntryPrompt question = questionsAfterSave[questionAt];
+            //Read name
+            questionName = getQuestionName.apply(question);
+            //Check for query string
+            String query = question.getFormElement()
+                    .getAdditionalAttribute(null, "query");
+            //No query?
+            if (query == null) {
+                //Remember name for later - could be first member of next cascade
+                skippedName = questionName;
+                continue;
+            }
+            //Second member of next cascade?
+            if (queryMatchesName.test(query, skippedName)) {
+                break;
+            }
+            //Reset anyway (could have been unhidden)
+            try {
+                fc.saveAnswer(question.getIndex(), null);
+            } catch (JavaRosaException e) {
+                Timber.d(e);
+            }
+            //Found next member of cascade?
+            if (queryMatchesName.test(query, precedingMemberName)) {
+                //Ready to carry on looking
+                precedingMemberName = questionName;
+            }
         }
     }
 

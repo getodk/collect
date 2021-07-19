@@ -142,6 +142,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -204,7 +205,8 @@ import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
  */
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
+public class
+FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
@@ -1887,12 +1889,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             backgroundLocationViewModel.locationPermissionChanged();
             locationPermissionsPreviouslyGranted = !locationPermissionsPreviouslyGranted;
         }
+        activityDisplayed();
+    }
+
+    @Override
+    protected void onStop() {
+        backgroundLocationViewModel.activityHidden();
+
+        super.onStop();
     }
 
     @Override
     protected void onPause() {
-        backgroundLocationViewModel.activityHidden();
-
         FormController formController = getFormController();
 
         // make sure we're not already saving to disk. if we are, currentPrompt
@@ -1910,8 +1918,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     protected void onResume() {
         super.onResume();
-
-        activityDisplayed();
 
         String navigation = settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION);
         showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
@@ -2250,7 +2256,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
         }
 
-        // onResume ran before the form was loaded. Let the viewModel know that the activity
+        // onStart ran before the form was loaded. Let the viewModel know that the activity
         // is about to be displayed and configured. Do this before the refresh actually
         // happens because if audit logging is enabled, the refresh logs a question event
         // and we want that to show up after initialization events.
@@ -2563,6 +2569,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 formIndexesToRemove.add(questionBeforeSave.getFormIndex());
             }
         }
+
+        SelectOneWidgetUtils.checkFastExternalCascadeInFieldList(lastChangedIndex, questionsAfterSave);
 
         for (int i = immutableQuestionsBeforeSave.size() - 1; i >= 0; i--) {
             ImmutableDisplayableQuestion questionBeforeSave = immutableQuestionsBeforeSave.get(i);
