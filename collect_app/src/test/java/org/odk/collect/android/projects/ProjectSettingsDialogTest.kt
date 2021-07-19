@@ -48,7 +48,7 @@ class ProjectSettingsDialogTest {
         )
     }
 
-    val projectsRepository = InMemProjectsRepository(UUIDGenerator())
+    val projectsRepository = InMemProjectsRepository(UUIDGenerator(),)
 
     val adminPasswordProvider: AdminPasswordProvider = mock {}
 

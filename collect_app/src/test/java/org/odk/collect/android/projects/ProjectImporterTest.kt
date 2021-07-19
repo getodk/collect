@@ -17,7 +17,7 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 class ProjectImporterTest {
 
-    private val projectsRepository = InMemProjectsRepository(UUIDGenerator())
+    private val projectsRepository = InMemProjectsRepository(UUIDGenerator(),)
 
     private val rootDir = TempFiles.createTempDir()
 
