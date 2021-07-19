@@ -1074,4 +1074,7 @@
     <!-- Preceded by "Don't have a project yet?" question -->
     <string name="try_demo">Try a demo</string>
     <string name="scan_configuration_qr_code">Scan configuration QR code</string>
+
+    <!-- Error shown when a user tries to open a form that's in a different project -->
+    <string name="wrong_project_selected_for_form">To open this form, you must first open ODK Collect and switch to the project that contains it.</string>
 </resources>

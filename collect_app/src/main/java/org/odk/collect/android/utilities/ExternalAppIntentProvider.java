@@ -9,7 +9,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.external.ExternalAppsUtils;
+import org.odk.collect.android.externaldata.ExternalAppsUtils;
 
 import java.util.Map;
 

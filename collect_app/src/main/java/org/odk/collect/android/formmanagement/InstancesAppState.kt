@@ -3,8 +3,8 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.android.external.InstanceProviderAPI
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.provider.InstanceProviderAPI
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository

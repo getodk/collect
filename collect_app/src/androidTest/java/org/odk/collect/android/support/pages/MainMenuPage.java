@@ -213,5 +213,11 @@ public class MainMenuPage extends Page<MainMenuPage> {
         onView(allOf(hasDescendant(withText(projectIcon)), withId(R.id.projects))).check(matches(isDisplayed()));
         return this;
     }
+
+    public MainMenuPage copyAndSyncForm(String formFilename) {
+        return copyForm(formFilename)
+                .clickFillBlankForm()
+                .pressBack(new MainMenuPage());
+    }
 }
 

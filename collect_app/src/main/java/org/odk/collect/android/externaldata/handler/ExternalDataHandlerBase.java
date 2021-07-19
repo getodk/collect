@@ -16,10 +16,10 @@
  * the License.
  */
 
-package org.odk.collect.android.external.handler;
+package org.odk.collect.android.externaldata.handler;
 
-import org.odk.collect.android.external.ExternalDataHandler;
-import org.odk.collect.android.external.ExternalDataManager;
+import org.odk.collect.android.externaldata.ExternalDataHandler;
+import org.odk.collect.android.externaldata.ExternalDataManager;
 
 import java.util.Locale;
 

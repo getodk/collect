@@ -24,7 +24,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.external.InstanceProviderAPI;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.Scheduler;

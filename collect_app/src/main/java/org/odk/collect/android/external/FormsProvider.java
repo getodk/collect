@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.provider;
+package org.odk.collect.android.external;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

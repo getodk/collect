@@ -47,7 +47,7 @@ class ProjectSettingsDialogTest {
         )
     }
 
-    val projectsRepository = InMemProjectsRepository(UUIDGenerator())
+    val projectsRepository = InMemProjectsRepository(UUIDGenerator(),)
 
     @Before
     fun setup() {

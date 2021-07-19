@@ -7,6 +7,9 @@ import org.hamcrest.Matchers.not
 import org.hamcrest.Matchers.notNullValue
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import java.util.function.Supplier
 
 abstract class ProjectsRepositoryTest {
     private val projectX = Project.New("ProjectX", "X", "#FF0000")
@@ -16,6 +19,7 @@ abstract class ProjectsRepositoryTest {
     lateinit var projectsRepository: ProjectsRepository
 
     abstract fun buildSubject(): ProjectsRepository
+    abstract fun buildSubject(clock: Supplier<Long>): ProjectsRepository
 
     @Before
     fun setup() {
@@ -37,6 +41,22 @@ abstract class ProjectsRepositoryTest {
     }
 
     @Test
+    fun `getAll() returns projects in created order`() {
+        val clock = mock(Supplier::class.java) as Supplier<Long>
+        projectsRepository = buildSubject(clock)
+
+        `when`(clock.get()).thenReturn(2)
+        projectsRepository.save(projectX)
+
+        `when`(clock.get()).thenReturn(1)
+        projectsRepository.save(projectY)
+
+        val projects = projectsRepository.getAll()
+        assertThat(projects[0].name, `is`(projectY.name))
+        assertThat(projects[1].name, `is`(projectX.name))
+    }
+
+    @Test
     fun `save() should save project to storage`() {
         projectsRepository.save(projectX)
 
@@ -50,6 +70,27 @@ abstract class ProjectsRepositoryTest {
     fun `save() should add uuid if not specified`() {
         projectsRepository.save(projectX)
         assertThat(projectsRepository.getAll()[0].uuid, `is`(not(isEmptyString())))
+    }
+
+    @Test
+    fun `save() adds project with uuid if specified`() {
+        projectsRepository.save(Project.Saved("blah", projectX))
+        assertThat(projectsRepository.getAll()[0].uuid, `is`("blah"))
+    }
+
+    @Test
+    fun `projects added with uuid are still sorted`() {
+        val clock = mock(Supplier::class.java) as Supplier<Long>
+        projectsRepository = buildSubject(clock)
+
+        `when`(clock.get()).thenReturn(2)
+        projectsRepository.save(Project.Saved("blah1", projectX))
+
+        `when`(clock.get()).thenReturn(1)
+        projectsRepository.save(Project.Saved("blah2", projectY))
+
+        assertThat(projectsRepository.getAll()[0].uuid, `is`("blah2"))
+        assertThat(projectsRepository.getAll()[1].uuid, `is`("blah1"))
     }
 
     @Test
@@ -67,6 +108,24 @@ abstract class ProjectsRepositoryTest {
         assertThat(projects[0], `is`(updatedProjectX))
         assertThat(projects[1], `is`(Project.Saved(projects[1].uuid, projectY)))
         assertThat(projects[2], `is`(Project.Saved(projects[2].uuid, projectZ)))
+    }
+
+    @Test
+    fun `updating project does not change its sort order`() {
+        val clock = mock(Supplier::class.java) as Supplier<Long>
+        projectsRepository = buildSubject(clock)
+
+        `when`(clock.get()).thenReturn(2)
+        projectsRepository.save(Project.Saved("blah1", projectX))
+
+        `when`(clock.get()).thenReturn(1)
+        val savedProjectY = projectsRepository.save(Project.Saved("blah2", projectY))
+
+        `when`(clock.get()).thenReturn(3)
+        projectsRepository.save(savedProjectY)
+
+        assertThat(projectsRepository.getAll()[0].uuid, `is`("blah2"))
+        assertThat(projectsRepository.getAll()[1].uuid, `is`("blah1"))
     }
 
     @Test

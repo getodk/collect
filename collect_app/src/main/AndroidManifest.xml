@@ -71,14 +71,14 @@ the specific language governing permissions and limitations under the License.
 
     <application
         android:name=".application.Collect"
+        android:allowBackup="true"
         android:icon="@drawable/notes"
         android:installLocation="auto"
         android:label="@string/collect_app_name"
         android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:allowBackup="true"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:usesCleartextTraffic="true">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -114,7 +114,9 @@ the specific language governing permissions and limitations under the License.
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
-        <activity android:name=".activities.FillBlankFormActivity" android:launchMode="singleTop"/>
+        <activity
+            android:name=".activities.FillBlankFormActivity"
+            android:launchMode="singleTop" />
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
             android:name=".activities.DeleteSavedFormActivity"
@@ -152,7 +154,8 @@ the specific language governing permissions and limitations under the License.
             android:value="@integer/google_play_services_version"
             tools:replace="android:value" /> <!-- integer/google_play_services_version -->
 
-        <meta-data android:name="firebase_analytics_collection_enabled"
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
             android:value="false" />
 
         <meta-data
@@ -174,11 +177,11 @@ the specific language governing permissions and limitations under the License.
          -->
 
         <provider
-            android:name=".provider.FormsProvider"
+            android:name=".external.FormsProvider"
             android:authorities="org.odk.collect.android.provider.odk.forms"
             android:exported="true" />
         <provider
-            android:name=".provider.InstanceProvider"
+            android:name=".external.InstanceProvider"
             android:authorities="org.odk.collect.android.provider.odk.instances"
             android:exported="true" />
 
@@ -192,7 +195,6 @@ the specific language governing permissions and limitations under the License.
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
         </activity-alias>
@@ -231,14 +233,14 @@ the specific language governing permissions and limitations under the License.
             android:targetActivity=".activities.FormDownloadListActivity">
             <intent-filter>
                 <action android:name="org.odk.collect.android.FORM_DOWNLOAD" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.form" />
             </intent-filter>
         </activity-alias>
 
         <activity-alias
             android:name=".activities.InstanceUploaderList"
-            android:targetActivity=".activities.InstanceUploaderListActivity" >
+            android:targetActivity=".activities.InstanceUploaderListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -252,7 +254,7 @@ the specific language governing permissions and limitations under the License.
             android:targetActivity=".activities.InstanceUploaderActivity">
             <intent-filter>
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
             </intent-filter>
         </activity-alias>
@@ -270,13 +272,30 @@ the specific language governing permissions and limitations under the License.
 
         <!-- Enable Shortcuts for Command Actions -->
         <activity
-            android:name=".activities.AndroidShortcutsActivity"
+            android:name=".external.AndroidShortcutsActivity"
             android:label="ODK Form"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Supports VIEW and EDIT actions for forms (documented at
+        https://docs.getodk.org/launch-collect-from-app/#using-a-uri-to-edit-a-form-or-instance).
+        Do not use the activity directly as it's name/package might change. -->
+        <activity
+            android:name=".external.FormUriActivity"
+            android:noHistory="true"
+            tools:ignore="AppLinkUrlError">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
             </intent-filter>
         </activity>
 

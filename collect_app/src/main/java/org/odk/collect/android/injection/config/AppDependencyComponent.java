@@ -4,7 +4,7 @@ import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.activities.AndroidShortcutsActivity;
+import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FillBlankFormActivity;
@@ -31,6 +31,7 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
+import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
@@ -78,8 +79,8 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
-import org.odk.collect.android.provider.FormsProvider;
-import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.external.FormsProvider;
+import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
@@ -283,6 +284,8 @@ public interface AppDependencyComponent {
     void inject(FirstLaunchActivity firstLaunchActivity);
 
     void inject(InstanceUploader instanceUploader);
+
+    void inject(FormUriActivity formUriActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

@@ -16,17 +16,28 @@
  * the License.
  */
 
-package org.odk.collect.android.external;
+package org.odk.collect.android.externaldata;
 
-import java.io.File;
-import java.util.Map;
+import org.javarosa.core.model.SelectChoice;
 
 /**
  * Author: Meletis Margaritis
- * Date: 30/04/13
- * Time: 13:52
+ * Date: 18/11/2013
+ * Time: 2:08 μμ
  */
-public interface ExternalDataReader {
+public class ExternalSelectChoice extends SelectChoice {
 
-    void doImport(Map<String, File> externalDataMap);
+    String image;
+
+    public ExternalSelectChoice(String labelOrID, String value, boolean isLocalizable) {
+        super(labelOrID, value, isLocalizable);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

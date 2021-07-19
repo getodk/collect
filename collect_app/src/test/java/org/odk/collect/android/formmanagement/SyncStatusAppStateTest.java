@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.external.FormsProviderAPI;
 import org.odk.collect.forms.FormSourceException;
 
 import static org.hamcrest.MatcherAssert.assertThat;

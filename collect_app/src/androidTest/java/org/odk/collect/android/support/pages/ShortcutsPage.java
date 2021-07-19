@@ -5,7 +5,7 @@ import android.content.Intent;
 import androidx.test.core.app.ActivityScenario;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.AndroidShortcutsActivity;
+import org.odk.collect.android.external.AndroidShortcutsActivity;
 
 public class ShortcutsPage extends Page<ShortcutsPage> {
 
@@ -23,7 +23,6 @@ public class ShortcutsPage extends Page<ShortcutsPage> {
 
     public Intent selectForm(String formName) {
         clickOnText(formName);
-        Intent resultData = scenario.getResult().getResultData();
-        return resultData.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+        return scenario.getResult().getResultData();
     }
 }

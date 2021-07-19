@@ -8,8 +8,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.InstanceProviderAPI;
 import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {

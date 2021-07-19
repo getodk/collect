@@ -27,7 +27,7 @@ import android.widget.TextView;
 import org.odk.collect.android.R;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.android.provider.InstanceProvider;
+import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 

@@ -28,7 +28,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.external.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.SaveFormToDisk;

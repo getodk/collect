@@ -35,7 +35,7 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.InstanceProviderAPI;
+import org.odk.collect.android.external.InstanceProviderAPI;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;

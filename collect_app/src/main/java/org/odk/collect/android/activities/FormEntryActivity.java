@@ -74,6 +74,8 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
+import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.InstanceProviderAPI;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEndView;
@@ -124,8 +126,6 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.provider.FormsProviderAPI;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -630,8 +630,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null && uriMimeType.equals(FormsProviderAPI.CONTENT_ITEM_TYPE)) {
-            String projectId = uri.getQueryParameter("projectId");
-            Form form = formsRepositoryProvider.get(projectId).get(ContentUriHelper.getIdFromUri(uri));
+            Form form = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri));
             if (form != null) {
                 formPath = form.getFormFilePath();
             }
