@@ -19,7 +19,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 
 @RunWith(AndroidJUnit4::class)
-class FormViewActionTest {
+class FormEditActionTest {
 
     private val rule = CollectTestRule()
 
@@ -41,7 +41,7 @@ class FormViewActionTest {
             .query(null)
             .build()
 
-        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, FormEntryPage("One Question"))
     }
 
@@ -60,7 +60,7 @@ class FormViewActionTest {
             .query(null)
             .build()
 
-        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
             .clickOK(MainMenuPage())
@@ -83,7 +83,7 @@ class FormViewActionTest {
             .query(null)
             .build()
 
-        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, FormEntryPage("One Question"))
     }
 
@@ -102,7 +102,7 @@ class FormViewActionTest {
             .query(null)
             .build()
 
-        val intent = Intent(Intent.ACTION_VIEW).also { it.data = uriWithoutProjectId }
+        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
             .clickOK(MainMenuPage())

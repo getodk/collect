@@ -43,7 +43,7 @@ class AndroidShortcutsTest {
     }
 
     @Test
-    fun shortcutIsFormViewAction() {
+    fun shortcutIsFormEditAction() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .clickFillBlankForm() // Load form
@@ -55,7 +55,7 @@ class AndroidShortcutsTest {
         val shortcutTargetIntent =
             shortcutIntent.getParcelableExtra<Intent>(EXTRA_SHORTCUT_INTENT)!!
         val formId = getFirstFormIdFromContentProvider("DEMO")
-        assertThat(shortcutTargetIntent.action, equalTo(Intent.ACTION_VIEW))
+        assertThat(shortcutTargetIntent.action, equalTo(Intent.ACTION_EDIT))
         assertThat(shortcutTargetIntent.data, equalTo(FormsProviderAPI.getUri("DEMO", formId)))
     }
 

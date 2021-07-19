@@ -84,7 +84,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @NotNull
     private Intent getShortcutIntent(List<BlankForm> forms, int item) {
-        Intent shortcutIntent = new Intent(Intent.ACTION_VIEW);
+        Intent shortcutIntent = new Intent(Intent.ACTION_EDIT);
         shortcutIntent.setData(forms.get(item).getContentUri());
 
         Intent intent = new Intent();
