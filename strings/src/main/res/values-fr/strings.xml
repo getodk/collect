@@ -803,6 +803,7 @@
   <string name="include_password_dialog">Mots de passe inclus dans le Code</string>
   <string name="generate">Générer</string>
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
+  <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
   <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
   <!--##############################################
      # MISC

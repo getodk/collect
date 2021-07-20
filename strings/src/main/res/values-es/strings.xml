@@ -791,6 +791,7 @@
   <string name="include_password_dialog">Contraseñas incluidas en el Código</string>
   <string name="generate">Generar</string>
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
+  <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
   <!--##############################################
      # MISC

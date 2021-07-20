@@ -802,6 +802,7 @@
   <string name="include_password_dialog">تضمين كلمات المرور في الكود</string>
   <string name="generate">توليد</string>
   <string name="invalid_qrcode">كود QR لا يتضمن إعدادات صحيحة</string>
+  <string name="qr_code_not_found">كود QR غير موجود في الصورة المحددة</string>
   <string name="corrupt_imported_preferences_error">الإعدادات الحالية تالفة. من إعدادات المسؤول، أعد ضبط الإعدادات أو قم باستيراد الإعدادات العاملة.</string>
   <!--##############################################
      # MISC

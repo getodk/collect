@@ -1,5 +1,6 @@
 package org.odk.collect.android.configure.qr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,6 +56,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     CurrentProjectProvider currentProjectProvider;
 
     private QRCodeMenuDelegate menuDelegate;
+    private QRCodeActivityResultDelegate activityResultDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         DaggerUtils.getComponent(this).inject(this);
 
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
+        activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, analytics, currentProjectProvider.getCurrentProject());
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.reconfigure_with_qr_code_settings_title));
@@ -109,5 +112,11 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        activityResultDelegate.onActivityResult(requestCode, resultCode, data);
     }
 }

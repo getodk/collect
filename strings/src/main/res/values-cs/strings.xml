@@ -818,6 +818,7 @@
   <string name="include_password_dialog">Hesla zahrnuta v kódu</string>
   <string name="generate">Vytvořit</string>
   <string name="invalid_qrcode">Kód QR neobsahuje platná nastavení</string>
+  <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
   <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozeno. Z nastavení administrátora obnovte nastavení nebo importujte pracovní nastavení.</string>
   <!--##############################################
      # MISC

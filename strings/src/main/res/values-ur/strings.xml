@@ -659,6 +659,7 @@
   <string name="include_password_dialog">کوڈ میں شامل پاس ورڈ</string>
   <string name="generate">جنریٹ </string>
   <string name="invalid_qrcode">کیو آر کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
+  <string name="qr_code_not_found">منتخب تصویر میں QR کوڈ موجود نھیں ہے</string>
   <!--##############################################
      # MISC
      ##############################################-->

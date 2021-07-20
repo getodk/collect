@@ -798,6 +798,7 @@ Hashize: %2$s</string>
   <string name="include_password_dialog">Ijambo ryibanga ririmo kode</string>
   <string name="generate">Kubyaza </string>
   <string name="invalid_qrcode">Kode za QR ntabwo zirimo settings zuzuye</string>
+  <string name="qr_code_not_found">QR code y\'ishusho wakanzeho ntiyabonetse </string>
   <string name="corrupt_imported_preferences_error">Igenamiterere zagize ikibazo. Uhereye ku igenamiterere rya Muyobozi, Hindura cg tangiza igenamiterere cg uzanemo inshya zikora. </string>
   <!--##############################################
      # MISC
