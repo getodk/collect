@@ -278,7 +278,7 @@ the specific language governing permissions and limitations under the License.
 
         <!-- Supports VIEW and EDIT actions for forms and instances (documented at
         https://docs.getodk.org/launch-collect-from-app/#using-a-uri-to-edit-a-form-or-instance).
-        Do not use the activity directly as it's name/package might change. -->
+        Do not use the activity directly as its name/package might change. -->
         <activity
             android:name=".external.FormUriActivity"
             android:noHistory="true"

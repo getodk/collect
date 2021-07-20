@@ -1,9 +1,6 @@
 package org.odk.collect.android.feature.external
 
-import android.app.Application
 import android.content.Intent
-import android.provider.BaseColumns
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
@@ -13,6 +10,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.EditSavedFormPage
 
@@ -39,23 +37,10 @@ class InstancePickActionTest {
             it.clickOnForm("One Question")
         }
 
-        val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         assertThat(
             result.resultData.data,
             equalTo(InstancesContract.getUri("DEMO", instanceId))
         )
-    }
-
-    private fun getFirstInstanceIdFromContentProvider(projectId: String): Long {
-        val contentResolver = ApplicationProvider.getApplicationContext<Application>().contentResolver
-        val uri = InstancesContract.getUri(projectId)
-        return contentResolver.query(uri, null, null, null, null, null).use {
-            if (it != null) {
-                it.moveToFirst()
-                it.getLong(it.getColumnIndex(BaseColumns._ID))
-            } else {
-                throw RuntimeException("Null cursor!")
-            }
-        }
     }
 }

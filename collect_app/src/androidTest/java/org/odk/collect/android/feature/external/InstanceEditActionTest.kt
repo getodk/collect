@@ -1,10 +1,7 @@
 package org.odk.collect.android.feature.external
 
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import android.provider.BaseColumns
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -13,6 +10,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -35,7 +33,7 @@ class InstanceEditActionTest {
             .swipeToEndScreen()
             .clickSaveAndExit()
 
-        val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
@@ -51,7 +49,7 @@ class InstanceEditActionTest {
             .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
 
-        val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
@@ -71,7 +69,7 @@ class InstanceEditActionTest {
             .openProjectSettings()
             .selectProject("Demo project")
 
-        val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
@@ -93,7 +91,7 @@ class InstanceEditActionTest {
             .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
 
-        val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
@@ -106,18 +104,5 @@ class InstanceEditActionTest {
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
             .clickOK(AppClosedPage())
-    }
-
-    private fun getFirstInstanceIdFromContentProvider(projectId: String): Long {
-        val contentResolver = ApplicationProvider.getApplicationContext<Application>().contentResolver
-        val uri = InstancesContract.getUri(projectId)
-        return contentResolver.query(uri, null, null, null, null, null).use {
-            if (it != null) {
-                it.moveToFirst()
-                it.getLong(it.getColumnIndex(BaseColumns._ID))
-            } else {
-                throw RuntimeException("Null cursor!")
-            }
-        }
     }
 }
