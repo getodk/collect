@@ -71,11 +71,7 @@ public class CollectTestRule implements TestRule {
     }
 
     public <T extends Page<T>> T launch(Intent intent, T destination) {
-        /*
-        This can't use ActivityScenario.launch because of: https://github.com/android/android-test/issues/496
-         */
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ApplicationProvider.getApplicationContext().startActivity(intent);
+        ActivityScenario.launch(intent);
         return destination.assertOnPage();
     }
 

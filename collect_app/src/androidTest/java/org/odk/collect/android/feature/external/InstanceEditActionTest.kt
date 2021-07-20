@@ -14,6 +14,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
@@ -57,7 +58,7 @@ class InstanceEditActionTest {
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
-            .clickOK(MainMenuPage())
+            .clickOK(AppClosedPage())
     }
 
     @Test
@@ -105,7 +106,7 @@ class InstanceEditActionTest {
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
-            .clickOK(MainMenuPage())
+            .clickOK(AppClosedPage())
     }
 
     private fun getFirstInstanceIdFromContentProvider(projectId: String): Long {

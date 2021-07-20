@@ -12,8 +12,8 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
-import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 
 @RunWith(AndroidJUnit4::class)
@@ -49,7 +49,7 @@ class FormEditActionTest {
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
-            .clickOK(MainMenuPage())
+            .clickOK(AppClosedPage())
     }
 
     @Test
@@ -91,6 +91,6 @@ class FormEditActionTest {
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
-            .clickOK(MainMenuPage())
+            .clickOK(AppClosedPage())
     }
 }
