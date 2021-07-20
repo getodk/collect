@@ -1,11 +1,8 @@
 package org.odk.collect.android.feature.external
 
-import android.app.Application
 import android.content.Intent
 import android.content.Intent.EXTRA_SHORTCUT_INTENT
 import android.content.Intent.EXTRA_SHORTCUT_NAME
-import android.provider.BaseColumns
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -15,6 +12,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
 
@@ -54,22 +52,8 @@ class AndroidShortcutsTest {
 
         val shortcutTargetIntent =
             shortcutIntent.getParcelableExtra<Intent>(EXTRA_SHORTCUT_INTENT)!!
-        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         assertThat(shortcutTargetIntent.action, equalTo(Intent.ACTION_EDIT))
         assertThat(shortcutTargetIntent.data, equalTo(FormsContract.getUri("DEMO", formId)))
-    }
-
-    private fun getFirstFormIdFromContentProvider(projectId: String): Long {
-        val contentResolver =
-            ApplicationProvider.getApplicationContext<Application>().contentResolver
-        val uri = FormsContract.getUri(projectId)
-        return contentResolver.query(uri, null, null, null, null, null).use {
-            if (it != null) {
-                it.moveToFirst()
-                it.getLong(it.getColumnIndex(BaseColumns._ID))
-            } else {
-                throw RuntimeException("Null cursor!")
-            }
-        }
     }
 }

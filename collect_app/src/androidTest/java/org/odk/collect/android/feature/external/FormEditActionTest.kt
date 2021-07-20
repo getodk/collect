@@ -1,10 +1,7 @@
 package org.odk.collect.android.feature.external
 
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import android.provider.BaseColumns
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -13,6 +10,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.CollectTestRule
+import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -32,7 +30,7 @@ class FormEditActionTest {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
 
-        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         val uri = FormsContract.getUri("DEMO", formId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
@@ -45,7 +43,7 @@ class FormEditActionTest {
             .copyAndSyncForm("one-question.xml")
             .addAndSwitchToProject("https://example.com")
 
-        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         val uri = FormsContract.getUri("DEMO", formId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
@@ -62,7 +60,7 @@ class FormEditActionTest {
             .openProjectSettings()
             .selectProject("Demo project")
 
-        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         val uri = FormsContract.getUri("DEMO", formId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
@@ -81,7 +79,7 @@ class FormEditActionTest {
             .copyAndSyncForm("one-question.xml")
             .addAndSwitchToProject("https://example.com")
 
-        val formId = getFirstFormIdFromContentProvider("DEMO")
+        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         val uri = FormsContract.getUri("DEMO", formId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
@@ -94,18 +92,5 @@ class FormEditActionTest {
         rule.launch(intent, OkDialog())
             .assertText(R.string.wrong_project_selected_for_form)
             .clickOK(MainMenuPage())
-    }
-
-    private fun getFirstFormIdFromContentProvider(projectId: String): Long {
-        val contentResolver = getApplicationContext<Application>().contentResolver
-        val uri = FormsContract.getUri(projectId)
-        return contentResolver.query(uri, null, null, null, null, null).use {
-            if (it != null) {
-                it.moveToFirst()
-                it.getLong(it.getColumnIndex(BaseColumns._ID))
-            } else {
-                throw RuntimeException("Null cursor!")
-            }
-        }
     }
 }
