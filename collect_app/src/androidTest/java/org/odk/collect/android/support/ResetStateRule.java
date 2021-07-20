@@ -68,7 +68,7 @@ public class ResetStateRule implements TestRule {
 
     private void setTestState() {
         MultiClickGuard.test = true;
-        DecoratedBarcodeView.TEST = true;
+        DecoratedBarcodeView.test = true;
         CopyFormRule.projectCreated = false;
     }
 

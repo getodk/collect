@@ -6,7 +6,7 @@ import android.view.View;
 
 public class DecoratedBarcodeView extends com.journeyapps.barcodescanner.DecoratedBarcodeView {
 
-    public static boolean TEST = false;
+    public static boolean test;
 
     public DecoratedBarcodeView(Context context) {
         super(context);
@@ -24,7 +24,7 @@ public class DecoratedBarcodeView extends com.journeyapps.barcodescanner.Decorat
     }
 
     private void initialize() {
-        if (TEST) {
+        if (test) {
             setVisibility(View.INVISIBLE);
         }
     }
