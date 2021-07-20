@@ -16,7 +16,6 @@ import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
-import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 
 @RunWith(AndroidJUnit4::class)

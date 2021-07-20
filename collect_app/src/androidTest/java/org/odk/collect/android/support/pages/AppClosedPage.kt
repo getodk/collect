@@ -1,12 +1,12 @@
 package org.odk.collect.android.support.pages
 
-import androidx.test.espresso.matcher.ViewMatchers
-import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 
 class AppClosedPage : Page<AppClosedPage>() {
 
     override fun assertOnPage(): AppClosedPage {
-        ViewMatchers.assertThat(getCurrentActivity(), CoreMatchers.equalTo(null))
+        assertThat(getCurrentActivity(), equalTo(null))
         return this
     }
 }
