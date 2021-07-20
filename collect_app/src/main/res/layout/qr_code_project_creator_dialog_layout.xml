@@ -6,7 +6,7 @@
     android:background="?attr/colorSurface">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/add_new_project_toolbar"
+        android:id="@+id/add_new_project_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -15,7 +15,9 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:title="@string/add_project"
+            app:menu="@menu/qr_code_scan_menu"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
@@ -27,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/shadow_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_new_project_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/add_new_project_appbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
