@@ -39,9 +39,9 @@ import static org.odk.collect.android.database.instances.DatabaseInstanceColumns
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.JR_VERSION;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns.STATUS;
-import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.external.InstanceProviderAPI.getUri;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.InstancesContract.getUri;
 import static org.odk.collect.forms.instances.Instance.STATUS_COMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_INCOMPLETE;
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
@@ -336,7 +336,7 @@ public class InstanceProviderTest {
         addInstanceToDb(firstProjectId, "/blah1", "Instance A");
         CollectHelpers.createProject(new Project.New("Another Project", "A", "#ffffff"));
 
-        Uri uriWithProject = InstanceProviderAPI.getUri("blah");
+        Uri uriWithProject = InstancesContract.getUri("blah");
         Uri uriWithoutProject = new Uri.Builder()
                 .scheme(uriWithProject.getScheme())
                 .authority(uriWithProject.getAuthority())

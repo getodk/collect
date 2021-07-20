@@ -27,7 +27,7 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
  * This defines the data model for blank forms. Blank forms are unique by
  * {@link DatabaseFormColumns#JR_FORM_ID} unless multiple {@link DatabaseFormColumns#JR_VERSION}s are defined.
  */
-public final class FormsProviderAPI {
+public final class FormsContract {
 
     static final String AUTHORITY = "org.odk.collect.android.provider.odk.forms";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.form";
@@ -57,6 +57,6 @@ public final class FormsProviderAPI {
         return Uri.parse("content://" + AUTHORITY + "/newest_forms_by_form_id?projectId=" + projectId);
     }
 
-    private FormsProviderAPI() {
+    private FormsContract() {
     }
 }

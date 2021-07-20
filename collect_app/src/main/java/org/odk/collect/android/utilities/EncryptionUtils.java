@@ -28,8 +28,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.javarosawrapper.FormController.InstanceMetadata;
-import org.odk.collect.android.external.FormsProviderAPI;
-import org.odk.collect.android.external.InstanceProviderAPI;
+import org.odk.collect.android.external.FormsContract;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.shared.strings.Md5;
@@ -266,7 +266,7 @@ public class EncryptionUtils {
 
         Form form = null;
 
-        if (InstanceProviderAPI.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+        if (InstancesContract.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             if (instance == null) {
                 String msg = TranslationHandler.getString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
@@ -288,7 +288,7 @@ public class EncryptionUtils {
             }
 
             form = forms.get(0);
-        } else if (FormsProviderAPI.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
+        } else if (FormsContract.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
             throw new IllegalArgumentException("Can't get encryption info for Form URI!");
         }
 

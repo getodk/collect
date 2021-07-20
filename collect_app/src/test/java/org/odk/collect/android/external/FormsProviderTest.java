@@ -38,9 +38,9 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.android.external.FormsProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.FormsProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.external.FormsProviderAPI.getUri;
+import static org.odk.collect.android.external.FormsContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.FormsContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.FormsContract.getUri;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsProviderTest {

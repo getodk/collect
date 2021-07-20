@@ -1,10 +1,8 @@
 package org.odk.collect.android.injection.config;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.telephony.TelephonyManager;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -115,6 +113,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
+import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
@@ -245,21 +244,7 @@ public class AppDependencyModule {
 
     @Provides
     public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
-        return new DeviceDetailsProvider() {
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getDeviceId() {
-                return installIDProvider.getInstallID();
-            }
-
-            @Override
-            @SuppressLint({"MissingPermission", "HardwareIds"})
-            public String getLine1Number() {
-                TelephonyManager telMgr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-                return telMgr.getLine1Number();
-            }
-        };
+        return new StaticCachingDeviceDetailsProvider(installIDProvider, context);
     }
 
     @Provides
@@ -618,4 +603,5 @@ public class AppDependencyModule {
         ForegroundServiceLocationTracker.setNotificationIcon(IconUtils.getNotificationAppIcon());
         return new ForegroundServiceLocationTracker(application);
     }
+
 }

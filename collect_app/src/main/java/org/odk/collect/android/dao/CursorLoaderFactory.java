@@ -8,8 +8,8 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.FormsProviderAPI;
-import org.odk.collect.android.external.InstanceProviderAPI;
+import org.odk.collect.android.external.FormsContract;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {
@@ -167,16 +167,16 @@ public class CursorLoaderFactory {
 
         if (charSequence.length() == 0) {
             Uri formUri = newestByFormId ?
-                    FormsProviderAPI.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
-                    FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid());
+                    FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
+                    FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
             String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
 
             Uri formUri = newestByFormId ?
-                    FormsProviderAPI.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
-                    FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid());
+                    FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
+                    FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
             cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
@@ -185,7 +185,7 @@ public class CursorLoaderFactory {
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
         return new CursorLoader(
                 Collect.getInstance(),
-                InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid()),
+                InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid()),
                 null,
                 selection,
                 selectionArgs,

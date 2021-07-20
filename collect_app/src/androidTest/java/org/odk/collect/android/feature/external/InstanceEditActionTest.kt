@@ -8,7 +8,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.external.FormsContract
+import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.TestRuleChain
@@ -17,7 +17,7 @@ import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.OkDialog
 
 @RunWith(AndroidJUnit4::class)
-class FormEditActionTest {
+class InstanceEditActionTest {
 
     private val rule = CollectTestRule()
 
@@ -26,25 +26,31 @@ class FormEditActionTest {
         .around(rule)
 
     @Test
-    fun opensForm() {
+    fun opensInstance() {
         rule.startAtMainMenu()
-            .copyAndSyncForm("one-question.xml")
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
 
-        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
-        val uri = FormsContract.getUri("DEMO", formId)
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
+        val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, FormEntryPage("One Question"))
     }
 
     @Test
-    fun whenFormIsNotCurrentProject_showsWarningAndExits() {
+    fun whenInstanceIsNotCurrentProject_showsWarningAndExits() {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
 
-        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
-        val uri = FormsContract.getUri("DEMO", formId)
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
+        val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, OkDialog())
@@ -56,12 +62,15 @@ class FormEditActionTest {
     fun whenUriDoesNotHaveProjectId_andCurrentProjectIsFirstOne_opensForm() {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
             .openProjectSettings()
             .selectProject("Demo project")
 
-        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
-        val uri = FormsContract.getUri("DEMO", formId)
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
+        val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)
@@ -77,10 +86,13 @@ class FormEditActionTest {
     fun whenUriDoesNotHaveProjectId_andCurrentProjectIsNotFirstOne_showsWarningAndExits() {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
 
-        val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
-        val uri = FormsContract.getUri("DEMO", formId)
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
+        val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)

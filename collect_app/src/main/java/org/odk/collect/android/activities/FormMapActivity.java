@@ -42,9 +42,9 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.external.InstanceProviderAPI;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
@@ -202,7 +202,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            final Uri formUri = FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
+            final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
             startActivity(new Intent(Intent.ACTION_EDIT, formUri));
         });
 
@@ -395,7 +395,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     }
 
     private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
         return new Intent(Intent.ACTION_EDIT, uri);
     }
 

@@ -112,7 +112,7 @@ public class FormsProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 cursor = databaseQuery(projectId, projection, selection, selectionArgs, sortOrder, null, null);
-                cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
+                cursor.setNotificationUri(getContext().getContentResolver(), FormsContract.getUri(projectId));
                 break;
 
             case NEWEST_FORMS_BY_FORM_ID:
@@ -145,7 +145,7 @@ public class FormsProvider extends ContentProvider {
                 }
 
                 cursor = databaseQuery(projectId, maxDateColumns.toArray(new String[0]), selection, selectionArgs, sortOrder, JR_FORM_ID, maxDateProjectionMap);
-                cursor.setNotificationUri(getContext().getContentResolver(), FormsProviderAPI.getUri(projectId));
+                cursor.setNotificationUri(getContext().getContentResolver(), FormsContract.getUri(projectId));
                 break;
 
             case FORM_ID:
@@ -168,10 +168,10 @@ public class FormsProvider extends ContentProvider {
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
             case NEWEST_FORMS_BY_FORM_ID:
-                return FormsProviderAPI.CONTENT_TYPE;
+                return FormsContract.CONTENT_TYPE;
 
             case FORM_ID:
-                return FormsProviderAPI.CONTENT_ITEM_TYPE;
+                return FormsContract.CONTENT_ITEM_TYPE;
 
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -191,7 +191,7 @@ public class FormsProvider extends ContentProvider {
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
         Form form = getFormsRepository(projectId).save(getFormFromValues(initialValues, formsPath, cachePath));
-        return FormsProviderAPI.getUri(projectId, form.getDbId());
+        return FormsContract.getUri(projectId, form.getDbId());
     }
 
     /**
@@ -301,9 +301,9 @@ public class FormsProvider extends ContentProvider {
     }
 
     static {
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms", FORMS);
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
+        URI_MATCHER.addURI(FormsContract.AUTHORITY, "forms", FORMS);
+        URI_MATCHER.addURI(FormsContract.AUTHORITY, "forms/#", FORM_ID);
         // Only available for query and type
-        URI_MATCHER.addURI(FormsProviderAPI.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
+        URI_MATCHER.addURI(FormsContract.AUTHORITY, "newest_forms_by_form_id", NEWEST_FORMS_BY_FORM_ID);
     }
 }

@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.external.InstanceProviderAPI
+import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
@@ -48,7 +48,7 @@ class InstancesAppState(
         _editable.postValue(editableInstances)
 
         context.contentResolver.notifyChange(
-            InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().uuid),
+            InstancesContract.getUri(currentProjectProvider.getCurrentProject().uuid),
             null
         )
     }
