@@ -117,11 +117,17 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                     fn = FN_LIST;
                 }
 
-                // If the function is a numnber greater than 0 then set the function to Index
+                /*
+                 * If the function is a number greater than 0 then set the function to "index",
+                 * if less than 0 set it to "count" otherwise if equal to 0 then it should be "list"
+                 * if it is not a number then it will not be changed
+                 */
                 try {
                     index = Integer.valueOf(XPathFuncExpr.toString(args[4]));
                     if(index > 0) {
                         fn = FN_INDEX;
+                    } else if(index < 0) {
+                        fn = FN_COUNT;
                     } else {
                         fn = FN_LIST;
                     }
