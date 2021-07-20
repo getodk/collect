@@ -92,7 +92,9 @@ public class ConfigureWithQRCodeTest {
                 .clickConfigureQR();
 
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
-        qrCodePage.checkIsToastWithMessageDisplayed(R.string.successfully_imported_settings);
+        qrCodePage
+                .checkIsToastWithMessageDisplayed(R.string.successfully_imported_settings)
+                .assertFileWithProjectNameUpdated("Demo project", "gallops.example");
 
         new MainMenuPage()
                 .assertOnPage()
