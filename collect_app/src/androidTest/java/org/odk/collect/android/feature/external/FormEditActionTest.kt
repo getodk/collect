@@ -11,7 +11,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.external.FormsProviderAPI
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -33,7 +33,7 @@ class FormEditActionTest {
             .copyAndSyncForm("one-question.xml")
 
         val formId = getFirstFormIdFromContentProvider("DEMO")
-        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uri = FormsContract.getUri("DEMO", formId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, FormEntryPage("One Question"))
@@ -46,7 +46,7 @@ class FormEditActionTest {
             .addAndSwitchToProject("https://example.com")
 
         val formId = getFirstFormIdFromContentProvider("DEMO")
-        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uri = FormsContract.getUri("DEMO", formId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, OkDialog())
@@ -63,7 +63,7 @@ class FormEditActionTest {
             .selectProject("Demo project")
 
         val formId = getFirstFormIdFromContentProvider("DEMO")
-        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uri = FormsContract.getUri("DEMO", formId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)
@@ -82,7 +82,7 @@ class FormEditActionTest {
             .addAndSwitchToProject("https://example.com")
 
         val formId = getFirstFormIdFromContentProvider("DEMO")
-        val uri = FormsProviderAPI.getUri("DEMO", formId)
+        val uri = FormsContract.getUri("DEMO", formId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)
@@ -98,7 +98,7 @@ class FormEditActionTest {
 
     private fun getFirstFormIdFromContentProvider(projectId: String): Long {
         val contentResolver = getApplicationContext<Application>().contentResolver
-        val uri = FormsProviderAPI.getUri(projectId)
+        val uri = FormsContract.getUri(projectId)
         return contentResolver.query(uri, null, null, null, null, null).use {
             if (it != null) {
                 it.moveToFirst()

@@ -13,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.external.FormsProviderAPI
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -56,13 +56,13 @@ class AndroidShortcutsTest {
             shortcutIntent.getParcelableExtra<Intent>(EXTRA_SHORTCUT_INTENT)!!
         val formId = getFirstFormIdFromContentProvider("DEMO")
         assertThat(shortcutTargetIntent.action, equalTo(Intent.ACTION_EDIT))
-        assertThat(shortcutTargetIntent.data, equalTo(FormsProviderAPI.getUri("DEMO", formId)))
+        assertThat(shortcutTargetIntent.data, equalTo(FormsContract.getUri("DEMO", formId)))
     }
 
     private fun getFirstFormIdFromContentProvider(projectId: String): Long {
         val contentResolver =
             ApplicationProvider.getApplicationContext<Application>().contentResolver
-        val uri = FormsProviderAPI.getUri(projectId)
+        val uri = FormsContract.getUri(projectId)
         return contentResolver.query(uri, null, null, null, null, null).use {
             if (it != null) {
                 it.moveToFirst()

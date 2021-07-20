@@ -18,7 +18,7 @@ package org.odk.collect.android.external;
 
 import android.net.Uri;
 
-public final class InstanceProviderAPI {
+public final class InstancesContract {
 
     public static final String AUTHORITY = "org.odk.collect.android.provider.odk.instances";
     public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.odk.instance";
@@ -33,7 +33,7 @@ public final class InstanceProviderAPI {
     }
 
     // This class cannot be instantiated
-    private InstanceProviderAPI() {
+    private InstancesContract() {
     }
 
 }

@@ -48,9 +48,9 @@ import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceF
 import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
 import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
-import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.InstanceProviderAPI.CONTENT_TYPE;
-import static org.odk.collect.android.external.InstanceProviderAPI.getUri;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.InstancesContract.getUri;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -290,7 +290,7 @@ public class InstanceProvider extends ContentProvider {
     }
 
     static {
-        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances", INSTANCES);
-        URI_MATCHER.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
+        URI_MATCHER.addURI(InstancesContract.AUTHORITY, "instances", INSTANCES);
+        URI_MATCHER.addURI(InstancesContract.AUTHORITY, "instances/#", INSTANCE_ID);
     }
 }

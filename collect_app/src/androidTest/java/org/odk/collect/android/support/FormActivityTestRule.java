@@ -11,7 +11,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.forms.Form;
 
@@ -42,7 +42,7 @@ public class FormActivityTestRule implements TestRule {
         String projectId = DaggerUtils.getComponent(application).currentProjectProvider().getCurrentProject().getUuid();
 
         Intent intent = new Intent(application, FormEntryActivity.class);
-        intent.setData(FormsProviderAPI.getUri(projectId, form.getDbId()));
+        intent.setData(FormsContract.getUri(projectId, form.getDbId()));
         return intent;
     }
 }

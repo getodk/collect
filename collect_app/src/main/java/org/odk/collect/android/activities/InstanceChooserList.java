@@ -35,7 +35,7 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.InstanceProviderAPI;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;
@@ -102,7 +102,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
                 long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
-                Uri instanceUri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+                Uri instanceUri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
 
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {

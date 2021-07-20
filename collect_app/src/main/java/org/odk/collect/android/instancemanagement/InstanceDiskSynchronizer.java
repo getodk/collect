@@ -28,7 +28,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.InstanceProviderAPI;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -217,7 +217,7 @@ public class InstanceDiskSynchronizer {
         String instancePath = instance.getInstanceFilePath();
         File instanceXml = new File(instancePath);
         if (!new File(instanceXml.getParentFile(), "submission.xml.enc").exists()) {
-            Uri uri = InstanceProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), instance.getDbId());
+            Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instance.getDbId());
             FormController.InstanceMetadata instanceMetadata = new FormController.InstanceMetadata(getInstanceIdFromInstance(instancePath), null, null);
             EncryptionUtils.EncryptedFormInformation formInfo = EncryptionUtils.getEncryptedFormInformation(uri, instanceMetadata);
 

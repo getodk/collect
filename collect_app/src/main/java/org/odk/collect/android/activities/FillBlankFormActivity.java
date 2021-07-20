@@ -42,7 +42,7 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -171,7 +171,7 @@ public class FillBlankFormActivity extends FormListActivity implements
         if (MultiClickGuard.allowClick(getClass().getName())) {
             // get uri to form
             long idFormsTable = listView.getAdapter().getItemId(position);
-            Uri formUri = FormsProviderAPI.getUri(currentProjectProvider.getCurrentProject().getUuid(), idFormsTable);
+            Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), idFormsTable);
 
             String action = getIntent().getAction();
             if (Intent.ACTION_PICK.equals(action)) {

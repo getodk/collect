@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement.matchexactly
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.external.FormsProviderAPI
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.forms.FormSourceException
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ class SyncStatusAppState(private val context: Context) {
     fun finishSync(projectId: String, exception: FormSourceException?) {
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
-        context.contentResolver.notifyChange(FormsProviderAPI.getUri(projectId), null)
+        context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
     }
 
     private fun getSyncingLiveData(projectId: String) =

@@ -11,7 +11,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.external.InstanceProviderAPI
+import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -36,7 +36,7 @@ class InstanceEditActionTest {
             .clickSaveAndExit()
 
         val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
-        val uri = InstanceProviderAPI.getUri("DEMO", instanceId)
+        val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, FormEntryPage("One Question"))
@@ -52,7 +52,7 @@ class InstanceEditActionTest {
             .addAndSwitchToProject("https://example.com")
 
         val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
-        val uri = InstanceProviderAPI.getUri("DEMO", instanceId)
+        val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         rule.launch(intent, OkDialog())
@@ -72,7 +72,7 @@ class InstanceEditActionTest {
             .selectProject("Demo project")
 
         val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
-        val uri = InstanceProviderAPI.getUri("DEMO", instanceId)
+        val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)
@@ -94,7 +94,7 @@ class InstanceEditActionTest {
             .addAndSwitchToProject("https://example.com")
 
         val instanceId = getFirstInstanceIdFromContentProvider("DEMO")
-        val uri = InstanceProviderAPI.getUri("DEMO", instanceId)
+        val uri = InstancesContract.getUri("DEMO", instanceId)
         val uriWithoutProjectId = Uri.Builder()
             .scheme(uri.scheme)
             .authority(uri.authority)
@@ -110,7 +110,7 @@ class InstanceEditActionTest {
 
     private fun getFirstInstanceIdFromContentProvider(projectId: String): Long {
         val contentResolver = ApplicationProvider.getApplicationContext<Application>().contentResolver
-        val uri = InstanceProviderAPI.getUri(projectId)
+        val uri = InstancesContract.getUri(projectId)
         return contentResolver.query(uri, null, null, null, null, null).use {
             if (it != null) {
                 it.moveToFirst()

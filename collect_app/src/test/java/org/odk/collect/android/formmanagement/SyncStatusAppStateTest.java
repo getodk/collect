@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.external.FormsProviderAPI;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.forms.FormSourceException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -80,6 +80,6 @@ public class SyncStatusAppStateTest {
         SyncStatusAppState syncStatusAppState = new SyncStatusAppState(context);
         syncStatusAppState.startSync("projectId");
         syncStatusAppState.finishSync("projectId", null);
-        verify(contentResolver).notifyChange(FormsProviderAPI.getUri("projectId"), null);
+        verify(contentResolver).notifyChange(FormsContract.getUri("projectId"), null);
     }
 }
