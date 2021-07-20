@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
@@ -15,6 +17,8 @@ import org.odk.collect.android.support.pages.FirstLaunchPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.Page;
 import org.odk.collect.android.support.pages.ShortcutsPage;
+
+import java.util.function.Consumer;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -73,5 +77,12 @@ public class CollectTestRule implements TestRule {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ApplicationProvider.getApplicationContext().startActivity(intent);
         return destination.assertOnPage();
+    }
+
+    public <T extends Page<T>> Instrumentation.ActivityResult launchForResult(Intent intent, T destination, Consumer<T> actions) {
+        ActivityScenario<Activity> scenario = ActivityScenario.launch(intent);
+        destination.assertOnPage();
+        actions.accept(destination);
+        return scenario.getResult();
     }
 }
