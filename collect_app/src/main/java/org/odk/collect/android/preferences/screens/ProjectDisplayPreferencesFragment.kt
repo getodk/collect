@@ -13,6 +13,7 @@ import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.ColorPickerDialog
@@ -20,6 +21,7 @@ import org.odk.collect.androidshared.ColorPickerViewModel
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import java.io.File
 import javax.inject.Inject
 
 class ProjectDisplayPreferencesFragment :
@@ -27,6 +29,9 @@ class ProjectDisplayPreferencesFragment :
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
+
+    @Inject
+    lateinit var storagePathProvider: StoragePathProvider
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -125,11 +130,16 @@ class ProjectDisplayPreferencesFragment :
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
         val (uuid, name, icon, color) = currentProjectProvider.getCurrentProject()
         when (preference.key) {
-            PROJECT_NAME_KEY -> projectsRepository.save(
-                Project.Saved(
-                    uuid, newValue.toString(), icon, color
+            PROJECT_NAME_KEY -> {
+                File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
+                File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
+
+                projectsRepository.save(
+                    Project.Saved(
+                        uuid, newValue.toString(), icon, color
+                    )
                 )
-            )
+            }
             PROJECT_ICON_KEY -> projectsRepository.save(
                 Project.Saved(
                     uuid, name, newValue.toString(), color
