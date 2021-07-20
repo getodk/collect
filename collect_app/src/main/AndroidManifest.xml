@@ -188,15 +188,8 @@ the specific language governing permissions and limitations under the License.
         <activity-alias
             android:name=".activities.FormEntryActivity"
             android:targetActivity=".activities.FormEntryActivity"
-            tools:ignore="AppLinkUrlError">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
-            </intent-filter>
+            tools:ignore="AppLinkUrlError"
+            android:exported="true">
         </activity-alias>
 
         <activity-alias
@@ -282,7 +275,7 @@ the specific language governing permissions and limitations under the License.
             </intent-filter>
         </activity>
 
-        <!-- Supports VIEW and EDIT actions for forms (documented at
+        <!-- Supports VIEW and EDIT actions for forms and instances (documented at
         https://docs.getodk.org/launch-collect-from-app/#using-a-uri-to-edit-a-form-or-instance).
         Do not use the activity directly as it's name/package might change. -->
         <activity
@@ -296,6 +289,7 @@ the specific language governing permissions and limitations under the License.
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.odk.instance" />
             </intent-filter>
         </activity>
 
