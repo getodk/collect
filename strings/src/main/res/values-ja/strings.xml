@@ -787,7 +787,6 @@
   <string name="include_password_dialog">パスワードがコードに含まれます</string>
   <string name="generate">生成</string>
   <string name="invalid_qrcode">QR コードに有効な設定が含まれていません</string>
-  <string name="qr_code_not_found">選択した画像に QR コードが見つかりませんでした</string>
   <string name="corrupt_imported_preferences_error">現在の設定が間違っています。 管理の設定から、設定をリセットするか、有効なものをインポートしてください。</string>
   <!--##############################################
      # MISC

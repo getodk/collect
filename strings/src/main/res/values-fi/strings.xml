@@ -791,7 +791,6 @@
   <string name="include_password_dialog">Koodiin sisältyvät salasanat</string>
   <string name="generate">Luo</string>
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
-  <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="corrupt_imported_preferences_error">Tämänhetkiset asetukset ovat vialliset. Pääkäyttäjän asetuksissa voit palauttaa oletusasetukset tai touda toimivat.</string>
   <!--##############################################
      # MISC

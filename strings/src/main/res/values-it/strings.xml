@@ -776,7 +776,6 @@
   <string name="include_password_dialog">Password inclusa nel Codice</string>
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
-  <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
   <string name="corrupt_imported_preferences_error">Le impostazioni attuali sono danneggiate. Dalle impostazioni di amministrazione, ripristinare le impostazioni o importare quelle funzionanti.</string>
   <!--##############################################
      # MISC

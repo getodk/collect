@@ -737,7 +737,6 @@
   <string name="include_password_dialog">Hasło Zawarte w Kodzie</string>
   <string name="generate">Wygeneruj</string>
   <string name="invalid_qrcode">Kod QR nie zawiera poprawnych ustawień</string>
-  <string name="qr_code_not_found">Na wybranym zdjęciu nie odnaleziono kodu QR</string>
   <string name="corrupt_imported_preferences_error">Bieżące ustawienia nie działają prawidłowo. Zresetuj je lub załaduj poprawne w ustawieniach administratora.</string>
   <!--##############################################
      # MISC

@@ -812,7 +812,6 @@
   <string name="include_password_dialog">Passwörter im Code enthalten</string>
   <string name="generate">Generieren</string>
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
-  <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Admin-Einstellungen zurück oder importiere funktionierende.</string>
   <!--##############################################
      # MISC

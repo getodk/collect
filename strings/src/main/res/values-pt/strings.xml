@@ -782,7 +782,6 @@ Escolher Imagem</string>
   <string name="include_password_dialog">Senha Adicionada no Código</string>
   <string name="generate">Gerar</string>
   <string name="invalid_qrcode">QR code não contém configurações válidas</string>
-  <string name="qr_code_not_found">Um QR Code não foi encontrado na imagem selecionada</string>
   <string name="corrupt_imported_preferences_error">As configurações atuais estão corrompidas. Nas configurações administrativas, restaure as configurações padrão ou importe configurações que estejam ok.</string>
   <!--##############################################
      # MISC

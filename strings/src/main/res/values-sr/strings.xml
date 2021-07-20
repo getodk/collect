@@ -696,7 +696,6 @@
   <string name="include_password_dialog">Lozinka je dio Koda</string>
   <string name="generate">Generiši</string>
   <string name="invalid_qrcode">QR kod ne sadrži validna podešavanja</string>
-  <string name="qr_code_not_found">QR kod nije pronađen na odabranoj slici</string>
   <string name="corrupt_imported_preferences_error">Trenutna podešavanja u pokvarena. Iz administratorkih podešavanja resetuj podešavanja ili unesi ona koja rade.</string>
   <!--##############################################
      # MISC

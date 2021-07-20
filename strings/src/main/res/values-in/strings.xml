@@ -787,7 +787,6 @@
   <string name="include_password_dialog">Kata Sandi Disertakan dalam Kode</string>
   <string name="generate">Generate</string>
   <string name="invalid_qrcode">QR code tidak mengandung pengaturan yang benar</string>
-  <string name="qr_code_not_found">Kode QR tidak ditemukan pada gambar terpilih</string>
   <string name="corrupt_imported_preferences_error">Pengaturan yang sekarang bermasalah. Dari pengaturan admin, set ulang pengaturan atau impor pengaturan.</string>
   <!--##############################################
      # MISC
