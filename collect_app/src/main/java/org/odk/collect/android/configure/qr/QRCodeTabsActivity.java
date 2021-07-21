@@ -64,7 +64,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         DaggerUtils.getComponent(this).inject(this);
 
         menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
-        activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, analytics, currentProjectProvider.getCurrentProject());
+        activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, currentProjectProvider.getCurrentProject());
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.reconfigure_with_qr_code_settings_title));

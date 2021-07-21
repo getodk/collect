@@ -48,7 +48,7 @@ public class QRCodeMenuDelegate implements MenuDelegate {
 
     @Override
     public void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
-        menuInflater.inflate(R.menu.settings_menu, menu);
+        menuInflater.inflate(R.menu.qr_code_scan_menu, menu);
     }
 
     @Override
