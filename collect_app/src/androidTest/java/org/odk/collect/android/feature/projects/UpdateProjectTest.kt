@@ -26,6 +26,7 @@ class UpdateProjectTest {
             .clickGeneralSettings()
             .clickProjectDisplay()
             .setProjectName("Project X")
+            .assertFileWithProjectNameUpdated("Demo project", "Project X")
             .setProjectIcon("XY")
             .setProjectColor("cccccc")
             .pressBack(ProjectSettingsPage())

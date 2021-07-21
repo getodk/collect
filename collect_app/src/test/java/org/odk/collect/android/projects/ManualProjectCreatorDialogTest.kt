@@ -25,6 +25,7 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
 import org.odk.collect.fragmentstest.DialogFragmentTest
@@ -112,7 +113,8 @@ class ManualProjectCreatorDialogTest {
                 projectsRepository: ProjectsRepository?,
                 currentProjectProvider: CurrentProjectProvider?,
                 settingsImporter: SettingsImporter?,
-                context: Context
+                context: Context,
+                storagePathProvider: StoragePathProvider
             ): ProjectCreator {
                 return projectCreator
             }

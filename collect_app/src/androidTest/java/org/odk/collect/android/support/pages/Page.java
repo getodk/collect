@@ -17,11 +17,13 @@ import androidx.test.runner.lifecycle.Stage;
 import junit.framework.AssertionFailedError;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -54,6 +56,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
@@ -469,6 +473,13 @@ public abstract class Page<T extends Page<T>> {
 
     public T clickOnContentDescription(int string) {
         onView(withContentDescription(string)).perform(click());
+        return (T) this;
+    }
+
+    public T assertFileWithProjectNameUpdated(String oldProjectName, String newProjectName) {
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        assertFalse(new File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).exists());
+        assertTrue(new File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).exists());
         return (T) this;
     }
 }
