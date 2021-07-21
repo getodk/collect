@@ -60,7 +60,6 @@
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
         android:layout_marginStart="38dp"
         android:text="@string/settings"
         app:layout_constraintStart_toStartOf="@+id/current_project"
