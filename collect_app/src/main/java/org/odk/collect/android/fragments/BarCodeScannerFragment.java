@@ -32,12 +32,10 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.android.utilities.ToastUtils;
-import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 
 import java.io.IOException;
@@ -61,9 +59,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     @Inject
     BarcodeViewDecoder barcodeViewDecoder;
-
-    @Inject
-    Analytics analytics;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -105,7 +100,6 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
                 handleScanningResult(barcodeResult);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
                 ToastUtils.showShortToast(getString(R.string.invalid_qrcode));
-                analytics.logEvent(AnalyticsEvents.SETTINGS_IMPORT_QR, "No valid settings", "none");
             }
         });
     }

@@ -85,19 +85,6 @@ public class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC_COMPLETED = "MatchExactlySyncCompleted";
 
     /**
-     * Track the outcome of a QR code scan. Used to see whether changes in UX or documentation are
-     * needed to get users to a successful state. The action should be the outcome. The label should
-     * be a hash of the settings represented by the code.
-     */
-    public static final String SETTINGS_IMPORT_QR = "SettingsImportQr";
-
-    /**
-     * Track the outcome of a QR code read from image. The action should be the outcome. The label should
-     * be a hash of the settings represented by the code.
-     */
-    public static final String SETTINGS_IMPORT_QR_IMAGE = "SettingsImportQrImage";
-
-    /**
      * Track submissions to a URL with a custom submission endpoint configured in settings. The action
      * should be a hash of the endpoint setting.
      */
