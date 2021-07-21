@@ -33,7 +33,7 @@ public class SelectOneWidgetUtils {
     private static final String BAD_NAME = "123";
 
     //'Macro'
-    private static final BiPredicate<String, String> queryMatchesName = (query, name) -> {
+    private static final BiPredicate<String, String> QUERY_MATCHES_NAME = (query, name) -> {
         return query.matches(".*\\b" + name + "\\b.*");
     };
 
@@ -80,13 +80,13 @@ public class SelectOneWidgetUtils {
                     continue;
                 }
                 //Second member of next cascade?
-                if (queryMatchesName.test(query, skippedName)) {
+                if (QUERY_MATCHES_NAME.test(query, skippedName)) {
                     break;
                 }
                 //Reset anyway (could be about to be hidden)
                 fc.saveAnswer(question.getIndex(), null);
                 //Found next member of cascade?
-                if (queryMatchesName.test(query, precedingMemberName)) {
+                if (QUERY_MATCHES_NAME.test(query, precedingMemberName)) {
                     //Ready to carry on looking
                     precedingMemberName = questionName;
                 }
@@ -162,7 +162,7 @@ public class SelectOneWidgetUtils {
                 continue;
             }
             //Second member of next cascade?
-            if (queryMatchesName.test(query, skippedName)) {
+            if (QUERY_MATCHES_NAME.test(query, skippedName)) {
                 break;
             }
             //Reset anyway (could have been unhidden)
@@ -172,7 +172,7 @@ public class SelectOneWidgetUtils {
                 Timber.d(e);
             }
             //Found next member of cascade?
-            if (queryMatchesName.test(query, precedingMemberName)) {
+            if (QUERY_MATCHES_NAME.test(query, precedingMemberName)) {
                 //Ready to carry on looking
                 precedingMemberName = questionName;
             }
