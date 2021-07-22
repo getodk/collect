@@ -28,7 +28,7 @@ import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
-public class NavigationButtonsTest {
+public class FormNavigationTest {
 
     CollectTestRule rule = new CollectTestRule();
 
