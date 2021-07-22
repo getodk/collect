@@ -81,6 +81,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 confirmationArgs.putString(MATCHING_PROJECT, uuid)
                 DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
             } ?: run {
+                Analytics.logEvent(AnalyticsEvents.GOOGLE_ACCOUNT_PROJECT)
                 createProject(settingsJson)
             }
         }

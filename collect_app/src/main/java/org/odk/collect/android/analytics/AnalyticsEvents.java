@@ -176,12 +176,21 @@ public class AnalyticsEvents {
     public static final String TRY_DEMO = "TryDemo";
 
     /**
-     * Tracks how often projects are created using QR codes
-     */
+     * Tracks how often projects are created using QR codes. he total number of
+     * created projects can be calculated from the combined count of
+     * {@link AnalyticsEvents#MANUAL_CREATE_PROJECT} and {@link AnalyticsEvents#QR_CREATE_PROJECT}.
+     **/
     public static final String QR_CREATE_PROJECT = "QrCreateProject";
 
     /**
-     * Tracks how often projects are created by manually entering details
+     * Tracks how often projects are created by manually entering details. The total number of
+     * created projects can be calculated from the combined count of
+     * {@link AnalyticsEvents#MANUAL_CREATE_PROJECT} and {@link AnalyticsEvents#QR_CREATE_PROJECT}.
      */
     public static final String MANUAL_CREATE_PROJECT = "ManualCreateProject";
+
+    /**
+     * Tracks how often a Google account is used to configure a manually created project
+     */
+    public static final String GOOGLE_ACCOUNT_PROJECT = "GoogleAccountProject";
 }
