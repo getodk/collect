@@ -2,6 +2,8 @@ package org.odk.collect.android.activities.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -19,6 +21,7 @@ class CurrentProjectViewModel(
 
     fun setCurrentProject(project: Project.Saved) {
         currentProjectProvider.setCurrentProject(project.uuid)
+        Analytics.logEvent(AnalyticsEvents.SWITCH_PROJECT)
         analyticsInitializer.initialize()
         refresh()
     }

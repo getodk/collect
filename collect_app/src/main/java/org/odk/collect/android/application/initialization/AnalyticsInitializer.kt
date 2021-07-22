@@ -18,5 +18,7 @@ class AnalyticsInitializer(
             val analyticsEnabled = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_ANALYTICS)
             analytics.setAnalyticsCollectionEnabled(analyticsEnabled)
         }
+
+        Analytics.setInstance(analytics)
     }
 }

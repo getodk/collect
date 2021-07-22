@@ -164,4 +164,9 @@ public class AnalyticsEvents {
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
      */
     public static final String OPEN_DELETED_INSTANCE = "OpenDeletedInstance";
+
+    /**
+     * Tracks how often users switch between projects
+     */
+    public static final String SWITCH_PROJECT = "SwitchProject";
 }
