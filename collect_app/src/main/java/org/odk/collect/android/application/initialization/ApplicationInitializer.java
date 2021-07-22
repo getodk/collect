@@ -22,6 +22,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.LaunchState;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -38,12 +39,13 @@ public class ApplicationInitializer {
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
     private final AnalyticsInitializer analyticsInitializer;
+    private final ProjectsRepository projectsRepository;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   StorageInitializer storageInitializer, LaunchState launchState,
                                   AppUpgrader appUpgrader,
-                                  AnalyticsInitializer analyticsInitializer) {
+                                  AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
@@ -52,6 +54,7 @@ public class ApplicationInitializer {
         this.launchState = launchState;
         this.appUpgrader = appUpgrader;
         this.analyticsInitializer = analyticsInitializer;
+        this.projectsRepository = projectsRepository;
     }
 
     public void initialize() {
@@ -80,6 +83,7 @@ public class ApplicationInitializer {
         initializeMapFrameworks();
         initializeJavaRosa();
         analyticsInitializer.initialize();
+        new UserPropertiesInitializer(analytics, projectsRepository).initialize();
     }
 
     private void initializeLocale() {
