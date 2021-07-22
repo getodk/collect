@@ -100,7 +100,7 @@ class FormNavigationTest {
     }
 
     @Test
-    fun whenNavigationSettingsChangesChangesShouldBeReflectedInFormFilling() {
+    fun whenNavigationSettingsChangeChangesShouldBeReflectedInFormFilling() {
         rule.startAtMainMenu()
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
