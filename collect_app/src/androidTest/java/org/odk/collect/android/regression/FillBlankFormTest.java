@@ -100,7 +100,7 @@ public class FillBlankFormTest {
                 .clickUseSwipesAndButtons()
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new FormEntryPage("All widgets"))
-                .checkAreNavigationButtonsDisplayed();
+                .assertNavigationButtonsAreDisplayed();
     }
 
     @Test

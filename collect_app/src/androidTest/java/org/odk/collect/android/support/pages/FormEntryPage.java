@@ -110,7 +110,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new ProjectSettingsPage().assertOnPage();
     }
 
-    public FormEntryPage checkAreNavigationButtonsDisplayed() {
+    public FormEntryPage assertNavigationButtonsAreDisplayed() {
         onView(withId(R.id.form_forward_button)).check(matches(isDisplayed()));
         onView(withId(R.id.form_back_button)).check(matches(isDisplayed()));
         return this;
