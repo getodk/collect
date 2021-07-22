@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -16,7 +17,8 @@ class ProjectDeleter(
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val instancesRepository: InstancesRepository,
     private val projectDirPath: String,
-    private val changeLockProvider: ChangeLockProvider
+    private val changeLockProvider: ChangeLockProvider,
+    private val settingsProvider: SettingsProvider
 ) {
     fun deleteCurrentProject(): DeleteProjectResult {
         return when {
@@ -50,6 +52,9 @@ class ProjectDeleter(
 
         formUpdateScheduler.cancelUpdates(currentProject.uuid)
         instanceSubmitScheduler.cancelSubmit(currentProject.uuid)
+
+        settingsProvider.getGeneralSettings(currentProject.uuid).clear()
+        settingsProvider.getAdminSettings(currentProject.uuid).clear()
 
         projectsRepository.delete(currentProject.uuid)
 

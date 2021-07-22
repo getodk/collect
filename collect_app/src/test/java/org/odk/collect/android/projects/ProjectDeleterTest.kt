@@ -13,6 +13,10 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
+import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
@@ -37,6 +41,7 @@ class ProjectDeleterTest {
         on { getFormLock(any()) } doReturn BooleanChangeLock()
         on { getInstanceLock(any()) } doReturn BooleanChangeLock()
     }
+    private val settingsProvider = InMemSettingsProvider()
 
     @Before
     fun setup() {
@@ -58,7 +63,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         deleter.deleteCurrentProject()
@@ -81,7 +87,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         deleter.deleteCurrentProject()
@@ -104,7 +111,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         deleter.deleteCurrentProject()
@@ -127,7 +135,8 @@ class ProjectDeleterTest {
             instanceSubmitScheduler,
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -150,7 +159,8 @@ class ProjectDeleterTest {
             instanceSubmitScheduler,
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -172,7 +182,8 @@ class ProjectDeleterTest {
             instanceSubmitScheduler,
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -189,12 +200,50 @@ class ProjectDeleterTest {
             instanceSubmitScheduler,
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         deleter.deleteCurrentProject()
         verify(formUpdateManager).cancelUpdates(project1.uuid)
         verify(instanceSubmitScheduler).cancelSubmit(project1.uuid)
+    }
+
+    @Test
+    fun `Deleting project clears its settings`() {
+        settingsProvider.getMetaSettings().save(MetaKeys.KEY_INSTALL_ID, "1234")
+
+        settingsProvider.getGeneralSettings("1").save(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getAdminSettings("1").save(AdminKeys.KEY_AUTOSEND, false)
+
+        settingsProvider.getGeneralSettings("2").save(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getAdminSettings("2").save(AdminKeys.KEY_AUTOSEND, false)
+
+        val deleter = ProjectDeleter(
+            mock(),
+            currentProjectProvider,
+            mock(),
+            mock(),
+            mock(),
+            "",
+            changeLockProvider,
+            settingsProvider
+        )
+
+        deleter.deleteCurrentProject()
+
+        assertThat(settingsProvider.getMetaSettings().getString(MetaKeys.KEY_INSTALL_ID), `is`("1234"))
+
+        settingsProvider.getGeneralSettings("1").getAll().forEach { (key, value) ->
+            assertThat(value, `is`(GeneralKeys.getDefaults()[key]))
+        }
+
+        settingsProvider.getAdminSettings("1").getAll().forEach { (key, value) ->
+            assertThat(value, `is`(AdminKeys.getDefaults()[key]))
+        }
+
+        assertThat(settingsProvider.getGeneralSettings("2").getString(GeneralKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
+        assertThat(settingsProvider.getAdminSettings("2").getBoolean(AdminKeys.KEY_AUTOSEND), `is`(false))
     }
 
     @Test
@@ -206,7 +255,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -226,7 +276,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             "",
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         val result = deleter.deleteCurrentProject()
@@ -250,7 +301,8 @@ class ProjectDeleterTest {
             mock(),
             instancesRepository,
             projectDir.absolutePath,
-            changeLockProvider
+            changeLockProvider,
+            settingsProvider
         )
 
         deleter.deleteCurrentProject()
