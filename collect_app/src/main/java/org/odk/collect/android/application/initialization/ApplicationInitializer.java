@@ -20,10 +20,8 @@ import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.LaunchState;
-import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -39,14 +37,13 @@ public class ApplicationInitializer {
     private final StorageInitializer storageInitializer;
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
-    private final VersionInformation versionInformation;
-    private final SettingsProvider settingsProvider;
+    private final AnalyticsInitializer analyticsInitializer;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   StorageInitializer storageInitializer, LaunchState launchState,
-                                  AppUpgrader appUpgrader, VersionInformation versionInformation,
-                                  SettingsProvider settingsProvider) {
+                                  AppUpgrader appUpgrader,
+                                  AnalyticsInitializer analyticsInitializer) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
@@ -54,8 +51,7 @@ public class ApplicationInitializer {
         this.storageInitializer = storageInitializer;
         this.launchState = launchState;
         this.appUpgrader = appUpgrader;
-        this.versionInformation = versionInformation;
-        this.settingsProvider = settingsProvider;
+        this.analyticsInitializer = analyticsInitializer;
     }
 
     public void initialize() {
@@ -83,11 +79,7 @@ public class ApplicationInitializer {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
         initializeJavaRosa();
-        initializeAnalytics();
-    }
-
-    private void initializeAnalytics() {
-        new AnalyticsInitializer(analytics, versionInformation, settingsProvider).initialize();
+        analyticsInitializer.initialize();
     }
 
     private void initializeLocale() {

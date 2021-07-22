@@ -591,8 +591,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader, VersionInformation versionInformation, SettingsProvider settingProvider) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader, versionInformation, settingProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, StorageInitializer storageInitializer, LaunchState launchState, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, storageInitializer, launchState, appUpgrader, analyticsInitializer);
     }
 
     @Provides

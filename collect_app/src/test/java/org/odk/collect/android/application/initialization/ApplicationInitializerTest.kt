@@ -9,7 +9,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.utilities.LaunchState
 
 @RunWith(AndroidJUnit4::class)
@@ -31,8 +30,6 @@ class ApplicationInitializerTest {
             mock(),
             launchState,
             appUpgrader,
-            mock(),
-            InMemSettingsProvider()
         )
 
         applicationInitializer.initialize()
@@ -55,8 +52,6 @@ class ApplicationInitializerTest {
             mock(),
             launchState,
             appUpgrader,
-            mock(),
-            InMemSettingsProvider()
         )
 
         applicationInitializer.initialize()
@@ -75,8 +70,6 @@ class ApplicationInitializerTest {
             mock(),
             launchState,
             mock(),
-            mock(),
-            InMemSettingsProvider()
         )
 
         applicationInitializer.initialize()
