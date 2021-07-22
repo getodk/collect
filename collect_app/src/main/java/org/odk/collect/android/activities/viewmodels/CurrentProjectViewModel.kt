@@ -2,12 +2,16 @@ package org.odk.collect.android.activities.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.projects.Project
 
-class CurrentProjectViewModel(private val currentProjectProvider: CurrentProjectProvider) :
+class CurrentProjectViewModel(
+    private val currentProjectProvider: CurrentProjectProvider,
+    private val analyticsInitializer: AnalyticsInitializer
+) :
     ViewModel() {
 
     private val _currentProject = MutableNonNullLiveData(currentProjectProvider.getCurrentProject())
@@ -15,6 +19,7 @@ class CurrentProjectViewModel(private val currentProjectProvider: CurrentProject
 
     fun setCurrentProject(project: Project.Saved) {
         currentProjectProvider.setCurrentProject(project.uuid)
+        analyticsInitializer.initialize()
         refresh()
     }
 
@@ -24,10 +29,10 @@ class CurrentProjectViewModel(private val currentProjectProvider: CurrentProject
         }
     }
 
-    open class Factory constructor(private val currentProjectProvider: CurrentProjectProvider) :
+    open class Factory constructor(private val currentProjectProvider: CurrentProjectProvider, private val analyticsInitializer: AnalyticsInitializer) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CurrentProjectViewModel(currentProjectProvider) as T
+            return CurrentProjectViewModel(currentProjectProvider, analyticsInitializer) as T
         }
     }
 }

@@ -25,6 +25,7 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
+import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.CollectSettingsMigrator;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
@@ -536,8 +537,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider) {
-        return new CurrentProjectViewModel.Factory(currentProjectProvider);
+    public AnalyticsInitializer providesAnalyticsInitializer(Analytics analytics, VersionInformation versionInformation, SettingsProvider settingsProvider) {
+        return new AnalyticsInitializer(analytics, versionInformation, settingsProvider);
+    }
+
+    @Provides
+    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer) {
+        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer);
     }
 
     @Provides
