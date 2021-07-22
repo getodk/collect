@@ -118,7 +118,6 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 }
 
                 override fun denied() {
-                    dismiss()
                 }
             }
         )
