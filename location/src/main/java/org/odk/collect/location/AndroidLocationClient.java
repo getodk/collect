@@ -23,6 +23,7 @@ import timber.log.Timber;
  * Package-private, use {@link LocationClientProvider} to retrieve the correct
  * {@link LocationClient}.
  */
+@SuppressLint("MissingPermission") // Permission checks for location services handled in components that use this class
 public class AndroidLocationClient
         extends BaseLocationClient
         implements android.location.LocationListener {
@@ -82,7 +83,6 @@ public class AndroidLocationClient
     }
 
     @Override
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isConnected) {
             // This is to maintain expected behavior across LocationClient implementations.
@@ -107,7 +107,6 @@ public class AndroidLocationClient
     }
 
     @Override
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {
