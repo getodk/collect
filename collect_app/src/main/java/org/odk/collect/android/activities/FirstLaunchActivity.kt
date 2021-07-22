@@ -1,7 +1,9 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -49,6 +51,8 @@ class FirstLaunchActivity : CollectAbstractActivity() {
         )
 
         binding.configureLater.setOnClickListener {
+            Analytics.logEvent(AnalyticsEvents.TRY_DEMO)
+
             projectImporter.importNewProject(Project.DEMO_PROJECT)
             currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 

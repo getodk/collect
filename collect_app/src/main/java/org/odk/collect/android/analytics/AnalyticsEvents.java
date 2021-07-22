@@ -169,4 +169,9 @@ public class AnalyticsEvents {
      * Tracks how often users switch between projects
      */
     public static final String SWITCH_PROJECT = "SwitchProject";
+
+    /**
+     * Tracks how often users choose to try the demo project
+     */
+    public static final String TRY_DEMO = "TryDemo";
 }
