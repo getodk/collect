@@ -2,7 +2,9 @@ package org.odk.collect.android.utilities;
 
 import android.database.SQLException;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -160,6 +162,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                         // insert failures are OK and expected if multiple
                         // DiskSync scanners are active.
                         formsRepository.save(form);
+                        Analytics.log(AnalyticsEvents.IMPORT_FORM);
                     } catch (SQLException e) {
                         Timber.i("[%d] %s", instance, e.toString());
                     }

@@ -151,6 +151,11 @@ public class AnalyticsEvents {
     public static final String IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance";
 
     /**
+     * Tracks how often forms are added using disk sync rather than from a server
+     */
+    public static final String IMPORT_FORM = "ImportForm";
+
+    /**
      * Tracks responses from OpenMapKit to the OSMWidget
      */
     public static final String OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse";
