@@ -11,6 +11,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.shared.Settings;
 
 import timber.log.Timber;
 
@@ -21,17 +22,17 @@ public class SwipeHandler {
     private ODKView odkView;
     private boolean allowSwiping = true;
     private boolean beenSwiped;
-    private final String navigationMode;
+    private final Settings generalSettings;
 
     public interface OnSwipeListener {
         void onSwipeBackward();
         void onSwipeForward();
     }
 
-    public SwipeHandler(Context context, String navigationMode) {
+    public SwipeHandler(Context context, Settings generalSettings) {
         gestureDetector = new GestureDetector(context, new GestureListener());
         this.onSwipe = (OnSwipeListener) context;
-        this.navigationMode = navigationMode;
+        this.generalSettings = generalSettings;
     }
 
     public void setOdkView(ODKView odkView) {
@@ -90,7 +91,8 @@ public class SwipeHandler {
             FlingRegister.flingDetected();
 
             if (e1 != null && e2 != null
-                    && navigationMode.contains(GeneralKeys.NAVIGATION_SWIPE) && allowSwiping) {
+                    && generalSettings.getString(GeneralKeys.KEY_NAVIGATION).contains(GeneralKeys.NAVIGATION_SWIPE)
+                    && allowSwiping) {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
                 // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"
