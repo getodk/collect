@@ -193,4 +193,9 @@ public class AnalyticsEvents {
      * Tracks how often a Google account is used to configure a manually created project
      */
     public static final String GOOGLE_ACCOUNT_PROJECT = "GoogleAccountProject";
+
+    /**
+     * Tracks how often users delete projects
+     */
+    public static final String DELETE_PROJECT = "DeleteProject";
 }

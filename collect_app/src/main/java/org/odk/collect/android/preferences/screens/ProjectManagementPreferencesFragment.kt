@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.SplashScreenActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
@@ -77,6 +79,8 @@ class ProjectManagementPreferencesFragment :
     }
 
     fun deleteProject() {
+        Analytics.logEvent(AnalyticsEvents.DELETE_PROJECT)
+
         when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
             is DeleteProjectResult.UnsentInstances -> {
                 AlertDialog.Builder(requireActivity())
