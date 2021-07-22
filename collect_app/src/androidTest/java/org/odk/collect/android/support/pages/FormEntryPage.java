@@ -116,6 +116,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage assertNavigationButtonsAreHidden() {
+        onView(withId(R.id.form_forward_button)).check(matches(not(isDisplayed())));
+        onView(withId(R.id.form_back_button)).check(matches(not(isDisplayed())));
+        return this;
+    }
+
     /**
      * @deprecated use {@link #swipeToPreviousQuestion(String)} instead
      */
