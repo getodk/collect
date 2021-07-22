@@ -10,7 +10,9 @@ import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
@@ -42,6 +44,8 @@ class ProjectDisplayPreferencesFragment :
         colorPickerViewModel.pickedColor.observe(
             this,
             { color: String ->
+                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_COLOR)
+
                 val (uuid, name, icon) = currentProjectProvider.getCurrentProject()
                 projectsRepository.save(Project.Saved(uuid, name, icon, color))
                 findPreference<Preference>(PROJECT_COLOR_KEY)!!.summaryProvider =
@@ -131,6 +135,8 @@ class ProjectDisplayPreferencesFragment :
         val (uuid, name, icon, color) = currentProjectProvider.getCurrentProject()
         when (preference.key) {
             PROJECT_NAME_KEY -> {
+                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_NAME)
+
                 File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
                 File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
 
@@ -140,11 +146,15 @@ class ProjectDisplayPreferencesFragment :
                     )
                 )
             }
-            PROJECT_ICON_KEY -> projectsRepository.save(
-                Project.Saved(
-                    uuid, name, newValue.toString(), color
+            PROJECT_ICON_KEY -> {
+                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_ICON)
+
+                projectsRepository.save(
+                    Project.Saved(
+                        uuid, name, newValue.toString(), color
+                    )
                 )
-            )
+            }
         }
         return true
     }

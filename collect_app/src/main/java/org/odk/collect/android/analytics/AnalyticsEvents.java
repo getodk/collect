@@ -198,4 +198,11 @@ public class AnalyticsEvents {
      * Tracks how often users delete projects
      */
     public static final String DELETE_PROJECT = "DeleteProject";
+
+    /**
+     * These events track how often users change project display settings
+     **/
+    public static final String CHANGE_PROJECT_NAME = "ChangeProjectName";
+    public static final String CHANGE_PROJECT_ICON = "ChangeProjectIcon";
+    public static final String CHANGE_PROJECT_COLOR = "ChangeProjectColor";
 }
