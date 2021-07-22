@@ -21,7 +21,7 @@ class CurrentProjectViewModel(
 
     fun setCurrentProject(project: Project.Saved) {
         currentProjectProvider.setCurrentProject(project.uuid)
-        Analytics.logEvent(AnalyticsEvents.SWITCH_PROJECT)
+        Analytics.log(AnalyticsEvents.SWITCH_PROJECT)
         analyticsInitializer.initialize()
         refresh()
     }

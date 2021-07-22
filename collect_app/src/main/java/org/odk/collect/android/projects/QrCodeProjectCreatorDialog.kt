@@ -248,7 +248,7 @@ class QrCodeProjectCreatorDialog :
         val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
 
         if (projectCreatedSuccessfully) {
-            Analytics.logEvent(AnalyticsEvents.QR_CREATE_PROJECT)
+            Analytics.log(AnalyticsEvents.QR_CREATE_PROJECT)
 
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
             ToastUtils.showLongToast(

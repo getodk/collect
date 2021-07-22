@@ -79,7 +79,7 @@ class ProjectManagementPreferencesFragment :
     }
 
     fun deleteProject() {
-        Analytics.logEvent(AnalyticsEvents.DELETE_PROJECT)
+        Analytics.log(AnalyticsEvents.DELETE_PROJECT)
 
         when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
             is DeleteProjectResult.UnsentInstances -> {

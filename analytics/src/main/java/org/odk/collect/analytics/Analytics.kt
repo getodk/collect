@@ -23,7 +23,8 @@ interface Analytics {
             this.instance = analytics
         }
 
-        fun logEvent(event: String) {
+        @JvmStatic
+        fun log(event: String) {
             instance.logEvent(event)
         }
     }

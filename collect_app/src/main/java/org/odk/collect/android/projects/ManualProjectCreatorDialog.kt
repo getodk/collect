@@ -81,7 +81,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 confirmationArgs.putString(MATCHING_PROJECT, uuid)
                 DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
             } ?: run {
-                Analytics.logEvent(AnalyticsEvents.GOOGLE_ACCOUNT_PROJECT)
+                Analytics.log(AnalyticsEvents.GOOGLE_ACCOUNT_PROJECT)
                 createProject(settingsJson)
             }
         }
@@ -177,7 +177,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     }
 
     override fun createProject(settingsJson: String) {
-        Analytics.logEvent(AnalyticsEvents.MANUAL_CREATE_PROJECT)
+        Analytics.log(AnalyticsEvents.MANUAL_CREATE_PROJECT)
 
         projectCreator.createNewProject(settingsJson)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)

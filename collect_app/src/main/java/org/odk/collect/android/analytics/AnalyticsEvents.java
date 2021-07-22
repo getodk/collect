@@ -205,4 +205,9 @@ public class AnalyticsEvents {
     public static final String CHANGE_PROJECT_NAME = "ChangeProjectName";
     public static final String CHANGE_PROJECT_ICON = "ChangeProjectIcon";
     public static final String CHANGE_PROJECT_COLOR = "ChangeProjectColor";
+
+    /**
+     * Tracks how often users reconfigure a project using QR codes
+     */
+    public static final String RECONFIGURE_PROJECT = "ReconfigureProject";
 }

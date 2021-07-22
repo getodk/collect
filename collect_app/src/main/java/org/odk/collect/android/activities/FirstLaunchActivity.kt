@@ -51,7 +51,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
         )
 
         binding.configureLater.setOnClickListener {
-            Analytics.logEvent(AnalyticsEvents.TRY_DEMO)
+            Analytics.log(AnalyticsEvents.TRY_DEMO)
 
             projectImporter.importNewProject(Project.DEMO_PROJECT)
             currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)

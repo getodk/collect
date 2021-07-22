@@ -44,7 +44,7 @@ class ProjectDisplayPreferencesFragment :
         colorPickerViewModel.pickedColor.observe(
             this,
             { color: String ->
-                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_COLOR)
+                Analytics.log(AnalyticsEvents.CHANGE_PROJECT_COLOR)
 
                 val (uuid, name, icon) = currentProjectProvider.getCurrentProject()
                 projectsRepository.save(Project.Saved(uuid, name, icon, color))
@@ -135,7 +135,7 @@ class ProjectDisplayPreferencesFragment :
         val (uuid, name, icon, color) = currentProjectProvider.getCurrentProject()
         when (preference.key) {
             PROJECT_NAME_KEY -> {
-                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_NAME)
+                Analytics.log(AnalyticsEvents.CHANGE_PROJECT_NAME)
 
                 File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
                 File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
@@ -147,7 +147,7 @@ class ProjectDisplayPreferencesFragment :
                 )
             }
             PROJECT_ICON_KEY -> {
-                Analytics.logEvent(AnalyticsEvents.CHANGE_PROJECT_ICON)
+                Analytics.log(AnalyticsEvents.CHANGE_PROJECT_ICON)
 
                 projectsRepository.save(
                     Project.Saved(

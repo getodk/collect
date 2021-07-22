@@ -3,9 +3,11 @@ package org.odk.collect.android.configure.qr
 import android.content.Context
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.fragments.BarCodeScannerFragment
 import org.odk.collect.android.injection.DaggerUtils
@@ -43,6 +45,8 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
         )
 
         if (importSuccess) {
+            Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
+
             val newProjectName = currentProjectProvider.getCurrentProject().name
             if (newProjectName != oldProjectName) {
                 File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
