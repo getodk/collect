@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -160,18 +161,22 @@ public class PermissionsProvider {
 
     // smap
     public void requestBackgroundLocationPermissions(Activity activity, @NonNull PermissionListener action) {
-        requestPermissions(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                action.granted();
-            }
+        if (Build.VERSION.SDK_INT >=  Build.VERSION_CODES.Q) {  // ACCESS_BACKGROUND_LOCATION added in API 29
+            requestPermissions(activity, new PermissionListener() {
+                @Override
+                public void granted() {
+                    action.granted();
+                }
 
-            @Override
-            public void denied() {
-                showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
-                        R.string.smap_background_location_permission_denied, R.drawable.ic_room_black_24dp, action);
-            }
-        }, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+                @Override
+                public void denied() {
+                    showAdditionalExplanation(activity, R.string.location_runtime_permissions_denied_title,
+                            R.string.smap_background_location_permission_denied, R.drawable.ic_room_black_24dp, action);
+                }
+            }, Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+        } else {
+            action.granted();
+        }
     }
 
     public void requestRecordAudioPermission(Activity activity, @NonNull PermissionListener action) {
