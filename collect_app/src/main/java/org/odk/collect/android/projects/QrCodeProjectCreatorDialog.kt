@@ -14,9 +14,11 @@ import com.google.zxing.client.android.BeepManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.qr.QRCodeDecoder
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
@@ -36,7 +38,9 @@ import org.odk.collect.projects.ProjectsRepository
 import timber.log.Timber
 import javax.inject.Inject
 
-class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
+class QrCodeProjectCreatorDialog :
+    MaterialFullScreenDialogFragment(),
+    DuplicateProjectConfirmationDialog.DuplicateProjectConfirmationListener {
 
     @Inject
     lateinit var codeCaptureManagerFactory: CodeCaptureManagerFactory
@@ -75,21 +79,22 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     @Inject
     lateinit var settingsImporter: SettingsImporter
 
-    private val imageQrCodeImportResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        val imageUri: Uri? = result.data?.data
-        if (imageUri != null) {
-            requireActivity().contentResolver.openInputStream(imageUri).use {
-                try {
-                    val settingsJson = qrCodeDecoder.decode(it)
-                    createProjectOrError(settingsJson)
-                } catch (e: QRCodeDecoder.InvalidException) {
-                    showShortToast(R.string.invalid_qrcode)
-                } catch (e: QRCodeDecoder.NotFoundException) {
-                    showShortToast(R.string.qr_code_not_found)
+    private val imageQrCodeImportResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            val imageUri: Uri? = result.data?.data
+            if (imageUri != null) {
+                requireActivity().contentResolver.openInputStream(imageUri).use {
+                    try {
+                        val settingsJson = qrCodeDecoder.decode(it)
+                        createProjectOrError(settingsJson)
+                    } catch (e: QRCodeDecoder.InvalidException) {
+                        showShortToast(R.string.invalid_qrcode)
+                    } catch (e: QRCodeDecoder.NotFoundException) {
+                        showShortToast(R.string.qr_code_not_found)
+                    }
                 }
             }
         }
-    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -98,13 +103,20 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
         settingsConnectionMatcher = SettingsConnectionMatcher(projectsRepository, settingsProvider)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = QrCodeProjectCreatorDialogLayoutBinding.inflate(inflater)
 
         configureMenu()
 
         binding.configureManuallyButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(ManualProjectCreatorDialog::class.java, requireActivity().supportFragmentManager)
+            DialogUtils.showIfNotShowing(
+                ManualProjectCreatorDialog::class.java,
+                requireActivity().supportFragmentManager
+            )
         }
         binding.cancelButton.setOnClickListener {
             dismiss()
@@ -136,8 +148,18 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                     if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
                         imageQrCodeImportResultLauncher.launch(photoPickerIntent)
                     } else {
-                        showShortToast(getString(R.string.activity_not_found, getString(R.string.choose_image)))
-                        Timber.w(getString(R.string.activity_not_found, getString(R.string.choose_image)))
+                        showShortToast(
+                            getString(
+                                R.string.activity_not_found,
+                                getString(R.string.choose_image)
+                            )
+                        )
+                        Timber.w(
+                            getString(
+                                R.string.activity_not_found,
+                                getString(R.string.choose_image)
+                            )
+                        )
                     }
                 }
             }
@@ -179,7 +201,12 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     }
 
     private fun startScanning(savedInstanceState: Bundle?) {
-        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), binding.barcodeView, savedInstanceState, listOf(IntentIntegrator.QR_CODE))
+        capture = codeCaptureManagerFactory.getCaptureManager(
+            requireActivity(),
+            binding.barcodeView,
+            savedInstanceState,
+            listOf(IntentIntegrator.QR_CODE)
+        )
 
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
             viewLifecycleOwner,
@@ -199,9 +226,16 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
         try {
             settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
                 val confirmationArgs = Bundle()
-                confirmationArgs.putString(DuplicateProjectConfirmationKeys.SETTINGS_JSON, settingsJson)
+                confirmationArgs.putString(
+                    DuplicateProjectConfirmationKeys.SETTINGS_JSON,
+                    settingsJson
+                )
                 confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
-                DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
+                DialogUtils.showIfNotShowing(
+                    DuplicateProjectConfirmationDialog::class.java,
+                    confirmationArgs,
+                    childFragmentManager
+                )
             } ?: run {
                 createProject(settingsJson)
             }
@@ -214,8 +248,15 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
         val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
 
         if (projectCreatedSuccessfully) {
+            Analytics.logEvent(AnalyticsEvents.QR_CREATE_PROJECT)
+
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-            ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+            ToastUtils.showLongToast(
+                getString(
+                    R.string.switched_project,
+                    currentProjectProvider.getCurrentProject().name
+                )
+            )
         } else {
             ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
         }
@@ -224,6 +265,11 @@ class QrCodeProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     override fun switchToProject(uuid: String) {
         currentProjectProvider.setCurrentProject(uuid)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-        ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
+        ToastUtils.showLongToast(
+            getString(
+                R.string.switched_project,
+                currentProjectProvider.getCurrentProject().name
+            )
+        )
     }
 }

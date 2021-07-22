@@ -174,4 +174,14 @@ public class AnalyticsEvents {
      * Tracks how often users choose to try the demo project
      */
     public static final String TRY_DEMO = "TryDemo";
+
+    /**
+     * Tracks how often projects are created using QR codes
+     */
+    public static final String QR_CREATE_PROJECT = "QrCreateProject";
+
+    /**
+     * Tracks how often projects are created by manually entering details
+     */
+    public static final String MANUAL_CREATE_PROJECT = "ManualCreateProject";
 }

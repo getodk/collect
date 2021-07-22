@@ -12,9 +12,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.gdrive.GoogleAccountsManager
@@ -174,6 +176,8 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     }
 
     override fun createProject(settingsJson: String) {
+        Analytics.logEvent(AnalyticsEvents.MANUAL_CREATE_PROJECT)
+
         projectCreator.createNewProject(settingsJson)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
