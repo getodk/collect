@@ -16,25 +16,26 @@
 package org.odk.collect.android.preferences
 
 import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
+import androidx.preference.PreferenceScreen
 import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys
-import org.odk.collect.shared.Settings
+import org.odk.collect.android.preferences.source.SettingsProvider
 
 class DisabledPreferencesRemover(
-    private val pf: PreferenceFragmentCompat,
-    private val adminSettings: Settings
+    private val settingsProvider: SettingsProvider,
+    private val adminAndGeneralKeys: Array<AdminAndGeneralKeys>
 ) {
-    fun hideDisabledPref(adminAndGeneralKeys: Array<AdminAndGeneralKeys>) {
-        hideDisabledPreferences(adminAndGeneralKeys)
-        hideEmptyCategories()
+
+    fun hideDisabledPref(preferenceScreen: PreferenceScreen) {
+        hideDisabledPreferences(preferenceScreen)
+        hideEmptyCategories(preferenceScreen)
     }
 
     // Hides preferences that are excluded by the admin settings
-    private fun hideDisabledPreferences(adminAndGeneralKeys: Array<AdminAndGeneralKeys>) {
+    private fun hideDisabledPreferences(preferenceScreen: PreferenceScreen) {
         for (agKeys in adminAndGeneralKeys) {
-            if (!adminSettings.getBoolean(agKeys.adminKey)) {
-                val preference = pf.findPreference<Preference>(agKeys.generalKey) ?: continue
+            if (!settingsProvider.getAdminSettings().getBoolean(agKeys.adminKey)) {
+                val preference = preferenceScreen.findPreference<Preference>(agKeys.generalKey) ?: continue
                 preference.isVisible = false
             }
         }
@@ -42,9 +43,9 @@ class DisabledPreferencesRemover(
 
     // Hides empty categories - this won't work with nested categories but we don't use them in our
     // settings and we rather shouldn't do that in the future since it would make them vey complex
-    private fun hideEmptyCategories() {
-        for (i in 0 until pf.preferenceScreen.preferenceCount) {
-            val preference = pf.preferenceScreen.getPreference(i)
+    private fun hideEmptyCategories(preferenceScreen: PreferenceScreen) {
+        for (i in 0 until preferenceScreen.preferenceCount) {
+            val preference = preferenceScreen.getPreference(i)
             if (preference is PreferenceGroup) {
                 if (!hasAnyVisiblePreferences(preference)) {
                     preference.isVisible = false

@@ -81,6 +81,7 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.DisabledPreferencesRemover;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -611,4 +612,8 @@ public class AppDependencyModule {
         return new ForegroundServiceLocationTracker(application);
     }
 
+    @Provides
+    public DisabledPreferencesRemover providesDisabledPreferencesRemover(SettingsProvider settingsProvider) {
+        return new DisabledPreferencesRemover(settingsProvider, AdminKeys.adminToGeneral);
+    }
 }
