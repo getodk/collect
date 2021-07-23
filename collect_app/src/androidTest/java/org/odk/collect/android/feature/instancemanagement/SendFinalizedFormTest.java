@@ -70,7 +70,8 @@ public class SendFinalizedFormTest {
 
                 .clickViewSentForm(1)
                 .clickOnForm("One Question")
-                .assertText("123");
+                .assertText("123")
+                .assertText(R.string.exit);
     }
 
     @Test
