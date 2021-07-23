@@ -24,7 +24,10 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.permissions.PermissionsChecker
+import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
@@ -36,14 +39,30 @@ import org.odk.collect.testshared.RobolectricHelpers
 class QrCodeProjectCreatorDialogTest {
 
     private val codeCaptureManagerFactory: CodeCaptureManagerFactory = mock {}
+    private val permissionsProvider = FakePermissionsProvider()
 
     @Before
     fun setup() {
+        permissionsProvider.setPermissionGranted(true)
+
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCodeCaptureManagerFactory(): CodeCaptureManagerFactory {
                 return codeCaptureManagerFactory
             }
+
+            override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker?): PermissionsProvider {
+                return permissionsProvider
+            }
         })
+    }
+
+    @Test
+    fun `If camera permission is not granted the dialog should not be dismissed`() {
+        permissionsProvider.setPermissionGranted(false)
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            assertThat(it.isVisible, `is`(true))
+        }
     }
 
     @Test
