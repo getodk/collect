@@ -130,13 +130,6 @@ class ProjectPreferencesFragment :
     }
 
     private fun updatePreferencesVisibility() {
-        findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = true
         findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = true
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible = true
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = true
@@ -150,92 +143,9 @@ class ProjectPreferencesFragment :
             findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = false
         }
 
-        if (!projectPreferencesViewModel.isStateUnlocked()) {
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_CHANGE_SERVER
-                        )
-                )
-            ) {
-                findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.isVisible = false
-            }
-
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_CHANGE_PROJECT_DISPLAY
-                        )
-                )
-            ) {
-                findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.isVisible = false
-            }
-
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_APP_THEME,
-                            AdminKeys.KEY_APP_LANGUAGE,
-                            AdminKeys.KEY_CHANGE_FONT_SIZE,
-                            AdminKeys.KEY_NAVIGATION,
-                            AdminKeys.KEY_SHOW_SPLASH_SCREEN
-                        )
-                )
-            ) {
-                findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.isVisible = false
-            }
-
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_MAPS
-                        )
-                )
-            ) {
-                findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.isVisible = false
-            }
-
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_FORM_UPDATE_MODE,
-                            AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK,
-                            AdminKeys.KEY_AUTOMATIC_UPDATE,
-                            AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS,
-                            AdminKeys.KEY_AUTOSEND,
-                            AdminKeys.KEY_DELETE_AFTER_SEND,
-                            AdminKeys.KEY_DEFAULT_TO_FINALIZED,
-                            AdminKeys.KEY_CONSTRAINT_BEHAVIOR,
-                            AdminKeys.KEY_HIGH_RESOLUTION,
-                            AdminKeys.KEY_IMAGE_SIZE,
-                            AdminKeys.KEY_GUIDANCE_HINT,
-                            AdminKeys.KEY_EXTERNAL_APP_RECORDING,
-                            AdminKeys.KEY_INSTANCE_FORM_SYNC
-                        )
-                )
-            ) {
-                findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = false
-            }
-
-            if (!hasAtLeastOneSettingEnabled(
-                    listOf(
-                            AdminKeys.KEY_CHANGE_FORM_METADATA,
-                            AdminKeys.KEY_ANALYTICS
-                        )
-                )
-            ) {
-                findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.isVisible = false
-            }
-        }
-
         if (versionInformation.isRelease) {
             findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
         }
-    }
-
-    private fun hasAtLeastOneSettingEnabled(keys: Collection<String>): Boolean {
-        for (key in keys) {
-            val value = settingsProvider.getAdminSettings().getBoolean(key)
-            if (value) {
-                return true
-            }
-        }
-        return false
     }
 
     companion object {
