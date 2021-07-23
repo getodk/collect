@@ -53,35 +53,10 @@ public class DisabledPreferencesRemover {
                     continue;
                 }
 
-                PreferenceGroup parent = getParent(pf.getPreferenceScreen(), preference);
-                if (parent == null) {
-                    throw new RuntimeException("Couldn't find preference");
-                }
-
                 preference.setVisible(false);
                 Timber.d("Removed %s", preference.toString());
             }
         }
-    }
-
-    private PreferenceGroup getParent(PreferenceGroup groupToSearchIn, Preference preference) {
-        for (int i = 0; i < groupToSearchIn.getPreferenceCount(); ++i) {
-            Preference child = groupToSearchIn.getPreference(i);
-
-            if (child == preference) {
-                return groupToSearchIn;
-            }
-
-            if (child instanceof PreferenceGroup) {
-                PreferenceGroup childGroup = (PreferenceGroup) child;
-                PreferenceGroup result = getParent(childGroup, preference);
-                if (result != null) {
-                    return result;
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
