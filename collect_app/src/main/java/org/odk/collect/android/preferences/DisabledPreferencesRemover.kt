@@ -51,18 +51,15 @@ class DisabledPreferencesRemover(
     /**
      * Deletes all empty PreferenceCategory items.
      */
-    private fun hideEmptyCategories(pc: PreferenceGroup?) {
-        if (pc == null) {
-            return
-        }
-        for (i in 0 until pc.preferenceCount) {
-            val preference = pc.getPreference(i)
+    private fun hideEmptyCategories(preferenceGroup: PreferenceGroup) {
+        for (i in 0 until preferenceGroup.preferenceCount) {
+            val preference = preferenceGroup.getPreference(i)
             if (preference is PreferenceGroup) {
-                if (!hideEmptyPreference(pc, preference)) {
+                if (!hideEmptyPreference(preferenceGroup, preference)) {
                     hideEmptyCategories(preference)
 
                     // try to remove preference group if it is empty now
-                    hideEmptyPreference(pc, preference)
+                    hideEmptyPreference(preferenceGroup, preference)
                 }
             }
         }
