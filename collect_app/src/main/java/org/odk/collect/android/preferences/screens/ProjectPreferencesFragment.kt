@@ -151,22 +151,74 @@ class ProjectPreferencesFragment :
         }
 
         if (!projectPreferencesViewModel.isStateUnlocked()) {
-            if (!hasAtLeastOneSettingEnabled(AdminKeys.serverKeys)) {
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_CHANGE_SERVER
+                        )
+                )
+            ) {
                 findPreference<Preference>(PROTOCOL_PREFERENCE_KEY)!!.isVisible = false
             }
-            if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY))) {
+
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_CHANGE_PROJECT_DISPLAY
+                        )
+                )
+            ) {
                 findPreference<Preference>(PROJECT_DISPLAY_PREFERENCE_KEY)!!.isVisible = false
             }
-            if (!hasAtLeastOneSettingEnabled(AdminKeys.userInterfaceKeys)) {
+
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_APP_THEME,
+                            AdminKeys.KEY_APP_LANGUAGE,
+                            AdminKeys.KEY_CHANGE_FONT_SIZE,
+                            AdminKeys.KEY_NAVIGATION,
+                            AdminKeys.KEY_SHOW_SPLASH_SCREEN
+                        )
+                )
+            ) {
                 findPreference<Preference>(USER_INTERFACE_PREFERENCE_KEY)!!.isVisible = false
             }
-            if (!hasAtLeastOneSettingEnabled(listOf(AdminKeys.KEY_MAPS))) {
+
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_MAPS
+                        )
+                )
+            ) {
                 findPreference<Preference>(MAPS_PREFERENCE_KEY)!!.isVisible = false
             }
-            if (!hasAtLeastOneSettingEnabled(AdminKeys.formManagementKeys)) {
+
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_FORM_UPDATE_MODE,
+                            AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK,
+                            AdminKeys.KEY_AUTOMATIC_UPDATE,
+                            AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS,
+                            AdminKeys.KEY_AUTOSEND,
+                            AdminKeys.KEY_DELETE_AFTER_SEND,
+                            AdminKeys.KEY_DEFAULT_TO_FINALIZED,
+                            AdminKeys.KEY_CONSTRAINT_BEHAVIOR,
+                            AdminKeys.KEY_HIGH_RESOLUTION,
+                            AdminKeys.KEY_IMAGE_SIZE,
+                            AdminKeys.KEY_GUIDANCE_HINT,
+                            AdminKeys.KEY_EXTERNAL_APP_RECORDING,
+                            AdminKeys.KEY_INSTANCE_FORM_SYNC
+                        )
+                )
+            ) {
                 findPreference<Preference>(FORM_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = false
             }
-            if (!hasAtLeastOneSettingEnabled(AdminKeys.identityKeys)) {
+
+            if (!hasAtLeastOneSettingEnabled(
+                    listOf(
+                            AdminKeys.KEY_CHANGE_FORM_METADATA,
+                            AdminKeys.KEY_ANALYTICS
+                        )
+                )
+            ) {
                 findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.isVisible = false
             }
         }

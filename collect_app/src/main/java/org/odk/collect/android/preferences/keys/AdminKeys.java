@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences.keys;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,38 +116,6 @@ public final class AdminKeys {
             ALLOW_OTHER_WAYS_OF_EDITING_FORM,
             KEY_MAPS,
             KEY_ADMIN_PW
-    );
-
-    public static Collection<String> serverKeys = Collections.singletonList(
-            KEY_CHANGE_SERVER
-    );
-
-    public static Collection<String> identityKeys = Arrays.asList(
-            KEY_CHANGE_FORM_METADATA,
-            KEY_ANALYTICS
-    );
-
-    public static Collection<String> formManagementKeys = Arrays.asList(
-            KEY_PERIODIC_FORM_UPDATES_CHECK,
-            KEY_AUTOMATIC_UPDATE,
-            KEY_HIDE_OLD_FORM_VERSIONS,
-            KEY_AUTOSEND,
-            KEY_DELETE_AFTER_SEND,
-            KEY_DEFAULT_TO_FINALIZED,
-            KEY_CONSTRAINT_BEHAVIOR,
-            KEY_HIGH_RESOLUTION,
-            KEY_IMAGE_SIZE,
-            KEY_GUIDANCE_HINT,
-            KEY_INSTANCE_FORM_SYNC,
-            KEY_EXTERNAL_APP_RECORDING
-    );
-
-    public static Collection<String> userInterfaceKeys = Arrays.asList(
-            KEY_APP_THEME,
-            KEY_APP_LANGUAGE,
-            KEY_CHANGE_FONT_SIZE,
-            KEY_NAVIGATION,
-            KEY_SHOW_SPLASH_SCREEN
     );
 
     public static Map<String, Object> getDefaults() {
