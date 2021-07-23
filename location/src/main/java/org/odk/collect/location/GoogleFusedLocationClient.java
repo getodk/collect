@@ -28,6 +28,7 @@ import timber.log.Timber;
  * Should be used whenever there Google Play Services is present. In general, use
  * {@link LocationClientProvider} to retrieve a configured {@link LocationClient}.
  */
+@SuppressLint("MissingPermission") // Permission checks for location services handled in components that use this class
 public class GoogleFusedLocationClient
         extends BaseLocationClient
         implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
@@ -118,7 +119,6 @@ public class GoogleFusedLocationClient
         }
     }
 
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation() && googleApiClient.isConnected()) {
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
@@ -139,7 +139,6 @@ public class GoogleFusedLocationClient
     }
 
     @Override
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
