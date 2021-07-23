@@ -33,9 +33,12 @@ class PreferenceVisibilityHandler(
     }
 
     // Hides preferences that are excluded by the admin settings
-    private fun updatePreferences(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
-        for (i in 0 until preferenceScreen.preferenceCount) {
-            val preference = preferenceScreen.getPreference(i)
+    private fun updatePreferences(preferenceGroup: PreferenceGroup, isStateLocked: Boolean) {
+        for (i in 0 until preferenceGroup.preferenceCount) {
+            val preference = preferenceGroup.getPreference(i)
+            if (preference is PreferenceGroup) {
+                updatePreferences(preference, isStateLocked)
+            }
             when (preference.key) {
                 "protocol" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_SERVER)
                 "project_display" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY)
