@@ -31,11 +31,7 @@ class DisabledPreferencesRemover(
         hideEmptyCategories(pf.preferenceScreen)
     }
 
-    /**
-     * Removes any preferences from the category that are excluded by the admin settings.
-     *
-     * @param keyPairs one or more AdminAndGeneralKeys objects.
-     */
+    // Hides preferences that are excluded by the admin settings
     private fun hideDisabledPreferences(adminAndGeneralKeys: Array<AdminAndGeneralKeys>) {
         for (agKeys in adminAndGeneralKeys) {
             val prefAllowed = adminSettings.getBoolean(agKeys.adminKey)
@@ -47,9 +43,8 @@ class DisabledPreferencesRemover(
         }
     }
 
-    /**
-     * Deletes all empty PreferenceCategory items.
-     */
+    // Hides empty categories - this won't work with nested categories but we don't use them in our
+    // settings and we rather shouldn't do that in the future since it would make them vey complex
     private fun hideEmptyCategories(preferenceGroup: PreferenceGroup) {
         for (i in 0 until preferenceGroup.preferenceCount) {
             val preference = preferenceGroup.getPreference(i)
