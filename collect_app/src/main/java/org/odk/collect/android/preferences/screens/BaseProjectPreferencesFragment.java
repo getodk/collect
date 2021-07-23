@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -31,7 +31,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     ProjectPreferencesViewModel.Factory factory;
 
     @Inject
-    DisabledPreferencesRemover disabledPreferencesRemover;
+    PreferenceVisibilityHandler preferenceVisibilityHandler;
 
     protected ProjectPreferencesViewModel projectPreferencesViewModel;
 
@@ -50,7 +50,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         if (!projectPreferencesViewModel.isStateUnlocked()) {
-            disabledPreferencesRemover.hideDisabledPref(getPreferenceScreen(), projectPreferencesViewModel.isStateLocked());
+            preferenceVisibilityHandler.updatePreferencesVisibility(getPreferenceScreen(), projectPreferencesViewModel.isStateLocked());
         }
         super.onViewCreated(view, savedInstanceState);
     }

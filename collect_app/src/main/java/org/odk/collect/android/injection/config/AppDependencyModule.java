@@ -81,7 +81,7 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
@@ -613,7 +613,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public DisabledPreferencesRemover providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
-        return new DisabledPreferencesRemover(settingsProvider, versionInformation);
+    public PreferenceVisibilityHandler providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
+        return new PreferenceVisibilityHandler(settingsProvider, versionInformation);
     }
 }

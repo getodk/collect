@@ -22,24 +22,24 @@ import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.version.VersionInformation
 
-class DisabledPreferencesRemover(
+class PreferenceVisibilityHandler(
     private val settingsProvider: SettingsProvider,
     private val versionInformation: VersionInformation
 ) {
 
-    fun hideDisabledPref(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
-        hideDisabledPreferences(preferenceScreen, isStateLocked)
-        hideEmptyCategories(preferenceScreen)
+    fun updatePreferencesVisibility(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
+        updatePreferences(preferenceScreen, isStateLocked)
+        updateCategories(preferenceScreen)
     }
 
     // Hides preferences that are excluded by the admin settings
-    private fun hideDisabledPreferences(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
+    private fun updatePreferences(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
         for (i in 0 until preferenceScreen.preferenceCount) {
             val preference = preferenceScreen.getPreference(i)
             when (preference.key) {
                 "protocol" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_SERVER)
                 "project_display" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY)
-                "user_interface" -> preference.isVisible = hasAtLeastOneSettingEnabled(
+                "user_interface" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
                         AdminKeys.KEY_APP_THEME,
                         AdminKeys.KEY_APP_LANGUAGE,
@@ -49,7 +49,7 @@ class DisabledPreferencesRemover(
                     )
                 )
                 "maps" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MAPS)
-                "form_management" -> preference.isVisible = hasAtLeastOneSettingEnabled(
+                "form_management" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
                         AdminKeys.KEY_FORM_UPDATE_MODE,
                         AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK,
@@ -66,7 +66,7 @@ class DisabledPreferencesRemover(
                         AdminKeys.KEY_INSTANCE_FORM_SYNC
                     )
                 )
-                "user_and_device_identity" -> preference.isVisible = hasAtLeastOneSettingEnabled(
+                "user_and_device_identity" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
                         AdminKeys.KEY_CHANGE_FORM_METADATA,
                         AdminKeys.KEY_ANALYTICS
@@ -108,18 +108,18 @@ class DisabledPreferencesRemover(
 
     // Hides empty categories - this won't work with nested categories but we don't use them in our
     // settings and we rather shouldn't do that in the future since it would make them vey complex
-    private fun hideEmptyCategories(preferenceScreen: PreferenceScreen) {
+    private fun updateCategories(preferenceScreen: PreferenceScreen) {
         for (i in 0 until preferenceScreen.preferenceCount) {
             val preference = preferenceScreen.getPreference(i)
             if (preference is PreferenceGroup) {
-                if (!hasAnyVisiblePreferences(preference)) {
+                if (!hasCategoryAnyVisiblePreferences(preference)) {
                     preference.isVisible = false
                 }
             }
         }
     }
 
-    private fun hasAnyVisiblePreferences(preferenceGroup: PreferenceGroup): Boolean {
+    private fun hasCategoryAnyVisiblePreferences(preferenceGroup: PreferenceGroup): Boolean {
         for (i in 0 until preferenceGroup.preferenceCount) {
             val preference = preferenceGroup.getPreference(i)
             if (preference.isVisible) {
@@ -129,7 +129,7 @@ class DisabledPreferencesRemover(
         return false
     }
 
-    private fun hasAtLeastOneSettingEnabled(keys: Collection<String>): Boolean {
+    private fun hasAtLeastOnePreferenceEnabled(keys: Collection<String>): Boolean {
         for (key in keys) {
             val value = settingsProvider.getAdminSettings().getBoolean(key)
             if (value) {
