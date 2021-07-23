@@ -71,7 +71,7 @@ class AppConfigurationGenerator(
         val adminSettings = settingsProvider.getAdminSettings().getAll()
         val defaultAdminSettings = AdminKeys.getDefaults()
 
-        for (key in AdminKeys.ALL_KEYS) {
+        for (key in AdminKeys.allKeys()) {
             if (key == AdminKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(AdminKeys.KEY_ADMIN_PW)) {
                 continue
             }
