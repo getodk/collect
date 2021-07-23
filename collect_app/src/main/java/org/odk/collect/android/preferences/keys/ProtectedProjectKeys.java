@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Admin preference settings keys. The values match those of the keys in admin_preferences.xml. */
-public final class AdminKeys {
+/** Protected project preference settings keys. */
+public final class ProtectedProjectKeys {
     // NOTE TO MAINTAINERS: ensure all keys defined below are in adminToGeneral or
     // otherKeys below, for automated testing.
 
@@ -117,7 +117,7 @@ public final class AdminKeys {
         );
     }
 
-    private AdminKeys() {
+    private ProtectedProjectKeys() {
 
     }
 }

@@ -16,7 +16,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -69,7 +69,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Form Metadata' option is disabled in protected settings should be hidden in Locked mode`() {
-        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateLocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -90,7 +90,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Form Metadata' option is disabled in protected settings should be visible in Unocked mode`() {
-        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -111,7 +111,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Form Metadata' option is disabled in protected settings should be hidden in NotProtected mode`() {
-        adminSettings.save(AdminKeys.KEY_CHANGE_FORM_METADATA, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateNotProtected()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -132,7 +132,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Collect anonymous usage data' option is disabled in protected settings should be hidden in Locked mode`() {
-        adminSettings.save(AdminKeys.KEY_ANALYTICS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateLocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -153,7 +153,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Collect anonymous usage data' option is disabled in protected settings should be visible in Unocked mode`() {
-        adminSettings.save(AdminKeys.KEY_ANALYTICS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -174,7 +174,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `If 'Collect anonymous usage data' option is disabled in protected settings should be hidden in NotProtected mode`() {
-        adminSettings.save(AdminKeys.KEY_ANALYTICS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateNotProtected()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -190,7 +190,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<CheckBoxPreference>(AdminKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
+            assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
         }
     }
 
@@ -201,7 +201,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<CheckBoxPreference>(AdminKeys.KEY_ANALYTICS)!!.isChecked, `is`(false))
+            assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(false))
         }
     }
 
@@ -232,7 +232,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            val option = fragment.findPreference<CheckBoxPreference>(AdminKeys.KEY_ANALYTICS)
+            val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)
             assertThat(option!!.isChecked, `is`(true))
 
             option.performClick()
@@ -247,7 +247,7 @@ class IdentityPreferencesFragmentFragmentTest {
     fun `Fragment recreation should not change the state of the 'Collect anonymous usage data' option`() {
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            val option = fragment.findPreference<CheckBoxPreference>(AdminKeys.KEY_ANALYTICS)
+            val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)
             assertThat(option!!.isChecked, `is`(true))
             scenario.recreate()
             assertThat(option.isChecked, `is`(true))

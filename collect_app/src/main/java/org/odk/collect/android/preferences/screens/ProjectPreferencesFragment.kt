@@ -26,7 +26,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.data.Consumable
@@ -64,7 +64,7 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.onPreferenceClickListener = this
-        findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
+        findPreference<Preference>(ProtectedProjectKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
     }
@@ -80,7 +80,7 @@ class ProjectPreferencesFragment :
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
                 UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY -> DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
-                AdminKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager)
+                ProtectedProjectKeys.KEY_CHANGE_ADMIN_PASSWORD -> DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager)
                 PROJECT_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(ProjectManagementPreferencesFragment())
                 ACCESS_CONTROL_PREFERENCE_KEY -> displayPreferences(AccessControlPreferencesFragment())
             }

@@ -123,7 +123,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.keys.GeneralKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -184,7 +184,7 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RES
 import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_COMPLETED_DEFAULT;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -1250,7 +1250,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        if (!settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MARK_AS_FINALIZED)) {
+        if (!settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED)) {
             endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
         }
 
@@ -1264,7 +1264,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // override the visibility settings based upon admin preferences
-        if (!settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SAVE_AS)) {
+        if (!settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS)) {
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }

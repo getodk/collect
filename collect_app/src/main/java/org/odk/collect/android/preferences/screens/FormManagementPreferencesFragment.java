@@ -35,7 +35,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.preferences.keys.AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOSEND;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;

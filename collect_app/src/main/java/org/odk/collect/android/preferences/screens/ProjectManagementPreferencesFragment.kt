@@ -16,7 +16,7 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.utilities.MultiClickGuard
@@ -39,7 +39,7 @@ class ProjectManagementPreferencesFragment :
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.project_management_preferences, rootKey)
 
-        findPreference<Preference>(AdminKeys.KEY_IMPORT_SETTINGS)!!.onPreferenceClickListener = this
+        findPreference<Preference>(ProtectedProjectKeys.KEY_IMPORT_SETTINGS)!!.onPreferenceClickListener = this
         findPreference<Preference>(DELETE_PROJECT_KEY)!!.onPreferenceClickListener = this
     }
 
@@ -62,7 +62,7 @@ class ProjectManagementPreferencesFragment :
     override fun onPreferenceClick(preference: Preference): Boolean {
         if (MultiClickGuard.allowClick(javaClass.name)) {
             when (preference.key) {
-                AdminKeys.KEY_IMPORT_SETTINGS -> {
+                ProtectedProjectKeys.KEY_IMPORT_SETTINGS -> {
                     val pref = Intent(activity, QRCodeTabsActivity::class.java)
                     startActivity(pref)
                 }

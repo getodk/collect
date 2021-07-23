@@ -17,7 +17,7 @@ package org.odk.collect.android.preferences
 
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.version.VersionInformation
@@ -40,64 +40,88 @@ class PreferenceVisibilityHandler(
                 updatePreferences(preference, isStateLocked)
             }
             when (preference.key) {
-                "protocol" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_SERVER)
-                "project_display" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_PROJECT_DISPLAY)
+                "protocol" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_CHANGE_SERVER)
+                "project_display" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY)
                 "user_interface" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
-                        AdminKeys.KEY_APP_THEME,
-                        AdminKeys.KEY_APP_LANGUAGE,
-                        AdminKeys.KEY_CHANGE_FONT_SIZE,
-                        AdminKeys.KEY_NAVIGATION,
-                        AdminKeys.KEY_SHOW_SPLASH_SCREEN
+                        ProtectedProjectKeys.KEY_APP_THEME,
+                        ProtectedProjectKeys.KEY_APP_LANGUAGE,
+                        ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE,
+                        ProtectedProjectKeys.KEY_NAVIGATION,
+                        ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN
                     )
                 )
-                "maps" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_MAPS)
+                "maps" -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_MAPS)
                 "form_management" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
-                        AdminKeys.KEY_FORM_UPDATE_MODE,
-                        AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK,
-                        AdminKeys.KEY_AUTOMATIC_UPDATE,
-                        AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS,
-                        AdminKeys.KEY_AUTOSEND,
-                        AdminKeys.KEY_DELETE_AFTER_SEND,
-                        AdminKeys.KEY_DEFAULT_TO_FINALIZED,
-                        AdminKeys.KEY_CONSTRAINT_BEHAVIOR,
-                        AdminKeys.KEY_HIGH_RESOLUTION,
-                        AdminKeys.KEY_IMAGE_SIZE,
-                        AdminKeys.KEY_GUIDANCE_HINT,
-                        AdminKeys.KEY_EXTERNAL_APP_RECORDING,
-                        AdminKeys.KEY_INSTANCE_FORM_SYNC
+                        ProtectedProjectKeys.KEY_FORM_UPDATE_MODE,
+                        ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK,
+                        ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE,
+                        ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS,
+                        ProtectedProjectKeys.KEY_AUTOSEND,
+                        ProtectedProjectKeys.KEY_DELETE_AFTER_SEND,
+                        ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED,
+                        ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR,
+                        ProtectedProjectKeys.KEY_HIGH_RESOLUTION,
+                        ProtectedProjectKeys.KEY_IMAGE_SIZE,
+                        ProtectedProjectKeys.KEY_GUIDANCE_HINT,
+                        ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING,
+                        ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC
                     )
                 )
                 "user_and_device_identity" -> preference.isVisible = hasAtLeastOnePreferenceEnabled(
                     listOf(
-                        AdminKeys.KEY_CHANGE_FORM_METADATA,
-                        AdminKeys.KEY_ANALYTICS
+                        ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA,
+                        ProtectedProjectKeys.KEY_ANALYTICS
                     )
                 )
-                GeneralKeys.KEY_APP_THEME -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_APP_THEME)
-                GeneralKeys.KEY_APP_LANGUAGE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_APP_LANGUAGE)
-                GeneralKeys.KEY_FONT_SIZE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_FONT_SIZE)
-                GeneralKeys.KEY_NAVIGATION -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_NAVIGATION)
-                GeneralKeys.KEY_SHOW_SPLASH -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SHOW_SPLASH_SCREEN)
-                GeneralKeys.KEY_SPLASH_PATH -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SHOW_SPLASH_SCREEN)
+                GeneralKeys.KEY_APP_THEME -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_APP_THEME)
+                GeneralKeys.KEY_APP_LANGUAGE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_APP_LANGUAGE)
+                GeneralKeys.KEY_FONT_SIZE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE)
+                GeneralKeys.KEY_NAVIGATION -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_NAVIGATION)
+                GeneralKeys.KEY_SHOW_SPLASH -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
+                GeneralKeys.KEY_SPLASH_PATH -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
 
-                GeneralKeys.KEY_FORM_UPDATE_MODE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_FORM_UPDATE_MODE)
-                GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
-                GeneralKeys.KEY_AUTOMATIC_UPDATE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_AUTOMATIC_UPDATE)
-                GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS)
-                GeneralKeys.KEY_AUTOSEND -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_AUTOSEND)
-                GeneralKeys.KEY_DELETE_AFTER_SEND -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_DELETE_AFTER_SEND)
-                GeneralKeys.KEY_COMPLETED_DEFAULT -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_DEFAULT_TO_FINALIZED)
-                GeneralKeys.KEY_CONSTRAINT_BEHAVIOR -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CONSTRAINT_BEHAVIOR)
-                GeneralKeys.KEY_HIGH_RESOLUTION -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_HIGH_RESOLUTION)
-                GeneralKeys.KEY_IMAGE_SIZE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_IMAGE_SIZE)
-                GeneralKeys.KEY_GUIDANCE_HINT -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_GUIDANCE_HINT)
-                GeneralKeys.KEY_EXTERNAL_APP_RECORDING -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_EXTERNAL_APP_RECORDING)
-                GeneralKeys.KEY_INSTANCE_SYNC -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_INSTANCE_FORM_SYNC)
+                GeneralKeys.KEY_FORM_UPDATE_MODE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_FORM_UPDATE_MODE)
+                GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
+                GeneralKeys.KEY_AUTOMATIC_UPDATE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE)
+                GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
+                GeneralKeys.KEY_AUTOSEND -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_AUTOSEND)
+                GeneralKeys.KEY_DELETE_AFTER_SEND -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_DELETE_AFTER_SEND)
+                GeneralKeys.KEY_COMPLETED_DEFAULT -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED)
+                GeneralKeys.KEY_CONSTRAINT_BEHAVIOR -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR)
+                GeneralKeys.KEY_HIGH_RESOLUTION -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_HIGH_RESOLUTION)
+                GeneralKeys.KEY_IMAGE_SIZE -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_IMAGE_SIZE)
+                GeneralKeys.KEY_GUIDANCE_HINT -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_GUIDANCE_HINT)
+                GeneralKeys.KEY_EXTERNAL_APP_RECORDING -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING)
+                GeneralKeys.KEY_INSTANCE_SYNC -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC)
 
-                GeneralKeys.KEY_FORM_METADATA -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_FORM_METADATA)
-                GeneralKeys.KEY_ANALYTICS -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_ANALYTICS)
+                GeneralKeys.KEY_FORM_METADATA -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA)
+                GeneralKeys.KEY_ANALYTICS -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(
+                    ProtectedProjectKeys.KEY_ANALYTICS)
 
                 "experimental" -> preference.isVisible = !versionInformation.isRelease
 

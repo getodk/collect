@@ -39,7 +39,7 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.external.FormsContract;
@@ -361,7 +361,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
                 setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
                 break;
             case OPEN_EDIT:
-                boolean canEditSaved = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_EDIT_SAVED);
+                boolean canEditSaved = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
                 setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
                 break;
         }

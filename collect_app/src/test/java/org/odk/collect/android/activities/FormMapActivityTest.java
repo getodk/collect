@@ -29,7 +29,7 @@ import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.formstest.InMemInstancesRepository;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -239,7 +239,7 @@ public class FormMapActivityTest {
 
     @Test
     public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
-        TestSettingsProvider.getAdminSettings().save(AdminKeys.KEY_EDIT_SAVED, false);
+        TestSettingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);

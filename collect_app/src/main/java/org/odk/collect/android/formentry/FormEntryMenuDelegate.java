@@ -16,7 +16,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -73,16 +73,16 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     public void onPrepareOptionsMenu(Menu menu) {
         boolean useability;
 
-        useability = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SAVE_MID);
+        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_JUMP_TO);
+        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_LANGUAGE)
+        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -90,7 +90,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_ACCESS_SETTINGS);
+        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);

@@ -1,7 +1,7 @@
 package org.odk.collect.android.configure.qr
 
 import org.json.JSONObject
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -69,10 +69,11 @@ class AppConfigurationGenerator(
         val adminPrefs = JSONObject()
 
         val adminSettings = settingsProvider.getAdminSettings().getAll()
-        val defaultAdminSettings = AdminKeys.getDefaults()
+        val defaultAdminSettings = ProtectedProjectKeys.getDefaults()
 
-        for (key in AdminKeys.allKeys()) {
-            if (key == AdminKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(AdminKeys.KEY_ADMIN_PW)) {
+        for (key in ProtectedProjectKeys.allKeys()) {
+            if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(
+                    ProtectedProjectKeys.KEY_ADMIN_PW)) {
                 continue
             }
             val value = adminSettings[key]

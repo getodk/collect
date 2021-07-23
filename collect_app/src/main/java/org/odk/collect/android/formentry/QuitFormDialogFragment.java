@@ -21,7 +21,7 @@ import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.external.InstancesContract;
@@ -77,7 +77,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         String title = formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded) : formSaveViewModel.getFormName();
 
         List<IconMenuItem> items;
-        if (settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_SAVE_MID)) {
+        if (settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
                     new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
         } else {

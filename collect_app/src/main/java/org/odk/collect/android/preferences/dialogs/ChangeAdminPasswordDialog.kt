@@ -14,7 +14,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.android.utilities.ToastUtils
@@ -61,7 +61,7 @@ class ChangeAdminPasswordDialog : DialogFragment() {
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 val password = binding.pwdField.text.toString()
 
-                settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, password)
+                settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, password)
 
                 if (password.isEmpty()) {
                     projectPreferencesViewModel.setStateNotProtected()

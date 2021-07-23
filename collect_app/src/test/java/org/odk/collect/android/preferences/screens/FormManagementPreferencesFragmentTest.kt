@@ -21,7 +21,7 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.FormUpdateMode
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -200,8 +200,8 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `Changing Form Update Mode should not cause any crash if related preferences are disabled in Admin Settings`() {
-        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
-        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         val scenario = FragmentScenario.launch(
             FormManagementPreferencesFragment::class.java
         )
@@ -237,17 +237,17 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in Locked mode`() {
-        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
-        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
-        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
-        adminSettings.save(AdminKeys.KEY_AUTOSEND, false)
-        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false)
-        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false)
-        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
-        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -289,17 +289,17 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be visible in Unlocked mode`() {
-        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
-        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
-        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
-        adminSettings.save(AdminKeys.KEY_AUTOSEND, false)
-        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false)
-        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false)
-        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
-        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -341,17 +341,17 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in NotProtected mode`() {
-        adminSettings.save(AdminKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
-        adminSettings.save(AdminKeys.KEY_AUTOMATIC_UPDATE, false)
-        adminSettings.save(AdminKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
-        adminSettings.save(AdminKeys.KEY_AUTOSEND, false)
-        adminSettings.save(AdminKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(AdminKeys.KEY_DEFAULT_TO_FINALIZED, false)
-        adminSettings.save(AdminKeys.KEY_CONSTRAINT_BEHAVIOR, false)
-        adminSettings.save(AdminKeys.KEY_HIGH_RESOLUTION, false)
-        adminSettings.save(AdminKeys.KEY_IMAGE_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_GUIDANCE_HINT, false)
-        adminSettings.save(AdminKeys.KEY_INSTANCE_FORM_SYNC, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 

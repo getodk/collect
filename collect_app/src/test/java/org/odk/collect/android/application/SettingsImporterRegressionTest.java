@@ -18,7 +18,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_MAPBOX;

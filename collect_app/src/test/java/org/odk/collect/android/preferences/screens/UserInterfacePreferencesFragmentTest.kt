@@ -14,7 +14,7 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
@@ -64,11 +64,11 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in Locked mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -100,11 +100,11 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be visible in Unlocked mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -136,11 +136,11 @@ class UserInterfacePreferencesFragmentTest {
 
     @Test
     fun `Disabled preferences should be hidden in NotProtected mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 

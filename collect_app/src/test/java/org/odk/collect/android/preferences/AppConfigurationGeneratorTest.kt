@@ -11,7 +11,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.InMemSettingsProvider
@@ -41,17 +41,18 @@ class AppConfigurationGeneratorTest {
 
     @Test
     fun `When admin password included, should be present in json`() {
-        val adminPrefs = mapOf<String, Any> (AdminKeys.KEY_ADMIN_PW to "123456")
+        val adminPrefs = mapOf<String, Any> (ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(AdminKeys.KEY_ADMIN_PW))
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(
+            ProtectedProjectKeys.KEY_ADMIN_PW))
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs, projectDetails)
     }
 
     @Test
     fun `When admin password excluded, should not be present in json`() {
-        val adminPrefs = mapOf<String, Any> (AdminKeys.KEY_ADMIN_PW to "123456")
+        val adminPrefs = mapOf<String, Any> (ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
@@ -87,8 +88,8 @@ class AppConfigurationGeneratorTest {
         )
 
         val adminPrefs = mapOf<String, Any> (
-            AdminKeys.KEY_GET_BLANK to false,
-            AdminKeys.KEY_DELETE_SAVED to false
+            ProtectedProjectKeys.KEY_GET_BLANK to false,
+            ProtectedProjectKeys.KEY_DELETE_SAVED to false
         )
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
@@ -107,8 +108,8 @@ class AppConfigurationGeneratorTest {
         )
 
         val adminPrefs = mapOf<String, Any> (
-            AdminKeys.KEY_GET_BLANK to true,
-            AdminKeys.KEY_DELETE_SAVED to true
+            ProtectedProjectKeys.KEY_GET_BLANK to true,
+            ProtectedProjectKeys.KEY_DELETE_SAVED to true
         )
 
         settingsProvider.getGeneralSettings().saveAll(generalPrefs)
