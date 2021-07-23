@@ -112,9 +112,7 @@ class PreferenceVisibilityHandler(
         for (i in 0 until preferenceScreen.preferenceCount) {
             val preference = preferenceScreen.getPreference(i)
             if (preference is PreferenceGroup) {
-                if (!hasCategoryAnyVisiblePreferences(preference)) {
-                    preference.isVisible = false
-                }
+                preference.isVisible = hasCategoryAnyVisiblePreferences(preference)
             }
         }
     }
