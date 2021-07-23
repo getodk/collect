@@ -33,6 +33,7 @@ class FormUriActivity : Activity() {
             startActivity(
                 Intent(this, FormEntryActivity::class.java).also {
                     it.data = formUri
+                    intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
                 }
             )
         } else {
