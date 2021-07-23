@@ -20,7 +20,6 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys
 import org.odk.collect.shared.Settings
-import timber.log.Timber
 
 class DisabledPreferencesRemover(
     private val pf: PreferenceFragmentCompat,
@@ -28,26 +27,24 @@ class DisabledPreferencesRemover(
 ) {
     fun hideDisabledPref(adminAndGeneralKeys: Array<AdminAndGeneralKeys>) {
         hideDisabledPreferences(adminAndGeneralKeys)
-        hideEmptyCategories(pf.preferenceScreen)
+        hideEmptyCategories()
     }
 
     // Hides preferences that are excluded by the admin settings
     private fun hideDisabledPreferences(adminAndGeneralKeys: Array<AdminAndGeneralKeys>) {
         for (agKeys in adminAndGeneralKeys) {
-            val prefAllowed = adminSettings.getBoolean(agKeys.adminKey)
-            if (!prefAllowed) {
+            if (!adminSettings.getBoolean(agKeys.adminKey)) {
                 val preference = pf.findPreference<Preference>(agKeys.generalKey) ?: continue
                 preference.isVisible = false
-                Timber.d("Removed %s", preference.toString())
             }
         }
     }
 
     // Hides empty categories - this won't work with nested categories but we don't use them in our
     // settings and we rather shouldn't do that in the future since it would make them vey complex
-    private fun hideEmptyCategories(preferenceGroup: PreferenceGroup) {
-        for (i in 0 until preferenceGroup.preferenceCount) {
-            val preference = preferenceGroup.getPreference(i)
+    private fun hideEmptyCategories() {
+        for (i in 0 until pf.preferenceScreen.preferenceCount) {
+            val preference = pf.preferenceScreen.getPreference(i)
             if (preference is PreferenceGroup) {
                 if (!hasAnyVisiblePreferences(preference)) {
                     preference.isVisible = false
@@ -56,9 +53,9 @@ class DisabledPreferencesRemover(
         }
     }
 
-    private fun hasAnyVisiblePreferences(pc: PreferenceGroup): Boolean {
-        for (i in 0 until pc.preferenceCount) {
-            val preference = pc.getPreference(i)
+    private fun hasAnyVisiblePreferences(preferenceGroup: PreferenceGroup): Boolean {
+        for (i in 0 until preferenceGroup.preferenceCount) {
+            val preference = preferenceGroup.getPreference(i)
             if (preference.isVisible) {
                 return true
             }
