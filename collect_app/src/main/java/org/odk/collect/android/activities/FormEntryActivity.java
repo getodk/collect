@@ -375,7 +375,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         setContentView(R.layout.form_entry);
         setupViewModels();
-        swipeHandler = new SwipeHandler(this, settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION));
+        swipeHandler = new SwipeHandler(this, settingsProvider.getGeneralSettings());
 
         compositeDisposable.add(eventBus
                 .register(ReadPhoneStatePermissionRxEvent.class)
