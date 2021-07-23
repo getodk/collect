@@ -71,32 +71,32 @@ public final class AdminKeys {
      */
     public static AdminAndGeneralKeys[] adminToGeneral = {
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
-            ag(KEY_CHANGE_PROJECT_DISPLAY,     GeneralKeys.KEY_PROJECT_DISPLAY),
-            ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
+            ag(KEY_CHANGE_PROJECT_DISPLAY,     GeneralKeys.KEY_PROJECT_DISPLAY),
+
+            ag(KEY_APP_THEME,                  GeneralKeys.KEY_APP_THEME),
+            ag(KEY_APP_LANGUAGE,               GeneralKeys.KEY_APP_LANGUAGE),
+            ag(KEY_CHANGE_FONT_SIZE,           GeneralKeys.KEY_FONT_SIZE),
+            ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
+            ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SHOW_SPLASH),
+            ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SPLASH_PATH),
+
+            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE),
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
             ag(KEY_AUTOMATIC_UPDATE,           GeneralKeys.KEY_AUTOMATIC_UPDATE),
             ag(KEY_HIDE_OLD_FORM_VERSIONS,     GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS),
-            ag(KEY_CHANGE_FONT_SIZE,           GeneralKeys.KEY_FONT_SIZE),
-            ag(KEY_APP_LANGUAGE,               GeneralKeys.KEY_APP_LANGUAGE),
+            ag(KEY_AUTOSEND,                   GeneralKeys.KEY_AUTOSEND),
+            ag(KEY_DELETE_AFTER_SEND,          GeneralKeys.KEY_DELETE_AFTER_SEND),
             ag(KEY_DEFAULT_TO_FINALIZED,       GeneralKeys.KEY_COMPLETED_DEFAULT),
+            ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
             ag(KEY_HIGH_RESOLUTION,            GeneralKeys.KEY_HIGH_RESOLUTION),
             ag(KEY_IMAGE_SIZE,                 GeneralKeys.KEY_IMAGE_SIZE),
             ag(KEY_GUIDANCE_HINT,              GeneralKeys.KEY_GUIDANCE_HINT),
-            ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SHOW_SPLASH),
-            ag(KEY_SHOW_SPLASH_SCREEN,         GeneralKeys.KEY_SPLASH_PATH),
-            ag(KEY_DELETE_AFTER_SEND,          GeneralKeys.KEY_DELETE_AFTER_SEND),
+            ag(KEY_EXTERNAL_APP_RECORDING,     GeneralKeys.KEY_EXTERNAL_APP_RECORDING),
             ag(KEY_INSTANCE_FORM_SYNC,         GeneralKeys.KEY_INSTANCE_SYNC),
-            ag(KEY_APP_THEME,                  GeneralKeys.KEY_APP_THEME),
 
-            ag(KEY_AUTOSEND,                   GeneralKeys.KEY_AUTOSEND),
-
-            ag(KEY_NAVIGATION,                 GeneralKeys.KEY_NAVIGATION),
-            ag(KEY_CONSTRAINT_BEHAVIOR,        GeneralKeys.KEY_CONSTRAINT_BEHAVIOR),
-
+            ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
             ag(KEY_ANALYTICS,                  GeneralKeys.KEY_ANALYTICS),
-            ag(KEY_FORM_UPDATE_MODE,           GeneralKeys.KEY_FORM_UPDATE_MODE),
-            ag(KEY_EXTERNAL_APP_RECORDING,     GeneralKeys.KEY_EXTERNAL_APP_RECORDING)
     };
 
     /** Admin keys other than those in adminToGeneral above */
