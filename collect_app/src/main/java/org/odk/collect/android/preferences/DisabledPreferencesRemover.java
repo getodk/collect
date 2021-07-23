@@ -37,8 +37,8 @@ public class DisabledPreferencesRemover {
     }
 
     public void hideDisabledPref(AdminAndGeneralKeys... keyPairs) {
-        remove(keyPairs);
-        removeEmptyCategories(pf.getPreferenceScreen());
+        hideDisabledPreferences(keyPairs);
+        hideEmptyCategories(pf.getPreferenceScreen());
     }
 
     /**
@@ -46,7 +46,7 @@ public class DisabledPreferencesRemover {
      *
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
-    private void remove(AdminAndGeneralKeys... keyPairs) {
+    private void hideDisabledPreferences(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
             boolean prefAllowed = adminSettings.getBoolean(agKeys.adminKey);
 
@@ -67,7 +67,7 @@ public class DisabledPreferencesRemover {
     /**
      * Deletes all empty PreferenceCategory items.
      */
-    private void removeEmptyCategories(PreferenceGroup pc) {
+    private void hideEmptyCategories(PreferenceGroup pc) {
         if (pc == null) {
             return;
         }
@@ -77,17 +77,17 @@ public class DisabledPreferencesRemover {
 
             if (preference instanceof PreferenceGroup) {
 
-                if (!removeEmptyPreference(pc, preference)) {
-                    removeEmptyCategories((PreferenceGroup) preference);
+                if (!hideEmptyPreference(pc, preference)) {
+                    hideEmptyCategories((PreferenceGroup) preference);
 
                     // try to remove preference group if it is empty now
-                    removeEmptyPreference(pc, preference);
+                    hideEmptyPreference(pc, preference);
                 }
             }
         }
     }
 
-    private boolean removeEmptyPreference(PreferenceGroup pc, Preference preference) {
+    private boolean hideEmptyPreference(PreferenceGroup pc, Preference preference) {
         if (((PreferenceGroup) preference).getPreferenceCount() == 0
                 && hasChildPrefs(preference.getKey())) {
             pc.removePreference(preference);
