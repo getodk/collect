@@ -19,7 +19,6 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceGroup
 import org.odk.collect.android.preferences.keys.AdminAndGeneralKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.shared.Settings
 import timber.log.Timber
 
@@ -55,38 +54,20 @@ class DisabledPreferencesRemover(
         for (i in 0 until preferenceGroup.preferenceCount) {
             val preference = preferenceGroup.getPreference(i)
             if (preference is PreferenceGroup) {
-                if (!hideEmptyPreference(preferenceGroup, preference)) {
-                    hideEmptyCategories(preference)
-
-                    // try to remove preference group if it is empty now
-                    hideEmptyPreference(preferenceGroup, preference)
+                if (!hasAnyVisiblePreferences(preference)) {
+                    preference.isVisible = false
                 }
             }
         }
     }
 
-    private fun hideEmptyPreference(pc: PreferenceGroup, preference: Preference): Boolean {
-        if ((preference as PreferenceGroup).preferenceCount == 0 && hasChildPrefs(preference.getKey())) {
-            pc.removePreference(preference)
-            Timber.d("Removed %s", preference.toString())
-            return true
-        }
-        return false
-    }
-
-    /**
-     * Checks whether the preferenceGroup actually has any child preferences defined
-     */
-    private fun hasChildPrefs(preferenceKey: String): Boolean {
-        val preferenceScreensWithNoChildren = arrayOf(
-            GeneralKeys.KEY_SPLASH_PATH,
-            GeneralKeys.KEY_FORM_METADATA
-        )
-        for (pref in preferenceScreensWithNoChildren) {
-            if (pref == preferenceKey) {
-                return false
+    private fun hasAnyVisiblePreferences(pc: PreferenceGroup): Boolean {
+        for (i in 0 until pc.preferenceCount) {
+            val preference = pc.getPreference(i)
+            if (preference.isVisible) {
+                return true
             }
         }
-        return true
+        return false
     }
 }
