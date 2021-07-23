@@ -71,7 +71,7 @@ public final class AdminKeys {
      */
     public static AdminAndGeneralKeys[] adminToGeneral = {
             ag(KEY_CHANGE_SERVER,              GeneralKeys.KEY_PROTOCOL),
-            ag(KEY_CHANGE_PROJECT_DISPLAY,     GeneralKeys.KEY_PROTOCOL),
+            ag(KEY_CHANGE_PROJECT_DISPLAY,     GeneralKeys.KEY_PROJECT_DISPLAY),
             ag(KEY_CHANGE_FORM_METADATA,       GeneralKeys.KEY_FORM_METADATA),
 
             ag(KEY_PERIODIC_FORM_UPDATES_CHECK, GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK),
