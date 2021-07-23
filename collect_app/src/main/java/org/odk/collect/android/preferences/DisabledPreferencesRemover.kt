@@ -20,16 +20,20 @@ import androidx.preference.PreferenceScreen
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.version.VersionInformation
 
-class DisabledPreferencesRemover(private val settingsProvider: SettingsProvider) {
+class DisabledPreferencesRemover(
+    private val settingsProvider: SettingsProvider,
+    private val versionInformation: VersionInformation
+) {
 
-    fun hideDisabledPref(preferenceScreen: PreferenceScreen) {
-        hideDisabledPreferences(preferenceScreen)
+    fun hideDisabledPref(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
+        hideDisabledPreferences(preferenceScreen, isStateLocked)
         hideEmptyCategories(preferenceScreen)
     }
 
     // Hides preferences that are excluded by the admin settings
-    private fun hideDisabledPreferences(preferenceScreen: PreferenceScreen) {
+    private fun hideDisabledPreferences(preferenceScreen: PreferenceScreen, isStateLocked: Boolean) {
         for (i in 0 until preferenceScreen.preferenceCount) {
             val preference = preferenceScreen.getPreference(i)
             when (preference.key) {
@@ -91,6 +95,13 @@ class DisabledPreferencesRemover(private val settingsProvider: SettingsProvider)
 
                 GeneralKeys.KEY_FORM_METADATA -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_CHANGE_FORM_METADATA)
                 GeneralKeys.KEY_ANALYTICS -> preference.isVisible = settingsProvider.getAdminSettings().getBoolean(AdminKeys.KEY_ANALYTICS)
+
+                "experimental" -> preference.isVisible = !versionInformation.isRelease
+
+                "admin_password" -> preference.isVisible = !isStateLocked
+                "project_management" -> preference.isVisible = !isStateLocked
+                "access_control" -> preference.isVisible = !isStateLocked
+                "unlock_protected_settings" -> preference.isVisible = isStateLocked
             }
         }
     }

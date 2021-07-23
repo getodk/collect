@@ -50,7 +50,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
         if (!projectPreferencesViewModel.isStateUnlocked()) {
-            disabledPreferencesRemover.hideDisabledPref(getPreferenceScreen());
+            disabledPreferencesRemover.hideDisabledPref(getPreferenceScreen(), projectPreferencesViewModel.isStateLocked());
         }
         super.onViewCreated(view, savedInstanceState);
     }

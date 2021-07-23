@@ -613,7 +613,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public DisabledPreferencesRemover providesDisabledPreferencesRemover(SettingsProvider settingsProvider) {
-        return new DisabledPreferencesRemover(settingsProvider);
+    public DisabledPreferencesRemover providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
+        return new DisabledPreferencesRemover(settingsProvider, versionInformation);
     }
 }

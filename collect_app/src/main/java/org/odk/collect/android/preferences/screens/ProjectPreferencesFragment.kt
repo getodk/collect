@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
@@ -30,16 +29,11 @@ import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
 import org.odk.collect.android.preferences.keys.AdminKeys
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
-import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.data.Consumable
-import javax.inject.Inject
 
 class ProjectPreferencesFragment :
     BaseProjectPreferencesFragment(),
     Preference.OnPreferenceClickListener {
-
-    @Inject
-    lateinit var versionInformation: VersionInformation
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,7 +45,7 @@ class ProjectPreferencesFragment :
             { state: Consumable<ProjectPreferencesViewModel.State> ->
                 if (!state.isConsumed()) {
                     state.consume()
-                    updatePreferencesVisibility()
+                    disabledPreferencesRemover.hideDisabledPref(preferenceScreen, state.value == ProjectPreferencesViewModel.State.LOCKED)
                     requireActivity().invalidateOptionsMenu()
                 }
             }
@@ -73,11 +67,6 @@ class ProjectPreferencesFragment :
         findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.onPreferenceClickListener = this
         findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.onPreferenceClickListener = this
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        updatePreferencesVisibility()
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
@@ -127,25 +116,6 @@ class ProjectPreferencesFragment :
             return true
         }
         return false
-    }
-
-    private fun updatePreferencesVisibility() {
-        findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible = true
-        findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = true
-        findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isVisible = true
-
-        if (projectPreferencesViewModel.isStateLocked()) {
-            findPreference<Preference>(AdminKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible = false
-            findPreference<Preference>(PROJECT_MANAGEMENT_PREFERENCE_KEY)!!.isVisible = false
-            findPreference<Preference>(ACCESS_CONTROL_PREFERENCE_KEY)!!.isVisible = false
-        } else {
-            findPreference<Preference>(UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY)!!.isVisible = false
-        }
-
-        if (versionInformation.isRelease) {
-            findPreference<Preference>(EXPERIMENTAL_PREFERENCE_KEY)!!.isVisible = false
-        }
     }
 
     companion object {
