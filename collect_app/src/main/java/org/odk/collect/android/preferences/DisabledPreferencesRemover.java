@@ -36,12 +36,17 @@ public class DisabledPreferencesRemover {
         this.adminSettings = adminSettings;
     }
 
+    public void hideDisabledPref(AdminAndGeneralKeys... keyPairs) {
+        remove(keyPairs);
+        removeEmptyCategories(pf.getPreferenceScreen());
+    }
+
     /**
      * Removes any preferences from the category that are excluded by the admin settings.
      *
      * @param keyPairs one or more AdminAndGeneralKeys objects.
      */
-    public void remove(AdminAndGeneralKeys... keyPairs) {
+    private void remove(AdminAndGeneralKeys... keyPairs) {
         for (AdminAndGeneralKeys agKeys : keyPairs) {
             boolean prefAllowed = adminSettings.getBoolean(agKeys.adminKey);
 
@@ -62,11 +67,6 @@ public class DisabledPreferencesRemover {
     /**
      * Deletes all empty PreferenceCategory items.
      */
-    public void removeEmptyCategories() {
-        removeEmptyCategories(pf.getPreferenceScreen());
-        removeEmptyCategories(pf.getPreferenceScreen());
-    }
-
     private void removeEmptyCategories(PreferenceGroup pc) {
         if (pc == null) {
             return;

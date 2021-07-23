@@ -72,7 +72,6 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     protected void removeDisabledPrefs() {
         DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, settingsProvider.getAdminSettings());
-        preferencesRemover.remove(AdminKeys.adminToGeneral);
-        preferencesRemover.removeEmptyCategories();
+        preferencesRemover.hideDisabledPref(AdminKeys.adminToGeneral);
     }
 }
