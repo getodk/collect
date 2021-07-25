@@ -156,6 +156,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
             } ?: run {
                 createProject(settingsJson)
+                Analytics.log(AnalyticsEvents.MANUAL_CREATE_PROJECT)
             }
         }
     }
@@ -177,8 +178,6 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
     }
 
     override fun createProject(settingsJson: String) {
-        Analytics.log(AnalyticsEvents.MANUAL_CREATE_PROJECT)
-
         projectCreator.createNewProject(settingsJson)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name))
