@@ -173,46 +173,55 @@ public class AnalyticsEvents {
     /**
      * Tracks how often users switch between projects
      */
-    public static final String SWITCH_PROJECT = "SwitchProject";
+    public static final String SWITCH_PROJECT = "ProjectSwitch";
 
     /**
      * Tracks how often users choose to try the demo project
      */
-    public static final String TRY_DEMO = "TryDemo";
+    public static final String TRY_DEMO = "ProjectCreateDemo";
 
     /**
-     * Tracks how often projects are created using QR codes. he total number of
-     * created projects can be calculated from the combined count of
-     * {@link AnalyticsEvents#MANUAL_CREATE_PROJECT} and {@link AnalyticsEvents#QR_CREATE_PROJECT}.
+     * Tracks how often projects are created using QR codes.
      **/
-    public static final String QR_CREATE_PROJECT = "QrCreateProject";
+    public static final String QR_CREATE_PROJECT = "ProjectCreateQR";
 
     /**
-     * Tracks how often projects are created by manually entering details. The total number of
-     * created projects can be calculated from the combined count of
-     * {@link AnalyticsEvents#MANUAL_CREATE_PROJECT} and {@link AnalyticsEvents#QR_CREATE_PROJECT}.
+     * Tracks how often projects are created by manually entering details.
      */
-    public static final String MANUAL_CREATE_PROJECT = "ManualCreateProject";
+    public static final String MANUAL_CREATE_PROJECT = "ProjectCreateManual";
 
     /**
      * Tracks how often a Google account is used to configure a manually created project
      */
-    public static final String GOOGLE_ACCOUNT_PROJECT = "GoogleAccountProject";
+    public static final String GOOGLE_ACCOUNT_PROJECT = "ProjectCreateGoogle";
+
+    /**
+     * Tracks how often projects with the same connection settings as an existing one are attempted
+     * to be created.
+     */
+    public static final String DUPLICATE_PROJECT = "ProjectCreateDuplicate";
+
+    /**
+     * Tracks how often users try to create projects with the same connection settings but then decide
+     * to switch to an existing project instead. This will give us a sense of whether users are getting
+     * confused about project identity and trying to recreate the same one multiple times.
+     */
+    public static final String DUPLICATE_PROJECT_SWITCH = "ProjectCreateDuplicateSwitch";
 
     /**
      * Tracks how often users delete projects
      */
-    public static final String DELETE_PROJECT = "DeleteProject";
+    public static final String DELETE_PROJECT = "ProjectDelete";
 
     /**
      * These events track how often users change project display settings
      **/
-    public static final String CHANGE_PROJECT_NAME = "ChangeProjectName";
-    public static final String CHANGE_PROJECT_ICON = "ChangeProjectIcon";
-    public static final String CHANGE_PROJECT_COLOR = "ChangeProjectColor";
+    public static final String CHANGE_PROJECT_NAME = "ProjectChangeName";
+    public static final String CHANGE_PROJECT_ICON = "ProjectChangeIcon";
+    public static final String CHANGE_PROJECT_COLOR = "ProjectChangeColor";
 
     /**
      * Tracks how often users reconfigure a project using QR codes
      */
-    public static final String RECONFIGURE_PROJECT = "ReconfigureProject";
+    public static final String RECONFIGURE_PROJECT = "ProjectReconfigure";
 }
