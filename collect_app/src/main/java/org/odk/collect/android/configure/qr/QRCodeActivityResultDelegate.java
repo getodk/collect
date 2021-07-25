@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
 import org.odk.collect.projects.Project;
@@ -51,6 +53,7 @@ public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
                     String response = qrCodeDecoder.decode(imageStream);
                     if (response != null) {
                         if (settingsImporter.fromJSON(response, project)) {
+                            Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT);
                             showToast(R.string.successfully_imported_settings);
                             startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
                         } else {

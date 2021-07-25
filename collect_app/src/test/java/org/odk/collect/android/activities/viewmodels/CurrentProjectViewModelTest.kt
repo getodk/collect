@@ -3,12 +3,12 @@ package org.odk.collect.android.activities.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
 
@@ -17,15 +17,12 @@ class CurrentProjectViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var currentProjectProvider: CurrentProjectProvider
-    private lateinit var currentProjectViewModel: CurrentProjectViewModel
-
-    @Before
-    fun setup() {
-        currentProjectProvider = mock(CurrentProjectProvider::class.java)
-        `when`(currentProjectProvider.getCurrentProject()).thenReturn(Project.Saved("123", "Project X", "X", "#cccccc"))
-        currentProjectViewModel = CurrentProjectViewModel(currentProjectProvider)
+    private val currentProjectProvider = mock<CurrentProjectProvider> {
+        on { getCurrentProject() } doReturn Project.Saved("123", "Project X", "X", "#cccccc")
     }
+
+    private val analyticsInitializer = mock<AnalyticsInitializer>()
+    private val currentProjectViewModel = CurrentProjectViewModel(currentProjectProvider, analyticsInitializer)
 
     @Test
     fun `Initial current project should be set`() {
@@ -38,5 +35,13 @@ class CurrentProjectViewModelTest {
 
         currentProjectViewModel.setCurrentProject(project)
         verify(currentProjectProvider).setCurrentProject("456")
+    }
+
+    @Test
+    fun `setCurrentProject() re-initializes analytics`() {
+        val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
+
+        currentProjectViewModel.setCurrentProject(project)
+        verify(analyticsInitializer).initialize()
     }
 }

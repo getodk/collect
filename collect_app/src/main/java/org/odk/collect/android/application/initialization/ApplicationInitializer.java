@@ -22,7 +22,7 @@ import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
 import org.odk.collect.android.storage.StorageInitializer;
 import org.odk.collect.android.utilities.LaunchState;
-import org.odk.collect.android.version.VersionInformation;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.util.Locale;
@@ -38,12 +38,14 @@ public class ApplicationInitializer {
     private final StorageInitializer storageInitializer;
     private final LaunchState launchState;
     private final AppUpgrader appUpgrader;
-    private final VersionInformation versionInformation;
+    private final AnalyticsInitializer analyticsInitializer;
+    private final ProjectsRepository projectsRepository;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   StorageInitializer storageInitializer, LaunchState launchState,
-                                  AppUpgrader appUpgrader, VersionInformation versionInformation) {
+                                  AppUpgrader appUpgrader,
+                                  AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
@@ -51,7 +53,8 @@ public class ApplicationInitializer {
         this.storageInitializer = storageInitializer;
         this.launchState = launchState;
         this.appUpgrader = appUpgrader;
-        this.versionInformation = versionInformation;
+        this.analyticsInitializer = analyticsInitializer;
+        this.projectsRepository = projectsRepository;
     }
 
     public void initialize() {
@@ -79,11 +82,8 @@ public class ApplicationInitializer {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         initializeMapFrameworks();
         initializeJavaRosa();
-        initializeAnalytics();
-    }
-
-    private void initializeAnalytics() {
-        analytics.setAnalyticsCollectionEnabled(versionInformation.isBeta());
+        analyticsInitializer.initialize();
+        new UserPropertiesInitializer(analytics, projectsRepository).initialize();
     }
 
     private void initializeLocale() {

@@ -12,9 +12,11 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.gdrive.GoogleAccountsManager
@@ -79,6 +81,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 confirmationArgs.putString(MATCHING_PROJECT, uuid)
                 DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
             } ?: run {
+                Analytics.log(AnalyticsEvents.GOOGLE_ACCOUNT_PROJECT)
                 createProject(settingsJson)
             }
         }
@@ -153,6 +156,7 @@ class ManualProjectCreatorDialog : MaterialFullScreenDialogFragment(), Duplicate
                 DialogUtils.showIfNotShowing(DuplicateProjectConfirmationDialog::class.java, confirmationArgs, childFragmentManager)
             } ?: run {
                 createProject(settingsJson)
+                Analytics.log(AnalyticsEvents.MANUAL_CREATE_PROJECT)
             }
         }
     }

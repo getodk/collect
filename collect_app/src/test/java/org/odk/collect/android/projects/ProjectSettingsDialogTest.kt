@@ -21,6 +21,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -52,8 +53,11 @@ class ProjectSettingsDialogTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesCurrentProjectViewModel(currentProjectProvider: CurrentProjectProvider): CurrentProjectViewModel.Factory {
-                return object : CurrentProjectViewModel.Factory(currentProjectProvider) {
+            override fun providesCurrentProjectViewModel(
+                currentProjectProvider: CurrentProjectProvider,
+                analyticsInitializer: AnalyticsInitializer
+            ): CurrentProjectViewModel.Factory? {
+                return object : CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return currentProjectViewModel as T
                     }
