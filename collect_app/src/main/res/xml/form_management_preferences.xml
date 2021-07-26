@@ -4,6 +4,7 @@
     android:title="@string/form_management_preferences">
 
     <PreferenceCategory
+        android:key="form_update_category"
         android:title="@string/form_update_category"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"

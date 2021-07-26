@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -368,6 +369,104 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When all preferences in 'Form update' category are hidden, the category should be hidden as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_update_category")!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When al least one preference in 'Form update' category is visible, the category should be visible as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, true)
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_update_category")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `When all preferences in 'Form submission' category are hidden, the category should be hidden as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_submission")!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When al least one preference in 'Form submission' category is visible, the category should be visible as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, true)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_submission")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `When all preferences in 'Form filling' category are hidden, the category should be hidden as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_filling")!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When al least one preference in 'Form filling' category is visible, the category should be visible as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, true)
+        adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_filling")!!.isVisible, `is`(true))
+        }
+    }
+
+    @Test
+    fun `When all preferences in 'Form import' category are hidden, the category should be hidden as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_import")!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When al least one preference in 'Form import' category is visible, the category should be visible as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, true)
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("form_import")!!.isVisible, `is`(true))
         }
     }
 }
