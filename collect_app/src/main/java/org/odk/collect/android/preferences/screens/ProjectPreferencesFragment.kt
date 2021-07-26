@@ -44,7 +44,7 @@ class ProjectPreferencesFragment :
             { state: Consumable<ProjectPreferencesViewModel.State> ->
                 if (!state.isConsumed()) {
                     state.consume()
-                    preferenceVisibilityHandler.updatePreferencesVisibility(preferenceScreen, state.value == ProjectPreferencesViewModel.State.LOCKED)
+                    preferenceVisibilityHandler.updatePreferencesVisibility(preferenceScreen, state.value)
                     requireActivity().invalidateOptionsMenu()
                 }
             }
