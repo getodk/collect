@@ -10,9 +10,6 @@ object ProjectKeys {
     // server_preferences.xml
     const val KEY_PROTOCOL = "protocol"
 
-    // project_display.xml
-    const val KEY_PROJECT_DISPLAY = "project_display"
-
     // odk_server_preferences.xml
     const val KEY_SERVER_URL = "server_url"
     const val KEY_USERNAME = "username"
@@ -25,6 +22,9 @@ object ProjectKeys {
     // google_preferences.xml
     const val KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account"
     const val KEY_GOOGLE_SHEETS_URL = "google_sheets_url"
+
+    // project_display.xml
+    const val KEY_PROJECT_DISPLAY = "project_display"
 
     // user_interface_preferences.xml
     const val KEY_APP_THEME = "appTheme"
