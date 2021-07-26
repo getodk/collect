@@ -4,6 +4,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.ViewModel
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
@@ -256,6 +257,26 @@ class IdentityPreferencesFragmentFragmentTest {
             assertThat(option.isChecked, `is`(false))
             scenario.recreate()
             assertThat(option.isChecked, `is`(false))
+        }
+    }
+    
+    @Test
+    fun `When all preferences in 'Usage data' category are hidden, the category should be hidden as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
+
+        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        scenario.onFragment { fragment: IdentityPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("usage_data")!!.isVisible, `is`(false))
+        }
+    }
+
+    @Test
+    fun `When al least one preference in 'Usage data' category is visible, the category should be visible as well`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, true)
+
+        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        scenario.onFragment { fragment: IdentityPreferencesFragment ->
+            assertThat(fragment.findPreference<PreferenceCategory>("usage_data")!!.isVisible, `is`(true))
         }
     }
 }

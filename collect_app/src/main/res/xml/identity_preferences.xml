@@ -12,7 +12,7 @@
         app:allowDividerBelow="false" />
 
     <PreferenceCategory
-        android:key="@string/analytics_preferences"
+        android:key="usage_data"
         android:title="@string/analytics_preferences"
         app:iconSpaceReserved="false">
 
