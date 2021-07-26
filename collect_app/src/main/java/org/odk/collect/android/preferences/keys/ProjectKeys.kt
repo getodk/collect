@@ -45,6 +45,7 @@ object ProjectKeys {
     const val KEY_REFERENCE_LAYER = "reference_layer"
 
     // form_management_preferences.xml
+    const val KEY_FORM_UPDATE_MODE = "form_update_mode"
     const val KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check"
     const val KEY_AUTOMATIC_UPDATE = "automatic_update"
     const val KEY_HIDE_OLD_FORM_VERSIONS = "hide_old_form_versions"
@@ -55,9 +56,8 @@ object ProjectKeys {
     const val KEY_HIGH_RESOLUTION = "high_resolution"
     const val KEY_IMAGE_SIZE = "image_size"
     const val KEY_GUIDANCE_HINT = "guidance_hint"
-    const val KEY_INSTANCE_SYNC = "instance_sync"
-    const val KEY_FORM_UPDATE_MODE = "form_update_mode"
     const val KEY_EXTERNAL_APP_RECORDING = "external_app_recording"
+    const val KEY_INSTANCE_SYNC = "instance_sync"
 
     // identity_preferences.xml
     const val KEY_ANALYTICS = "analytics"

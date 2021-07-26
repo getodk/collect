@@ -222,6 +222,7 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
@@ -232,12 +233,14 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be hidden in Locked mode`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -248,12 +251,14 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateLocked()
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
@@ -264,6 +269,7 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(false))
         }
     }
@@ -274,6 +280,7 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
@@ -284,12 +291,14 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be visible in Unlocked mode`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -300,12 +309,14 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
@@ -316,6 +327,7 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(true))
         }
     }
@@ -326,6 +338,7 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
@@ -336,12 +349,14 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be hidden in NotProtected mode`() {
+        adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
@@ -352,12 +367,14 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
         adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
@@ -368,6 +385,7 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_GUIDANCE_HINT)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_EXTERNAL_APP_RECORDING)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_INSTANCE_SYNC)!!.isVisible, `is`(false))
         }
     }

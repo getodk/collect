@@ -259,7 +259,7 @@ class IdentityPreferencesFragmentTest {
             assertThat(option.isChecked, `is`(false))
         }
     }
-    
+
     @Test
     fun `When all preferences in 'Usage data' category are hidden, the category should be hidden as well`() {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
