@@ -61,6 +61,14 @@ object ProtectedProjectKeys {
         }
 
     fun allKeys() = listOf(
+        KEY_ADMIN_PW,
+
+        KEY_EDIT_SAVED,
+        KEY_SEND_FINALIZED,
+        KEY_VIEW_SENT,
+        KEY_GET_BLANK,
+        KEY_DELETE_SAVED,
+
         KEY_CHANGE_SERVER,
         KEY_CHANGE_PROJECT_DISPLAY,
         KEY_APP_THEME,
@@ -84,11 +92,7 @@ object ProtectedProjectKeys {
         KEY_INSTANCE_FORM_SYNC,
         KEY_CHANGE_FORM_METADATA,
         KEY_ANALYTICS,
-        KEY_EDIT_SAVED,
-        KEY_SEND_FINALIZED,
-        KEY_VIEW_SENT,
-        KEY_GET_BLANK,
-        KEY_DELETE_SAVED,
+
         KEY_MOVING_BACKWARDS,
         KEY_ACCESS_SETTINGS,
         KEY_CHANGE_LANGUAGE,
@@ -96,7 +100,6 @@ object ProtectedProjectKeys {
         KEY_SAVE_MID,
         KEY_SAVE_AS,
         KEY_MARK_AS_FINALIZED,
-        ALLOW_OTHER_WAYS_OF_EDITING_FORM,
-        KEY_ADMIN_PW
+        ALLOW_OTHER_WAYS_OF_EDITING_FORM
     )
 }
