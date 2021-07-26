@@ -40,8 +40,8 @@ class PreferenceVisibilityHandler(
                 updatePreferences(preference, state)
             }
             when (preference.key) {
-                "protocol" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_SERVER)
-                "project_display" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY)
+                "protocol" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_SERVER)
+                "project_display" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY)
                 "user_interface" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || hasAtLeastOnePreferenceEnabled(
                     listOf(
                         ProtectedProjectKeys.KEY_APP_THEME,
@@ -51,7 +51,7 @@ class PreferenceVisibilityHandler(
                         ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN
                     )
                 )
-                "maps" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_MAPS)
+                "maps" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_MAPS)
                 "form_management" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || hasAtLeastOnePreferenceEnabled(
                     listOf(
                         ProtectedProjectKeys.KEY_FORM_UPDATE_MODE,
@@ -75,29 +75,29 @@ class PreferenceVisibilityHandler(
                         ProtectedProjectKeys.KEY_ANALYTICS
                     )
                 )
-                ProjectKeys.KEY_APP_THEME -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_APP_THEME)
-                ProjectKeys.KEY_APP_LANGUAGE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_APP_LANGUAGE)
-                ProjectKeys.KEY_FONT_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE)
-                ProjectKeys.KEY_NAVIGATION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_NAVIGATION)
-                ProjectKeys.KEY_SHOW_SPLASH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
-                ProjectKeys.KEY_SPLASH_PATH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
+                ProjectKeys.KEY_APP_THEME -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_APP_THEME)
+                ProjectKeys.KEY_APP_LANGUAGE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_APP_LANGUAGE)
+                ProjectKeys.KEY_FONT_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE)
+                ProjectKeys.KEY_NAVIGATION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_NAVIGATION)
+                ProjectKeys.KEY_SHOW_SPLASH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
+                ProjectKeys.KEY_SPLASH_PATH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
 
-                ProjectKeys.KEY_FORM_UPDATE_MODE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE)
-                ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
-                ProjectKeys.KEY_AUTOMATIC_UPDATE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE)
-                ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
-                ProjectKeys.KEY_AUTOSEND -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_AUTOSEND)
-                ProjectKeys.KEY_DELETE_AFTER_SEND -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND)
-                ProjectKeys.KEY_COMPLETED_DEFAULT -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED)
-                ProjectKeys.KEY_CONSTRAINT_BEHAVIOR -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR)
-                ProjectKeys.KEY_HIGH_RESOLUTION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_HIGH_RESOLUTION)
-                ProjectKeys.KEY_IMAGE_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_IMAGE_SIZE)
-                ProjectKeys.KEY_GUIDANCE_HINT -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_GUIDANCE_HINT)
-                ProjectKeys.KEY_EXTERNAL_APP_RECORDING -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING)
-                ProjectKeys.KEY_INSTANCE_SYNC -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC)
+                ProjectKeys.KEY_FORM_UPDATE_MODE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE)
+                ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)
+                ProjectKeys.KEY_AUTOMATIC_UPDATE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE)
+                ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
+                ProjectKeys.KEY_AUTOSEND -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_AUTOSEND)
+                ProjectKeys.KEY_DELETE_AFTER_SEND -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND)
+                ProjectKeys.KEY_COMPLETED_DEFAULT -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED)
+                ProjectKeys.KEY_CONSTRAINT_BEHAVIOR -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR)
+                ProjectKeys.KEY_HIGH_RESOLUTION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_HIGH_RESOLUTION)
+                ProjectKeys.KEY_IMAGE_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_IMAGE_SIZE)
+                ProjectKeys.KEY_GUIDANCE_HINT -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_GUIDANCE_HINT)
+                ProjectKeys.KEY_EXTERNAL_APP_RECORDING -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING)
+                ProjectKeys.KEY_INSTANCE_SYNC -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC)
 
-                ProjectKeys.KEY_FORM_METADATA -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA)
-                ProjectKeys.KEY_ANALYTICS -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_ANALYTICS)
+                ProjectKeys.KEY_FORM_METADATA -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA)
+                ProjectKeys.KEY_ANALYTICS -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_ANALYTICS)
 
                 "experimental" -> preference.isVisible = !versionInformation.isRelease
 
@@ -139,4 +139,6 @@ class PreferenceVisibilityHandler(
         }
         return false
     }
+
+    private fun isOptionEnabled(key: String) = settingsProvider.getAdminSettings().getBoolean(key)
 }
