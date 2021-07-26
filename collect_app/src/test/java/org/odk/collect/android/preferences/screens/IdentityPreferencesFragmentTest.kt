@@ -25,7 +25,7 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)
-class IdentityPreferencesFragmentFragmentTest {
+class IdentityPreferencesFragmentTest {
     private lateinit var generalSettings: Settings
     private lateinit var adminSettings: Settings
 
