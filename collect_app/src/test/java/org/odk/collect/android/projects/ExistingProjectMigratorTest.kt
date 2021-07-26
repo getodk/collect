@@ -10,7 +10,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -32,7 +32,7 @@ class ExistingProjectMigratorTest {
         PreferenceManager
             .getDefaultSharedPreferences(context)
             .edit()
-            .putString(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
+            .putString(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
             .apply()
 
         existingProjectMigrator.run()

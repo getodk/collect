@@ -17,7 +17,7 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.version.VersionInformation
@@ -63,7 +63,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
     }
 
@@ -74,7 +74,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
     }
 
@@ -84,7 +84,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
     }
 
@@ -95,7 +95,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
     }
 
@@ -105,7 +105,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
     }
 
@@ -116,7 +116,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
     }
 
@@ -126,7 +126,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
     }
 
@@ -137,7 +137,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
     }
 
@@ -147,7 +147,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
     }
 
@@ -158,7 +158,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
     }
 
@@ -168,7 +168,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
     }
 
@@ -179,13 +179,13 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
     }
 
     @Test
     fun `'Collect anonymous usage data' option should be checked if it's enabled in settings`() {
-        generalSettings.save(GeneralKeys.KEY_ANALYTICS, true)
+        generalSettings.save(ProjectKeys.KEY_ANALYTICS, true)
         whenever(versionInformation.isBeta).thenReturn(false)
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -196,7 +196,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
     @Test
     fun `'Collect anonymous usage data' option should be unchecked if it's disabled in settings`() {
-        generalSettings.save(GeneralKeys.KEY_ANALYTICS, false)
+        generalSettings.save(ProjectKeys.KEY_ANALYTICS, false)
         whenever(versionInformation.isBeta).thenReturn(false)
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -211,8 +211,8 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<CheckBoxPreference>(GeneralKeys.KEY_ANALYTICS)!!.isEnabled, `is`(false))
-            assertThat(fragment.findPreference<CheckBoxPreference>(GeneralKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
+            assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isEnabled, `is`(false))
+            assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
         }
     }
 
@@ -222,7 +222,7 @@ class IdentityPreferencesFragmentFragmentTest {
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
-            assertThat(fragment.findPreference<CheckBoxPreference>(GeneralKeys.KEY_ANALYTICS)!!.isEnabled, `is`(true))
+            assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isEnabled, `is`(true))
         }
     }
 

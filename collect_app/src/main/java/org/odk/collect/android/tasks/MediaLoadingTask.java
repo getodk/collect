@@ -23,7 +23,7 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
 
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 

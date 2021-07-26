@@ -40,7 +40,7 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.tasks.FormSyncTask;
@@ -284,6 +284,6 @@ public class FillBlankFormActivity extends FormListActivity implements
     }
 
     private boolean hideOldFormVersions() {
-        return settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_HIDE_OLD_FORM_VERSIONS);
+        return settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS);
     }
 }

@@ -12,7 +12,7 @@ import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -36,7 +36,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
 
 public class InstanceSubmitter {
@@ -65,14 +65,14 @@ public class InstanceSubmitter {
             throw new SubmitException(Type.NOTHING_TO_SUBMIT);
         }
 
-        String protocol = generalSettings.getString(GeneralKeys.KEY_PROTOCOL);
+        String protocol = generalSettings.getString(ProjectKeys.KEY_PROTOCOL);
 
         InstanceUploader uploader;
         Map<String, String> resultMessagesByInstanceId = new HashMap<>();
         String deviceId = null;
         boolean anyFailure = false;
 
-        if (protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+        if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
             if (permissionsProvider.isGetAccountsPermissionGranted()) {
                 String googleUsername = googleAccountsManager.getLastSelectedAccountIfValid();
                 if (googleUsername.isEmpty()) {
@@ -92,7 +92,7 @@ public class InstanceSubmitter {
         for (Instance instance : toUpload) {
             try {
                 String destinationUrl;
-                if (protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+                if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
                     destinationUrl = uploader.getUrlToSubmitTo(instance, null, null, generalSettings.getString(KEY_GOOGLE_SHEETS_URL));
 
                     if (!InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
@@ -113,16 +113,16 @@ public class InstanceSubmitter {
                 // perhaps another worker. It also feels like this could fail and if so should be
                 // communicated to the user. Maybe successful delete should also be communicated?
                 if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(),
-                        generalSettings.getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND))) {
+                        generalSettings.getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND))) {
                     new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), new FormsRepositoryProvider(Collect.getInstance()).get()).delete(instance.getDbId());
                 }
 
-                String action = protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS) ?
+                String action = protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS) ?
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion());
                 analytics.logEvent(SUBMISSION, action, label);
 
-                String submissionEndpoint = generalSettings.getString(GeneralKeys.KEY_SUBMISSION_URL);
+                String submissionEndpoint = generalSettings.getString(ProjectKeys.KEY_SUBMISSION_URL);
                 if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
                     String submissionEndpointHash = Md5.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
                     analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);

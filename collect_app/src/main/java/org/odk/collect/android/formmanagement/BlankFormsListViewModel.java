@@ -15,7 +15,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
@@ -101,7 +101,7 @@ public class BlankFormsListViewModel extends ViewModel {
     }
 
     private void logManualSync() {
-        Uri uri = Uri.parse(generalSettings.getString(GeneralKeys.KEY_SERVER_URL));
+        Uri uri = Uri.parse(generalSettings.getString(ProjectKeys.KEY_SERVER_URL));
         String host = uri.getHost() != null ? uri.getHost() : "";
         String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(host.getBytes()));
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash);

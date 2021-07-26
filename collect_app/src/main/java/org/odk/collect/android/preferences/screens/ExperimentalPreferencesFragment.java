@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 
@@ -19,7 +19,7 @@ public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragm
         super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.experimental_preferences, rootKey);
 
-        findPreference(GeneralKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {
+        findPreference(ProjectKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {
             startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
             return true;
         });

@@ -4,7 +4,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.application.initialization.SettingsMigrator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.projects.Project
@@ -51,10 +51,11 @@ class SettingsImporter(
                 JSONObject()
             }
 
-            val connectionIdentifier = if (generalSettings.getString(GeneralKeys.KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
-                generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
+            val connectionIdentifier = if (generalSettings.getString(ProjectKeys.KEY_PROTOCOL).equals(
+                    ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
+                generalSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
             } else {
-                generalSettings.getString(GeneralKeys.KEY_SERVER_URL) ?: ""
+                generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
             }
 
             importProjectDetails(

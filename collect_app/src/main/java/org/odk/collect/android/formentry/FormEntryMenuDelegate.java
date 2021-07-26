@@ -25,7 +25,7 @@ import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {
 

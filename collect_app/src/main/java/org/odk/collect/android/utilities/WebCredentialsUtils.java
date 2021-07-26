@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.net.URI;
@@ -37,8 +37,8 @@ public class WebCredentialsUtils {
     }
 
     public void saveCredentialsPreferences(String userName, String password, PropertyManager propertyManager) {
-        generalSettings.save(GeneralKeys.KEY_USERNAME, userName);
-        generalSettings.save(GeneralKeys.KEY_PASSWORD, password);
+        generalSettings.save(ProjectKeys.KEY_USERNAME, userName);
+        generalSettings.save(ProjectKeys.KEY_PASSWORD, password);
 
         propertyManager.reload();
     }
@@ -69,15 +69,15 @@ public class WebCredentialsUtils {
     }
 
     public String getServerUrlFromPreferences() {
-        return generalSettings.getString(GeneralKeys.KEY_SERVER_URL);
+        return generalSettings.getString(ProjectKeys.KEY_SERVER_URL);
     }
 
     public String getPasswordFromPreferences() {
-        return generalSettings.getString(GeneralKeys.KEY_PASSWORD);
+        return generalSettings.getString(ProjectKeys.KEY_PASSWORD);
     }
 
     public String getUserNameFromPreferences() {
-        return generalSettings.getString(GeneralKeys.KEY_USERNAME);
+        return generalSettings.getString(ProjectKeys.KEY_USERNAME);
     }
 
     /**

@@ -4,7 +4,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -94,17 +94,17 @@ class SettingsConnectionMatcherTest {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
         val generalSettings = inMemSettingsProvider.getGeneralSettings(projectId)
-        generalSettings.save(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_SERVER)
-        generalSettings.save(GeneralKeys.KEY_SERVER_URL, url)
-        generalSettings.save(GeneralKeys.KEY_USERNAME, username)
+        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
+        generalSettings.save(ProjectKeys.KEY_SERVER_URL, url)
+        generalSettings.save(ProjectKeys.KEY_USERNAME, username)
     }
 
     private fun createGoogleDriveProject(projectId: String, account: String) {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
         val generalSettings = inMemSettingsProvider.getGeneralSettings(projectId)
-        generalSettings.save(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
-        generalSettings.save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, account)
+        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
+        generalSettings.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, account)
     }
 
     private fun getServerSettingsJson(url: String): String {

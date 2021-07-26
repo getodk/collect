@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.FormUpdateMode
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.shared.Settings
 
@@ -288,7 +288,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `When match exactly enabled shows the Get Blank Form option as unchecked and disabled`() {
-        generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
+        generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
 
         val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
 
@@ -302,9 +302,9 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `When match exactly enabled and google used as protocol the Get Blank Form option is enabled`() {
-        generalSettings.save(GeneralKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
+        generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
 
-        generalSettings.save(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
+        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)!!.isEnabled, `is`(true))

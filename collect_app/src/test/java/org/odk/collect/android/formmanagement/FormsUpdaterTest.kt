@@ -22,7 +22,7 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
@@ -99,7 +99,7 @@ class FormsUpdaterTest {
         addFormToServer(updatedXForm, "formId", "2")
 
         settingsProvider.getGeneralSettings(project.uuid)
-            .save(GeneralKeys.KEY_AUTOMATIC_UPDATE, true)
+            .save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
 
         updateManager.downloadUpdates(project.uuid)
         assertThat(

@@ -11,7 +11,7 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
@@ -89,7 +89,7 @@ public class InstanceAutoSender {
 
     @NotNull
     private List<Instance> getInstancesToAutoSend(FormsRepository formsRepository, InstancesRepository instancesRepository, Settings generalSettings) {
-        boolean isAutoSendAppSettingEnabled = !generalSettings.getString(GeneralKeys.KEY_AUTOSEND).equals("off");
+        boolean isAutoSendAppSettingEnabled = !generalSettings.getString(ProjectKeys.KEY_AUTOSEND).equals("off");
         List<Instance> toUpload = new ArrayList<>();
         for (Instance instance : instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)) {
             if (shouldFormBeSent(formsRepository, instance.getFormId(), instance.getFormVersion(), isAutoSendAppSettingEnabled)) {

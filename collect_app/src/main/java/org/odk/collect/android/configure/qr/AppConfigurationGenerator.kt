@@ -2,7 +2,7 @@ package org.odk.collect.android.configure.qr
 
 import org.json.JSONObject
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 
@@ -13,9 +13,9 @@ class AppConfigurationGenerator(
 
     fun getAppConfigurationAsJsonWithServerDetails(url: String, username: String, password: String): String {
         val generalSettings = JSONObject().apply {
-            put(GeneralKeys.KEY_SERVER_URL, url)
-            put(GeneralKeys.KEY_USERNAME, username)
-            put(GeneralKeys.KEY_PASSWORD, password)
+            put(ProjectKeys.KEY_SERVER_URL, url)
+            put(ProjectKeys.KEY_USERNAME, username)
+            put(ProjectKeys.KEY_PASSWORD, password)
         }
 
         return JSONObject().apply {
@@ -27,9 +27,9 @@ class AppConfigurationGenerator(
 
     fun getAppConfigurationAsJsonWithGoogleDriveDetails(googleAccount: String?): String {
         val generalSettings = JSONObject().apply {
-            put(GeneralKeys.KEY_PROTOCOL, GeneralKeys.PROTOCOL_GOOGLE_SHEETS)
-            put(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, googleAccount)
-            put(GeneralKeys.KEY_SERVER_URL, "")
+            put(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
+            put(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, googleAccount)
+            put(ProjectKeys.KEY_SERVER_URL, "")
         }
 
         return JSONObject().apply {
@@ -51,10 +51,11 @@ class AppConfigurationGenerator(
         val generalPrefs = JSONObject()
 
         val generalSettings = settingsProvider.getGeneralSettings().getAll()
-        val defaultGeneralSettings: Map<String, *> = GeneralKeys.getDefaults()
+        val defaultGeneralSettings: Map<String, *> = ProjectKeys.getDefaults()
 
         for (key in defaultGeneralSettings.keys) {
-            if (key == GeneralKeys.KEY_PASSWORD && !includedPasswordKeys.contains(GeneralKeys.KEY_PASSWORD)) {
+            if (key == ProjectKeys.KEY_PASSWORD && !includedPasswordKeys.contains(
+                    ProjectKeys.KEY_PASSWORD)) {
                 continue
             }
             val value = generalSettings[key]

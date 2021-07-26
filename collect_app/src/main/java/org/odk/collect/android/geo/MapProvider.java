@@ -17,17 +17,17 @@ import org.odk.collect.shared.Settings;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 /**
  * Obtains a MapFragment according to the user's preferences.

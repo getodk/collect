@@ -22,8 +22,8 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
 public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragment {
 

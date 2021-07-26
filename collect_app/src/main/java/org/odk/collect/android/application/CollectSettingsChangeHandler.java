@@ -9,11 +9,11 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import static org.odk.collect.android.analytics.AnalyticsUtils.getServerHash;
 import static org.odk.collect.android.analytics.AnalyticsUtils.logServerConfiguration;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_EXTERNAL_APP_RECORDING;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SERVER_URL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 
 public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 

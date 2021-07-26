@@ -10,7 +10,7 @@ import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds

@@ -8,7 +8,7 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -51,7 +51,7 @@ class FormsUpdater(
                 serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
                     .collect(Collectors.toList())
             if (updatedForms.isNotEmpty()) {
-                if (sandbox.generalSettings.getBoolean(GeneralKeys.KEY_AUTOMATIC_UPDATE)) {
+                if (sandbox.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                     val formUpdateDownloader = FormUpdateDownloader()
                     val results = formUpdateDownloader.downloadUpdates(
                         updatedForms,

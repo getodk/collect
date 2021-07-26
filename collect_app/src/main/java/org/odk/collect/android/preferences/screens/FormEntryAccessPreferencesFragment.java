@@ -8,7 +8,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
@@ -16,7 +16,7 @@ import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_JUMP_TO;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_SAVE_MID;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
 
 public class FormEntryAccessPreferencesFragment extends BaseAdminPreferencesFragment {
 
@@ -43,7 +43,7 @@ public class FormEntryAccessPreferencesFragment extends BaseAdminPreferencesFrag
         settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
         settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
         settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
         findPreference(KEY_JUMP_TO).setEnabled(false);
         findPreference(KEY_SAVE_MID).setEnabled(false);

@@ -28,7 +28,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import javax.inject.Inject;
@@ -36,14 +36,14 @@ import javax.inject.Inject;
 import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_AUTOSEND;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GUIDANCE_HINT;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferencesFragment extends BaseProjectPreferencesFragment {
@@ -91,7 +91,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (generalSettings.getString(KEY_PROTOCOL).equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+        if (generalSettings.getString(KEY_PROTOCOL).equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
             displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(R.string.manual));
             if (automaticDownload != null) {
                 displayDisabled(automaticDownload, false);

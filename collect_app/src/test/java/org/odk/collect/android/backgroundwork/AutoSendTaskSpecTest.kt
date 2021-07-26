@@ -17,7 +17,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.permissions.PermissionsProvider
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
@@ -55,7 +55,7 @@ class AutoSendTaskSpecTest {
         RobolectricHelpers.mountExternalStorage()
         projectId = CollectHelpers.setupDemoProject()
         TestSettingsProvider.getGeneralSettings(projectId)
-            .save(GeneralKeys.KEY_AUTOSEND, "wifi_and_cellular")
+            .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
     }
 
     @Test

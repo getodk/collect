@@ -6,7 +6,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.android.utilities.LaunchState
 import org.odk.collect.projects.Project
@@ -29,13 +29,13 @@ class SplashScreenViewModelTest {
 
     @Test
     fun `shouldDisplaySplashScreen() should return false if displaying splash screen is disabled`() {
-        `when`(generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)).thenReturn(false)
+        `when`(generalSettings.getBoolean(ProjectKeys.KEY_SHOW_SPLASH)).thenReturn(false)
         assertThat(splashScreenViewModel.shouldDisplaySplashScreen, `is`(false))
     }
 
     @Test
     fun `shouldDisplaySplashScreen() should return true if displaying splash screen is enabled`() {
-        `when`(generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)).thenReturn(true)
+        `when`(generalSettings.getBoolean(ProjectKeys.KEY_SHOW_SPLASH)).thenReturn(true)
         assertThat(splashScreenViewModel.shouldDisplaySplashScreen, `is`(true))
     }
 
@@ -46,7 +46,7 @@ class SplashScreenViewModelTest {
 
     @Test
     fun `splashScreenLogoFile should return file name if custom logo is specified`() {
-        `when`(generalSettings.getString(GeneralKeys.KEY_SPLASH_PATH)).thenReturn("blah")
+        `when`(generalSettings.getString(ProjectKeys.KEY_SPLASH_PATH)).thenReturn("blah")
         assertThat(splashScreenViewModel.splashScreenLogoFile.name, `is`("blah"))
     }
 

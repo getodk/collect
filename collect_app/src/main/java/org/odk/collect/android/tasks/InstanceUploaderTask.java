@@ -21,7 +21,7 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
@@ -63,7 +63,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                     if (deleteInstanceAfterSubmission != null) {
                         isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
                     } else {
-                        isFormAutoDeleteOptionEnabled = settingsProvider.getGeneralSettings().getBoolean(GeneralKeys.KEY_DELETE_AFTER_SEND);
+                        isFormAutoDeleteOptionEnabled = settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
                     }
 
                     Stream<Instance> instancesToDelete = instanceIds.stream()

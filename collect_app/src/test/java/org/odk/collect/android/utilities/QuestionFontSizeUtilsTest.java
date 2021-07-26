@@ -9,7 +9,7 @@ import org.odk.collect.android.TestSettingsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FONT_SIZE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
 
 @RunWith(AndroidJUnit4.class)
 public class QuestionFontSizeUtilsTest {

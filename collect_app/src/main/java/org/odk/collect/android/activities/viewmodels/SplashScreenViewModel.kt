@@ -3,7 +3,7 @@ package org.odk.collect.android.activities.viewmodels
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import org.odk.collect.projects.ProjectsRepository
@@ -16,10 +16,10 @@ class SplashScreenViewModel(
 ) : ViewModel() {
 
     val shouldDisplaySplashScreen
-        get() = generalSettings.getBoolean(GeneralKeys.KEY_SHOW_SPLASH)
+        get() = generalSettings.getBoolean(ProjectKeys.KEY_SHOW_SPLASH)
 
     val splashScreenLogoFile
-        get() = File(generalSettings.getString(GeneralKeys.KEY_SPLASH_PATH) ?: "")
+        get() = File(generalSettings.getString(ProjectKeys.KEY_SPLASH_PATH) ?: "")
 
     val scaledSplashScreenLogoBitmap: Bitmap
         get() = FileUtils.getBitmapScaledToDisplay(splashScreenLogoFile, ScreenUtils.getScreenHeight(), ScreenUtils.getScreenWidth())

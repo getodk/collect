@@ -124,7 +124,7 @@ import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -185,8 +185,8 @@ import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_COMPLETED_DEFAULT;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_NAVIGATION;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
@@ -1410,10 +1410,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean saveBeforeNextView(FormController formController) {
         if (formController.currentPromptIsQuestion()) {
             // get constraint behavior preference value with appropriate default
-            String constraintBehavior = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+            String constraintBehavior = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
 
             // if constraint behavior says we should validate on swipe, do so
-            if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+            if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                 if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
                     // A constraint was violated so a dialog should be showing.
                     swipeHandler.setBeenSwiped(false);
@@ -1747,12 +1747,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 onScreenRefresh();
 
                 // get constraint behavior preference value with appropriate default
-                String constraintBehavior = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_CONSTRAINT_BEHAVIOR);
+                String constraintBehavior = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
 
                 // an answer constraint was violated, so we need to display the proper toast(s)
                 // if constraint behavior is on_swipe, this will happen if we do a 'swipe' to the
                 // next question
-                if (constraintBehavior.equals(GeneralKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
                     next();
                 } else {
                     // otherwise, we can get the proper toast(s) by saving with constraint check
@@ -1913,7 +1913,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         activityDisplayed();
 
         String navigation = settingsProvider.getGeneralSettings().getString(KEY_NAVIGATION);
-        showNavigationButtons = navigation.contains(GeneralKeys.NAVIGATION_BUTTONS);
+        showNavigationButtons = navigation.contains(ProjectKeys.NAVIGATION_BUTTONS);
 
         findViewById(R.id.buttonholder).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
         findViewById(R.id.shadow_up).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);

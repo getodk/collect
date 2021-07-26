@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.junit.Test;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import static org.mockito.Mockito.mock;
@@ -19,8 +19,8 @@ public class WebCredentialsUtilsTest {
 
         webCredentialsUtils.saveCredentialsPreferences("username", "password", propertyManager);
 
-        verify(generalSettings, times(1)).save(GeneralKeys.KEY_USERNAME, "username");
-        verify(generalSettings, times(1)).save(GeneralKeys.KEY_PASSWORD, "password");
+        verify(generalSettings, times(1)).save(ProjectKeys.KEY_USERNAME, "username");
+        verify(generalSettings, times(1)).save(ProjectKeys.KEY_PASSWORD, "password");
         verify(propertyManager, times(1)).reload();
     }
 }

@@ -9,7 +9,7 @@ import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
 import java.util.HashMap;
 
-public final class GeneralKeys {
+public final class ProjectKeys {
     // server_preferences.xml
     public static final String KEY_PROTOCOL = "protocol";
 
@@ -154,7 +154,7 @@ public final class GeneralKeys {
         return hashMap;
     }
 
-    private GeneralKeys() {
+    private ProjectKeys() {
 
     }
 

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
@@ -104,7 +104,7 @@ public class AutoSendTaskSpec implements TaskSpec {
             return false;
         }
 
-        String autosend = settingsProvider.getGeneralSettings(projectId).getString(GeneralKeys.KEY_AUTOSEND);
+        String autosend = settingsProvider.getGeneralSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {

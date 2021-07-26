@@ -41,7 +41,7 @@ import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
@@ -195,7 +195,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
         TextView guidance;
-        GuidanceHint setting = GuidanceHint.get(settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get(settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.No)) {
             return null;

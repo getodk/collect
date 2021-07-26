@@ -84,7 +84,7 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
@@ -327,7 +327,7 @@ public class AppDependencyModule {
                 settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
-                GeneralKeys.getDefaults(),
+                ProjectKeys.getDefaults(),
                 ProtectedProjectKeys.getDefaults(),
                 settingsChangeHandler,
                 projectsRepository,
@@ -337,7 +337,7 @@ public class AppDependencyModule {
 
     @Provides
     public SettingsValidator providesSettingsValidator() {
-        return new StructureAndTypeSettingsValidator(GeneralKeys.getDefaults(), ProtectedProjectKeys.getDefaults());
+        return new StructureAndTypeSettingsValidator(ProjectKeys.getDefaults(), ProtectedProjectKeys.getDefaults());
     }
 
     @Provides
