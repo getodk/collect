@@ -19,8 +19,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.permissions.PermissionsProvider
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -116,7 +116,7 @@ class ProjectResetterTest {
         assertThat(
             getAdminSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
-                ProtectedProjectKeys.getDefaults()[ProtectedProjectKeys.KEY_VIEW_SENT]
+                ProtectedProjectKeys.defaults[ProtectedProjectKeys.KEY_VIEW_SENT]
             )
         )
     }

@@ -69,7 +69,7 @@ class AppConfigurationGenerator(
         val adminPrefs = JSONObject()
 
         val adminSettings = settingsProvider.getAdminSettings().getAll()
-        val defaultAdminSettings = ProtectedProjectKeys.getDefaults()
+        val defaultAdminSettings = ProtectedProjectKeys.defaults
 
         for (key in ProtectedProjectKeys.allKeys()) {
             if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(
