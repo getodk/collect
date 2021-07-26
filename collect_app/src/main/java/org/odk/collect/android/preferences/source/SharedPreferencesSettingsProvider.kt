@@ -20,7 +20,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         val settingsId = getSettingsId(GENERAL_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), ProjectKeys.getDefaults())
+            SharedPreferencesSettings(getSharedPrefs(settingsId), ProjectKeys.defaults)
         }
     }
 

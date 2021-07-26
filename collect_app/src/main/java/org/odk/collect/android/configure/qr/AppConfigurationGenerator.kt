@@ -51,7 +51,7 @@ class AppConfigurationGenerator(
         val generalPrefs = JSONObject()
 
         val generalSettings = settingsProvider.getGeneralSettings().getAll()
-        val defaultGeneralSettings: Map<String, *> = ProjectKeys.getDefaults()
+        val defaultGeneralSettings: Map<String, *> = ProjectKeys.defaults
 
         for (key in defaultGeneralSettings.keys) {
             if (key == ProjectKeys.KEY_PASSWORD && !includedPasswordKeys.contains(ProjectKeys.KEY_PASSWORD)) {

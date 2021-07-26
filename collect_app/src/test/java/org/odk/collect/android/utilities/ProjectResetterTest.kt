@@ -76,13 +76,13 @@ class ProjectResetterTest {
         assertThat(
             getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
-                ProjectKeys.getDefaults()[ProjectKeys.KEY_USERNAME]
+                ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
             getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
-                ProjectKeys.getDefaults()[ProjectKeys.KEY_PASSWORD]
+                ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
             )
         )
     }
