@@ -13,9 +13,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.preferences.keys.AdminKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
@@ -213,11 +213,11 @@ class ProjectDeleterTest {
     fun `Deleting project clears its settings`() {
         settingsProvider.getMetaSettings().save(MetaKeys.KEY_INSTALL_ID, "1234")
 
-        settingsProvider.getGeneralSettings("1").save(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
-        settingsProvider.getAdminSettings("1").save(AdminKeys.KEY_AUTOSEND, false)
+        settingsProvider.getGeneralSettings("1").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getAdminSettings("1").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
-        settingsProvider.getGeneralSettings("2").save(GeneralKeys.KEY_SERVER_URL, "https://my-server.com")
-        settingsProvider.getAdminSettings("2").save(AdminKeys.KEY_AUTOSEND, false)
+        settingsProvider.getGeneralSettings("2").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getAdminSettings("2").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
         val deleter = ProjectDeleter(
             mock(),
@@ -235,15 +235,15 @@ class ProjectDeleterTest {
         assertThat(settingsProvider.getMetaSettings().getString(MetaKeys.KEY_INSTALL_ID), `is`("1234"))
 
         settingsProvider.getGeneralSettings("1").getAll().forEach { (key, value) ->
-            assertThat(value, `is`(GeneralKeys.getDefaults()[key]))
+            assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
         settingsProvider.getAdminSettings("1").getAll().forEach { (key, value) ->
-            assertThat(value, `is`(AdminKeys.getDefaults()[key]))
+            assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
-        assertThat(settingsProvider.getGeneralSettings("2").getString(GeneralKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
-        assertThat(settingsProvider.getAdminSettings("2").getBoolean(AdminKeys.KEY_AUTOSEND), `is`(false))
+        assertThat(settingsProvider.getGeneralSettings("2").getString(ProjectKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
+        assertThat(settingsProvider.getAdminSettings("2").getBoolean(ProtectedProjectKeys.KEY_AUTOSEND), `is`(false))
     }
 
     @Test

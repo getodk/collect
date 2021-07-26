@@ -7,7 +7,7 @@ import org.mockito.kotlin.only
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.version.VersionInformation
 
@@ -35,7 +35,7 @@ class AnalyticsInitializerTest {
     @Test
     fun whenBetaVersion_andAnalyticsDisabledInSettings_enablesAnalytics() {
         whenever(versionInformation.isBeta).thenReturn(true)
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_ANALYTICS, false)
+        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, false)
 
         val analyticsInitializer = AnalyticsInitializer(
             analytics,
@@ -48,7 +48,7 @@ class AnalyticsInitializerTest {
 
     @Test
     fun whenAnalyticsDisabledInSettings_disablesAnalytics() {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_ANALYTICS, false)
+        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, false)
 
         val analyticsInitializer =
             AnalyticsInitializer(analytics, versionInformation, settingsProvider)
@@ -58,7 +58,7 @@ class AnalyticsInitializerTest {
 
     @Test
     fun whenAnalyticsEnabledInSettings_enablesAnalytics() {
-        settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_ANALYTICS, true)
+        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, true)
 
         val analyticsInitializer =
             AnalyticsInitializer(analytics, versionInformation, settingsProvider)
