@@ -43,7 +43,7 @@ object ProtectedProjectKeys {
     const val KEY_SAVE_MID = "save_mid"
     const val KEY_SAVE_AS = "save_as"
     const val KEY_MARK_AS_FINALIZED = "mark_as_finalized"
-    const val KEY_CHANGE_ADMIN_PASSWORD = "admin_password"
+
     const val KEY_IMPORT_SETTINGS = "import_settings"
     const val ALLOW_OTHER_WAYS_OF_EDITING_FORM = "allow_other_ways_of_editing_form"
 
@@ -97,7 +97,6 @@ object ProtectedProjectKeys {
         KEY_SAVE_MID,
         KEY_SAVE_AS,
         KEY_MARK_AS_FINALIZED,
-        KEY_CHANGE_ADMIN_PASSWORD,
         ALLOW_OTHER_WAYS_OF_EDITING_FORM,
         KEY_ADMIN_PW
     )

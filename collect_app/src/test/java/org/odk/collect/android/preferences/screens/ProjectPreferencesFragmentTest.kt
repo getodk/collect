@@ -610,7 +610,7 @@ class ProjectPreferencesFragmentTest {
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(true))
 
-            assertThat(fragment.findPreference<Preference>(ProtectedProjectKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(false))
         }
@@ -624,7 +624,7 @@ class ProjectPreferencesFragmentTest {
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
 
-            assertThat(fragment.findPreference<Preference>(ProtectedProjectKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(true))
         }
@@ -638,7 +638,7 @@ class ProjectPreferencesFragmentTest {
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
 
-            assertThat(fragment.findPreference<Preference>(ProtectedProjectKeys.KEY_CHANGE_ADMIN_PASSWORD)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(true))
         }
