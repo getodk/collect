@@ -110,7 +110,7 @@ class PreferenceVisibilityHandler(
     }
 
     // Hides empty categories - this won't work with nested categories but we don't use them in our
-    // settings and we rather shouldn't do that in the future since it would make them vey complex
+    // settings and we rather shouldn't do that in the future since it would make them very complex
     private fun updateCategories(preferenceScreen: PreferenceScreen) {
         for (i in 0 until preferenceScreen.preferenceCount) {
             val preference = preferenceScreen.getPreference(i)

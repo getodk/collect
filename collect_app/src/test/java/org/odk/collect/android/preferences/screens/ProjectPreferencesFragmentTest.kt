@@ -117,7 +117,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Server' option is enabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Server' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
@@ -127,7 +127,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Server' option is disabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Server' option is disabled in protected settings should be visible in Unlocked mode`() {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_SERVER, false)
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -180,7 +180,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Project display' option is enabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Project display' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
@@ -190,7 +190,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Project display' option is disabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Project display' option is disabled in protected settings should be visible in Unlocked mode`() {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -339,7 +339,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Maps' option is enabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Maps' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
@@ -349,7 +349,7 @@ class ProjectPreferencesFragmentTest {
     }
 
     @Test
-    fun `If 'Maps' option is disabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Maps' option is disabled in protected settings should be visible in Unlocked mode`() {
         adminSettings.save(ProtectedProjectKeys.KEY_MAPS, false)
         projectPreferencesViewModel.setStateUnlocked()
 

@@ -79,7 +79,7 @@ class IdentityPreferencesFragmentFragmentTest {
     }
 
     @Test
-    fun `If 'Form Metadata' option is enabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Form Metadata' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -89,7 +89,7 @@ class IdentityPreferencesFragmentFragmentTest {
     }
 
     @Test
-    fun `If 'Form Metadata' option is disabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Form Metadata' option is disabled in protected settings should be visible in Unlocked mode`() {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -142,7 +142,7 @@ class IdentityPreferencesFragmentFragmentTest {
     }
 
     @Test
-    fun `If 'Collect anonymous usage data' option is enabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Collect anonymous usage data' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
@@ -152,7 +152,7 @@ class IdentityPreferencesFragmentFragmentTest {
     }
 
     @Test
-    fun `If 'Collect anonymous usage data' option is disabled in protected settings should be visible in Unocked mode`() {
+    fun `If 'Collect anonymous usage data' option is disabled in protected settings should be visible in Unlocked mode`() {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateUnlocked()
 
