@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.FileUtils
 import org.odk.collect.android.application.initialization.upgrade.Upgrade
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectDetailsCreator

@@ -12,8 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.FormUpdateMode
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.shared.Settings
 

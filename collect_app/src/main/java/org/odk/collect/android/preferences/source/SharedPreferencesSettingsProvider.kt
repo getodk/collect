@@ -1,9 +1,9 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.Context
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 import javax.inject.Singleton
 
