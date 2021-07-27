@@ -4,16 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.shared.strings.Validator;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.shared.strings.Validator;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -394,9 +394,7 @@ public class ServerFormDownloader implements FormDownloader {
                 String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
 
                 if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
-                    // if the hashes match, it's the same file
-                    // otherwise delete our current one and replace it with the new one
-                    FileUtils.deleteAndReport(finalMediaFile);
+                    // if the hashes match, it's the same file otherwise replace it with the new one
                     InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
                     writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
                 } else {
@@ -430,7 +428,13 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (mediaFiles != null && mediaFiles.length != 0) {
             for (File mediaFile : mediaFiles) {
-                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+                try {
+                    org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath);
+                } catch (IllegalArgumentException e) {
+                    // This can happen if copyFileToDirectory is pointed at a file instead of a dir
+                    throw new IOException(e);
+                }
+
             }
         }
     }
