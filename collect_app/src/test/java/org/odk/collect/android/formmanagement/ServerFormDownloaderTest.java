@@ -299,7 +299,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormHasMediaFiles_andWritingMediaFilesFails_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
+    public void whenFormHasMediaFiles_andFileExistsInMediaDirPath_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",

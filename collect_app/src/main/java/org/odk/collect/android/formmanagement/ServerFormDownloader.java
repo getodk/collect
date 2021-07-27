@@ -4,16 +4,16 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.MediaFile;
-import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.shared.strings.Validator;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.shared.strings.Validator;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -428,7 +428,13 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (mediaFiles != null && mediaFiles.length != 0) {
             for (File mediaFile : mediaFiles) {
-                org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath);
+                try {
+                    org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath);
+                } catch (IllegalArgumentException e) {
+                    // This can happen if copyFileToDirectory is pointed at a file instead of a dir
+                    throw new IOException(e);
+                }
+
             }
         }
     }
