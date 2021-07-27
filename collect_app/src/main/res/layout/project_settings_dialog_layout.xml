@@ -79,7 +79,6 @@
         android:id="@+id/project_list_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constrainedHeight="true"
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintEnd_toStartOf="@+id/guideline_end"
