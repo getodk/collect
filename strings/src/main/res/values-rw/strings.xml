@@ -473,6 +473,8 @@ Hashize: %2$s</string>
   <string name="geometry_status">Bika neza ibyanditswe: %d (bigaragara ku ikarita %d)</string>
   <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <!--Title for notification that lets user know their location is currently being tracked-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -559,6 +561,8 @@ Hashize: %2$s</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Ubunararibonye</string>
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
@@ -691,6 +695,8 @@ Hashize: %2$s</string>
   <string name="device_id">Ibiranga igikoresho </string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Ntabwo bihari </string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -831,6 +837,10 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="projects">Project zitandukanye</string>
   <string name="add_project">Shyiramo project</string>
   <string name="add">Shyiramo</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Button text for adding a duplicate project-->
+  <!--Buton text for switching to an existing project-->
   <string name="project_name">Izina rya project</string>
   <string name="project_icon">Akarango ka Project</string>
   <string name="project_color">Ibara rya Project</string>
@@ -865,4 +875,5 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Gerageza kubyerekana</string>
   <string name="scan_configuration_qr_code">Umubarendangabanga wemejwe kuri QR</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
 </resources>

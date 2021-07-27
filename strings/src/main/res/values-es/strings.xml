@@ -162,6 +162,7 @@
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Grabación deshabilitada. Habilitar en %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Formulario lleno ha sido eliminado!</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -471,6 +472,10 @@
   <string name="geometry_status">Form. Guardados: %d (%d se muestran en el mapa)</string>
   <!--Name of an action button-->
   <string name="view_data">Ver formulario guardado</string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Seguimiento de ubicación</string>
+  <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Monitoreando ubicación…</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -533,29 +538,47 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
+  <string name="project_settings">Ajustes de proyecto</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor - Usuario</string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, usuario, contraseña</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">Visualización del proyecto</string>
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Nombre, icono, color</string>
   <!--Title of a settings section-->
   <string name="client">Interfaz de usuario</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Idioma, tema, tamaño de fuente</string>
   <!--Title of a settings section-->
   <string name="maps">Mapas</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Mapa base, estilo, capas</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Manejo de formularios</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Actualización automática, autoenvío, autoborrado</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Metadatos del formulario</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Usuario, teléfono, ID dispositivo</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimental</string>
+  <string name="protected_settings">Protegido</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Desbloquear configuraciones protegidas</string>
   <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Cambiar contrasela, ajustar controles de acceso</string>
+  <string name="set_admin_password">Establecer contraseña de administrador</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">Gestión de proyectos</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Reconfigurar, restablecer, borrar</string>
+  <!--Title of a settings section-->
+  <string name="access_control_section_title">Control de acceso</string>
+  <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Limitar la interfaz de usuario</string>
   <string name="server_preferences">Configuración del Servidor</string>
   <!--Label for server type setting-->
   <string name="type">Tipo</string>
@@ -684,6 +707,10 @@
   <string name="device_id">ID de dispositivo</string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">No disponible</string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Desbloquear ajustes</string>
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Ajustes desbloqueados</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -699,6 +726,7 @@
   <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="reset_project_settings_title">Restablecer</string>
+  <string name="reset_project_settings_subtext">Elija entre configuraciones, formularios, datos</string>
   <string name="delete_project">Eliminar</string>
   <string name="select_all">Seleccionar todo</string>
   <string name="clear_all">Limpiar todo</string>
@@ -718,8 +746,11 @@
   <string name="reset_layers_result">Capas de mapa :: %s</string>
   <string name="reset_cache_result">Cache de carga de formularios :: %s</string>
   <string name="main_menu_settings">Menú principal de ajustes</string>
+  <string name="main_menu_settings_summary">Mostrar u ocultar botones</string>
   <string name="user_settings">Ajustes de usuario</string>
+  <string name="user_setting_summary">Mostrar u ocultar ajustes</string>
   <string name="form_entry_setting">Configuración de entrada de formularios</string>
+  <string name="form_entry_settings_summary">Mostrar u ocultar acciones</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
@@ -774,6 +805,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">Reconfigurar con código QR</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Reemplazar todos los ajustes existentes</string>
   <string name="qr_code">Configuración del Código QR</string>
   <string name="scan_qr_code_fragment_title">Escanear</string>
   <string name="view_qr_code_fragment_title">Código QR</string>
@@ -821,8 +854,17 @@
      # Projects
      ##############################################-->
   <string name="projects">Proyectos</string>
+  <string name="settings">Ajustes</string>
   <string name="add_project">Agregar proyecto</string>
   <string name="add">Agregar</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Proyecto duplicado</string>
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Ya tienes un proyecto con estas configuraciones de conexión. ¿Quieres cambiar al proyecto existente o agregar uno nuevo?</string>
+  <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Agregar proyecto duplicado</string>
+  <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Cambiar a proyecto existente</string>
   <string name="project_name">Nombre del proyecto</string>
   <string name="project_icon">Icono del proyecto</string>
   <string name="project_color">Color del proyecto</string>
@@ -834,6 +876,7 @@
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">El proyecto no se puede eliminar</string>
   <string name="cannot_delete_project_message_one">Tiene envíos sin enviar. Para eliminar el proyecto, primero debe enviar o eliminar esos envíos.</string>
+  <string name="cannot_delete_project_message_two">Se están ejecutando trabajos en segundo plano. Por favor, inténtelo de nuevo más tarde.</string>
   <string name="or">O</string>
   <string name="hex_color">Color en Hex</string>
   <string name="invalid_hex_code">Código hexadecimal no válido</string>
@@ -857,4 +900,6 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Prueba una demostración</string>
   <string name="scan_configuration_qr_code">Escanear el código QR de configuración</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
 </resources>

@@ -472,6 +472,10 @@
   <string name="geometry_status">Formulaires enregistrés %d (%d affichés sur la carte)</string>
   <!--Name of an action button-->
   <string name="view_data">Voir Questionnaire Enregistré </string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>
+  <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Enregistrement de la localisation…</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -540,6 +544,7 @@
   <!--Subtext of a settings section-->
   <string name="server_settings_subtext">URL, utilisateur, mot de passe</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">Affichage du projet</string>
   <!--Subtext of a settings section-->
   <string name="project_display_subtext">Nom, icône, couleur</string>
   <!--Title of a settings section-->
@@ -549,18 +554,27 @@
   <!--Title of a settings section-->
   <string name="maps">Cartes</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Fond de carte, styles, couches</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Gestion des formulaires</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Mise à jour, envoi et suppression automatiques</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identité de l\'utilisateur et de l\'appareil</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Nom d\'utilisateur, numéro de téléphone et ID de l\'appareil</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimental</string>
   <string name="protected_settings">Protégé</string>
+  <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Déverrouiller les paramètres du projet</string>
+  <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Changer de mot de passe, définir les contrôles d\'accès</string>
   <string name="set_admin_password">Configurer mot de passe d\'administration</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">Gestion de projet</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Reconfigurer, réinitialiser, supprimer</string>
   <!--Title of a settings section-->
   <string name="access_control_section_title">Contrôle d\'accès</string>
   <!--Subtext of a settings section-->
@@ -693,6 +707,10 @@
   <string name="device_id">ID du périphérique</string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Pas disponible</string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Déverrouiller les paramètres</string>
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Paramètres déverrouillés</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -708,6 +726,7 @@
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
   <string name="reset_project_settings_title">Réinitialiser</string>
+  <string name="reset_project_settings_subtext">Choisir depuis les paramètres, formulaires et données</string>
   <string name="delete_project">Supprimer</string>
   <string name="select_all">Tout sélectionner</string>
   <string name="clear_all">Tout désélectionner </string>
@@ -786,6 +805,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">Reconfigurer avec un QR code</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Remplacer tous les paramètres existants</string>
   <string name="qr_code">Configuration par code QR</string>
   <string name="scan_qr_code_fragment_title">Lire code</string>
   <string name="view_qr_code_fragment_title">Code QR</string>
@@ -835,11 +856,26 @@
   <string name="settings">Paramètres</string>
   <string name="add_project">Ajouter un projet</string>
   <string name="add">Ajouter</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Projet existe déjà</string>
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Vous avez déjà un projet avec ces paramètres de connexion. Voulez vous basculer sur ce projet existant ou en créer un nouveau ?</string>
+  <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Ajouté projet répété</string>
+  <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Basculer sur le projet existant</string>
   <string name="project_name">Nom du projet</string>
   <string name="project_icon">Icône du projet</string>
   <string name="project_color">Couleur du projet </string>
+  <string name="switched_project">Changé à %s</string>
+  <string name="using_project">Projet %s en utilisation</string>
+  <string name="switch_to_project">Changer à %s</string>
+  <string name="delete_project_confirm_message">Tous les formulaires vierges, soumissions et paramètres seront définitivement supprimés.</string>
   <string name="delete_project_yes">Oui</string>
   <string name="delete_project_no">Non</string>
+  <string name="cannot_delete_project_title">Le projet ne peut être supprimé</string>
+  <string name="cannot_delete_project_message_one">Vous avez des données non envoyées. Pour supprimer le projet, vous devez préalablement envoyer ou supprimer ces données.</string>
+  <string name="cannot_delete_project_message_two">Des tâches d\'arrière-plan sont en cours d\'exécution. Merci de réessayer plus tard.</string>
   <string name="or">OU</string>
   <string name="hex_color">Couleur hex</string>
   <string name="invalid_hex_code">Code de couleur hex n\'est pas valide</string>
@@ -848,11 +884,12 @@
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
-  <string name="tagline">La collecte de données\nsans frontières</string>
+  <string name="tagline">Collecte de données\nsans frontières</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <string name="configure_with_qr_code">Configurer par QR code</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Saisir les détails du projet</string>
+  <string name="project_config_tip">Après avoir ajouté un projet, vous pouvez le configurer dans les Paramètres généraux et d\'administration</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Mon projet utilise Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -861,4 +898,7 @@
   <string name="dont_have_project">Pas encore de projet?</string>
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Essayer une démo</string>
+  <string name="scan_configuration_qr_code">Scanner un QR Code de configuration</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Pour ouvrir ce formulaire, vous devez d\'abord ouvrir ODK Collect et basculer sur le projet qui le contient.</string>
 </resources>
