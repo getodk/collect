@@ -614,6 +614,16 @@ class ProjectPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(false))
         }
+
+        scenario.recreate()
+
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(true))
+
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(false))
+        }
     }
 
     @Test
@@ -628,6 +638,16 @@ class ProjectPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(true))
         }
+
+        scenario.recreate()
+
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
+
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(true))
+        }
     }
 
     @Test
@@ -635,6 +655,16 @@ class ProjectPreferencesFragmentTest {
         projectPreferencesViewModel.setStateNotProtected()
 
         val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        scenario.onFragment { fragment: ProjectPreferencesFragment ->
+            assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
+
+            assertThat(fragment.findPreference<Preference>("admin_password")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("project_management")!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>("access_control")!!.isVisible, `is`(true))
+        }
+
+        scenario.recreate()
+
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
 

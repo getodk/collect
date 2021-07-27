@@ -49,9 +49,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        if (!projectPreferencesViewModel.isStateUnlocked()) {
-            preferenceVisibilityHandler.updatePreferencesVisibility(getPreferenceScreen(), projectPreferencesViewModel.getState().getValue().getValue());
-        }
+        preferenceVisibilityHandler.updatePreferencesVisibility(getPreferenceScreen(), projectPreferencesViewModel.getState().getValue().getValue());
         super.onViewCreated(view, savedInstanceState);
     }
 
