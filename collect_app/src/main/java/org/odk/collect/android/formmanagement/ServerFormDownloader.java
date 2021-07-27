@@ -430,7 +430,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (mediaFiles != null && mediaFiles.length != 0) {
             for (File mediaFile : mediaFiles) {
-                org.apache.commons.io.FileUtils.moveFileToDirectory(mediaFile, formMediaPath, true);
+                org.apache.commons.io.FileUtils.copyFileToDirectory(mediaFile, formMediaPath);
             }
         }
     }
