@@ -1039,8 +1039,11 @@
     <string name="project_name">Project name</string>
     <string name="project_icon">Project icon</string>
     <string name="project_color">Project color</string>
+    <!-- Toast text shown when the current project is changed -->
     <string name="switched_project">Switched to %s</string>
+    <!-- Description for screen readers of which project is in use. This is part of the project selection dialog -->
     <string name="using_project">Using %s</string>
+    <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
     <string name="switch_to_project">Switch to %s</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
