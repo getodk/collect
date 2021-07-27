@@ -556,6 +556,62 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
+    public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_updatesMediaFiles() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents".getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
+
+        // Initial download
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        ServerFormDetails serverFormDetailsUpdatedMediaFile = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                "md5:" + Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                false,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1")
+                )));
+
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents-updated".getBytes()));
+
+        // Second download
+        downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
+
+        List<Form> allForms = formsRepository.getAll();
+        assertThat(allForms.size(), is(1));
+        Form form = allForms.get(0);
+        assertThat(form.getFormId(), is("id"));
+
+        File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
+        assertThat(formFile.exists(), is(true));
+        assertThat(new String(read(formFile)), is(xform));
+
+        File mediaFile1 = new File(form.getFormMediaPath() + "/file1");
+        assertThat(mediaFile1.exists(), is(true));
+        assertThat(new String(read(mediaFile1)), is("contents-updated"));
+    }
+
+    @Test
     public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_andMediaFetchFails_throwsFormDownloadException() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
