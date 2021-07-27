@@ -52,7 +52,6 @@ class ExistingProjectMigratorTest {
             File(rootDir, "instances"),
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
-            File(rootDir, ".cache"),
             File(rootDir, "settings")
         )
 
@@ -72,7 +71,28 @@ class ExistingProjectMigratorTest {
             val dir = File(it)
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
-            assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
+            if (!it.endsWith("cache")) {
+                assertThat(dir.listFiles()!!.isEmpty(), `is`(false))
+            }
+        }
+    }
+
+    @Test
+    fun `deletes and does not move cache directory`() {
+        val cacheDir = File(rootDir, ".cache")
+        cacheDir.mkdir()
+        TempFiles.createTempFile(cacheDir, "file", ".temp")
+
+        existingProjectMigrator.run()
+        val existingProject = currentProjectProvider.getCurrentProject()
+
+        assertThat(cacheDir.exists(), `is`(false))
+
+        storagePathProvider.getProjectDirPaths(existingProject.uuid).forEach {
+            val dir = File(it)
+            assertThat(dir.exists(), `is`(true))
+            assertThat(dir.isDirectory, `is`(true))
+            assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
         }
     }
 
@@ -82,7 +102,6 @@ class ExistingProjectMigratorTest {
             File(rootDir, "instances"),
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
-            File(rootDir, ".cache"),
             File(rootDir, "settings")
         )
 
@@ -98,7 +117,7 @@ class ExistingProjectMigratorTest {
             assertThat(dir.exists(), `is`(true))
             assertThat(dir.isDirectory, `is`(true))
 
-            if (it.endsWith("forms")) {
+            if (it.endsWith("forms") || it.endsWith("cache")) {
                 assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
             } else {
                 assertThat(dir.listFiles()!!.isEmpty(), `is`(false))

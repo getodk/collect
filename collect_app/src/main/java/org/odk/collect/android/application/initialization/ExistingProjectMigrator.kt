@@ -46,7 +46,6 @@ class ExistingProjectMigrator(
             File(rootDir, "instances"),
             File(rootDir, "metadata"),
             File(rootDir, "layers"),
-            File(rootDir, ".cache"),
             File(rootDir, "settings")
         ).forEach {
             try {
@@ -56,6 +55,8 @@ class ExistingProjectMigrator(
                 // Original dir doesn't exist - no  need to copy
             }
         }
+
+        FileUtils.deleteDirectory(File(rootDir, ".cache"))
 
         val adminSharedPrefs = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
