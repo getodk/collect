@@ -394,9 +394,7 @@ public class ServerFormDownloader implements FormDownloader {
                 String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
 
                 if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
-                    // if the hashes match, it's the same file
-                    // otherwise delete our current one and replace it with the new one
-                    FileUtils.deleteAndReport(finalMediaFile);
+                    // if the hashes match, it's the same file otherwise replace it with the new one
                     InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
                     writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
                 } else {
