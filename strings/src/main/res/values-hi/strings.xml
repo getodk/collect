@@ -287,6 +287,8 @@
   <string name="geoshape_view_change_location">जिओ शेप देखें या बदलें </string>
   <string name="geotrace_view_change_location">जिओ ट्रेस देखें या बदलें </string>
   <!--Name of an action button-->
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <!--Title for notification that lets user know their location is currently being tracked-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -349,6 +351,8 @@
   <string name="user_and_device_identity_title">प्रयोगकर्ता और डिवाइस पहचान</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
@@ -444,6 +448,8 @@
   <string name="device_defined">डिवाइस-से-परिभाषित</string>
   <string name="device_id">डिवाइस आईडी</string>
   <!--Displayed when a device property such as the phone number is not available-->
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -544,6 +550,10 @@
   <!--##############################################
      # Projects
      ##############################################-->
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Button text for adding a duplicate project-->
+  <!--Buton text for switching to an existing project-->
   <string name="delete_project_yes">हाँ</string>
   <string name="delete_project_no">नहीं</string>
   <!--##############################################
@@ -557,4 +567,5 @@
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
 </resources>

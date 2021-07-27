@@ -478,6 +478,10 @@
   <string name="geometry_status">Uložené formuláře:%d (%d zobrazené na mapě)</string>
   <!--Name of an action button-->
   <string name="view_data">Zobrazit uložený formulář</string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Sledování polohy</string>
+  <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Sledování polohy…</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -568,6 +572,10 @@
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimentální</string>
   <string name="protected_settings">Chráněné</string>
+  <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Odemknutí chráněných nastavení</string>
+  <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Změna hesla, nastavení kontroly přístupu</string>
   <string name="set_admin_password">Nastavení hesla správce</string>
   <!--Title of a settings section-->
   <string name="project_management_section_title">Řízení projektu</string>
@@ -705,6 +713,10 @@
   <string name="device_id">ID zařízení</string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Není dostupný</string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Odemknutí nastavení</string>
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Odemčené nastavení</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -850,6 +862,14 @@
   <string name="settings">Nastavení</string>
   <string name="add_project">Přidat projekt</string>
   <string name="add">Přidat</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Duplicitní projekt</string>
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Již máte projekt s těmito nastaveními připojení. Chcete přejít na stávající projekt nebo přidat nový?</string>
+  <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Přidat duplicitní projekt</string>
+  <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Přepnutí na stávající projekt</string>
   <string name="project_name">Název projektu</string>
   <string name="project_icon">Ikona projektu</string>
   <string name="project_color">Barva projektu</string>
@@ -885,4 +905,5 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Vyzkoušejte si demo</string>
   <string name="scan_configuration_qr_code">Naskenování konfiguračního kódu QR</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
 </resources>

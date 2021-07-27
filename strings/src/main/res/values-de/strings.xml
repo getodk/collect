@@ -472,6 +472,10 @@
   <string name="geometry_status">Gespeicherte Formulare: %d (%d auf der Karte angezeigt) </string>
   <!--Name of an action button-->
   <string name="view_data">Gespeichertes Formular anzeigen</string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Standortverlauf</string>
+  <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Standort wird aufgezeichnet… </string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -562,6 +566,10 @@
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Experimentell</string>
   <string name="protected_settings">Geschützt</string>
+  <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Geschützte Einstellungen freigeben</string>
+  <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Passwort ändern, Zugriffssteuerung einstellen</string>
   <string name="set_admin_password">Admin-Passwort setzen</string>
   <!--Title of a settings section-->
   <string name="project_management_section_title">Projektverwaltung</string>
@@ -699,6 +707,10 @@
   <string name="device_id">Geräte-ID</string>
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Nicht verfügbar</string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Einstellungen freigeben</string>
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Einstellungen freigegeben</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -844,6 +856,14 @@
   <string name="settings">Einstellungen</string>
   <string name="add_project">Projekt hinzufügen</string>
   <string name="add">Hinzufügen</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Duplikat-Projekt</string>
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Sie haben schon ein Projekt mit diesen Verbindungseinstellungen. Wollen Sie zum existierenden Projekt wechseln oder ein neues hinzufügen?</string>
+  <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Duplikat-Projekt hinzufügen</string>
+  <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Zum existierenden Projekt wechseln</string>
   <string name="project_name">Projekt-Name</string>
   <string name="project_icon">Projekt-Icon</string>
   <string name="project_color">Projekt-Farbe</string>
@@ -879,4 +899,6 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <string name="try_demo">Versuchen Sie es mit einer Demo</string>
   <string name="scan_configuration_qr_code">Konfigurations-QR-Code scannen</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Um dieses Formular zu öffnen, müssen Sie zuerst ODK Collect öffnen und in das Projekt wechseln, in dem es enthalten ist.</string>
 </resources>

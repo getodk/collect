@@ -312,6 +312,8 @@
   <string name="geoshape_view_change_location">Gennemse eller ændr´ GeoShape</string>
   <!--Name of an action button-->
   <string name="view_data">Inpicér gemt formular</string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <!--Title for notification that lets user know their location is currently being tracked-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -376,6 +378,8 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <!--Title of a settings section-->
+  <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
@@ -465,6 +469,8 @@
   <string name="email">Mailadresse</string>
   <string name="device_defined">Defineret af enhed</string>
   <!--Displayed when a device property such as the phone number is not available-->
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -543,6 +549,10 @@
      # Projects
      ##############################################-->
   <string name="add">Tilføj</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <!--Button text for adding a duplicate project-->
+  <!--Buton text for switching to an existing project-->
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
@@ -554,4 +564,5 @@
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
+  <!--Error shown when a user tries to open a form that's in a different project-->
 </resources>
