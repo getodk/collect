@@ -13,10 +13,10 @@ import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.FormUpdateMode.MATCH_EXACTLY
 import org.odk.collect.android.preferences.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
-import org.odk.collect.android.preferences.keys.GeneralKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORM_UPDATE_MODE
-import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
-import org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE
+import org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
+import org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL
 import org.odk.collect.async.Scheduler
 
 @RunWith(AndroidJUnit4::class)
@@ -30,7 +30,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     fun `scheduleUpdates passes project id when scheduling previously downloaded only`() {
         val generalSettings = settingsProvider.getGeneralSettings("myProject")
 
-        generalSettings.save(KEY_PROTOCOL, GeneralKeys.PROTOCOL_SERVER)
+        generalSettings.save(KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(application))
         generalSettings.save(
             KEY_PERIODIC_FORM_UPDATES_CHECK,
@@ -68,7 +68,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
     fun `scheduleUpdates passes project id when scheduling match exactly`() {
         val generalSettings = settingsProvider.getGeneralSettings("myProject")
 
-        generalSettings.save(KEY_PROTOCOL, GeneralKeys.PROTOCOL_SERVER)
+        generalSettings.save(KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(application))
         generalSettings.save(
             KEY_PERIODIC_FORM_UPDATES_CHECK,

@@ -40,7 +40,7 @@ import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
@@ -53,10 +53,10 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_FORMLIST_URL;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_SUBMISSION_URL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORMLIST_URL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
@@ -114,7 +114,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
             return true;
         });
 
-        if (GeneralKeys.PROTOCOL_GOOGLE_SHEETS.equals(protocolPref.getValue())) {
+        if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS.equals(protocolPref.getValue())) {
             addGooglePreferences();
         } else {
             addServerPreferences();
@@ -125,9 +125,9 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         if (!new ServerPreferencesAdder(this).add()) {
             return;
         }
-        EditTextPreference serverUrlPreference = findPreference(GeneralKeys.KEY_SERVER_URL);
-        EditTextPreference usernamePreference = findPreference(GeneralKeys.KEY_USERNAME);
-        passwordPreference = findPreference(GeneralKeys.KEY_PASSWORD);
+        EditTextPreference serverUrlPreference = findPreference(ProjectKeys.KEY_SERVER_URL);
+        EditTextPreference usernamePreference = findPreference(ProjectKeys.KEY_USERNAME);
+        passwordPreference = findPreference(ProjectKeys.KEY_PASSWORD);
 
         serverUrlPreference.setOnPreferenceChangeListener(createChangeListener());
         serverUrlPreference.setSummary(serverUrlPreference.getText());
@@ -161,7 +161,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         selectedGoogleAccountPreference = findPreference(KEY_SELECTED_GOOGLE_ACCOUNT);
 
         EditTextPreference googleSheetsUrlPreference = (EditTextPreference) findPreference(
-                GeneralKeys.KEY_GOOGLE_SHEETS_URL);
+                ProjectKeys.KEY_GOOGLE_SHEETS_URL);
         googleSheetsUrlPreference.setOnBindEditTextListener(editText -> editText.setFilters(new InputFilter[] {new ControlCharacterFilter(), new WhitespaceFilter() }));
         googleSheetsUrlPreference.setOnPreferenceChangeListener(createChangeListener());
 
@@ -206,7 +206,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
     private Preference.OnPreferenceChangeListener createChangeListener() {
         return (preference, newValue) -> {
             switch (preference.getKey()) {
-                case GeneralKeys.KEY_SERVER_URL:
+                case ProjectKeys.KEY_SERVER_URL:
                     String url = newValue.toString();
 
                     if (Validator.isUrlValid(url)) {
@@ -217,7 +217,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                     }
                     break;
 
-                case GeneralKeys.KEY_USERNAME:
+                case ProjectKeys.KEY_USERNAME:
                     String username = newValue.toString();
 
                     // do not allow leading and trailing whitespace
@@ -229,7 +229,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                     preference.setSummary(username);
                     return true;
 
-                case GeneralKeys.KEY_PASSWORD:
+                case ProjectKeys.KEY_PASSWORD:
                     String pw = newValue.toString();
 
                     // do not allow leading and trailing whitespace
@@ -241,7 +241,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                     maskPasswordSummary(pw);
                     break;
 
-                case GeneralKeys.KEY_GOOGLE_SHEETS_URL:
+                case ProjectKeys.KEY_GOOGLE_SHEETS_URL:
                     url = newValue.toString();
 
                     if (Validator.isUrlValid(url)) {
@@ -290,7 +290,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         String account = settingsProvider.getGeneralSettings().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
         String protocol = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
 
-        if (TextUtils.isEmpty(account) && protocol.equals(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+        if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
 
             AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_dialog_info)

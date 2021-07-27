@@ -5,7 +5,7 @@ import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.configure.SettingsUtils
 import org.odk.collect.android.preferences.FormUpdateMode
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
 
 class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
@@ -14,12 +14,12 @@ class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey)
 
-        findPreference<Preference>(AdminKeys.KEY_EDIT_SAVED)!!.isEnabled =
-            settingsProvider.getAdminSettings().getBoolean(AdminKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
+        findPreference<Preference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isEnabled =
+            settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
 
         val formUpdateMode = SettingsUtils.getFormUpdateMode(requireContext(), settingsProvider.getGeneralSettings())
         if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {
-            PreferencesUtils.displayDisabled(findPreference(AdminKeys.KEY_GET_BLANK), false)
+            PreferencesUtils.displayDisabled(findPreference(ProtectedProjectKeys.KEY_GET_BLANK), false)
         }
     }
 }

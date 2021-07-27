@@ -13,7 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
@@ -39,16 +39,16 @@ public class ServerAuthDialogFragment extends DialogFragment {
         dialogView = binding.getRoot();
 
         Settings generalSettings = settingsProvider.getGeneralSettings();
-        binding.usernameEdit.setText(generalSettings.getString(GeneralKeys.KEY_USERNAME));
-        binding.passwordEdit.setText(generalSettings.getString(GeneralKeys.KEY_PASSWORD));
+        binding.usernameEdit.setText(generalSettings.getString(ProjectKeys.KEY_USERNAME));
+        binding.passwordEdit.setText(generalSettings.getString(ProjectKeys.KEY_PASSWORD));
 
         return new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.server_requires_auth)
-                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSettings.getString(GeneralKeys.KEY_SERVER_URL)))
+                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSettings.getString(ProjectKeys.KEY_SERVER_URL)))
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-                    generalSettings.save(GeneralKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
-                    generalSettings.save(GeneralKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
+                    generalSettings.save(ProjectKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
+                    generalSettings.save(ProjectKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
                 })
                 .create();
     }

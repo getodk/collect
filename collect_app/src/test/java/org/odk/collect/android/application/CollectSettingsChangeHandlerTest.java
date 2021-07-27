@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
 import static org.mockito.Mockito.mock;
@@ -32,19 +32,19 @@ public class CollectSettingsChangeHandlerTest {
 
     @Test
     public void whenChangedKeyIsFormUpdateMode_schedulesUpdates() {
-        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_FORM_UPDATE_MODE);
+        handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_FORM_UPDATE_MODE);
         verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 
     @Test
     public void whenChangedKeyIsPeriodicUpdatesCheck_schedulesUpdates() {
-        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_PERIODIC_FORM_UPDATES_CHECK);
+        handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK);
         verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 
     @Test
     public void whenChangedKeyIsProtocol_schedulesUpdates() {
-        handler.onSettingChanged("projectId", "anything", GeneralKeys.KEY_PROTOCOL);
+        handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PROTOCOL);
         verify(formUpdateScheduler).scheduleUpdates("projectId");
     }
 }

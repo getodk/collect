@@ -21,8 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_REFERENCE_LAYER;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 class GoogleMapConfigurator implements MapConfigurator {
     private final String prefKey;

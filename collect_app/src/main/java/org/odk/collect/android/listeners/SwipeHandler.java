@@ -8,7 +8,7 @@ import androidx.core.widget.NestedScrollView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.shared.Settings;
@@ -91,7 +91,7 @@ public class SwipeHandler {
             FlingRegister.flingDetected();
 
             if (e1 != null && e2 != null
-                    && generalSettings.getString(GeneralKeys.KEY_NAVIGATION).contains(GeneralKeys.NAVIGATION_SWIPE)
+                    && generalSettings.getString(ProjectKeys.KEY_NAVIGATION).contains(ProjectKeys.NAVIGATION_SWIPE)
                     && allowSwiping) {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 

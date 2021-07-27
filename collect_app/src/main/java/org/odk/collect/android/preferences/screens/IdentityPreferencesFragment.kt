@@ -20,7 +20,7 @@ import androidx.preference.Preference
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
@@ -53,7 +53,7 @@ class IdentityPreferencesFragment : BaseProjectPreferencesFragment() {
     }
 
     private fun initAnalyticsPref() {
-        val analyticsPreference = findPreference<Preference>(GeneralKeys.KEY_ANALYTICS) as CheckBoxPreference?
+        val analyticsPreference = findPreference<Preference>(ProjectKeys.KEY_ANALYTICS) as CheckBoxPreference?
         if (analyticsPreference != null) {
             if (versionInformation.isBeta) {
                 PreferencesUtils.displayDisabled(analyticsPreference, true)

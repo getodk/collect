@@ -25,7 +25,7 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.ResponseMessageParser;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -293,14 +293,14 @@ public class InstanceServerUploader extends InstanceUploader {
     }
 
     private String getServerSubmissionURL() {
-        String serverBase = generalSettings.getString(GeneralKeys.KEY_SERVER_URL);
+        String serverBase = generalSettings.getString(ProjectKeys.KEY_SERVER_URL);
 
         if (serverBase.endsWith(URL_PATH_SEP)) {
             serverBase = serverBase.substring(0, serverBase.length() - 1);
         }
 
         // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = generalSettings.getString(GeneralKeys.KEY_SUBMISSION_URL);
+        String submissionPath = generalSettings.getString(ProjectKeys.KEY_SUBMISSION_URL);
 
         if (!submissionPath.startsWith(URL_PATH_SEP)) {
             submissionPath = URL_PATH_SEP + submissionPath;

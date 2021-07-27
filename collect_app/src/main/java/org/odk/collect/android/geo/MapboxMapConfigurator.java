@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_REFERENCE_LAYER;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 class MapboxMapConfigurator implements MapConfigurator {
     private final String prefKey;

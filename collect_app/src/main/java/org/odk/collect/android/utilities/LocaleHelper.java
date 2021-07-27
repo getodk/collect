@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.util.Locale;
@@ -14,7 +14,7 @@ import java.util.TreeMap;
  */
 public class LocaleHelper {
     public static String getLocaleCode(Settings generalSettings) {
-        String localeCode = generalSettings.getString(GeneralKeys.KEY_APP_LANGUAGE);
+        String localeCode = generalSettings.getString(ProjectKeys.KEY_APP_LANGUAGE);
         if (localeCode == null) {
             return "";
         }

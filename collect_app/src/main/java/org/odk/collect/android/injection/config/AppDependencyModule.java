@@ -81,9 +81,10 @@ import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
-import org.odk.collect.android.preferences.keys.AdminKeys;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
@@ -326,8 +327,8 @@ public class AppDependencyModule {
                 settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
-                GeneralKeys.getDefaults(),
-                AdminKeys.getDefaults(),
+                ProjectKeys.getDefaults(),
+                ProtectedProjectKeys.getDefaults(),
                 settingsChangeHandler,
                 projectsRepository,
                 new ProjectDetailsCreator(context)
@@ -336,7 +337,7 @@ public class AppDependencyModule {
 
     @Provides
     public SettingsValidator providesSettingsValidator() {
-        return new StructureAndTypeSettingsValidator(GeneralKeys.getDefaults(), AdminKeys.getDefaults());
+        return new StructureAndTypeSettingsValidator(ProjectKeys.getDefaults(), ProtectedProjectKeys.getDefaults());
     }
 
     @Provides
@@ -611,4 +612,8 @@ public class AppDependencyModule {
         return new ForegroundServiceLocationTracker(application);
     }
 
+    @Provides
+    public PreferenceVisibilityHandler providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
+        return new PreferenceVisibilityHandler(settingsProvider, versionInformation);
+    }
 }

@@ -3,17 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/user_and_device_identity_title">
 
-    <PreferenceScreen
+    <Preference
         android:key="form_metadata"
         android:summary="@string/form_metadata_summary"
         android:title="@string/form_metadata"
         app:iconSpaceReserved="false"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false" />
+
     <PreferenceCategory
-        android:key="@string/analytics_preferences"
+        android:key="usage_data"
         android:title="@string/analytics_preferences"
         app:iconSpaceReserved="false">
+
         <CheckBoxPreference
             android:key="analytics"
             android:summary="@string/analytics_summary"

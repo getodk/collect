@@ -19,8 +19,8 @@ import org.odk.collect.async.Scheduler;
 import java.util.Collection;
 
 import static java.util.Arrays.asList;
-import static org.odk.collect.android.preferences.keys.AdminKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PASSWORD;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PASSWORD;
 
 class QRCodeViewModel extends ViewModel {
 

@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -73,7 +73,7 @@ public class GoogleAccountsManagerTest {
      * Stubbing
      */
     private void stubSavedAccount(String accountName) {
-        when(generalSettings.getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
+        when(generalSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT)).thenReturn(accountName);
         stubAccount(accountName);
     }
 
@@ -103,7 +103,7 @@ public class GoogleAccountsManagerTest {
 
     private void stubPreferences() {
         doAnswer(invocation -> {
-            if (invocation.getArgument(0).equals(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
+            if (invocation.getArgument(0).equals(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT)) {
                 savedAccount = invocation.getArgument(1);
             }
             return null;

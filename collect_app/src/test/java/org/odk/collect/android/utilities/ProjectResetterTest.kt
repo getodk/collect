@@ -19,8 +19,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.permissions.PermissionsProvider
-import org.odk.collect.android.preferences.keys.AdminKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -74,15 +74,15 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(currentProjectId).getString(GeneralKeys.KEY_USERNAME),
+            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
-                GeneralKeys.getDefaults()[GeneralKeys.KEY_USERNAME]
+                ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
-            getGeneralSettings(currentProjectId).getString(GeneralKeys.KEY_PASSWORD),
+            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
-                GeneralKeys.getDefaults()[GeneralKeys.KEY_PASSWORD]
+                ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
             )
         )
     }
@@ -94,13 +94,13 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(GeneralKeys.KEY_USERNAME),
+            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
                 "usernameTest"
             )
         )
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(GeneralKeys.KEY_PASSWORD),
+            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
                 "passwordTest"
             )
@@ -114,9 +114,9 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(currentProjectId).getBoolean(AdminKeys.KEY_VIEW_SENT),
+            getAdminSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
-                AdminKeys.getDefaults()[AdminKeys.KEY_VIEW_SENT]
+                ProtectedProjectKeys.defaults[ProtectedProjectKeys.KEY_VIEW_SENT]
             )
         )
     }
@@ -128,7 +128,7 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(anotherProjectId).getBoolean(AdminKeys.KEY_VIEW_SENT),
+            getAdminSettings(anotherProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
                 false
             )
@@ -250,12 +250,12 @@ class ProjectResetterTest {
     }
 
     private fun setupTestGeneralSettings(uuid: String) {
-        getGeneralSettings(uuid).save(GeneralKeys.KEY_USERNAME, "usernameTest")
-        getGeneralSettings(uuid).save(GeneralKeys.KEY_PASSWORD, "passwordTest")
+        getGeneralSettings(uuid).save(ProjectKeys.KEY_USERNAME, "usernameTest")
+        getGeneralSettings(uuid).save(ProjectKeys.KEY_PASSWORD, "passwordTest")
     }
 
     private fun setupTestAdminSettings(uuid: String) {
-        getAdminSettings(uuid).save(AdminKeys.KEY_VIEW_SENT, false)
+        getAdminSettings(uuid).save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
     }
 
     private fun setupTestSettingsFolder(uuid: String) {

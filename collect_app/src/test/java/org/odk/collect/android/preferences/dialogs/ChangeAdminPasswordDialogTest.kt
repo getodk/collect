@@ -19,7 +19,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.InMemSettingsProvider
@@ -90,11 +90,11 @@ class ChangeAdminPasswordDialogTest {
     fun `Setting password and accepting updates the password in settings`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
-            settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "")
+            settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             RobolectricHelpers.runLooper()
-            assertThat(settingsProvider.getAdminSettings().getString(AdminKeys.KEY_ADMIN_PW), `is`("password"))
+            assertThat(settingsProvider.getAdminSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`("password"))
         }
     }
 
@@ -102,11 +102,11 @@ class ChangeAdminPasswordDialogTest {
     fun `Setting password and canceling does not update the password in settings`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
-            settingsProvider.getAdminSettings().save(AdminKeys.KEY_ADMIN_PW, "")
+            settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
             RobolectricHelpers.runLooper()
-            assertThat(settingsProvider.getAdminSettings().getString(AdminKeys.KEY_ADMIN_PW), `is`(""))
+            assertThat(settingsProvider.getAdminSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`(""))
         }
     }
 

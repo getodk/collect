@@ -10,9 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.DisabledPreferencesRemover;
+import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
-import org.odk.collect.android.preferences.keys.AdminKeys;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 
@@ -31,6 +30,9 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Inject
     ProjectPreferencesViewModel.Factory factory;
 
+    @Inject
+    PreferenceVisibilityHandler preferenceVisibilityHandler;
+
     protected ProjectPreferencesViewModel projectPreferencesViewModel;
 
     @Override
@@ -47,9 +49,7 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
-        if (!projectPreferencesViewModel.isStateUnlocked()) {
-            removeDisabledPrefs();
-        }
+        preferenceVisibilityHandler.updatePreferencesVisibility(getPreferenceScreen(), projectPreferencesViewModel.getState().getValue().getValue());
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -68,11 +68,5 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Override
     public void onSettingChanged(@NotNull String key) {
         settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getGeneralSettings().getAll().get(key), key);
-    }
-
-    protected void removeDisabledPrefs() {
-        DisabledPreferencesRemover preferencesRemover = new DisabledPreferencesRemover(this, settingsProvider.getAdminSettings());
-        preferencesRemover.remove(AdminKeys.adminToGeneral);
-        preferencesRemover.removeEmptyCategories();
     }
 }

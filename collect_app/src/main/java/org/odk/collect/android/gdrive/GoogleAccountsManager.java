@@ -24,7 +24,7 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -69,7 +69,7 @@ public class GoogleAccountsManager {
     @NonNull
     public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = accountPicker.getAllAccounts();
-        String account = settingsProvider.getGeneralSettings().getString(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String account = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
             for (Account googleAccount : googleAccounts) {
@@ -78,7 +78,7 @@ public class GoogleAccountsManager {
                 }
             }
 
-            settingsProvider.getGeneralSettings().reset(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+            settingsProvider.getGeneralSettings().reset(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
 
         return "";
@@ -86,7 +86,7 @@ public class GoogleAccountsManager {
 
     public void selectAccount(String accountName) {
         if (accountName != null) {
-            settingsProvider.getGeneralSettings().save(GeneralKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             accountPicker.setSelectedAccountName(accountName);
         }
     }

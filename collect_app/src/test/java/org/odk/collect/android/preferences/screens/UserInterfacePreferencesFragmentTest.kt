@@ -14,8 +14,8 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.AdminKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.shared.Settings
@@ -53,33 +53,33 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be hidden in Locked mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateLocked()
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 
@@ -89,33 +89,33 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be visible in Unlocked mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
@@ -125,33 +125,33 @@ class UserInterfacePreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `Disabled preferences should be hidden in NotProtected mode`() {
-        adminSettings.save(AdminKeys.KEY_APP_THEME, false)
-        adminSettings.save(AdminKeys.KEY_APP_LANGUAGE, false)
-        adminSettings.save(AdminKeys.KEY_CHANGE_FONT_SIZE, false)
-        adminSettings.save(AdminKeys.KEY_NAVIGATION, false)
-        adminSettings.save(AdminKeys.KEY_SHOW_SPLASH_SCREEN, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_THEME, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 
         val scenario = FragmentScenario.launch(UserInterfacePreferencesFragment::class.java)
         scenario.onFragment { fragment: UserInterfacePreferencesFragment ->
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(GeneralKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_THEME)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
+            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 }

@@ -42,7 +42,7 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -58,7 +58,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_PROTOCOL;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -215,7 +215,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         String server = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
 
-        if (server.equalsIgnoreCase(GeneralKeys.PROTOCOL_GOOGLE_SHEETS)) {
+        if (server.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
             // if it's Sheets, start the Sheets uploader
             // first make sure we have a google account selected
             if (new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {

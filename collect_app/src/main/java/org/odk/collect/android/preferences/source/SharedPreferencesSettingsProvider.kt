@@ -1,9 +1,9 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.Context
-import org.odk.collect.android.preferences.keys.AdminKeys
-import org.odk.collect.android.preferences.keys.GeneralKeys
 import org.odk.collect.android.preferences.keys.MetaKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         val settingsId = getSettingsId(GENERAL_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), GeneralKeys.getDefaults())
+            SharedPreferencesSettings(getSharedPrefs(settingsId), ProjectKeys.defaults)
         }
     }
 
@@ -28,7 +28,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         val settingsId = getSettingsId(ADMIN_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), AdminKeys.getDefaults())
+            SharedPreferencesSettings(getSharedPrefs(settingsId), ProtectedProjectKeys.defaults)
         }
     }
 

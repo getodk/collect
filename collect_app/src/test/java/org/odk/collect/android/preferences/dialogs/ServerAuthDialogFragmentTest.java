@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.preferences.keys.GeneralKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
 
@@ -24,8 +24,8 @@ public class ServerAuthDialogFragmentTest {
 
     @Test
     public void prefillsUsernameAndPassword() {
-        generalSettings.save(GeneralKeys.KEY_USERNAME, "Alpen");
-        generalSettings.save(GeneralKeys.KEY_PASSWORD, "swiss");
+        generalSettings.save(ProjectKeys.KEY_USERNAME, "Alpen");
+        generalSettings.save(ProjectKeys.KEY_PASSWORD, "swiss");
 
         FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class, R.style.Theme_Collect_Light);
 
@@ -52,7 +52,7 @@ public class ServerAuthDialogFragmentTest {
         });
 
         RobolectricHelpers.runLooper();
-        assertThat(generalSettings.getString(GeneralKeys.KEY_USERNAME), is("Frederick Chilton"));
-        assertThat(generalSettings.getString(GeneralKeys.KEY_PASSWORD), is("chesapeake"));
+        assertThat(generalSettings.getString(ProjectKeys.KEY_USERNAME), is("Frederick Chilton"));
+        assertThat(generalSettings.getString(ProjectKeys.KEY_PASSWORD), is("chesapeake"));
     }
 }

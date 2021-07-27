@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.odk.collect.android.openrosa.OpenRosaFormSource
-import org.odk.collect.android.preferences.keys.GeneralKeys
+import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 
 class FormSourceProviderTest {
@@ -17,10 +17,10 @@ class FormSourceProviderTest {
 
         val formSourceProvider = FormSourceProvider(settingsProvider, mock())
 
-        settings.save(GeneralKeys.KEY_SERVER_URL, "http://example.com")
-        settings.save(GeneralKeys.KEY_FORMLIST_URL, "/a-path")
-        settings.save(GeneralKeys.KEY_USERNAME, "user")
-        settings.save(GeneralKeys.KEY_PASSWORD, "pass")
+        settings.save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
+        settings.save(ProjectKeys.KEY_FORMLIST_URL, "/a-path")
+        settings.save(ProjectKeys.KEY_USERNAME, "user")
+        settings.save(ProjectKeys.KEY_PASSWORD, "pass")
         val formSource = formSourceProvider.get("projectId") as OpenRosaFormSource
 
         assertThat(formSource.serverURL, `is`("http://example.com"))

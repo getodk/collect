@@ -32,7 +32,7 @@ import java.util.function.BiConsumer;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.keys.GeneralKeys.KEY_BACKGROUND_RECORDING;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_RECORDING;
 
 public class BackgroundAudioViewModel extends ViewModel implements RequiresFormController {
 

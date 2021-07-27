@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.AdminKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer;
 import org.odk.collect.android.version.VersionInformation;
@@ -69,24 +69,24 @@ public class MainMenuViewModel extends ViewModel {
     }
 
     public boolean shouldEditSavedFormButtonBeVisible() {
-        return adminSettings.getBoolean(AdminKeys.KEY_EDIT_SAVED);
+        return adminSettings.getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
     }
 
     public boolean shouldSendFinalizedFormButtonBeVisible() {
-        return adminSettings.getBoolean(AdminKeys.KEY_SEND_FINALIZED);
+        return adminSettings.getBoolean(ProtectedProjectKeys.KEY_SEND_FINALIZED);
     }
 
     public boolean shouldViewSentFormButtonBeVisible() {
-        return adminSettings.getBoolean(AdminKeys.KEY_VIEW_SENT);
+        return adminSettings.getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT);
     }
 
     public boolean shouldGetBlankFormButtonBeVisible() {
-        boolean buttonEnabled = adminSettings.getBoolean(AdminKeys.KEY_GET_BLANK);
+        boolean buttonEnabled = adminSettings.getBoolean(ProtectedProjectKeys.KEY_GET_BLANK);
         return !isMatchExactlyEnabled() && buttonEnabled;
     }
 
     public boolean shouldDeleteSavedFormButtonBeVisible() {
-        return adminSettings.getBoolean(AdminKeys.KEY_DELETE_SAVED);
+        return adminSettings.getBoolean(ProtectedProjectKeys.KEY_DELETE_SAVED);
     }
 
     public LiveData<Integer> getEditableInstancesCount() {
