@@ -7,7 +7,9 @@ import androidx.work.WorkManager;
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.robolectric.shadows.ShadowApplication;
+import org.robolectric.shadows.ShadowEnvironment;
 
+import static android.os.Environment.MEDIA_MOUNTED;
 import static org.robolectric.Shadows.shadowOf;
 
 /**
@@ -18,6 +20,9 @@ public class RobolectricApplication extends Collect {
 
     @Override
     public void onCreate() {
+        // Make sure storage is accessible
+        ShadowEnvironment.setExternalStorageState(MEDIA_MOUNTED);
+
         // Prevents OKHttp from exploding on initialization https://github.com/robolectric/robolectric/issues/5115
         System.setProperty("javax.net.ssl.trustStore", "NONE");
 
@@ -27,8 +32,6 @@ public class RobolectricApplication extends Collect {
         } catch (IllegalStateException e) {
             // initialize() explodes if it's already been called
         }
-
-        super.onCreate();
 
         // We don't want to deal with permission checks in Robolectric
         ShadowApplication shadowApplication = shadowOf(this);
@@ -45,5 +48,7 @@ public class RobolectricApplication extends Collect {
 
         // We don't want any clicks to be blocked
         MultiClickGuard.test = true;
+
+        super.onCreate();
     }
 }
