@@ -216,7 +216,12 @@ class QrCodeProjectCreatorDialog :
                     // ignore because beeping isn't essential and this can crash the whole app
                 }
 
-                createProjectOrError(CompressionUtils.decompress(barcodeResult.text))
+                try {
+                    val settingsJson = CompressionUtils.decompress(barcodeResult.text)
+                    createProjectOrError(settingsJson)
+                } catch (e: Exception) {
+                    showShortToast(getString(R.string.invalid_qrcode))
+                }
             }
         )
     }
