@@ -18,11 +18,13 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
+import org.odk.collect.android.utilities.StringUtils
 import org.odk.collect.androidshared.ColorPickerDialog
 import org.odk.collect.androidshared.ColorPickerViewModel
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -137,8 +139,17 @@ class ProjectDisplayPreferencesFragment :
             PROJECT_NAME_KEY -> {
                 Analytics.log(AnalyticsEvents.CHANGE_PROJECT_NAME)
 
-                File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
-                File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
+                try {
+                    File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
+                } catch (e: Exception) {
+                    Timber.e(StringUtils.getFilenameError(name))
+                }
+
+                try {
+                    File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
+                } catch (e: Exception) {
+                    Timber.e(StringUtils.getFilenameError(newValue as String))
+                }
 
                 projectsRepository.save(
                     Project.Saved(

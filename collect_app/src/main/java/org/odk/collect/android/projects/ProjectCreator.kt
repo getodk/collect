@@ -2,7 +2,9 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.utilities.StringUtils
 import org.odk.collect.projects.ProjectsRepository
+import timber.log.Timber
 import java.io.File
 
 class ProjectCreator(
@@ -20,7 +22,11 @@ class ProjectCreator(
 
         return if (settingsImportedSuccessfully) {
             currentProjectProvider.setCurrentProject(savedProject.uuid)
-            File((storagePathProvider.getProjectRootDirPath() + File.separator + currentProjectProvider.getCurrentProject().name)).createNewFile()
+            try {
+                File((storagePathProvider.getProjectRootDirPath() + File.separator + currentProjectProvider.getCurrentProject().name)).createNewFile()
+            } catch (e: Exception) {
+                Timber.e(StringUtils.getFilenameError(currentProjectProvider.getCurrentProject().name))
+            }
             true
         } else {
             projectsRepository.delete(savedProject.uuid)
