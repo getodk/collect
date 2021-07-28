@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -20,6 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
+import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
@@ -34,6 +36,7 @@ import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.testshared.RobolectricHelpers
+import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
 class QrCodeProjectCreatorDialogTest {
@@ -126,6 +129,39 @@ class QrCodeProjectCreatorDialogTest {
         scenario.onFragment {
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
+        }
+    }
+
+    @Test
+    fun `When QR code is invalid a toast should be displayed`() {
+        val projectCreator = mock<ProjectCreator>()
+
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
+                val barcodeResult = mock<BarcodeResult> {
+                    `when`(it.text).thenReturn("%")
+                }
+
+                return mock {
+                    `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
+                }
+            }
+            override fun providesProjectCreator(
+                projectImporter: ProjectImporter?,
+                projectsRepository: ProjectsRepository?,
+                currentProjectProvider: CurrentProjectProvider?,
+                settingsImporter: SettingsImporter?,
+                context: Context,
+                storagePathProvider: StoragePathProvider
+            ): ProjectCreator {
+                return projectCreator
+            }
+        })
+
+        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        scenario.onFragment {
+            assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
+            verifyNoInteractions(projectCreator)
         }
     }
 }
