@@ -126,7 +126,9 @@ class QrCodeProjectCreatorDialog :
             requireActivity(),
             object : PermissionListener {
                 override fun granted() {
-                    startScanning(savedInstanceState)
+                    if (isAdded) {
+                        startScanning(savedInstanceState)
+                    }
                 }
 
                 override fun denied() {
