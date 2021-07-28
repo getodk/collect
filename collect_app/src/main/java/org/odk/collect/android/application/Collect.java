@@ -17,7 +17,6 @@ package org.odk.collect.android.application;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Environment;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
@@ -50,11 +49,11 @@ import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
 
-import static android.os.Environment.MEDIA_MOUNTED;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application implements
@@ -123,11 +122,7 @@ public class Collect extends Application implements
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // Throw specific error to avoid later ones if the app won't be able to access storage
-        if (!Environment.getExternalStorageState().equals(MEDIA_MOUNTED)) {
-            throw new IllegalStateException("App launched without mounted storage!");
-        }
+        testStorage();
 
         singleton = this;
 
@@ -137,6 +132,18 @@ public class Collect extends Application implements
         fixGoogleBug154855417();
 
         setupStrictMode();
+    }
+
+    private void testStorage() {
+        // Throw specific error to avoid later ones if the app won't be able to access storage
+        try {
+            File externalFilesDir = getExternalFilesDir(null);
+            File testFile = new File(externalFilesDir + File.separator + ".test");
+            testFile.createNewFile();
+            testFile.delete();
+        } catch (IOException e) {
+            throw new IllegalStateException("App can't write to storage!");
+        }
     }
 
     /**
