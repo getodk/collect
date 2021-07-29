@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>form_design_error</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="form_design_error">
+                    <group>
+                        <select />
+                        <select2 />
+                    </group>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <instance id="list">
+                <root>
+                    <item>
+                        <label>A</label>
+                        <name>a</name>
+                    </item>
+                    <item>
+                        <label>B</label>
+                        <name>b</name>
+                    </item>
+                    <item>
+                        <label>C</label>
+                        <name>c</name>
+                    </item>
+                </root>
+            </instance>
+            <instance id="list2">
+                <root>
+                    <item>
+                        <label>AA</label>
+                        <list>a</list>
+                        <name>aa</name>
+                    </item>
+                    <item>
+                        <label>AB</label>
+                        <list>a</list>
+                        <name>ab</name>
+                    </item>
+                    <item>
+                        <label>BA</label>
+                        <list>b</list>
+                        <name>ba</name>
+                    </item>
+                    <item>
+                        <label>BB</label>
+                        <list>b</list>
+                        <name>bb</name>
+                    </item>
+                </root>
+            </instance>
+            <bind nodeset="/data/group/select" type="string" />
+            <bind calculate="concat( /data/group/select , 'a')" nodeset="/data/group/select2" type="string" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <group appearance="field-list" ref="/data/group">
+            <select1 appearance="minimal" ref="/data/group/select">
+                <label>Select</label>
+                <item>
+                    <label>A</label>
+                    <value>a</value>
+                </item>
+                <item>
+                    <label>B</label>
+                    <value>b</value>
+                </item>
+                <item>
+                    <label>C</label>
+                    <value>c</value>
+                </item>
+            </select1>
+            <select1 appearance="minimal" ref="/data/group/select2">
+                <label>Select2</label>
+                <itemset nodeset="instance('list2')/root/item[list= /data/group/select ]">
+                    <value ref="name" />
+                    <label ref="label" />
+                </itemset>
+            </select1>
+        </group>
+    </h:body>
+</h:html>
