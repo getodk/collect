@@ -19,4 +19,9 @@ public class FormManagementPage extends Page<FormManagementPage> {
         clickOnString(R.string.form_update_frequency_title);
         return new ListPreferenceDialog<>(R.string.form_update_frequency_title, this).assertOnPage();
     }
+
+    public ListPreferenceDialog<FormManagementPage> clickAutoSend() {
+        clickOnString(R.string.autosend);
+        return new ListPreferenceDialog<>(R.string.autosend, this).assertOnPage();
+    }
 }
