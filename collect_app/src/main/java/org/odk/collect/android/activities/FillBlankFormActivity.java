@@ -33,6 +33,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.formmanagement.BlankFormListMenuDelegate;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -42,7 +43,6 @@ import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -179,7 +179,9 @@ public class FillBlankFormActivity extends FormListActivity implements
                 setResult(RESULT_OK, new Intent().setData(formUri));
             } else {
                 // caller wants to view/edit a form, so launch formentryactivity
-                Intent intent = new Intent(Intent.ACTION_EDIT, formUri);
+                Intent intent = new Intent(this, FormEntryActivity.class);
+                intent.setAction(Intent.ACTION_EDIT);
+                intent.setData(formUri);
                 intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                 startActivity(intent);
             }

@@ -33,9 +33,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;
@@ -125,7 +125,9 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
                     }
                     // caller wants to view/edit a form, so launch formentryactivity
                     Intent parentIntent = this.getIntent();
-                    Intent intent = new Intent(Intent.ACTION_EDIT, instanceUri);
+                    Intent intent = new Intent(this, FormEntryActivity.class);
+                    intent.setAction(Intent.ACTION_EDIT);
+                    intent.setData(instanceUri);
                     String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                     if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
