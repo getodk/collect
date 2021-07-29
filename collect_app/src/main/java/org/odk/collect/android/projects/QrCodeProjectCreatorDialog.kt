@@ -126,6 +126,7 @@ class QrCodeProjectCreatorDialog :
             requireActivity(),
             object : PermissionListener {
                 override fun granted() {
+                    // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                     if (isAdded) {
                         startScanning(savedInstanceState)
                     }
