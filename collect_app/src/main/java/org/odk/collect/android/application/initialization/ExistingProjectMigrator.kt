@@ -56,7 +56,11 @@ class ExistingProjectMigrator(
             }
         }
 
-        FileUtils.deleteDirectory(File(rootDir, ".cache"))
+        try {
+            FileUtils.deleteDirectory(File(rootDir, ".cache"))
+        } catch (e: Exception) {
+            // ignore
+        }
 
         val adminSharedPrefs = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
