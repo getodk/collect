@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.NotificationDrawerRule;
 import org.odk.collect.android.support.TestDependencies;
@@ -61,6 +62,27 @@ public class AutoSendTest {
         mainMenuPage
                 .clickViewSentForm(1)
                 .assertText("One Question Autosend");
+
+        notificationDrawerRule.open()
+                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
+    }
+
+    @Test
+    public void whenFormIsFinalized_enablingAutoSend_schedulesSubmitFinalizedForm() {
+        MainMenuPage mainMenuPage = rule.startAtMainMenu()
+                .setServer(testDependencies.server.getURL())
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .inputText("31")
+                .swipeToEndScreen()
+                .clickSaveAndExit()
+                .enableAutoSend();
+
+        testDependencies.scheduler.runDeferredTasks();
+
+        mainMenuPage
+                .clickViewSentForm(1)
+                .assertText("One Question");
 
         notificationDrawerRule.open()
                 .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
