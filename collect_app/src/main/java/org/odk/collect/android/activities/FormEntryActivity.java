@@ -645,42 +645,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                  * Savepoints for forms that were explicitly saved will be recovered when that
                  * explicitly saved instance is edited via edit-saved-form.
                  */
-                final String filePrefix = formPath.substring(
-                        formPath.lastIndexOf('/') + 1,
-                        formPath.lastIndexOf('.'))
-                        + "_";
-                final String fileSuffix = ".xml.save";
-                File cacheDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
-                File[] files = cacheDir.listFiles(pathname -> {
-                    String name = pathname.getName();
-                    return name.startsWith(filePrefix)
-                            && name.endsWith(fileSuffix);
-                });
-
-                /**
-                 * See if any of these savepoints are for a filled-in form that has never
-                 * been explicitly saved by the user.
-                 */
-                for (File candidate : files) {
-                    String instanceDirName = candidate.getName()
-                            .substring(
-                                    0,
-                                    candidate.getName().length()
-                                            - fileSuffix.length());
-                    File instanceDir = new File(
-                            storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
-                                    + instanceDirName);
-                    File instanceFile = new File(instanceDir,
-                            instanceDirName + ".xml");
-                    if (instanceDir.exists()
-                            && instanceDir.isDirectory()
-                            && !instanceFile.exists()) {
-                        // yes! -- use this savepoint file
-                        instancePath = instanceFile
-                                .getAbsolutePath();
-                        break;
-                    }
-                }
+                instancePath = loadSavePoint();
             }
         } else {
             Timber.i("Unrecognized URI: %s", uri);
@@ -691,6 +656,51 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
+    }
+
+    private String loadSavePoint() {
+        final String filePrefix = formPath.substring(
+                formPath.lastIndexOf('/') + 1,
+                formPath.lastIndexOf('.'))
+                + "_";
+        final String fileSuffix = ".xml.save";
+        File cacheDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
+        File[] files = cacheDir.listFiles(pathname -> {
+            String name = pathname.getName();
+            return name.startsWith(filePrefix)
+                    && name.endsWith(fileSuffix);
+        });
+
+        if (files != null) {
+            /**
+             * See if any of these savepoints are for a filled-in form that has never
+             * been explicitly saved by the user.
+             */
+            for (File candidate : files) {
+                String instanceDirName = candidate.getName()
+                        .substring(
+                                0,
+                                candidate.getName().length()
+                                        - fileSuffix.length());
+                File instanceDir = new File(
+                        storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
+                                + instanceDirName);
+                File instanceFile = new File(instanceDir,
+                        instanceDirName + ".xml");
+                if (instanceDir.exists()
+                        && instanceDir.isDirectory()
+                        && !instanceFile.exists()) {
+                    // yes! -- use this savepoint file
+                    return instanceFile
+                            .getAbsolutePath();
+                }
+            }
+
+        } else {
+            Timber.e("Couldn't access cache directory when looking for save points!");
+        }
+
+        return null;
     }
 
 
