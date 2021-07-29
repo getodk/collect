@@ -2511,6 +2511,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     } catch (FormDesignException e) {
                         Timber.e(e);
                         createErrorDialog(e.getMessage(), false);
+                    } catch (Exception | Error e) {
+                        Timber.e(e);
+                        createErrorDialog(getString(R.string.update_widgets_error), true);
                     }
                 }
             });
