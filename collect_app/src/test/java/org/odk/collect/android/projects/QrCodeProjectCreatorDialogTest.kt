@@ -158,10 +158,8 @@ class QrCodeProjectCreatorDialogTest {
             }
         })
 
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
-        scenario.onFragment {
-            assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
-            verifyNoInteractions(projectCreator)
-        }
+        RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
+        verifyNoInteractions(projectCreator)
     }
 }
