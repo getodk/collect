@@ -27,5 +27,10 @@ interface Analytics {
         fun log(event: String) {
             instance.logEvent(event)
         }
+
+        @JvmStatic
+        fun logServer(event: String, serverHash: String) {
+            instance.logServerEvent(event, serverHash)
+        }
     }
 }

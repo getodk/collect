@@ -225,6 +225,10 @@ public class AnalyticsEvents {
      */
     public static final String RECONFIGURE_PROJECT = "ProjectReconfigure";
 
+    public static final String FORMS_PROVIDER_INSERT = "FormsProviderInsert";
+    public static final String FORMS_PROVIDER_UPDATE = "FormsProviderUpdate";
+    public static final String FORMS_PROVIDER_DELETE = "FormsProviderDelete";
+
     /**
      * These track how often the external edit or view actions are used for forms or instances.
      * One event tracks when a project ID is included with the action URI and the other tracks when
