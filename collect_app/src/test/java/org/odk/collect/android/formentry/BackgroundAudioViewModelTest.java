@@ -8,15 +8,14 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.utilities.Clock;
 
@@ -48,7 +47,7 @@ public class BackgroundAudioViewModelTest {
         Settings generalSettings = TestSettingsProvider.getGeneralSettings();
         generalSettings.clear();
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock, mock(Analytics.class));
+        viewModel = new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock);
     }
 
     @Test

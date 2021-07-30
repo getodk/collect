@@ -1,6 +1,8 @@
 package org.odk.collect.android.analytics;
 
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
@@ -22,6 +24,14 @@ public class AnalyticsUtils {
 
     private AnalyticsUtils() {
 
+    }
+
+    public static void logFormEvent(String event) {
+        Analytics.log(event, "form", getFormHash(Collect.getInstance().getFormController()));
+    }
+
+    public static void logFormEvent(String event, String formId, String formTitle) {
+        Analytics.log(event, "form", getFormHash(formId, formTitle));
     }
 
     public static void logServerEvent(String event, Settings generalSettings) {
@@ -50,6 +60,19 @@ public class AnalyticsUtils {
 
         String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
         analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
+    }
+
+    public static String getFormHash(String formId, String formTitle) {
+        return Md5.getMd5Hash(new ByteArrayInputStream((formTitle + " " + formId).getBytes()));
+    }
+
+    public static String getFormHash(FormController formController) {
+        if (formController != null) {
+            String formID = formController.getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
+            return getFormHash(formID, formController.getFormTitle());
+        } else {
+            return "";
+        }
     }
 
     private static String getServerHash(Settings generalSettings) {

@@ -13,8 +13,8 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -29,7 +29,6 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGr
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Clock clock;
-    private final Analytics analytics;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
@@ -41,9 +40,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock, Analytics analytics) {
+    public FormEntryViewModel(Clock clock) {
         this.clock = clock;
-        this.analytics = analytics;
     }
 
     @Override
@@ -54,7 +52,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.hasBackgroundRecording.setValue(hasBackgroundRecording);
 
         if (hasBackgroundRecording) {
-            analytics.logFormEvent(AnalyticsEvents.REQUESTS_BACKGROUND_AUDIO, getFormIdentifierHash());
+            AnalyticsUtils.logFormEvent(AnalyticsEvents.REQUESTS_BACKGROUND_AUDIO);
         }
     }
 
@@ -174,36 +172,26 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void logFormEvent(String event) {
-        analytics.logFormEvent(event, getFormIdentifierHash());
+        AnalyticsUtils.logFormEvent(event);
     }
 
     public NonNullLiveData<Boolean> hasBackgroundRecording() {
         return hasBackgroundRecording;
     }
 
-    private String getFormIdentifierHash() {
-        if (formController != null) {
-            return formController.getCurrentFormIdentifierHash();
-        } else {
-            return "";
-        }
-    }
-
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Clock clock;
-        private final Analytics analytics;
 
-        public Factory(Clock clock, Analytics analytics) {
+        public Factory(Clock clock) {
             this.clock = clock;
-            this.analytics = analytics;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, analytics);
+            return (T) new FormEntryViewModel(clock);
         }
     }
 

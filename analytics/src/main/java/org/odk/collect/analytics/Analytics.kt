@@ -8,7 +8,6 @@ interface Analytics {
     fun logEvent(category: String, action: String, label: String)
 
     fun logEvent(event: String)
-    fun logFormEvent(event: String, formIdHash: String)
     fun logEventWithParam(event: String, key: String, value: String)
     fun logFatal(throwable: Throwable)
     fun logNonFatal(message: String)

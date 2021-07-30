@@ -17,18 +17,18 @@ package org.odk.collect.android.instancemanagement;
 import android.net.Uri;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -39,11 +39,9 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.shared.strings.Md5;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -63,7 +61,6 @@ public class InstanceDiskSynchronizer {
     private final SettingsProvider settingsProvider;
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
     private final InstancesRepository instancesRepository;
-    private final Analytics analytics;
 
     public String getStatusMessage() {
         return currentStatus;
@@ -73,7 +70,6 @@ public class InstanceDiskSynchronizer {
         this.settingsProvider = settingsProvider;
         instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
         AppDependencyComponent component = DaggerUtils.getComponent(Collect.getInstance());
-        analytics = component.analytics();
         currentProjectProvider = component.currentProjectProvider();
     }
 
@@ -200,17 +196,11 @@ public class InstanceDiskSynchronizer {
     }
 
     private void logImport(Form form) {
-        String id = form.getFormId();
-        String title = form.getDisplayName();
-        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
-        analytics.logFormEvent(AnalyticsEvents.IMPORT_INSTANCE, formIdHash);
+        AnalyticsUtils.logFormEvent(AnalyticsEvents.IMPORT_INSTANCE, form.getFormId(), form.getDisplayName());
     }
 
     private void logImportAndEncrypt(Form form) {
-        String id = form.getFormId();
-        String title = form.getDisplayName();
-        String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream((id + " " + title).getBytes()));
-        analytics.logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, formIdHash);
+        AnalyticsUtils.logFormEvent(AnalyticsEvents.IMPORT_AND_ENCRYPT_INSTANCE, form.getFormId(), form.getDisplayName());
     }
 
     private void encryptInstance(Instance instance) throws EncryptionException, IOException {

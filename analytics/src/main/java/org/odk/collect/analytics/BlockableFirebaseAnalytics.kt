@@ -29,10 +29,6 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
         firebaseAnalytics.logEvent(event, null)
     }
 
-    override fun logFormEvent(event: String, formIdHash: String) {
-        logEventWithParam(event, "form", formIdHash)
-    }
-
     override fun logFatal(throwable: Throwable) {
         crashlytics.recordException(throwable)
     }
