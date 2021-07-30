@@ -23,7 +23,6 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
@@ -314,7 +313,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     private void logServerEvent(String projectId, String event) {
-        Analytics.logServer(event, AnalyticsUtils.getServerHash(settingsProvider.getGeneralSettings(projectId)));
+        AnalyticsUtils.logServerEvent(event, settingsProvider.getGeneralSettings(projectId));
     }
 
     static {

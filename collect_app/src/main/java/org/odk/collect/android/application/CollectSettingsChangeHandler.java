@@ -2,12 +2,12 @@ package org.odk.collect.android.application;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 
-import static org.odk.collect.android.analytics.AnalyticsUtils.getServerHash;
 import static org.odk.collect.android.analytics.AnalyticsUtils.logServerConfiguration;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
@@ -38,8 +38,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            String serverHash = getServerHash(settingsProvider.getGeneralSettings(projectId));
-            analytics.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, serverHash);
+            AnalyticsUtils.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, settingsProvider.getGeneralSettings(projectId));
         }
 
         if (changedKey.equals(KEY_SERVER_URL)) {
