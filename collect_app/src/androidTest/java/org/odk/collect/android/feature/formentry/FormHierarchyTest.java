@@ -30,6 +30,7 @@ public class FormHierarchyTest {
             .around(new CopyFormRule("formHierarchy2.xml", null))
             .around(new CopyFormRule("formHierarchy3.xml", null))
             .around(new CopyFormRule("repeat_group_new.xml", null))
+            .around(new CopyFormRule("empty_first_repeat.xml", null))
             .around(rule);
 
     @Test
@@ -169,5 +170,15 @@ public class FormHierarchyTest {
                 .clickGoToArrow()
                 .deleteGroup()
                 .addGroup();
+    }
+
+    @Test
+    //https://github.com/getodk/collect/issues/4570
+    public void empty_first_repeat() {
+        new MainMenuPage()
+                .startBlankForm("empty_first_repeat")
+                .clickGoToArrow()
+                .assertText("Beet, Bell pepper, Cabbage")
+                .clickOnText("Frequencies");
     }
 }

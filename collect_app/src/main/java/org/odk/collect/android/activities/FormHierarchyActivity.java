@@ -243,17 +243,23 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         return element instanceof GroupDef && ((GroupDef) element).noAddRemove;
     }
 
-    /** Override to disable this button. */
+    /**
+     * Override to disable this button.
+     */
     protected void showDeleteButton(boolean shouldShow) {
         optionsMenu.findItem(R.id.menu_delete_child).setVisible(shouldShow);
     }
 
-    /** Override to disable this button. */
+    /**
+     * Override to disable this button.
+     */
     protected void showAddButton(boolean shouldShow) {
         optionsMenu.findItem(R.id.menu_add_repeat).setVisible(shouldShow);
     }
 
-    /** Override to disable this button. */
+    /**
+     * Override to disable this button.
+     */
     protected void showGoUpButton(boolean shouldShow) {
         optionsMenu.findItem(R.id.menu_go_up).setVisible(shouldShow);
     }
@@ -596,13 +602,18 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                         break;
                     }
                     case FormEntryController.EVENT_REPEAT: {
+                        FormEntryCaption fc = formController.getCaptionPrompt();
                         if (!formController.isGroupRelevant()) {
-                            break;
+                            //Handles #4570 - ensures repeats are visible
+                            boolean isFirst = fc.getMultiplicity() == 0;
+                            //But disregard if starting a picker
+                            boolean isPicker = shouldShowRepeatGroupPicker();
+                            if (!isFirst || isPicker) {
+                                break;
+                            }
                         }
 
                         visibleGroupRef = currentRef;
-
-                        FormEntryCaption fc = formController.getCaptionPrompt();
 
                         // Don't render other groups' children.
                         if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
