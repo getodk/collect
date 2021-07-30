@@ -24,9 +24,12 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -69,6 +72,9 @@ public class InstanceProvider extends ContentProvider {
 
     @Inject
     ProjectsRepository projectsRepository;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     @Override
     public boolean onCreate() {
@@ -125,6 +131,7 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         String projectId = getProjectId(uri);
+        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_INSERT);
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
@@ -173,6 +180,7 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         String projectId = getProjectId(uri);
+        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_DELETE);
 
         int count;
 
@@ -220,7 +228,10 @@ public class InstanceProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String where, String[] whereArgs) {
         DaggerUtils.getComponent(getContext()).inject(this);
+
         String projectId = getProjectId(uri);
+        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_UPDATE);
+
         InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
         String instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId);
 
@@ -287,6 +298,10 @@ public class InstanceProvider extends ContentProvider {
         } else {
             return projectsRepository.getAll().get(0).getUuid();
         }
+    }
+
+    private void logServerEvent(String projectId, String event) {
+        AnalyticsUtils.logServerEvent(event, settingsProvider.getGeneralSettings(projectId));
     }
 
     static {
