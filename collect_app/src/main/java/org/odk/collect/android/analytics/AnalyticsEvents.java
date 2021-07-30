@@ -224,4 +224,17 @@ public class AnalyticsEvents {
      * Tracks how often users reconfigure a project using QR codes
      */
     public static final String RECONFIGURE_PROJECT = "ProjectReconfigure";
+
+    /**
+     * These track how often the external edit or view actions are used for forms or instances.
+     * One event tracks when a project ID is included with the action URI and the other tracks when
+     * it's not included.
+     */
+    public static final String FORM_ACTION_WITH_PROJECT_ID = "FormActionWithProjectId";
+    public static final String FORM_ACTION_WITHOUT_PROJECT_ID = "FormActionWithoutProjectId";
+
+    /**
+     * Tracks how often an external edit or view action includes an extra we'd like to deprecate.
+     */
+    public static final String FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra";
 }

@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
@@ -26,13 +29,16 @@ class FormUriActivity : Activity() {
         setTheme(ThemeUtils(this).appTheme)
 
         val firstProject = projectsRepository.getAll().first()
-        val formUri = intent.data
-        val projectId = formUri?.getQueryParameter("projectId") ?: firstProject.uuid
+        val uri = intent.data
+        val uriProjectId = uri?.getQueryParameter("projectId")
+        val projectId = uriProjectId ?: firstProject.uuid
+
+        logAnalytics(uriProjectId)
 
         if (projectId == currentProjectProvider.getCurrentProject().uuid) {
             startActivity(
                 Intent(this, FormEntryActivity::class.java).also {
-                    it.data = formUri
+                    it.data = uri
                     intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
                 }
             )
@@ -42,6 +48,18 @@ class FormUriActivity : Activity() {
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
+        }
+    }
+
+    private fun logAnalytics(uriProjectId: String?) {
+        if (uriProjectId != null) {
+            Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_PROJECT_ID)
+        } else {
+            Analytics.log(AnalyticsEvents.FORM_ACTION_WITHOUT_PROJECT_ID)
+        }
+
+        if (intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE) != null) {
+            Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_FORM_MODE_EXTRA)
         }
     }
 }
