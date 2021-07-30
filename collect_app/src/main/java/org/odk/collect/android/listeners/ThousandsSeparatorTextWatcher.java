@@ -55,7 +55,8 @@ public class ThousandsSeparatorTextWatcher implements TextWatcher {
             }
 
             //setting the cursor back to where it was
-            editText.setSelection(editText.getText().toString().length() - cursorPosition);
+            int selectionIndex = editText.getText().toString().length() - cursorPosition;
+            editText.setSelection(Math.max(selectionIndex, 0));
             editText.addTextChangedListener(this);
         } catch (Exception ex) {
             Timber.e(ex);
