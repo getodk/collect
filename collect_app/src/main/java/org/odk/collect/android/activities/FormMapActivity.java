@@ -35,6 +35,9 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
+import org.odk.collect.android.external.FormsContract;
+import org.odk.collect.android.external.InstanceProvider;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -42,9 +45,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.external.FormsContract;
-import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
@@ -203,7 +203,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
             final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
-            startActivity(new Intent(Intent.ACTION_EDIT, formUri));
+            Intent intent = new Intent(this, FormEntryActivity.class);
+            intent.setAction(Intent.ACTION_EDIT);
+            intent.setData(formUri);
+            startActivity(intent);
         });
 
         map.setGpsLocationEnabled(true);
@@ -396,7 +399,10 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private Intent getEditFormInstanceIntentFor(long instanceId) {
         Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
-        return new Intent(Intent.ACTION_EDIT, uri);
+        Intent intent = new Intent(this, FormEntryActivity.class);
+        intent.setAction(Intent.ACTION_EDIT);
+        intent.setData(uri);
+        return intent;
     }
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {
