@@ -203,6 +203,9 @@
     <!-- Error displayed when opened filled form has been deleted on disk -->
     <string name="instance_deleted_message">Filled form has been deleted!</string>
 
+    <!-- Error displayed when something bad happens during updating widgets in a field-list group -->
+    <string name="update_widgets_error">Failure trying to update values. This is generally because of incorrect usage of calculations in the form design.\n\nIf you keep having this problem, report it to the person who asked you to collect data.</string>
+
     <!--
     ##############################################
     # FORM FEATURES
