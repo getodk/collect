@@ -543,8 +543,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer) {
-        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer);
+    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository) {
+        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer, storagePathProvider, projectsRepository);
     }
 
     @Provides

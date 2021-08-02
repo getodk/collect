@@ -31,4 +31,8 @@ class CurrentProjectProvider(private val settingsProvider: SettingsProvider, pri
     private fun getCurrentProjectId(): String? {
         return settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID)
     }
+
+    fun clear() {
+        settingsProvider.getMetaSettings().remove(MetaKeys.CURRENT_PROJECT_ID)
+    }
 }

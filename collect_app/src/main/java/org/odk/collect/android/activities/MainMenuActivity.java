@@ -31,8 +31,8 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -41,8 +41,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-
-import java.io.File;
 
 import javax.inject.Inject;
 
@@ -226,16 +224,15 @@ public class MainMenuActivity extends CollectAbstractActivity {
     protected void onResume() {
         super.onResume();
 
-        if (new File(storagePathProvider.getOdkRootDirPath()).listFiles().length == 0) {
-            settingsProvider.getMetaSettings().remove(MetaKeys.CURRENT_PROJECT_ID);
-            settingsProvider.getMetaSettings().remove(MetaKeys.KEY_PROJECTS);
-            ActivityUtils.startActivityAndCloseAllOthers(this, SplashScreenActivity.class);
-        } else {
-            mainMenuViewModel.refreshInstances();
-
-            setButtonsVisibility();
+        try {
             currentProjectViewModel.refresh();
+        } catch (CurrentProjectViewModel.CurrentProjectNotAccessibleException e) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, SplashScreenActivity.class);
+            return;
         }
+
+        mainMenuViewModel.refreshInstances();
+        setButtonsVisibility();
     }
 
     private void setButtonsVisibility() {
