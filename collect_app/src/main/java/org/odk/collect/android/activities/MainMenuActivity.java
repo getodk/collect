@@ -226,7 +226,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         try {
             currentProjectViewModel.refresh();
-        } catch (CurrentProjectViewModel.CurrentProjectNotAccessibleException e) {
+        } catch (CurrentProjectViewModel.NoCurrentProjectException e) {
             ActivityUtils.startActivityAndCloseAllOthers(this, SplashScreenActivity.class);
             return;
         }

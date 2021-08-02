@@ -30,14 +30,14 @@ class CurrentProjectViewModel(
         updateCurrentProjectIfNeeded()
     }
 
-    @Throws(CurrentProjectNotAccessibleException::class)
+    @Throws(NoCurrentProjectException::class)
     fun refresh() {
         updateCurrentProjectIfNeeded()
 
         if (File(storagePathProvider.odkRootDirPath).listFiles().isEmpty()) {
             currentProjectProvider.clear()
             projectsRepository.deleteAll()
-            throw CurrentProjectNotAccessibleException()
+            throw NoCurrentProjectException()
         }
     }
 
@@ -64,5 +64,5 @@ class CurrentProjectViewModel(
         }
     }
 
-    class CurrentProjectNotAccessibleException : Exception()
+    class NoCurrentProjectException : Exception()
 }
