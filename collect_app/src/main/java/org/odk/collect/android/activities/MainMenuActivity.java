@@ -37,9 +37,12 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.storage.StorageInitializer;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+
+import java.io.File;
 
 import javax.inject.Inject;
 
@@ -71,6 +74,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Inject
     StorageInitializer storageInitializer;
+
+    @Inject
+    StoragePathProvider storagePathProvider;
 
     private MainMenuViewModel mainMenuViewModel;
 
@@ -219,10 +225,17 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mainMenuViewModel.refreshInstances();
 
-        setButtonsVisibility();
-        currentProjectViewModel.refresh();
+        if (new File(storagePathProvider.getOdkRootDirPath()).listFiles().length == 0) {
+            settingsProvider.getMetaSettings().remove(MetaKeys.CURRENT_PROJECT_ID);
+            settingsProvider.getMetaSettings().remove(MetaKeys.KEY_PROJECTS);
+            ActivityUtils.startActivityAndCloseAllOthers(this, SplashScreenActivity.class);
+        } else {
+            mainMenuViewModel.refreshInstances();
+
+            setButtonsVisibility();
+            currentProjectViewModel.refresh();
+        }
     }
 
     private void setButtonsVisibility() {

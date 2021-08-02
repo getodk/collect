@@ -80,7 +80,7 @@ class AddNewProjectTest {
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
             .openProjectSettings()
             .assertCurrentProject("Demo project", "demo.getodk.org")
-            .assertNotInactiveProject("Demo project", "demo.getodk.org")
+            .assertNotInactiveProject("Demo project")
     }
 
     @Test
@@ -111,7 +111,7 @@ class AddNewProjectTest {
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
             .openProjectSettings()
             .assertCurrentProject("Demo project", "demo.getodk.org")
-            .assertNotInactiveProject("Demo project", "demo.getodk.org")
+            .assertNotInactiveProject("Demo project")
     }
 
     @Test
