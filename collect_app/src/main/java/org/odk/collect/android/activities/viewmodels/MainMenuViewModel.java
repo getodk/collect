@@ -9,15 +9,20 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsUtils;
 import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer;
 import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.shared.Settings;
+
+import java.io.File;
 
 public class MainMenuViewModel extends ViewModel {
 
@@ -118,11 +123,50 @@ public class MainMenuViewModel extends ViewModel {
     public void refreshInstances() {
         scheduler.immediate(() -> {
             new InstanceDiskSynchronizer(settingsProvider).doInBackground();
-            instancesAppState.update();
+
+            try {
+                instancesAppState.update();
+            } catch (android.database.sqlite.SQLiteCantOpenDatabaseException e) {
+                determineWhyDatabaseCannotBeAccessed(e);
+            }
+
             return null;
         }, ignored -> {
         });
 
+    }
+
+    /**
+     * Work out what has happened to make the database go missing and then throw the appropriate
+     * exception. Here to determine the cause of https://console.firebase.google.com/u/0/project/api-project-322300403941/crashlytics/app/android:org.odk.collect.android/issues/07cccfa2bbf3b4e0e4fed4f0a9fcbd76
+     */
+    private void determineWhyDatabaseCannotBeAccessed(android.database.sqlite.SQLiteCantOpenDatabaseException e) {
+        Collect.getInstance().testStorage(); // Check we can actually access storage
+
+        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        File currentProjectDir = new File(storagePathProvider.getProjectRootDirPath());
+        File projectsDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.PROJECTS));
+
+        if (projectsDir.exists()) {
+            if (currentProjectDir.exists()) {
+                boolean cacheDirExists = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)).exists();
+                boolean metaDirExists = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA)).exists();
+                int filesInProjectDir = currentProjectDir.listFiles().length;
+
+                // Cache dir is hidden so might not be cleared when other directories are
+                if (filesInProjectDir == 0 || (filesInProjectDir == 1 && cacheDirExists)) {
+                    throw new CurrentProjectDirClearedException();
+                } else if (!metaDirExists) {
+                    throw new MetaDirDeletedException();
+                } else {
+                    throw e;
+                }
+            } else {
+                throw new CurrentProjectDirDeletedException();
+            }
+        } else {
+            throw new ProjectsDirDeletedException();
+        }
     }
 
     public static class Factory implements ViewModelProvider.Factory {
@@ -148,5 +192,21 @@ public class MainMenuViewModel extends ViewModel {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             return (T) new MainMenuViewModel(application, versionInformation, settingsProvider, instancesAppState, scheduler);
         }
+    }
+
+    private static class CurrentProjectDirClearedException extends IllegalStateException {
+
+    }
+
+    private static class CurrentProjectDirDeletedException extends IllegalStateException {
+
+    }
+
+    private static class MetaDirDeletedException extends IllegalStateException {
+
+    }
+
+    private static class ProjectsDirDeletedException extends IllegalStateException {
+
     }
 }

@@ -134,7 +134,7 @@ public class Collect extends Application implements
         setupStrictMode();
     }
 
-    private void testStorage() {
+    public void testStorage() {
         // Throw specific error to avoid later ones if the app won't be able to access storage
         try {
             File externalFilesDir = getExternalFilesDir(null);
