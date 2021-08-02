@@ -63,8 +63,7 @@ class ProjectSettingsDialogTest {
                 return object : CurrentProjectViewModel.Factory(
                     currentProjectProvider,
                     analyticsInitializer,
-                    storagePathProvider,
-                    projectsRepository
+                    storagePathProvider
                 ) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return currentProjectViewModel as T

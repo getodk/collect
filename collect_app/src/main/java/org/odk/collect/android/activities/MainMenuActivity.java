@@ -37,7 +37,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.storage.StorageInitializer;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -72,9 +71,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Inject
     StorageInitializer storageInitializer;
-
-    @Inject
-    StoragePathProvider storagePathProvider;
 
     private MainMenuViewModel mainMenuViewModel;
 
@@ -223,14 +219,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        try {
-            currentProjectViewModel.refresh();
-        } catch (CurrentProjectViewModel.NoCurrentProjectException e) {
-            ActivityUtils.startActivityAndCloseAllOthers(this, SplashScreenActivity.class);
-            return;
-        }
-
+        currentProjectViewModel.refresh();
         mainMenuViewModel.refreshInstances();
         setButtonsVisibility();
     }

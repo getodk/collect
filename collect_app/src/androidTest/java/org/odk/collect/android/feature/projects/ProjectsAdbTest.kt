@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.FirstLaunchPage
+import org.odk.collect.android.support.pages.MainMenuPage
 
 @RunWith(AndroidJUnit4::class)
 class ProjectsAdbTest {
@@ -28,11 +29,7 @@ class ProjectsAdbTest {
         val storage = getApplicationContext<Application>().getExternalFilesDir(null)
         storage!!.listFiles()!!.forEach { it.deleteRecursively() }
 
-        fillBlankFormPage.pressBack(FirstLaunchPage())
-            .clickManuallyEnterProjectDetails()
-            .inputUrl("https://example.com")
-            .addProject()
-            .openProjectSettings()
-            .assertNotInactiveProject("Demo project")
+        fillBlankFormPage.pressBack(MainMenuPage())
+            .assertProjectIcon("D")
     }
 }

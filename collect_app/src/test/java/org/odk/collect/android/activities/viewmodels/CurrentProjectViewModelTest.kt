@@ -11,7 +11,6 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.TempFiles
 
@@ -31,8 +30,7 @@ class CurrentProjectViewModelTest {
     private val currentProjectViewModel = CurrentProjectViewModel(
         currentProjectProvider,
         analyticsInitializer,
-        storagePathProvider,
-        InMemProjectsRepository()
+        storagePathProvider
     )
 
     @Test
