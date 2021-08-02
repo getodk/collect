@@ -25,7 +25,7 @@ public class ItemsetDbAdapter implements Closeable {
 
     public static final String DATABASE_NAME = "itemsets.db";
     private static final String DATABASE_TABLE = "itemset_";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String ITEMSET_TABLE = "itemsets";
     public static final String KEY_ITEMSET_HASH = "hash";
