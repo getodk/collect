@@ -83,16 +83,30 @@ class QrCodeProjectCreatorDialog :
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             val imageUri: Uri? = result.data?.data
             if (imageUri != null) {
-                requireActivity().contentResolver.openInputStream(imageUri).use {
-                    try {
-                        val settingsJson = qrCodeDecoder.decode(it)
-                        createProjectOrError(settingsJson)
-                    } catch (e: QRCodeDecoder.InvalidException) {
-                        showShortToast(R.string.invalid_qrcode)
-                    } catch (e: QRCodeDecoder.NotFoundException) {
-                        showShortToast(R.string.qr_code_not_found)
+                permissionsProvider.requestReadUriPermission(
+                    requireActivity(),
+                    imageUri,
+                    requireActivity().contentResolver,
+                    object : PermissionListener {
+                        override fun granted() {
+                            // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
+                            if (isAdded) {
+                                requireActivity().contentResolver.openInputStream(imageUri).use {
+                                    try {
+                                        val settingsJson = qrCodeDecoder.decode(it)
+                                        createProjectOrError(settingsJson)
+                                    } catch (e: QRCodeDecoder.InvalidException) {
+                                        showShortToast(R.string.invalid_qrcode)
+                                    } catch (e: QRCodeDecoder.NotFoundException) {
+                                        showShortToast(R.string.qr_code_not_found)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun denied() {}
                     }
-                }
+                )
             }
         }
 
