@@ -37,7 +37,7 @@ class ManualProjectCreatorDialogPage : Page<ManualProjectCreatorDialogPage>() {
         val data = Intent()
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, googleAccount)
         val activityResult = Instrumentation.ActivityResult(Activity.RESULT_OK, data)
-        intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult)
+        intending(hasAction("com.google.android.gms.common.account.CHOOSE_ACCOUNT")).respondWith(activityResult)
 
         onView(withText(R.string.gdrive_configure)).perform(scrollTo(), click())
         return MainMenuPage().assertOnPage()
