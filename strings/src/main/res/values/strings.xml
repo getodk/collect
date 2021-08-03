@@ -244,6 +244,7 @@
 
     <string name="capture_image">Take Picture</string>
     <string name="choose_image">Choose Image</string>
+    <string name="choose_account">Choose account</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
     <string name="view_image">View Image</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
