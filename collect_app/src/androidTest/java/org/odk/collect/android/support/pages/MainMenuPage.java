@@ -164,7 +164,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         Intent data = new Intent();
         data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
-        intending(hasAction("PICK_GOOGLE_ACCOUNT")).respondWith(activityResult);
+        intending(hasAction("com.google.android.gms.common.account.CHOOSE_ACCOUNT")).respondWith(activityResult);
 
         return openProjectSettings()
                 .clickGeneralSettings()

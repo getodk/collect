@@ -48,6 +48,6 @@ public class FakeGoogleAccountPicker implements GoogleAccountPicker {
 
     @Override
     public Intent newChooseAccountIntent() {
-        return new Intent("PICK_GOOGLE_ACCOUNT");
+        return new Intent("com.google.android.gms.common.account.CHOOSE_ACCOUNT");
     }
 }
