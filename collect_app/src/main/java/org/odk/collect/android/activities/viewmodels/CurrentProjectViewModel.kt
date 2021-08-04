@@ -33,6 +33,7 @@ class CurrentProjectViewModel(
         updateCurrentProjectIfNeeded()
 
         if (!File(storagePathProvider.getProjectRootDirPath()).exists()) {
+            Analytics.log(AnalyticsEvents.RECREATE_PROJECT_DIR)
             storagePathProvider.getProjectDirPaths(currentProject.value.uuid).forEach { FileUtils.createDir(it) }
         }
     }
