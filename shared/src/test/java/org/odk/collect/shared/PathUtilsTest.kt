@@ -8,7 +8,7 @@ class PathUtilsTest {
 
     @Test
     fun `getAbsoluteFilePath() returns filePath prepended with dirPath`() {
-        val path = PathUtils.getAbsoluteFilePath("/anotherRoot/anotherDir", "/root/dir/file")
+        val path = PathUtils.getAbsoluteFilePath("/anotherRoot/anotherDir", "root/dir/file")
         assertThat(path, equalTo("/anotherRoot/anotherDir/root/dir/file"))
     }
 
