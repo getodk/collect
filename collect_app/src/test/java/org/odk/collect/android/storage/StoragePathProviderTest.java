@@ -34,37 +34,37 @@ public class StoragePathProviderTest {
     }
 
     @Test
-    public void getStorageRootDirWithScopedStorageTest() {
+    public void getStorageRootDirPath_returnsRoot() {
         assertThat(storagePathProvider.getOdkRootDirPath(), is(root.getAbsolutePath()));
     }
 
     @Test
-    public void getFormsDirWithScopedStorageTest() {
+    public void getOdkDirPath_withForms_returnsFormsDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), is(root.getAbsolutePath() + "/projects/123/forms"));
     }
 
     @Test
-    public void getInstancesDirWithScopedStorageTest() {
+    public void getOdkDirPath_withInstances_returnsInstancesDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), is(root.getAbsolutePath() + "/projects/123/instances"));
     }
 
     @Test
-    public void getMetadataDirWithScopedStorageTest() {
+    public void getOdkDirPath_withMetadata_returnsMetadataDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), is(root.getAbsolutePath() + "/projects/123/metadata"));
     }
 
     @Test
-    public void getCacheDirWithScopedStorageTest() {
+    public void getOdkDirPath_withCache_returnsCacheDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE), is(root.getAbsolutePath() + "/projects/123/.cache"));
     }
 
     @Test
-    public void getLayersDirWithScopedStorageTest() {
+    public void getOdkDirPath_withLayers_returnsLayersDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), is(root.getAbsolutePath() + "/projects/123/layers"));
     }
 
     @Test
-    public void getSettingsDirWithScopedStorageTest() {
+    public void getOdkDirPath_withSettings_returnsSettingsDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is(root.getAbsolutePath() + "/projects/123/settings"));
     }
 
@@ -72,65 +72,6 @@ public class StoragePathProviderTest {
     public void getODKDirPathsWithScopedStorageTest() {
         String[] storageSubdirectories = storagePathProvider.getOdkRootDirPaths();
         assertThat(storageSubdirectories, arrayWithSize(1));
-    }
-
-    @Test
-    public void getFormDbPathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getRelativeFormPath("All widgets.xml"), is("All widgets.xml"));
-        assertThat(storagePathProvider.getRelativeFormPath(root.getAbsolutePath() + "/projects/123/forms/All widgets.xml"), is("All widgets.xml"));
-
-        assertThat(storagePathProvider.getRelativeFormPath("All widgets-media"), is("All widgets-media"));
-        assertThat(storagePathProvider.getRelativeFormPath(root.getAbsolutePath() + "/projects/123/forms/All widgets-media"), is("All widgets-media"));
-
-        assertThat(storagePathProvider.getRelativeFormPath("All widgets-media/itemsets.csv"), is("All widgets-media/itemsets.csv"));
-        assertThat(storagePathProvider.getRelativeFormPath(root.getAbsolutePath() + "/projects/123/forms/All widgets-media/itemsets.csv"), is("All widgets-media/itemsets.csv"));
-    }
-
-    @Test
-    public void getInstanceDbPathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getRelativeInstancePath("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-        assertThat(storagePathProvider.getRelativeInstancePath(root.getAbsolutePath() + "/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-    }
-
-    @Test
-    public void getCacheDbPathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getRelativeCachePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is("a688a8b48b2e50c070bc76239f572e16.formdef"));
-        assertThat(storagePathProvider.getRelativeCachePath(root.getAbsolutePath() + "/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is("a688a8b48b2e50c070bc76239f572e16.formdef"));
-    }
-
-    @Test
-    public void getAbsoluteFormFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets.xml"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets.xml"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath(root.getAbsolutePath() + "/projects/123/forms/All widgets.xml"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets.xml"));
-
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets-media"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath(root.getAbsolutePath() + "/projects/123/forms/All widgets-media"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets-media"));
-
-        assertThat(storagePathProvider.getAbsoluteFormFilePath("All widgets-media/itemsets.csv"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets-media/itemsets.csv"));
-        assertThat(storagePathProvider.getAbsoluteFormFilePath(root.getAbsolutePath() + "/projects/123/forms/All widgets-media/itemsets.csv"), is(root.getAbsolutePath() + "/projects/123/forms/All widgets-media/itemsets.csv"));
-    }
-
-    @Test
-    public void getAbsoluteInstanceFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteInstanceFilePath("All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is(root.getAbsolutePath() + "/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-        assertThat(storagePathProvider.getAbsoluteInstanceFilePath(root.getAbsolutePath() + "/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"), is(root.getAbsolutePath() + "/projects/123/instances/All widgets_2020-01-20_13-54-11/All widgets_2020-01-20_13-54-11.xml"));
-    }
-
-    @Test
-    public void getAbsoluteCacheFilePathWithScopedStorageTest() {
-        assertThat(storagePathProvider.getAbsoluteCacheFilePath("a688a8b48b2e50c070bc76239f572e16.formdef"), is(root.getAbsolutePath() + "/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
-        assertThat(storagePathProvider.getAbsoluteCacheFilePath(root.getAbsolutePath() + "/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"), is(root.getAbsolutePath() + "/projects/123/.cache/a688a8b48b2e50c070bc76239f572e16.formdef"));
-    }
-
-    @Test
-    public void getRelativeMapLayerPathTest() {
-        assertThat(storagePathProvider.getRelativeMapLayerPath("countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
-        assertThat(storagePathProvider.getRelativeMapLayerPath(root.getAbsolutePath() + "/projects/123/layers/countries/countries-raster.mbtiles"), is("countries/countries-raster.mbtiles"));
-    }
-
-    @Test
-    public void getOfflineMapLayerPathTestWithScopedStorage() {
-        assertThat(storagePathProvider.getAbsoluteOfflineMapLayerPath(root.getAbsolutePath() + "/projects/123/layers/countries/countries-raster.mbtiles"), is(root.getAbsolutePath() + "/projects/123/layers/countries/countries-raster.mbtiles"));
     }
 
     @Test

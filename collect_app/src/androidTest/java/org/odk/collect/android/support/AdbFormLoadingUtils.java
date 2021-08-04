@@ -24,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
-import org.odk.collect.projects.Project;
 
 import java.io.File;
 import java.io.IOException;

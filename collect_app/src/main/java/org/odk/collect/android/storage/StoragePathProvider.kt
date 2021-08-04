@@ -3,8 +3,6 @@ package org.odk.collect.android.storage
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.shared.PathUtils.getAbsoluteFilePath
-import org.odk.collect.shared.PathUtils.getRelativeFilePath
 import java.io.File
 
 class StoragePathProvider @JvmOverloads constructor(
@@ -73,37 +71,5 @@ class StoragePathProvider @JvmOverloads constructor(
 
     fun getTmpVideoFilePath(): String {
         return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4"
-    }
-
-    fun getRelativeInstancePath(filePath: String): String {
-        return getRelativeFilePath(getOdkDirPath(StorageSubdirectory.INSTANCES), filePath)
-    }
-
-    fun getAbsoluteInstanceFilePath(filePath: String): String {
-        return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.INSTANCES), filePath)
-    }
-
-    fun getRelativeFormPath(filePath: String): String {
-        return getRelativeFilePath(getOdkDirPath(StorageSubdirectory.FORMS), filePath)
-    }
-
-    fun getAbsoluteFormFilePath(filePath: String): String {
-        return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.FORMS), filePath)
-    }
-
-    fun getRelativeCachePath(filePath: String): String {
-        return getRelativeFilePath(getOdkDirPath(StorageSubdirectory.CACHE), filePath)
-    }
-
-    fun getAbsoluteCacheFilePath(filePath: String): String {
-        return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.CACHE), filePath)
-    }
-
-    fun getRelativeMapLayerPath(filePath: String): String {
-        return getRelativeFilePath(getOdkDirPath(StorageSubdirectory.LAYERS), filePath)
-    }
-
-    fun getAbsoluteOfflineMapLayerPath(filePath: String): String {
-        return getAbsoluteFilePath(getOdkDirPath(StorageSubdirectory.LAYERS), filePath)
     }
 }
