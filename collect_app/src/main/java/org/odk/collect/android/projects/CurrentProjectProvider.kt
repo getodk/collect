@@ -4,7 +4,6 @@ import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import java.lang.IllegalStateException
 
 class CurrentProjectProvider(private val settingsProvider: SettingsProvider, private val projectsRepository: ProjectsRepository) {
 
@@ -30,9 +29,5 @@ class CurrentProjectProvider(private val settingsProvider: SettingsProvider, pri
 
     private fun getCurrentProjectId(): String? {
         return settingsProvider.getMetaSettings().getString(MetaKeys.CURRENT_PROJECT_ID)
-    }
-
-    fun clear() {
-        settingsProvider.getMetaSettings().remove(MetaKeys.CURRENT_PROJECT_ID)
     }
 }
