@@ -9,7 +9,6 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestRuleChain
-import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 
 @RunWith(AndroidJUnit4::class)
