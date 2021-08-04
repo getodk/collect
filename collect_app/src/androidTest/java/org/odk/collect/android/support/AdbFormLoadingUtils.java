@@ -109,14 +109,19 @@ public class AdbFormLoadingUtils {
      * @return the forms dir path that the user would expect (from docs)
      */
     private static String getFormsDirPath() {
-        return currentProjectPath() + "/forms/";
+        String path = currentProjectPath() + "/forms/";
+        new File(path).mkdirs();
+        return path;
     }
 
     /**
      * @return the instances dir path that the user would expect (from docs)
      */
     private static String getInstancesDirPath() {
-        return currentProjectPath() + "/instances/";
+        String path = currentProjectPath() + "/instances/";
+        new File(path).mkdirs();
+
+        return path;
     }
 
     @NotNull

@@ -10,7 +10,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import java.io.File
 import java.io.FileNotFoundException
@@ -37,7 +36,12 @@ class ExistingProjectMigrator(
     override fun run() {
         val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val newProject = projectDetailsCreator.createProjectFromDetails(connectionIdentifier = generalSharedPrefs.getString(ProjectKeys.KEY_SERVER_URL, "") ?: "")
+        val newProject = projectDetailsCreator.createProjectFromDetails(
+            connectionIdentifier = generalSharedPrefs.getString(
+                ProjectKeys.KEY_SERVER_URL,
+                ""
+            ) ?: ""
+        )
         val project = projectsRepository.save(newProject)
 
         val rootDir = storagePathProvider.odkRootDirPath
@@ -66,13 +70,6 @@ class ExistingProjectMigrator(
         settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
         settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
-        createProjectDirs(project)
-
         currentProjectProvider.setCurrentProject(project.uuid)
-    }
-
-    private fun createProjectDirs(project: Project.Saved) {
-        storagePathProvider.getProjectDirPaths(project.uuid)
-            .forEach { org.odk.collect.android.utilities.FileUtils.createDir(it) }
     }
 }

@@ -43,7 +43,7 @@ class StoragePathProvider @JvmOverloads constructor(
 
     @JvmOverloads
     fun getOdkDirPath(subdirectory: StorageSubdirectory, projectId: String? = null): String {
-        return when (subdirectory) {
+        val path = when (subdirectory) {
             StorageSubdirectory.FORMS,
             StorageSubdirectory.INSTANCES,
             StorageSubdirectory.CACHE,
@@ -52,6 +52,12 @@ class StoragePathProvider @JvmOverloads constructor(
             StorageSubdirectory.SETTINGS -> getProjectRootDirPath(projectId) + File.separator + subdirectory.directoryName
             StorageSubdirectory.PROJECTS -> odkRootDirPath + File.separator + subdirectory.directoryName
         }
+
+        if (!File(path).exists()) {
+            File(path).mkdirs()
+        }
+
+        return path
     }
 
     fun getCustomSplashScreenImagePath(): String {
