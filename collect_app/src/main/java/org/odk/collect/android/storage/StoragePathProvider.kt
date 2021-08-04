@@ -11,21 +11,6 @@ class StoragePathProvider @JvmOverloads constructor(
     val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
 ) {
 
-    fun getOdkRootDirPaths(): Array<String> {
-        return arrayOf(getOdkDirPath(StorageSubdirectory.PROJECTS))
-    }
-
-    fun getProjectDirPaths(projectId: String?): Array<String> {
-        return arrayOf(
-            getOdkDirPath(StorageSubdirectory.FORMS, projectId),
-            getOdkDirPath(StorageSubdirectory.INSTANCES, projectId),
-            getOdkDirPath(StorageSubdirectory.CACHE, projectId),
-            getOdkDirPath(StorageSubdirectory.METADATA, projectId),
-            getOdkDirPath(StorageSubdirectory.LAYERS, projectId),
-            getOdkDirPath(StorageSubdirectory.SETTINGS, projectId)
-        )
-    }
-
     @JvmOverloads
     fun getProjectRootDirPath(projectId: String? = null): String {
         val path = if (projectId == null) {

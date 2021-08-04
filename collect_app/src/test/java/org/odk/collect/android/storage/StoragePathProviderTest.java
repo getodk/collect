@@ -10,7 +10,6 @@ import org.odk.collect.shared.TempFiles;
 import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -66,12 +65,6 @@ public class StoragePathProviderTest {
     @Test
     public void getOdkDirPath_withSettings_returnsSettingsDirForCurrentProject() {
         assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is(root.getAbsolutePath() + "/projects/123/settings"));
-    }
-
-    @Test
-    public void getODKDirPathsWithScopedStorageTest() {
-        String[] storageSubdirectories = storagePathProvider.getOdkRootDirPaths();
-        assertThat(storageSubdirectories, arrayWithSize(1));
     }
 
     @Test
