@@ -32,7 +32,7 @@ class AndroidShortcutsTest {
             .clickFillBlankForm() // Load form
             .pressBack(MainMenuPage())
             .addAndSwitchToProject("https://example.com")
-            .copyForm("two-question.xml")
+            .copyForm("two-question.xml", "example.com")
             .clickFillBlankForm() // Load form
 
         rule.launchShortcuts()

@@ -103,7 +103,7 @@ public class FormManagementSettingsTest {
                 .clickOption(R.string.previously_downloaded_only)
                 .clickOnString(R.string.automatic_download);
 
-        AdbFormLoadingUtils.copyFormToStorage("one-question.xml");
+        AdbFormLoadingUtils.copyFormToDemoProject("one-question.xml");
         testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
 
