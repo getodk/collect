@@ -28,11 +28,8 @@ class StoragePathProvider @JvmOverloads constructor(
         )
     }
 
-    fun getProjectRootDirPath(): String {
-        return getProjectRootDirPath(null)
-    }
-
-    fun getProjectRootDirPath(projectId: String?): String {
+    @JvmOverloads
+    fun getProjectRootDirPath(projectId: String? = null): String {
         return if (projectId == null) {
             val currentProjectId = currentProjectProvider.getCurrentProject().uuid
             getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + currentProjectId
