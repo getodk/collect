@@ -31,8 +31,8 @@ import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.ProjectIconView;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -219,10 +219,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mainMenuViewModel.refreshInstances();
-
-        setButtonsVisibility();
         currentProjectViewModel.refresh();
+        mainMenuViewModel.refreshInstances();
+        setButtonsVisibility();
     }
 
     private void setButtonsVisibility() {

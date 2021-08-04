@@ -25,6 +25,7 @@ import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.DialogFragmentTest
@@ -55,9 +56,15 @@ class ProjectSettingsDialogTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesCurrentProjectViewModel(
                 currentProjectProvider: CurrentProjectProvider,
-                analyticsInitializer: AnalyticsInitializer
+                analyticsInitializer: AnalyticsInitializer,
+                storagePathProvider: StoragePathProvider,
+                projectsRepository: ProjectsRepository
             ): CurrentProjectViewModel.Factory? {
-                return object : CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer) {
+                return object : CurrentProjectViewModel.Factory(
+                    currentProjectProvider,
+                    analyticsInitializer,
+                    storagePathProvider
+                ) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return currentProjectViewModel as T
                     }

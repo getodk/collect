@@ -10,7 +10,9 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.shared.TempFiles
 
 class CurrentProjectViewModelTest {
 
@@ -21,12 +23,22 @@ class CurrentProjectViewModelTest {
         on { getCurrentProject() } doReturn Project.Saved("123", "Project X", "X", "#cccccc")
     }
 
+    private val storagePathProvider =
+        StoragePathProvider(currentProjectProvider, TempFiles.createTempDir().absolutePath)
+
     private val analyticsInitializer = mock<AnalyticsInitializer>()
-    private val currentProjectViewModel = CurrentProjectViewModel(currentProjectProvider, analyticsInitializer)
+    private val currentProjectViewModel = CurrentProjectViewModel(
+        currentProjectProvider,
+        analyticsInitializer,
+        storagePathProvider
+    )
 
     @Test
     fun `Initial current project should be set`() {
-        assertThat(currentProjectViewModel.currentProject.value, `is`(Project.Saved("123", "Project X", "X", "#cccccc")))
+        assertThat(
+            currentProjectViewModel.currentProject.value,
+            `is`(Project.Saved("123", "Project X", "X", "#cccccc"))
+        )
     }
 
     @Test

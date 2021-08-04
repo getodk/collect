@@ -45,8 +45,8 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         return this
     }
 
-    fun assertNotInactiveProject(projectName: String, subtext: String): ProjectSettingsDialogPage {
-        onView(allOf(hasDescendant(withText(projectName)), hasDescendant(withText(subtext)), withContentDescription(getTranslatedString(R.string.switch_to_project, projectName)))).check(doesNotExist())
+    fun assertNotInactiveProject(projectName: String): ProjectSettingsDialogPage {
+        onView(allOf(hasDescendant(withText(projectName)), withContentDescription(getTranslatedString(R.string.switch_to_project, projectName)))).check(doesNotExist())
         return this
     }
 

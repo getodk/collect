@@ -4,7 +4,6 @@ import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import java.lang.IllegalStateException
 
 class CurrentProjectProvider(private val settingsProvider: SettingsProvider, private val projectsRepository: ProjectsRepository) {
 

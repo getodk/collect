@@ -68,9 +68,15 @@ class MainMenuActivityTest {
 
             override fun providesCurrentProjectViewModel(
                 currentProjectProvider: CurrentProjectProvider,
-                analyticsInitializer: AnalyticsInitializer
+                analyticsInitializer: AnalyticsInitializer,
+                storagePathProvider: StoragePathProvider,
+                projectsRepository: ProjectsRepository
             ): CurrentProjectViewModel.Factory? {
-                return object : CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer) {
+                return object : CurrentProjectViewModel.Factory(
+                    currentProjectProvider,
+                    analyticsInitializer,
+                    storagePathProvider
+                ) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                         return currentProjectViewModel as T
                     }

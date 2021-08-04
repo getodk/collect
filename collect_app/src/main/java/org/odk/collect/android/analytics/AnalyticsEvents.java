@@ -237,4 +237,10 @@ public class AnalyticsEvents {
      * Tracks how often an external edit or view action includes an extra we'd like to deprecate.
      */
     public static final String FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra";
+
+    /**
+     * Tracks how often the app needs to recreate the directory for the current project
+     * when returning to or launching the app.
+     */
+    public static final String RECREATE_PROJECT_DIR = "RecreateProjectDir";
 }
