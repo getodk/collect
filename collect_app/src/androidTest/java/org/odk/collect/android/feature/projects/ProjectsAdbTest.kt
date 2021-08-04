@@ -23,7 +23,7 @@ class ProjectsAdbTest {
         .around(rule)
 
     @Test
-    fun clearingStorage_andReturningToApp_returnsToLaunchScreen_andRemovesOldProject() {
+    fun clearingStorage_andReturningToApp_recreatesStorageForProject() {
         val fillBlankFormPage = rule.startAtMainMenu().clickFillBlankForm()
 
         val storage = getApplicationContext<Application>().getExternalFilesDir(null)
