@@ -1,6 +1,7 @@
 package org.odk.collect.android.activities.viewmodels;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -126,7 +127,7 @@ public class MainMenuViewModel extends ViewModel {
 
             try {
                 instancesAppState.update();
-            } catch (android.database.sqlite.SQLiteCantOpenDatabaseException e) {
+            } catch (SQLiteCantOpenDatabaseException e) {
                 determineWhyDatabaseCannotBeAccessed(e);
             }
 
@@ -140,7 +141,7 @@ public class MainMenuViewModel extends ViewModel {
      * Work out what has happened to make the database go missing and then throw the appropriate
      * exception. Here to determine the cause of https://console.firebase.google.com/u/0/project/api-project-322300403941/crashlytics/app/android:org.odk.collect.android/issues/07cccfa2bbf3b4e0e4fed4f0a9fcbd76
      */
-    private void determineWhyDatabaseCannotBeAccessed(android.database.sqlite.SQLiteCantOpenDatabaseException e) {
+    private void determineWhyDatabaseCannotBeAccessed(SQLiteCantOpenDatabaseException e) {
         Collect.getInstance().testStorage(); // Check we can actually access storage
 
         StoragePathProvider storagePathProvider = new StoragePathProvider();
