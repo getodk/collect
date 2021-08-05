@@ -38,38 +38,51 @@ public class StoragePathProviderTest {
     }
 
     @Test
-    public void getOdkDirPath_withForms_returnsFormsDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), is(root.getAbsolutePath() + "/projects/123/forms"));
+    public void getProjectRootDirPath_returnsAndCreatesDirForProject() {
+        String path = storagePathProvider.getProjectRootDirPath("projectId");
+        assertThat(path, is(root.getAbsolutePath() + "/projects/projectId"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getOdkDirPath_withInstances_returnsInstancesDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES), is(root.getAbsolutePath() + "/projects/123/instances"));
+    public void getOdkDirPath_withForms_returnsAndCreatesFormsDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/forms"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getOdkDirPath_withMetadata_returnsMetadataDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA), is(root.getAbsolutePath() + "/projects/123/metadata"));
+    public void getOdkDirPath_withInstances_returnsAndCreatesInstancesDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/instances"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getOdkDirPath_withCache_returnsCacheDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE), is(root.getAbsolutePath() + "/projects/123/.cache"));
+    public void getOdkDirPath_withMetadata_returnsAndCreatesMetadataDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/metadata"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getOdkDirPath_withLayers_returnsLayersDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), is(root.getAbsolutePath() + "/projects/123/layers"));
+    public void getOdkDirPath_withCache_returnsAndCreatesCacheDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/.cache"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getOdkDirPath_withSettings_returnsSettingsDirForCurrentProject() {
-        assertThat(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS), is(root.getAbsolutePath() + "/projects/123/settings"));
+    public void getOdkDirPath_withLayers_returnsAndCreatesLayersDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/layers"));
+        assertThat(new File(path).exists(), is(true));
     }
 
     @Test
-    public void getProjectRootDirPath_whenDirDoesNotExist_createsIt() {
-        String projectRootDirPath = storagePathProvider.getProjectRootDirPath("projectId");
-        assertThat(new File(projectRootDirPath).exists(), is(true));
+    public void getOdkDirPath_withSettings_returnsAndCreatesSettingsDirForCurrentProject() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS);
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123/settings"));
+        assertThat(new File(path).exists(), is(true));
     }
 }
