@@ -8,6 +8,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.utilities.FlingRegister;
 
+import java.util.concurrent.Callable;
+
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -36,6 +38,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     @Override
     public FormEntryPage assertOnPage() {
+        // Make sure we wait for loading to finish
+        waitFor((Callable<Void>) () -> {
+            assertTextDoesNotExist(R.string.loading_form);
+            return null;
+        });
+
         assertToolbarTitle(formName);
         return this;
     }
