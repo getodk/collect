@@ -7,13 +7,14 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {
 
+    public static final String INTERNAL_QUERY_PARAM = "internal";
     private final CurrentProjectProvider currentProjectProvider;
 
     public CursorLoaderFactory(CurrentProjectProvider currentProjectProvider) {
@@ -196,7 +197,7 @@ public class CursorLoaderFactory {
 
     private Uri getUriWithAnalyticsParam(Uri uri) {
         return uri.buildUpon()
-                .appendQueryParameter("internal", "true")
+                .appendQueryParameter(INTERNAL_QUERY_PARAM, "true")
                 .build();
     }
 }

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -113,6 +114,11 @@ public class FormsProvider extends ContentProvider {
         deferDaggerInit();
 
         String projectId = getProjectId(uri);
+
+        // We only want to log external calls to the content provider
+        if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) != null) {
+            logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_QUERY);
+        }
 
         Cursor cursor;
         switch (URI_MATCHER.match(uri)) {
