@@ -204,6 +204,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         boolean usedSavepoint = false;
 
+        // smap move creation of form controller before initialisation
+        final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
+                : new File(instancePath));
+        Collect.getInstance().setFormController(fc);    // smap make note of the form controller
+
         try {
             Timber.i("Initializing form.");
             final long start = System.currentTimeMillis();
@@ -227,8 +232,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         processItemSets(formMediaDir);
 
-        final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
-                : new File(instancePath));
+
+
         if (xpath != null) {
             // we are resuming after having terminated -- set index to this
             // position...

@@ -36,6 +36,7 @@ import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
+import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSelectChoice;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
@@ -143,7 +144,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 throw new ExternalDataException(
                         Collect.getInstance().getString(R.string.smap_eval_required, searchType));
             }
-            expression = evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+            expression = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
         }
         if (args.length >= 4) {
             searchType = XPathFuncExpr.toString(args[1]);
@@ -239,44 +240,6 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
 
         return choices;
 
-    }
-
-    /*
-     * Convert placeholders for quesions into the answers of those questions
-     */
-    String evaluateExpressionNodes(String in, EvaluationContext ec) {
-        StringBuilder expression = new StringBuilder("");
-        if(in != null) {
-            FormDef formDef = Collect.getInstance().getFormController().getFormDef();
-            FormInstance formInstance = formDef.getInstance();
-
-            String [] eList = in.split("\\s+");
-            for(String s : eList) {
-                if(s.startsWith("/main")) {
-                    XPathPathExpr pathExpr = XPathReference.getPathExpr(s);
-                    XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
-                    Object o = XPathFuncExpr.unpack(xpathNodeset);
-
-                    if (o.getClass() == String.class) {
-                        s = XPathFuncExpr.toString(o);
-                        s = "'" + s + "'";
-                    } else if (o.getClass() == Date.class) {
-                        Date d = (Date) o;
-                        SimpleDateFormat sdf;
-                        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-                        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));   // Dates on server will be in UTC
-                        s = "'" + sdf.format(d) + "'::timestamptz";
-                    } else {
-                        s = XPathFuncExpr.toString(o);
-                    }
-                }
-                if(expression.length() > 0) {
-                    expression.append(" ");
-                }
-                expression.append(s);
-            }
-        }
-        return expression.toString();
     }
 
 }

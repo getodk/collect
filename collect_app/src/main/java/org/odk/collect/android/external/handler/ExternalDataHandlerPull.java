@@ -24,6 +24,8 @@ import android.database.sqlite.SQLiteException;
 
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.odk.collect.android.database.SqlFrag;
+import org.odk.collect.android.database.SqlFragParam;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.external.ExternalSQLiteOpenHelper;
@@ -91,24 +93,61 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                         .build());
                         */
 
-        if (args.length != 4 && args.length != 6) {     // smap add support for 5th and 6th parameter
-            Timber.e("4 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);  // smap 5th, 6th parameter
+        /*
+         * smap
+         * There are 3 variants of pulldata with 3, 4 and 6 parameters
+         * 3 parameters:  selection of a single record defined by sql like expression
+         * 4 parameters: selection of single record defined by specification of a column and a value
+         * 5 parameters: Selects multiple records or applies a dunction to multiple records filtered suing an sql like expression
+         * 6 parameters: handles multiple records defined by specification of a column and a value
+         */
+        if (args.length < 3 || args.length > 6) {     // smap add support for additional parameter combinations
+            Timber.e("3, 4, 5 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);  // smap 5th, 6th parameter
             return "";
         }
 
+        // smap common parameters
         String dataSetName = XPathFuncExpr.toString(args[0]);
         String queriedColumn = XPathFuncExpr.toString(args[1]);
-        String referenceColumn = XPathFuncExpr.toString(args[2]);
-        String referenceValue = XPathFuncExpr.toString(args[3]);
 
-        // start smap
-        boolean multiSelect = (args.length == 6);
+        String filter = null;
+        String referenceColumn = null;
+        String referenceValue = null;
+        boolean multiSelect = (args.length == 5 || args.length == 6);
         int index = 0;
+        String indexString = null;
         String fn = null;    // count || list || index || sum || max || min || mean
         String searchType = null;
+
+        if(args.length == 3) {
+            filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+            //filter = XPathFuncExpr.toString(args[2]);
+        } else if(args.length == 4) {
+            referenceColumn = XPathFuncExpr.toString(args[2]);
+            referenceValue = XPathFuncExpr.toString(args[3]);
+        } else if(args.length == 5) {
+            filter = XPathFuncExpr.toString(args[2]);
+            fn = XPathFuncExpr.toString(args[3]).toLowerCase();
+            indexString = XPathFuncExpr.toString(args[4]);
+        } else if(args.length == 6) {
+            referenceColumn = XPathFuncExpr.toString(args[2]);
+            referenceValue = XPathFuncExpr.toString(args[3]);
+            fn = XPathFuncExpr.toString(args[4]).toLowerCase();
+            indexString = XPathFuncExpr.toString(args[5]);
+        }
+
+        SqlFrag filterFrag = null;
+        if(filter != null && filter.length() > 0) {
+            filterFrag = new SqlFrag();
+            try {
+                filterFrag.addSqlFragment(filter, false, null, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if(multiSelect) {
             try {
-                fn = XPathFuncExpr.toString(args[4]).toLowerCase();
 
                 // Support legacy function values
                 if(fn.equals("-1")) { // legacy
@@ -123,7 +162,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                  * if it is not a number then it will not be changed
                  */
                 try {
-                    index = Integer.valueOf(XPathFuncExpr.toString(args[4]));
+                    index = Integer.valueOf(indexString);
                     if(index > 0) {
                         fn = FN_INDEX;
                     } else if(index < 0) {
@@ -154,8 +193,23 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
             SQLiteDatabase db = sqLiteOpenHelper.getReadableDatabase();
             String[] columns = {ExternalDataUtil.toSafeColumnName(queriedColumn)};
-            String selection = ExternalDataUtil.toSafeColumnName(referenceColumn) + "=?";
-            String[] selectionArgs = {referenceValue};
+
+            // Add the where clause
+            String selection = null;
+            String [] selectionArgs;
+            if(filterFrag != null) {
+                selection = filterFrag.sql.toString();
+                selectionArgs = new String[filterFrag.params.size()];
+                int idx = 0;
+                for(SqlFragParam param : filterFrag.params) {
+                    selectionArgs[idx++] = SqlFrag.getParamValue(param);
+                }
+            } else {  // Add default matches query
+                selection = ExternalDataUtil.toSafeColumnName(referenceColumn) + "=?";
+                selectionArgs = new String[1];
+                selectionArgs[0] = referenceValue;
+            }
+
             String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
 
             // smap start - Add user specified selection if it is not matches
@@ -279,4 +333,6 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
         }
         return sb.toString();
     }
+
+
 }

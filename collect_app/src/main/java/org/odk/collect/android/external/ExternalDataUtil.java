@@ -20,14 +20,18 @@ package org.odk.collect.android.external;
 
 import android.widget.Toast;
 
+import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -41,14 +45,17 @@ import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -418,5 +425,43 @@ public final class ExternalDataUtil {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    /*
+     * Convert placeholders for quesions into the answers of those questions
+     */
+    public static String evaluateExpressionNodes(String in, EvaluationContext ec) {
+        StringBuilder expression = new StringBuilder("");
+        if(in != null) {
+            FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+            FormInstance formInstance = formDef.getInstance();
+
+            String [] eList = in.split("\\s+");
+            for(String s : eList) {
+                if(s.startsWith("/main")) {
+                    XPathPathExpr pathExpr = XPathReference.getPathExpr(s);
+                    XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
+                    Object o = XPathFuncExpr.unpack(xpathNodeset);
+
+                    if (o.getClass() == String.class) {
+                        s = XPathFuncExpr.toString(o);
+                        s = "'" + s + "'";
+                    } else if (o.getClass() == Date.class) {
+                        Date d = (Date) o;
+                        SimpleDateFormat sdf;
+                        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));   // Dates on server will be in UTC
+                        s = "'" + sdf.format(d) + "'::timestamptz";
+                    } else {
+                        s = XPathFuncExpr.toString(o);
+                    }
+                }
+                if(expression.length() > 0) {
+                    expression.append(" ");
+                }
+                expression.append(s);
+            }
+        }
+        return expression.toString();
     }
 }
