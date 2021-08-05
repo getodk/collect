@@ -169,7 +169,7 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
             String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
@@ -177,18 +177,26 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
     }
 
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
+        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
+
         return new CursorLoader(
                 Collect.getInstance(),
-                InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid()),
+                getUriWithAnalyticsParam(uri),
                 null,
                 selection,
                 selectionArgs,
                 sortOrder);
+    }
+
+    private Uri getUriWithAnalyticsParam(Uri uri) {
+        return uri.buildUpon()
+                .appendQueryParameter("internal", "true")
+                .build();
     }
 }
