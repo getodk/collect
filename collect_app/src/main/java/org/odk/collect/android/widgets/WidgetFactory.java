@@ -22,6 +22,7 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -107,7 +108,7 @@ public class WidgetFactory {
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, Collect.getCurrentFormIdentifierHash(), readOnlyOverride);
+        QuestionDetails questionDetails = new QuestionDetails(prompt, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), readOnlyOverride);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {

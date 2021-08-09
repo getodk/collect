@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.javarosawrapper;
 
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -50,9 +54,7 @@ import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
-import org.odk.collect.shared.strings.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,10 +63,6 @@ import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
-import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENDATAKIT_NAMESPACE;
 
 /**
  * This class is a wrapper for Javarosa's FormEntryController. In theory, if you wanted to replace
@@ -281,22 +279,6 @@ public class FormController {
      */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
-    }
-
-    /**
-     * Gets a unique, privacy-preserving identifier for the current form.
-     *
-     * @return md5 hash of the form title, a space, the form ID
-     */
-    public String getCurrentFormIdentifierHash() {
-        String formIdentifier = "";
-
-        if (getFormDef() != null) {
-            String formID = getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
-            formIdentifier = getFormTitle() + " " + formID;
-        }
-
-        return Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
     }
 
     /**

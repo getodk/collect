@@ -54,6 +54,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -242,7 +243,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 audioHelper,
                 ReferenceManager.instance(),
                 analytics,
-                Collect.getCurrentFormIdentifierHash()
+                AnalyticsUtils.getFormHash(Collect.getInstance().getFormController())
         );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);

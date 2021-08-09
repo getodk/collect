@@ -7,13 +7,14 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.forms.instances.Instance;
 
 public class CursorLoaderFactory {
 
+    public static final String INTERNAL_QUERY_PARAM = "internal";
     private final CurrentProjectProvider currentProjectProvider;
 
     public CursorLoaderFactory(CurrentProjectProvider currentProjectProvider) {
@@ -169,7 +170,7 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, DatabaseFormColumns.DELETED_DATE + " IS NULL", new String[]{}, sortOrder);
         } else {
             String selection = DatabaseFormColumns.DISPLAY_NAME + " LIKE ? AND " + DatabaseFormColumns.DELETED_DATE + " IS NULL";
             String[] selectionArgs = {"%" + charSequence + "%"};
@@ -177,18 +178,26 @@ public class CursorLoaderFactory {
             Uri formUri = newestByFormId ?
                     FormsContract.getContentNewestFormsByFormIdUri(currentProjectProvider.getCurrentProject().getUuid()) :
                     FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
-            cursorLoader = new CursorLoader(Collect.getInstance(), formUri, null, selection, selectionArgs, sortOrder);
+            cursorLoader = new CursorLoader(Collect.getInstance(), getUriWithAnalyticsParam(formUri), null, selection, selectionArgs, sortOrder);
         }
         return cursorLoader;
     }
 
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
+        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
+
         return new CursorLoader(
                 Collect.getInstance(),
-                InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid()),
+                getUriWithAnalyticsParam(uri),
                 null,
                 selection,
                 selectionArgs,
                 sortOrder);
+    }
+
+    private Uri getUriWithAnalyticsParam(Uri uri) {
+        return uri.buildUpon()
+                .appendQueryParameter(INTERNAL_QUERY_PARAM, "true")
+                .build();
     }
 }

@@ -8,8 +8,7 @@ interface Analytics {
     fun logEvent(category: String, action: String, label: String)
 
     fun logEvent(event: String)
-    fun logFormEvent(event: String, formIdHash: String)
-    fun logServerEvent(event: String, serverHash: String)
+    fun logEventWithParam(event: String, key: String, value: String)
     fun logFatal(throwable: Throwable)
     fun logNonFatal(message: String)
     fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean)
@@ -26,6 +25,11 @@ interface Analytics {
         @JvmStatic
         fun log(event: String) {
             instance.logEvent(event)
+        }
+
+        @JvmStatic
+        fun log(event: String, key: String, value: String) {
+            instance.logEventWithParam(event, key, value)
         }
     }
 }

@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.utilities.FileUtils;
@@ -15,7 +16,6 @@ import org.odk.collect.forms.MediaFile;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -69,9 +69,7 @@ public class ServerFormDownloader implements FormDownloader {
         } else {
             List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
             if (!allSameFormIdVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
-                String formIdentifier = form.getFormName() + " " + form.getFormId();
-                String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
-                analytics.logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
+                analytics.logEventWithParam(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, "form", AnalyticsUtils.getFormHash(form.getFormId(), form.getFormName()));
             }
         }
 

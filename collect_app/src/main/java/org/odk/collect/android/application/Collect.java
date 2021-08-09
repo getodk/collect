@@ -216,20 +216,6 @@ public class Collect extends Application implements
     }
 
     /**
-     * Gets a unique, privacy-preserving identifier for the current form.
-     *
-     * @return md5 hash of the form title, a space, the form ID
-     */
-    public static String getCurrentFormIdentifierHash() {
-        FormController formController = getInstance().getFormController();
-        if (formController != null) {
-            return formController.getCurrentFormIdentifierHash();
-        }
-
-        return "";
-    }
-
-    /**
      * Gets a unique, privacy-preserving identifier for a form based on its id and version.
      *
      * @param formId      id of a form

@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
@@ -48,9 +47,6 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
     BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
 
     @Inject
-    Analytics analytics;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Override
@@ -67,8 +63,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.select_odk_shortcut)
                 .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
-                    String serverHash = AnalyticsUtils.getServerHash(settingsProvider.getGeneralSettings());
-                    analytics.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, serverHash);
+                    AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getGeneralSettings());
 
                     Intent intent = getShortcutIntent(forms, item);
                     setResult(RESULT_OK, intent);

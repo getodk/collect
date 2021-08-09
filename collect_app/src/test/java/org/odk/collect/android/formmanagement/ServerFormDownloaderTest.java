@@ -451,7 +451,7 @@ public class ServerFormDownloaderTest {
         String formIdentifier = form.getDisplayName() + " " + form.getFormId();
         String formIdHash = Md5.getMd5Hash(new ByteArrayInputStream(formIdentifier.getBytes()));
 
-        verify(mockAnalytics).logFormEvent(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, formIdHash);
+        verify(mockAnalytics).logEventWithParam(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, "form", formIdHash);
     }
 
     @Test

@@ -8,9 +8,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.utilities.Clock;
@@ -34,23 +32,18 @@ public class FormEntryViewModelTest {
     private FormEntryViewModel viewModel;
     private FormController formController;
     private FormIndex startingIndex;
-    private AuditEventLogger auditEventLogger;
-    private Clock clock;
 
     @Before
     public void setup() {
         formController = mock(FormController.class);
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
-        when(formController.getCurrentFormIdentifierHash()).thenReturn("formIdentifierHash");
         when(formController.getFormDef()).thenReturn(new FormDef());
 
-        auditEventLogger = mock(AuditEventLogger.class);
+        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
 
-        clock = mock(Clock.class);
-
-        viewModel = new FormEntryViewModel(clock, mock(Analytics.class));
+        viewModel = new FormEntryViewModel(mock(Clock.class));
         viewModel.formLoaded(formController);
     }
 
@@ -125,12 +118,5 @@ public class FormEntryViewModelTest {
 
         viewModel.cancelRepeatPrompt();
         assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
-    }
-
-    @Test
-    public void openHierarchy_logsHierarchyAuditEvent() {
-        when(clock.getCurrentTime()).thenReturn(12345L);
-        viewModel.openHierarchy();
-        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.HIERARCHY, true, 12345L);
     }
 }

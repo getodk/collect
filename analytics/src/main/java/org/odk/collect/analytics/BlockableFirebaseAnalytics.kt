@@ -29,12 +29,6 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
         firebaseAnalytics.logEvent(event, null)
     }
 
-    override fun logFormEvent(event: String, formIdHash: String) {
-        val bundle = Bundle()
-        bundle.putString("form", formIdHash)
-        firebaseAnalytics.logEvent(event, bundle)
-    }
-
     override fun logFatal(throwable: Throwable) {
         crashlytics.recordException(throwable)
     }
@@ -43,9 +37,9 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
         crashlytics.log(message)
     }
 
-    override fun logServerEvent(event: String, serverHash: String) {
+    override fun logEventWithParam(event: String, key: String, value: String) {
         val bundle = Bundle()
-        bundle.putString("server", serverHash)
+        bundle.putString(key, value)
         firebaseAnalytics.logEvent(event, bundle)
     }
 

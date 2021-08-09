@@ -65,6 +65,7 @@ import org.joda.time.LocalDateTime;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
@@ -803,7 +804,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
-                analytics.logFormEvent(OPEN_MAP_KIT_RESPONSE, Collect.getCurrentFormIdentifierHash());
+                AnalyticsUtils.logFormEvent(OPEN_MAP_KIT_RESPONSE);
                 setWidgetData(intent.getStringExtra("OSM_FILE_NAME"));
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
@@ -1527,7 +1528,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", Collect.getCurrentFormIdentifierHash());
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;

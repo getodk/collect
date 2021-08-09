@@ -435,12 +435,12 @@ public class AppDependencyModule {
 
     @Provides
     public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
-        return new FormEntryViewModel.Factory(clock, analytics);
+        return new FormEntryViewModel.Factory(clock);
     }
 
     @Provides
     public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getGeneralSettings(), permissionsChecker, clock, analytics);
+        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getGeneralSettings(), permissionsChecker, clock);
     }
 
     @Provides
