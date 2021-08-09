@@ -116,7 +116,7 @@ public class FormsProvider extends ContentProvider {
         String projectId = getProjectId(uri);
 
         // We only want to log external calls to the content provider
-        if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) != null) {
+        if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) == null) {
             logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_QUERY);
         }
 
