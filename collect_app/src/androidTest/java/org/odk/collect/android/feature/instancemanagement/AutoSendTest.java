@@ -65,25 +65,4 @@ public class AutoSendTest {
         notificationDrawerRule.open()
                 .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
     }
-
-    @Test
-    public void whenFormIsFinalized_enablingAutoSend_schedulesSubmitFinalizedForm() {
-        MainMenuPage mainMenuPage = rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("31")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-                .enableAutoSend();
-
-        testDependencies.scheduler.runDeferredTasks();
-
-        mainMenuPage
-                .clickViewSentForm(1)
-                .assertText("One Question");
-
-        notificationDrawerRule.open()
-                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
-    }
 }
