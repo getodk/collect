@@ -19,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.never
 import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
@@ -509,5 +510,16 @@ class FormManagementPreferencesFragmentTest {
             fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "wifi"
         }
         verify(instanceSubmitScheduler).scheduleSubmit(projectID)
+    }
+
+    @Test
+    fun `When Auto send preference is disabled, no submissions should be scheduled`() {
+        generalSettings.save(ProjectKeys.KEY_AUTOSEND, "wifi")
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "off"
+        }
+        verify(instanceSubmitScheduler, never()).scheduleSubmit(projectID)
     }
 }
