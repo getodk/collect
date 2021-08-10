@@ -57,7 +57,7 @@ public class QRCodeMenuDelegateTest {
         ShadowActivity.IntentForResult intentForResult = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(intentForResult, notNullValue());
         assertThat(intentForResult.requestCode, is(SELECT_PHOTO));
-        assertThat(intentForResult.intent.getAction(), is(Intent.ACTION_PICK));
+        assertThat(intentForResult.intent.getAction(), is(Intent.ACTION_GET_CONTENT));
         assertThat(intentForResult.intent.getType(), is("image/*"));
     }
 

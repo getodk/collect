@@ -55,7 +55,7 @@ public class QRCodeMenuDelegate implements MenuDelegate {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_scan_sd_card:
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 photoPickerIntent.setType("image/*");
                 if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
                     activity.startActivityForResult(photoPickerIntent, SELECT_PHOTO);
