@@ -503,7 +503,6 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When Auto send preference is enabled, finalized forms should be scheduled for submission`() {
-        generalSettings.save(ProjectKeys.KEY_AUTOSEND, "off")
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
@@ -514,7 +513,6 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When Auto send preference is disabled, no submissions should be scheduled`() {
-        generalSettings.save(ProjectKeys.KEY_AUTOSEND, "wifi")
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
