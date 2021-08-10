@@ -506,7 +506,7 @@ class FormManagementPreferencesFragmentTest {
 
         val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
-            generalSettings.save(ProjectKeys.KEY_AUTOSEND, "wifi")
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "wifi"
         }
         verify(instanceSubmitScheduler).scheduleSubmit(projectID)
     }
