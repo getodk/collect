@@ -115,25 +115,22 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
         String referenceValue = null;
         boolean multiSelect = (args.length == 5 || args.length == 6);
         int index = 0;
-        String indexString = null;
         String fn = null;    // count || list || index || sum || max || min || mean
-        String searchType = null;
+        String searchType = null;  // matches || endswith || startswith || contains
 
         if(args.length == 3) {
             filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
-            //filter = XPathFuncExpr.toString(args[2]);
         } else if(args.length == 4) {
             referenceColumn = XPathFuncExpr.toString(args[2]);
             referenceValue = XPathFuncExpr.toString(args[3]);
         } else if(args.length == 5) {
             filter = XPathFuncExpr.toString(args[2]);
             fn = XPathFuncExpr.toString(args[3]).toLowerCase();
-            indexString = XPathFuncExpr.toString(args[4]);
         } else if(args.length == 6) {
             referenceColumn = XPathFuncExpr.toString(args[2]);
             referenceValue = XPathFuncExpr.toString(args[3]);
             fn = XPathFuncExpr.toString(args[4]).toLowerCase();
-            indexString = XPathFuncExpr.toString(args[5]);
+            searchType = XPathFuncExpr.toString(args[5]);
         }
 
         SqlFrag filterFrag = null;
@@ -162,7 +159,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                  * if it is not a number then it will not be changed
                  */
                 try {
-                    index = Integer.valueOf(indexString);
+                    index = Integer.valueOf(fn);
                     if(index > 0) {
                         fn = FN_INDEX;
                     } else if(index < 0) {
@@ -176,7 +173,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             } catch (Exception e) {
                 fn = FN_LIST;        // default
             }
-            searchType = XPathFuncExpr.toString(args[5]);
+
         }
         // smap
 
