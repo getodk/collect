@@ -1,0 +1,4 @@
+package dependencies
+
+object Versions {
+}
