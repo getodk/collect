@@ -159,7 +159,7 @@ class QrCodeProjectCreatorDialog :
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_item_scan_sd_card -> {
-                    val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                    val photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
                     photoPickerIntent.type = "image/*"
                     if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
                         imageQrCodeImportResultLauncher.launch(photoPickerIntent)
