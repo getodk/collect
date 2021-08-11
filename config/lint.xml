@@ -59,4 +59,10 @@
     <issue id="AlwaysShowAction" severity="ignore" />
 
     <issue id="InvalidFragmentVersionForActivityResult" severity="ignore" />
+
+    <!-- This incorrectly identifies places where String.format is used on the string -->
+    <issue id="TimberArgCount" severity="ignore" />
+
+    <!-- This seems to flag IDs used via View Binding -->
+    <issue id="UnusedIds" severity="ignore" />
 </lint>
