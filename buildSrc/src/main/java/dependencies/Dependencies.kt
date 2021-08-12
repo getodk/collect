@@ -54,6 +54,7 @@ object Dependencies {
     const val dagger_android = "com.google.dagger:dagger-android:${Versions.dagger}"
     const val dagger_android_support = "com.google.dagger:dagger-android-support:${Versions.dagger}"
     const val dagger_android_processor = "com.google.dagger:dagger-android-processor:${Versions.dagger}"
+    const val kotlinx_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
     const val rxandroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
     const val rxjava = "io.reactivex.rxjava2:rxjava:2.2.21"
     const val rxrelay = "com.jakewharton.rxrelay2:rxrelay:2.1.1"
