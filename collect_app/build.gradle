@@ -403,6 +403,7 @@ dependencies {
 
     androidTestImplementation Dependencies.okhttp3_mockwebserver
     androidTestImplementation Dependencies.androidx_work_testing
+    androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
 
