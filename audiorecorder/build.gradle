@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -37,25 +39,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation 'androidx.activity:activity-ktx:1.2.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
+    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.androidx_activity_ktx
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation project(':strings')
-    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
-    kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-    implementation "com.jakewharton.timber:timber:${rootProject.timberVersion}"
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
+    implementation Dependencies.timber
     implementation project(path: ':async')
     implementation project(path: ':androidshared')
 
     testImplementation project(path: ':testshared')
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation "org.robolectric:robolectric:4.5.1"
-    testImplementation 'androidx.test.ext:junit:1.1.2'
-    testImplementation "androidx.test:core-ktx:1.3.0"
-    testImplementation 'androidx.test:rules:1.3.0'
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.mockito:mockito-core:3.7.7"
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.robolectric
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.androidx_test_core_ktx
+    testImplementation Dependencies.androidx_test_rules
+    testImplementation Dependencies.androidx_arch_core_testing
+    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.hamcrest
 }

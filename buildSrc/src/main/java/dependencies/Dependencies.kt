@@ -2,6 +2,7 @@ package dependencies
 
 object Dependencies {
     const val desugar = "com.android.tools:desugar_jdk_libs:1.1.1"
+    const val androidx_activity_ktx = "androidx.activity:activity-ktx:1.2.0"
     const val androidx_legacy_support = "androidx.legacy:legacy-support-v13:1.0.0"
     const val androidx_lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
     const val androidx_lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
@@ -79,6 +80,7 @@ object Dependencies {
     const val androidx_arch_core_testing = "androidx.arch.core:core-testing:2.1.0"
     const val androidx_work_testing = "androidx.work:work-testing:2.5.0"
     const val androidx_test_core_ktx = "androidx.test:core-ktx:1.3.0"
+    const val androidx_test_rules = "androidx.test:rules:1.3.0"
     const val androidx_test_espresso_contrib = "androidx.test.espresso:espresso-contrib:3.3.0"
     const val androidx_test_espresso_core = "androidx.test.espresso:espresso-core:3.3.0"
     const val androidx_test_espresso_intents = "androidx.test.espresso:espresso-intents:3.3.0"
