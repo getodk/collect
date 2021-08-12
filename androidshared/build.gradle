@@ -48,7 +48,7 @@ android {
 dependencies {
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.lifecycle_livedata_ktx
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment_ktx
     implementation project(':strings')

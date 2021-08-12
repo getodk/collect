@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -29,20 +31,20 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    coreLibraryDesugaring Dependencies.desugar
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
+    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.androidx_core_ktx
 
     implementation project(':async')
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.3.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata:2.3.0'
+    implementation Dependencies.androidx_lifecycle_viewmodel
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
 
     testImplementation project(path: ':testshared')
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:3.7.7'
-    testImplementation 'androidx.test.ext:junit:1.1.2'
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.androidx_arch_core_testing
+    testImplementation Dependencies.hamcrest
 }
