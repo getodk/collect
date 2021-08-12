@@ -83,6 +83,7 @@ object Dependencies {
     const val okhttp3_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp3}"
     const val kotlinx_coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3"
     const val json = "org.json:json:20201115"
+    const val gson = "com.google.code.gson:gson:2.8.6"
     const val hamcrest = "org.hamcrest:hamcrest:2.2"
     const val powermock_module_junit4 = "org.powermock:powermock-module-junit4:2.0.9"
     const val powermock_api_mockito2 = "org.powermock:powermock-api-mockito2:2.0.9"

@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -46,30 +48,30 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    coreLibraryDesugaring Dependencies.desugar
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation Dependencies.kotlin_stdlib
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation "androidx.fragment:fragment-ktx:${rootProject.fragmentVersion}"
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.androidx_fragment_ktx
 
     implementation project(':shared')
     implementation project(':androidshared')
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation "com.google.android.material:material:${rootProject.materialVersion}"
+    implementation  Dependencies.gson
+    implementation Dependencies.android_material
     implementation project(':material')
-    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
-    kapt "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
 
-    debugImplementation("androidx.fragment:fragment-testing:${rootProject.fragmentVersion}") {
+    debugImplementation(Dependencies.androidx_fragment_testing) {
         exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
     }
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'androidx.test.ext:junit:1.1.2'
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.hamcrest
+    testImplementation Dependencies.androidx_test_ext_junit
     testImplementation project(':testshared')
-    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation "org.mockito:mockito-core:3.7.7"
+    testImplementation Dependencies.androidx_test_espresso_core
+    testImplementation Dependencies.mockito_core
 }
