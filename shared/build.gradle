@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -13,7 +15,7 @@ java {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation Dependencies.kotlin_stdlib
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.hamcrest
 }
