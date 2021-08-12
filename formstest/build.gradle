@@ -13,9 +13,9 @@ java {
 }
 
 dependencies {
-    implementation Dependencies.kotlin_stdlib
     implementation project(':forms')
     implementation project(':shared')
+    implementation Dependencies.kotlin_stdlib
     implementation Dependencies.commons_io
     implementation Dependencies.junit
     implementation Dependencies.mockito_core

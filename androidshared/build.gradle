@@ -46,18 +46,18 @@ android {
 }
 
 dependencies {
+    implementation project(':strings')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment_ktx
-    implementation project(':strings')
-
-    debugImplementation project(':fragmentstest')
 
     testImplementation project(':testshared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.androidx_test_ext_junit
     testImplementation Dependencies.androidx_test_espresso_core
     testImplementation Dependencies.robolectric
+
+    debugImplementation project(':fragmentstest')
 }

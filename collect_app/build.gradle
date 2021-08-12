@@ -237,6 +237,19 @@ configurations.all {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
+    implementation project(':shared')
+    implementation project(':androidshared')
+    implementation project(':nbistubs')
+    implementation project(':strings')
+    implementation project(':material')
+    implementation project(':async')
+    implementation project(':analytics')
+    implementation project(':audioclips')
+    implementation project(':forms')
+    implementation project(':audiorecorder')
+    implementation project(':projects')
+    implementation project(':location')
+
     implementation Dependencies.androidx_legacy_support
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_browser
@@ -305,9 +318,6 @@ dependencies {
 
     implementation Dependencies.danlew_android_joda
 
-    // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugImplementation Dependencies.leakcanary
-
     // Android Architecture Components:
     implementation Dependencies.androidx_lifecycle_extensions
     implementation Dependencies.androidx_lifecycle_runtime_ktx
@@ -341,19 +351,6 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
-    implementation project(':shared')
-    implementation project(':androidshared')
-    implementation project(':nbistubs')
-    implementation project(':strings')
-    implementation project(':material')
-    implementation project(':async')
-    implementation project(':analytics')
-    implementation project(':audioclips')
-    implementation project(':forms')
-    implementation project(':audiorecorder')
-    implementation project(':projects')
-    implementation project(':location')
-
     // Makes binding to Views easy:
     implementation Dependencies.butterknife
     annotationProcessor Dependencies.butterknife_compiler
@@ -362,8 +359,7 @@ dependencies {
     compileOnly Dependencies.findbugs_annotations
     compileOnly Dependencies.findbugs_jsr305
 
-    // Used to generate documentation screenshots.
-    androidTestImplementation Dependencies.fastlane_screengrab
+    testImplementation project(':formstest')
 
     // Testing-only dependencies
     testImplementation Dependencies.junit
@@ -378,7 +374,6 @@ dependencies {
     testImplementation Dependencies.robolectric
 
     testImplementation Dependencies.androidx_test_ext_junit
-    debugImplementation project(':fragmentstest')
     testImplementation Dependencies.androidx_arch_core_testing
     testImplementation Dependencies.robolectric_shadows_multidex
     testImplementation Dependencies.okhttp3_mockwebserver
@@ -396,8 +391,8 @@ dependencies {
     testImplementation Dependencies.androidx_test_core_ktx
     testImplementation Dependencies.kotlinx_coroutines_test
 
-    testImplementation project(':formstest')
-
+    // Used to generate documentation screenshots.
+    androidTestImplementation Dependencies.fastlane_screengrab
     androidTestImplementation Dependencies.mockito_android
     androidTestImplementation Dependencies.androidx_test_ext_junit
     androidTestImplementation Dependencies.androidx_test_espresso_core
@@ -409,8 +404,12 @@ dependencies {
     }
 
     androidTestImplementation Dependencies.okhttp3_mockwebserver
-
     androidTestImplementation Dependencies.androidx_work_testing
+
+    debugImplementation project(':fragmentstest')
+
+    // Real LeakCanary for debug builds only: notifications, analysis, etc
+    debugImplementation Dependencies.leakcanary
 }
 
 // Must be at bottom to prevent dependency collisions

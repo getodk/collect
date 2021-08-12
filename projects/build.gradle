@@ -50,23 +50,17 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
+    implementation project(':shared')
+    implementation project(':androidshared')
+    implementation project(':material')
     implementation Dependencies.kotlin_stdlib
-
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_fragment_ktx
-
-    implementation project(':shared')
-    implementation project(':androidshared')
     implementation  Dependencies.gson
     implementation Dependencies.android_material
-    implementation project(':material')
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
-
-    debugImplementation(Dependencies.androidx_fragment_testing) {
-        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
-    }
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
@@ -74,4 +68,8 @@ dependencies {
     testImplementation project(':testshared')
     testImplementation Dependencies.androidx_test_espresso_core
     testImplementation Dependencies.mockito_core
+
+    debugImplementation(Dependencies.androidx_fragment_testing) {
+        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
+    }
 }

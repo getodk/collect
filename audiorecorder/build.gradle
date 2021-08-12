@@ -39,17 +39,17 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':strings')
+    implementation project(path: ':async')
+    implementation project(path: ':androidshared')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_activity_ktx
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_lifecycle_livedata_ktx
-    implementation project(':strings')
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
     implementation Dependencies.timber
-    implementation project(path: ':async')
-    implementation project(path: ':androidshared')
 
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit

@@ -32,16 +32,18 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
-    implementation Dependencies.androidx_recyclerview
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(path: ':async')
+    implementation project(path: ':shared')
+    implementation Dependencies.androidx_recyclerview
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_appcompat
-    implementation project(path: ':async')
-    implementation project(path: ':shared')
     implementation Dependencies.robolectric
     implementation Dependencies.android_material
+
     testImplementation Dependencies.androidx_test_ext_junit
+
     debugImplementation(Dependencies.androidx_fragment_testing) {
         exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
     }

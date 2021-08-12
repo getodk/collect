@@ -34,10 +34,9 @@ dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':async')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
-
-    implementation project(':async')
     implementation Dependencies.androidx_lifecycle_viewmodel
     implementation Dependencies.androidx_lifecycle_livedata_ktx
 
