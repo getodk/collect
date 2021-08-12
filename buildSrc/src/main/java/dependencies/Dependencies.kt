@@ -64,6 +64,7 @@ object Dependencies {
     const val findbugs_jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
     const val fastlane_screengrab = "tools.fastlane:screengrab:2.0.0"
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
+    const val kotlin_stdlib_jdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val junit = "junit:junit:4.13.2"
     const val mockito_android = "org.mockito:mockito-android:3.7.7"
     const val mockito_core = "org.mockito:mockito-core:3.7.7"

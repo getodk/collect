@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 plugins {
     id 'com.android.library'
 }
@@ -29,11 +31,11 @@ android {
 }
 
 dependencies {
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.kotlin_stdlib_jdk7
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.hamcrest
 }
 repositories {
     mavenCentral()
