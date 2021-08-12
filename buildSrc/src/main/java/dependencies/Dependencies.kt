@@ -28,7 +28,7 @@ object Dependencies {
     const val firebase_analytics = "com.google.firebase:firebase-analytics:19.0.0"
     const val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:18.2.1"
     const val mapbox_android_sdk = "com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1"
-    const val mapbox_android_plugin_annotation = "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0"
+    const val mapbox_android_plugin_annotation = "com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0" // Upgrading will require more changes in our codebase https://github.com/getodk/collect/issues/4305
     const val guava = "com.google.guava:guava:30.1.1-android"
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
     const val squareup_okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp3}"
@@ -37,7 +37,7 @@ object Dependencies {
     const val myanmar_calendar = "com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3"
     const val bikram_sambat = "bikramsambat:bikram-sambat:1.1.0"
     const val rarepebble_colorpicker = "com.rarepebble:colorpicker:3.0.1"
-    const val commons_io = "commons-io:commons-io:2.5"
+    const val commons_io = "commons-io:commons-io:2.5" // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
     const val opencsv = "net.sf.opencsv:opencsv:2.4"
     const val javarosa = "org.getodk:javarosa:3.2.0"
     const val karumi_dexter = "com.karumi:dexter:6.2.3"
@@ -48,7 +48,7 @@ object Dependencies {
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
     const val slf4j_api = "org.slf4j:slf4j-api:2.0.0-alpha0"
     const val slf4j_timber = "com.arcao:slf4j-timber:3.1@aar"
-    const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:3.6.0"
+    const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:3.6.0" // Upgrading will require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
     const val danlew_android_joda = "net.danlew:android.joda:2.10.9.1"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"

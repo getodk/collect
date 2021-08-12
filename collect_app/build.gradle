@@ -274,8 +274,6 @@ dependencies {
     implementation Dependencies.firebase_crashlytics
 
     implementation Dependencies.mapbox_android_sdk
-
-    // Upgrading will require more changes in our codebase https://github.com/getodk/collect/issues/4305
     implementation Dependencies.mapbox_android_plugin_annotation
 
     implementation Dependencies.guava
@@ -288,7 +286,7 @@ dependencies {
     implementation Dependencies.myanmar_calendar
     implementation Dependencies.bikram_sambat
     implementation Dependencies.rarepebble_colorpicker
-    implementation Dependencies.commons_io // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
+    implementation Dependencies.commons_io
     implementation Dependencies.opencsv
     implementation(Dependencies.javarosa) {
         exclude group: 'joda-time'
@@ -314,7 +312,6 @@ dependencies {
     implementation Dependencies.slf4j_api
     implementation Dependencies.slf4j_timber
 
-    //updating would require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
     implementation Dependencies.zxing_android_embedded
 
     implementation Dependencies.danlew_android_joda
@@ -416,6 +413,3 @@ dependencies {
 // Must be at bottom to prevent dependency collisions
 // https://developers.google.com/android/guides/google-services-plugin
 apply plugin: 'com.google.gms.google-services'
-
-
-
