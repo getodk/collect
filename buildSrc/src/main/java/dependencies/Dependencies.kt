@@ -9,6 +9,7 @@ object Dependencies {
     const val androidx_core_ktx = "androidx.core:core-ktx:${Versions.androidx_core_ktx}"
     const val androidx_browser = "androidx.browser:browser:1.3.0"
     const val androidx_recyclerview = "androidx.recyclerview:recyclerview:1.1.0"
+    const val androidx_fragment = "androidx.fragment:fragment:${Versions.androidx_fragment}"
     const val androidx_appcompat = "androidx.appcompat:appcompat:1.2.0"
     const val androidx_work_runtime = "androidx.work:work-runtime:2.5.0"
     const val androidx_cardview = "androidx.cardview:cardview:1.0.0"

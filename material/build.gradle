@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 apply plugin: 'com.android.library'
 
 apply from: '../config/quality.gradle'
@@ -32,7 +34,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "com.google.android.material:material:${rootProject.materialVersion}"
-    implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.android_material
+    implementation Dependencies.androidx_fragment
 }
