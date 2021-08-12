@@ -17,6 +17,7 @@
         <exclude name="AvoidReassigningParameters" />
         <exclude name="AvoidStringBufferField" />
         <exclude name="ForLoopCanBeForeach" />
+        <exclude name="GuardLogStatement" />
         <exclude name="JUnit4TestShouldUseBeforeAnnotation" />
         <exclude name="JUnit4TestShouldUseTestAnnotation" />
         <exclude name="JUnitAssertionsShouldIncludeMessage" />
@@ -28,8 +29,11 @@
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
+        <exclude name="PrimitiveWrapperInstantiation" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedAssignment" />
+        <exclude name="UnusedPrivateMethod" />
+        <exclude name="UseStandardCharsets" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
         <exclude name="ForLoopVariableCount" />
@@ -72,6 +76,7 @@
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
         <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
+        <exclude name="CognitiveComplexity" />
         <exclude name="CollapsibleIfStatements" />
         <exclude name="CyclomaticComplexity" />
         <exclude name="DataClass" />
@@ -83,6 +88,7 @@
         <exclude name="GodClass" />
         <exclude name="LawOfDemeter" />
         <exclude name="LoosePackageCoupling" />
+        <exclude name="MutableStaticState" />
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
@@ -120,10 +126,12 @@
         <exclude name="EmptyCatchBlock" />
         <exclude name="EmptyIfStmt" />
         <exclude name="EmptyWhileStmt" />
+        <exclude name="ImplicitSwitchFallThrough" />
         <exclude name="JUnitSpelling" />
         <exclude name="MissingBreakInSwitch" />
         <exclude name="MissingSerialVersionUID" />
         <exclude name="NullAssignment" />
+        <exclude name="ReturnEmptyCollectionRatherThanNull" />
         <exclude name="TestClassWithoutTestCases" />
         <exclude name="UnnecessaryBooleanAssertion" />
         <exclude name="DetachedTestCase" />

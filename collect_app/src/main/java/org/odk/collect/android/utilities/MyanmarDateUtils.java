@@ -29,7 +29,7 @@ import mmcalendar.WesternDateConverter;
 
 public class MyanmarDateUtils {
 
-    private MyanmarDateUtils(){
+    private MyanmarDateUtils() {
     }
 
     public static MyanmarDate gregorianDateToMyanmarDate(LocalDateTime localDateTime) {
