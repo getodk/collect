@@ -6,7 +6,7 @@ apply plugin: "com.github.ben-manes.versions"
 buildscript {
     repositories {
         google()
-        mavenCentral()
+        jcenter()
 
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -29,7 +29,7 @@ allprojects {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
-        mavenCentral()
+        jcenter()
         maven { url 'https://oss.sonatype.org/content/groups/public' }
         maven { url 'https://jitpack.io' }
         maven {
