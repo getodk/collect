@@ -1,4 +1,5 @@
 import dependencies.Dependencies
+import dependencies.Versions
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
@@ -8,11 +9,11 @@ apply plugin: 'kotlin-kapt'
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion rootProject.androidCompileSdk
+    compileSdkVersion Versions.android_compile_sdk
 
     defaultConfig {
-        minSdkVersion rootProject.androidMinSdk
-        targetSdkVersion rootProject.androidTargetSdk
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

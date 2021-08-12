@@ -69,9 +69,3 @@ task checkInstrumented(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
     startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.instrumented"]
 }
-
-ext {
-    androidCompileSdk = 30
-    androidMinSdk = 21
-    androidTargetSdk = 29
-}
