@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
+import org.odk.collect.androidshared.utils.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -49,7 +50,6 @@ import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -122,7 +122,7 @@ public class Collect extends Application implements
     @Override
     public void onCreate() {
         super.onCreate();
-        testStorage();
+        ExternalFilesUtils.testExternalFilesAccess(this);
 
         singleton = this;
 
@@ -132,18 +132,6 @@ public class Collect extends Application implements
         fixGoogleBug154855417();
 
         setupStrictMode();
-    }
-
-    private void testStorage() {
-        // Throw specific error to avoid later ones if the app won't be able to access storage
-        try {
-            File externalFilesDir = getExternalFilesDir(null);
-            File testFile = new File(externalFilesDir + File.separator + ".test");
-            testFile.createNewFile();
-            testFile.delete();
-        } catch (IOException e) {
-            throw new IllegalStateException("App can't write to storage!");
-        }
     }
 
     /**

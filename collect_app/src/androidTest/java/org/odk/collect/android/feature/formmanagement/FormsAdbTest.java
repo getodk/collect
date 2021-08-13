@@ -35,7 +35,7 @@ public class FormsAdbTest {
                 .assertFormExists("One Question")
                 .pressBack(new MainMenuPage());
 
-        AdbFormLoadingUtils.copyFormToStorage("one-question-updated.xml", "one-question.xml");
+        AdbFormLoadingUtils.copyFormToDemoProject("one-question-updated.xml", "one-question.xml");
 
         mainMenuPage
                 .clickFillBlankForm()

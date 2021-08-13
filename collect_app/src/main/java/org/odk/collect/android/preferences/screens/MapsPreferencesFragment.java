@@ -35,6 +35,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.shared.PathUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -163,8 +164,11 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
             populateReferenceLayerPref();
             return false;
         });
+
+        String layersPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS);
+
         if (referenceLayerPref.getValue() == null
-                || new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(referenceLayerPref.getValue())).exists()) {
+                || new File(PathUtils.getAbsoluteFilePath(layersPath, referenceLayerPref.getValue())).exists()) {
             updateReferenceLayerSummary(referenceLayerPref.getValue());
         } else {
             referenceLayerPref.setValue(null);
@@ -188,7 +192,8 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
                 summary = getString(R.string.none);
             } else {
                 MapConfigurator cftor = MapProvider.getConfigurator();
-                summary = cftor.getDisplayName(new File(new StoragePathProvider().getAbsoluteOfflineMapLayerPath(value.toString())));
+                String path = PathUtils.getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), value.toString());
+                summary = cftor.getDisplayName(new File(path));
             }
             referenceLayerPref.setSummary(summary);
         }
@@ -204,7 +209,7 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
             String path = FileUtils.simplifyScopedStoragePath(file.getPath());
-            String value = storagePathProvider.getRelativeMapLayerPath(file.getAbsolutePath());
+            String value = PathUtils.getRelativeFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), file.getAbsolutePath());
             String name = cftor.getDisplayName(new File(file.getAbsolutePath()));
             items.add(new Item(value, name, path));
         }

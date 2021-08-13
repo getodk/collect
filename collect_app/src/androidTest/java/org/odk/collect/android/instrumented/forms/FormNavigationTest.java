@@ -161,7 +161,7 @@ public class FormNavigationTest {
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
     private void copyToStorage(String formName) throws IOException {
-        AdbFormLoadingUtils.copyFormToStorage(formName);
+        AdbFormLoadingUtils.copyFormToDemoProject(formName);
     }
 
     private static String formPath(String formName) {

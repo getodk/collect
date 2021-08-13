@@ -27,7 +27,6 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             mock(),
-            mock(),
             launchState,
             appUpgrader,
             mock(),
@@ -51,7 +50,6 @@ class ApplicationInitializerTest {
             mock(),
             mock(),
             mock(),
-            mock(),
             launchState,
             appUpgrader,
             mock(),
@@ -68,7 +66,6 @@ class ApplicationInitializerTest {
 
         val applicationInitializer = ApplicationInitializer(
             ApplicationProvider.getApplicationContext(),
-            mock(),
             mock(),
             mock(),
             mock(),

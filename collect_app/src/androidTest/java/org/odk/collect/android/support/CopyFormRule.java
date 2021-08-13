@@ -76,7 +76,7 @@ public class CopyFormRule implements TestRule {
                 projectCreated = true;
             }
 
-            AdbFormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase, fileName);
+            AdbFormLoadingUtils.copyFormToStorage(fileName, mediaFilePaths, copyToDatabase, fileName, "Demo project");
             base.evaluate();
         }
     }
