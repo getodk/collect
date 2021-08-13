@@ -12,4 +12,5 @@ object Versions {
     const val timber = "5.0.0"
     const val dagger = "2.38.1"
     const val kotlin = "1.5.21"
+    const val mockito = "3.11.1" // the newest version is buggy https://github.com/mockito/mockito/issues/2370
 }
