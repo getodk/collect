@@ -85,17 +85,12 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 6 && args.length != 4) {
-            Timber.e("4 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);
-            return "";
-        }
-
-        Collect app = Collect.getInstance();
-
         if (args.length < 3 || args.length > 6) {     // smap add support for additional parameter combinations
             Timber.e("3, 4, 5 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);  // smap 5th, 6th parameter
             return "";
         }
+
+        Collect app = Collect.getInstance();
 
         // smap common parameters
         String dataSetName = XPathFuncExpr.toString(args[0]);
@@ -167,13 +162,13 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
         }
 
-        if(referenceValue.length() > 0) {
+        if(args.length == 3 || args.length == 5 || referenceValue.length() > 0) {
 
             // Get the url which doubles as the cache key - url encode it by converting to a URI
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
             if(args.length == 3 || args.length == 5) {
                 try {
-                    url +="?expr=" + URLEncoder.encode(filter, "UTF-8");
+                    url +="?expression=" + URLEncoder.encode(filter, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
