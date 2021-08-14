@@ -8,6 +8,7 @@ import java.net.URL
 import java.util.Locale
 import java.util.regex.Pattern
 import kotlin.math.abs
+import com.vdurmont.emoji.EmojiParser
 
 class ProjectDetailsCreator(private val context: Context) {
 
@@ -19,10 +20,19 @@ class ProjectDetailsCreator(private val context: Context) {
         }
 
         val projectIcon = if (icon.isNotBlank()) {
-            if (Character.codePointCount(icon, 0, icon.length) == 1) {
-                icon.toUpperCase(Locale.US)
-            } else {
-                getFirstSign(icon)
+            val onlyText = EmojiParser.removeAllEmojis(icon)
+            val onlyEmojis = EmojiParser.extractEmojis(icon)
+            if (Character.codePointCount(onlyText,0,onlyText.length) > 0) {
+                if (onlyEmojis.size > 0) {
+                    onlyEmojis[0]
+                }
+                else{
+                    getFirstSign(icon).toUpperCase(Locale.US)
+                }
+            }
+            else
+            {
+                onlyEmojis[0]
             }
         } else {
             projectName.first().toUpperCase().toString()
