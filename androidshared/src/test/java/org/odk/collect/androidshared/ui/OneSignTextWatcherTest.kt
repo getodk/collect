@@ -39,6 +39,6 @@ class OneSignTextWatcherTest {
         editText.setText("12")
         assertThat(editText.text.toString(), `is`(""))
         editText.setText("\uD83D\uDC22\uD83D\uDC22")
-        assertThat(editText.text.toString(), `is`(""))
+        assertThat(editText.text.toString(), `is`("\uD83D\uDC22"))
     }
 }
