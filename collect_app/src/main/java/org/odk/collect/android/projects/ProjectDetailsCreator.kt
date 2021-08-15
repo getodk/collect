@@ -2,13 +2,13 @@ package org.odk.collect.android.projects
 
 import android.content.Context
 import androidx.core.content.ContextCompat
+import com.vdurmont.emoji.EmojiParser
 import org.odk.collect.android.R
 import org.odk.collect.projects.Project
 import java.net.URL
 import java.util.Locale
 import java.util.regex.Pattern
 import kotlin.math.abs
-import com.vdurmont.emoji.EmojiParser
 
 class ProjectDetailsCreator(private val context: Context) {
 
@@ -22,16 +22,13 @@ class ProjectDetailsCreator(private val context: Context) {
         val projectIcon = if (icon.isNotBlank()) {
             val onlyText = EmojiParser.removeAllEmojis(icon)
             val onlyEmojis = EmojiParser.extractEmojis(icon)
-            if (Character.codePointCount(onlyText,0,onlyText.length) > 0) {
+            if (Character.codePointCount(onlyText, 0, onlyText.length) > 0) {
                 if (onlyEmojis.size > 0) {
                     onlyEmojis[0]
-                }
-                else{
+                } else {
                     getFirstSign(icon).toUpperCase(Locale.US)
                 }
-            }
-            else
-            {
+            } else {
                 onlyEmojis[0]
             }
         } else {

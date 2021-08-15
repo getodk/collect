@@ -20,18 +20,15 @@ class OneSignTextWatcher(private val editText: EditText) : TextWatcher {
         if (oldTextString != newTextString) {
             val onlyText = EmojiParser.removeAllEmojis(newTextString)
             val onlyEmojis = EmojiParser.extractEmojis(newTextString)
-            if (Character.codePointCount(onlyText,0,onlyText.length) > 0) {
+            if (Character.codePointCount(onlyText, 0, onlyText.length) > 0) {
                 if (onlyEmojis.size > 0) {
                     newTextString = onlyEmojis[0]
-                }
-                else {
+                } else {
                     if (Character.codePointCount(newTextString, 0, newTextString.length) > 1) {
                         newTextString = oldTextString
                     }
                 }
-            }
-            else
-            {
+            } else {
                 if (onlyEmojis.size > 0) {
                     newTextString = onlyEmojis[0]
                 }
