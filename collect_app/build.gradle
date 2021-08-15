@@ -281,7 +281,9 @@ dependencies {
     implementation Dependencies.squareup_okhttp
     implementation Dependencies.squareup_okhttp_tls
     implementation Dependencies.burgstaller_okhttp_digest
-    implementation "com.vdurmont:emoji-java:5.1.1"
+    implementation ("com.vdurmont:emoji-java:5.1.1") {
+        exclude group: 'org.json', module: 'json'
+    }
     implementation Dependencies.persian_joda_time
     implementation Dependencies.myanmar_calendar
     implementation Dependencies.bikram_sambat

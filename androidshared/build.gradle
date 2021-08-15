@@ -53,7 +53,9 @@ dependencies {
     implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment_ktx
-    implementation "com.vdurmont:emoji-java:5.1.1"
+    implementation ("com.vdurmont:emoji-java:5.1.1") {
+        exclude group: 'org.json', module: 'json'
+    }
 
     testImplementation project(':testshared')
     testImplementation Dependencies.junit
