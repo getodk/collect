@@ -47,7 +47,9 @@ android {
 
 dependencies {
     //Handle Emojis in project settings
-    implementation "com.vdurmont:emoji-java:5.1.1"
+    implementation ("com.vdurmont:emoji-java:5.1.1") {
+        exclude group: 'org.json', module: 'json'
+    }
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"

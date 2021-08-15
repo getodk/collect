@@ -268,7 +268,9 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
     implementation 'com.burgstaller:okhttp-digest:2.5'
-    implementation "com.vdurmont:emoji-java:5.1.1"
+    implementation ("com.vdurmont:emoji-java:5.1.1") {
+        exclude group: 'org.json', module: 'json'
+    }
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
