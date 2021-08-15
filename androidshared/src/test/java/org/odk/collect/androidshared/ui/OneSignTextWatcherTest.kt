@@ -27,7 +27,7 @@ class OneSignTextWatcherTest {
         editText.setText("1")
         assertThat(editText.text.toString(), `is`("1"))
     }
-    
+
     @Test
     fun `Complex emojis should be accepted`() {
         editText.setText("\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67\uDB40\uDC7F")
