@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences.screens
 
+import android.app.Application
 import android.content.Context
 import android.os.Looper
 import androidx.fragment.app.testing.FragmentScenario
@@ -17,20 +18,26 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.FormUpdateMode
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
+import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
+import org.odk.collect.async.Scheduler
 import org.odk.collect.shared.Settings
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class FormManagementPreferencesFragmentTest {
+    private lateinit var projectID: String
     private lateinit var context: Context
     private lateinit var generalSettings: Settings
     private lateinit var adminSettings: Settings
@@ -38,6 +45,8 @@ class FormManagementPreferencesFragmentTest {
     private val adminPasswordProvider = mock<AdminPasswordProvider> {
         on { isAdminPasswordSet } doReturn false
     }
+    private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
+
     private val projectPreferencesViewModel = ProjectPreferencesViewModel(adminPasswordProvider)
 
     @Before
@@ -50,9 +59,13 @@ class FormManagementPreferencesFragmentTest {
                     }
                 }
             }
+
+            override fun providesFormSubmitManager(scheduler: Scheduler, settingsProvider: SettingsProvider, application: Application): InstanceSubmitScheduler {
+                return instanceSubmitScheduler
+            }
         })
 
-        CollectHelpers.setupDemoProject()
+        projectID = CollectHelpers.setupDemoProject()
         context = ApplicationProvider.getApplicationContext()
         generalSettings = TestSettingsProvider.getGeneralSettings()
         adminSettings = TestSettingsProvider.getAdminSettings()
@@ -486,5 +499,25 @@ class FormManagementPreferencesFragmentTest {
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_import")!!.isVisible, `is`(true))
         }
+    }
+
+    @Test
+    fun `When Auto send preference is enabled, finalized forms should be scheduled for submission`() {
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "wifi"
+        }
+        verify(instanceSubmitScheduler).scheduleSubmit(projectID)
+    }
+
+    @Test
+    fun `When Auto send preference is disabled, no submissions should be scheduled`() {
+
+        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        scenario.onFragment { fragment: FormManagementPreferencesFragment ->
+            fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "off"
+        }
+        verify(instanceSubmitScheduler, never()).scheduleSubmit(projectID)
     }
 }

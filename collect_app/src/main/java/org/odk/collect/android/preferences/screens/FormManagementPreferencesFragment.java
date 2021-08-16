@@ -28,6 +28,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
@@ -53,6 +54,9 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
 
     @Inject
     FormUpdateScheduler formUpdateScheduler;
+
+    @Inject
+    InstanceSubmitScheduler instanceSubmitScheduler;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -81,6 +85,10 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
 
         if (key.equals(KEY_FORM_UPDATE_MODE) || key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
             updateDisabledPrefs();
+        }
+
+        if (key.equals(KEY_AUTOSEND) && !settingsProvider.getGeneralSettings().getString(KEY_AUTOSEND).equals("off")) {
+            instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
         }
     }
 
