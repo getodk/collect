@@ -50,7 +50,7 @@
         <item name="android:layout_height">match_parent</item>
     </style>
 
-    <style name="Widget.Collect.Button.FullWidth" parent="Widget.Collect.Button.Custom">
+    <style name="Widget.Collect.Button.FullWidth" parent="Widget.MaterialComponents.Button">
         <item name="android:paddingTop">@dimen/margin_standard</item>
         <item name="android:paddingBottom">@dimen/margin_standard</item>
         <item name="android:textSize">21sp</item>
