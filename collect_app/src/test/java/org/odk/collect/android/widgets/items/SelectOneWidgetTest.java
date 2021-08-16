@@ -246,24 +246,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     }
 
     @Test
-    public void whenChoicesHaveAudio_logsAudioChoiceEvent() throws Exception {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withIndex("i am index")
-                .withSelectChoices(asList(
-                        new SelectChoice("1", "1"),
-                        new SelectChoice("2", "2")
-                ))
-                .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
-                ))
-                .build();
-
-        populateRecyclerView(getWidget());
-        verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
-    }
-
-    @Test
     public void whenAChoiceValueIsNull_selecting_doesNotSetAnswer() {
         SelectChoice selectChoice = new SelectChoice(); // The two arg constructor protects against null values
         selectChoice.setTextID("1");

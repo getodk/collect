@@ -51,10 +51,8 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -122,9 +120,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     public AudioHelperFactory audioHelperFactory;
-
-    @Inject
-    public Analytics analytics;
 
     @Inject
     ActivityAvailability activityAvailability;
@@ -238,9 +233,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     private Boolean autoplayAudio(FormEntryPrompt firstPrompt) {
         PromptAutoplayer promptAutoplayer = new PromptAutoplayer(
                 audioHelper,
-                ReferenceManager.instance(),
-                analytics,
-                AnalyticsUtils.getFormHash(Collect.getInstance().getFormController())
+                ReferenceManager.instance()
         );
 
         return promptAutoplayer.autoplayIfNeeded(firstPrompt);

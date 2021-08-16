@@ -49,12 +49,6 @@ public class AnalyticsEvents {
     public static final String SAVE_INCOMPLETE = "WidgetAttribute";
 
     /**
-     * Track displays of widget/question types. The action should be the type of widget and
-     * the label should be a hash of the form definition.
-     */
-    public static final String PROMPT = "Prompt";
-
-    /**
      * Track attempts to download a form with the same formid/version but different contents as one
      * already on the device. We know this happens in the case of Central drafts but it should
      * otherwise be rare.
