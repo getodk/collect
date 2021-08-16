@@ -65,12 +65,15 @@
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
 
-        <!-- Sets up rounding for anything using `AlertDialog.Builder` -->
+        <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
     </style>
 
-    <style name="Theme.Collect.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <!-- Need to duplicate these values as they gets lost due to the parent. Only needed for AlertDialog.Builder. -->
+    <style name="Theme.Collect.Dialog.Alert" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="colorPrimary">#3e9fcc</item>
+        <item name="colorSecondary">#bd006b</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
