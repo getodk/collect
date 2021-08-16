@@ -16,21 +16,25 @@
 
 package org.odk.collect.android.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.ThemeUtils;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Locale;
 
@@ -50,6 +54,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         themeUtils = new ThemeUtils(this);
+        AppCompatDelegate.setDefaultNightMode(themeUtils.isDarkTheme() ? MODE_NIGHT_YES : MODE_NIGHT_NO);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
         super.onCreate(savedInstanceState);
     }
