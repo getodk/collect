@@ -78,7 +78,6 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
-import org.odk.collect.android.widgets.UrlWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
@@ -204,8 +203,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
         setupAudioErrors();
         autoplayIfNeeded(advancingPage);
-
-        logAnalyticsForWidgets();
     }
 
     private void setupAudioErrors() {
@@ -686,13 +683,5 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             widgetValueChangedListener.widgetValueChanged(changedWidget);
         }
 
-    }
-
-    private void logAnalyticsForWidgets() {
-        for (QuestionWidget widget : widgets) {
-            if (widget instanceof UrlWidget) {
-                formEntryViewModel.logFormEvent(AnalyticsEvents.URL_QUESTION);
-            }
-        }
     }
 }

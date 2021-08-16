@@ -119,11 +119,6 @@ public class AnalyticsEvents {
     public static final String INTERNAL_RECORDING_OPT_IN = "InternalRecordingOptIn";
 
     /**
-     * Tracks how often people see the URL question
-     */
-    public static final String URL_QUESTION = "UrlQuestion";
-
-    /**
      * Track how many forms record background audio
      */
     public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
