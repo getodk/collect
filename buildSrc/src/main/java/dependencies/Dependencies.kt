@@ -69,7 +69,7 @@ object Dependencies {
     const val findbugs_jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
     const val fastlane_screengrab = "tools.fastlane:screengrab:2.1.0"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
-    const val timber = "com.jakewharton.timber:timber:5.0.0"
+    const val timber = "com.jakewharton.timber:timber:5.0.1"
     const val slf4j_api = "org.slf4j:slf4j-api:2.0.0-alpha0"
     const val slf4j_timber = "com.arcao:slf4j-timber:3.1@aar"
 
