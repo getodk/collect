@@ -24,7 +24,6 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -33,7 +32,6 @@ import org.odk.collect.shared.Settings;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.AUTO_FORM_UPDATE_PREF_CHANGE;
 import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
@@ -47,9 +45,6 @@ import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferencesFragment extends BaseProjectPreferencesFragment {
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     FormUpdateScheduler formUpdateScheduler;
@@ -139,10 +134,6 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
                 int index = ((ListPreference) preference).findIndexOfValue(newValue.toString());
                 CharSequence entry = ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
-
-                if (key.equals(KEY_PERIODIC_FORM_UPDATES_CHECK)) {
-                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Periodic form updates check", (String) newValue);
-                }
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
@@ -160,12 +151,6 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
 
                 // Only enable automatic form updates if periodic updates are set
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));
-
-                pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    analytics.logEvent(AUTO_FORM_UPDATE_PREF_CHANGE, "Automatic form updates", newValue + " " + formUpdateCheckPeriod);
-
-                    return true;
-                });
             }
         }
     }

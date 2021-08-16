@@ -37,12 +37,6 @@ public class AnalyticsEvents {
     public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
 
     /**
-     * Track changes to preferences related to automatic form updates. The action should be the
-     * preference name and the label should be the new preference value.
-     */
-    public static final String AUTO_FORM_UPDATE_PREF_CHANGE = "PreferenceChange";
-
-    /**
      * Track submissions. The action should describe how it's being sent and the label should be a
      * hash of the form definition.
      */
