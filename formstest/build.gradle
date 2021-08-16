@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -11,11 +13,11 @@ java {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation project(':forms')
     implementation project(':shared')
-    implementation "commons-io:commons-io:2.5"
-    implementation 'junit:junit:4.13.2'
-    implementation "org.mockito:mockito-core:3.7.7"
-    implementation 'org.hamcrest:hamcrest:2.2'
+    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.commons_io
+    implementation Dependencies.junit
+    implementation Dependencies.mockito_core
+    implementation Dependencies.hamcrest
 }

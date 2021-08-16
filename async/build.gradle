@@ -1,3 +1,6 @@
+import dependencies.Dependencies
+import dependencies.Versions
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -5,11 +8,11 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion rootProject.androidCompileSdk
+    compileSdkVersion Versions.android_compile_sdk
 
     defaultConfig {
-        minSdkVersion rootProject.androidMinSdk
-        targetSdkVersion rootProject.androidTargetSdk
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -35,12 +38,13 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
+    coreLibraryDesugaring Dependencies.desugar
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2"
-    implementation 'androidx.work:work-runtime:2.5.0'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.kotlinx_coroutines_android
+    implementation Dependencies.androidx_work_runtime
+
+    testImplementation Dependencies.hamcrest
 }

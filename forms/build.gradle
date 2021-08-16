@@ -1,3 +1,5 @@
+import dependencies.Dependencies
+
 plugins {
     id 'java-library'
     id 'kotlin'
@@ -11,5 +13,5 @@ java {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation Dependencies.kotlin_stdlib
 }

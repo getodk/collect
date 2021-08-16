@@ -5,6 +5,8 @@ apply from: '../config/jacoco.gradle'
 apply plugin: 'kotlin-android'
 
 import com.android.ddmlib.DdmPreferences
+import dependencies.Dependencies
+import dependencies.Versions
 
 DdmPreferences.setTimeOut(60000)
 
@@ -68,7 +70,7 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion rootProject.androidCompileSdk
+    compileSdkVersion Versions.android_compile_sdk
 
     buildFeatures {
         viewBinding true
@@ -76,8 +78,8 @@ android {
 
     defaultConfig {
         applicationId('org.odk.collect.android')
-        minSdkVersion rootProject.androidMinSdk
-        targetSdkVersion rootProject.androidTargetSdk
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
         versionCode LEGACY_BUILD_NUMBER_OFFSET + getMasterCommitCount()
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
@@ -234,111 +236,7 @@ configurations.all {
 }
 
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.1'
-
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation 'androidx.browser:browser:1.3.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation "androidx.work:work-runtime:2.5.0"
-
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.exifinterface:exifinterface:1.3.2'
-    implementation 'androidx.multidex:multidex:2.0.1'
-    implementation 'androidx.preference:preference:1.1.1'
-    implementation "androidx.fragment:fragment-ktx:${rootProject.fragmentVersion}"
-
-    implementation "com.google.android.material:material:${rootProject.materialVersion}"
-    implementation 'com.google.android:flexbox:2.0.1'
-
-    implementation "com.google.android.gms:play-services-auth:19.0.0"
-    implementation "com.google.android.gms:play-services-maps:17.0.0"
-    implementation "com.google.android.gms:play-services-location:17.1.0"
-
-    implementation 'com.google.firebase:firebase-analytics:18.0.2'
-    implementation 'com.google.firebase:firebase-crashlytics:17.3.1'
-
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
-
-    // Upgrading will require more changes in our codebase https://github.com/getodk/collect/issues/4305
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'
-
-    implementation("com.google.guava:guava:30.1-android")
-
-    implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
-    implementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:2.5'
-
-    implementation 'com.github.mohamadian:PersianJodaTime:1.2'
-    implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
-    implementation 'bikramsambat:bikram-sambat:1.1.0'
-    implementation "com.rarepebble:colorpicker:3.0.1"
-    implementation "commons-io:commons-io:2.5" // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
-    implementation "net.sf.opencsv:opencsv:2.4"
-    implementation("org.getodk:javarosa:3.2.0") {
-        exclude group: 'joda-time'
-        exclude group: 'org.slf4j'
-        exclude group: 'org.hamcrest', module: 'hamcrest-all'
-    }
-    implementation "com.karumi:dexter:6.2.2"
-    implementation "org.osmdroid:osmdroid-android:6.1.10"
-    implementation("com.google.api-client:google-api-client-android:1.31.2") {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation("com.google.apis:google-api-services-drive:v3-rev20210207-1.31.0") {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev20201130-1.31.0") {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-
-    implementation "com.jakewharton.timber:timber:${rootProject.timberVersion}"
-    implementation "org.slf4j:slf4j-api:2.0.0-alpha0"
-    implementation "com.arcao:slf4j-timber:3.1@aar"
-
-    //updating would require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
-    implementation "com.journeyapps:zxing-android-embedded:3.6.0"
-
-    implementation "net.danlew:android.joda:2.10.9"
-
-    // Real LeakCanary for debug builds only: notifications, analysis, etc
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
-
-    // Android Architecture Components:
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-
-    // Dagger:
-    implementation "com.google.dagger:dagger:${rootProject.daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-
-    // Needed for injection into Robolectric tests
-    testAnnotationProcessor "com.google.dagger:dagger-compiler:${rootProject.daggerVersion}"
-
-    // Dagger Android:
-    implementation "com.google.dagger:dagger-android:${rootProject.daggerVersion}"
-    implementation "com.google.dagger:dagger-android-support:${rootProject.daggerVersion}"
-    annotationProcessor "com.google.dagger:dagger-android-processor:${rootProject.daggerVersion}"
-
-    // RxJava 2:
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
-    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
-
-    // Better "Subjects" for Rx:
-    implementation "com.jakewharton.rxrelay2:rxrelay:2.1.1"
-
-    implementation 'com.github.Armen101:AudioRecordView:1.0.5'
-
-    // Glide
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-
-    implementation('org.mp4parser:muxer:1.9.41') {
-        exclude group: 'org.hamcrest'
-    }
+    coreLibraryDesugaring Dependencies.desugar
 
     implementation project(':shared')
     implementation project(':androidshared')
@@ -353,69 +251,166 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
 
+    implementation Dependencies.androidx_legacy_support
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.androidx_browser
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.androidx_work_runtime
+
+    implementation Dependencies.androidx_cardview
+    implementation Dependencies.androidx_exinterface
+    implementation Dependencies.androidx_multidex
+    implementation Dependencies.androidx_preference_ktx
+    implementation Dependencies.androidx_fragment_ktx
+
+    implementation Dependencies.android_material
+    implementation Dependencies.android_flexbox
+
+    implementation Dependencies.play_services_auth
+    implementation Dependencies.play_services_maps
+    implementation Dependencies.play_services_location
+
+    implementation Dependencies.firebase_analytics
+    implementation Dependencies.firebase_crashlytics
+
+    implementation Dependencies.mapbox_android_sdk
+    implementation Dependencies.mapbox_android_plugin_annotation
+
+    implementation Dependencies.guava
+
+    implementation Dependencies.squareup_okhttp
+    implementation Dependencies.squareup_okhttp_tls
+    implementation Dependencies.burgstaller_okhttp_digest
+
+    implementation Dependencies.persian_joda_time
+    implementation Dependencies.myanmar_calendar
+    implementation Dependencies.bikram_sambat
+    implementation Dependencies.rarepebble_colorpicker
+    implementation Dependencies.commons_io
+    implementation Dependencies.opencsv
+    implementation(Dependencies.javarosa) {
+        exclude group: 'joda-time'
+        exclude group: 'org.slf4j'
+        exclude group: 'org.hamcrest', module: 'hamcrest-all'
+    }
+    implementation Dependencies.karumi_dexter
+    implementation Dependencies.osmdroid
+    implementation(Dependencies.google_api_client_android) {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
+    }
+    implementation(Dependencies.google_api_services_drive) {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
+    }
+    implementation(Dependencies.google_api_services_sheets) {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
+    }
+
+    implementation Dependencies.timber
+    implementation Dependencies.slf4j_api
+    implementation Dependencies.slf4j_timber
+
+    implementation Dependencies.zxing_android_embedded
+
+    implementation Dependencies.danlew_android_joda
+
+    // Android Architecture Components:
+    implementation Dependencies.androidx_lifecycle_extensions
+    implementation Dependencies.androidx_lifecycle_runtime_ktx
+    implementation Dependencies.androidx_viewpager2
+
+    // Dagger:
+    implementation Dependencies.dagger
+    annotationProcessor Dependencies.dagger_compiler
+
+    // Needed for injection into Robolectric tests
+    testAnnotationProcessor Dependencies.dagger_compiler
+
+    // Dagger Android:
+    implementation Dependencies.dagger_android
+    implementation Dependencies.dagger_android_support
+    annotationProcessor Dependencies.dagger_android_processor
+
+    // RxJava 2:
+    implementation Dependencies.rxandroid
+    implementation Dependencies.rxjava
+
+    // Better "Subjects" for Rx:
+    implementation Dependencies.rxrelay
+
+    implementation Dependencies.armen101_audio_recorder_view
+
+    // Glide
+    implementation Dependencies.glide
+
+    implementation(Dependencies.mp4parser_muxer) {
+        exclude group: 'org.hamcrest'
+    }
+
     // Makes binding to Views easy:
-    implementation "com.jakewharton:butterknife:10.2.3"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.3"
+    implementation Dependencies.butterknife
+    annotationProcessor Dependencies.butterknife_compiler
 
     // Annotations understood by FindBugs
-    compileOnly 'com.google.code.findbugs:annotations:3.0.1'
-    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    compileOnly Dependencies.findbugs_annotations
+    compileOnly Dependencies.findbugs_jsr305
 
-    // Used to generate documentation screenshots.
-    androidTestImplementation "tools.fastlane:screengrab:2.0.0"
+    testImplementation project(':formstest')
 
     // Testing-only dependencies
-    testImplementation "junit:junit:4.13.2"
-    testImplementation "org.mockito:mockito-core:3.7.7"
-    testImplementation 'org.mockito:mockito-inline:3.7.7'
-    testImplementation "org.mockito.kotlin:mockito-kotlin:3.1.0"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:3.2.0"
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.mockito_inline
+    testImplementation Dependencies.mockito_kotlin
 
     testImplementation(project(path: ':testshared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 
-    testImplementation "org.robolectric:robolectric:4.5.1"
+    testImplementation Dependencies.robolectric
 
-    testImplementation 'androidx.test.ext:junit:1.1.2'
-    debugImplementation project(':fragmentstest')
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
-    testImplementation "org.robolectric:shadows-multidex:4.5.1"
-    testImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
-    testImplementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.androidx_arch_core_testing
+    testImplementation Dependencies.robolectric_shadows_multidex
+    testImplementation Dependencies.okhttp3_mockwebserver
+    testImplementation Dependencies.squareup_okhttp_tls
 
     // power mock (for mocking final methods which is not handled by mockito)
-    testImplementation "org.powermock:powermock-module-junit4:2.0.9"
-    testImplementation "org.powermock:powermock-api-mockito2:2.0.9"
+    testImplementation Dependencies.powermock_module_junit4
+    testImplementation Dependencies.powermock_api_mockito2
 
-    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation Dependencies.hamcrest
 
-    testImplementation "org.json:json:20201115"
-    testImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    testImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
-    testImplementation "androidx.test:core-ktx:1.3.0"
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+    testImplementation Dependencies.json
+    testImplementation Dependencies.androidx_test_espresso_core
+    testImplementation Dependencies.androidx_test_espresso_intents
+    testImplementation Dependencies.androidx_test_core_ktx
+    testImplementation Dependencies.kotlinx_coroutines_test
 
-    testImplementation project(':formstest')
-
-    androidTestImplementation "org.mockito:mockito-android:3.7.7"
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0") {
+    // Used to generate documentation screenshots.
+    androidTestImplementation Dependencies.fastlane_screengrab
+    androidTestImplementation Dependencies.mockito_android
+    androidTestImplementation Dependencies.androidx_test_ext_junit
+    androidTestImplementation Dependencies.androidx_test_espresso_core
+    androidTestImplementation Dependencies.androidx_arch_core_testing
+    androidTestImplementation Dependencies.androidx_test_espresso_contrib
+    androidTestImplementation(Dependencies.androidx_test_espresso_intents) {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
-    androidTestImplementation "com.squareup.okhttp3:mockwebserver:${rootProject.okhttp3Version}"
+    androidTestImplementation Dependencies.okhttp3_mockwebserver
+    androidTestImplementation Dependencies.androidx_work_testing
+    androidTestImplementation Dependencies.uiautomator
 
-    androidTestImplementation "androidx.work:work-testing:2.5.0"
+    debugImplementation project(':fragmentstest')
+
+    // Real LeakCanary for debug builds only: notifications, analysis, etc
+    debugImplementation Dependencies.leakcanary
 }
 
 // Must be at bottom to prevent dependency collisions
 // https://developers.google.com/android/guides/google-services-plugin
 apply plugin: 'com.google.gms.google-services'
-
-
-

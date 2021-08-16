@@ -2,9 +2,8 @@ package org.odk.collect.android.gdrive;
 
 import android.content.Context;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.drive.Drive;
@@ -25,7 +24,6 @@ public class GoogleApiProvider {
     }
 
     public SheetsApi getSheetsApi(String account) {
-        HttpTransport transport = AndroidHttp.newCompatibleTransport();
         GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
 
         GoogleAccountCredential googleAccountCredential = GoogleAccountCredential
@@ -33,13 +31,12 @@ public class GoogleApiProvider {
                 .setBackOff(new ExponentialBackOff());
         googleAccountCredential.setSelectedAccountName(account);
 
-        return new GoogleSheetsApi(new Sheets.Builder(transport, gsonFactory, googleAccountCredential)
+        return new GoogleSheetsApi(new Sheets.Builder(new NetHttpTransport(), gsonFactory, googleAccountCredential)
                 .setApplicationName("ODK-Collect")
                 .build());
     }
 
     public DriveApi getDriveApi(String account) {
-        HttpTransport transport = AndroidHttp.newCompatibleTransport();
         GsonFactory gsonFactory = GsonFactory.getDefaultInstance();
 
         GoogleAccountCredential googleAccountCredential = GoogleAccountCredential
@@ -47,7 +44,7 @@ public class GoogleApiProvider {
                 .setBackOff(new ExponentialBackOff());
         googleAccountCredential.setSelectedAccountName(account);
 
-        return new GoogleDriveApi(new Drive.Builder(transport, gsonFactory, googleAccountCredential)
+        return new GoogleDriveApi(new Drive.Builder(new NetHttpTransport(), gsonFactory, googleAccountCredential)
                 .setApplicationName("ODK-Collect")
                 .build());
     }

@@ -1,3 +1,6 @@
+import dependencies.Dependencies
+import dependencies.Versions
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
@@ -6,11 +9,11 @@ plugins {
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion rootProject.androidCompileSdk
+    compileSdkVersion Versions.android_compile_sdk
 
     defaultConfig {
-        minSdkVersion rootProject.androidMinSdk
-        targetSdkVersion rootProject.androidTargetSdk
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -32,9 +35,8 @@ android {
 }
 
 dependencies {
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "androidx.core:core-ktx:${rootProject.coreKtxVersion}"
-    implementation 'com.google.firebase:firebase-analytics:18.0.1'
-    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.firebase_analytics
+    implementation Dependencies.firebase_crashlytics
 }
