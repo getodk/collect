@@ -43,7 +43,8 @@
         <!--/Material theme attributes-->
 
         <!-- Needed to customize the status bar color -->
-        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 
         <!-- defines the hint color for search -->
         <item name="android:textColorHint">#E3E3E3</item>
