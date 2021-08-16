@@ -12,13 +12,6 @@
         app:layout_constraintGuide_begin="@dimen/margin_standard" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,53 +91,35 @@
         android:layout_height="1dp"
         android:alpha="0.2"
         android:background="?colorOnSurface"
-        app:layout_constraintBottom_toTopOf="@+id/add_project_button_container"
+        app:layout_constraintBottom_toTopOf="@+id/add_project_button"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout
-        android:id="@+id/add_project_button_container"
-        android:layout_width="0dp"
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+        android:id="@+id/add_project_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_standard"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:paddingVertical="@dimen/margin_small"
+        android:text="@string/add_project"
+        android:textColor="?colorOnSurface"
+        app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_center"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start">
+        app:layout_constraintEnd_toStartOf="@id/about_button"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
-            android:id="@+id/add_project_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center_vertical"
-            android:text="@string/add_project"
-            android:textColor="?colorOnSurface"
-            app:icon="@drawable/ic_baseline_qr_code_scanner_24"
-            app:iconTintMode="multiply" />
-    </org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout>
-
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout
-        android:id="@+id/about_button_container"
-        android:layout_width="0dp"
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+        android:id="@+id/about_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="@dimen/margin_standard"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:paddingVertical="@dimen/margin_small"
+        android:text="@string/about_preferences"
+        android:textColor="?colorOnSurface"
+        app:icon="@drawable/ic_outline_info_24"
+        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-        app:layout_constraintStart_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toTopOf="@+id/add_project_button_container">
-
-        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
-            android:id="@+id/about_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:gravity="center_vertical"
-            android:text="@string/about_preferences"
-            android:textColor="?colorOnSurface"
-            app:icon="@drawable/ic_outline_info_24"
-            app:iconTintMode="multiply" />
-    </org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/add_project_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
