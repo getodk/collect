@@ -59,5 +59,13 @@
 
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
+
+        <!-- Sets up rounding for anything using `AlertDialog.Builder` -->
+        <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+    </style>
+
+    <style name="Theme.Collect.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="dialogCornerRadius">8dp</item>
     </style>
 </resources>
