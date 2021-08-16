@@ -43,44 +43,17 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getAppTheme() {
-        if (isMagentaEnabled()) {
-            return R.style.Theme_Collect_Magenta;
-        } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Dark;
-            } else {
-                return R.style.Theme_Collect_Light;
-            }
-        }
+        return R.style.Theme_Collect_Magenta;
     }
 
     @StyleRes
     public int getFormEntryActivityTheme() {
-        if (isMagentaEnabled()) {
-            return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
-        } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Activity_FormEntryActivity_Dark;
-            } else {
-                return R.style.Theme_Collect_Activity_FormEntryActivity_Light;
-            }
-        }
+        return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
     }
 
     @StyleRes
     public int getSettingsTheme() {
-        if (isMagentaEnabled()) {
-            return R.style.Theme_Collect_Settings_Magenta;
-        } else {
-            String theme = getPrefsTheme();
-            if (theme.equals(context.getString(R.string.app_theme_dark))) {
-                return R.style.Theme_Collect_Settings_Dark;
-            } else {
-                return R.style.Theme_Collect_Settings_Light;
-            }
-        }
+        return R.style.Theme_Collect_Settings_Magenta;
     }
 
     @StyleRes
@@ -132,10 +105,6 @@ public final class ThemeUtils {
     public boolean isDarkTheme() {
         String theme = getPrefsTheme();
         return theme.equals(context.getString(R.string.app_theme_dark));
-    }
-
-    private boolean isMagentaEnabled() {
-        return settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_MAGENTA_THEME);
     }
 
     private String getPrefsTheme() {

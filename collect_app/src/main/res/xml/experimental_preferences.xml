@@ -2,9 +2,4 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/experimental">
 
-    <SwitchPreference
-        android:key="magenta"
-        app:iconSpaceReserved="false"
-        app:title="@string/theme_magenta" />
-
 </PreferenceScreen>
