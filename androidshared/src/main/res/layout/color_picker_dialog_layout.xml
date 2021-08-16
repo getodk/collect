@@ -326,7 +326,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:hintEnabled="false"

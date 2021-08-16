@@ -60,7 +60,7 @@
                     style="@style/Widget.Collect.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="?colorSecondary"
+                    android:backgroundTint="?colorPrimary"
                     android:text="@string/configure_with_qr_code"
                     android:textAppearance="?attr/textAppearanceBody1"
                     android:textColor="@android:color/white"

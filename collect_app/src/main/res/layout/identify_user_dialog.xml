@@ -63,8 +63,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout">
+                android:layout_marginTop="@dimen/margin_extra_large">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/identity"

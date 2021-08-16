@@ -43,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/server_url"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -61,7 +60,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/username"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/url">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -79,7 +77,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
                 android:hint="@string/password"
-                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
                 app:layout_constraintTop_toBottomOf="@+id/username"
                 tools:layout_editor_absoluteX="16dp">
 
@@ -168,7 +165,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="@+id/add_button"
         app:layout_constraintEnd_toStartOf="@+id/add_button"
         app:layout_constraintTop_toTopOf="@+id/add_button" />
@@ -181,7 +177,6 @@
         android:layout_margin="@dimen/margin_extra_small"
         android:enabled="false"
         android:text="@string/add"
-        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
