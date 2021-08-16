@@ -589,8 +589,7 @@ Hashize: %2$s</string>
   <string name="app_theme">Isanganyamatsiko</string>
   <string name="theme_light">Urumuri rw\'insanganyamatsiko.</string>
   <string name="theme_dark">Umwijima w\'isanganyamatsiko.</string>
-  <string name="theme_magenta">Isanganyamatsiko rya Magenta.</string>
-  <string name="language">Ururimi</string>
+    <string name="language">Ururimi</string>
   <string name="use_device_language">Kurikiza imikorere y\'igikoresho</string>
   <string name="font_size">Ingano y\'amagambo</string>
   <string name="change_font_size">Ingano y\'amagambo</string>

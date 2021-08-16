@@ -579,8 +579,7 @@
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema terang</string>
   <string name="theme_dark">Tema gelap</string>
-  <string name="theme_magenta">Tema Magenta</string>
-  <string name="language">Bahasa</string>
+    <string name="language">Bahasa</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="font_size">Ukuran teks font</string>
   <string name="change_font_size">Ukuran teks font</string>

@@ -601,8 +601,7 @@
   <string name="app_theme">Theme</string>
   <string name="theme_light">Helles Theme</string>
   <string name="theme_dark">Dunkles Theme</string>
-  <string name="theme_magenta">Magenta Theme</string>
-  <string name="language">Sprache</string>
+    <string name="language">Sprache</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>

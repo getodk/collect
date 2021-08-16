@@ -570,8 +570,7 @@
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema chiaro</string>
   <string name="theme_dark">Tema scuro</string>
-  <string name="theme_magenta">Tema Magenta</string>
-  <string name="language">Lingua</string>
+    <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>

@@ -601,8 +601,7 @@
   <string name="app_theme">Thème</string>
   <string name="theme_light">Thème clair</string>
   <string name="theme_dark">Thème sombre</string>
-  <string name="theme_magenta">Thème Magenta</string>
-  <string name="language">Langue</string>
+    <string name="language">Langue</string>
   <string name="use_device_language">Utiliser la langue de l\'appareil</string>
   <string name="font_size">Taille de la Police</string>
   <string name="change_font_size">Taille de la Police</string>

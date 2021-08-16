@@ -594,8 +594,7 @@
   <string name="app_theme">المظهر</string>
   <string name="theme_light">مظهر فاتح</string>
   <string name="theme_dark">مظهر داكن</string>
-  <string name="theme_magenta">مظهر بنفسجي مُحمّر</string>
-  <string name="language">اللغة</string>
+    <string name="language">اللغة</string>
   <string name="use_device_language">استخدم لغة الجهاز</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>

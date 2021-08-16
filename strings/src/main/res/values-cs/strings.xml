@@ -607,8 +607,7 @@
   <string name="app_theme">Vizuální styl</string>
   <string name="theme_light">Světlý styl</string>
   <string name="theme_dark">Tmavý styl</string>
-  <string name="theme_magenta">Magenta styl</string>
-  <string name="language">Jazyk</string>
+    <string name="language">Jazyk</string>
   <string name="use_device_language">Použít jazyk zařízení</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
