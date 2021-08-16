@@ -8,7 +8,6 @@
   the specific language governing permissions and limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -44,6 +43,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/enter_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -52,6 +53,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/review_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -60,6 +63,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/send_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -68,6 +73,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/view_sent_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -76,6 +83,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/get_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -84,6 +93,8 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/manage_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="?colorSurface"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
