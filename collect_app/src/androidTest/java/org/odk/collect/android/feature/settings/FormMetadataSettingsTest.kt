@@ -115,6 +115,65 @@ class FormMetadataSettingsTest {
             .scrollToAndAssertText(deviceDetailsProvider.deviceId)
     }
 
+    @Test // https://github.com/getodk/collect/issues/4792
+    fun metadataProperties_shouldBeReloadedAfterSwitchingProjects() {
+        rule.startAtMainMenu()
+            .copyForm("metadata.xml")
+            .openProjectSettings()
+            .clickGeneralSettings()
+            .clickUserAndDeviceIdentity()
+            .clickFormMetadata()
+            .clickEmail()
+            .inputText("demo@getodk.com")
+            .clickOKOnDialog()
+            .clickPhoneNumber()
+            .inputText("123456789")
+            .clickOKOnDialog()
+            .clickUsername()
+            .inputText("Demo user")
+            .clickOKOnDialog()
+            .pressBack(UserAndDeviceIdentitySettingsPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+
+            .addAndSwitchToProject("https://second-project.com")
+            .copyForm("metadata.xml", "second-project.com")
+            .openProjectSettings()
+            .clickGeneralSettings()
+            .clickUserAndDeviceIdentity()
+            .clickFormMetadata()
+            .clickEmail()
+            .inputText("john@second-project.com")
+            .clickOKOnDialog()
+            .clickPhoneNumber()
+            .inputText("987654321")
+            .clickOKOnDialog()
+            .clickUsername()
+            .inputText("John Smith")
+            .clickOKOnDialog()
+            .pressBack(UserAndDeviceIdentitySettingsPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+
+            .clickFillBlankForm()
+            .clickOnForm("Metadata")
+            .scrollToAndAssertText("john@second-project.com")
+            .scrollToAndAssertText("987654321")
+            .scrollToAndAssertText("John Smith")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
+
+            .openProjectSettings()
+            .selectProject("Demo project")
+            .clickFillBlankForm()
+            .clickOnForm("Metadata")
+            .scrollToAndAssertText("demo@getodk.com")
+            .scrollToAndAssertText("123456789")
+            .scrollToAndAssertText("Demo user")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
+    }
+
     private class FakeDeviceDetailsProvider : DeviceDetailsProvider {
         override fun getDeviceId(): String {
             return "deviceID"
