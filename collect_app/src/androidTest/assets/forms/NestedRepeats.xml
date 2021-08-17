@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa"
+    xmlns:odk="http://www.opendatakit.org/xforms" xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>NestedRepeats</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="NestedRepeats" version="2021-08-15 B">
+                    <person jr:template="">
+                        <age />
+                        <child jr:template="">
+                            <name />
+                            <pet jr:template="">
+                                <colour />
+                            </pet>
+                        </child>
+                    </person>
+                    <person>
+                        <age />
+                        <child>
+                            <name />
+                            <pet>
+                                <colour />
+                            </pet>
+                        </child>
+                    </person>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/person/age" type="string" />
+            <bind nodeset="/data/person/child/name" type="string" />
+            <bind nodeset="/data/person/child/pet/colour" type="string" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <group ref="/data/person">
+            <label>Person</label>
+            <repeat nodeset="/data/person">
+                <input ref="/data/person/age">
+                    <label>age?</label>
+                </input>
+                <group ref="/data/person/child">
+                    <label>Child</label>
+                    <repeat nodeset="/data/person/child">
+                        <input ref="/data/person/child/name">
+                            <label>name?</label>
+                        </input>
+                        <group ref="/data/person/child/pet">
+                            <label>Pet</label>
+                            <repeat nodeset="/data/person/child/pet">
+                                <input ref="/data/person/child/pet/colour">
+                                    <label>colour?</label>
+                                </input>
+                            </repeat>
+                        </group>
+                    </repeat>
+                </group>
+            </repeat>
+        </group>
+    </h:body>
+</h:html>
