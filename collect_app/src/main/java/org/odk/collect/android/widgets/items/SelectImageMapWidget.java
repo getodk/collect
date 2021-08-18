@@ -35,7 +35,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.SelectImageMapWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -255,7 +255,7 @@ public abstract class SelectImageMapWidget extends ItemsWidget {
                     .append("</b> ");
             for (Selection selection : selections) {
                 String choiceName = getFormEntryPrompt().getSelectChoiceText(selection.choice);
-                CharSequence choiceDisplayName = StringUtils.textToHtml(choiceName);
+                CharSequence choiceDisplayName = HtmlUtils.textToHtml(choiceName);
                 stringBuilder.append(choiceDisplayName);
                 if (selections.indexOf(selection) < selections.size() - 1) {
                     stringBuilder.append(", ");

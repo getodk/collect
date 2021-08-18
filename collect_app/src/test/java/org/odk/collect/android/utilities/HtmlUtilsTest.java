@@ -10,17 +10,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class StringUtilsTest {
+public class HtmlUtilsTest {
 
     @Test
     public void textToHtml_nullBecomesEmptyString() {
-        CharSequence observed = StringUtils.textToHtml(null);
+        CharSequence observed = HtmlUtils.textToHtml(null);
         assertThat(observed, equalTo(""));
     }
 
     @Test
     public void textToHtml_shouldBeTrimmed() {
-        CharSequence observed = StringUtils.textToHtml("<p style=\"text-align:center\">Text</p>");
+        CharSequence observed = HtmlUtils.textToHtml("<p style=\"text-align:center\">Text</p>");
         assertThat(observed.toString(), equalTo("Text"));
     }
 
@@ -49,7 +49,7 @@ public class StringUtilsTest {
                 {"\\\\\\", "\\\\"}};
 
         for (String[] testCase : tests) {
-            assertEquals(testCase[1], StringUtils.markdownToHtml(testCase[0]));
+            assertEquals(testCase[1], HtmlUtils.markdownToHtml(testCase[0]));
         }
     }
 
@@ -65,7 +65,7 @@ public class StringUtilsTest {
                 {"test < 1/>", "test &lt; 1/>"}
         };
         for (String[] testCase: tests) {
-            assertEquals(testCase[1], StringUtils.markdownToHtml(testCase[0]));
+            assertEquals(testCase[1], HtmlUtils.markdownToHtml(testCase[0]));
         }
     }
 
@@ -79,7 +79,7 @@ public class StringUtilsTest {
                 "</closetag>"
         };
         for (String testCase: tests) {
-            assertEquals(testCase, StringUtils.markdownToHtml(testCase));
+            assertEquals(testCase, HtmlUtils.markdownToHtml(testCase));
         }
     }
 
@@ -90,7 +90,7 @@ public class StringUtilsTest {
         };
 
         for (String testCase: tests) {
-            assertEquals(testCase, StringUtils.textToHtml(testCase).toString());
+            assertEquals(testCase, HtmlUtils.textToHtml(testCase).toString());
         }
     }
 }

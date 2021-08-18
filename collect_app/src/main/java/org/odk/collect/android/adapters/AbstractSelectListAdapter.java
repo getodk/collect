@@ -42,7 +42,7 @@ import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
 
@@ -131,7 +131,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
     void setUpButton(TextView button, int index) {
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-        button.setText(StringUtils.textToHtml(prompt.getSelectChoiceText(filteredItems.get(index))));
+        button.setText(HtmlUtils.textToHtml(prompt.getSelectChoiceText(filteredItems.get(index))));
         button.setTag(items.indexOf(filteredItems.get(index)));
         button.setGravity(isRTL() ? Gravity.END : Gravity.START);
         button.setTextAlignment(isRTL() ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
@@ -202,7 +202,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
         private String getChoiceText(int index) {
             SelectChoice selectChoice = filteredItems.get(index);
-            return StringUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
+            return HtmlUtils.textToHtml(prompt.getSelectChoiceText(selectChoice)).toString();
         }
 
         private String getErrorMsg(File imageFile) {
