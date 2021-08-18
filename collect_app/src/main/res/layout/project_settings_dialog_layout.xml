@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
-    <com.google.android.material.button.MaterialButton
+    <org.odk.collect.android.views.MultiClickSafeButton
         android:id="@+id/general_settings_button"
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
