@@ -4,7 +4,6 @@ import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
@@ -25,14 +23,10 @@ public class PromptAutoplayer {
 
     private final AudioHelper audioHelper;
     private final ReferenceManager referenceManager;
-    private final Analytics analytics;
-    private final String formIdentifierHash;
 
-    public PromptAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager, Analytics analytics, String formIdentifierHash) {
+    public PromptAutoplayer(AudioHelper audioHelper, ReferenceManager referenceManager) {
         this.audioHelper = audioHelper;
         this.referenceManager = referenceManager;
-        this.analytics = analytics;
-        this.formIdentifierHash = formIdentifierHash;
     }
 
     public Boolean autoplayIfNeeded(FormEntryPrompt prompt) {
@@ -44,13 +38,11 @@ public class PromptAutoplayer {
             Clip promptClip = getPromptClip(prompt);
             if (promptClip != null) {
                 clipsToPlay.add(promptClip);
-                analytics.logEvent(PROMPT, "AutoplayAudioLabel", formIdentifierHash);
             }
 
             List<Clip> selectClips = getSelectClips(prompt);
             if (!selectClips.isEmpty()) {
                 clipsToPlay.addAll(selectClips);
-                analytics.logEvent(PROMPT, "AutoplayAudioChoice", formIdentifierHash);
             }
 
             if (clipsToPlay.isEmpty()) {

@@ -20,7 +20,6 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
 public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget, SelectItemClickListener {
@@ -97,7 +96,6 @@ public abstract class BaseSelectListWidget extends ItemsWidget implements MultiC
                 String audioURI = getPlayableAudioURI(questionDetails.getPrompt(), choice, getReferenceManager());
 
                 if (audioURI != null) {
-                    analytics.logEvent(PROMPT, "AudioChoice", questionDetails.getFormAnalyticsID());
                     break;
                 }
             }
