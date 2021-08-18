@@ -14,7 +14,7 @@ object StringUtils {
         return if (onlyEmojis.isNotEmpty() && !firstCharacterIsNotEmoji) {
             onlyEmojis[0]
         } else {
-            string.first().toString()
+            if (string.isEmpty()) "" else string.first().toString()
         }
     }
 

@@ -52,6 +52,11 @@ class StringUtilsTest {
     }
 
     @Test
+    fun firstCharacterOrEmoji_whenStringIsEmpty_returnsEmptyString() {
+        assertThat(firstCharacterOrEmoji(""), equalTo(""))
+    }
+
+    @Test
     fun ellipsizeBeginningTest() {
         // 50 chars
         assertEquals(
