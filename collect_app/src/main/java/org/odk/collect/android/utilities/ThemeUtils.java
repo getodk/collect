@@ -143,4 +143,9 @@ public final class ThemeUtils {
     public int getColorSecondary() {
         return getAttributeValue(R.attr.colorSecondary);
     }
+
+    @ColorInt
+    public int getColorError() {
+        return getAttributeValue(R.attr.colorError);
+    }
 }

@@ -17,5 +17,5 @@ limitations under the License.
     android:shape="rectangle">
     <stroke
         android:width="@dimen/margin_extra_small"
-        android:color="@color/highContrastHighlight" />
+        android:color="?colorSecondary" />
 </shape>

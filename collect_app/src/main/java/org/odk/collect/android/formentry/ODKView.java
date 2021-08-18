@@ -626,7 +626,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 scrollTo(qw);
 
                 ValueAnimator va = new ValueAnimator();
-                va.setIntValues(getResources().getColor(R.color.red_500), getDrawingCacheBackgroundColor());
+                va.setIntValues(new ThemeUtils(getContext()).getColorError(), getDrawingCacheBackgroundColor());
                 va.setEvaluator(new ArgbEvaluator());
                 va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
                 va.setDuration(2500);

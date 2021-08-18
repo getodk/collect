@@ -11,7 +11,7 @@
         <!--Material theme attributes-->
         <item name="colorPrimary">#E0E0E0</item>
         <item name="colorSecondary">#3e9fcc</item>
-        <item name="colorError">@color/red_500</item>
+        <item name="colorError">#F44336</item>
 
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
