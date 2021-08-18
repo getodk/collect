@@ -2,6 +2,7 @@ package org.odk.collect.android.projects
 
 import android.content.Context
 import androidx.core.content.ContextCompat
+import com.vdurmont.emoji.EmojiParser
 import org.odk.collect.android.R
 import org.odk.collect.projects.Project
 import java.net.URL
@@ -19,10 +20,16 @@ class ProjectDetailsCreator(private val context: Context) {
         }
 
         val projectIcon = if (icon.isNotBlank()) {
-            if (Character.codePointCount(icon, 0, icon.length) == 1) {
-                icon.toUpperCase(Locale.US)
+            val onlyText = EmojiParser.removeAllEmojis(icon)
+            val onlyEmojis = EmojiParser.extractEmojis(icon)
+            if (Character.codePointCount(onlyText, 0, onlyText.length) > 0) {
+                if (onlyEmojis.size > 0) {
+                    onlyEmojis[0]
+                } else {
+                    getFirstSign(icon).toUpperCase(Locale.US)
+                }
             } else {
-                getFirstSign(icon)
+                onlyEmojis[0]
             }
         } else {
             projectName.first().toUpperCase().toString()
