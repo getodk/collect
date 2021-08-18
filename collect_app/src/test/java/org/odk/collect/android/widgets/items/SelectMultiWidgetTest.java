@@ -164,24 +164,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
 
-    @Test
-    public void whenChoicesHaveAudio_logsAudioChoiceEvent() throws Exception {
-        formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withIndex("i am index")
-                .withSelectChoices(asList(
-                        new SelectChoice("1", "1"),
-                        new SelectChoice("2", "2")
-                ))
-                .withSpecialFormSelectChoiceText(asList(
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(0).first),
-                        new Pair<>(FormEntryCaption.TEXT_FORM_AUDIO, REFERENCES.get(1).first)
-                ))
-                .build();
-
-        populateRecyclerView(getWidget());
-        verify(analytics).logEvent("Prompt", "AudioChoice", "formAnalyticsID");
-    }
-
     private void overrideDependencyModule() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {

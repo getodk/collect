@@ -37,12 +37,6 @@ public class AnalyticsEvents {
     public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
 
     /**
-     * Track changes to preferences related to automatic form updates. The action should be the
-     * preference name and the label should be the new preference value.
-     */
-    public static final String AUTO_FORM_UPDATE_PREF_CHANGE = "PreferenceChange";
-
-    /**
      * Track submissions. The action should describe how it's being sent and the label should be a
      * hash of the form definition.
      */
@@ -53,12 +47,6 @@ public class AnalyticsEvents {
      * and the label should be a hash of the form definition.
      */
     public static final String SAVE_INCOMPLETE = "WidgetAttribute";
-
-    /**
-     * Track displays of widget/question types. The action should be the type of widget and
-     * the label should be a hash of the form definition.
-     */
-    public static final String PROMPT = "Prompt";
 
     /**
      * Track attempts to download a form with the same formid/version but different contents as one
@@ -117,11 +105,6 @@ public class AnalyticsEvents {
      * Tracks how many users have opted in to internal recording as their default
      */
     public static final String INTERNAL_RECORDING_OPT_IN = "InternalRecordingOptIn";
-
-    /**
-     * Tracks how often people see the URL question
-     */
-    public static final String URL_QUESTION = "UrlQuestion";
 
     /**
      * Track how many forms record background audio

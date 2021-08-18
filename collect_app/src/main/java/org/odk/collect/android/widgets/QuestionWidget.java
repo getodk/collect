@@ -62,7 +62,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.PROMPT;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
@@ -184,7 +183,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             }
             if (playableAudioURI != null) {
                 label.setAudio(playableAudioURI, audioHelper);
-                analytics.logEvent(PROMPT, "AudioLabel", questionDetails.getFormAnalyticsID());
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid media reference due to %s ", e.getMessage());

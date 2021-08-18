@@ -68,19 +68,6 @@ public class QuestionWidgetTest {
         verify(audioHelper).setAudio(audioButton, new Clip("i am index", "blah.mp3"));
     }
 
-    @Test
-    public void whenQuestionHasAudio_logsAudioLabelEvent() throws Exception {
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withIndex("i am index")
-                .withAudioURI("ref")
-                .build();
-
-        TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
-        new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
-
-        verify(analytics).logEvent("Prompt", "AudioLabel", "formAnalyticsID");
-    }
-
     private void overrideDependencyModule() throws Exception {
         ReferenceManager referenceManager = setupFakeReferenceManager(asList(new Pair<>("ref", "blah.mp3")));
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
