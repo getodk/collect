@@ -1313,6 +1313,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean moveScreen(Direction direction) {
+        closeContextMenu();
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
