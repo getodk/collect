@@ -2,7 +2,7 @@ package org.odk.collect.android.formentry.audit;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.instance.TreeReference;
-import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -26,7 +26,7 @@ import com.google.api.services.sheets.v4.model.UpdateSheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.UpdateSpreadsheetPropertiesRequest;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
-import org.odk.collect.android.utilities.StringUtils;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

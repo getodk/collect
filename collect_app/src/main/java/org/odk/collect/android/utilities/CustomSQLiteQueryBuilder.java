@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import org.odk.collect.shared.strings.StringUtils;
+
 import java.util.Arrays;
 import java.util.List;
 

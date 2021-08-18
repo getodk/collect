@@ -54,7 +54,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
-import static org.odk.collect.android.utilities.StringUtils.isBlank;
+import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
 

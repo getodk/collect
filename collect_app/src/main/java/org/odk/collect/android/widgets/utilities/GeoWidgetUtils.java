@@ -1,11 +1,12 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.odk.collect.shared.strings.StringUtils.removeEnd;
+
 import android.content.Context;
 import android.location.Location;
 
 import org.javarosa.core.model.QuestionDef;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.StringUtils;
 
 import java.text.DecimalFormat;
 
@@ -38,7 +39,7 @@ public class GeoWidgetUtils {
 
     public static String getGeoPolyAnswerToDisplay(String answer) {
         if (answer != null && !answer.isEmpty()) {
-            answer = StringUtils.removeEnd(answer.replaceAll(";\\s", ";"), ";");
+            answer = removeEnd(answer.replaceAll(";\\s", ";"), ";");
         }
         return answer;
     }

@@ -60,6 +60,8 @@ import timber.log.Timber;
 
 import static java.util.Arrays.asList;
 
+import com.google.common.base.CharMatcher;
+
 /**
  * Static methods used for common file operations.
  *
@@ -587,6 +589,14 @@ public class FileUtils {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public static String getFilenameError(String filename) {
+        String possiblyRestricted = "?:\"*|/\\<>\u0000";
+        boolean containsAt = filename.contains("@");
+        boolean containsNonAscii = CharMatcher.ascii().matchesAllOf(filename);
+        boolean containsPossiblyRestricted = CharMatcher.anyOf(possiblyRestricted).matchesAnyOf(possiblyRestricted);
+        return "Problem with project name file. Contains @: " + containsAt + ", Contains non-ascii: " + containsNonAscii + ", Contains restricted: " + containsPossiblyRestricted;
     }
 
     /** An iterator that walks over all the directories and files under a given path. */

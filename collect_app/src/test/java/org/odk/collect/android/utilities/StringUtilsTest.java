@@ -1,15 +1,13 @@
 package org.odk.collect.android.utilities;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class StringUtilsTest {
@@ -94,55 +92,5 @@ public class StringUtilsTest {
         for (String testCase: tests) {
             assertEquals(testCase, StringUtils.textToHtml(testCase).toString());
         }
-    }
-
-    @Test
-    public void ellipsizeBeginningTest() {
-        //50 chars
-        assertEquals("Lorem ipsum dolor sit amet, consectetur massa nunc",
-                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur massa nunc"));
-        //100 chars
-        assertEquals("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, risus ac cursus turpis duis",
-                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tempus, risus ac cursus turpis duis"));
-        //101 chars
-        assertEquals("...m ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus, augue a imperdiet orci aliquam",
-                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras finibus, augue a imperdiet orci aliquam"));
-        //150 chars
-        assertEquals("...it. Donec cursus condimentum sagittis. Ut condimentum efficitur libero, vitae volutpat dui nullam",
-                StringUtils.ellipsizeBeginning("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec cursus condimentum sagittis. Ut condimentum efficitur libero, vitae volutpat dui nullam"));
-    }
-
-    @Test
-    public void whenStringIsJustWhitespace_returnsTrue() {
-        assertTrue(StringUtils.isBlank(" "));
-    }
-
-    @Test
-    public void whenStringContainsWhitespace_returnsFalse() {
-        assertFalse(StringUtils.isBlank(" hello "));
-    }
-
-    @Test
-    public void whenCharSequenceContainWhitespaces_shouldTrimReturnTrimmedCharSequence() {
-        CharSequence result = StringUtils.trim("\n\t <p style=\"text-align:center\">Text</p> \t\n");
-        assertThat(result, equalTo("<p style=\"text-align:center\">Text</p>"));
-    }
-
-    @Test
-    public void whenCharSequenceContainOnlyWhitespaces_shouldTrimReturnOriginalCharSequence() {
-        CharSequence result = StringUtils.trim("\n\t \t\n");
-        assertThat(result, equalTo("\n\t \t\n"));
-    }
-
-    @Test
-    public void whenCharSequenceIsNull_shouldTrimReturnNull() {
-        CharSequence result = StringUtils.trim(null);
-        assertThat(result, equalTo(null));
-    }
-
-    @Test
-    public void whenCharSequenceIsEmpty_shouldTrimReturnEmptyCharSequence() {
-        CharSequence result = StringUtils.trim("");
-        assertThat(result, equalTo(""));
     }
 }

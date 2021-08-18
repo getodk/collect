@@ -17,8 +17,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.MultiClickGuard
-import org.odk.collect.android.utilities.StringUtils
 import org.odk.collect.androidshared.ColorPickerDialog
 import org.odk.collect.androidshared.ColorPickerViewModel
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
@@ -142,13 +142,21 @@ class ProjectDisplayPreferencesFragment :
                 try {
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + name).delete()
                 } catch (e: Exception) {
-                    Timber.e(StringUtils.getFilenameError(name))
+                    Timber.e(
+                        FileUtils.getFilenameError(
+                            name
+                        )
+                    )
                 }
 
                 try {
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + newValue).createNewFile()
                 } catch (e: Exception) {
-                    Timber.e(StringUtils.getFilenameError(newValue as String))
+                    Timber.e(
+                        FileUtils.getFilenameError(
+                            newValue as String
+                        )
+                    )
                 }
 
                 projectsRepository.save(
