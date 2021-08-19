@@ -2,20 +2,19 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Collect.Magenta" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Collect" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <!--Material theme attributes from https://material.io/develop/android/theming -->
-        <item name="colorPrimary">#3e9fcc</item>
-        <item name="colorPrimaryVariant">#00719b</item>
-        <item name="colorSecondary">#bd006b</item>
-        <item name="colorSecondaryVariant">#870040</item>
-        <item name="colorError">#D42C2C</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorError">@color/colorError</item>
         <item name="colorSurface">@color/colorSurface</item>
 
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="colorOnBackground">#000000</item>
-        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
@@ -51,13 +50,11 @@
         <item name="android:statusBarColor">?colorSurface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightStatusBar</item>
 
-        <!-- defines the hint color for search -->
-        <item name="android:textColorHint">#E3E3E3</item>
-
         <!-- Used as divider in many places. Not sure why. -->
         <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
 
-        <item name="searchViewStyle">@style/Widget.Collect.SearchView</item>
+        <!-- Remove icon from SearchView -->
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView.NoIcon</item>
 
         <!-- Always show scrollbars for a11y reasons -->
         <item name="android:fadeScrollbars">false</item>
@@ -70,19 +67,14 @@
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
     </style>
 
-    <!-- Need to duplicate these values as they gets lost due to the parent. Only needed for AlertDialog.Builder. -->
+    <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
     <style name="Theme.Collect.Dialog.Alert" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="colorPrimary">#3e9fcc</item>
-        <item name="colorSecondary">#bd006b</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
-    <style name="ShapeAppearance.Collect.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-    </style>
-
-    <style name="Widget.Collect.SearchView" parent="Widget.AppCompat.SearchView">
+    <style name="Widget.Collect.SearchView.NoIcon" parent="Widget.AppCompat.SearchView">
         <item name="searchHintIcon">@null</item>
     </style>
 </resources>

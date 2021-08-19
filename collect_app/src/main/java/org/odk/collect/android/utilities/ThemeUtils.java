@@ -43,7 +43,7 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getAppTheme() {
-        return R.style.Theme_Collect_Magenta;
+        return R.style.Theme_Collect;
     }
 
     @StyleRes
@@ -112,6 +112,11 @@ public final class ThemeUtils {
     @ColorInt
     public int getColorOnSurface() {
         return getAttributeValue(R.attr.colorOnSurface);
+    }
+
+    @ColorInt
+    public int getColorOnSurfaceLowEmphasis() {
+        return context.getResources().getColor(R.color.color_on_surface_low_emphasis);
     }
 
     @ColorInt
