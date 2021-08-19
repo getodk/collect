@@ -10,13 +10,13 @@
         <item name="colorSecondary">#bd006b</item>
         <item name="colorSecondaryVariant">#870040</item>
         <item name="colorError">#D42C2C</item>
+        <item name="colorSurface">@color/colorSurface</item>
 
-        <item name="colorSurface">#F7F7F7</item>
         <item name="colorOnPrimary">#FFFFFF</item>
         <item name="colorOnSecondary">#FFFFFF</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnError">#FFFFFF</item>
-        <item name="colorOnSurface">#000000</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
         </item>
@@ -49,7 +49,7 @@
 
         <!-- Needed to customize the status bar color -->
         <item name="android:statusBarColor">?colorSurface</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightStatusBar</item>
 
         <!-- defines the hint color for search -->
         <item name="android:textColorHint">#E3E3E3</item>
@@ -80,5 +80,9 @@
     <style name="ShapeAppearance.Collect.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="Widget.Collect.SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
     </style>
 </resources>

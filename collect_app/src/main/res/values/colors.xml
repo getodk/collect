@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSurface">#F7F7F7</color>
+    <color name="colorOnSurface">#000000</color>
+
+    <bool name="lightStatusBar">true</bool>
+</resources>
