@@ -201,7 +201,7 @@ public abstract class AppListFragment extends ListFragment {
             return;
         }
 
-        bottomSheetDialog = new BottomSheetDialog(activity, new ThemeUtils(getContext()).getBottomDialogTheme());
+        bottomSheetDialog = new BottomSheetDialog(activity);
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

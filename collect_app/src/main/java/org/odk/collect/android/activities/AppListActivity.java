@@ -286,7 +286,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     }
 
     private void showBottomSheetDialog() {
-        bottomSheetDialog = new BottomSheetDialog(this, themeUtils.getBottomDialogTheme());
+        bottomSheetDialog = new BottomSheetDialog(this);
         final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

@@ -56,11 +56,6 @@ public final class ThemeUtils {
         return R.style.Theme_Collect_Settings_Magenta;
     }
 
-    @StyleRes
-    public int getBottomDialogTheme() {
-        return isDarkTheme() ? R.style.Theme_Collect_MaterialDialogSheet_Dark : R.style.Theme_Collect_MaterialDialogSheet_Light;
-    }
-
     @DrawableRes
     public int getDivider() {
         return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;
