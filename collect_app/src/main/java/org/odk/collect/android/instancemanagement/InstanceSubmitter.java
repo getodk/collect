@@ -25,16 +25,13 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.shared.strings.Md5;
 
-import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.CUSTOM_ENDPOINT_SUB;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
@@ -121,12 +118,6 @@ public class InstanceSubmitter {
                         "HTTP-Sheets auto" : "HTTP auto";
                 String label = Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion());
                 analytics.logEvent(SUBMISSION, action, label);
-
-                String submissionEndpoint = generalSettings.getString(ProjectKeys.KEY_SUBMISSION_URL);
-                if (!submissionEndpoint.equals(TranslationHandler.getString(Collect.getInstance(), R.string.default_odk_submission))) {
-                    String submissionEndpointHash = Md5.getMd5Hash(new ByteArrayInputStream(submissionEndpoint.getBytes()));
-                    analytics.logEvent(CUSTOM_ENDPOINT_SUB, submissionEndpointHash);
-                }
             } catch (UploadException e) {
                 Timber.d(e);
                 anyFailure = true;
