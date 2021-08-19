@@ -13,6 +13,7 @@ import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.openrosa.HttpGetResult;
 import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
+import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.shared.strings.Md5;
 
@@ -34,9 +35,6 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     private static final String HOST = "server.example.com";
 
-    private String formListPath = "/formList";
-    private String submissionPath = "/submission";
-
     private final List<FormManifestEntry> forms = new ArrayList<>();
     private String username;
     private String password;
@@ -55,7 +53,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             return new HttpGetResult(null, new HashMap<>(), "Trying to connect to incorrect server: " + uri.getHost(), 410);
         } else if (credentialsIncorrect(credentials)) {
             return new HttpGetResult(null, new HashMap<>(), "", 401);
-        } else if (uri.getPath().equals(formListPath)) {
+        } else if (uri.getPath().equals(OpenRosaConstants.FORM_LIST)) {
             return new HttpGetResult(getFormListResponse(), getStandardHeaders(), "", 200);
         } else if (uri.getPath().equals("/form")) {
             if (fetchingFormsError) {
@@ -79,7 +77,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             return new HttpHeadResult(410, new CaseInsensitiveEmptyHeaders());
         } else if (credentialsIncorrect(credentials)) {
             return new HttpHeadResult(401, new CaseInsensitiveEmptyHeaders());
-        } else if (uri.getPath().equals(submissionPath)) {
+        } else if (uri.getPath().equals(OpenRosaConstants.SUBMISSION)) {
             HashMap<String, String> headers = getStandardHeaders();
             headers.put("x-openrosa-accept-content-length", "10485760");
 
@@ -100,19 +98,11 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             return new HttpPostResult("Trying to connect to incorrect server: " + uri.getHost(), 410, "");
         } else if (credentialsIncorrect(credentials)) {
             return new HttpPostResult("", 401, "");
-        } else if (uri.getPath().equals(submissionPath)) {
+        } else if (uri.getPath().equals(OpenRosaConstants.SUBMISSION)) {
             return new HttpPostResult("", 201, "");
         } else {
             return new HttpPostResult("", 404, "");
         }
-    }
-
-    public void setFormListPath(String path) {
-        formListPath = path;
-    }
-
-    public void setFormSubmissionPath(String path) {
-        submissionPath = path;
     }
 
     public void setCredentials(String username, String password) {

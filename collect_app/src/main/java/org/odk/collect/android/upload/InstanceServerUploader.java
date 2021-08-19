@@ -299,6 +299,6 @@ public class InstanceServerUploader extends InstanceUploader {
             serverBase = serverBase.substring(0, serverBase.length() - 1);
         }
 
-        return serverBase + "/submission";
+        return serverBase + OpenRosaConstants.SUBMISSION;
     }
 }

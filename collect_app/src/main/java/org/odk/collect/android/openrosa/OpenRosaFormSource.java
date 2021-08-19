@@ -149,7 +149,7 @@ public class OpenRosaFormSource implements FormSource {
             downloadListUrl = downloadListUrl.substring(0, downloadListUrl.length() - 1);
         }
 
-        downloadListUrl += "/formList";
+        downloadListUrl += OpenRosaConstants.FORM_LIST;
         return downloadListUrl;
     }
 
