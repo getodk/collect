@@ -338,10 +338,6 @@
   <string name="change_username">ODK Username</string>
   <string name="password">Wachtwoord</string>
   <string name="change_password">Wachtwoord</string>
-  <string name="change_formlist_url">Form List Path (toegevoegd aan Server URL)</string>
-  <string name="change_submission_url">Submission Path (toegevoegd aan Server URL)</string>
-  <string name="formlist_url">Form List Path</string>
-  <string name="submission_url">Submission Path</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Google Account</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

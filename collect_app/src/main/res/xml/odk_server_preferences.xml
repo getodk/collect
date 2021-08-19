@@ -19,12 +19,4 @@
         android:key="password"
         android:title="@string/password"
         app:iconSpaceReserved="false" />
-
-    <Preference
-        android:key="custom_server_paths"
-        android:persistent="false"
-        android:summary="@string/legacy_custom_server_paths_summary"
-        android:title="@string/custom_server_paths"
-        app:iconSpaceReserved="false" />
-
 </PreferenceScreen>

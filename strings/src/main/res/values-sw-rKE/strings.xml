@@ -276,10 +276,6 @@
   <string name="change_username">Jina la mtumiaji</string>
   <string name="password">Thibitisho</string>
   <string name="change_password">Nywila ya ODK</string>
-  <string name="change_formlist_url">Njia ya orodha ya Fomu (imeelekezwa URL)</string>
-  <string name="change_submission_url">Njia ya Kuwasilisha (imeelekezwa URL)</string>
-  <string name="formlist_url">Njia ya orodha ya fomu</string>
-  <string name="submission_url">Njia ya kuwasilisha</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

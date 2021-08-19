@@ -381,10 +381,6 @@
   <string name="change_username">Emri i Përdoruesit</string>
   <string name="password">Fjalëkalimi</string>
   <string name="change_password">Fjalëkalimi</string>
-  <string name="change_formlist_url">Adresa për listën e formularëve (në fund të URL)</string>
-  <string name="change_submission_url">Adresa për dërgimin (në fund të URL)</string>
-  <string name="formlist_url">Adresa për listën e formave</string>
-  <string name="submission_url">Adresa për dërgimin</string>
   <string name="selected_google_account_text">Llogaria në Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

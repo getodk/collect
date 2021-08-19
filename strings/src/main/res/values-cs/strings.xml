@@ -598,12 +598,6 @@
   <string name="change_password">Heslo do ODK</string>
   <string name="password_error_whitespace">Počáteční nebo koncové mezery v heslech nejsou povoleny </string>
   <string name="username_error_whitespace">Počáteční nebo koncové mezery v uživatelských jménech nejsou povoleny</string>
-  <string name="custom_server_paths">Vlastní cesty serveru</string>
-  <string name="legacy_custom_server_paths_summary">Bude odebráno v budoucí verzi. Použijte prosím / formList a / odeslání  na váš server.</string>
-  <string name="change_formlist_url">Cesta k seznamu dotazníků (přidat k URL)</string>
-  <string name="change_submission_url">Cesta pro odeslání (přidat k URL)</string>
-  <string name="formlist_url">Cesta k seznamu dotazníků</string>
-  <string name="submission_url">Cesta pro odeslání</string>
   <string name="server_platform_google_sheets">Disk Google, Tabulky Google</string>
   <string name="selected_google_account_text">Účet Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

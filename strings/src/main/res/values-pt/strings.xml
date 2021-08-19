@@ -565,12 +565,6 @@ Escolher Imagem</string>
   <string name="change_password">Senha</string>
   <string name="password_error_whitespace">Espaços em branco antes e depois de senhas não são permitidos</string>
   <string name="username_error_whitespace">Espaços em branco antes e depois de nomes de usuários não são permitidos</string>
-  <string name="custom_server_paths">Caminhos (paths) personalizados do servidor</string>
-  <string name="legacy_custom_server_paths_summary">Será removido em uma versão futura. Por favor, use /formList e /submission no seu servidor.</string>
-  <string name="change_formlist_url">Caminho para listagem de formulários (adicionado do URL do Servidor)</string>
-  <string name="change_submission_url">Caminho para submeter (adicionado do URL do Servidor)</string>
-  <string name="formlist_url">Caminho para lista de formulários</string>
-  <string name="submission_url">Caminho para submeter</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Conta Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

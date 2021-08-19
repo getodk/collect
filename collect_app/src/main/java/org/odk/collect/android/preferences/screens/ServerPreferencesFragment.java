@@ -41,7 +41,6 @@ import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.shared.strings.Md5;
@@ -53,10 +52,8 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORMLIST_URL;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SUBMISSION_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
 public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
@@ -144,15 +141,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
 
         passwordPreference.setOnBindEditTextListener(editText -> {
             editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
-        });
-
-        findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
-            if (MultiClickGuard.allowClick(getClass().getName())) {
-                displayPreferences(new CustomServerPathsPreferencesFragment());
-                return true;
-            } else {
-                return false;
-            }
         });
     }
 
@@ -255,10 +243,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                         ToastUtils.showShortToast(R.string.url_error);
                         return false;
                     }
-                    break;
-                case KEY_FORMLIST_URL:
-                case KEY_SUBMISSION_URL:
-                    preference.setSummary(newValue.toString());
                     break;
             }
             return true;

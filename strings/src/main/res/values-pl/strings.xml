@@ -539,10 +539,6 @@
   <string name="change_password">Hasło ODK</string>
   <string name="password_error_whitespace">Spacje na początku lub na końcu hasła są niedozwolone</string>
   <string name="username_error_whitespace">Spacje na początku lub na końcu nazwy użytkownika są niedozwolone</string>
-  <string name="change_formlist_url">Ścieżka do listy formularzy (dołączana do URL)</string>
-  <string name="change_submission_url">Ścieżka zgłoszeń (dołączana do URL)</string>
-  <string name="formlist_url">Ścieżka do listy formularzy</string>
-  <string name="submission_url">Ścieżka zgłoszeń</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Konto Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

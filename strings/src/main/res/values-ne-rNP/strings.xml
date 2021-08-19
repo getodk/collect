@@ -343,10 +343,6 @@
   <string name="change_password">ODK पासवर्ड </string>
   <string name="password_error_whitespace">पासवर्डमा खाली स्पेस हुनु हुँदैन ।</string>
   <string name="username_error_whitespace">प्रयोगकर्ता नाममा खाली स्पेस हुनु हुँदैन ।</string>
-  <string name="change_formlist_url">फारम सूचीको मार्ग (URL मा जोडिसकिएको छ )</string>
-  <string name="change_submission_url">बुझाईएको वस्तुको मार्ग (URL मा जोडिसकिएको छ )</string>
-  <string name="formlist_url">फारम सूचीको मार्ग </string>
-  <string name="submission_url">बुझाईएको वस्तुको मार्ग</string>
   <string name="server_platform_google_sheets">गुगल ड्राइभ, गुगल सिट्स</string>
   <string name="selected_google_account_text">गुगल एकाउण्ट</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

@@ -570,12 +570,6 @@
   <string name="change_password">ODK パスワード</string>
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
-  <string name="custom_server_paths">カスタムのサーバーパス</string>
-  <string name="legacy_custom_server_paths_summary">将来のバージョンでは削除されます。 お使いのサーバーでは /formList と /submission を使用してください。</string>
-  <string name="change_formlist_url">フォーム一覧のパス (URLに追加されます)</string>
-  <string name="change_submission_url">提出パス (URLに追加されます)</string>
-  <string name="formlist_url">フォーム一覧のパス</string>
-  <string name="submission_url">送信パス</string>
   <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
   <string name="selected_google_account_text">Google アカウント</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

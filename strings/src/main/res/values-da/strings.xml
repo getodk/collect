@@ -394,10 +394,6 @@
   <string name="change_username">ODK brugernavn</string>
   <string name="password">Adgangskode</string>
   <string name="change_password">ODK kodeord</string>
-  <string name="change_formlist_url">Sti til formularoverblik(tilføjet til webadresse) </string>
-  <string name="change_submission_url">Stil til indberetningsdata (tilføjet til webadresse)</string>
-  <string name="formlist_url">Sti til formularoverblik</string>
-  <string name="submission_url">Sti til indberetningsdata</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Google-konto</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

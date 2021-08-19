@@ -330,10 +330,6 @@
   <string name="change_password">รหัสผ่าน ODK</string>
   <string name="password_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังรหัสผ่าน</string>
   <string name="username_error_whitespace">ไม่สามารถใช้ช่องว่างนำหน้าและตามหลังชื่อผู้ใช้</string>
-  <string name="change_formlist_url">Form list path (appended to URL)</string>
-  <string name="change_submission_url">Submission path (appended to URL)</string>
-  <string name="formlist_url">Form list path</string>
-  <string name="submission_url">Submission path</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">บัญชีกูเกิล</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

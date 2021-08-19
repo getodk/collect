@@ -718,12 +718,6 @@
     <string name="change_password">ODK Password</string>
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
-    <string name="custom_server_paths">Custom server paths</string>
-    <string name="legacy_custom_server_paths_summary">Will be removed in a future version. Please use /formList and /submission on your server.</string>
-    <string name="change_formlist_url">Form list path (appended to URL)</string>
-    <string name="change_submission_url">Submission path (appended to URL)</string>
-    <string name="formlist_url">Form list path</string>
-    <string name="submission_url">Submission path</string>
 
     <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
     <string name="selected_google_account_text">Google account</string>

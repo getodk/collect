@@ -240,10 +240,6 @@
   <string name="change_username">ODK naudotojo vardas</string>
   <string name="password">Slaptažodis</string>
   <string name="change_password">Slaptažodis</string>
-  <string name="change_formlist_url">Formų sąrašo kelias (pridėtas prie serverio URL)</string>
-  <string name="change_submission_url">Pateikimo kelias (pridėtas prie serverio URL)</string>
-  <string name="formlist_url">Formų sąrašo kelias</string>
-  <string name="submission_url">Pateikimo kelias</string>
   <string name="selected_google_account_text">Google sąskaita</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

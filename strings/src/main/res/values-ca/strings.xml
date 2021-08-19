@@ -332,10 +332,6 @@
   <string name="change_password">Clau d\'accés ODK</string>
   <string name="password_error_whitespace">No es permeten espais davant o darrera una clau d\'accés</string>
   <string name="username_error_whitespace">No es permeten espais davant o darrera un nom d\'usuari</string>
-  <string name="change_formlist_url">Camí a carpeta de formularis (afegit a URL servidor)</string>
-  <string name="change_submission_url">Carpeta presentacions (afegit URL servidor)</string>
-  <string name="formlist_url">Carpeta de formularis</string>
-  <string name="submission_url">Carpeta de presentacions</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Compte Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

@@ -251,10 +251,6 @@
   <string name="change_username">ODK استعمال کرنے والے کا نام</string>
   <string name="password">شناختی لفظ (Password)</string>
   <string name="change_password">  ODK  کا شناختی لفظ (Password)</string>
-  <string name="change_formlist_url">فارم لیسٹ کا راستہ (ملحقہ ہو آر ایل)</string>
-  <string name="change_submission_url">حوالگی کا راستہ </string>
-  <string name="formlist_url">فارم فہرست کا پاتھ</string>
-  <string name="submission_url">سبمشن کا پاتھ</string>
   <string name="selected_google_account_text">گوگل اکاونٹ</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

@@ -249,10 +249,6 @@
   <string name="change_username">ODK အသုံးပြုသူအမည်</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
   <string name="change_password">ODK စကားဝှက်</string>
-  <string name="change_formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ (appended to Server URL)</string>
-  <string name="change_submission_url">ထည့္သြင္းရမည့္ေနရာ(appended to Server URL)</string>
-  <string name="formlist_url">ပံုစံစာရင္းရိွသည့္ေနရာ</string>
-  <string name="submission_url">ထည့္သြင္းရမည့္ေနရာ</string>
   <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

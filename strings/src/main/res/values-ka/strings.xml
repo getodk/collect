@@ -292,10 +292,6 @@
   <string name="change_username">ODK-ის მომხმარებლის სახელი</string>
   <string name="password">პაროლი</string>
   <string name="change_password">პაროლი</string>
-  <string name="change_formlist_url">ბმული ფორმების ჩამონათვალზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="change_submission_url">ბმული დადასტურებულ ფორმებზე (დაემატოს სერვერის ბმულს)</string>
-  <string name="formlist_url">ბმული ფორმების ჩამონათვალზე</string>
-  <string name="submission_url">ბმული დადასტურებულ ფორმებზე</string>
   <string name="selected_google_account_text">Google ექაუნთი</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

@@ -315,8 +315,6 @@
   <string name="change_username">اسم کاربری</string>
   <string name="password">پسورد</string>
   <string name="change_password">پسورد</string>
-  <string name="change_formlist_url">شیوه لیست فورم (به آدرس وب سایت ضمیمه گردیده است)</string>
-  <string name="formlist_url">شیوه لیست فورم</string>
   <string name="server_platform_google_sheets">گوگل درایو، گوگل شیت</string>
   <string name="selected_google_account_text">حساب کاربری گوگل</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

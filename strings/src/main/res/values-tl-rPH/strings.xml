@@ -99,10 +99,6 @@
   <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
   <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
-  <string name="change_formlist_url">Form List Path (appended to Server URL)</string>
-    <string name="change_submission_url">Submission Path (appended to Server URL)</string>
-  <string name="formlist_url">Form List Path</string>
-  <string name="submission_url">Submission Path</string>
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>
   <string name="form_download_progress">%1$s. Kinukuha ang talaksang media : %2$s of %3$s</string>
