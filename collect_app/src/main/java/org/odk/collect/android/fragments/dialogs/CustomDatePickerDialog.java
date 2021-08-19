@@ -19,13 +19,13 @@ package org.odk.collect.android.fragments.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
