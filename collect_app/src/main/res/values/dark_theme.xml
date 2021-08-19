@@ -63,30 +63,4 @@
         -->
         <item name="android:tintMode" tools:targetApi="21">src_in</item>
     </style>
-
-    <style name="Theme.Collect.Dark.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">?attr/colorSecondary</item>
-        <item name="android:background">?attr/colorSurface</item>
-        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-        <item name="dialogCornerRadius">8dp</item>
-    </style>
-
-    <style name="Theme.Collect.Dark.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">?attr/colorSecondary</item>
-        <item name="android:background">?attr/colorSurface</item>
-        <item name="dialogCornerRadius">8dp</item>
-    </style>
-
-    <style name="Theme.Collect.Dark.Spinner.DatePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
-        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
-    </style>
-
-    <style name="Theme.Collect.Dark.Spinner.TimePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
-        <item name="android:timePickerStyle">@style/Theme.Collect.Dark.Spinner.TimePicker</item>
-    </style>
-
-    <style name="Theme.Collect.Dark.Spinner.TimePicker" parent="android:Widget.Material.TimePicker">
-        <item name="android:timePickerMode">spinner</item>
-    </style>
 </resources>
