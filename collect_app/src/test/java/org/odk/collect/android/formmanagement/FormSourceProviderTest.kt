@@ -18,13 +18,11 @@ class FormSourceProviderTest {
         val formSourceProvider = FormSourceProvider(settingsProvider, mock())
 
         settings.save(ProjectKeys.KEY_SERVER_URL, "http://example.com")
-        settings.save(ProjectKeys.KEY_FORMLIST_URL, "/a-path")
         settings.save(ProjectKeys.KEY_USERNAME, "user")
         settings.save(ProjectKeys.KEY_PASSWORD, "pass")
         val formSource = formSourceProvider.get("projectId") as OpenRosaFormSource
 
         assertThat(formSource.serverURL, `is`("http://example.com"))
-        assertThat(formSource.formListPath, `is`("/a-path"))
         assertThat(formSource.webCredentialsUtils.userNameFromPreferences, `is`("user"))
         assertThat(formSource.webCredentialsUtils.passwordFromPreferences, `is`("pass"))
     }
