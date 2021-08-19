@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
 
@@ -27,7 +28,7 @@ public class ServerAuthDialogFragmentTest {
         generalSettings.save(ProjectKeys.KEY_USERNAME, "Alpen");
         generalSettings.save(ProjectKeys.KEY_PASSWORD, "swiss");
 
-        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class, R.style.Theme_Collect_Light);
+        FragmentScenario<ServerAuthDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
@@ -40,7 +41,7 @@ public class ServerAuthDialogFragmentTest {
 
     @Test
     public void clickingOK_savesUsernameAndPasswordToGeneralPrefs() {
-        FragmentScenario<ServerAuthDialogFragment> scenario = RobolectricHelpers.launchDialogFragment(ServerAuthDialogFragment.class, R.style.Theme_Collect_Light);
+        FragmentScenario<ServerAuthDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);

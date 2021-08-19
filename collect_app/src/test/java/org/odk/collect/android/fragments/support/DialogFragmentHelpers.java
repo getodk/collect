@@ -1,5 +1,12 @@
 package org.odk.collect.android.fragments.support;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.NumberPicker;
@@ -19,13 +26,6 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
-
 public class DialogFragmentHelpers {
 
     private DialogFragmentHelpers() {
@@ -43,7 +43,6 @@ public class DialogFragmentHelpers {
 
     public static Bundle getDialogFragmentArguments(DatePickerDetails datePickerDetails) {
         Bundle bundle = new Bundle();
-        bundle.putInt(DateTimeWidgetUtils.DIALOG_THEME, R.style.Theme_Collect_Light);
         bundle.putSerializable(DateTimeWidgetUtils.DATE, new LocalDateTime().withDate(2020, 5, 12));
         bundle.putSerializable(DateTimeWidgetUtils.DATE_PICKER_DETAILS, datePickerDetails);
         return bundle;
@@ -147,7 +146,7 @@ public class DialogFragmentHelpers {
         @Override
         protected void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            setTheme(R.style.Theme_Collect_Light);  // Needed for androidx.appcompat.app.AlertDialog
+            setTheme(R.style.Theme_DialogFragmentTest);  // Needed for androidx.appcompat.app.AlertDialog
         }
     }
 }

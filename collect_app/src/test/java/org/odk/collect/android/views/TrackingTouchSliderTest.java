@@ -9,7 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.android.R;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_UP;
@@ -23,7 +23,7 @@ public class TrackingTouchSliderTest {
 
     @Before
     public void setUp() {
-        CollectHelpers.createThemedContext();
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_MaterialComponents);
         LinearLayout linearLayout = new LinearLayout(ApplicationProvider.getApplicationContext());
         slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext(), null);
 

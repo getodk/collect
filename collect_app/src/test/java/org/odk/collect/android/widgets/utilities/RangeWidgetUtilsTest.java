@@ -1,5 +1,15 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,17 +32,6 @@ import org.robolectric.shadows.ShadowToast;
 
 import java.math.BigDecimal;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.CollectHelpers.createThemedContext;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnlyAndQuestionDef;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-
 @RunWith(AndroidJUnit4.class)
 public class RangeWidgetUtilsTest {
     private static final String VERTICAL_APPEARANCE = "vertical";
@@ -45,7 +44,7 @@ public class RangeWidgetUtilsTest {
 
     @Before
     public void setup() {
-        createThemedContext();
+        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_MaterialComponents);
         slider = new TrackingTouchSlider(ApplicationProvider.getApplicationContext(), null);
         sampleTextView1 = new TextView(ApplicationProvider.getApplicationContext());
         sampleTextView2 = new TextView(ApplicationProvider.getApplicationContext());
