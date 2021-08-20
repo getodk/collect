@@ -48,12 +48,12 @@ android {
 
 dependencies {
     implementation project(':strings')
+    implementation project(':shared')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment_ktx
-    implementation project(path: ':shared')
 
     testImplementation project(':testshared')
     testImplementation Dependencies.junit

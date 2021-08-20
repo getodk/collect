@@ -14,7 +14,7 @@ java {
 
 dependencies {
     implementation Dependencies.kotlin_stdlib
-    implementation ("com.vdurmont:emoji-java:5.1.1")
+    implementation Dependencies.emoji_java
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
