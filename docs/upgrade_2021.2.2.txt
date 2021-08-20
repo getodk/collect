@@ -340,8 +340,8 @@
 	deleted:    collect_app/src/main/java/org/odk/collect/android/external/ExternalDataUtil.java
 	new file:   collect_app/src/main/java/org/odk/collect/android/external/FormUriActivity.kt
 	new file:   collect_app/src/main/java/org/odk/collect/android/external/FormsContract.java
-ign	new file:   collect_app/src/main/java/org/odk/collect/android/external/FormsProvider.java
-ign	new file:   collect_app/src/main/java/org/odk/collect/android/external/InstanceProvider.java
+	new file:   collect_app/src/main/java/org/odk/collect/android/external/FormsProvider.java
+	new file:   collect_app/src/main/java/org/odk/collect/android/external/InstanceProvider.java
 	new file:   collect_app/src/main/java/org/odk/collect/android/external/InstancesContract.java
 	renamed:    collect_app/src/main/java/org/odk/collect/android/external/ExternalAnswerResolver.java -> collect_app/src/main/java/org/odk/collect/android/externaldata/ExternalAnswerResolver.java
 	renamed:    collect_app/src/main/java/org/odk/collect/android/external/ExternalAppsUtils.java -> collect_app/src/main/java/org/odk/collect/android/externaldata/ExternalAppsUtils.java
