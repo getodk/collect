@@ -113,6 +113,10 @@ android {
             applicationId "org.smap.smapTask.android.stl"
             versionName "6.503-stl"
         }
+        ljs {
+            applicationId "org.smap.smapTask.android.ljs"
+            versionName "6.503-ljs"
+        }
     }
 
     buildTypes {
