@@ -592,12 +592,6 @@
   <string name="change_password">Mot de passe ODK</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom d\'utilisateur</string>
-  <string name="custom_server_paths">Chemins d\'accès au serveur personnalisés</string>
-  <string name="legacy_custom_server_paths_summary">Sera supprimé dans une prochaine version. Veuillez utiliser /formList et /submission sur votre serveur.</string>
-  <string name="change_formlist_url">Chemin de la liste de formulaires (ajouté à l\'URL du serveur)</string>
-  <string name="change_submission_url">Chemin de soumission (ajouté à l\'URL du serveur)</string>
-  <string name="formlist_url">Chemin de la liste de formulaires</string>
-  <string name="submission_url">Chemin de soumission</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Compte Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

@@ -573,12 +573,6 @@
   <string name="change_password">ODK salasana</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
-  <string name="custom_server_paths">Mukautetut palvelinpolut</string>
-  <string name="legacy_custom_server_paths_summary">Poistetaan tulevassa versiossa. Ole hyvä ja käytä palvelimellasi alapolkuja /formList ja /submission.</string>
-  <string name="change_formlist_url">Lomakkeiden listan polku (lisätään URL:ään)</string>
-  <string name="change_submission_url">Lähetettävien lomakkeiden polku (lisätään URL:ään)</string>
-  <string name="formlist_url">Lomakelistauksen polku</string>
-  <string name="submission_url">Lähetettävien lomakkeiden polku</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Google-tili</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

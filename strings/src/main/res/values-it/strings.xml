@@ -561,11 +561,6 @@
   <string name="change_password">Password ODK</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
-  <string name="custom_server_paths">Percorsi server personalizzati</string>
-  <string name="change_formlist_url">Percorso Elenco Moduli (allegato alla URL del server)</string>
-  <string name="change_submission_url">Luogo di consegna (appended to Server URL)</string>
-  <string name="formlist_url">Percorso Elenco Moduli</string>
-  <string name="submission_url">Luogo di consegna</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Account Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

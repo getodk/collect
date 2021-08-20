@@ -592,12 +592,6 @@
   <string name="change_password">ODK Passwort</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
-  <string name="custom_server_paths">Benutzerdefinierte Serverpfade</string>
-  <string name="legacy_custom_server_paths_summary">Wird in einer zukünftigen Version entfernt. Bitte benutzen Sie /formList und /submission auf Ihrem Server. </string>
-  <string name="change_formlist_url">Formularlisten-Pfad (der Server-URL angehängt)</string>
-  <string name="change_submission_url">Übermittlungspfad (der Server-URL angehängt)</string>
-  <string name="formlist_url">Formularlisten-Pfad</string>
-  <string name="submission_url">Übermittlungspfad</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Google-Konto</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

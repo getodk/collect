@@ -264,10 +264,6 @@
   <string name="change_username">用户名</string>
   <string name="password">密码</string>
   <string name="change_password">密码</string>
-  <string name="change_formlist_url">表格列表路径 (附加到服务器URL之后)</string>
-  <string name="change_submission_url">提交路径 (附加到服务器URL之后)</string>
-  <string name="formlist_url">表格列表路径</string>
-  <string name="submission_url">提交路径</string>
   <string name="selected_google_account_text">Google账号</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

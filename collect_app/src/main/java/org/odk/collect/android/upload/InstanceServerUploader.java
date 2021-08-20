@@ -299,13 +299,6 @@ public class InstanceServerUploader extends InstanceUploader {
             serverBase = serverBase.substring(0, serverBase.length() - 1);
         }
 
-        // NOTE: /submission must not be translated! It is the well-known path on the server.
-        String submissionPath = generalSettings.getString(ProjectKeys.KEY_SUBMISSION_URL);
-
-        if (!submissionPath.startsWith(URL_PATH_SEP)) {
-            submissionPath = URL_PATH_SEP + submissionPath;
-        }
-
-        return serverBase + submissionPath;
+        return serverBase + OpenRosaConstants.SUBMISSION;
     }
 }

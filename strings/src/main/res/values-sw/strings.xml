@@ -485,10 +485,6 @@
   <string name="change_password">Nenosiri la ODK</string>
   <string name="password_error_whitespace">Nafasi za wazi kabla au baada ya nywila \"neno la siri\" hairuhusiwi</string>
   <string name="username_error_whitespace">Nafasi za wazi kabla au baada ya jina la mtumiaji haziruhusiwi</string>
-  <string name="change_formlist_url">Orodhesha njia ya Fomu (iliyotumwa kwenye URL)</string>
-  <string name="change_submission_url">Njia ya kuwasilisha (iliyotumwa kwenye URL)</string>
-  <string name="formlist_url">Njia ya orodha ya fomu</string>
-  <string name="submission_url">Njia ya kuwasilisha </string>
   <string name="server_platform_google_sheets">Hifadhi ya Google ,makaratasi ya google</string>
   <string name="selected_google_account_text">Akaunti ya Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

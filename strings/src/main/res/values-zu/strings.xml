@@ -257,10 +257,6 @@
   <string name="change_username">igamamfihlo le ODK</string>
   <string name="password">Inombolomfihlo</string>
   <string name="change_password">Inombolomfihlo ye ODK</string>
-  <string name="change_formlist_url">Uhla lendlela yefomu (appended to URL)</string>
-  <string name="change_submission_url">Indlela yokuhambisa  (appended to URL)</string>
-  <string name="formlist_url">Uhla lendlela yefomu</string>
-  <string name="submission_url">Indlela yokuthumela</string>
   <string name="selected_google_account_text">akhawunti Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

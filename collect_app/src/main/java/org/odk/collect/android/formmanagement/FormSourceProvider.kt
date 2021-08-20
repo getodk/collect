@@ -18,11 +18,9 @@ class FormSourceProvider(
         val generalSettings = settingsProvider.getGeneralSettings(projectId)
 
         val serverURL = generalSettings.getString(ProjectKeys.KEY_SERVER_URL)
-        val formListPath = generalSettings.getString(ProjectKeys.KEY_FORMLIST_URL)
 
         return OpenRosaFormSource(
             serverURL,
-            formListPath,
             openRosaHttpInterface,
             WebCredentialsUtils(generalSettings),
             OpenRosaResponseParserImpl()

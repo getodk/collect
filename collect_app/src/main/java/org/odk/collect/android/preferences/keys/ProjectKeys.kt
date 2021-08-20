@@ -15,10 +15,6 @@ object ProjectKeys {
     const val KEY_USERNAME = "username"
     const val KEY_PASSWORD = "password"
 
-    // custom_server_paths_preferences.xml
-    const val KEY_FORMLIST_URL = "formlist_url"
-    const val KEY_SUBMISSION_URL = "submission_url"
-
     // google_preferences.xml
     const val KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account"
     const val KEY_GOOGLE_SHEETS_URL = "google_sheets_url"
@@ -126,11 +122,6 @@ object ProjectKeys {
             hashMap[KEY_GOOGLE_SHEETS_URL] = ""
             // identity_preferences.xml
             hashMap[KEY_ANALYTICS] = true
-            // custom_server_paths_preferenceshs_preferences.xml
-            hashMap[KEY_FORMLIST_URL] =
-                Collect.getInstance().getString(R.string.default_odk_formlist)
-            hashMap[KEY_SUBMISSION_URL] =
-                Collect.getInstance().getString(R.string.default_odk_submission)
             // server_preferences.xml
             hashMap[KEY_PROTOCOL] = PROTOCOL_SERVER
             // user_interface_preferences.xml

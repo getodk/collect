@@ -331,10 +331,6 @@
   <string name="change_password">ODk geslo</string>
   <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
   <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
-  <string name="change_formlist_url">Pot seznama obrazcev (dodana URL)</string>
-  <string name="change_submission_url">Pot prispevkov (dodana URL)</string>
-  <string name="formlist_url">Pot seznama obrazcev</string>
-  <string name="submission_url">Pot prispevkov</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Goggle račun</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

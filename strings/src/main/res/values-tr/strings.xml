@@ -216,10 +216,6 @@
   <string name="change_username">ODK Kullanici Adi</string>
   <string name="password">Şifre</string>
   <string name="change_password">ODK Şifresi</string>
-  <string name="change_formlist_url">Form liste yolu(URL\'ye eklenmiş)</string>
-  <string name="change_submission_url">Gönderim yolu( URL ye eklenmiş)</string>
-  <string name="formlist_url">Form listesi yolu</string>
-  <string name="submission_url">Gönderim yolu</string>
   <string name="selected_google_account_text">Google account</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

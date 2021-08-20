@@ -279,10 +279,6 @@
   <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="change_password">ລະຫັດຜ່ານ ODK</string>
-  <string name="change_formlist_url">​ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="change_submission_url">​ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ (ເພີ່ມເຕີມໃສ່ URL)</string>
-  <string name="formlist_url">ບ່ອນ​ເກັບ​ລາຍ​ການແບບຟອມ</string>
-  <string name="submission_url">ບ່ອນ​ສົ່ງ​ຂໍ້​ມູນ </string>
   <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

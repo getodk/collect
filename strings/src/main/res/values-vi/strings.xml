@@ -244,10 +244,6 @@
   <string name="change_username">Tên truy cập ODK</string>
   <string name="password">Mật khẩu</string>
   <string name="change_password">Mật khẩu</string>
-  <string name="change_formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="change_submission_url">Đường dẫn gửi dữ liệu</string>
-  <string name="formlist_url">Danh sách đường dẫn biểu mẫu</string>
-  <string name="submission_url">Đường dẫn gửi dữ liệu</string>
   <string name="selected_google_account_text">Tài khoản Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

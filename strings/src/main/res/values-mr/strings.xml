@@ -359,10 +359,6 @@
   <string name="change_password">ODK संकेतशब्द</string>
   <string name="password_error_whitespace">पासवर्डमध्ये अग्रस्थानी किंवा अनुसरणी व्हायरसपासची परवानगी नाही</string>
   <string name="username_error_whitespace">वापरकर्तानावांमध्ये अग्रगण्य किंवा अनुसरणी व्हायरसपेस अनुमत नाहीत</string>
-  <string name="change_formlist_url">फॉर्म यादी पथ ( यु र एल  वर जोडलेले )</string>
-  <string name="change_submission_url">सबमिशन पथ (यु र एल वर जोडला आहे)</string>
-  <string name="formlist_url">फॉर्म यादी पथ</string>
-  <string name="submission_url">सबमिशन पथ</string>
   <string name="server_platform_google_sheets">गूगल ड्राइव्ह, गूगल पत्रक</string>
   <string name="selected_google_account_text">गूगल खाते</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

@@ -73,12 +73,6 @@ public class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC_COMPLETED = "MatchExactlySyncCompleted";
 
     /**
-     * Track submissions to a URL with a custom submission endpoint configured in settings. The action
-     * should be a hash of the endpoint setting.
-     */
-    public static final String CUSTOM_ENDPOINT_SUB = "CustomEndpointSub";
-
-    /**
      * Tracks how often the audio player seek bar is used.
      */
     public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";

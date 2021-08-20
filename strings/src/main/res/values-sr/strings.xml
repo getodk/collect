@@ -498,10 +498,6 @@
   <string name="change_password">ODK Lozinka</string>
   <string name="password_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod lozinki</string>
   <string name="username_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod korisničkih imena</string>
-  <string name="change_formlist_url">Web putanja liste formulara (dodata URL adresi)</string>
-  <string name="change_submission_url">Web putanja za slanje formulara (dodata URL adresi)</string>
-  <string name="formlist_url">Web putanja liste formulara</string>
-  <string name="submission_url">Web putanja za slanje formulara</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Google korisnički nalog</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

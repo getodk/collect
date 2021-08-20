@@ -592,12 +592,6 @@
   <string name="change_password">Contraseña</string>
   <string name="password_error_whitespace">Los espacios al inicio o al final no están permitidos en las contraseñas</string>
   <string name="username_error_whitespace">No se permiten espacios al inicio o al final en el nombre de usuario.</string>
-  <string name="custom_server_paths">Rutas de servidor personalizadas</string>
-  <string name="legacy_custom_server_paths_summary">Será removido en una próxima versión. Favor usar /formList y /submission en su servidor.</string>
-  <string name="change_formlist_url">Ubicación de la Lista del Formulario (se añade a la URL del Servidor)</string>
-  <string name="change_submission_url">Ubicación a donde enviar (se añade a la URL del Servidor)</string>
-  <string name="formlist_url">La ubicación de la lista de formularios</string>
-  <string name="submission_url">Ubicación de Envio</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Cuenta de Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

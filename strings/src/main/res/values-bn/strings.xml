@@ -250,10 +250,6 @@
   <string name="change_username">ব্যবহারকারীর নাম পরিবর্তন </string>
   <string name="password">পাসওয়ার্ড</string>
   <string name="change_password">পাসওয়ার্ড পরিবর্তন </string>
-  <string name="change_formlist_url">ফর্ম তালিকা URL পরিবর্তন</string>
-  <string name="change_submission_url"> সাবমিশান URL পরিবর্তন</string>
-  <string name="formlist_url">ফর্ম তালিকা URL</string>
-  <string name="submission_url"> সাবমিশান URL</string>
   <string name="selected_google_account_text">গুগল একাউন্ট</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

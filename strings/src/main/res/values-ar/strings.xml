@@ -585,12 +585,6 @@
   <string name="change_password">ODK كلمة المرور</string>
   <string name="password_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في اسم المستخدم</string>
-  <string name="custom_server_paths">مسارات مخدم مخصصة</string>
-  <string name="legacy_custom_server_paths_summary">سيتم الإزالة في الإصدارات المستقبلية. يرجى استخدام /formList و /submission في سيرفرك</string>
-  <string name="change_formlist_url">مسار الارسال (مظاف الى الرابط)</string>
-  <string name="change_submission_url">مسار الارسال (مظاف الى الرابط)</string>
-  <string name="formlist_url">مسار قائمة الاستمارات</string>
-  <string name="submission_url">مسار الارسال</string>
   <string name="server_platform_google_sheets">محرك الجوجل، صفحات الجوجل</string>
   <string name="selected_google_account_text">حساب جوجل</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

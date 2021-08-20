@@ -540,11 +540,6 @@
   <string name="change_password">ODK పాస్ వర్డ్ </string>
   <string name="password_error_whitespace">పాస్ వర్డ్ ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="username_error_whitespace">యూసర్ నేమ్ లో ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
-  <string name="custom_server_paths">కస్టమ్ సర్వర్ మార్గాలు</string>
-  <string name="change_formlist_url">ఫారం జాబితా లింకు (URL కు జోడించబడింది)</string>
-  <string name="change_submission_url">సబ్మిషన్ లింక్  (URL కు జోడించబడింది)</string>
-  <string name="formlist_url">ఫారం జాబితా లింక్ </string>
-  <string name="submission_url">సబ్మిషన్ లింక్ </string>
   <string name="server_platform_google_sheets">గూగుల్ డ్రైవ్, గూగుల్ షీట్స్</string>
   <string name="selected_google_account_text">గూగుల్ ఖాతా</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

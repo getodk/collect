@@ -580,12 +580,6 @@ Hashize: %2$s</string>
   <string name="change_password">Ijambo banga rya ODK</string>
   <string name="password_error_whitespace">Mu ijambobanga ahantu hariho ubusa ntibyemewe </string>
   <string name="username_error_whitespace">Kuzuza ahantu hariho ubusa ntabwo byemewe mu izina ugomba gukoresha </string>
-  <string name="custom_server_paths">Hindura inzira za Server </string>
-  <string name="legacy_custom_server_paths_summary">Izasibwa mu nyandiko shingiro izaza. Musabwa gukoresha/ urutonde rw\'inyandiko shingiro na/ uruheherekane rwabyo ku kigega kibika amakuru yose.</string>
-  <string name="change_formlist_url">Inzira igaragaza urutonde rw\'inyandiko shingiro ( Ushireho URL)</string>
-  <string name="change_submission_url">Uburyo bwokohereza (ongera kuri URL)</string>
-  <string name="formlist_url">Inzira igaragaza urutonde rw\'inyandiko shingiro.</string>
-  <string name="submission_url">Inzira zokwohereza</string>
   <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
   <string name="selected_google_account_text">Konte kuri Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

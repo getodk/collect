@@ -458,10 +458,6 @@
   <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
-  <string name="change_formlist_url">ផ្លូវរបស់បញ្ជីសំណុំ​បែប​បទ​(បានបន្ថែមលើ URL)</string>
-  <string name="change_submission_url">ផ្លូវដាក់ចូល (បន្ថែមលើ URL)</string>
-  <string name="formlist_url">ទីតាំងបញ្ជីសំណុំ​បែប​បទ</string>
-  <string name="submission_url">ផ្លូវដាក់ចូល</string>
   <string name="server_platform_google_sheets">ថាស Google, សន្លឹក Google</string>
   <string name="selected_google_account_text">គណនី Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

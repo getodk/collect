@@ -498,10 +498,6 @@
   <string name="change_password">Пароль ODK</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
-  <string name="change_formlist_url">Шлях до списку анкет (додається до URL)</string>
-  <string name="change_submission_url">Шлях надсилання (додається до URL)</string>
-  <string name="formlist_url">Шлях до списку анкет</string>
-  <string name="submission_url">Шлях надсилання</string>
   <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
   <string name="selected_google_account_text">Обліковий запис Google</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->

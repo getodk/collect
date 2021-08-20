@@ -281,10 +281,6 @@
   <string name="change_username">ODK Gebruikersnaam</string>
   <string name="password">Wagwoord</string>
   <string name="change_password">ODK Wagwoord</string>
-  <string name="change_formlist_url">Vorm lys path (word bygevoeg tot URL)</string>
-  <string name="change_submission_url">Indiening path (word bygevoeg tot URL)</string>
-  <string name="formlist_url">Vorm lys path</string>
-  <string name="submission_url">Indiening path</string>
   <string name="selected_google_account_text">Google rekening</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
   <!--Description for Fallback submission URL setting-->

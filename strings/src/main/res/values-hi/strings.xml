@@ -370,10 +370,6 @@
   <string name="change_password">odk पासवर्ड</string>
   <string name="password_error_whitespace">पासवर्ड में अग्रणी या अनुगामी व्हाइटस्पेस की अनुमति नहीं है</string>
   <string name="username_error_whitespace">उपयोगकर्ता नामों में अग्रणी या अनुगामी श्वेत स्थान की अनुमति नहीं है</string>
-  <string name="change_formlist_url">फॉर्म सूची पथ (URL पर जोड़ा गया)</string>
-  <string name="change_submission_url">सबमिशन पथ (URL पर जोड़ा गया)</string>
-  <string name="formlist_url">फॉर्म सूची पथ</string>
-  <string name="submission_url">सबमिशन पथ</string>
   <string name="server_platform_google_sheets">गूगल ड्राइव, गूगल शीट्</string>
   <string name="selected_google_account_text">गूगल अकाउंट</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
