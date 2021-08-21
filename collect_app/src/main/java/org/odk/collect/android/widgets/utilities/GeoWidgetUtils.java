@@ -5,6 +5,7 @@ import android.location.Location;
 
 import org.javarosa.core.model.QuestionDef;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.StringUtils;
 
 import java.text.DecimalFormat;
 
@@ -17,7 +18,7 @@ public class GeoWidgetUtils {
 
     }
 
-    public static String getAnswerToDisplay(Context context, String answer) {
+    public static String getGeoPointAnswerToDisplay(Context context, String answer) {
         try {
             if (answer != null && !answer.isEmpty()) {
                 String[] parts = answer.split(" ");
@@ -33,6 +34,13 @@ public class GeoWidgetUtils {
             return "";
         }
         return "";
+    }
+
+    public static String getGeoPolyAnswerToDisplay(String answer) {
+        if (answer != null && !answer.isEmpty()) {
+            answer = StringUtils.removeEnd(answer.replaceAll(";\\s", ";"), ";");
+        }
+        return answer;
     }
 
     public static double[] getLocationParamsFromStringAnswer(String answer) {

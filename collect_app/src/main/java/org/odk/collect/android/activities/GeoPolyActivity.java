@@ -34,11 +34,13 @@ import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.location.Location;
+import org.odk.collect.location.tracker.LocationTracker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -69,6 +71,10 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     @Inject
     MapProvider mapProvider;
+
+    @Inject
+    LocationTracker locationTracker;
+
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -163,6 +169,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
         }
+
+        locationTracker.stop();
         super.onDestroy();
     }
 
@@ -277,12 +285,12 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, formatPoints(points)));
+            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
         finish();
     }
 
     @Override public void onBackPressed() {
-        if (map != null && !formatPoints(map.getPolyPoints(featureId)).equals(originalAnswerString)) {
+        if (map != null && !parsePoints(originalAnswerString).equals(map.getPolyPoints(featureId))) {
             showBackDialog();
         } else {
             finish();
@@ -325,34 +333,27 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         return points;
     }
 
-    /**
-     * Serializes a list of vertices into a string, in the format
-     * appropriate for storing as the result of this form question.
-     */
-    private String formatPoints(List<MapPoint> points) {
-        if (outputMode == OutputMode.GEOSHAPE) {
-            // Polygons are stored with a last point that duplicates the
-            // first point.  Add this extra point if it's not already present.
-            int count = points.size();
-            if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
-                points.add(points.get(0));
-            }
-        }
-        StringBuilder result = new StringBuilder();
-        for (MapPoint point : points) {
-            // TODO(ping): Remove excess precision when we're ready for the output to change.
-            result.append(String.format(Locale.US, "%s %s %s %s;",
-                    Double.toString(point.lat), Double.toString(point.lon),
-                    Double.toString(point.alt), Float.toString((float) point.sd)));
-        }
-        return result.toString().trim();
-    }
-
     @Override
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            startScheduler(INTERVAL_OPTIONS[intervalIndex]);
+            locationTracker.start();
+
+            recordPoint(map.getGpsLocation());
+            schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
+                Location currentLocation = locationTracker.getCurrentLocation();
+
+                if (currentLocation != null) {
+                    MapPoint currentMapPoint = new MapPoint(
+                            currentLocation.getLatitude(),
+                            currentLocation.getLongitude(),
+                            currentLocation.getAltitude(),
+                            currentLocation.getAccuracy()
+                    );
+
+                    recordPoint(currentMapPoint);
+                }
+            }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
         }
         updateUi();
     }
@@ -392,11 +393,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         this.accuracyThresholdIndex = accuracyThresholdIndex;
     }
 
-    public void startScheduler(int intervalSeconds) {
-        schedulerHandler = scheduler.scheduleAtFixedRate(
-            () -> runOnUiThread(this::recordPoint), 0, intervalSeconds, TimeUnit.SECONDS);
-    }
-
     private void onClick(MapPoint point) {
         if (inputActive && !recordingEnabled) {
             map.appendPointToPoly(featureId, point);
@@ -419,8 +415,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         updateUi();
     }
 
-    private void recordPoint() {
-        MapPoint point = map.getGpsLocation();
+    private void recordPoint(MapPoint point) {
         if (point != null && isLocationAcceptable(point)) {
             map.appendPointToPoly(featureId, point);
             updateUi();

@@ -18,6 +18,8 @@ import android.text.Html;
 
 import androidx.annotation.NonNull;
 
+import com.google.common.base.CharMatcher;
+
 import java.util.Iterator;
 import java.util.regex.MatchResult;
 
@@ -177,6 +179,26 @@ public class StringUtils {
             return text.subSequence(start, end + 1);
         }
         return text;
+    }
+
+    public static String removeEnd(String str, String remove) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+
+        return str;
+    }
+
+    public static String getFilenameError(String filename) {
+        String possiblyRestricted = "?:\"*|/\\<>\u0000";
+        boolean containsAt = filename.contains("@");
+        boolean containsNonAscii = CharMatcher.ascii().matchesAllOf(filename);
+        boolean containsPossiblyRestricted = CharMatcher.anyOf(possiblyRestricted).matchesAnyOf(possiblyRestricted);
+        return "Problem with project name file. Contains @: " + containsAt + ", Contains non-ascii: " + containsNonAscii + ", Contains restricted: " + containsPossiblyRestricted;
     }
 }
 

@@ -570,10 +570,10 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/ExIntegerWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/ExStringWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/ExVideoWidget.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoPointMapWidget.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoPointWidget.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoShapeWidget.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoTraceWidget.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoPointMapWidget.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoPointWidget.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoShapeWidget.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/GeoTraceWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/ImageWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/OSMWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/QuestionWidget.java
@@ -587,7 +587,7 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/items/ListWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/AudioRecorderRecordingStatusHandler.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/DateTimeWidgetUtils.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GeoWidgetUtils.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GeoWidgetUtils.java
 	modified:   collect_app/src/main/java/org/odk/collect/utilities/Clock.java
 	deleted:    collect_app/src/main/java/org/odk/collect/utilities/PathUtils.java
 	new file:   collect_app/src/main/res/drawable-hdpi/odk_logo.png
@@ -1106,18 +1106,15 @@ Unmerged paths:
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/activities/SplashScreenActivity.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/FormListAdapter.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/adapters/InstanceListCursorAdapter.java
-del	deleted by them: collect_app/src/main/java/org/odk/collect/android/analytics/Analytics.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/analytics/Analytics.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/analytics/AnalyticsEvents.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/application/Collect.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/configure/qr/QRCodeActivityResultDelegate.java
-del	deleted by them: collect_app/src/main/java/org/odk/collect/android/configure/qr/QRCodeScannerFragment.java
-keep	deleted by them: collect_app/src/main/java/org/odk/collect/android/dao/FormsDao.java
-         moved to smap package
-keep	deleted by them: collect_app/src/main/java/org/odk/collect/android/dao/InstancesDao.java
-         moved to smap package
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/configure/qr/QRCodeScannerFragment.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/dao/FormsDao.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/dao/InstancesDao.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/dao/helpers/ContentResolverHelper.java
-keep	deleted by them: collect_app/src/main/java/org/odk/collect/android/database/DatabaseFormsRepository.java
-          moved to smap package
+    deleted by them: collect_app/src/main/java/org/odk/collect/android/database/DatabaseFormsRepository.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/database/FormsDatabaseHelper.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/database/InstancesDatabaseHelper.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/database/forms/FormDatabaseMigrator.java
@@ -1150,19 +1147,14 @@ keep	deleted by them: collect_app/src/main/java/org/odk/collect/android/database
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/screens/ExperimentalPreferencesFragment.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/screens/FormManagementPreferencesFragment.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/preferences/screens/ServerPreferencesFragment.java
-ret	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/FormsProvider.java
-       moved to smap package
-ret	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/FormsProviderAPI.java
-       moved to smap package
-ret	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/InstanceProvider.java
-	   moved to smap package
-ret	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/InstanceProviderAPI.java
-       moved to smap package
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/FormsProvider.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/FormsProviderAPI.java
+    deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/InstanceProvider.java
+	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/InstanceProviderAPI.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/storage/StoragePathProvider.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/tasks/FormLoaderTask.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/tasks/InstanceSyncTask.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/tasks/SaveFormToDisk.java
-	   moved to smap package
 	both modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceServerUploader.java
 	both modified:   collect_app/src/main/java/org/odk/collect/android/upload/InstanceUploader.java
 	deleted by them: collect_app/src/main/java/org/odk/collect/android/utilities/ApplicationResetter.java
@@ -1185,6 +1177,6 @@ ret	deleted by them: collect_app/src/main/java/org/odk/collect/android/provider/
 	both modified:   collect_app/src/test/java/org/odk/collect/android/openrosa/OpenRosaPostRequestTest.java
 	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/FileUtilsTest.java
 	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/GeoUtilsTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/StringUtilsTest.java
+merged	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/StringUtilsTest.java
 	both modified:   forms/src/main/java/org/odk/collect/forms/Form.java
 	both modified:   forms/src/main/java/org/odk/collect/forms/FormSource.java
