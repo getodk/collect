@@ -105,6 +105,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FileUtil;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
+import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -115,6 +116,8 @@ import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
+import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
+import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -543,5 +546,11 @@ public class AppDependencyModule {
     @Provides
     public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, PreferencesProvider preferencesProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
         return new BackgroundAudioViewModel.Factory(audioRecorder, preferencesProvider, permissionsChecker, clock, analytics);
+    }
+
+    @Provides
+    public LocationTracker providesLocationTracker(Application application) {
+        ForegroundServiceLocationTracker.setNotificationIcon(IconUtils.getNotificationAppIcon());
+        return new ForegroundServiceLocationTracker(application);
     }
 }

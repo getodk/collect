@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_standard">
+
+        <!-- 1st row -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color1"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color2"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color3"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color5"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color4"
+            app:layout_constraintTop_toTopOf="parent" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 2nd row -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color6"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/color1" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color6" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color7"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color6"
+            app:layout_constraintTop_toBottomOf="@id/color2" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color7" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color8"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color7"
+            app:layout_constraintTop_toBottomOf="@id/color3" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color8" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color9"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color8"
+            app:layout_constraintTop_toBottomOf="@id/color4" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color9"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color10"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color9"
+            app:layout_constraintTop_toBottomOf="@id/color5" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color10" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 3rd row -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color11"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/color6" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color11"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color12"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color11"
+            app:layout_constraintTop_toBottomOf="@id/color7" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color12" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color13"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color12"
+            app:layout_constraintTop_toBottomOf="@id/color8" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color13" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color14"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color13"
+            app:layout_constraintTop_toBottomOf="@id/color9" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color14" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color15"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toEndOf="@id/color14"
+            app:layout_constraintTop_toBottomOf="@id/color10" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/color_circle"
+                android:backgroundTint="@color/color15" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/current_color_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_extra_large"
+            app:layout_constraintWidth_percent="0.2"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/color11" >
+
+            <TextView
+                android:id="@+id/current_color"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin_extra_small"
+                android:background="@drawable/color_circle"
+                android:textColor="@android:color/white"
+                android:textAllCaps="true"
+                android:gravity="center"
+                app:autoSizeTextType="uniform" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.textview.MaterialTextView
+            style="?textAppearanceBody1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hex"
+            app:layout_constraintBottom_toBottomOf="@+id/hex_color_layout"
+            app:layout_constraintEnd_toStartOf="@+id/hex_color_layout"
+            app:layout_constraintTop_toTopOf="@+id/hex_color_layout" />
+
+        <FrameLayout
+            android:id="@+id/hex_color_layout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/margin_small"
+            app:layout_constraintTop_toTopOf="@+id/current_color_container"
+            app:layout_constraintBottom_toBottomOf="@+id/current_color_container"
+            app:layout_constraintStart_toStartOf="@+id/color13"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:hintEnabled="false"
+                app:prefixText="@string/hash"
+                app:prefixTextAppearance="?textAppearanceBody1"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/hex_color"
+                    style="?textAppearanceBody1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/hex_color"
+                    android:padding="0dp"
+                    android:maxLength="6" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

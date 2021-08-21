@@ -200,6 +200,12 @@
     <!-- Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu. -->
     <string name="recording_disabled">Recording disabled. Enable in %s</string>
 
+    <!-- Error displayed when opened filled form has been deleted on disk -->
+    <string name="instance_deleted_message">Filled form has been deleted!</string>
+
+    <!-- Error displayed when something bad happens during updating widgets in a field-list group -->
+    <string name="update_widgets_error">Failure trying to update values. This is generally because of incorrect usage of calculations in the form design.\n\nIf you keep having this problem, report it to the person who asked you to collect data.</string>
+
     <!--
     ##############################################
     # FORM FEATURES
@@ -238,6 +244,7 @@
 
     <string name="capture_image">Take Picture</string>
     <string name="choose_image">Choose Image</string>
+    <string name="choose_account">Choose account</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
     <string name="gdrive_connection_exception">This image is stored on Google Drive and cannot be accessed while you are offline.</string>
     <string name="view_image">View Image</string>
@@ -561,6 +568,12 @@
     <!-- Name of an action button -->
     <string name="view_data">View Saved Form</string>
 
+    <!-- Name for the location tracking notifications. Will be seen in Android settings. -->
+    <string name="location_tracking_notification_channel_name">Location tracking</string>
+
+    <!-- Title for notification that lets user know their location is currently being tracked -->
+    <string name="location_tracking_notification_title">Tracking location…</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM
@@ -653,16 +666,45 @@
 
     <!-- Title of a settings section -->
     <string name="server_settings_title">Server</string>
+    <!-- Subtext of a settings section -->
+    <string name="server_settings_subtext">URL, username, password</string>
+    <!-- Title of a settings section -->
+    <string name="project_display_title">Project display</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_display_subtext">Name, icon, color</string>
     <!-- Title of a settings section -->
     <string name="client">User interface</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_interface_settings_subtext">App language, theme, font size</string>
     <!-- Title of a settings section -->
     <string name="maps">Maps</string>
+    <!-- Subtext of a settings section -->
+    <string name="maps_settings_subtext">Basemap, styles, layers</string>
     <!-- Title of a settings section -->
     <string name="form_management_preferences">Form management</string>
+    <!-- Subtext of a settings section -->
+    <string name="form_management_settings_subtext">Auto-update, auto-send, auto-delete</string>
     <!-- Title of a settings section -->
     <string name="user_and_device_identity_title">User and device identity</string>
+    <!-- Subtext of a settings section -->
+    <string name="user_and_device_identity_settings_subtext">Username, phone number, device ID</string>
     <!-- Title of a settings section only available in beta or development builds. -->
     <string name="experimental">Experimental</string>
+
+    <string name="protected_settings">Protected</string>
+    <!-- Title of a settings section -->
+    <string name="unlock_protected_settings_section_title">Unlock protected settings</string>
+    <!-- Subtext of a settings section -->
+    <string name="unlock_protected_settings_section_subtext">Change password, set access controls</string>
+    <string name="set_admin_password">Set admin password</string>
+    <!-- Title of a settings section -->
+    <string name="project_management_section_title">Project management</string>
+    <!-- Subtext of a settings section -->
+    <string name="project_management_section_subtext">Reconfigure, reset, delete</string>
+    <!-- Title of a settings section -->
+    <string name="access_control_section_title">Access control</string>
+    <!-- Subtext of a settings section -->
+    <string name="access_control_section_subtext">Limit user interface</string>
 
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
@@ -799,7 +841,7 @@
 
     <string name="analytics_preferences">Usage data</string>
     <string name="analytics">Collect anonymous usage data</string>
-    <string name="analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features</string>
+    <string name="analytics_summary">Anonymous usage data helps the ODK team prioritize fixes and features.</string>
 
     <string name="form_metadata_title">Form Metadata</string>
     <string name="form_metadata">Form metadata</string>
@@ -812,6 +854,11 @@
     <string name="device_id">Device ID</string>
     <!-- Displayed when a device property such as the phone number is not available -->
     <string name="preference_not_available">Not available</string>
+
+    <!-- Label for an item displayed in the project settings menu to unlock settings -->
+    <string name="unlock_settings">Unlock settings</string>
+    <!-- Label for an item displayed in the project settings menu to indicate that settings are unlocked -->
+    <string name="settings_unlocked">Settings unlocked</string>
 
     <!--
      ##############################################
@@ -1008,4 +1055,68 @@
     <string name="not_a_directory">%s exists, but is not a directory</string>
 
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
+    <string name="background_audio_help">This form records the audio from your device\'s microphone.\n\nYou can use the volume indicator to make sure the microphone is close enough to the sound you need to record.\n\nTo stop the recording please exit this form.\n\nFor more information please contact the person who asked you to collect data.</string>
+
+    <!--
+     ##############################################
+     # Projects
+     ##############################################
+     -->
+    <string name="projects">Projects</string>
+    <string name="settings">Settings</string>
+    <string name="add_project">Add project</string>
+    <string name="add">Add</string>
+    <!-- Title of the dialog shown when attempting to create a project with connection settings that match an existing project -->
+    <string name="duplicate_project">Duplicate project</string>
+    <!-- Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project -->
+    <string name="duplicate_project_details">You already have a project with these connection settings. Do you want to switch to the existing project or add a new one?</string>
+    <!-- Button text for adding a duplicate project -->
+    <string name="add_duplicate_project">Add duplicate project</string>
+    <!-- Buton text for switching to an existing project -->
+    <string name="switch_to_existing">Switch to existing project</string>
+
+    <string name="project_name">Project name</string>
+    <string name="project_icon">Project icon</string>
+    <string name="project_color">Project color</string>
+    <!-- Toast text shown when the current project is changed -->
+    <string name="switched_project">Switched to %s</string>
+    <!-- Description for screen readers of which project is in use. This is part of the project selection dialog -->
+    <string name="using_project">Using %s</string>
+    <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
+    <string name="switch_to_project">Switch to %s</string>
+    <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
+    <string name="delete_project_yes">Yes</string>
+    <string name="delete_project_no">No</string>
+    <string name="cannot_delete_project_title">Project can\'t be deleted</string>
+    <string name="cannot_delete_project_message_one">You have unsent submissions. To delete the project, you must first send or delete those submissions.</string>
+    <string name="cannot_delete_project_message_two">Background jobs are running. Please try again later.</string>
+    <string name="or">OR</string>
+    <string name="hex_color">Hex color</string>
+    <string name="invalid_hex_code">Invalid hex code</string>
+
+    <!--
+     ##############################################
+     # First launch and initial configuration
+     ##############################################
+    -->
+    <!-- Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language. -->
+    <string name="tagline">Collect data\nanywhere</string>
+    <!-- Text for the button that allows for configuring a project by scanning a QR code. Should be short -->
+    <string name="configure_with_qr_code">Configure with QR code</string>
+    <!-- Text for the button that allows for manually entering project details. Should be short -->
+    <string name="configure_manually">Manually enter project details</string>
+    <string name="project_config_tip">After you add your project, you can configure it in General and Admin Settings</string>
+    <!-- Immediately followed by "Configure" which is a link to configure a Google Drive project -->
+    <string name="gdrive_project">My project uses Google Drive.</string>
+    <!-- Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project -->
+    <string name="gdrive_configure">Configure</string>
+    <!-- Immediately followed by "Try Collect" which is a link to create a demo project -->
+    <string name="dont_have_project">Don\'t have a project yet?</string>
+    <!-- Preceded by "Don't have a project yet?" question -->
+    <string name="try_demo">Try a demo</string>
+    <string name="scan_configuration_qr_code">Scan configuration QR code</string>
+
+    <!-- Error shown when a user tries to open a form that's in a different project -->
+    <string name="wrong_project_selected_for_form">To open this form, you must first open ODK Collect and switch to the project that contains it.</string>
 </resources>

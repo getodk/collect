@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.DialogFragmentTest" parent="Theme.MaterialComponents">
+        <!--
+        For some reason the default value of `alertDialogTheme` (which is
+        `ThemeOverlay.MaterialComponents.Dialog.Alert`) will cause `launchFragment` to
+        explode. This is most likely a bug in FragmentScenario (or Robolectric itself)
+         -->
+        <item name="alertDialogTheme">@style/Theme.MaterialComponents.Dialog.Alert</item>
+    </style>
+</resources>

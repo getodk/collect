@@ -29,15 +29,15 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
-import org.odk.collect.android.location.client.LocationClient;
-import org.odk.collect.android.location.client.LocationClientProvider;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -104,8 +104,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClientProvider.getClient(this, new PlayServicesChecker(),
-                () -> new GoogleFusedLocationClient(getApplication()));
+        locationClient = LocationClientProvider.getClient(this,
+                () -> new GoogleFusedLocationClient(getApplication()), GoogleApiAvailability
+                        .getInstance());
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }
@@ -116,14 +117,10 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        locationClient.start();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
+
+        locationClient.start();
 
         if (locationDialog != null) {
             locationDialog.show();
@@ -141,6 +138,14 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onPause() {
         super.onPause();
 
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (locationManager != null) {
+            locationManager.removeGpsStatusListener(this);
+        }
+
+        locationClient.stop();
+        locationClient.setListener(null);
+
         if (timer != null) {
             timer.cancel();
         }
@@ -150,19 +155,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         if (locationDialog != null && locationDialog.isShowing()) {
             locationDialog.dismiss();
         }
-    }
-
-    @Override
-    protected void onStop() {
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (locationManager != null) {
-            locationManager.removeGpsStatusListener(this);
-        }
-
-        locationClient.stop();
-        locationClient.setListener(null);
-
-        super.onStop();
     }
 
     @Override

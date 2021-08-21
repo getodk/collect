@@ -43,6 +43,8 @@ import org.odk.collect.android.preferences.PreferencesProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.androidshared.data.AppState;
+import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.strings.LocalizedApplication;
 
 import java.io.ByteArrayInputStream;
@@ -59,9 +61,12 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
-public class Collect extends Application implements LocalizedApplication {
+public class Collect extends Application implements LocalizedApplication,
+        StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
+
+    private final AppState appState = new AppState();
 
     @Nullable
     private FormController formController;
@@ -377,5 +382,11 @@ public class Collect extends Application implements LocalizedApplication {
     @Override
     public Locale getLocale() {
         return new Locale(LocaleHelper.getLocaleCode(this));
+    }
+
+    @NotNull
+    @Override
+    public AppState getState() {
+        return appState;
     }
 }

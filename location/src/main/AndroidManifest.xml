@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.odk.collect.location">
+
+    <application>
+        <service
+            android:name=".tracker.LocationTrackerService"
+            android:foregroundServiceType="location" />
+    </application>
+</manifest>

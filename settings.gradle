@@ -1,5 +1,7 @@
 
 include ':AWSMobileHelper'
+include ':shared'
+include ':androidshared'
 include ':audiorecorder'
 include ':testshared'
 include ':audioclips'
@@ -8,5 +10,7 @@ include ':async'
 include ':collect_app'
 include ':nbistubs'
 include ':material'
+include ':fragmentstest'
+include ':location'
 
 include ':collect_app:libs'

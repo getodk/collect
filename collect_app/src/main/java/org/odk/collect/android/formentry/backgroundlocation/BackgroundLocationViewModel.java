@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.location.client.GoogleFusedLocationClient;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.location.GoogleFusedLocationClient;
 
 import static org.odk.collect.android.preferences.GeneralKeys.KEY_BACKGROUND_LOCATION;
 

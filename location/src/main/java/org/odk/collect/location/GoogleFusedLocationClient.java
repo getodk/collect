@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.location;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -19,8 +19,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import org.odk.collect.android.utilities.GeoUtils;
-
 import timber.log.Timber;
 
 /**
@@ -30,6 +28,7 @@ import timber.log.Timber;
  * Should be used whenever there Google Play Services is present. In general, use
  * {@link LocationClientProvider} to retrieve a configured {@link LocationClient}.
  */
+@SuppressLint("MissingPermission") // Permission checks for location services handled in components that use this class
 public class GoogleFusedLocationClient
         extends BaseLocationClient
         implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
@@ -87,9 +86,9 @@ public class GoogleFusedLocationClient
      * @param fusedLocationProviderApi The FusedLocationProviderApi for fetching the User's
      *                                 location.
      */
-    GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
-                              @NonNull FusedLocationProviderApi fusedLocationProviderApi,
-                              @NonNull LocationManager locationManager) {
+    public GoogleFusedLocationClient(@NonNull GoogleApiClient googleApiClient,
+                                     @NonNull FusedLocationProviderApi fusedLocationProviderApi,
+                                     @NonNull LocationManager locationManager) {
         super(locationManager);
 
         this.googleApiClient = googleApiClient;
@@ -120,7 +119,6 @@ public class GoogleFusedLocationClient
         }
     }
 
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
         if (!isMonitoringLocation() && googleApiClient.isConnected()) {
             fusedLocationProviderApi.requestLocationUpdates(googleApiClient, createLocationRequest(), this);
@@ -141,14 +139,13 @@ public class GoogleFusedLocationClient
     }
 
     @Override
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
             googleApiClient.blockingConnect();
         }
 
-        return GeoUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
+        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
     }
 
     @Override
@@ -167,14 +164,6 @@ public class GoogleFusedLocationClient
 
         this.updateInterval = updateInterval;
         this.fastestUpdateInterval = fastestUpdateInterval;
-    }
-
-    @Override
-    public void resetUpdateIntervals() {
-        Timber.i("GoogleFusedLocationClient resetting update intervals.");
-
-        this.updateInterval = DEFAULT_UPDATE_INTERVAL;
-        this.fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
     }
 
     // GoogleFusedLocationClient:
@@ -218,7 +207,7 @@ public class GoogleFusedLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            locationListener.onLocationChanged(GeoUtils.sanitizeAccuracy(location));
+            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
         }
     }
 

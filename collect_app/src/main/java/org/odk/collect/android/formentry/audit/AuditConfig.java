@@ -16,7 +16,7 @@
 
 package org.odk.collect.android.formentry.audit;
 
-import org.odk.collect.android.location.client.LocationClient;
+import org.odk.collect.location.LocationClient;
 
 import java.util.Locale;
 

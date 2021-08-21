@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+apply from: '../config/quality.gradle'
+
+android {
+    compileSdkVersion rootProject.androidCompileSdk
+
+    defaultConfig {
+        minSdkVersion rootProject.androidMinSdk
+        targetSdkVersion rootProject.androidTargetSdk
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation "com.google.android.gms:play-services-location:17.1.0"
+    implementation "com.jakewharton.timber:timber:${rootProject.timberVersion}"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(':androidshared')
+    implementation project(':strings')
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation project(':testshared')
+    testImplementation 'org.mockito:mockito-core:3.9.0'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'androidx.test.ext:junit:1.1.3'
+}

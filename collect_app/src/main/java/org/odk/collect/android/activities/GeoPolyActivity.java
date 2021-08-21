@@ -221,7 +221,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         });
 
         recordButton = findViewById(R.id.record_button);
-        recordButton.setOnClickListener(v -> recordPoint());
+        recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
             MapsPreferences.showReferenceLayerDialog(this);

@@ -13,30 +13,30 @@
 	new file:   analytics/src/main/java/org/odk/collect/analytics/Analytics.kt
 	new file:   analytics/src/main/java/org/odk/collect/analytics/BlockableFirebaseAnalytics.kt
 	new file:   analytics/src/main/java/org/odk/collect/analytics/NoopAnalytics.kt
-	new file:   androidshared/.gitignore
-	new file:   androidshared/build.gradle
-	new file:   androidshared/consumer-rules.pro
-	new file:   androidshared/src/main/AndroidManifest.xml
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/data/AppState.kt
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/data/Consumable.kt
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/livedata/LiveDataUtils.java
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/livedata/NonNullLiveData.kt
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/ui/ColorPickerDialog.kt
-	new file:   androidshared/src/main/java/org/odk/collect/androidshared/ui/OneSignTextWatcher.kt
+add	new file:   androidshared/.gitignore
+add	new file:   androidshared/build.gradle
+add	new file:   androidshared/consumer-rules.pro
+add	new file:   androidshared/src/main/AndroidManifest.xml
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/data/AppState.kt
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/data/Consumable.kt
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/livedata/LiveDataUtils.java
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/livedata/NonNullLiveData.kt
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/ui/ColorPickerDialog.kt
+add	new file:   androidshared/src/main/java/org/odk/collect/androidshared/ui/OneSignTextWatcher.kt
 	renamed:    audiorecorder/src/main/java/org/odk/collect/audiorecorder/recording/internal/ReturnToAppActivity.kt -> androidshared/src/main/java/org/odk/collect/androidshared/ui/ReturnToAppActivity.kt
 	renamed:    collect_app/src/main/res/anim/popup_hide.xml -> androidshared/src/main/res/anim/popup_hide.xml
 	renamed:    collect_app/src/main/res/anim/popup_show.xml -> androidshared/src/main/res/anim/popup_show.xml
-	new file:   androidshared/src/main/res/drawable/color_circle.xml
+add	new file:   androidshared/src/main/res/drawable/color_circle.xml
 	renamed:    collect_app/src/main/res/drawable/ic_close_black_24dp.xml -> androidshared/src/main/res/drawable/ic_close_black_24dp.xml
 	renamed:    collect_app/src/main/res/drawable/shadow_up.xml -> androidshared/src/main/res/drawable/shadow_up.xml
 	renamed:    collect_app/src/main/res/drawable/thumb.xml -> androidshared/src/main/res/drawable/thumb.xml
-	new file:   androidshared/src/main/res/layout/color_picker_dialog_layout.xml
-	new file:   androidshared/src/main/res/values/color_picker_dialog_colors.xml
-	new file:   androidshared/src/main/res/values/dimens.xml
-	new file:   androidshared/src/main/res/values/material_theme_polyfill.xml
-	new file:   androidshared/src/main/res/values/toolbars.xml
-	new file:   androidshared/src/test/java/org/odk/collect/androidshared/ui/ColorPickerDialogTest.kt
-	new file:   androidshared/src/test/java/org/odk/collect/androidshared/ui/OneSignTextWatcherTest.kt
+add	new file:   androidshared/src/main/res/layout/color_picker_dialog_layout.xml
+add	new file:   androidshared/src/main/res/values/color_picker_dialog_colors.xml
+add	new file:   androidshared/src/main/res/values/dimens.xml
+add	new file:   androidshared/src/main/res/values/material_theme_polyfill.xml
+add	new file:   androidshared/src/main/res/values/toolbars.xml
+add	new file:   androidshared/src/test/java/org/odk/collect/androidshared/ui/ColorPickerDialogTest.kt
+add	new file:   androidshared/src/test/java/org/odk/collect/androidshared/ui/OneSignTextWatcherTest.kt
 	renamed:    audiorecorder/src/test/java/org/odk/collect/audiorecorder/recording/internal/ReturnToAppActivityTest.kt -> androidshared/src/test/java/org/odk/collect/androidshared/ui/ReturnToAppActivityTest.kt
 	renamed:    material/src/test/resources/robolectric.properties -> androidshared/src/test/resources/robolectric.properties
 	modified:   async/build.gradle
@@ -428,9 +428,9 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/listeners/FormListDownloaderListener.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/listeners/SwipeHandler.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/listeners/ThousandsSeparatorTextWatcher.java
-	deleted:    collect_app/src/main/java/org/odk/collect/android/location/client/BaseLocationClient.java
-	deleted:    collect_app/src/main/java/org/odk/collect/android/location/client/LocationClientProvider.java
-	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClient.java -> collect_app/src/main/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClientWrapper.java
+deleted	deleted:    collect_app/src/main/java/org/odk/collect/android/location/client/BaseLocationClient.java
+deleted	deleted:    collect_app/src/main/java/org/odk/collect/android/location/client/LocationClientProvider.java
+applied	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClient.java -> collect_app/src/main/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClientWrapper.java
 	deleted:    collect_app/src/main/java/org/odk/collect/android/logic/FormInfo.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/logic/HierarchyElement.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/logic/PropertyManager.java
@@ -540,7 +540,7 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/FormDefCache.java
 	renamed:    collect_app/src/main/java/org/odk/collect/android/forms/FormUtils.java -> collect_app/src/main/java/org/odk/collect/android/utilities/FormUtils.java
 	new file:   collect_app/src/main/java/org/odk/collect/android/utilities/FormsRepositoryProvider.kt
-	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/GeoUtils.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/GeoUtils.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/IconUtils.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/ImageConverter.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/utilities/InstanceUploaderUtils.java
@@ -679,254 +679,6 @@ merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/uti
 	new file:   collect_app/src/main/res/xml/project_management_preferences.xml
 	new file:   collect_app/src/main/res/xml/project_preferences.xml
 	modified:   collect_app/src/main/res/xml/user_settings_access_preferences.xml
-	new file:   collect_app/src/test/java/org/odk/collect/android/activities/FirstLaunchActivityTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/FormDownloadListActivityTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/activities/FormMapActivityTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/activities/FormMapViewModelTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/MainActivityTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/MainMenuActivityTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/activities/MainMenuActivityTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/activities/MainMenuButtonsVisibilityTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/SplashScreenActivityTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/activities/SplashScreenActivityTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysDenyStoragePermissionPermissionsProvider.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/support/AlwaysGrantStoragePermissionsPermissionsProvider.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/activities/viewmodels/CurrentProjectViewModelTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/activities/viewmodels/FormDownloadListViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/activities/viewmodels/MainMenuViewModelTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/activities/viewmodels/SplashScreenViewModelTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/CollectSettingsChangeHandlerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/RobolectricApplication.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/SettingsImporterRegressionTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/AnalyticsInitializerTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/ApplicationInitializerTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/CollectSettingsMigratorTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/application/initialization/CollectSettingsPreferenceMigratorTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/ExistingSettingsMigratorTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/FormUpdatesUpgradeTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyCombinerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyExtractorTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyMoverTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyRemoverTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyRenamerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/KeyTranslatorTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/SharedPreferenceUtils.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/application/initialization/migration/ValueTranslatorTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/application/initialization/upgrade/AppUpgraderTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioButtonIntegrationTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioButtonTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioControllerViewTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioRecordingControllerFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/audio/AudioRecordingFormErrorDialogFragmentTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/audio/BackgroundAudioHelpDialogFragmentTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/backgroundwork/AutoSendTaskSpecTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/backgroundwork/AutoUpdateTaskSpecTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/backgroundwork/AutoUpdateTaskSpecTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/backgroundwork/FormUpdateAndInstanceSubmitSchedulerTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/backgroundwork/SyncFormsTaskSpecTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/configure/SettingsImporterTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/configure/SettingsImporterTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/configure/SettingsUtilsTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/configure/SharedPreferencesServerRepositoryTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/configure/StructureAndTypeSettingsValidatorTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/configure/qr/QRCodeActivityResultDelegateTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/configure/qr/QRCodeMenuDelegateTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/configure/qr/QRCodeViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/database/DatabaseFormsRepositoryTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/database/DatabaseInstancesRepositoryTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/database/DatabaseMediaFileRepositoryTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/database/FormDatabaseMigratorTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/external/FormsProviderTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/external/InstanceProviderTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/external/ExternalDataReaderTest.java -> collect_app/src/test/java/org/odk/collect/android/externaldata/ExternalDataReaderTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/external/ExternalDataUtilTest.java -> collect_app/src/test/java/org/odk/collect/android/externaldata/ExternalDataUtilTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fakes/FakePermissionsProvider.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/AudioVideoImageTextLabelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/AudioVideoImageTextLabelVisibilityTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/BackgroundAudioPermissionDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/BackgroundAudioViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/FormEntryMenuDelegateTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/FormEntryViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/FormLoadingDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/QuitFormDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/RecordingHandlerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/RefreshFormListDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/SaveFormProgressDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/audit/AsyncTaskAuditEventWriterTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/audit/AuditConfigTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/audit/FormSaveViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/audit/IdentityPromptViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/backgroundlocation/BackgroundLocationManagerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/loading/FormInstanceFileCreatorTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formentry/repeats/DeleteRepeatDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/BlankFormListMenuDelegateTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/BlankFormsListViewModelTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormDeleterTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormMetadataParserTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormSourceExceptionMapperTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormSourceProviderTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormUpdateDownloaderTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/formmanagement/FormsUpdaterTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/ServerFormDownloaderTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/ServerFormsDetailsFetcherTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/formmanagement/ServerFormsSynchronizerTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/formmanagement/SyncStatusAppStateTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/formmanagement/SyncStatusRepositoryTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/forms/FormsRepositoryTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/BikramSambatDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/CopticDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/EthiopianDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/IslamicDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/MyanmarDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/PersianDatePickerDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/ProgressDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/SelectMinimalDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/SelectMultiMinimalDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/dialogs/SelectOneMinimalDialogTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/fragments/support/DialogFragmentHelpers.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/gdrive/GoogleAccountsManagerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/geo/SettingsDialogFragmentTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/instancemanagement/InstanceDeleterTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/instancemanagement/InstanceSubmitterTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/instances/InstancesRepositoryTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/location/LocationTestUtils.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/location/activities/BaseGeoActivityTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/location/activities/GeoPointActivityTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/location/client/FakeLocationClient.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/location/client/MapboxLocationCallbackTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClientTest.java -> collect_app/src/test/java/org/odk/collect/android/location/client/MaxAccuracyWithinTimeoutLocationClientWrapperTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/metadata/SharedPreferencesInstallIDProviderTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/notifications/NotificationManagerNotifierTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/openrosa/OkHttpConnectionPostRequest.java -> collect_app/src/test/java/org/odk/collect/android/openrosa/OkHttpConnectionPostRequestTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/openrosa/OpenRosaGetRequestTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/openrosa/OpenRosaXmlFetcherTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/openrosa/api/OpenRosaFormSourceTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/permissions/PermissionsProviderTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/AdminPasswordDialogFragmentTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/AdminPreferencesActivityTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/AppConfigurationGeneratorTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/ChangeAdminPasswordDialogTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/FormManagementPreferencesTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/GeneralPreferencesFragmentTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/IdentityPreferencesFragmentTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/JsonPreferencesGeneratorTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/MainMenuAccessPreferencesTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/PreferenceValidatorTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/PreferencesActivityTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/ProjectPreferencesViewModelTest.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/ProtocolTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/preferences/AggregatePreferencesAdderTest.java -> collect_app/src/test/java/org/odk/collect/android/preferences/ServerPreferencesAdderTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/SharedPreferencesTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/preferences/UserInterfacePreferencesFragmentTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/dialogs/AdminPasswordDialogFragmentTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/dialogs/ChangeAdminPasswordDialogTest.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/preferences/ServerAuthDialogFragmentTest.java -> collect_app/src/test/java/org/odk/collect/android/preferences/dialogs/ServerAuthDialogFragmentTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/FormManagementPreferencesFragmentTest.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/preferences/FormMetadataFragmentTest.java -> collect_app/src/test/java/org/odk/collect/android/preferences/screens/FormMetadataPreferencesFragmentTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/IdentityPreferencesFragmentTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/MainMenuAccessPreferencesTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/ProjectDisplayPreferencesFragmentTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/ProjectPreferencesFragmentTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/screens/UserInterfacePreferencesFragmentTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/source/SettingsStoreTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/source/SharedPreferencesSettingsProviderTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/preferences/source/SharedPreferencesSettingsTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/CurrentProjectProviderTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ExistingProjectMigratorTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ManualProjectCreatorDialogTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectCreatorTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectDeleterTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectDetailsCreatorTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectIconViewTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectImporterTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectListItemViewTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/ProjectSettingsDialogTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/QrCodeProjectCreatorDialogTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/projects/SettingsConnectionMatcherTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/rules/MainCoroutineScopeRule.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/storage/StorageInitializerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/storage/StoragePathProviderTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/storage/StorageStateProviderTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/storage/migration/StorageMigrationResultTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/storage/migration/StorageMigrationServiceTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/storage/migration/StorageMigratorTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/support/CollectHelpers.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/support/InMemFormsRepository.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/support/InMemInstancesRepository.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/support/InMemSettingsProvider.kt
-	deleted:    collect_app/src/test/java/org/odk/collect/android/support/InstanceUtils.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/support/Matchers.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/ShadowPlayServicesUtil.java -> collect_app/src/test/java/org/odk/collect/android/support/ShadowPlayServicesUtil.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/AdminPasswordProviderTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/AppearancesTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/utilities/ApplicationResetterTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/CSVUtilsTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/ChangeLockProviderTest.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/utilities/CustomSQLiteQueryBuilderTestCase.java -> collect_app/src/test/java/org/odk/collect/android/utilities/CustomSQLiteQueryBuilderTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/utilities/CustomTabHelperTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/DateTimeUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/DaylightSavingTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/DialogUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/ExternalAppIntentProviderTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/ExternalAppUtilsTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/ExternalWebPageHelperTest.java
-	deleted:    collect_app/src/test/java/org/odk/collect/android/utilities/FileUtilTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/FormsRepositoryProviderTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/InstanceUploaderUtilsTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/InstancesRepositoryProviderTest.kt
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/LaunchStateTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/PermissionsTest.java
-	new file:   collect_app/src/test/java/org/odk/collect/android/utilities/ProjectResetterTest.kt
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/QuestionFontSizeUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/SQLiteUtilsTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/utilities/ThemeUtilsTests.java -> collect_app/src/test/java/org/odk/collect/android/utilities/ThemeUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/utilities/WebCredentialsUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/views/ChoicesRecyclerViewTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/views/TrackingTouchSliderTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/views/helpers/PromptAutoplayerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/AnnotateWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ArbitraryFileWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/AudioWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/BarcodeWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/BearingWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/DateTimeWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/DateWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/DrawWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ExArbitraryFileWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ExAudioWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ExImageWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ExVideoWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/GeoPointMapWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/GeoPointWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/GeoShapeWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/GeoTraceWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/ImageWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/OSMWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/QuestionWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/RangeDecimalWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/RangeIntegerWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/RangePickerDecimalWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/RangePickerIntegerWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/RatingWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/SignatureWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/TimeWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/TriggerWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/UrlWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/WidgetFactoryTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/base/GeneralSelectOneWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/base/QuestionWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/base/WidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/items/SelectImageMapWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/items/SelectMultiWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/items/SelectOneWidgetTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/support/GeoWidgetHelpers.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/support/QuestionWidgetHelpers.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/utilities/ActivityGeoDataRequesterTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/utilities/AudioRecorderRecordingStatusHandlerTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/utilities/DateTimeWidgetUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/utilities/GeoWidgetUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/utilities/RangeWidgetUtilsTest.java
-	modified:   collect_app/src/test/java/org/odk/collect/android/widgets/viewmodels/DateTimeViewModelTest.java
 	modified:   config/lint.xml
 	modified:   config/pmd-ruleset.xml
 	modified:   config/quality.gradle
@@ -953,39 +705,34 @@ merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/uti
 	new file:   formstest/src/main/java/org/odk/collect/formstest/InstancesRepositoryTest.java
 	renamed:    collect_app/src/test/java/org/odk/collect/android/forms/InMemFormsRepositoryTest.java -> formstest/src/test/java/org/odk/collect/formstest/InMemFormsRepositoryTest.java
 	renamed:    collect_app/src/test/java/org/odk/collect/android/instances/InMemInstancesRepositoryTest.java -> formstest/src/test/java/org/odk/collect/formstest/InMemInstancesRepositoryTest.java
-	new file:   fragmentstest/.gitignore
-	new file:   fragmentstest/README.md
-	new file:   fragmentstest/build.gradle
-	new file:   fragmentstest/consumer-rules.pro
-	new file:   fragmentstest/src/main/AndroidManifest.xml
-	new file:   fragmentstest/src/main/java/org/odk/collect/fragmentstest/DialogFragmentTest.kt
-	new file:   fragmentstest/src/main/res/values/dialog_fragment_test_theme.xml
+add	new file:   fragmentstest/.gitignore
+add	new file:   fragmentstest/README.md
+add	new file:   fragmentstest/build.gradle
+add	new file:   fragmentstest/consumer-rules.pro
+add	new file:   fragmentstest/src/main/AndroidManifest.xml
+add	new file:   fragmentstest/src/main/java/org/odk/collect/fragmentstest/DialogFragmentTest.kt
+add	new file:   fragmentstest/src/main/res/values/dialog_fragment_test_theme.xml
 	modified:   gradle.properties
 	modified:   gradle/wrapper/gradle-wrapper.properties
-	new file:   location/.gitignore
-	new file:   location/build.gradle
-	new file:   location/consumer-rules.pro
-	new file:   location/src/main/AndroidManifest.xml
-	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/AndroidLocationClient.java -> location/src/main/java/org/odk/collect/location/AndroidLocationClient.java
-	new file:   location/src/main/java/org/odk/collect/location/BaseLocationClient.kt
-	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/GoogleFusedLocationClient.java -> location/src/main/java/org/odk/collect/location/GoogleFusedLocationClient.java
-	new file:   location/src/main/java/org/odk/collect/location/Location.kt
-	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/LocationClient.java -> location/src/main/java/org/odk/collect/location/LocationClient.java
-	new file:   location/src/main/java/org/odk/collect/location/LocationClientProvider.java
-	new file:   location/src/main/java/org/odk/collect/location/LocationUtils.kt
-	new file:   location/src/main/java/org/odk/collect/location/tracker/ForegroundServiceLocationTracker.kt
-	new file:   location/src/main/java/org/odk/collect/location/tracker/LocationTracker.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/AndroidLocationClientTest.java -> location/src/test/java/org/odk/collect/location/AndroidLocationClientTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/GoogleFusedLocationClientTest.java -> location/src/test/java/org/odk/collect/location/GoogleFusedLocationClientTest.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/LocationClientProviderTest.java -> location/src/test/java/org/odk/collect/location/LocationClientProviderTest.java
-	new file:   location/src/test/java/org/odk/collect/location/LocationUtilsTest.kt
-	new file:   location/src/test/java/org/odk/collect/location/RobolectricApplication.kt
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/TestClientListener.java -> location/src/test/java/org/odk/collect/location/TestClientListener.java
-	renamed:    collect_app/src/test/java/org/odk/collect/android/location/client/TestLocationListener.java -> location/src/test/java/org/odk/collect/location/TestLocationListener.java
-	new file:   location/src/test/java/org/odk/collect/location/tracker/ForegroundServiceLocationTrackerTest.kt
-	new file:   location/src/test/java/org/odk/collect/location/tracker/LocationTrackerServiceTest.kt
-	new file:   location/src/test/java/org/odk/collect/location/tracker/LocationTrackerTest.kt
-	new file:   location/src/test/resources/robolectric.properties
+add	new file:   location/.gitignore
+add	new file:   location/build.gradle
+add	new file:   location/consumer-rules.pro
+add	new file:   location/src/main/AndroidManifest.xml
+applied	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/AndroidLocationClient.java -> location/src/main/java/org/odk/collect/location/AndroidLocationClient.java
+add	new file:   location/src/main/java/org/odk/collect/location/BaseLocationClient.kt
+applied	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/GoogleFusedLocationClient.java -> location/src/main/java/org/odk/collect/location/GoogleFusedLocationClient.java
+add	new file:   location/src/main/java/org/odk/collect/location/Location.kt
+applied	renamed:    collect_app/src/main/java/org/odk/collect/android/location/client/LocationClient.java -> location/src/main/java/org/odk/collect/location/LocationClient.java
+add	new file:   location/src/main/java/org/odk/collect/location/LocationClientProvider.java
+add	new file:   location/src/main/java/org/odk/collect/location/LocationUtils.kt
+add	new file:   location/src/main/java/org/odk/collect/location/tracker/ForegroundServiceLocationTracker.kt
+add	new file:   location/src/main/java/org/odk/collect/location/tracker/LocationTracker.kt
+add	new file:   location/src/test/java/org/odk/collect/location/LocationUtilsTest.kt
+add	new file:   location/src/test/java/org/odk/collect/location/RobolectricApplication.kt
+add	new file:   location/src/test/java/org/odk/collect/location/tracker/ForegroundServiceLocationTrackerTest.kt
+add	new file:   location/src/test/java/org/odk/collect/location/tracker/LocationTrackerServiceTest.kt
+add	new file:   location/src/test/java/org/odk/collect/location/tracker/LocationTrackerTest.kt
+add	new file:   location/src/test/resources/robolectric.properties
 	modified:   material/README.md
 	modified:   material/build.gradle
 	deleted:    material/src/debug/res/layout/material_banner_attr_test.xml
@@ -1009,19 +756,19 @@ merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/uti
 	new file:   projects/src/test/resources/robolectric.properties
 	new file:   robolectric-deps.properties
 	modified:   settings.gradle
-	new file:   shared/.gitignore
-	new file:   shared/build.gradle
-	new file:   shared/src/main/java/org/odk/collect/shared/PathUtils.kt
-	new file:   shared/src/main/java/org/odk/collect/shared/Settings.kt
-	new file:   shared/src/main/java/org/odk/collect/shared/TempFiles.kt
-	new file:   shared/src/main/java/org/odk/collect/shared/locks/ChangeLock.kt
+add	new file:   shared/.gitignore
+add	new file:   shared/build.gradle
+add	new file:   shared/src/main/java/org/odk/collect/shared/PathUtils.kt
+add	new file:   shared/src/main/java/org/odk/collect/shared/Settings.kt
+add	new file:   shared/src/main/java/org/odk/collect/shared/TempFiles.kt
+add	new file:   shared/src/main/java/org/odk/collect/shared/locks/ChangeLock.kt
 	renamed:    collect_app/src/main/java/org/odk/collect/android/backgroundwork/ReentrantLockChangeLock.java -> shared/src/main/java/org/odk/collect/shared/locks/ReentrantLockChangeLock.java
-	new file:   shared/src/main/java/org/odk/collect/shared/strings/Md5.kt
+add	new file:   shared/src/main/java/org/odk/collect/shared/strings/Md5.kt
 	renamed:    collect_app/src/main/java/org/odk/collect/utilities/RandomString.java -> shared/src/main/java/org/odk/collect/shared/strings/RandomString.java
-	new file:   shared/src/main/java/org/odk/collect/shared/strings/UUIDGenerator.kt
+add	new file:   shared/src/main/java/org/odk/collect/shared/strings/UUIDGenerator.kt
 	renamed:    collect_app/src/main/java/org/odk/collect/android/utilities/Validator.java -> shared/src/main/java/org/odk/collect/shared/strings/Validator.kt
-	new file:   shared/src/test/java/org/odk/collect/shared/Md5Test.kt
-	new file:   shared/src/test/java/org/odk/collect/shared/ValidatorTest.kt
+add	new file:   shared/src/test/java/org/odk/collect/shared/Md5Test.kt
+add	new file:   shared/src/test/java/org/odk/collect/shared/ValidatorTest.kt
 	modified:   strings/build.gradle
 	modified:   strings/src/main/res/values-af/strings.xml
 	modified:   strings/src/main/res/values-am/strings.xml
@@ -1081,7 +828,7 @@ merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/uti
 	modified:   strings/src/main/res/values-zh/strings.xml
 	modified:   strings/src/main/res/values-zu/strings.xml
 	modified:   strings/src/main/res/values/strings.xml
-	renamed:    collect_app/src/main/res/values/untranslated.xml -> strings/src/main/res/values/untranslated.xml
+applied	renamed:    collect_app/src/main/res/values/untranslated.xml -> strings/src/main/res/values/untranslated.xml
 	modified:   testshared/build.gradle
 	renamed:    collect_app/src/test/java/org/odk/collect/android/support/BooleanChangeLock.java -> testshared/src/main/java/org/odk/collect/testshared/BooleanChangeLock.java
 	modified:   testshared/src/main/java/org/odk/collect/testshared/FakeLifecycleOwner.kt
@@ -1171,12 +918,6 @@ Unmerged paths:
 	deleted by them: collect_app/src/main/res/xml/admin_preferences.xml
 	deleted by them: collect_app/src/main/res/xml/general_preferences.xml
 	both modified:   collect_app/src/main/res/xml/identity_preferences.xml
-	both modified:   collect_app/src/test/java/org/odk/collect/android/formentry/audit/AuditEventCSVLineTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/location/activities/GeoPointMapActivityTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/location/activities/GeoPolyActivityTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/openrosa/OpenRosaPostRequestTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/FileUtilsTest.java
-	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/GeoUtilsTest.java
-merged	both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/StringUtilsTest.java
+    both modified:   collect_app/src/test/java/org/odk/collect/android/utilities/StringUtilsTest.java
 	both modified:   forms/src/main/java/org/odk/collect/forms/Form.java
 	both modified:   forms/src/main/java/org/odk/collect/forms/FormSource.java
