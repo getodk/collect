@@ -116,7 +116,6 @@
         <exclude name="AvoidInstanceofChecksInCatchClause" />
         <exclude name="AvoidLiteralsInIfCondition" />
         <exclude name="BeanMembersShouldSerialize" />
-        <exclude name="CompareObjectsWithEquals" />
         <exclude name="ConstructorCallsOverridableMethod" />
         <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="EmptyCatchBlock" />
