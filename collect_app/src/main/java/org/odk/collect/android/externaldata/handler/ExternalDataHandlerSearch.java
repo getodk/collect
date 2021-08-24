@@ -154,7 +154,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 columnsToFetch.add(safeImageColumn);
             }
 
-            String[] sqlColumns = columnsToFetch.toArray(new String[columnsToFetch.size()]);
+            String[] sqlColumns = columnsToFetch.toArray(new String[0]);
 
             String selection;
             String[] selectionArgs;

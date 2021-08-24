@@ -147,7 +147,6 @@
         <exclude name="AvoidInstantiatingObjectsInLoops" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="OptimizableToArrayCall" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="UseStringBufferForStringAppends" />
