@@ -34,7 +34,6 @@
         <exclude name="UnusedPrivateMethod" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
-        <exclude name="ForLoopVariableCount" />
     </rule>
 
     <rule ref="category/java/codestyle.xml">
