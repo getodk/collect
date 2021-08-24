@@ -143,6 +143,11 @@ jobs:
           name: Assemble connected test build
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
 
+      - persist_to_workspace:
+          root: ~/work
+          paths:
+            - .
+
   test_instrumented:
     <<: *android_config
     steps:
@@ -151,9 +156,6 @@ jobs:
       - restore_cache:
           key: deps-{{ checksum "deps.txt" }}
 
-      - run:
-          name: Assemble test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
@@ -195,14 +197,9 @@ workflows:
       - build_instrumented:
           requires:
             - compile
-          filters:
-            branches:
-              ignore: master
       - test_instrumented:
           requires:
-            - check_quality
-            - test_modules
-            - test_app
+            - build_instrumented
           filters:
             branches:
               only: master
