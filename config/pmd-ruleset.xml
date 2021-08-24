@@ -29,7 +29,6 @@
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
-        <exclude name="PrimitiveWrapperInstantiation" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedAssignment" />
         <exclude name="UnusedPrivateMethod" />
