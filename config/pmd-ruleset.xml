@@ -141,4 +141,6 @@
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
+
+    <rule ref="category/java/security.xml"/>
 </ruleset>
