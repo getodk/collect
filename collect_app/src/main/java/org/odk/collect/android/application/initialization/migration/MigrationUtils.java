@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 
 import org.odk.collect.shared.Settings;
 
-public class MigrationUtils {
+public final class MigrationUtils {
 
     private MigrationUtils() {
 

@@ -5,7 +5,7 @@ import org.odk.collect.shared.Settings;
 
 import static org.junit.Assert.assertEquals;
 
-public class SharedPreferenceUtils {
+public final class SharedPreferenceUtils {
 
     private SharedPreferenceUtils() {
     }

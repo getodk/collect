@@ -12,7 +12,7 @@ import org.robolectric.android.controller.ActivityController;
  * using an Activity that isn't part of the manifest. This is useful when using a mock/fake/stub
  * Activity as part of a test
  */
-public class TestActivityScenario<T extends Activity> {
+public final class TestActivityScenario<T extends Activity> {
 
     private final ActivityController<T> activityController;
 

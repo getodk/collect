@@ -27,7 +27,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class Appearances {
+public final class Appearances {
     private static final String EXCEPTION_PARSING_COLUMNS = "Exception parsing columns";
 
     // Date appearances

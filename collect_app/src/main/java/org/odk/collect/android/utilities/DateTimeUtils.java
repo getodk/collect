@@ -6,7 +6,7 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 
-public class DateTimeUtils {
+public final class DateTimeUtils {
 
     private DateTimeUtils() {
 

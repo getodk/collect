@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 /**
  * Escape strings according to https://tools.ietf.org/html/rfc4180
  */
-public class CSVUtils {
+public final class CSVUtils {
 
     private CSVUtils() {
 

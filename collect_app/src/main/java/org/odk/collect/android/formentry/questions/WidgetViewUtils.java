@@ -25,7 +25,7 @@ import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import static android.view.View.GONE;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 
-public class WidgetViewUtils {
+public final class WidgetViewUtils {
 
     private static final int WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER = 4;
 

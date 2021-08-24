@@ -35,7 +35,7 @@ import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 /**
  * Emulates the process of copying a form via ADB
  */
-public class AdbFormLoadingUtils {
+public final class AdbFormLoadingUtils {
 
     private AdbFormLoadingUtils() {
 

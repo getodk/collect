@@ -29,7 +29,7 @@ import timber.log.Timber;
  * Created by shobhit on 12/4/17.
  */
 
-public class CompressionUtils {
+public final class CompressionUtils {
 
     private CompressionUtils() {
 

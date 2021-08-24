@@ -27,7 +27,7 @@ import mmcalendar.ThingyanCalculator;
 import mmcalendar.WesternDate;
 import mmcalendar.WesternDateConverter;
 
-public class MyanmarDateUtils {
+public final class MyanmarDateUtils {
 
     private MyanmarDateUtils() {
     }

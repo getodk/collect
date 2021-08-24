@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-public class ArrayUtils {
+public final class ArrayUtils {
 
     /**
      * An empty immutable {@code Long} array.

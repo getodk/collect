@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-public class InstanceUploaderUtils {
+public final class InstanceUploaderUtils {
 
     public static final String DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successful!";
     public static final String SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE = "Failed. Records can only be submitted to spreadsheets created in Google Sheets. The submission spreadsheet specified was uploaded to Google Drive.";

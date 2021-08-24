@@ -5,7 +5,7 @@ import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
 
-public class InstanceUtils {
+public final class InstanceUtils {
 
     private InstanceUtils() {
 

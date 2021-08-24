@@ -8,7 +8,7 @@ import org.odk.collect.android.preferences.FormUpdateMode;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
-public class SettingsUtils {
+public final class SettingsUtils {
 
     private SettingsUtils() {
 

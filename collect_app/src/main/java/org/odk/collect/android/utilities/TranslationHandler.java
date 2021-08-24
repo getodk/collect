@@ -4,7 +4,7 @@ import android.content.Context;
 
 import static org.odk.collect.strings.LocalizedApplicationKt.getLocalizedString;
 
-public class TranslationHandler {
+public final class TranslationHandler {
     private TranslationHandler() {
 
     }

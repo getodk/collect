@@ -2,7 +2,7 @@ package org.odk.collect.shared.strings;
 
 import java.security.SecureRandom;
 
-public class RandomString {
+public final class RandomString {
 
     private RandomString() {
 

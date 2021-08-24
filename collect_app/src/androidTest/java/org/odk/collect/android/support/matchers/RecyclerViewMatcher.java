@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 // https://github.com/dannyroa/espresso-samples/blob/master/RecyclerView/app/src/androidTest/java/com/dannyroa/espresso_samples/recyclerview/RecyclerViewMatcher.java
-public class RecyclerViewMatcher {
+public final class RecyclerViewMatcher {
     private final int recyclerViewId;
 
     private RecyclerViewMatcher(int recyclerViewId) {

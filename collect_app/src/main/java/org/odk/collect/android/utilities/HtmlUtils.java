@@ -20,7 +20,7 @@ import android.text.Html;
 
 import java.util.regex.MatchResult;
 
-public class HtmlUtils {
+public final class HtmlUtils {
 
     private static ReplaceCallback.Callback createHeader = match -> {
         int level = match.group(1).length();

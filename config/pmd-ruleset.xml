@@ -71,7 +71,6 @@
         <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
-        <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="CognitiveComplexity" />
         <exclude name="CollapsibleIfStatements" />
         <exclude name="CyclomaticComplexity" />

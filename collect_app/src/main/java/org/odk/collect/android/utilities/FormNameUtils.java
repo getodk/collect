@@ -19,7 +19,7 @@ package org.odk.collect.android.utilities;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class FormNameUtils {
+public final class FormNameUtils {
 
     private static final String CONTROL_CHAR_REGEX = "[\\p{Cntrl}]";
     private static final Pattern CONTROL_CHAR_PATTERN = Pattern.compile(CONTROL_CHAR_REGEX);

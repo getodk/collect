@@ -8,7 +8,7 @@ import androidx.test.espresso.matcher.BoundedMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-public class DrawableMatcher  {
+public final class DrawableMatcher  {
 
     private DrawableMatcher() {
     }

@@ -16,7 +16,7 @@ import java.io.IOException;
 import timber.log.Timber;
 
 /** Methods for reading from and writing to the FormDef cache */
-public class FormDefCache {
+public final class FormDefCache {
 
     private FormDefCache() {
         // Private constructor

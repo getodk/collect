@@ -9,7 +9,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
-public class SelectOneWidgetUtils {
+public final class SelectOneWidgetUtils {
 
     private SelectOneWidgetUtils() {
 

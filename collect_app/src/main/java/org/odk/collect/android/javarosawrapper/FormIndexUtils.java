@@ -7,7 +7,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.IFormElement;
 
-public class FormIndexUtils {
+public final class FormIndexUtils {
 
     private FormIndexUtils() {
 

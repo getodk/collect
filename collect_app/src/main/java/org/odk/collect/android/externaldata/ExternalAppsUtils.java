@@ -51,7 +51,7 @@ import java.util.Map;
  * Date: 30/07/13
  * Time: 10:44
  */
-public class ExternalAppsUtils {
+public final class ExternalAppsUtils {
 
     private static final String LEFT_PARENTHESIS = "(";
     private static final String RIGHT_PARENTHESIS = ")";

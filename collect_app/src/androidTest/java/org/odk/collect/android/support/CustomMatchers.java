@@ -28,7 +28,7 @@ import org.hamcrest.TypeSafeMatcher;
 /**
  * Grab bag of Hamcrest matchers.
  */
-public class CustomMatchers {
+public final class CustomMatchers {
     private CustomMatchers() {
 
     }

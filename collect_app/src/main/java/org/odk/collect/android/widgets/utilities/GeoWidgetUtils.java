@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 
 import timber.log.Timber;
 
-public class GeoWidgetUtils {
+public final class GeoWidgetUtils {
     public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
 
     private GeoWidgetUtils() {
