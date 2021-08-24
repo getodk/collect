@@ -318,7 +318,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature != null && feature instanceof PolyFeature) {
+        if (feature instanceof PolyFeature) {
             ((PolyFeature) feature).addPoint(point);
         }
     }

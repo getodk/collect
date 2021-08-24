@@ -87,7 +87,6 @@
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
-        <exclude name="SimplifyConditional" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />

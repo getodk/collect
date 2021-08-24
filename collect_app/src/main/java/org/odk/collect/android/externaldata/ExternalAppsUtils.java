@@ -120,7 +120,7 @@ public final class ExternalAppsUtils {
                 try {
                     Object result = getValueRepresentedBy(paramEntry.getValue(), reference);
 
-                    if (result != null && result instanceof Serializable) {
+                    if (result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);
                     }
                 } catch (Exception e) {
