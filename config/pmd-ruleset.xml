@@ -35,7 +35,6 @@
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
         <exclude name="ForLoopVariableCount" />
-        <exclude name="AvoidReassigningLoopVariables" />
     </rule>
 
     <rule ref="category/java/codestyle.xml">
