@@ -1,9 +1,9 @@
 package org.odk.collect.android.preferences;
 
 public enum GuidanceHint {
-    Yes("yes"),
-    YesCollapsed("yes_collapsed"),
-    No("no");
+    YES("yes"),
+    YES_COLLAPSED("yes_collapsed"),
+    NO("no");
 
     private final String name;
 
