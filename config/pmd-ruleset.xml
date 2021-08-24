@@ -127,7 +127,6 @@
         <exclude name="MissingSerialVersionUID" />
         <exclude name="NullAssignment" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
-        <exclude name="TestClassWithoutTestCases" />
         <exclude name="UnnecessaryBooleanAssertion" />
         <exclude name="DetachedTestCase" />
         <exclude name="CloseResource" />
