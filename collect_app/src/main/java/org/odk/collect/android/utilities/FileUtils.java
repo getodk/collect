@@ -45,7 +45,7 @@ import java.io.OutputStream;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -404,7 +404,7 @@ public class FileUtils {
         File lastSavedFile = getLastSavedFile(formXml);
 
         if (!lastSavedFile.exists()) {
-            write(lastSavedFile, STUB_XML.getBytes(Charset.forName("UTF-8")));
+            write(lastSavedFile, STUB_XML.getBytes(StandardCharsets.UTF_8));
         }
 
         return "jr://file/" + LAST_SAVED_FILENAME;

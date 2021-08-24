@@ -33,7 +33,6 @@
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedAssignment" />
         <exclude name="UnusedPrivateMethod" />
-        <exclude name="UseStandardCharsets" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
         <exclude name="ForLoopVariableCount" />
