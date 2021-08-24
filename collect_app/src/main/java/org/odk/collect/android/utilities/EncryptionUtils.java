@@ -228,7 +228,7 @@ public class EncryptionUtils {
             ++ivSeedArray[ivCounter % ivSeedArray.length];
             ++ivCounter;
             IvParameterSpec baseIv = new IvParameterSpec(ivSeedArray);
-            Cipher c = null;
+            Cipher c;
             try {
                 c = Cipher.getInstance(EncryptionUtils.SYMMETRIC_ALGORITHM, "BC");
                 isNotBouncyCastle = false;
@@ -544,7 +544,7 @@ public class EncryptionUtils {
 
         c = d.createElement(XML_ENCRYPTED_TAG_NAMESPACE, BASE64_ENCRYPTED_ELEMENT_SIGNATURE);
         c.addChild(0, Node.TEXT, formInfo.getBase64EncryptedElementSignature());
-        e.addChild(idx++, Node.ELEMENT, c);
+        e.addChild(idx, Node.ELEMENT, c);
 
         FileOutputStream fout = null;
         OutputStreamWriter writer = null;

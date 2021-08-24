@@ -52,8 +52,6 @@ public class OpenRosaResponseParserImpl implements OpenRosaResponseParser {
             String formId = null;
             String formName = null;
             String version = null;
-            String majorMinorVersion = null;
-            String description = null;
             String downloadUrl = null;
             String manifestUrl = null;
             String hash = null;
@@ -90,16 +88,8 @@ public class OpenRosaResponseParserImpl implements OpenRosaResponseParser {
                         }
                         break;
                     case "majorMinorVersion":
-                        majorMinorVersion = XFormParser.getXMLText(child, true);
-                        if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
-                            majorMinorVersion = null;
-                        }
                         break;
                     case "descriptionText":
-                        description = XFormParser.getXMLText(child, true);
-                        if (description != null && description.length() == 0) {
-                            description = null;
-                        }
                         break;
                     case "downloadUrl":
                         downloadUrl = XFormParser.getXMLText(child, true);

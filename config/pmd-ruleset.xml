@@ -30,7 +30,6 @@
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
-        <exclude name="UnusedAssignment" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
     </rule>

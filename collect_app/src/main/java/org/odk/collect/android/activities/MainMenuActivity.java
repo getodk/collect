@@ -145,7 +145,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             @Override
             public void onClick(View v) {
                 String protocol = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_PROTOCOL);
-                Intent i = null;
+                Intent i;
                 if (protocol.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
                     if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {
                         i = new Intent(getApplicationContext(),

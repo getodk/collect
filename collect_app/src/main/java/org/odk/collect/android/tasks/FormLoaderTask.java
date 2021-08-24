@@ -258,7 +258,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // for itemsets.csv, we only check to see if the itemset file has been
         // updated
         final File csv = new File(formMediaDir.getAbsolutePath() + "/" + ITEMSETS_CSV);
-        String csvmd5 = null;
+        String csvmd5;
         if (csv.exists()) {
             csvmd5 = Md5.getMd5Hash(csv);
             boolean readFile = false;
