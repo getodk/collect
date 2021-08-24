@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -560,8 +561,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             );
         }
         if (accuracyCircle == null) {
-            int stroke = getResources().getColor(R.color.locationAccuracyCircle);
-            int fill = getResources().getColor(R.color.locationAccuracyFill);
+            int stroke = new ThemeUtils(requireContext()).getColorPrimaryDark();
+            int fill = getResources().getColor(R.color.color_primary_low_emphasis);
             accuracyCircle = map.addCircle(new CircleOptions()
                 .center(loc)
                 .radius(radius)
@@ -746,7 +747,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(getResources().getColor(R.color.mapLine))
+                    .color(new ThemeUtils(requireContext()).getColorSecondary())
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)

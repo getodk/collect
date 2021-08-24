@@ -59,6 +59,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -841,7 +842,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
             }
             line = lineManager.create(new LineOptions()
-                .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.mapLine)))
+                .withLineColor(ColorUtils.colorToRgbaString(new ThemeUtils(requireContext()).getColorSecondary()))
                 .withLineWidth(STROKE_WIDTH)
                 .withLatLngs(new ArrayList<>())
             );

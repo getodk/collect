@@ -689,7 +689,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
-            polyline.setColor(getResources().getColor(R.color.mapLine));
+            polyline.setColor(new ThemeUtils(requireContext()).getColorSecondary());
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolyline);
                 if (featureClickListener != null && featureId != -1) {

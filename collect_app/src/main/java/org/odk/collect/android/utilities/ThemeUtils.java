@@ -148,4 +148,9 @@ public final class ThemeUtils {
     public int getColorError() {
         return getAttributeValue(R.attr.colorError);
     }
+
+    @ColorInt
+    public int getColorPrimaryDark() {
+        return getAttributeValue(R.attr.colorPrimaryDark);
+    }
 }
