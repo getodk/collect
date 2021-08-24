@@ -3,6 +3,7 @@ package org.odk.collect.androidshared.ui
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
+import org.odk.collect.shared.strings.StringUtils
 
 class OneSignTextWatcher(private val editText: EditText) : TextWatcher {
     lateinit var oldTextString: String
@@ -15,13 +16,12 @@ class OneSignTextWatcher(private val editText: EditText) : TextWatcher {
     }
 
     override fun afterTextChanged(editable: Editable?) {
-        var newTextString = editable.toString()
-        if (oldTextString != newTextString) {
-            if (Character.codePointCount(newTextString, 0, newTextString.length) > 1) {
-                newTextString = oldTextString
+        editable.toString().let {
+            if (it != oldTextString) {
+                val trimmedString = StringUtils.firstCharacterOrEmoji(it)
+                editText.setText(trimmedString)
+                editText.setSelection(trimmedString.length)
             }
-            editText.setText(newTextString)
-            editText.setSelection(newTextString.length)
         }
     }
 }

@@ -14,6 +14,7 @@ java {
 
 dependencies {
     implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.emoji_java
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest

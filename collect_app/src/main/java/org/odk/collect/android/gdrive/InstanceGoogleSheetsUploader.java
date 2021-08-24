@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.gdrive;
 
+import static org.odk.collect.android.javarosawrapper.FormController.INSTANCE_ID;
+
 import androidx.annotation.NonNull;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -45,12 +47,12 @@ import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.StringUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.shared.PathUtils;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,8 +66,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.javarosawrapper.FormController.INSTANCE_ID;
 
 public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private static final String PARENT_KEY = "PARENT_KEY";

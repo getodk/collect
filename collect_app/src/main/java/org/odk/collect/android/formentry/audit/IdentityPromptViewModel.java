@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry.audit;
 
+import static org.odk.collect.shared.strings.StringUtils.isBlank;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -8,8 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.javarosawrapper.FormController;
-
-import static org.odk.collect.android.utilities.StringUtils.isBlank;
 
 public class IdentityPromptViewModel extends ViewModel implements RequiresFormController {
 

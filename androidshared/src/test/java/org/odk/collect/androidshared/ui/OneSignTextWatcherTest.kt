@@ -23,22 +23,9 @@ class OneSignTextWatcherTest {
     }
 
     @Test
-    fun `One character should be accepted`() {
-        editText.setText("1")
-        assertThat(editText.text.toString(), `is`("1"))
-    }
-
-    @Test
-    fun `One emoji should be accepted`() {
-        editText.setText("\uD83D\uDC22")
-        assertThat(editText.text.toString(), `is`("\uD83D\uDC22"))
-    }
-
-    @Test
     fun `Longer strings should not be accepted`() {
+        editText.setText("1")
         editText.setText("12")
-        assertThat(editText.text.toString(), `is`(""))
-        editText.setText("\uD83D\uDC22\uD83D\uDC22")
-        assertThat(editText.text.toString(), `is`(""))
+        assertThat(editText.text.toString(), `is`("1"))
     }
 }

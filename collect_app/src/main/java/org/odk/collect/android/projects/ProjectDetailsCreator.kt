@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import org.odk.collect.android.R
 import org.odk.collect.projects.Project
+import org.odk.collect.shared.strings.StringUtils
 import java.net.URL
-import java.util.Locale
 import java.util.regex.Pattern
 import kotlin.math.abs
 
@@ -19,11 +19,7 @@ class ProjectDetailsCreator(private val context: Context) {
         }
 
         val projectIcon = if (icon.isNotBlank()) {
-            if (Character.codePointCount(icon, 0, icon.length) == 1) {
-                icon.toUpperCase(Locale.US)
-            } else {
-                getFirstSign(icon)
-            }
+            StringUtils.firstCharacterOrEmoji(icon)
         } else {
             projectName.first().toUpperCase().toString()
         }
