@@ -39,7 +39,6 @@
         <exclude name="AtLeastOneConstructor" />
         <exclude name="AvoidFinalLocalVariable" />
         <exclude name="AvoidPrefixingMethodParameters" />
-        <exclude name="AvoidProtectedMethodInFinalClassNotExtending" />
         <exclude name="CallSuperInConstructor" />
         <exclude name="ClassNamingConventions" />
         <exclude name="CommentDefaultAccessModifier" />
