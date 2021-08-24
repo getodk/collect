@@ -34,6 +34,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -241,7 +242,7 @@ public class FileUtils {
         fields.put(TITLE, formDef.getTitle());
         fields.put(FORMID, formDef.getMainInstance().getRoot().getAttributeValue(null, "id"));
         String version = formDef.getMainInstance().getRoot().getAttributeValue(null, "version");
-        if (version != null && version.trim().isEmpty()) {
+        if (version != null && StringUtils.isBlank(version)) {
             version = null;
         }
         fields.put(VERSION, version);

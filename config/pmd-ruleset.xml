@@ -145,7 +145,6 @@
     <rule ref="category/java/performance.xml">
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
-        <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
         <exclude name="OptimizableToArrayCall" />
