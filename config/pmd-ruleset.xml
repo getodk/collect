@@ -31,7 +31,6 @@
         <exclude name="PreserveStackTrace" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
         <exclude name="UnusedAssignment" />
-        <exclude name="UnusedPrivateMethod" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
     </rule>
