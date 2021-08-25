@@ -105,7 +105,6 @@
         <exclude name="AvoidCatchingThrowable" />
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="AvoidFieldNameMatchingMethodName" />
-        <exclude name="AvoidFieldNameMatchingTypeName" />
         <exclude name="AvoidInstanceofChecksInCatchClause" />
         <exclude name="AvoidLiteralsInIfCondition" />
         <exclude name="BeanMembersShouldSerialize" />
