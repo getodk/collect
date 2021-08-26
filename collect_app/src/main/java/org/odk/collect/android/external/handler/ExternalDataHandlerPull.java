@@ -84,15 +84,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
-        /* smap
-        Collect.getInstance().getDefaultTracker()
-                .send(new HitBuilders.EventBuilder()
-                        .setCategory("ExternalData")
-                        .setAction("pulldata()")
-                        .setLabel(Collect.getCurrentFormIdentifierHash())
-                        .build());
-                        */
-
+        
         /*
          * smap
          * There are 3 variants of pulldata with 3, 4 and 6 parameters
@@ -124,7 +116,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             referenceColumn = XPathFuncExpr.toString(args[2]);
             referenceValue = XPathFuncExpr.toString(args[3]);
         } else if(args.length == 5) {
-            filter = XPathFuncExpr.toString(args[2]);
+            filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
             fn = XPathFuncExpr.toString(args[3]).toLowerCase();
         } else if(args.length == 6) {
             referenceColumn = XPathFuncExpr.toString(args[2]);
@@ -210,7 +202,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
 
             // smap start - Add user specified selection if it is not matches
-            if(multiSelect && !searchType.equals("matches")) {
+            if(multiSelect && searchType != null && searchType.equals("matches")) {
                 ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
                         searchType, ExternalDataSearchType.CONTAINS);
                 List<String> referenceValues = ExternalDataUtil.createListOfValues(referenceValue, externalDataSearchType.getKeyword().trim());
