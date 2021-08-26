@@ -8,7 +8,7 @@ import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
 
-public class AuditUtils {
+public final class AuditUtils {
 
     private AuditUtils() {
 

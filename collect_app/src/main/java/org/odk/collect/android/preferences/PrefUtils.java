@@ -10,7 +10,7 @@ import org.odk.collect.shared.Settings;
 
 import java.util.Arrays;
 
-public class PrefUtils {
+public final class PrefUtils {
     private PrefUtils() { }  // prevent instantiation of this utility class
 
     public static Settings getSharedPrefs() {

@@ -14,7 +14,7 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
 
-public class GeoWidgetHelpers {
+public final class GeoWidgetHelpers {
 
     private GeoWidgetHelpers() {
     }

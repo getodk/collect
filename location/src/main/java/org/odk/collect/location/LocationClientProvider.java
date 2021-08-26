@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 /**
  * A static helper class for obtaining the appropriate LocationClient to use.
  */
-public class LocationClientProvider {
+public final class LocationClientProvider {
     @Nullable
     private static LocationClient testClient;
 

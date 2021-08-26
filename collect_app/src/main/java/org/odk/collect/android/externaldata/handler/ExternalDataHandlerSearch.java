@@ -32,6 +32,7 @@ import org.odk.collect.android.externaldata.ExternalDataUtil;
 import org.odk.collect.android.externaldata.ExternalSQLiteOpenHelper;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -153,7 +154,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 columnsToFetch.add(safeImageColumn);
             }
 
-            String[] sqlColumns = columnsToFetch.toArray(new String[columnsToFetch.size()]);
+            String[] sqlColumns = columnsToFetch.toArray(new String[0]);
 
             String selection;
             String[] selectionArgs;
@@ -215,7 +216,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                     String label = buildLabel(c, selectColumnMap, columnsToExcludeFromLabels);
 
                     ExternalSelectChoice selectChoice;
-                    if (label.trim().length() == 0) {
+                    if (StringUtils.isBlank(label)) {
                         selectChoice = new ExternalSelectChoice(value, value, false);
                     } else {
                         selectChoice = new ExternalSelectChoice(label, value, false);

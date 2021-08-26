@@ -324,7 +324,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
-        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
         jumpToGroupWithText("Guidance hint");
         onView(withText(startsWith("Source11"))).perform(click());
 

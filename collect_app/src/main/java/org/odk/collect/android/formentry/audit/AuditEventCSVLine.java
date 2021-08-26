@@ -11,7 +11,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.CSVUtils.getEscapedValueForCsv;
 
-public class AuditEventCSVLine {
+public final class AuditEventCSVLine {
 
     private AuditEventCSVLine() {
 

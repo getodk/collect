@@ -20,7 +20,7 @@ import android.text.Html;
 
 import java.util.regex.MatchResult;
 
-public class HtmlUtils {
+public final class HtmlUtils {
 
     private static ReplaceCallback.Callback createHeader = match -> {
         int level = match.group(1).length();
@@ -67,7 +67,7 @@ public class HtmlUtils {
 
     }
 
-    protected static String markdownToHtml(String text) {
+    static String markdownToHtml(String text) {
 
         text = text.replaceAll("<([^a-zA-Z/])", "&lt;$1");
         // https://github.com/enketo/enketo-transformer/blob/master/src/markdown.js

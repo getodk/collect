@@ -20,7 +20,7 @@ import static org.odk.collect.forms.FormSourceException.SecurityError;
 import static org.odk.collect.forms.FormSourceException.ServerError;
 import static org.odk.collect.forms.FormSourceException.Unreachable;
 
-public class AnalyticsUtils {
+public final class AnalyticsUtils {
 
     private AnalyticsUtils() {
 

@@ -403,7 +403,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         // If the repeat picker is showing, don't show an item number for the current index.
         boolean hideLastMultiplicity = shouldShowRepeatGroupPicker();
 
-        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[groups.size()]), hideLastMultiplicity);
+        return ODKView.getGroupsPath(groups.toArray(new FormEntryCaption[0]), hideLastMultiplicity);
     }
 
     /**

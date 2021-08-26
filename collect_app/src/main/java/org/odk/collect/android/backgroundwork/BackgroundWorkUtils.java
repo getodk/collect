@@ -4,7 +4,7 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 
-public class BackgroundWorkUtils {
+public final class BackgroundWorkUtils {
 
     private static final long FIFTEEN_MINUTES_PERIOD = 900000;
     private static final long ONE_HOUR_PERIOD = 3600000;

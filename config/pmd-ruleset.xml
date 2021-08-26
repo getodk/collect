@@ -29,22 +29,15 @@
         <exclude name="PositionLiteralsFirstInCaseInsensitiveComparisons" />
         <exclude name="PositionLiteralsFirstInComparisons" />
         <exclude name="PreserveStackTrace" />
-        <exclude name="PrimitiveWrapperInstantiation" />
         <exclude name="SwitchStmtsShouldHaveDefault" />
-        <exclude name="UnusedAssignment" />
-        <exclude name="UnusedPrivateMethod" />
-        <exclude name="UseStandardCharsets" />
         <exclude name="UseVarargs" />
         <exclude name="UseTryWithResources" />
-        <exclude name="ForLoopVariableCount" />
-        <exclude name="AvoidReassigningLoopVariables" />
     </rule>
 
     <rule ref="category/java/codestyle.xml">
         <exclude name="AtLeastOneConstructor" />
         <exclude name="AvoidFinalLocalVariable" />
         <exclude name="AvoidPrefixingMethodParameters" />
-        <exclude name="AvoidProtectedMethodInFinalClassNotExtending" />
         <exclude name="CallSuperInConstructor" />
         <exclude name="ClassNamingConventions" />
         <exclude name="CommentDefaultAccessModifier" />
@@ -62,8 +55,6 @@
         <exclude name="ShortMethodName" />
         <exclude name="ShortVariable" />
         <exclude name="TooManyStaticImports" />
-        <exclude name="FieldNamingConventions" />
-        <exclude name="LocalVariableNamingConventions" />
         <exclude name="UseUnderscoresInNumericLiterals" />
         <exclude name="LinguisticNaming" />
         <exclude name="UnnecessaryFullyQualifiedName" />
@@ -75,7 +66,6 @@
         <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
-        <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="CognitiveComplexity" />
         <exclude name="CollapsibleIfStatements" />
         <exclude name="CyclomaticComplexity" />
@@ -92,7 +82,6 @@
         <exclude name="NcssCount" />
         <exclude name="NPathComplexity" />
         <exclude name="SignatureDeclareThrowsException" />
-        <exclude name="SimplifyConditional" />
         <exclude name="SwitchDensity" />
         <exclude name="TooManyFields" />
         <exclude name="TooManyMethods" />
@@ -116,11 +105,9 @@
         <exclude name="AvoidCatchingThrowable" />
         <exclude name="AvoidDuplicateLiterals" />
         <exclude name="AvoidFieldNameMatchingMethodName" />
-        <exclude name="AvoidFieldNameMatchingTypeName" />
         <exclude name="AvoidInstanceofChecksInCatchClause" />
         <exclude name="AvoidLiteralsInIfCondition" />
         <exclude name="BeanMembersShouldSerialize" />
-        <exclude name="CompareObjectsWithEquals" />
         <exclude name="ConstructorCallsOverridableMethod" />
         <exclude name="DataflowAnomalyAnalysis" />
         <exclude name="EmptyCatchBlock" />
@@ -132,8 +119,6 @@
         <exclude name="MissingSerialVersionUID" />
         <exclude name="NullAssignment" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
-        <exclude name="TestClassWithoutTestCases" />
-        <exclude name="UnnecessaryBooleanAssertion" />
         <exclude name="DetachedTestCase" />
         <exclude name="CloseResource" />
     </rule>
@@ -147,12 +132,12 @@
     <rule ref="category/java/performance.xml">
         <exclude name="AvoidFileStream" />
         <exclude name="AvoidInstantiatingObjectsInLoops" />
-        <exclude name="InefficientEmptyStringCheck" />
         <exclude name="InefficientStringBuffering" />
         <exclude name="InsufficientStringBufferDeclaration" />
-        <exclude name="OptimizableToArrayCall" />
         <exclude name="SimplifyStartsWith" />
         <exclude name="TooFewBranchesForASwitchStatement" /> <!-- Decided not to use in #2564 -->
         <exclude name="UseStringBufferForStringAppends" />
     </rule>
+
+    <rule ref="category/java/security.xml"/>
 </ruleset>

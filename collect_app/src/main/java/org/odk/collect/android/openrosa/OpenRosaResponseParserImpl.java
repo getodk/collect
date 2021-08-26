@@ -6,6 +6,7 @@ import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.odk.collect.forms.FormListItem;
 import org.odk.collect.forms.MediaFile;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +52,6 @@ public class OpenRosaResponseParserImpl implements OpenRosaResponseParser {
             String formId = null;
             String formName = null;
             String version = null;
-            String majorMinorVersion = null;
-            String description = null;
             String downloadUrl = null;
             String manifestUrl = null;
             String hash = null;
@@ -84,21 +83,13 @@ public class OpenRosaResponseParserImpl implements OpenRosaResponseParser {
                         break;
                     case "version":
                         version = XFormParser.getXMLText(child, true);
-                        if (version != null && version.trim().isEmpty()) {
+                        if (version != null && StringUtils.isBlank(version)) {
                             version = null;
                         }
                         break;
                     case "majorMinorVersion":
-                        majorMinorVersion = XFormParser.getXMLText(child, true);
-                        if (majorMinorVersion != null && majorMinorVersion.length() == 0) {
-                            majorMinorVersion = null;
-                        }
                         break;
                     case "descriptionText":
-                        description = XFormParser.getXMLText(child, true);
-                        if (description != null && description.length() == 0) {
-                            description = null;
-                        }
                         break;
                     case "downloadUrl":
                         downloadUrl = XFormParser.getXMLText(child, true);

@@ -283,7 +283,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         ArrayList<DriveListItem> dl = new ArrayList<>();
         dl.addAll(filteredList);
         outState.putParcelableArrayList(DRIVE_ITEMS_KEY, dl);
-        outState.putStringArray(PATH_KEY, currentPath.toArray(new String[currentPath.size()]));
+        outState.putStringArray(PATH_KEY, currentPath.toArray(new String[0]));
         outState.putString(PARENT_KEY, parentId);
         outState.putBoolean(ALERT_SHOWING_KEY, alertShowing);
         outState.putString(ALERT_MSG_KEY, alertMsg);

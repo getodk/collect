@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
-public class GeoUtils {
+public final class GeoUtils {
 
     private GeoUtils() {
 

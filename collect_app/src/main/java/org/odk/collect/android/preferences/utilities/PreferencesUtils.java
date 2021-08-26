@@ -3,7 +3,7 @@ package org.odk.collect.android.preferences.utilities;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 
-public class PreferencesUtils {
+public final class PreferencesUtils {
 
     private PreferencesUtils() {
 

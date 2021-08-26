@@ -275,7 +275,7 @@ public final class ExternalDataUtil {
         return values;
     }
 
-    protected static List<String> splitTrimmed(String displayColumns, String separator,
+    private static List<String> splitTrimmed(String displayColumns, String separator,
             String fallbackSeparator) {
         List<String> commaSplitParts = splitTrimmed(displayColumns, separator);
 
@@ -286,7 +286,7 @@ public final class ExternalDataUtil {
         return commaSplitParts;
     }
 
-    protected static List<String> splitTrimmed(String text, String separator) {
+    private static List<String> splitTrimmed(String text, String separator) {
         List<String> parts = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(text, separator);
         while (st.hasMoreTokens()) {

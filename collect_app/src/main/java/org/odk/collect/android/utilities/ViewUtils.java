@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
-public class ViewUtils {
+public final class ViewUtils {
 
     private ViewUtils() {
         

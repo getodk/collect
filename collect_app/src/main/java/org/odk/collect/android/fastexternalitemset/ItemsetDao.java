@@ -159,7 +159,6 @@ public class ItemsetDao {
                 }
                 // move string forward to after " or "
                 queryString = queryString.substring(orIndex + 4, queryString.length());
-                orIndex = -1;
             }
         }
 

@@ -117,7 +117,7 @@ public class DateTimeWidgetUtils {
                 break;
             case BIKRAM_SAMBAT:
                 customDate = new DateTime(date);
-                monthArray = BsCalendar.MONTH_NAMES.toArray(new String[BsCalendar.MONTH_NAMES.size()]);
+                monthArray = BsCalendar.MONTH_NAMES.toArray(new String[0]);
                 break;
             case MYANMAR:
                 customDate = new DateTime(date);

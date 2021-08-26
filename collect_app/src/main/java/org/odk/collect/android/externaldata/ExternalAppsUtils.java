@@ -51,7 +51,7 @@ import java.util.Map;
  * Date: 30/07/13
  * Time: 10:44
  */
-public class ExternalAppsUtils {
+public final class ExternalAppsUtils {
 
     private static final String LEFT_PARENTHESIS = "(";
     private static final String RIGHT_PARENTHESIS = ")";
@@ -120,7 +120,7 @@ public class ExternalAppsUtils {
                 try {
                     Object result = getValueRepresentedBy(paramEntry.getValue(), reference);
 
-                    if (result != null && result instanceof Serializable) {
+                    if (result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);
                     }
                 } catch (Exception e) {

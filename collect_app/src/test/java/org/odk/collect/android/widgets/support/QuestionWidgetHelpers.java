@@ -11,7 +11,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 
 import static org.mockito.Mockito.mock;
 
-public class QuestionWidgetHelpers {
+public final class QuestionWidgetHelpers {
 
     private QuestionWidgetHelpers() {
 

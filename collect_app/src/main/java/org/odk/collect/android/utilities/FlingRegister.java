@@ -5,7 +5,7 @@ package org.odk.collect.android.utilities;
  * successfully detected or not
  */
 
-public class FlingRegister {
+public final class FlingRegister {
 
     private static boolean flingDetected;
 

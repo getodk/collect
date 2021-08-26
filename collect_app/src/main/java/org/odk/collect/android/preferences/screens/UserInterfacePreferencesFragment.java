@@ -123,16 +123,15 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
         if (pref != null) {
             final LocaleHelper localeHelper = new LocaleHelper();
             TreeMap<String, String> languageList = localeHelper.getEntryListValues();
-            int length = languageList.size() + 1;
             ArrayList<String> entryValues = new ArrayList<>();
             entryValues.add(0, "");
             entryValues.addAll(languageList.values());
-            pref.setEntryValues(entryValues.toArray(new String[length]));
+            pref.setEntryValues(entryValues.toArray(new String[0]));
             ArrayList<String> entries = new ArrayList<>();
             entries.add(0, getActivity().getResources()
                     .getString(R.string.use_device_language));
             entries.addAll(languageList.keySet());
-            pref.setEntries(entries.toArray(new String[length]));
+            pref.setEntries(entries.toArray(new String[0]));
             if (pref.getValue() == null) {
                 //set Default value to "Use phone locale"
                 pref.setValueIndex(0);

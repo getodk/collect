@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SQLiteUtils {
+public final class SQLiteUtils {
     private SQLiteUtils() {
     }
 

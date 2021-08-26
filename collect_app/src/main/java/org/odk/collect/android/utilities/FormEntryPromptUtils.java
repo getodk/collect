@@ -42,7 +42,7 @@ import javax.annotation.Nullable;
 
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
-public class FormEntryPromptUtils {
+public final class FormEntryPromptUtils {
 
     private FormEntryPromptUtils() {
     }

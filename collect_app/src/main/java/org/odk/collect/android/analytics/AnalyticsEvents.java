@@ -1,6 +1,6 @@
 package org.odk.collect.android.analytics;
 
-public class AnalyticsEvents {
+public final class AnalyticsEvents {
 
     private AnalyticsEvents() {
 

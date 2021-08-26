@@ -6,7 +6,7 @@ import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.rules.RuleChain;
 
-public class TestRuleChain {
+public final class TestRuleChain {
 
     private TestRuleChain() {
 

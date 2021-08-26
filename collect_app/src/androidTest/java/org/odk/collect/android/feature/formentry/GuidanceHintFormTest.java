@@ -54,7 +54,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedWhenSettingSetToYes() {
-        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.Yes.toString());
+        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
@@ -70,7 +70,7 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedAfterClickWhenSettingSetToYesCollapsed() {
-        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YesCollapsed.toString());
+        TestSettingsProvider.getGeneralSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES_COLLAPSED.toString());
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());

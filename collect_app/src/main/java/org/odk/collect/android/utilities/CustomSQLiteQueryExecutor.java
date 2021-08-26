@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
-public class CustomSQLiteQueryExecutor extends CustomSQLiteQueryBuilder {
+public final class CustomSQLiteQueryExecutor extends CustomSQLiteQueryBuilder {
     private final SQLiteDatabase db;
 
     private CustomSQLiteQueryExecutor(SQLiteDatabase db) {

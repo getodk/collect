@@ -34,7 +34,7 @@ import java.util.Map;
 import static android.os.Looper.getMainLooper;
 import static org.robolectric.Shadows.shadowOf;
 
-public class RobolectricHelpers {
+public final class RobolectricHelpers {
 
     public static Map<Class, ServiceScenario> services = new HashMap<>();
 

@@ -58,7 +58,7 @@ public class IconMenuListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null || !(convertView instanceof TextView)) {
+        if (!(convertView instanceof TextView)) {
             convertView = createView(parent);
         }
         refreshView((IconMenuItem) getItem(position), (TextView) convertView);

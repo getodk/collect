@@ -26,7 +26,7 @@ import androidx.core.content.ContextCompat;
 import org.odk.collect.android.R;
 import org.odk.collect.forms.instances.Instance;
 
-public class IconUtils {
+public final class IconUtils {
 
     private IconUtils() {
     }

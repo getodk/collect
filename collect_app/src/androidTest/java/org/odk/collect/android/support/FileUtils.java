@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FileUtils {
+public final class FileUtils {
 
     private FileUtils() {
     }

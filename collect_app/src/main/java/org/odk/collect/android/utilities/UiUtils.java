@@ -29,7 +29,7 @@ import org.odk.collect.android.application.Collect;
  * Collection of utils related to Android UI components
  * ViewUtils name already taken by support library
  */
-public class UiUtils {
+public final class UiUtils {
 
     private UiUtils() {
     }

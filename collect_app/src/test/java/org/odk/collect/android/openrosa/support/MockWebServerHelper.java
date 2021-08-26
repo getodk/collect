@@ -3,7 +3,7 @@ package org.odk.collect.android.openrosa.support;
 import okhttp3.Request;
 import okhttp3.mockwebserver.MockWebServer;
 
-public class MockWebServerHelper {
+public final class MockWebServerHelper {
 
     private MockWebServerHelper() {
 

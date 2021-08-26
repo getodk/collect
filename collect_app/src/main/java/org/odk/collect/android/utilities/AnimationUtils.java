@@ -16,7 +16,7 @@ import org.odk.collect.android.listeners.Result;
 /**
  * Created by Ing. Oscar G. Medina Cruz on 18/06/2016.
  */
-public class AnimationUtils {
+public final class AnimationUtils {
 
     private static final Interpolator EASE_IN_OUT_QUART = PathInterpolatorCompat.create(0.77f, 0f, 0.175f, 1f);
 

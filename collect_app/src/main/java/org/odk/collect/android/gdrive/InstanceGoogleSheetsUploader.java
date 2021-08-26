@@ -247,7 +247,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     // by Javarosa https://github.com/getodk/javarosa/issues/266
     private boolean shouldRowBeInserted(HashMap<String, String> answers) {
         for (String answer : answers.values()) {
-            if (answer != null && !answer.trim().isEmpty()) {
+            if (answer != null && !StringUtils.isBlank(answer)) {
                 return true;
             }
         }

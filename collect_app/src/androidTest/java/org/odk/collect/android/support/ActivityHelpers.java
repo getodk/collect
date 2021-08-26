@@ -14,7 +14,7 @@ import org.hamcrest.core.AllOf;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 
-public class ActivityHelpers {
+public final class ActivityHelpers {
 
     private ActivityHelpers() {
     }

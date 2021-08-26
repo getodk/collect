@@ -32,7 +32,7 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE;
 
-public class ImageConverter {
+public final class ImageConverter {
 
     private ImageConverter() {
     }

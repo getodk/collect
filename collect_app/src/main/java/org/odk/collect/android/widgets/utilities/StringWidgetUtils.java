@@ -19,7 +19,7 @@ import java.util.Locale;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-public class StringWidgetUtils {
+public final class StringWidgetUtils {
 
     private StringWidgetUtils() {
     }

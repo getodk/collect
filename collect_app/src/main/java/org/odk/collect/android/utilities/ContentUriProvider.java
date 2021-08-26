@@ -20,7 +20,7 @@ import java.io.OutputStream;
 
 import timber.log.Timber;
 
-public class ContentUriProvider {
+public final class ContentUriProvider {
     private static final String HUAWEI_MANUFACTURER = "Huawei";
 
     private ContentUriProvider() {

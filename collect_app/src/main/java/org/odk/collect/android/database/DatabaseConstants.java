@@ -1,6 +1,6 @@
 package org.odk.collect.android.database;
 
-public class DatabaseConstants {
+public final class DatabaseConstants {
 
     public static final String FORMS_DATABASE_NAME = "forms.db";
     public static final String FORMS_TABLE_NAME = "forms";

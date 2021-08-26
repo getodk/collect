@@ -76,7 +76,7 @@ public class CustomTimePickerDialog extends DialogFragment {
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
             try {
                 // Get the theme's android:timePickerMode
-                final int MODE_SPINNER = 2;
+                final int modeSpinner = 2;
                 Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
                 Field timePickerStyleableField = styleableClass.getField("TimePicker");
                 int[] timePickerStyleable = (int[]) timePickerStyleableField.get(null);
@@ -84,10 +84,10 @@ public class CustomTimePickerDialog extends DialogFragment {
                         android.R.attr.timePickerStyle, 0);
                 Field timePickerModeStyleableField = styleableClass.getField("TimePicker_timePickerMode");
                 int timePickerModeStyleable = timePickerModeStyleableField.getInt(null);
-                final int mode = a.getInt(timePickerModeStyleable, MODE_SPINNER);
+                final int mode = a.getInt(timePickerModeStyleable, modeSpinner);
                 a.recycle();
 
-                if (mode == MODE_SPINNER) {
+                if (mode == modeSpinner) {
                     Field field = findField(TimePickerDialog.class, TimePicker.class, "mTimePicker");
                     if (field == null) {
                         Timber.e("Reflection failed: Couldn't find field 'mTimePicker'");

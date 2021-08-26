@@ -3,7 +3,7 @@ package org.odk.collect.android.activities;
 import android.app.Activity;
 import android.content.Intent;
 
-public class ActivityUtils {
+public final class ActivityUtils {
 
     private ActivityUtils() {
 

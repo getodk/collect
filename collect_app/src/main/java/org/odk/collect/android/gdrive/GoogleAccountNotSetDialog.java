@@ -8,7 +8,7 @@ import org.odk.collect.android.R;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
-public class GoogleAccountNotSetDialog {
+public final class GoogleAccountNotSetDialog {
 
     private GoogleAccountNotSetDialog() {
 
