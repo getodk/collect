@@ -34,7 +34,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.views.FixedButtonsProgressDialog;
+import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -264,7 +264,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                progressDialog = new FixedButtonsProgressDialog(this);
+                progressDialog = new DayNightProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override

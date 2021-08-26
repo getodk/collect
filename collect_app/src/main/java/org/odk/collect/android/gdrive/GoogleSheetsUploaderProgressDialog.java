@@ -26,7 +26,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.FixedButtonsProgressDialog;
+import org.odk.collect.android.views.DayNightProgressDialog;
 
 import timber.log.Timber;
 
@@ -87,7 +87,7 @@ public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
         setRetainInstance(true);
         setCancelable(false);
 
-        dialog = new FixedButtonsProgressDialog(getActivity());
+        dialog = new DayNightProgressDialog(getActivity());
         dialog.setTitle(getString(R.string.uploading_data));
         dialog.setMessage(getString(R.string.please_wait));
         dialog.setCancelable(false);
