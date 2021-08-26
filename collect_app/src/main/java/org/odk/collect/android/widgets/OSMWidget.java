@@ -45,10 +45,6 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     public static final String FORM_FILE_NAME = "FORM_FILE_NAME";
     public static final String OSM_EDIT_FILE_NAME = "OSM_EDIT_FILE_NAME";
 
-    // button colors
-    private static final int OSM_GREEN = Color.rgb(126, 188, 111);
-    private static final int OSM_BLUE = Color.rgb(112, 146, 255);
-
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final ActivityAvailability activityAvailability;
 
@@ -78,11 +74,8 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
 
         if (osmFileName != null) {
             binding.launchOpenMapKitButton.setText(getContext().getString(R.string.recapture_osm));
-            binding.launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-
             binding.osmFileText.setText(osmFileName);
         } else {
-            binding.launchOpenMapKitButton.setBackgroundColor(OSM_GREEN);
             binding.osmFileHeaderText.setVisibility(View.GONE);
         }
     }
@@ -179,7 +172,6 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     private void onButtonClick() {
-        binding.launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
         binding.errorText.setVisibility(View.GONE);
         launchOpenMapKit();
     }
