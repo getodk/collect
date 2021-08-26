@@ -84,7 +84,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
 
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
-        
+
         /*
          * smap
          * There are 3 variants of pulldata with 3, 4 and 6 parameters
@@ -202,7 +202,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
 
             // smap start - Add user specified selection if it is not matches
-            if(multiSelect && searchType != null && searchType.equals("matches")) {
+            if(multiSelect && searchType != null && !searchType.equals("eval")) {
                 ExternalDataSearchType externalDataSearchType = ExternalDataSearchType.getByKeyword(
                         searchType, ExternalDataSearchType.CONTAINS);
                 List<String> referenceValues = ExternalDataUtil.createListOfValues(referenceValue, externalDataSearchType.getKeyword().trim());
