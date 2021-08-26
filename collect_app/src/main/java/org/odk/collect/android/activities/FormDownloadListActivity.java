@@ -42,6 +42,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.views.FixedButtonsProgressDialog;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -624,7 +625,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     private void createCancelDialog() {
-        cancelDialog = new ProgressDialog(this);
+        cancelDialog = new FixedButtonsProgressDialog(this);
         cancelDialog.setTitle(getString(R.string.canceling));
         cancelDialog.setMessage(getString(R.string.please_wait));
         cancelDialog.setIcon(android.R.drawable.ic_dialog_info);

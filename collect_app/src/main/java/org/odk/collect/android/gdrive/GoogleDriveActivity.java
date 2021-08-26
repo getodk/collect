@@ -43,6 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.views.FixedButtonsProgressDialog;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
@@ -365,7 +366,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                ProgressDialog progressDialog = new ProgressDialog(this);
+                ProgressDialog progressDialog = new FixedButtonsProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -630,7 +631,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(GoogleDriveActivity.this);
+            progressDialog = new FixedButtonsProgressDialog(GoogleDriveActivity.this);
             progressDialog.setMessage(getString(R.string.reading_files));
             progressDialog.setIndeterminate(true);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

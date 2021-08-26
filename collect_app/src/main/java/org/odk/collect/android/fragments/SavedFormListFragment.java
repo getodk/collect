@@ -43,6 +43,7 @@ import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.views.FixedButtonsProgressDialog;
 
 import javax.inject.Inject;
 
@@ -176,7 +177,7 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
      */
     private void deleteSelectedInstances() {
         if (deleteInstancesTask == null) {
-            progressDialog = new ProgressDialog(getContext());
+            progressDialog = new FixedButtonsProgressDialog(getContext());
             progressDialog.setMessage(getResources().getString(R.string.form_delete_message));
             progressDialog.setIndeterminate(true);
             progressDialog.setCancelable(false);
