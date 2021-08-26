@@ -54,13 +54,6 @@ the License.
         android:layout_above="@+id/buttonholder"
         android:layout_below="@id/appBarLayout" />
 
-    <ImageView
-        android:id="@+id/shadow_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonholder"
-        android:src="@drawable/shadow_up" />
-
     <LinearLayout
         android:id="@+id/buttonholder"
         android:layout_width="match_parent"

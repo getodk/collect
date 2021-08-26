@@ -1932,7 +1932,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         showNavigationButtons = navigation.contains(ProjectKeys.NAVIGATION_BUTTONS);
 
         findViewById(R.id.buttonholder).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
-        findViewById(R.id.shadow_up).setVisibility(showNavigationButtons ? View.VISIBLE : View.GONE);
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
