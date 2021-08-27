@@ -37,6 +37,9 @@ import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 import static android.widget.RelativeLayout.TRUE;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
+
+import com.google.android.material.radiobutton.MaterialRadioButton;
 
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends ItemsWidget {
@@ -116,13 +119,13 @@ public class LikertWidget extends ItemsWidget {
             buttonsToName.put(button, items.get(i).getValue());
             buttonView.addView(button);
 
-            if (i == 0) {
-                addLine(true, false, button, buttonView);
-            } else if (i == items.size() - 1) {
-                addLine(false, true, button, buttonView);
-            } else {
-                addLine(false, false, button, buttonView);
-            }
+//            if (i == 0) {
+//                addLine(true, false, button, buttonView);
+//            } else if (i == items.size() - 1) {
+//                addLine(false, true, button, buttonView);
+//            } else {
+//                addLine(false, false, button, buttonView);
+//            }
 
             LinearLayout optionView = getLinearLayout();
             optionView.addView(buttonView);
@@ -198,28 +201,20 @@ public class LikertWidget extends ItemsWidget {
     }
 
     public RadioButton getRadioButton(int i) {
-        AppCompatRadioButton button = new AppCompatRadioButton(getContext());
+        MaterialRadioButton button = new MaterialRadioButton(getContext());
         button.setId(View.generateViewId());
         button.setEnabled(!getFormEntryPrompt().isReadOnly());
         button.setFocusable(!getFormEntryPrompt().isReadOnly());
         radioButtonsParams.addRule(CENTER_HORIZONTAL, TRUE);
+        radioButtonsParams.setMargins(0, pxFromDp(getContext(), 16), 0, pxFromDp(getContext(), 8));
         button.setLayoutParams(radioButtonsParams);
-        // This the adds the negated margins to reduce the extra padding of the button.
-        // It is done this way to get the width of the button which has to be done after rendering
-        ViewTreeObserver vto = button.getViewTreeObserver();
-        // This variable is to prevent an infinite loop for rendering the button.
-        final Boolean[] paramsSet = {false};
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (!paramsSet[0]) {
-                    int width = button.getWidth();
-                    radioButtonsParams.setMargins(-width / 5, 0, -width / 5, 0);
-                    button.setLayoutParams(radioButtonsParams);
-                    paramsSet[0] = true;
-                }
-            }
-        });
+
+        // Remove radio button padding - this needs minHeight/Width rather than padding
+        button.setMinHeight(0);
+        button.setMinWidth(0);
+        button.setMinimumHeight(0);
+        button.setMinimumWidth(0);
+
         button.setGravity(Gravity.CENTER);
         return button;
     }
