@@ -1,16 +1,13 @@
 package org.odk.collect.android.preferences.screens;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+import org.odk.collect.android.utilities.ToastUtils;
 
 public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragment {
 
@@ -18,16 +15,15 @@ public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragm
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
         setPreferencesFromResource(R.xml.experimental_preferences, rootKey);
-
-        findPreference(ProjectKeys.KEY_MAGENTA_THEME).setOnPreferenceChangeListener((preference, newValue) -> {
-            startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity.class);
-            return true;
-        });
     }
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+    public void onViewCreated(@NotNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (getPreferenceScreen().getPreferenceCount() == 0) {
+            ToastUtils.showLongToast("No experimental settings at the moment!");
+            getParentFragmentManager().popBackStack();
+        }
     }
 }
