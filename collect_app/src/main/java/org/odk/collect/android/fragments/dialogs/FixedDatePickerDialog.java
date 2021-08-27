@@ -82,7 +82,7 @@ public class FixedDatePickerDialog extends DialogFragment {
 
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("month", "id", "android"))
                     .setVisibility(View.GONE);
-            dialog.getDatePicker().updateDate(date.getYear(), 1, 1);
+            dialog.getDatePicker().updateDate(date.getYear(), 0, 1);
         } else if (viewModel.getDatePickerDetails().isMonthYearMode()) {
             dialog.getDatePicker().findViewById(Resources.getSystem().getIdentifier("day", "id", "android"))
                     .setVisibility(View.GONE);
