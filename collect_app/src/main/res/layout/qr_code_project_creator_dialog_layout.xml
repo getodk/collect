@@ -15,7 +15,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Surface"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
             app:title="@string/add_project"
             app:menu="@menu/qr_code_scan_menu"
             android:layout_width="match_parent"

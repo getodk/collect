@@ -11,7 +11,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             tools:title="Title" />
