@@ -1027,14 +1027,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        FormController formController = getFormController();
+        if (!swipeHandler.beenSwiped()) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            FormController formController = getFormController();
 
-        menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
-        if (formController.indexContainsRepeatableGroup()) {
-            menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
+            menu.add(0, v.getId(), 0, getString(R.string.clear_answer));
+            if (formController.indexContainsRepeatableGroup()) {
+                menu.add(0, DELETE_REPEAT, 0, getString(R.string.delete_repeat));
+            }
+            menu.setHeaderTitle(getString(R.string.edit_prompt));
         }
-        menu.setHeaderTitle(getString(R.string.edit_prompt));
     }
 
     @Override
@@ -1313,6 +1315,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean moveScreen(Direction direction) {
+        currentView.cancelPendingInputEvents();
+        closeContextMenu();
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
