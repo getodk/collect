@@ -9,7 +9,7 @@ object MultiClickGuard {
     var test = false
 
     private var lastClickTime: Long = 0
-    private lateinit var lastClickName: String
+    private var lastClickName: String = javaClass.name
 
     // Debounce multiple clicks within the same screen
     @JvmStatic
