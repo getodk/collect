@@ -50,6 +50,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.text.SimpleDateFormat;
@@ -144,7 +145,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
-                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), false);
+                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
                     viewModel.setSelectedSubmissionId(-1);
                 }
             }
@@ -260,15 +261,15 @@ public class FormMapActivity extends BaseGeoMapActivity {
             MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
             int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
 
-            updateSubmissionMarker(featureId, featureId == viewModel.getSelectedSubmissionId());
+            updateSubmissionMarker(featureId, instance.getStatus(), featureId == viewModel.getSelectedSubmissionId());
 
             instancesByFeatureId.put(featureId, instance);
             points.add(point);
         }
     }
 
-    private void updateSubmissionMarker(int featureId, boolean enlarged) {
-        int drawableId = getDrawableIdForStatus(enlarged);
+    private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
+        int drawableId = getDrawableIdForStatus(status, enlarged);
         map.setMarkerIcon(featureId, drawableId);
     }
 
@@ -294,7 +295,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
             FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
             if (mappableFormInstance != null) {
                 map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-                updateSubmissionMarker(featureId, true);
+                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
                 setUpSummarySheetDetails(mappableFormInstance);
             }
             viewModel.setSelectedSubmissionId(featureId);
@@ -314,8 +315,18 @@ public class FormMapActivity extends BaseGeoMapActivity {
         }
     }
 
-    private static int getDrawableIdForStatus(boolean enlarged) {
-        return enlarged ? R.drawable.ic_room_primary_48dp : R.drawable.ic_room_primary_24dp;
+    private static int getDrawableIdForStatus(String status, boolean enlarged) {
+        switch (status) {
+            case Instance.STATUS_INCOMPLETE:
+                return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
+            case Instance.STATUS_COMPLETE:
+                return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
+            case Instance.STATUS_SUBMITTED:
+                return enlarged ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
+            case Instance.STATUS_SUBMISSION_FAILED:
+                return enlarged ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
+        }
+        return R.drawable.ic_map_point;
     }
 
     private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
@@ -396,7 +407,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {
         if (viewModel.getSelectedSubmissionId() != -1 && viewModel.getSelectedSubmissionId() != newSubmissionId) {
-            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), false);
+            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
         }
     }
 

@@ -5,8 +5,7 @@
     android:background="?colorSurface"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/margin_standard"
-    android:paddingTop="@dimen/margin_standard"
-    android:paddingBottom="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_small"
     xmlns:android="http://schemas.android.com/apk/res/android"
     app:behavior_hideable="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -22,13 +21,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="?colorOnSurface" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:background="?colorPrimary" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/margin_small">
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/status_icon"
@@ -51,9 +55,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:textColor="?colorOnPrimary"
-        app:chipBackgroundColor="?colorPrimary"
-        app:chipIconTint="?colorOnPrimary"
+        android:textColor="@android:color/white"
+        app:chipBackgroundColor="?colorSecondary"
         app:iconStartPadding="@dimen/margin_small"
         app:chipEndPadding="@dimen/margin_small"/>
 
