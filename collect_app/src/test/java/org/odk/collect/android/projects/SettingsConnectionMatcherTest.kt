@@ -90,6 +90,14 @@ class SettingsConnectionMatcherTest {
         assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("uuid 3"))
     }
 
+    @Test
+    fun `returns null when a project with Google Drive exists and a user tries to add Demo project`() {
+        createGoogleDriveProject("a uuid", "foo@bar.baz")
+        val jsonSettings = getDemoServerSettingsJson()
+
+        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`(nullValue()))
+    }
+
     private fun createServerProject(projectId: String, url: String, username: String) {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
@@ -105,6 +113,12 @@ class SettingsConnectionMatcherTest {
         val generalSettings = inMemSettingsProvider.getGeneralSettings(projectId)
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         generalSettings.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, account)
+        generalSettings.save(ProjectKeys.KEY_SERVER_URL, "")
+        generalSettings.save(ProjectKeys.KEY_USERNAME, "")
+    }
+
+    private fun getDemoServerSettingsJson(): String {
+        return "{\"general\":{},\"admin\":{},\"project\":{\"name\":\"Demo project\",\"icon\":\"D\",\"color\":\"#3e9fcc\"}}"
     }
 
     private fun getServerSettingsJson(url: String): String {
