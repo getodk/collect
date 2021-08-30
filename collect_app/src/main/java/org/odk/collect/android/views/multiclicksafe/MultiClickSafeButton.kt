@@ -1,4 +1,4 @@
-package org.odk.collect.android.views
+package org.odk.collect.android.views.multiclicksafe
 
 import android.content.Context
 import android.util.AttributeSet
