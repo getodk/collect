@@ -23,6 +23,7 @@ import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -34,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -369,6 +371,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
+        // this issue by including WebViews
+        if (Build.VERSION.SDK_INT >= 24) {
+            new WebView(this);
+        }
+
         super.onCreate(savedInstanceState);
 
         Collect.getInstance().getComponent().inject(this);
