@@ -101,7 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/add_project_button" />
 
-    <FrameLayout
+    <org.odk.collect.android.views.MultiClickSafeFrameLayout
         android:id="@+id/add_project_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -121,9 +121,9 @@
             android:layout_gravity="end"
             app:icon="@drawable/ic_baseline_qr_code_scanner_24"
             app:iconTintMode="multiply" />
-    </FrameLayout>
+    </org.odk.collect.android.views.MultiClickSafeFrameLayout>
 
-    <FrameLayout
+    <org.odk.collect.android.views.MultiClickSafeFrameLayout
         android:id="@+id/about_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -144,5 +144,5 @@
             android:layout_gravity="start"
             app:icon="@drawable/ic_outline_info_24"
             app:iconTintMode="multiply" />
-    </FrameLayout>
+    </org.odk.collect.android.views.MultiClickSafeFrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
