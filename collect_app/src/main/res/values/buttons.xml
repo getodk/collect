@@ -42,10 +42,14 @@
         <item name="android:layout_marginTop">@dimen/margin_extra_small</item>
     </style>
 
+    <!-- These use surface color rather than primary as they are secondary options on a page.
+    It's likely anything using this should be replaced by a bottom nav bar or something. -->
     <style name="Widget.Collect.Button.BottomOption" parent="Widget.Collect.Button.Custom">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:backgroundTint">?colorSurface</item>
+        <item name="android:textColor">?colorOnSurface</item>
     </style>
 
     <style name="Widget.Collect.Button.FullWidth" parent="Widget.MaterialComponents.Button">
