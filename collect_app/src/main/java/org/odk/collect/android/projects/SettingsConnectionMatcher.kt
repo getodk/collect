@@ -30,12 +30,12 @@ class SettingsConnectionMatcher(
                 val projectUsername = projectSettings.getString(ProjectKeys.KEY_USERNAME)
                 val projectGoogleAccount = projectSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT)
 
-                if (jsonProtocol.equals(projectProtocol) && jsonProtocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-                    if (jsonGoogleAccount.equals(projectGoogleAccount)) {
-                        return it.uuid
-                    }
-                } else {
-                    if (jsonUrl.equals(projectUrl) && jsonUsername.equals(projectUsername)) {
+                if (jsonProtocol.equals(projectProtocol)) {
+                    if (jsonProtocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
+                        if (jsonGoogleAccount.equals(projectGoogleAccount)) {
+                            return it.uuid
+                        }
+                    } else if (jsonUrl.equals(projectUrl) && jsonUsername.equals(projectUsername)) {
                         return it.uuid
                     }
                 }
