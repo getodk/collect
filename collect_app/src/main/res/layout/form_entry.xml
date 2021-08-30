@@ -59,7 +59,7 @@ the License.
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="?colorPrimary"
+        android:background="?colorSurface"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -76,7 +76,6 @@ the License.
             android:text="@string/form_backward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -98,7 +97,6 @@ the License.
             android:text="@string/form_forward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>
