@@ -13,6 +13,6 @@ class MultiClickSafeImageButton : AppCompatImageButton {
     )
 
     override fun performClick(): Boolean {
-        return allowClick(javaClass.name) && super.performClick()
+        return allowClick() && super.performClick()
     }
 }
