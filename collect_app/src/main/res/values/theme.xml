@@ -7,13 +7,13 @@
         <!--Material theme attributes from https://material.io/develop/android/theming -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorSecondary">?colorPrimary</item>
+        <item name="colorSecondaryVariant">?colorPrimaryVariant</item>
         <item name="colorError">@color/colorError</item>
         <item name="colorSurface">@color/colorSurface</item>
 
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnSecondary">?colorOnPrimary</item>
         <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
 
@@ -70,7 +70,7 @@
     <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
     <style name="Theme.Collect.Dialog.Alert" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
