@@ -2,14 +2,16 @@
 
 <!-- This file contains themes and styles needed to fix broken compatibility between Date/TimePickerDialog
 and newer themes. This probably has a lot to do with these components relying on platform dependencies
-rather than AndroidX/Library dependencies. -->
+rather than AndroidX/Library dependencies.
+
+These dialog themes need to reference `colorPrimary` directly as they do not inherit from our app theme. -->
 
 <resources>
 
     <!-- Dark styles -->
 
     <style name="Theme.Collect.Dark.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:background">?attr/colorSurface</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
@@ -17,7 +19,7 @@ rather than AndroidX/Library dependencies. -->
     </style>
 
     <style name="Theme.Collect.Dark.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:background">?attr/colorSurface</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
@@ -37,14 +39,14 @@ rather than AndroidX/Library dependencies. -->
     <!-- Light styles -->
 
     <style name="Theme.Collect.Light.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
     <style name="Theme.Collect.Light.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">?attr/colorSecondary</item>
+        <item name="colorAccent">@color/colorPrimary</item>
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
