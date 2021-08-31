@@ -29,7 +29,7 @@ limitations under the License.
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="25sp" />
+        android:textAppearance="?textAppearanceHeadline5" />
 
     <FrameLayout
         android:layout_width="match_parent"
