@@ -1,14 +1,17 @@
 package org.odk.collect.android.projects
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 
+@RunWith(AndroidJUnit4::class)
 class SettingsConnectionMatcherTest {
     private val inMemProjectsRepository = InMemProjectsRepository()
     private val inMemSettingsProvider = InMemSettingsProvider()
@@ -25,6 +28,14 @@ class SettingsConnectionMatcherTest {
     fun `returns a matching project uuid when urls match`() {
         createServerProject("a uuid", "https://demo.getodk.org", "")
         val jsonSettings = getServerSettingsJson("https://demo.getodk.org")
+
+        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+    }
+
+    @Test
+    fun `returns a matching project uuid when a Demo project exists and a user tries to add another Demo project`() {
+        createServerProject("a uuid", "https://demo.getodk.org", "")
+        val jsonSettings = getDemoServerSettingsJson()
 
         assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
     }

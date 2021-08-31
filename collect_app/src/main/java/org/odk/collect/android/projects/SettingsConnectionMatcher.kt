@@ -16,9 +16,9 @@ class SettingsConnectionMatcher(
         try {
             val jsonObject = JSONObject(settingsJson)
             val jsonSettings = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
-            val jsonProtocol = try { jsonSettings.get(ProjectKeys.KEY_PROTOCOL) } catch (e: JSONException) { ProjectKeys.PROTOCOL_SERVER }
+            val jsonProtocol = try { jsonSettings.get(ProjectKeys.KEY_PROTOCOL) } catch (e: JSONException) { ProjectKeys.defaults[ProjectKeys.KEY_PROTOCOL]!! }
 
-            val jsonUrl = try { jsonSettings.get(ProjectKeys.KEY_SERVER_URL) } catch (e: JSONException) { "" }
+            val jsonUrl = try { jsonSettings.get(ProjectKeys.KEY_SERVER_URL) } catch (e: JSONException) { ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL]!! }
             val jsonUsername = try { jsonSettings.get(ProjectKeys.KEY_USERNAME) } catch (e: JSONException) { "" }
 
             val jsonGoogleAccount = try { jsonSettings.get(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } catch (e: JSONException) { "" }
