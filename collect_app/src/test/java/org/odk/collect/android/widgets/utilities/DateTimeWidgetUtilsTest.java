@@ -20,6 +20,8 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.android.support.TestScreenContextActivity;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -31,6 +33,8 @@ import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.GRE
 import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.ISLAMIC;
 import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.MYANMAR;
 import static org.odk.collect.android.logic.DatePickerDetails.DatePickerType.PERSIAN;
+
+import android.app.DatePickerDialog;
 
 @RunWith(AndroidJUnit4.class)
 public class DateTimeWidgetUtilsTest {
@@ -236,6 +240,19 @@ public class DateTimeWidgetUtilsTest {
     @Test
     public void displayDatePickerDialog_showsPersianDatePickerDialog_whenDatePickerTypeIsPersian() {
         assertDialogIsShowing(PERSIAN, PersianDatePickerDialog.class);
+    }
+
+    @Test
+    public void displayDatePickerDialogWithYearMode_showsDatePickerWithDayAndMonthFixedToJanuaryFirst() {
+        when(datePickerDetails.getDatePickerType()).thenReturn(GREGORIAN);
+
+        dateTimeWidgetUtils.showDatePickerDialog(activity, gregorianYear, date);
+        DialogFragment dialog = (DialogFragment) activity.getSupportFragmentManager()
+                .findFragmentByTag(FixedDatePickerDialog.class.getName());
+
+        assertThat(((DatePickerDialog) dialog.getDialog()).getDatePicker().getYear(), is(date.getYear()));
+        assertThat(((DatePickerDialog) dialog.getDialog()).getDatePicker().getMonth(), is(0));
+        assertThat(((DatePickerDialog) dialog.getDialog()).getDatePicker().getDayOfMonth(), is(1));
     }
 
     private void assertDialogIsShowing(DatePickerDetails.DatePickerType datePickerType, Class dialogClass) {
