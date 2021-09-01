@@ -34,7 +34,7 @@
             android:layout_below="@id/form_title"
             android:layout_above="@id/geometry_status" />
 
-        <org.odk.collect.android.views.MultiClickSafeImageButton
+        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
             android:id="@+id/new_instance"
             style="@style/Widget.Collect.ImageButton.MapButton"
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.odk.collect.android.views.MultiClickSafeImageButton
+                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_location"
                     style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                     app:srcCompat="@drawable/ic_my_location"
                     android:padding="15dp" />
 
-                <org.odk.collect.android.views.MultiClickSafeImageButton
+                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_bounds"
                     style="@style/Widget.Collect.ImageButton.MapButton"
                     android:layout_width="wrap_content"

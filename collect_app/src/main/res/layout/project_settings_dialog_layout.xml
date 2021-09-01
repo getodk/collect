@@ -55,7 +55,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
-    <org.odk.collect.android.views.MultiClickSafeButton
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
         android:id="@+id/general_settings_button"
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/add_project_button" />
 
-    <FrameLayout
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout
         android:id="@+id/add_project_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintEnd_toStartOf="@+id/guideline_center">
 
-        <com.google.android.material.button.MaterialButton
+        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -121,9 +121,9 @@
             android:layout_gravity="end"
             app:icon="@drawable/ic_baseline_qr_code_scanner_24"
             app:iconTintMode="multiply" />
-    </FrameLayout>
+    </org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout>
 
-    <FrameLayout
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout
         android:id="@+id/about_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -134,7 +134,7 @@
         app:layout_constraintTop_toTopOf="@+id/add_project_button"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.button.MaterialButton
+        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -144,5 +144,5 @@
             android:layout_gravity="start"
             app:icon="@drawable/ic_outline_info_24"
             app:iconTintMode="multiply" />
-    </FrameLayout>
+    </org.odk.collect.android.views.multiclicksafe.MultiClickSafeFrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

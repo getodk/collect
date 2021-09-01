@@ -5,7 +5,7 @@
     android:paddingTop="@dimen/margin_small"
     android:paddingHorizontal="@dimen/margin_standard">
 
-    <org.odk.collect.android.views.MultiClickSafeButton
+    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
         android:id="@+id/simple_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/get_location" />
