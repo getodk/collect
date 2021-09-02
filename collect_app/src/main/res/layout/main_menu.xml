@@ -43,7 +43,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/enter_data"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/review_data"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/send_data"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/view_sent_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/get_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/manage_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="?colorSurface"
+                    android:backgroundTint="@color/surfaceButtonColor"
                     android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
