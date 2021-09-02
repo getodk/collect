@@ -21,25 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.adapters.SortDialogAdapter;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.ThemeUtils;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,6 +33,21 @@ import androidx.fragment.app.ListFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.adapters.SortDialogAdapter;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.MultiClickGuard;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.inject.Inject;
 
