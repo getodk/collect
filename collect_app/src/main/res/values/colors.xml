@@ -7,7 +7,7 @@
     <color name="colorError">#D42C2C</color>
     <color name="colorOnError">#ffffff</color>
 
-    <color name="colorSurface">#F7F7F7</color>
+    <color name="colorSurface">#FFFFFF</color>
     <color name="colorOnSurface">#000000</color>
 
     <bool name="lightStatusBar">true</bool>
