@@ -130,8 +130,6 @@ public abstract class AppListFragment extends ListFragment {
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(new ThemeUtils(getContext()).getColorOnPrimary());
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
