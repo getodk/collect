@@ -1,9 +1,9 @@
 package org.odk.collect.android.projects
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -25,7 +25,7 @@ class DuplicateProjectConfirmationDialog : DialogFragment() {
         val settingsJson = arguments?.getString(SETTINGS_JSON, "") ?: ""
         val matchingProject = arguments?.getString(MATCHING_PROJECT, "") ?: ""
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.duplicate_project)
             .setMessage(R.string.duplicate_project_details)
             .setPositiveButton(R.string.add_duplicate_project) { _, _ -> listener.createProject(settingsJson) }
