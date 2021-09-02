@@ -17,6 +17,7 @@ package org.odk.collect.android.geo;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -747,7 +748,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(new ThemeUtils(requireContext()).getColorSecondary())
+                    .color(Color.parseColor(LINE_COLOR))
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)

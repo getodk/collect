@@ -59,6 +59,8 @@ public interface MapFragment {
     String CENTER = "center";
     String BOTTOM = "bottom";
 
+    String LINE_COLOR = "#ffff0000";
+
     /**
      * Configures the map according to settings such as styling preferences and
      * layer data sources.  For now, this means anything that is configurable
