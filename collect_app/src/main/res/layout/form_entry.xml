@@ -60,6 +60,7 @@ the License.
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:background="?colorSurface"
+        android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
