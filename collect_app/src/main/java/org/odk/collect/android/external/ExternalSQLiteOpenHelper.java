@@ -240,6 +240,9 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
                             throw new ExternalDataException(TranslationHandler.getString(Collect.getInstance(), R.string.ext_sortBy_numeric_error, columnValue));
                         }
                     } else {
+                        if(columnValue != null) {               // smap
+                            columnValue = columnValue.trim();
+                        }
                         values.put(safeColumnName, columnValue);
                     }
                 }

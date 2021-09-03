@@ -9,6 +9,7 @@ import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.forms.Form;
 import org.odk.collect.android.forms.FormsRepository;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -114,16 +115,26 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public Form save(Form form) {
+        // start smap
+        String project = form.getProject();
+        if(project == null) {
+            project = "project";
+        }
+        String tasksOnly = form.getTasksOnly();
+        if (tasksOnly == null) {
+            tasksOnly = "no";
+        }
+        // end smap
         final ContentValues v = new ContentValues();
         v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
         v.put(FORM_MEDIA_PATH, storagePathProvider.getFormDbPath(form.getFormMediaPath()));
         v.put(DISPLAY_NAME, form.getDisplayName());
         v.put(JR_VERSION, form.getJrVersion());
         v.put(JR_FORM_ID, form.getJrFormId());
-        v.put(PROJECT, form.getProject());      // smap
-        v.put(TASKS_ONLY, form.getTasksOnly());      // smap
+        v.put(PROJECT, project);      // smap
+        v.put(TASKS_ONLY, tasksOnly);      // smap
         v.put(SEARCH_LOCAL_DATA, form.getSearchLocalData());      // smap
-        v.put(SOURCE, form.getSource());      // smap
+        v.put(SOURCE, Utilities.getSource());      // smap
         v.put(SUBMISSION_URI, form.getSubmissionUri());
         v.put(BASE64_RSA_PUBLIC_KEY, form.getBASE64RSAPublicKey());
         v.put(AUTO_DELETE, form.getAutoDelete());
