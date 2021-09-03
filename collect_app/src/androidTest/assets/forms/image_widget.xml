@@ -1,0 +1,29 @@
+<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jr="http://openrosa.org/javarosa">
+  <h:head>
+    <h:title>image_widget</h:title>
+    <model>
+      <instance>
+        <data id="build_image-widget_1630658903">
+          <meta>
+            <instanceID/>
+          </meta>
+          <image/>
+        </data>
+      </instance>
+      <itext>
+        <translation lang="English">
+          <text id="/data/image:label">
+            <value>Image</value>
+          </text>
+        </translation>
+      </itext>
+      <bind nodeset="/data/meta/instanceID" type="string" readonly="true()" calculate="concat('uuid:', uuid())"/>
+      <bind nodeset="/data/image" type="binary"/>
+    </model>
+  </h:head>
+  <h:body>
+    <upload ref="/data/image" mediatype="image/*">
+      <label ref="jr:itext('/data/image:label')"/>
+    </upload>
+  </h:body>
+</h:html>
