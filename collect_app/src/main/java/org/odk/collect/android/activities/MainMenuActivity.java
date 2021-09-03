@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,6 +43,7 @@ import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import javax.inject.Inject;
 
@@ -74,6 +79,8 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(new ThemeUtils(this).isDarkTheme() ? MODE_NIGHT_YES : MODE_NIGHT_NO);
+
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
         setContentView(R.layout.main_menu);
