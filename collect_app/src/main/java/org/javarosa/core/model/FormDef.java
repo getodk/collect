@@ -306,7 +306,8 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * <p/>
      * Ignore 'new-repeat' node for now; just return/stop at ref to
      * yet-to-be-created repeat node (similar to repeats that already exist)
-     * @param index
+     *
+     * @param index i
      */
     public List<IFormElement> explodeIndex(FormIndex index) {
         List<Integer> indexes = new ArrayList<>();
@@ -451,7 +452,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * corresponding FormIndex. Behavior is currently undefined if you call this
      * method on a node that is not contained within a repeat.
      *
-     * @param index
+     * @param index i
      */
     public FormIndex deleteRepeat(FormIndex index) {
         List<Integer> indexes = new ArrayList<>();
@@ -1191,7 +1192,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * Writes the form definition object to the supplied stream.
      *
      * @param dos - the stream to write to
-     * @throws IOException
+     * @throws IOException ioe
      */
     @Override
     public void writeExternal(DataOutputStream dos) throws IOException {
