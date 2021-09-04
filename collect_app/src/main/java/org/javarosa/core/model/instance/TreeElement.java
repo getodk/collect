@@ -80,10 +80,10 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
     /* model properties */
     protected int dataType = Constants.DATATYPE_NULL; //TODO
 
-    private Constraint constraint = null;
-    private String preloadHandler = null;
-    private String preloadParams = null;
-    private List<TreeElement> bindAttributes = new ArrayList<TreeElement>(0);
+    private Constraint constraint;
+    private String preloadHandler;
+    private String preloadParams;
+    private List<TreeElement> bindAttributes = new ArrayList<>(0);
 
     // TODO see what’s required here from commented-out code removed 2017-04-23
 
@@ -104,7 +104,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
      * The name of the instance that this node is in. The value of the id attribute in the case of a secondary
      * instance or null for the primary instance.
      */
-    private String instanceName = null;
+    private String instanceName;
 
     /**
      * TreeElement with null name and 0 multiplicity? (a "hidden root" node?)
@@ -121,7 +121,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
         this.name = name;
         this.multiplicity = multiplicity;
         this.parent = null;
-        attributes = new ArrayList<TreeElement>(0);
+        attributes = new ArrayList<>(0);
     }
 
     /**
@@ -180,7 +180,9 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
         }
 
         // null-valued attributes are a "remove-this" instruction... ignore them
-        if (value == null) return;
+        if (value == null) {
+            return;
+        }
 
         // create an attribute...
         TreeElement attr = TreeElement.constructAttributeElement(namespace, name, value);
@@ -353,7 +355,9 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
             //Test that multiplicities must be adjusted
             boolean keepTemplateMultiplicities = false;
             //#4059
-            if (!keepTemplateMultiplicities) child.setMult(TreeReference.DEFAULT_MULTIPLICITY);
+            if (!keepTemplateMultiplicities) {
+                child.setMult(TreeReference.DEFAULT_MULTIPLICITY);
+            }
             newNode.addChild(child.deepCopyForRepeat());
         }
         return newNode;
@@ -500,8 +504,9 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
     /* ==== OBSERVER PATTERN ==== */
 
     public void registerStateObserver(FormElementStateListener qsl) {
-        if (observers == null)
-            observers = new ArrayList<FormElementStateListener>(1);
+        if (observers == null) {
+            observers = new ArrayList<>(1);
+        }
 
         if (!observers.contains(qsl)) {
             observers.add(qsl);
@@ -511,8 +516,9 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
     public void unregisterStateObserver(FormElementStateListener qsl) {
         if (observers != null) {
             observers.remove(qsl);
-            if (observers.isEmpty())
+            if (observers.isEmpty()) {
                 observers = null;
+            }
         }
     }
 
@@ -752,7 +758,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
                 this.setValue(answerResolver.resolveAnswer(textVal, this, f));
             }
         } else {
-            List<String> names = new ArrayList<String>(this.getNumChildren());
+            List<String> names = new ArrayList<>(this.getNumChildren());
             for (int i = 0; i < this.getNumChildren(); i++) {
                 TreeElement child = this.getChildAt(i);
                 if (!names.contains(child.getName())) {
@@ -811,7 +817,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
                     i += newChildren.size();
                 } else {
 
-                    if (newChildren.size() == 0) {
+                    if (newChildren.isEmpty()) {
                         child.setRelevant(false);
                     } else {
                         child.populate(newChildren.get(0), f);
@@ -1051,7 +1057,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
             return null;
         }
 
-        List<Integer> toRemove = new ArrayList<Integer>();
+        List<Integer> toRemove = new ArrayList<>();
         List<TreeReference> selectedChildren = null;
 
         //Lazy init these until we've determined that our predicate is hintable
@@ -1074,10 +1080,10 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
                     //We're lazily initializing this, since it might actually take a while, and we
                     //don't want the overhead if our predicate is too complex anyway
                     if (indices == null) {
-                        indices = new HashMap<XPathPathExpr, String>();
+                        indices = new HashMap<>();
                         kids = this.getChildrenWithName(name);
 
-                        if (kids.size() == 0) {
+                        if (kids.isEmpty()) {
                             return null;
                         }
 
@@ -1096,7 +1102,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
                             for (TreeElement kid : kids) {
                                 if (kid.getAttributeValue(null, attributeName).equals(((XPathStringLiteral) right).s)) {
                                     if (selectedChildren == null) {
-                                        selectedChildren = new ArrayList<TreeReference>();
+                                        selectedChildren = new ArrayList<>();
                                     }
                                     selectedChildren.add(kid.getRef());
                                 }

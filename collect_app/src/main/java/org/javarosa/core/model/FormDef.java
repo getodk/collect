@@ -82,6 +82,7 @@ import java.util.Set;
  *
  * @author Daniel Kayiwa, Drew Roos
  */
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormDef implements IFormElement, Localizable, Persistable, IMetaData,
         ActionController.ActionResultProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FormDef.class);
@@ -160,7 +161,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
     private HashMap<String, SubmissionProfile> submissionProfiles;
 
     private HashMap<String, DataInstance> formInstances;
-    private FormInstance mainInstance = null;
+    private FormInstance mainInstance;
 
     //region Actions
     private ActionController actionController;
@@ -178,8 +179,8 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 
     private EventNotifier eventNotifier;
 
-    private List<String> parseWarnings = new ArrayList<>();
-    private List<String> parseErrors = new ArrayList<>();
+    private final List<String> parseWarnings = new ArrayList<>();
+    private final List<String> parseErrors = new ArrayList<>();
 
     public FormDef() {
         this(defaultEventNotifier);
@@ -283,8 +284,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 
     @Override
     public IFormElement getChild(int i) {
-        if (i < this.children.size())
+        if (i < this.children.size()) {
             return this.children.get(i);
+        }
 
         throw new ArrayIndexOutOfBoundsException("FormDef: invalid child index: " + i + " only "
                 + children.size() + " children");
@@ -331,8 +333,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
     }
 
     public TreeReference getChildInstanceRef(List<IFormElement> elements, List<Integer> multiplicities) {
-        if (elements.size() == 0)
+        if (elements.isEmpty()) {
             return null;
+        }
 
         IFormElement element = elements.get(elements.size() - 1);
         // get reference for target element
@@ -925,7 +928,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 
         int depth = 0;
         List<String> outstandingArgs = Localizer.getArgs(template);
-        while (outstandingArgs.size() > 0) {
+        while (outstandingArgs.isEmpty()) {
             for (String argName : outstandingArgs) {
                 if (!args.containsKey(argName)) {
                     int ix = -1;
@@ -935,8 +938,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
                         logger.warn("expect arguments to be numeric [{}]", argName);
                     }
 
-                    if (ix < 0 || ix >= outputFragments.size())
+                    if (ix < 0 || ix >= outputFragments.size()) {
                         continue;
+                    }
 
                     IConditionExpr expr = outputFragments.get(ix);
                     EvaluationContext ec = new EvaluationContext(exprEvalContext, contextRef);
@@ -996,10 +1000,11 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
         if (!node.isLeaf()) {
             for (int i = 0; i < node.getNumChildren(); i++) {
                 TreeElement child = node.getChildAt(i);
-                if (child.getMult() != TreeReference.INDEX_TEMPLATE)
+                if (child.getMult() != TreeReference.INDEX_TEMPLATE) {
                     // don't preload templates; new repeats are preloaded as they're
                     // created
                     preloadInstance(child);
+                }
             }
         }
         // }
@@ -1046,8 +1051,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
             boolean instanceModified = false;
             for (int i = 0; i < node.getNumChildren(); i++) {
                 TreeElement child = node.getChildAt(i);
-                if (child.getMult() != TreeReference.INDEX_TEMPLATE)
+                if (child.getMult() != TreeReference.INDEX_TEMPLATE) {
                     instanceModified |= postProcessInstance(child);
+                }
             }
             return instanceModified;
         }
@@ -1081,8 +1087,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 
         setLocalizer((Localizer) ExtUtil.read(dis, new ExtWrapNullable(Localizer.class), pf));
 
-        for (Triggerable condition : TriggerableDag.readExternalTriggerables(dis, pf))
+        for (Triggerable condition : TriggerableDag.readExternalTriggerables(dis, pf)) {
             addTriggerable(condition);
+        }
         finalizeTriggerables();
 
         outputFragments = (List<IConditionExpr>) ExtUtil.read(dis, new ExtWrapListPoly(), pf);
@@ -1134,7 +1141,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
     }
 
     private static void getElementsFromReferences(Set<TreeReference> referencesRemaining, IFormElement fe, Set<IFormElement> elementsSoFar) {
-        if (referencesRemaining.size() > 0 && fe.getChildren() != null) {
+        if (referencesRemaining.isEmpty() && fe.getChildren() != null) {
             for (IFormElement candidate : fe.getChildren()) {
                 TreeReference candidateReference = FormInstance.unpackReference(candidate.getBind());
                 for (TreeReference reference : referencesRemaining) {
@@ -1516,8 +1523,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
         } else {
             for (int i = 0; i < fe.getChildren().size(); i++) {
                 QuestionDef ret = findQuestionByRef(ref, fe.getChild(i));
-                if (ret != null)
+                if (ret != null) {
                     return ret;
+                }
             }
             return null;
         }
@@ -1618,7 +1626,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
         } catch (InstantiationException e) {
             throw new RuntimeException("Illegally Structured XForm Extension " + extension.getName());
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Illegally Structured XForm Extension " + extension.getName());
+            throw new RuntimeException("Illegally Structured XForm Extension_ " + extension.getName());
         }
         extensions.add(newEx);
         return newEx;
