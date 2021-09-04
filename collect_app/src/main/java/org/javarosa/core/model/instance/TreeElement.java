@@ -55,7 +55,7 @@ import java.util.List;
  * <p>An element of a FormInstance.</p>
  *
  * <p>TreeElements represent an XML node in the instance. It may either have a value (e.g., <name>Drew</name>),
- * a number of TreeElement children (e.g., <meta><device /><timestamp /><user_id /></meta>), or neither (e.g.,<empty_node />)</p>
+ * a number of TreeElement children (e.g., <device /><timestamp /><user_id />), or neither (e.g.,<empty_node />)</p>
  *
  * <p>TreeElements can also represent attributes. Attributes are unique from normal elements in that they are
  * not "children" of their parent, and are always leaf nodes: IE cannot have children.</p>
@@ -129,8 +129,8 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
      * namespace and name.
      *
      * @param namespace - if null will be converted to empty string
-     * @param name
-     * @param value
+     * @param name      a
+     * @param value     b
      * @return A new instance of a TreeElement
      */
     public static TreeElement constructAttributeElement(String namespace, String name, String value) {
@@ -154,8 +154,8 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
      * attribute with the matching name.</p>
      *
      * @param attributes - list of attributes to search
-     * @param namespace
-     * @param name
+     * @param namespace  a
+     * @param name       b
      * @return TreeElement
      */
     public static TreeElement getAttribute(List<TreeElement> attributes, String namespace, String name) {
@@ -165,6 +165,15 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
             }
         }
         return null;
+    }
+
+    @Override
+    public TreeElement getAttribute(String namespace, String name) {
+        return getAttribute(attributes, namespace, name);
+    }
+
+    public void setAttribute(String namespace, String name, String value) {
+        setAttribute(this, attributes, namespace, name, value);
     }
 
     public static void setAttribute(TreeElement parent, List<TreeElement> attrs, String namespace, String name, String value) {
@@ -426,8 +435,8 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
                     attribute.setRelevant(newRelevant, true);
                 }
             }
-            for (TreeElement aChildren : children) {
-                aChildren.setRelevant(newRelevant, true);
+            for (TreeElement child : children) {
+                child.setRelevant(newRelevant, true);
             }
             alertStateObservers(FormElementStateListener.CHANGE_RELEVANT);
         }
@@ -493,8 +502,8 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
 
         if (isEnabled() != oldEnabled) {
             if (children != null) {
-                for (TreeElement aChildren : children) {
-                    aChildren.setEnabled(isEnabled(), true);
+                for (TreeElement child : children) {
+                    child.setEnabled(isEnabled(), true);
                 }
             }
             alertStateObservers(FormElementStateListener.CHANGE_ENABLED);
@@ -570,8 +579,7 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
     /**
      * Get the String value of the provided attribute
      *
-     * @param attribute
-     * @return
+     * @param attribute a
      */
     private String getAttributeValue(TreeElement attribute) {
         if (attribute.getValue() == null) {
@@ -581,26 +589,17 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
         }
     }
 
-    public String getAttributeValue() {
-        if (!isAttribute()) {
-            throw new IllegalStateException("this is not an attribute");
-        }
-        return getValue().uncast().getString();
-    }
-
-    @Override
-    public TreeElement getAttribute(String namespace, String name) {
-        return getAttribute(attributes, namespace, name);
-    }
-
     @Override
     public String getAttributeValue(String namespace, String name) {
         TreeElement element = getAttribute(namespace, name);
         return element == null ? null : getAttributeValue(element);
     }
 
-    public void setAttribute(String namespace, String name, String value) {
-        setAttribute(this, attributes, namespace, name, value);
+    public String getAttributeValue() {
+        if (!isAttribute()) {
+            throw new IllegalStateException("this is not an attribute");
+        }
+        return getValue().uncast().getString();
     }
 
     /* ==== SERIALIZATION ==== */
@@ -895,13 +894,13 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
         //TODO: Expire cache somehow;
         synchronized (refCache) {
             if (refCache[0] == null) {
-                refCache[0] = TreeElement.BuildRef(this);
+                refCache[0] = TreeElement.buildRef(this);
             }
             return refCache[0];
         }
     }
 
-    public static TreeReference BuildRef(AbstractTreeElement elem) {
+    public static TreeReference buildRef(AbstractTreeElement elem) {
         TreeReference ref = TreeReference.selfRef();
 
         while (elem != null) {
@@ -929,10 +928,10 @@ public class TreeElement implements Externalizable, AbstractTreeElement<TreeElem
 
     @Override
     public int getDepth() {
-        return TreeElement.CalculateDepth(this);
+        return TreeElement.calculateDepth(this);
     }
 
-    public static int CalculateDepth(AbstractTreeElement elem) {
+    public static int calculateDepth(AbstractTreeElement elem) {
         int depth = 0;
 
         while (elem.getName() != null) {

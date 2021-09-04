@@ -85,7 +85,7 @@ import java.util.Set;
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormDef implements IFormElement, Localizable, Persistable, IMetaData,
         ActionController.ActionResultProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(FormDef.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FormDef.class);
 
     public static final String STORAGE_KEY = "FORMDEF";
     public static final int TEMPLATING_RECURSION_LIMIT = 10;
@@ -156,7 +156,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
     private QuestionPreloader preloader = new QuestionPreloader();
 
     // XML ID's cannot start with numbers, so this should never conflict
-    private static String DEFAULT_SUBMISSION_PROFILE = "1";
+    private static String defaultSubmissionProfile = "1";
 
     private HashMap<String, SubmissionProfile> submissionProfiles;
 
@@ -236,7 +236,6 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * Get an instance based on a name
      *
      * @param name string name
-     * @return
      */
     public DataInstance getNonMainInstance(String name) {
         HashMap<String, DataInstance> formInstances = getFormInstances();
@@ -307,9 +306,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * <p/>
      * Ignore 'new-repeat' node for now; just return/stop at ref to
      * yet-to-be-created repeat node (similar to repeats that already exist)
-     *
      * @param index
-     * @return
      */
     public List<IFormElement> explodeIndex(FormIndex index) {
         List<Integer> indexes = new ArrayList<>();
@@ -455,7 +452,6 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * method on a node that is not contained within a repeat.
      *
      * @param index
-     * @return
      */
     public FormIndex deleteRepeat(FormIndex index) {
         List<Integer> indexes = new ArrayList<>();
@@ -935,7 +931,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
                     try {
                         ix = Integer.parseInt(argName);
                     } catch (NumberFormatException nfe) {
-                        logger.warn("expect arguments to be numeric [{}]", argName);
+                        LOGGER.warn("expect arguments to be numeric [{}]", argName);
                     }
 
                     if (ix < 0 || ix >= outputFragments.size()) {
@@ -1066,9 +1062,9 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
      * that should be used for deserialization.
      *
      * @param dis - the stream to read from
-     * @throws IOException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
+     * @throws IOException            a
+     * @throws InstantiationException b
+     * @throws IllegalAccessException c
      */
     @Override
     public void readExternal(DataInputStream dis, PrototypeFactory pf) throws IOException,
@@ -1168,7 +1164,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
             DataInstance instance = formInstances.get(instanceId);
             instance.initialize(factory, instanceId);
         }
-        if (newInstance) {// only preload new forms (we may have to revisit
+        if (newInstance) { // only preload new forms (we may have to revisit
             // this)
             preloadInstance(mainInstance.getRoot());
         }
@@ -1355,7 +1351,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
 
     @Override
     public void setChildren(List<IFormElement> children) {
-        this.children = (children == null ? new ArrayList<>() : children);
+        this.children = children == null ? new ArrayList<>() : children;
     }
 
     public String getTitle() {
@@ -1406,7 +1402,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
                 metadata.put(field, getMetaData(field));
             } catch (NullPointerException npe) {
                 if (getMetaData(field) == null) {
-                    logger.error("ERROR! XFORM MUST HAVE A NAME!", npe);
+                    LOGGER.error("ERROR! XFORM MUST HAVE A NAME!", npe);
                 }
             }
         }
@@ -1519,7 +1515,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
         if (fe instanceof QuestionDef) {
             QuestionDef q = (QuestionDef) fe;
             TreeReference bind = FormInstance.unpackReference(q.getBind());
-            return (ref.equals(bind) ? q : null);
+            return ref.equals(bind) ? q : null;
         } else {
             for (int i = 0; i < fe.getChildren().size(); i++) {
                 QuestionDef ret = findQuestionByRef(ref, fe.getChild(i));
@@ -1581,7 +1577,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
     }
 
     public void setDefaultSubmission(SubmissionProfile profile) {
-        submissionProfiles.put(DEFAULT_SUBMISSION_PROFILE, profile);
+        submissionProfiles.put(defaultSubmissionProfile, profile);
     }
 
     public void addSubmissionProfile(String submissionId, SubmissionProfile profile) {
@@ -1594,7 +1590,7 @@ public class FormDef implements IFormElement, Localizable, Persistable, IMetaDat
         // In the mean time, though, we can only promise that the default one will
         // be used.
 
-        return submissionProfiles.get(DEFAULT_SUBMISSION_PROFILE);
+        return submissionProfiles.get(defaultSubmissionProfile);
     }
 
     @Override
