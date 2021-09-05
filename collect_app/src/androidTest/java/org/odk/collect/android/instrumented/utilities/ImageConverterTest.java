@@ -338,7 +338,7 @@ public class ImageConverterTest {
     }
 
     @Test
-    public void keepExifTest1AfterScaling() {
+    public void keepExifAfterScaling() {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ARTIST, ExifInterface.TAG_ARTIST);
         attributes.put(ExifInterface.TAG_DATETIME, ExifInterface.TAG_DATETIME);
