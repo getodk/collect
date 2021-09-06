@@ -147,6 +147,13 @@ public class DrawActivity extends CollectAbstractActivity {
             }
         });
 
+        cardViewClear.setOnClickListener(this::clear);
+        fabClear.setOnClickListener(this::clear);
+        cardViewSaveAndClose.setOnClickListener(this::close);
+        fabSaveAndClose.setOnClickListener(this::close);
+        cardViewSetColor.setOnClickListener(this::setColor);
+        fabSetColor.setOnClickListener(this::setColor);
+
         Bundle extras = getIntent().getExtras();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         if (extras == null) {
