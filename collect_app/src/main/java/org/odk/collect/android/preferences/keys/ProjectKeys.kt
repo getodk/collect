@@ -87,9 +87,6 @@ object ProjectKeys {
     const val BASEMAP_SOURCE_STAMEN = "stamen"
     const val BASEMAP_SOURCE_CARTO = "carto"
 
-    // experimental
-    const val KEY_MAGENTA_THEME = "magenta"
-
     @JvmStatic
     val defaults: HashMap<String, Any>
         get() {
@@ -125,13 +122,12 @@ object ProjectKeys {
             // server_preferences.xml
             hashMap[KEY_PROTOCOL] = PROTOCOL_SERVER
             // user_interface_preferences.xml
-            hashMap[KEY_APP_THEME] = Collect.getInstance().getString(R.string.app_theme_light)
+            hashMap[KEY_APP_THEME] = Collect.getInstance().getString(R.string.app_theme_system)
             hashMap[KEY_APP_LANGUAGE] = ""
             hashMap[KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[KEY_NAVIGATION] = NAVIGATION_BOTH
             hashMap[KEY_SHOW_SPLASH] = false
             hashMap[KEY_SPLASH_PATH] = Collect.getInstance().getString(R.string.default_splash_path)
-            hashMap[KEY_MAGENTA_THEME] = false
             hashMap[KEY_EXTERNAL_APP_RECORDING] = true
             // map_preferences.xml
             hashMap[KEY_BASEMAP_SOURCE] = BASEMAP_SOURCE_GOOGLE

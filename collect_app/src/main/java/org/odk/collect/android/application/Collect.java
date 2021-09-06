@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.application;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 import android.app.Application;
 import android.content.Context;
@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,8 +55,6 @@ import java.io.File;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application implements
         LocalizedApplication,
@@ -135,10 +132,6 @@ public class Collect extends Application implements
         fixGoogleBug154855417();
 
         setupStrictMode();
-
-        // Default the app to light theme as we don't have "System" theme option. Dark theme will
-        // applied by `MainMenuActivity` if requested.
-        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
     }
 
     /**

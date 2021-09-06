@@ -110,7 +110,7 @@ public class ResetApplicationTest {
                 .openProjectSettings()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .assertText(R.string.theme_light)
+                .assertText(R.string.theme_system)
                 .clickOnTheme()
                 .clickOnString(R.string.theme_dark);
         new MainMenuPage()
@@ -138,7 +138,7 @@ public class ResetApplicationTest {
                 .openProjectSettings()
                 .clickGeneralSettings()
                 .clickOnUserInterface()
-                .assertText(R.string.theme_light)
+                .assertText(R.string.theme_system)
                 .assertTextDoesNotExist(R.string.theme_dark)
                 .assertText(R.string.use_device_language)
                 .assertTextDoesNotExist("español");

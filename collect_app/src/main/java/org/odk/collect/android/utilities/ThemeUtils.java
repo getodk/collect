@@ -14,6 +14,12 @@
 
 package org.odk.collect.android.utilities;
 
+import static android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.Context;
 import android.util.TypedValue;
 
@@ -21,6 +27,7 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -97,9 +104,26 @@ public final class ThemeUtils {
         return isDarkTheme() ? 0 : 1;
     }
 
+    public boolean isSystemTheme() {
+        return getPrefsTheme().equals(context.getString(R.string.app_theme_system));
+    }
+
     public boolean isDarkTheme() {
-        String theme = getPrefsTheme();
-        return theme.equals(context.getString(R.string.app_theme_dark));
+        if (isSystemTheme()) {
+            int uiMode = context.getResources().getConfiguration().uiMode;
+            return (uiMode & UI_MODE_NIGHT_MASK) == UI_MODE_NIGHT_YES;
+        } else {
+            String theme = getPrefsTheme();
+            return theme.equals(context.getString(R.string.app_theme_dark));
+        }
+    }
+
+    public void setDarkModeForCurrentProject() {
+        if (isSystemTheme()) {
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(isDarkTheme() ? MODE_NIGHT_YES : MODE_NIGHT_NO);
+        }
     }
 
     private String getPrefsTheme() {

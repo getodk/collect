@@ -14,8 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -46,8 +44,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -79,7 +75,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(new ThemeUtils(this).isDarkTheme() ? MODE_NIGHT_YES : MODE_NIGHT_NO);
+        new ThemeUtils(this).setDarkModeForCurrentProject();
 
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
