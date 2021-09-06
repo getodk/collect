@@ -14,12 +14,15 @@
 
 package org.odk.collect.android.application;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
@@ -132,6 +135,10 @@ public class Collect extends Application implements
         fixGoogleBug154855417();
 
         setupStrictMode();
+
+        // Default the app to light theme as we don't have "System" theme option. Dark theme will
+        // applied by `MainMenuActivity` if requested.
+        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
     }
 
     /**
