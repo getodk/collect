@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.formentry
+package org.odk.collect.android.regression
 
 import android.app.Activity
 import android.app.Instrumentation
