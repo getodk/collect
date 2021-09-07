@@ -10,3 +10,4 @@ cp robolectric-deps.properties collect_app/src/test/resources
 cp robolectric-deps.properties audiorecorder/src/test/resources
 cp robolectric-deps.properties projects/src/test/resources
 cp robolectric-deps.properties location/src/test/resources
+cp robolectric-deps.properties androidshared/src/test/resources
