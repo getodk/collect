@@ -28,10 +28,12 @@ import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.SqlFrag;
 import org.odk.collect.android.external.ExternalDataUtil;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -83,35 +85,101 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
     @Override
     public Object eval(Object[] args, EvaluationContext ec) {
 
-        if (args.length != 6 && args.length != 4) {
-            Timber.e("4 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);
+        if (args.length < 3 || args.length > 6) {     // smap add support for additional parameter combinations
+            Timber.e("3, 4, 5 or 6 arguments are needed to evaluate the %s function", HANDLER_NAME);  // smap 5th, 6th parameter
             return "";
         }
 
         Collect app = Collect.getInstance();
 
+        // smap common parameters
         String dataSetName = XPathFuncExpr.toString(args[0]);
         String queriedColumn = XPathFuncExpr.toString(args[1]);
-        String referenceColumn = XPathFuncExpr.toString(args[2]);
-        String referenceValue = XPathFuncExpr.toString(args[3]);
-        String searchType = "matches";
-        int index = 0;
 
-        if(args.length == 6) {
-            String sIndex = XPathFuncExpr.toString(args[4]);
-            try {
-                index = Integer.parseInt(sIndex);
-            } catch (Exception e) { }
+        boolean hasParam = false;
+        String filter = null;
+        String referenceColumn = null;
+        String referenceValue = null;
+        boolean multiSelect = (args.length == 5 || args.length == 6);
+        int index = 0;
+        String fn = null;    // count || list || index || sum || max || min || mean
+        String searchType = null;  // matches || endswith || startswith || contains
+
+        if(args.length == 3) {
+            filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+        } else if(args.length == 4) {
+            referenceColumn = XPathFuncExpr.toString(args[2]);
+            referenceValue = XPathFuncExpr.toString(args[3]);
+        } else if(args.length == 5) {
+            filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+            fn = XPathFuncExpr.toString(args[3]).toLowerCase();
+        } else if(args.length == 6) {
+            referenceColumn = XPathFuncExpr.toString(args[2]);
+            referenceValue = XPathFuncExpr.toString(args[3]);
+            fn = XPathFuncExpr.toString(args[4]).toLowerCase();
             searchType = XPathFuncExpr.toString(args[5]);
         }
 
-        if(referenceValue.length() > 0) {
+        SqlFrag filterFrag = null;
+        if(filter != null && filter.length() > 0) {
+            filterFrag = new SqlFrag();
+            try {
+                filterFrag.addSqlFragment(filter, false, null, 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(multiSelect) {
+            try {
+
+                // Support legacy function values
+                if(fn.equals("-1")) { // legacy
+                    fn = ExternalDataHandlerPull.FN_COUNT;
+                } else if(fn.equals("0")) { // legacy
+                    fn = ExternalDataHandlerPull.FN_LIST;
+                }
+
+                /*
+                 * If the function is a number greater than 0 then set the function to "index",
+                 * if less than 0 set it to "count" otherwise if equal to 0 then it should be "list"
+                 * if it is not a number then it will not be changed
+                 */
+                try {
+                    index = Integer.valueOf(fn);
+                    if(index > 0) {
+                        fn = ExternalDataHandlerPull.FN_INDEX;
+                    }
+                } catch (Exception e) {
+
+                }
+
+
+            } catch (Exception e) {
+                fn = ExternalDataHandlerPull.FN_LIST;        // default
+            }
+
+        }
+
+        if(args.length == 3 || args.length == 5 || referenceValue.length() > 0) {
 
             // Get the url which doubles as the cache key - url encode it by converting to a URI
             String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
-            if(args.length == 6) {
-                url += "?index=" + index;
+            if(args.length == 3 || args.length == 5) {
+                //try {
+                //    url +="?expression=" + URLEncoder.encode(filter, "UTF-8");
+                //
+                //} catch (UnsupportedEncodingException e) {
+                //    e.printStackTrace();
+                //}
+                url += (hasParam ? "&" : "?") + "expression=" + filter;
+                hasParam = true;
+            }
+
+            if(args.length == 6 || args.length == 5) {
+                url += (hasParam ? "&" : "?") + "index=" + (index > 0 ? index : fn);
                 url += "&searchType=" + searchType;
+                hasParam = true;
             }
             try {
                 URL u = new URL(url);
@@ -119,6 +187,9 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
                 u = uri.toURL();
                 url = u.toString();
             } catch (Exception e) {}
+
+            // The first # in an expression will not have been encoded
+            url = url.replace("#", "%23");
 
             // Get the cache results if they exist
             String data = app.getRemoteData(url);
@@ -139,7 +210,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
                 task.execute(url, "0", "false", null, null, "true");
                 return "";
             } else {
-                if(index == -1) {
+                if(index == -1 || (fn != null && fn.equals(ExternalDataHandlerPull.FN_COUNT))) {
                     return ExternalDataUtil.nullSafe(record.get("_count"));
                 } else {
                     return ExternalDataUtil.nullSafe(record.get(queriedColumn));

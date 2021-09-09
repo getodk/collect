@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -138,7 +139,9 @@ public class MultiFormDownloaderSmap {
                     .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);        // smap
 
             // get the xml file - either download or use the existing one
-            fileResult = downloadXform(fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" + deviceId, stateListener,
+            fileResult = downloadXform(fd.getProject(), fd.getFormName(), fd.getDownloadUrl() + "&deviceID=" +
+                            URLEncoder.encode(deviceId != null ? deviceId : "", "UTF-8"),
+                    stateListener,
                     fd.isFormDownloaded(),
                     fd.getFormPath());
 
@@ -288,9 +291,9 @@ public class MultiFormDownloaderSmap {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, boolean isFormDownloaded, String formPath) throws Exception {  // smap add download and formPath
+    FileResult downloadXform(String project, String formName, String url, FormDownloaderListener stateListener, boolean isFormDownloaded, String formPath) throws Exception {  // smap add project, download and formPath
         // clean up friendly form name...
-        String rootName = FormNameUtils.formatFilenameFromFormName(formName);
+        String rootName = FormNameUtils.formatFilenameFromFormName(project, formName);  // smap add project
 
         File f;
         boolean isNew = false;

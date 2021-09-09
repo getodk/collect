@@ -38,6 +38,8 @@ collect_app/informEd/
 collect_app/src/informEd/
 collect_app/stl/
 collect_app/src/stl/
+collect_app/ljs/
+collect_app/src/ljs/
 
 # gradle env props
 secrets.properties
