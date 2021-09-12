@@ -111,15 +111,12 @@ public class LocationReceiver  extends BroadcastReceiver {
                 }
 
                 /*
-                 * Save the location in the database
+                 * Process the location change
+                 * Discard if this app is downloaded from the google play store
+                 * Otherwise for corporate apps the response will be dependent on the corporate policy
                  */
                 LocationRegister lr = new LocationRegister();
                 lr.register(context, location);
-                //if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
-                //    TraceUtilities.insertPoint(location);
-                //    Timber.i("+++++ Insert Point");
-                //    LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("locationChanged"));  // update map
-                //}
             }
 
         }
