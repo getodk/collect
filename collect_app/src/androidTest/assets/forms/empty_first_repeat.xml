@@ -5,7 +5,7 @@
         <h:title>empty_first_repeat</h:title>
         <model odk:xforms-version="1.0.0">
             <instance>
-                <data id="empty_first_repeat" version="2021-07-30 B">
+                <data id="empty_first_repeat" version="2021-09-10 A">
                     <veg_yn>1</veg_yn>
                     <veg_type>2 3 5</veg_type>
                     <veg_repeat_count />
@@ -63,82 +63,6 @@
                     <item>
                         <label>Carrot</label>
                         <name>6</name>
-                    </item>
-                    <item>
-                        <label>Cauliflower</label>
-                        <name>7</name>
-                    </item>
-                    <item>
-                        <label>Celery</label>
-                        <name>8</name>
-                    </item>
-                    <item>
-                        <label>Corn</label>
-                        <name>9</name>
-                    </item>
-                    <item>
-                        <label>Cucumber</label>
-                        <name>10</name>
-                    </item>
-                    <item>
-                        <label>Garlic</label>
-                        <name>11</name>
-                    </item>
-                    <item>
-                        <label>Green onion</label>
-                        <name>12</name>
-                    </item>
-                    <item>
-                        <label>Kale</label>
-                        <name>13</name>
-                    </item>
-                    <item>
-                        <label>Leek</label>
-                        <name>14</name>
-                    </item>
-                    <item>
-                        <label>Lettuce</label>
-                        <name>15</name>
-                    </item>
-                    <item>
-                        <label>Radish</label>
-                        <name>16</name>
-                    </item>
-                    <item>
-                        <label>Rhubarb</label>
-                        <name>17</name>
-                    </item>
-                    <item>
-                        <label>Rutabaga/Turnip</label>
-                        <name>18</name>
-                    </item>
-                    <item>
-                        <label>Spinach</label>
-                        <name>19</name>
-                    </item>
-                    <item>
-                        <label>Sweet potato/Yam</label>
-                        <name>20</name>
-                    </item>
-                    <item>
-                        <label>Onion</label>
-                        <name>21</name>
-                    </item>
-                    <item>
-                        <label>Squash/pumpkin</label>
-                        <name>22</name>
-                    </item>
-                    <item>
-                        <label>Tomato</label>
-                        <name>23</name>
-                    </item>
-                    <item>
-                        <label>Zucchini</label>
-                        <name>24</name>
-                    </item>
-                    <item>
-                        <label>Other</label>
-                        <name>777</name>
                     </item>
                 </root>
             </instance>

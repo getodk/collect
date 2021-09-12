@@ -1,5 +1,11 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -12,12 +18,6 @@ import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
 public class FormHierarchyTest {
 
@@ -179,6 +179,7 @@ public class FormHierarchyTest {
                 .startBlankForm("empty_first_repeat")
                 .clickGoToArrow()
                 .assertText("Beet, Bell pepper, Cabbage")
-                .clickOnText("Frequencies");
+                .clickOnText("Frequencies")
+                .assertText("2.\u200E Beet", "3.\u200E Bell pepper", "5.\u200E Cabbage");
     }
 }

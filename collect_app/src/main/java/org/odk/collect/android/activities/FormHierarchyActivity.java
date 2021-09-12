@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
@@ -57,8 +59,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
 
 public class FormHierarchyActivity extends CollectAbstractActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
@@ -603,14 +603,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                     }
                     case FormEntryController.EVENT_REPEAT: {
                         FormEntryCaption fc = formController.getCaptionPrompt();
-                        if (!formController.isGroupRelevant()) {
-                            //Handles #4570 - ensures repeats are visible
-                            boolean isFirst = fc.getMultiplicity() == 0;
-                            //But disregard if starting a picker
-                            boolean isPicker = shouldShowRepeatGroupPicker();
-                            if (!isFirst || isPicker) {
-                                break;
-                            }
+                        boolean isFirst = fc.getMultiplicity() == 0;
+                        boolean forPicker = shouldShowRepeatGroupPicker();
+                        boolean isEmpty = !formController.isGroupRelevant();
+                        if (isEmpty &&
+                                // For #4570
+                                (!isFirst || forPicker)) {
+                            break;
                         }
 
                         visibleGroupRef = currentRef;
@@ -620,7 +619,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                             break;
                         }
 
-                        if (shouldShowRepeatGroupPicker()) {
+                        if (forPicker) {
                             // Don't render other groups' instances.
                             String repeatGroupPickerRef = repeatGroupPickerIndex.getReference().toString(false);
                             if (!currentRef.toString(false).equals(repeatGroupPickerRef)) {
@@ -646,7 +645,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                                     repeatLabel, null,
                                     null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
                             elementsToDisplay.add(instance);
-                        } else if (fc.getMultiplicity() == 0) {
+                        } else if (isFirst) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
                                     fc.getShortText(), getString(R.string.repeatable_group_label),
