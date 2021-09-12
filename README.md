@@ -21,6 +21,8 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) if you don't have it already
 
+1. In Android Studio install the target SDK
+
 1. [Add Smap JavaRosa as a project in Android Studio](https://github.com/smap-consulting/javarosa)
 
         Follow the readme instructions in the javarosa repository to build the latest production java rosa version. Currently tip of production branch.
