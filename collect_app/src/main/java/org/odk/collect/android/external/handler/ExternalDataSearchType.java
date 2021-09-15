@@ -70,7 +70,7 @@ enum ExternalDataSearchType {
         }
     },
 
-    WITHIN("within") {              // smap
+    EVAL("eval") {              // smap
         @Override
         protected String getSingleLikeArgument(String queriedValue) {
             return queriedValue;

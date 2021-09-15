@@ -26,6 +26,8 @@ import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.SqlFrag;
+import org.odk.collect.android.database.SqlFragParam;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.external.ExternalDataManager;
 import org.odk.collect.android.external.ExternalDataUtil;
@@ -42,6 +44,7 @@ import java.util.Set;
 import timber.log.Timber;
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.IN;
 import static org.odk.collect.android.external.handler.ExternalDataSearchType.NOT_IN;
+import static org.odk.collect.android.external.handler.ExternalDataSearchType.EVAL;
 
 /**
  * Author: Smap Consulting
@@ -169,7 +172,37 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             String selection;
             String[] selectionArgs;
 
-            if (searchRows && useFilter) {
+            String filter= null;
+            SqlFrag filterFrag = null;
+            if(externalDataSearchType.equals(EVAL)) {
+                filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
+                if(filter != null && filter.length() > 0) {
+                    filterFrag = new SqlFrag();
+                    try {
+                        filterFrag.addSqlFragment(filter, false, null, 0);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            if(filterFrag != null) {
+                selection = filterFrag.sql.toString();
+                int paramSize = filterFrag.params.size();
+                if(useFilter) {
+                    selection += " AND " + ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";
+                    paramSize++;
+                }
+
+                selectionArgs = new String[paramSize];
+                int idx = 0;
+                for(SqlFragParam param : filterFrag.params) {
+                    selectionArgs[idx++] = SqlFrag.getParamValue(param);
+                }
+                if(useFilter) {
+                    selectionArgs[selectionArgs.length - 1] = filterValue;
+                }
+            } else if (searchRows && useFilter) {
                 // smap modify arguments for createLikeExpression
                 selection = "( " + createLikeExpression(queriedColumns, queriedValues, externalDataSearchType) + " ) AND "
                         + ExternalDataUtil.toSafeColumnName(filterColumn) + "=? ";

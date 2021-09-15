@@ -161,65 +161,52 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
 
         }
 
-        if(args.length == 3 || args.length == 5 || referenceValue.length() > 0) {
-
-            // Get the url which doubles as the cache key - url encode it by converting to a URI
-            String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
-            if(args.length == 3 || args.length == 5) {
-                //try {
-                //    url +="?expression=" + URLEncoder.encode(filter, "UTF-8");
-                //
-                //} catch (UnsupportedEncodingException e) {
-                //    e.printStackTrace();
-                //}
-                url += (hasParam ? "&" : "?") + "expression=" + filter;
-                hasParam = true;
-            }
-
-            if(args.length == 6 || args.length == 5) {
-                url += (hasParam ? "&" : "?") + "index=" + (index > 0 ? index : fn);
-                url += "&searchType=" + searchType;
-                hasParam = true;
-            }
-            try {
-                URL u = new URL(url);
-                URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
-                u = uri.toURL();
-                url = u.toString();
-            } catch (Exception e) {}
-
-            // The first # in an expression will not have been encoded
-            url = url.replace("#", "%23");
-
-            // Get the cache results if they exist
-            String data = app.getRemoteData(url);
-            HashMap<String, String> record = null;
-            try {
-                record =
-                        new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
-                        }.getType());
-            } catch (Exception e) {
-                return data;            // Assume the data contains the error message
-            }
-            Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
-            if (record == null) {
-                // Call a webservice to get the remote record
-                app.startRemoteCall(url);
-                SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
-                task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, "0", "false", null, null, "true");
-                return "";
-            } else {
-                if(index == -1 || (fn != null && fn.equals(ExternalDataHandlerPull.FN_COUNT))) {
-                    return ExternalDataUtil.nullSafe(record.get("_count"));
-                } else {
-                    return ExternalDataUtil.nullSafe(record.get(queriedColumn));
-                }
-            }
-        } else {
-            // No data to lookup
-            return "";
+        // Get the url which doubles as the cache key - url encode it by converting to a URI
+        String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+        if(args.length == 3 || args.length == 5) {
+            url += (hasParam ? "&" : "?") + "expression=" + filter;
+            hasParam = true;
         }
 
+        if(args.length == 6 || args.length == 5) {
+            url += (hasParam ? "&" : "?") + "index=" + (index > 0 ? index : fn);
+            url += "&searchType=" + searchType;
+            hasParam = true;
+        }
+        try {
+            URL u = new URL(url);
+            URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
+            u = uri.toURL();
+            url = u.toString();
+        } catch (Exception e) {}
+
+        // The first # in an expression will not have been encoded
+        url = url.replace("#", "%23");
+
+        // Get the cache results if they exist
+        String data = app.getRemoteData(url);
+        HashMap<String, String> record = null;
+        try {
+            record =
+                    new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
+                    }.getType());
+        } catch (Exception e) {
+            return data;            // Assume the data contains the error message
+        }
+        Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
+        if (record == null) {
+            // Call a webservice to get the remote record
+            app.startRemoteCall(url);
+            SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
+            task.setSmapRemoteListener(app.getFormEntryActivity());
+            task.execute(url, "0", "false", null, null, "true");
+            return "";
+        } else {
+            if(index == -1 || (fn != null && fn.equals(ExternalDataHandlerPull.FN_COUNT))) {
+                return ExternalDataUtil.nullSafe(record.get("_count"));
+            } else {
+                return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+            }
+        }
     }
 }

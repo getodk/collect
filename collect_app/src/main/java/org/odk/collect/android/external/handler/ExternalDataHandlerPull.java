@@ -199,7 +199,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
                 selectionArgs[0] = referenceValue;
             }
 
-            String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
+            //String sortBy = ExternalDataUtil.SORT_COLUMN_NAME; // smap add sorting
 
             // smap start - Add user specified selection if it is not matches
             if(multiSelect && searchType != null && !searchType.equals("eval")) {
@@ -213,7 +213,7 @@ public class ExternalDataHandlerPull extends ExternalDataHandlerBase {
             // smap end
 
             c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, columns, selection,
-                    selectionArgs, null, null, sortBy);
+                    selectionArgs, null, null, null);
             if (c.getCount() > 0) {
                 if(!multiSelect) {  // smap - use original processing if the   original 4 parameter format is used
                     c.moveToFirst();
