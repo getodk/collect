@@ -748,7 +748,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(Color.parseColor(LINE_COLOR))
+                    .color(requireContext().getResources().getColor(R.color.mapLineColor))
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)

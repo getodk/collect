@@ -841,7 +841,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
             }
             line = lineManager.create(new LineOptions()
-                .withLineColor(ColorUtils.colorToRgbaString(Color.parseColor(LINE_COLOR)))
+                .withLineColor(ColorUtils.colorToRgbaString(requireContext().getResources().getColor(R.color.mapLineColor)))
                 .withLineWidth(STROKE_WIDTH)
                 .withLatLngs(new ArrayList<>())
             );
