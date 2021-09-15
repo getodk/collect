@@ -316,21 +316,21 @@ public class DrawActivity extends CollectAbstractActivity {
         alertDialog.show();
     }
 
-    public void clear(View view) {
+    private void clear(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             reset();
         }
     }
 
-    public void close(View view) {
+    private void close(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             saveAndClose();
         }
     }
 
-    public void setColor(View view) {
+    private void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
 
