@@ -14,10 +14,11 @@
 
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -51,14 +52,14 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.location.GoogleFusedLocationClient;
-import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.IconUtils;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,8 +71,6 @@ import javax.inject.Inject;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
-
-import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
 
 public class GoogleMapFragment extends SupportMapFragment implements
     MapFragment, LocationListener, LocationClient.LocationClientListener,
