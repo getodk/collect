@@ -318,13 +318,13 @@ public class FormMapActivity extends BaseGeoMapActivity {
     private static int getDrawableIdForStatus(String status, boolean enlarged) {
         switch (status) {
             case Instance.STATUS_INCOMPLETE:
-                return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
+                return enlarged ? R.drawable.ic_room_form_state_incomplete_48dp : R.drawable.ic_room_form_state_incomplete_24dp;
             case Instance.STATUS_COMPLETE:
-                return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
+                return enlarged ? R.drawable.ic_room_form_state_complete_48dp : R.drawable.ic_room_form_state_complete_24dp;
             case Instance.STATUS_SUBMITTED:
-                return enlarged ? R.drawable.ic_room_green_48dp : R.drawable.ic_room_green_24dp;
+                return enlarged ? R.drawable.ic_room_form_state_submitted_48dp : R.drawable.ic_room_form_state_submitted_24dp;
             case Instance.STATUS_SUBMISSION_FAILED:
-                return enlarged ? R.drawable.ic_room_red_48dp : R.drawable.ic_room_red_24dp;
+                return enlarged ? R.drawable.ic_room_form_state_submission_failed_48dp : R.drawable.ic_room_form_state_submission_failed_24dp;
         }
         return R.drawable.ic_map_point;
     }
