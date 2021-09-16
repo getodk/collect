@@ -12,6 +12,13 @@
         app:layout_constraintGuide_begin="@dimen/margin_standard" />
 
     <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -98,6 +105,7 @@
         android:id="@+id/add_project_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_small"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:paddingVertical="@dimen/margin_small"
         android:text="@string/add_project"
@@ -105,14 +113,13 @@
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
         app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/about_button"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_center" />
 
     <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
         android:id="@+id/about_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:paddingVertical="@dimen/margin_small"
         android:text="@string/about_preferences"
@@ -120,6 +127,5 @@
         app:icon="@drawable/ic_outline_info_24"
         app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/add_project_button" />
+        app:layout_constraintStart_toEndOf="@id/guideline_center" />
 </androidx.constraintlayout.widget.ConstraintLayout>
