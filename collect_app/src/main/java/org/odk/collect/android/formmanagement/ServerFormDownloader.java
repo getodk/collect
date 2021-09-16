@@ -92,7 +92,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException {
+    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException {
         boolean success = true;
 
         // use a temporary media path until everything is ok.
@@ -163,7 +163,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
+    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
         FormResult formResult;
 
         File formFile;
@@ -251,7 +251,7 @@ public class ServerFormDownloader implements FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
+    private FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
         InputStream xform = formSource.fetchForm(url);
 
         String fileName = getFormFileName(formName, formsDirPath);
@@ -416,11 +416,11 @@ public class ServerFormDownloader implements FormDownloader {
         return fileName;
     }
 
-    public static String getMd5HashWithoutPrefix(String hash) {
+    private static String getMd5HashWithoutPrefix(String hash) {
         return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 
-    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
+    private static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
         File tempMediaFolder = new File(tempMediaPath);
         File[] mediaFiles = tempMediaFolder.listFiles();
 
