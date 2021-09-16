@@ -10,5 +10,5 @@
 
     {@deprecated These components should be replaced with material ones and this
     color should be deleted} -->
-    <color name="surfaceButtonColor">#121212</color>
+    <color name="surfaceButtonColor">#282828</color>
 </resources>
