@@ -59,7 +59,7 @@ public class ServerFormDownloader implements FormDownloader {
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
         } catch (IllegalArgumentException e) {
-            throw new FormDownloadException(e.getMessage());
+            throw new FormDownloadException.FormWithNoHashException();
         }
 
         if (formOnDevice != null) {
