@@ -54,7 +54,7 @@ public class ServerFormDownloader implements FormDownloader {
     }
 
     @Override
-    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
+    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
         Form formOnDevice;
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
@@ -92,7 +92,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException, FormDownloadException.DiskException {
+    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException.DiskException, FormDownloadException.DownloadingInterruptedException {
         boolean success = true;
 
         // use a temporary media path until everything is ok.
@@ -108,10 +108,10 @@ public class ServerFormDownloader implements FormDownloader {
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName());
             }
-        } catch (InterruptedException e) {
+        } catch (FormDownloadException.DownloadingInterruptedException e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
-            throw e;
+            throw new FormDownloadException.DownloadingInterruptedException();
         } catch (IOException e) {
             throw new FormDownloadException.DiskException();
         } catch (FormSourceException e) {
@@ -120,11 +120,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
             cleanUp(fileResult, tempMediaPath);
-            fileResult = null;
-        }
-
-        if (fileResult == null) {
-            return false;
+            throw new FormDownloadException.DownloadingInterruptedException();
         }
 
         Map<String, String> parsedFields = null;
@@ -253,7 +249,7 @@ public class ServerFormDownloader implements FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
+    private FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterruptedException {
         InputStream xform = formSource.fetchForm(url);
 
         String fileName = getFormFileName(formName, formsDirPath);
@@ -282,7 +278,7 @@ public class ServerFormDownloader implements FormDownloader {
      * is okay, so that garbage is not left over on cancel.
      */
     private void writeFile(InputStream inputStream, File destinationFile, File tempDir, FormDownloaderListener stateListener)
-            throws IOException, InterruptedException {
+            throws IOException, FormDownloadException.DownloadingInterruptedException {
 
         File tempFile = File.createTempFile(
                 destinationFile.getName(),
@@ -351,7 +347,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             if (stateListener != null && stateListener.isTaskCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
-                throw new InterruptedException();
+                throw new FormDownloadException.DownloadingInterruptedException();
             }
         }
 
@@ -371,7 +367,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws FormSourceException, IOException, InterruptedException {
+    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws FormSourceException, IOException, FormDownloadException.DownloadingInterruptedException {
         File tempMediaDir = new File(tempMediaPath);
         tempMediaDir.mkdir();
 
