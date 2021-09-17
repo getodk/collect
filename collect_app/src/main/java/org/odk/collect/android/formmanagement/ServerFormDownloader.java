@@ -92,7 +92,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException {
+    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException, FormDownloadException.DiskException {
         boolean success = true;
 
         // use a temporary media path until everything is ok.
@@ -112,7 +112,9 @@ public class ServerFormDownloader implements FormDownloader {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
             throw e;
-        } catch (FormSourceException | IOException e) {
+        } catch (IOException e) {
+            throw new FormDownloadException.DiskException();
+        } catch (FormSourceException e) {
             return false;
         }
 
@@ -163,7 +165,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
+    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormDownloadException.DiskException {
         FormResult formResult;
 
         File formFile;
@@ -193,7 +195,7 @@ public class ServerFormDownloader implements FormDownloader {
                     formsRepository.delete(formResult.form.getDbId());
                 }
 
-                return false;
+                throw new FormDownloadException.DiskException();
             }
         }
 
