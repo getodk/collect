@@ -136,14 +136,16 @@ public class ServerFormDownloader implements FormDownloader {
             }
         }
 
+        if (stateListener != null && stateListener.isTaskCancelled()) {
+            throw new FormDownloadException.DownloadingInterruptedException();
+        }
+
         boolean installed = false;
 
-        if ((stateListener == null || !stateListener.isTaskCancelled()) && success) {
-            if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
-                installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
-            } else {
-                success = false;
-            }
+        if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
+            installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
+        } else {
+            success = false;
         }
 
         if (!installed) {
