@@ -78,11 +78,7 @@ public class ServerFormDownloader implements FormDownloader {
 
         try {
             FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            boolean result = processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
-
-            if (!result) {
-                throw new FormDownloadException();
-            }
+            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
         } finally {
             try {
                 deleteDirectory(tempDir);
@@ -92,9 +88,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormSourceException {
-        boolean success = true;
-
+    private void processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormSourceException {
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
@@ -140,20 +134,16 @@ public class ServerFormDownloader implements FormDownloader {
             throw new FormDownloadException.DownloadingInterruptedException();
         }
 
-        boolean installed = false;
-
         if (fileResult.isNew && !isSubmissionOk(parsedFields)) {
             throw new FormDownloadException.InvalidSubmissionException();
         }
 
-        installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
-
-        if (!installed) {
-            success = false;
+        try {
+            installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
+        } catch (FormDownloadException.DiskException e) {
             cleanUp(fileResult, tempMediaPath);
+            throw e;
         }
-
-        return success;
     }
 
     private boolean isSubmissionOk(Map<String, String> parsedFields) {
@@ -161,7 +151,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormDownloadException.DiskException {
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormDownloadException.DiskException {
         FormResult formResult;
 
         File formFile;
@@ -194,8 +184,6 @@ public class ServerFormDownloader implements FormDownloader {
                 throw new FormDownloadException.DiskException();
             }
         }
-
-        return true;
     }
 
     private void cleanUp(FileResult fileResult, String tempMediaPath) {
