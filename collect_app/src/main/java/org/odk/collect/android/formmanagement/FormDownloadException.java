@@ -19,4 +19,8 @@ public class FormDownloadException extends FormSourceException {
     public static class DiskException extends FormDownloadException {
 
     }
+
+    public static class InvalidSubmissionException extends FormDownloadException {
+
+    }
 }

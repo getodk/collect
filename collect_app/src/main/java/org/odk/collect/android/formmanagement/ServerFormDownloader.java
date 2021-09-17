@@ -142,11 +142,11 @@ public class ServerFormDownloader implements FormDownloader {
 
         boolean installed = false;
 
-        if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
-            installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
-        } else {
-            success = false;
+        if (fileResult.isNew && !isSubmissionOk(parsedFields)) {
+            throw new FormDownloadException.InvalidSubmissionException();
         }
+
+        installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
 
         if (!installed) {
             success = false;
