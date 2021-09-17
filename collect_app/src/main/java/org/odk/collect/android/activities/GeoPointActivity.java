@@ -80,12 +80,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (!permissionsProvider.areLocationPermissionsGranted()) {
-            ToastUtils.showLongToast(this, R.string.not_granted_permission);
-            finish();
-            return;
-        }
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         if (savedInstanceState != null) {
