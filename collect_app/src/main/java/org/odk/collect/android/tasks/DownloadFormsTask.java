@@ -70,10 +70,10 @@ public class DownloadFormsTask extends
                 }, this::isCancelled);
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
+            } catch (FormSourceException.DownloadingInterruptedException e) {
+                return emptyMap();
             } catch (FormSourceException e) {
                 results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getInstance(), R.string.failure));
-            } catch (InterruptedException e) {
-                return emptyMap();
             }
 
             index++;

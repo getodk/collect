@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 
 public interface FormDownloader {
 
-    void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormSourceException, InterruptedException;
+    void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormSourceException;
 
     interface ProgressReporter {
         void onDownloadingMediaFile(int count);
