@@ -132,7 +132,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                return false;
+                throw new FormDownloadException.FormParsingException();
             }
         }
 
