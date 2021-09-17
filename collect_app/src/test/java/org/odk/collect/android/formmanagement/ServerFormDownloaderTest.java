@@ -291,7 +291,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormDownloadException e) {
+        } catch (FormSourceException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -652,7 +652,7 @@ public class ServerFormDownloaderTest {
             when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException.FetchError());
             downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
             fail("Expected exception");
-        } catch (FormDownloadException e) {
+        } catch (FormSourceException e) {
             // Check form is still intact
             List<Form> allForms = formsRepository.getAll();
             assertThat(allForms.size(), is(1));
@@ -666,7 +666,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void afterDownloadingXForm_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
+    public void afterDownloadingXForm_cancelling_throwsDownloadingInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -684,7 +684,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Expected exception");
-        } catch (InterruptedException e) {
+        } catch (FormDownloadException.DownloadingInterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -692,7 +692,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void afterDownloadingMediaFile_cancelling_throwsInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
+    public void afterDownloadingMediaFile_cancelling_throwsDownloadingInterruptedExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -713,7 +713,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Excepted exception");
-        } catch (InterruptedException e) {
+        } catch (FormDownloadException.DownloadingInterruptedException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
