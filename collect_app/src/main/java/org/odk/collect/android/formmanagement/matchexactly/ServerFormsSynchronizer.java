@@ -1,7 +1,6 @@
 package org.odk.collect.android.formmanagement.matchexactly;
 
 import org.odk.collect.android.formmanagement.FormDeleter;
-import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -43,7 +42,7 @@ public class ServerFormsSynchronizer {
             if (form.isNotOnDevice() || form.isUpdated()) {
                 try {
                     formDownloader.downloadForm(form, null, null);
-                } catch (FormDownloadException e) {
+                } catch (FormSourceException e) {
                     downloadException = true;
                 } catch (InterruptedException e) {
                     return;
