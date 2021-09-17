@@ -21,6 +21,16 @@ class LocationUtilsTest {
     }
 
     @Test
+    fun whenAccuracyIsNegative_andRetainMockAccuracyIsTrue_shouldBeSetToZeroAfterSanitizing() {
+        val location = createLocation(LocationManager.GPS_PROVIDER, 7.0, 2.0, 3.0, -1.0f)
+        val sanitizedLocation = sanitizeAccuracy(location, retainMockAccuracy = true)
+        assertThat(sanitizedLocation!!.latitude, `is`(7.0))
+        assertThat(sanitizedLocation.longitude, `is`(2.0))
+        assertThat(sanitizedLocation.altitude, `is`(3.0))
+        assertThat(sanitizedLocation.accuracy, `is`(0.0f))
+    }
+
+    @Test
     fun whenLocationIsMocked_shouldAccuracyBeSetToZeroAfterSanitizing() {
         val location = createLocation(LocationManager.GPS_PROVIDER, 7.0, 2.0, 3.0, 5.0f, true)
         val sanitizedLocation = sanitizeAccuracy(location)
@@ -28,6 +38,16 @@ class LocationUtilsTest {
         assertThat(sanitizedLocation.longitude, `is`(2.0))
         assertThat(sanitizedLocation.altitude, `is`(3.0))
         assertThat(sanitizedLocation.accuracy, `is`(0.0f))
+    }
+
+    @Test
+    fun whenLocationIsMocked_andRetainMockAccuracyIsTrue_retainsAccuracy() {
+        val location = createLocation(LocationManager.GPS_PROVIDER, 7.0, 2.0, 3.0, 5.0f, true)
+        val sanitizedLocation = sanitizeAccuracy(location, retainMockAccuracy = true)
+        assertThat(sanitizedLocation!!.latitude, `is`(7.0))
+        assertThat(sanitizedLocation.longitude, `is`(2.0))
+        assertThat(sanitizedLocation.altitude, `is`(3.0))
+        assertThat(sanitizedLocation.accuracy, `is`(5.0f))
     }
 
     @Test

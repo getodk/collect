@@ -5,10 +5,12 @@ import android.location.Location
 object LocationUtils {
 
     @JvmStatic
-    fun sanitizeAccuracy(location: Location?): Location? {
-        if (location != null && (location.isFromMockProvider || location.accuracy < 0)) {
+    @JvmOverloads
+    fun sanitizeAccuracy(location: Location?, retainMockAccuracy: Boolean = false): Location? {
+        if (location != null && (location.isFromMockProvider && !retainMockAccuracy || location.accuracy < 0)) {
             location.accuracy = 0f
         }
+
         return location
     }
 }
