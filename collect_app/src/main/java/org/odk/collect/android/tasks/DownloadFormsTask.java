@@ -18,11 +18,11 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +70,7 @@ public class DownloadFormsTask extends
                 }, this::isCancelled);
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
-            } catch (FormDownloadException e) {
+            } catch (FormSourceException e) {
                 results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getInstance(), R.string.failure));
             } catch (InterruptedException e) {
                 return emptyMap();

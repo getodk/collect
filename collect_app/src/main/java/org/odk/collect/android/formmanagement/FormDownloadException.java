@@ -1,13 +1,8 @@
 package org.odk.collect.android.formmanagement;
 
-public class FormDownloadException extends Exception {
-    public FormDownloadException() {
-        super();
-    }
+import org.odk.collect.forms.FormSourceException;
 
-    public FormDownloadException(String message) {
-        super(message);
-    }
+public class FormDownloadException extends FormSourceException {
 
     public static class DownloadingInterruptedException extends FormDownloadException {
 

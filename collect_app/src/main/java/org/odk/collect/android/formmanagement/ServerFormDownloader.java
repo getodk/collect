@@ -54,7 +54,7 @@ public class ServerFormDownloader implements FormDownloader {
     }
 
     @Override
-    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
+    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormSourceException {
         Form formOnDevice;
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
@@ -92,7 +92,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException.DiskException, FormDownloadException.DownloadingInterruptedException {
+    private boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormSourceException {
         boolean success = true;
 
         // use a temporary media path until everything is ok.
@@ -114,8 +114,6 @@ public class ServerFormDownloader implements FormDownloader {
             throw new FormDownloadException.DownloadingInterruptedException();
         } catch (IOException e) {
             throw new FormDownloadException.DiskException();
-        } catch (FormSourceException e) {
-            return false;
         }
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
