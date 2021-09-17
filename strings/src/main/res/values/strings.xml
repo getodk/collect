@@ -637,6 +637,11 @@
 
     <string name="load_remote_form_error">Form list download failed</string>
 
+    <string name="form_with_no_hash_error">The form has no hash.</string>
+    <string name="form_parsing_error">The form can not be parsed.</string>
+    <string name="form_save_disk_error">Disk exception occurred during saving the form.</string>
+    <string name="form_with_invalid_submission_error">The form has invalid submission.</string>
+
     <!--
     ##############################################
     # DELETE SAVED FORM
