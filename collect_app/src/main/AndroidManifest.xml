@@ -111,7 +111,7 @@ the specific language governing permissions and limitations under the License.
             android:screenOrientation="landscape" />
         <activity
             android:name=".gdrive.GoogleDriveActivity"
-            android:configChanges="orientation|screenSize|uiMode"
+            android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity
@@ -120,13 +120,13 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
             android:name=".activities.DeleteSavedFormActivity"
-            android:configChanges="orientation|screenSize|uiMode" />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".gdrive.GoogleSheetsUploaderActivity"
-            android:configChanges="orientation|screenSize|uiMode" />
+            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".activities.InstanceUploaderListActivity"
-            android:configChanges="orientation|screenSize|uiMode" />
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".configure.qr.QRCodeTabsActivity" />
