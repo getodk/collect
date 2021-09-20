@@ -19,9 +19,9 @@ import android.os.AsyncTask;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.ArrayList;
@@ -52,6 +52,8 @@ public class DownloadFormsTask extends
     protected Map<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
         HashMap<ServerFormDetails, String> results = new HashMap<>();
 
+        FormSourceExceptionMapper exceptionMapper = new FormSourceExceptionMapper(Collect.getInstance());
+
         int index = 1;
         for (ServerFormDetails serverFormDetails : values[0]) {
             try {
@@ -73,7 +75,7 @@ public class DownloadFormsTask extends
             } catch (FormSourceException.DownloadingInterruptedException e) {
                 return emptyMap();
             } catch (FormSourceException e) {
-                results.put(serverFormDetails, e.getMessage() != null ? e.getMessage() : TranslationHandler.getString(Collect.getInstance(), R.string.failure));
+                results.put(serverFormDetails, exceptionMapper.getMessage(e));
             }
 
             index++;
