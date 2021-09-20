@@ -57,6 +57,34 @@ public final class SelectOneWidgetUtils {
         fc.jumpToIndex(thenIndex);
     }
 
+    //#4500 - Field lists
+    public static void checkFastExternalCascadeInFieldList(FormEntryPrompt[] questionsAfterSave,
+                                                           FormIndex lastChangedIndex) {
+        //Quit immediately if no FEI questions
+        boolean hasFastExternal = false;
+        for (FormEntryPrompt question : questionsAfterSave) {
+            hasFastExternal |= question.getFormElement()
+                    .getAdditionalAttribute(null, "query") != null;
+        }
+        if (!hasFastExternal) {
+            return;
+        }
+        FormController fc = Collect.getInstance().getFormController();
+        if (fc == null) {
+            return;
+        }
+
+        //Store current index, prepare for and perform check, revert index
+        FormIndex thenIndex = fc.getFormIndex();
+        fc.jumpToIndex(lastChangedIndex);
+        try {
+            doCascadeCheck(fc);
+        } catch (JavaRosaException e) {
+            Timber.d(e);
+        }
+        fc.jumpToIndex(thenIndex);
+    }
+
     private static void doCascadeCheck(FormController fc) throws JavaRosaException {
         //'Macros'
         Function<FormEntryPrompt, String> getQuestionName = (question) ->
