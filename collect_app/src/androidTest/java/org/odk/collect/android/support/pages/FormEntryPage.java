@@ -1,15 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.test.espresso.Espresso;
-
-import org.hamcrest.Matchers;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.utilities.FlingRegister;
-
-import java.util.concurrent.Callable;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -27,6 +17,18 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
+import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
+
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.ViewMatchers;
+
+import org.hamcrest.Matchers;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.utilities.FlingRegister;
+
+import java.util.concurrent.Callable;
 
 public class FormEntryPage extends Page<FormEntryPage> {
 
@@ -337,4 +339,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
         clickOnString(R.string.record_audio);
         return new CancelRecordingDialog(formName);
     }
+
+    //The following added for SelectOneResetTest 21-06-28
+    public FormEntryPage assertTextIsNotChecked(String text) {
+        onView(withIndex(withText(text), 0))
+                .check(matches(ViewMatchers.isNotChecked()));
+        return this;
+    }
+
+    public FormEntryPage scrollToText(String text) {
+        onView(withIndex(withText(text), 0)).perform(nestedScrollTo());
+        return this;
+    }
+
+    public FormEntryPage scrollToAndClickText(String text, int index) {
+        onView(withIndex(withText(text), index)).perform(nestedScrollTo());
+        onView(withIndex(withText(text), index)).perform(click());
+        return this;
+    }
+
 }
