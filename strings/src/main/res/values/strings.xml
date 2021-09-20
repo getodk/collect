@@ -729,7 +729,7 @@
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>
     <string name="theme_dark">Dark theme</string>
-    <string name="theme_system">System default</string>
+    <string name="theme_system">Use device theme</string>
 
     <string name="language">Language</string>
     <string name="use_device_language">Use device language</string>
