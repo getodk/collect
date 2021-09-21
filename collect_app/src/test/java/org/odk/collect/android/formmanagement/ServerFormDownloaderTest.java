@@ -268,7 +268,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormHasMediaFiles_andFetchingMediaFileFails_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
+    public void whenFormHasMediaFiles_andFetchingMediaFileFails_throwsFetchErrorAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -299,7 +299,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormHasMediaFiles_andFileExistsInMediaDirPath_throwsFormDownloadExceptionAndDoesNotSaveAnything() throws Exception {
+    public void whenFormHasMediaFiles_andFileExistsInMediaDirPath_throwsDiskExceptionAndDoesNotSaveAnything() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -612,7 +612,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_andMediaFetchFails_throwsFormDownloadException() throws Exception {
+    public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_andMediaFetchFails_throwsFetchError() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
