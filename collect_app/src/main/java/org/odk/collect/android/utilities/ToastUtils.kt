@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 
+/**
+ * Convenience wrapper around Android's [Toast] API.
+ */
 object ToastUtils {
 
     private lateinit var lastToast: Toast
