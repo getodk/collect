@@ -12,9 +12,9 @@ sealed class FormSourceException : Exception() {
     // to provide this response to HTTP requests so some custom servers tried to implement it.
     class ServerNotOpenRosaError : FormSourceException()
 
-    class DownloadingInterruptedException : FormSourceException()
-    class FormWithNoHashException : FormSourceException()
-    class FormParsingException : FormSourceException()
-    class DiskException : FormSourceException()
-    class InvalidSubmissionException : FormSourceException()
+    class DownloadingInterrupted : FormSourceException()
+    class FormWithNoHash : FormSourceException()
+    class FormParsingError : FormSourceException()
+    class DiskError : FormSourceException()
+    class InvalidSubmission : FormSourceException()
 }

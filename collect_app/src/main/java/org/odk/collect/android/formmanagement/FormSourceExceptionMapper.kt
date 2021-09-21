@@ -50,7 +50,7 @@ class FormSourceExceptionMapper(private val context: Context) {
                     context, R.string.report_to_project_lead
                 )
             }
-            is FormSourceException.FormWithNoHashException -> {
+            is FormSourceException.FormWithNoHash -> {
                 TranslationHandler.getString(
                     context,
                     R.string.form_with_no_hash_error
@@ -58,7 +58,7 @@ class FormSourceExceptionMapper(private val context: Context) {
                     context, R.string.report_to_project_lead
                 )
             }
-            is FormSourceException.FormParsingException -> {
+            is FormSourceException.FormParsingError -> {
                 TranslationHandler.getString(
                     context,
                     R.string.form_parsing_error
@@ -66,7 +66,7 @@ class FormSourceExceptionMapper(private val context: Context) {
                     context, R.string.report_to_project_lead
                 )
             }
-            is FormSourceException.DiskException -> {
+            is FormSourceException.DiskError -> {
                 TranslationHandler.getString(
                     context,
                     R.string.form_save_disk_error
@@ -74,7 +74,7 @@ class FormSourceExceptionMapper(private val context: Context) {
                     context, R.string.report_to_project_lead
                 )
             }
-            is FormSourceException.InvalidSubmissionException -> {
+            is FormSourceException.InvalidSubmission -> {
                 TranslationHandler.getString(
                     context,
                     R.string.form_with_invalid_submission_error

@@ -100,7 +100,7 @@ class FormSourceExceptionMapperTest {
             R.string.form_with_no_hash_error,
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
-            mapper.getMessage(FormSourceException.FormWithNoHashException()),
+            mapper.getMessage(FormSourceException.FormWithNoHash()),
             `is`(expectedString)
         )
     }
@@ -111,7 +111,7 @@ class FormSourceExceptionMapperTest {
             R.string.form_parsing_error,
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
-            mapper.getMessage(FormSourceException.FormParsingException()),
+            mapper.getMessage(FormSourceException.FormParsingError()),
             `is`(expectedString)
         )
     }
@@ -122,7 +122,7 @@ class FormSourceExceptionMapperTest {
             R.string.form_save_disk_error,
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
-            mapper.getMessage(FormSourceException.DiskException()),
+            mapper.getMessage(FormSourceException.DiskError()),
             `is`(expectedString)
         )
     }
@@ -133,7 +133,7 @@ class FormSourceExceptionMapperTest {
             R.string.form_with_invalid_submission_error,
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
-            mapper.getMessage(FormSourceException.InvalidSubmissionException()),
+            mapper.getMessage(FormSourceException.InvalidSubmission()),
             `is`(expectedString)
         )
     }

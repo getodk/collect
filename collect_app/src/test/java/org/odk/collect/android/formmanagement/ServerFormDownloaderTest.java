@@ -180,7 +180,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception because of missing form hash");
-        } catch (FormSourceException.FormWithNoHashException e) {
+        } catch (FormSourceException.FormWithNoHash e) {
             // pass
         }
     }
@@ -325,7 +325,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormSourceException.DiskException e) {
+        } catch (FormSourceException.DiskError e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -684,7 +684,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Expected exception");
-        } catch (FormSourceException.DownloadingInterruptedException e) {
+        } catch (FormSourceException.DownloadingInterrupted e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -713,7 +713,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Excepted exception");
-        } catch (FormSourceException.DownloadingInterruptedException e) {
+        } catch (FormSourceException.DownloadingInterrupted e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));

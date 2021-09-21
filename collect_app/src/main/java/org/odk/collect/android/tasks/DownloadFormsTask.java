@@ -72,7 +72,7 @@ public class DownloadFormsTask extends
                 }, this::isCancelled);
 
                 results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
-            } catch (FormSourceException.DownloadingInterruptedException e) {
+            } catch (FormSourceException.DownloadingInterrupted e) {
                 return emptyMap();
             } catch (FormSourceException e) {
                 results.put(serverFormDetails, exceptionMapper.getMessage(e));

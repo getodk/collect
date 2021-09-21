@@ -59,7 +59,7 @@ public class ServerFormDownloader implements FormDownloader {
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
         } catch (IllegalArgumentException e) {
-            throw new FormSourceException.FormWithNoHashException();
+            throw new FormSourceException.FormWithNoHash();
         }
 
         if (formOnDevice != null) {
@@ -102,17 +102,17 @@ public class ServerFormDownloader implements FormDownloader {
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName());
             }
-        } catch (FormSourceException.DownloadingInterruptedException e) {
+        } catch (FormSourceException.DownloadingInterrupted e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
-            throw new FormSourceException.DownloadingInterruptedException();
+            throw new FormSourceException.DownloadingInterrupted();
         } catch (IOException e) {
-            throw new FormSourceException.DiskException();
+            throw new FormSourceException.DiskError();
         }
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
             cleanUp(fileResult, tempMediaPath);
-            throw new FormSourceException.DownloadingInterruptedException();
+            throw new FormSourceException.DownloadingInterrupted();
         }
 
         Map<String, String> parsedFields = null;
@@ -126,21 +126,21 @@ public class ServerFormDownloader implements FormDownloader {
 
                 Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                throw new FormSourceException.FormParsingException();
+                throw new FormSourceException.FormParsingError();
             }
         }
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
-            throw new FormSourceException.DownloadingInterruptedException();
+            throw new FormSourceException.DownloadingInterrupted();
         }
 
         if (fileResult.isNew && !isSubmissionOk(parsedFields)) {
-            throw new FormSourceException.InvalidSubmissionException();
+            throw new FormSourceException.InvalidSubmission();
         }
 
         try {
             installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
-        } catch (FormSourceException.DiskException e) {
+        } catch (FormSourceException.DiskError e) {
             cleanUp(fileResult, tempMediaPath);
             throw e;
         }
@@ -151,7 +151,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormSourceException.DiskException {
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormSourceException.DiskError {
         FormResult formResult;
 
         File formFile;
@@ -181,7 +181,7 @@ public class ServerFormDownloader implements FormDownloader {
                     formsRepository.delete(formResult.form.getDbId());
                 }
 
-                throw new FormSourceException.DiskException();
+                throw new FormSourceException.DiskError();
             }
         }
     }
@@ -335,7 +335,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             if (stateListener != null && stateListener.isTaskCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
-                throw new FormSourceException.DownloadingInterruptedException();
+                throw new FormSourceException.DownloadingInterrupted();
             }
         }
 
