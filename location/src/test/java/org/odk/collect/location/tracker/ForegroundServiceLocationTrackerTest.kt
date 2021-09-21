@@ -4,8 +4,11 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.gms.location.LocationListener
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.After
 import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
@@ -44,6 +47,22 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
         RobolectricHelpers.clearServices()
         LocationClientProvider.setTestClient(null)
     }
+
+    @Test
+    fun start_whenRetainMockAccuracyIsTrue_setsRetainMockAccuracyOnClient() {
+        locationTracker.start(retainMockAccuracy = true)
+        runBackground()
+
+        assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
+    }
+
+    @Test
+    fun start_whenRetainMockAccuracyIsFalse_setsRetainMockAccuracyOnClient() {
+        locationTracker.start(retainMockAccuracy = false)
+        runBackground()
+
+        assertThat(locationClient.getRetainMockAccuracy(), equalTo(false))
+    }
 }
 
 private class FakeLocationClient : LocationClient {
@@ -51,6 +70,7 @@ private class FakeLocationClient : LocationClient {
     private var started = false
     private var locationListener: LocationListener? = null
     private var locationClientListener: LocationClient.LocationClientListener? = null
+    private var retainMockAccuracy: Boolean = false
 
     override fun start() {
         this.started = true
@@ -83,7 +103,7 @@ private class FakeLocationClient : LocationClient {
     }
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
-        TODO("Not yet implemented")
+        this.retainMockAccuracy = retainMockAccuracy
     }
 
     override fun getLastLocation(): android.location.Location? {
@@ -110,5 +130,9 @@ private class FakeLocationClient : LocationClient {
         if (started) {
             locationListener?.onLocationChanged(location)
         }
+    }
+
+    fun getRetainMockAccuracy(): Boolean {
+        return retainMockAccuracy
     }
 }
