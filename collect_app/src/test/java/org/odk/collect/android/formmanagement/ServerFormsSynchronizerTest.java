@@ -102,7 +102,7 @@ public class ServerFormsSynchronizerTest {
         when(serverFormDetailsFetcher.fetchFormDetails()).thenReturn(serverForms);
 
         FormDownloader formDownloader = mock(FormDownloader.class);
-        doThrow(new FormDownloadException()).when(formDownloader).downloadForm(serverForms.get(0), null, null);
+        doThrow(new FormDownloadException.FormSourceError(new FormSourceException.FetchError())).when(formDownloader).downloadForm(serverForms.get(0), null, null);
 
         ServerFormsSynchronizer synchronizer = new ServerFormsSynchronizer(serverFormDetailsFetcher, formsRepository, instancesRepository, formDownloader);
 

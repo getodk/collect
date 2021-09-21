@@ -54,12 +54,12 @@ public class ServerFormDownloader implements FormDownloader {
     }
 
     @Override
-    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException, InterruptedException {
+    public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
         Form formOnDevice;
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
         } catch (IllegalArgumentException e) {
-            throw new FormDownloadException(e.getMessage());
+            throw new FormDownloadException.FormWithNoHash();
         }
 
         if (formOnDevice != null) {
@@ -78,11 +78,9 @@ public class ServerFormDownloader implements FormDownloader {
 
         try {
             FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
-            boolean result = processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
-
-            if (!result) {
-                throw new FormDownloadException();
-            }
+            processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
+        } catch (FormSourceException e) {
+            throw new FormDownloadException.FormSourceError(e);
         } finally {
             try {
                 deleteDirectory(tempDir);
@@ -92,9 +90,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    public boolean processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws InterruptedException {
-        boolean success = true;
-
+    private void processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
@@ -108,21 +104,17 @@ public class ServerFormDownloader implements FormDownloader {
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
                 downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName());
             }
-        } catch (InterruptedException e) {
+        } catch (FormDownloadException.DownloadingInterrupted e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
-            throw e;
-        } catch (FormSourceException | IOException e) {
-            return false;
+            throw new FormDownloadException.DownloadingInterrupted();
+        } catch (IOException e) {
+            throw new FormDownloadException.DiskError();
         }
 
         if (stateListener != null && stateListener.isTaskCancelled()) {
             cleanUp(fileResult, tempMediaPath);
-            fileResult = null;
-        }
-
-        if (fileResult == null) {
-            return false;
+            throw new FormDownloadException.DownloadingInterrupted();
         }
 
         Map<String, String> parsedFields = null;
@@ -136,26 +128,24 @@ public class ServerFormDownloader implements FormDownloader {
 
                 Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
             } catch (RuntimeException e) {
-                return false;
+                throw new FormDownloadException.FormParsingError();
             }
         }
 
-        boolean installed = false;
-
-        if ((stateListener == null || !stateListener.isTaskCancelled()) && success) {
-            if (!fileResult.isNew || isSubmissionOk(parsedFields)) {
-                installed = installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
-            } else {
-                success = false;
-            }
+        if (stateListener != null && stateListener.isTaskCancelled()) {
+            throw new FormDownloadException.DownloadingInterrupted();
         }
 
-        if (!installed) {
-            success = false;
+        if (fileResult.isNew && !isSubmissionOk(parsedFields)) {
+            throw new FormDownloadException.InvalidSubmission();
+        }
+
+        try {
+            installEverything(tempMediaPath, fileResult, parsedFields, formsDirPath);
+        } catch (FormDownloadException.DiskError e) {
             cleanUp(fileResult, tempMediaPath);
+            throw e;
         }
-
-        return success;
     }
 
     private boolean isSubmissionOk(Map<String, String> parsedFields) {
@@ -163,7 +153,7 @@ public class ServerFormDownloader implements FormDownloader {
         return submission == null || Validator.isUrlValid(submission);
     }
 
-    boolean installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) {
+    private void installEverything(String tempMediaPath, FileResult fileResult, Map<String, String> parsedFields, String formsDirPath) throws FormDownloadException.DiskError {
         FormResult formResult;
 
         File formFile;
@@ -193,11 +183,9 @@ public class ServerFormDownloader implements FormDownloader {
                     formsRepository.delete(formResult.form.getDbId());
                 }
 
-                return false;
+                throw new FormDownloadException.DiskError();
             }
         }
-
-        return true;
     }
 
     private void cleanUp(FileResult fileResult, String tempMediaPath) {
@@ -251,7 +239,7 @@ public class ServerFormDownloader implements FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, InterruptedException {
+    private FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterrupted {
         InputStream xform = formSource.fetchForm(url);
 
         String fileName = getFormFileName(formName, formsDirPath);
@@ -280,7 +268,7 @@ public class ServerFormDownloader implements FormDownloader {
      * is okay, so that garbage is not left over on cancel.
      */
     private void writeFile(InputStream inputStream, File destinationFile, File tempDir, FormDownloaderListener stateListener)
-            throws IOException, InterruptedException {
+            throws IOException, FormDownloadException.DownloadingInterrupted {
 
         File tempFile = File.createTempFile(
                 destinationFile.getName(),
@@ -349,7 +337,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             if (stateListener != null && stateListener.isTaskCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
-                throw new InterruptedException();
+                throw new FormDownloadException.DownloadingInterrupted();
             }
         }
 
@@ -369,7 +357,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws FormSourceException, IOException, InterruptedException {
+    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException {
         File tempMediaDir = new File(tempMediaPath);
         tempMediaDir.mkdir();
 
@@ -416,11 +404,11 @@ public class ServerFormDownloader implements FormDownloader {
         return fileName;
     }
 
-    public static String getMd5HashWithoutPrefix(String hash) {
+    private static String getMd5HashWithoutPrefix(String hash) {
         return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 
-    public static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
+    private static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {
         File tempMediaFolder = new File(tempMediaPath);
         File[] mediaFiles = tempMediaFolder.listFiles();
 

@@ -43,10 +43,10 @@ public class ServerFormsSynchronizer {
             if (form.isNotOnDevice() || form.isUpdated()) {
                 try {
                     formDownloader.downloadForm(form, null, null);
+                } catch (FormDownloadException.DownloadingInterrupted e) {
+                    return;
                 } catch (FormDownloadException e) {
                     downloadException = true;
-                } catch (InterruptedException e) {
-                    return;
                 }
             }
         }

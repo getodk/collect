@@ -52,7 +52,7 @@ class FormUpdateDownloaderTest {
                 calledBefore = if (!calledBefore) {
                     true
                 } else {
-                    throw InterruptedException()
+                    throw FormDownloadException.DownloadingInterrupted()
                 }
             }
         }).`when`(formDownloader).downloadForm(any(), any(), any())

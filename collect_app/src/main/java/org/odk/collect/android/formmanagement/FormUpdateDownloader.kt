@@ -19,10 +19,10 @@ class FormUpdateDownloader {
                     try {
                         formDownloader.downloadForm(serverFormDetails, null, null)
                         results[serverFormDetails] = successMessage
+                    } catch (e: FormDownloadException.DownloadingInterrupted) {
+                        break
                     } catch (e: FormDownloadException) {
                         results[serverFormDetails] = failureMessage
-                    } catch (e: InterruptedException) {
-                        break
                     }
                 }
             }
