@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.forms.FormSourceException
 import org.odk.collect.shared.locks.ChangeLock
 
 class FormUpdateDownloader {
@@ -20,9 +19,9 @@ class FormUpdateDownloader {
                     try {
                         formDownloader.downloadForm(serverFormDetails, null, null)
                         results[serverFormDetails] = successMessage
-                    } catch (e: FormSourceException.DownloadingInterrupted) {
+                    } catch (e: FormDownloadException.DownloadingInterrupted) {
                         break
-                    } catch (e: FormSourceException) {
+                    } catch (e: FormDownloadException) {
                         results[serverFormDetails] = failureMessage
                     }
                 }

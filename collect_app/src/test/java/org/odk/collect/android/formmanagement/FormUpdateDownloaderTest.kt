@@ -10,7 +10,6 @@ import org.mockito.invocation.InvocationOnMock
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.stubbing.Answer
-import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.testshared.BooleanChangeLock
 
@@ -53,7 +52,7 @@ class FormUpdateDownloaderTest {
                 calledBefore = if (!calledBefore) {
                     true
                 } else {
-                    throw FormSourceException.DownloadingInterrupted()
+                    throw FormDownloadException.DownloadingInterrupted()
                 }
             }
         }).`when`(formDownloader).downloadForm(any(), any(), any())

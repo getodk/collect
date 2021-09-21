@@ -180,7 +180,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception because of missing form hash");
-        } catch (FormSourceException.FormWithNoHash e) {
+        } catch (FormDownloadException.FormWithNoHash e) {
             // pass
         }
     }
@@ -291,7 +291,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormSourceException.FetchError e) {
+        } catch (FormDownloadException.FormSourceError e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -325,7 +325,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormSourceException.DiskError e) {
+        } catch (FormDownloadException.DiskError e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -652,7 +652,7 @@ public class ServerFormDownloaderTest {
             when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException.FetchError());
             downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
             fail("Expected exception");
-        } catch (FormSourceException.FetchError e) {
+        } catch (FormDownloadException.FormSourceError e) {
             // Check form is still intact
             List<Form> allForms = formsRepository.getAll();
             assertThat(allForms.size(), is(1));
@@ -684,7 +684,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Expected exception");
-        } catch (FormSourceException.DownloadingInterrupted e) {
+        } catch (FormDownloadException.DownloadingInterrupted e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -713,7 +713,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, formListApi);
             fail("Excepted exception");
-        } catch (FormSourceException.DownloadingInterrupted e) {
+        } catch (FormDownloadException.DownloadingInterrupted e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -748,23 +748,23 @@ public class ServerFormDownloaderTest {
         }
 
         @Override
-        public InputStream fetchForm(String formURL) throws FormSourceException {
+        public InputStream fetchForm(String formURL) {
             isCancelled = true;
             return new ByteArrayInputStream(xform.getBytes());
         }
 
         @Override
-        public List<FormListItem> fetchFormList() throws FormSourceException {
+        public List<FormListItem> fetchFormList() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ManifestFile fetchManifest(String manifestURL) throws FormSourceException {
+        public ManifestFile fetchManifest(String manifestURL) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
+        public InputStream fetchMediaFile(String mediaFileURL) {
             throw new UnsupportedOperationException();
         }
 
@@ -784,23 +784,23 @@ public class ServerFormDownloaderTest {
         }
 
         @Override
-        public InputStream fetchForm(String formURL) throws FormSourceException {
+        public InputStream fetchForm(String formURL) {
             return new ByteArrayInputStream(xform.getBytes());
         }
 
         @Override
-        public InputStream fetchMediaFile(String mediaFileURL) throws FormSourceException {
+        public InputStream fetchMediaFile(String mediaFileURL) {
             isCancelled = true;
             return new ByteArrayInputStream("contents".getBytes());
         }
 
         @Override
-        public List<FormListItem> fetchFormList() throws FormSourceException {
+        public List<FormListItem> fetchFormList() {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public ManifestFile fetchManifest(String manifestURL) throws FormSourceException {
+        public ManifestFile fetchManifest(String manifestURL) {
             throw new UnsupportedOperationException();
         }
 

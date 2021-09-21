@@ -93,48 +93,4 @@ class FormSourceExceptionMapperTest {
             `is`(expectedString)
         )
     }
-
-    @Test
-    fun formWithNoHashError_returnsFormWithNoHashErrorMessage() {
-        val expectedString = context.getString(
-            R.string.form_with_no_hash_error,
-        ) + " " + context.getString(R.string.report_to_project_lead)
-        assertThat(
-            mapper.getMessage(FormSourceException.FormWithNoHash()),
-            `is`(expectedString)
-        )
-    }
-
-    @Test
-    fun formParsingError_returnsFormParsingErrorMessage() {
-        val expectedString = context.getString(
-            R.string.form_parsing_error,
-        ) + " " + context.getString(R.string.report_to_project_lead)
-        assertThat(
-            mapper.getMessage(FormSourceException.FormParsingError()),
-            `is`(expectedString)
-        )
-    }
-
-    @Test
-    fun formSaveError_returnsFormSaveErrorMessage() {
-        val expectedString = context.getString(
-            R.string.form_save_disk_error,
-        ) + " " + context.getString(R.string.report_to_project_lead)
-        assertThat(
-            mapper.getMessage(FormSourceException.DiskError()),
-            `is`(expectedString)
-        )
-    }
-
-    @Test
-    fun formWithInvalidSubmissionError_returnsFormInvalidSubmissionErrorMessage() {
-        val expectedString = context.getString(
-            R.string.form_with_invalid_submission_error,
-        ) + " " + context.getString(R.string.report_to_project_lead)
-        assertThat(
-            mapper.getMessage(FormSourceException.InvalidSubmission()),
-            `is`(expectedString)
-        )
-    }
 }
