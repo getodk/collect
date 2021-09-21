@@ -1,5 +1,18 @@
 package org.odk.collect.location;
 
+import static android.location.LocationManager.GPS_PROVIDER;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -16,19 +29,6 @@ import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.testshared.LocationTestUtils;
-
-import static android.location.LocationManager.GPS_PROVIDER;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class GoogleFusedLocationClientTest {
@@ -209,6 +209,18 @@ public class GoogleFusedLocationClientTest {
     }
 
     @Test
+    public void whenNewlyReceivedLocationIsMocked_andRetainMockAccuracyIsTrue_doesNotChangeAccuracy() {
+        TestLocationListener listener = new TestLocationListener();
+        client.setRetainMockAccuracy(true);
+        client.requestLocationUpdates(listener);
+
+        Location location = LocationTestUtils.createLocation("GPS", 7, 2, 3, 5.0f, true);
+        client.onLocationChanged(location);
+
+        assertThat(listener.getLastLocation().getAccuracy(), is(5.0f));
+    }
+
+    @Test
     public void whenLastKnownLocationAccuracyIsNegative_shouldBeSetToZero() {
         Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, -1.0f);
         when(fusedLocationProviderApi.getLastLocation(googleApiClient)).thenReturn(location);
@@ -222,6 +234,15 @@ public class GoogleFusedLocationClientTest {
         when(fusedLocationProviderApi.getLastLocation(googleApiClient)).thenReturn(location);
 
         assertThat(client.getLastLocation().getAccuracy(), is(0.0f));
+    }
+
+    @Test
+    public void whenLastKnownLocationIsMocked_andRetainMockAccuracyIsTrue_doesNotChangeAccuracy() {
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7, 2, 3, 5.0f, true);
+        client.setRetainMockAccuracy(true);
+        when(fusedLocationProviderApi.getLastLocation(googleApiClient)).thenReturn(location);
+
+        assertThat(client.getLastLocation().getAccuracy(), is(5.0f));
     }
 
     private static Location newMockLocation() {
