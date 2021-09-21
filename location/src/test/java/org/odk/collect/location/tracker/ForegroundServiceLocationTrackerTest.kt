@@ -82,6 +82,10 @@ private class FakeLocationClient : LocationClient {
         TODO("Not yet implemented")
     }
 
+    override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun getLastLocation(): android.location.Location? {
         TODO("Not yet implemented")
     }
