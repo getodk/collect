@@ -214,6 +214,7 @@ public final class ExternalDataUtil {
 
                     FormInstance formInstance =
                             Collect.getInstance().getFormController().getFormDef().getInstance();
+
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
