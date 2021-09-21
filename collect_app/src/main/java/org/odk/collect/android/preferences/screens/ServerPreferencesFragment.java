@@ -42,7 +42,7 @@ import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
 

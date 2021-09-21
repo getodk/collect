@@ -37,7 +37,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 

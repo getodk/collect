@@ -40,7 +40,7 @@ import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 
 import javax.inject.Inject;
 

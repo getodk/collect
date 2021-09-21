@@ -147,7 +147,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
@@ -194,8 +194,8 @@ import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnab
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.android.utilities.ToastUtils.showLongToast;
-import static org.odk.collect.android.utilities.ToastUtils.showShortToast;
+import static org.odk.collect.androidshared.utils.ToastUtils.showLongToast;
+import static org.odk.collect.androidshared.utils.ToastUtils.showShortToast;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating

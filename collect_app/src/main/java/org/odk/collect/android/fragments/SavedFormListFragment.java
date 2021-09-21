@@ -42,8 +42,8 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.utils.ToastUtils;
 
 import javax.inject.Inject;
 

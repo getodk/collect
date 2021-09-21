@@ -29,7 +29,7 @@ import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTING
 import org.odk.collect.android.utilities.ActivityAvailability
 import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.android.utilities.ToastUtils
+import org.odk.collect.androidshared.utils.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.Validator

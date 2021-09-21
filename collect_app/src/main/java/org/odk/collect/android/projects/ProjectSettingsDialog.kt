@@ -20,7 +20,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.DialogUtils
-import org.odk.collect.android.utilities.ToastUtils
+import org.odk.collect.androidshared.utils.ToastUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject

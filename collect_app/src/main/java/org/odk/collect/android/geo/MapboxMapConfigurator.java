@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.shared.Settings;
 
 import java.io.File;

@@ -50,7 +50,7 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;

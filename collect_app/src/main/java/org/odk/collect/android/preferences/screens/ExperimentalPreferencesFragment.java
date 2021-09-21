@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.androidshared.utils.ToastUtils;
 
 public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragment {
 

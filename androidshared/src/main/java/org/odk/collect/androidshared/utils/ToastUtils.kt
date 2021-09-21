@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.androidshared.utils
 
 import android.app.Application
 import android.content.Context
@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import org.odk.collect.strings.getLocalizedString
 
 /**
  * Convenience wrapper around Android's [Toast] API.
@@ -21,7 +22,10 @@ object ToastUtils {
 
     @JvmStatic
     fun showShortToast(context: Context, messageResource: Int) {
-        showToast(context.applicationContext as Application, TranslationHandler.getString(context, messageResource))
+        showToast(
+            context.applicationContext as Application,
+            context.getLocalizedString(messageResource)
+        )
     }
 
     @JvmStatic
@@ -33,7 +37,7 @@ object ToastUtils {
     fun showLongToast(context: Context, messageResource: Int) {
         showToast(
             context.applicationContext as Application,
-            TranslationHandler.getString(context, messageResource),
+            context.getLocalizedString(messageResource),
             Toast.LENGTH_LONG
         )
     }
@@ -43,7 +47,11 @@ object ToastUtils {
         showToastInMiddle(context.applicationContext as Application, message)
     }
 
-    private fun showToast(context: Application, message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToast(
+        context: Application,
+        message: String,
+        duration: Int = Toast.LENGTH_SHORT
+    ) {
         hideLastToast()
         lastToast = Toast.makeText(context, message, duration)
         lastToast.show()
@@ -69,7 +77,7 @@ object ToastUtils {
     }
 
     private fun hideLastToast() {
-        if (::lastToast.isInitialized) {
+        if (ToastUtils::lastToast.isInitialized) {
             lastToast.cancel()
         }
     }

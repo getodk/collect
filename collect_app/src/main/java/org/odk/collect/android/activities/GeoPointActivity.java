@@ -37,8 +37,8 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
