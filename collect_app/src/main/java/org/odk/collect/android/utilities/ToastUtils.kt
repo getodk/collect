@@ -8,7 +8,7 @@ import android.widget.Toast
 
 object ToastUtils {
 
-    private lateinit var toast: Toast
+    private lateinit var lastToast: Toast
 
     @JvmStatic
     fun showShortToast(context: Context, message: String) {
@@ -40,9 +40,9 @@ object ToastUtils {
     }
 
     private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
-        hideOldToast()
-        toast = Toast.makeText(context, message, duration)
-        toast.show()
+        hideLastToast()
+        lastToast = Toast.makeText(context, message, duration)
+        lastToast.show()
     }
 
     private fun showToastInMiddle(
@@ -50,23 +50,23 @@ object ToastUtils {
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
-        hideOldToast()
-        toast = Toast.makeText(context, message, duration)
+        hideLastToast()
+        lastToast = Toast.makeText(context, message, duration)
         try {
-            val group = toast.view as ViewGroup?
+            val group = lastToast.view as ViewGroup?
             val messageTextView = group!!.getChildAt(0) as TextView
             messageTextView.textSize = 21f
             messageTextView.gravity = Gravity.CENTER
         } catch (ignored: Exception) {
             // ignored
         }
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.show()
+        lastToast.setGravity(Gravity.CENTER, 0, 0)
+        lastToast.show()
     }
 
-    private fun hideOldToast() {
-        if (::toast.isInitialized) {
-            toast.cancel()
+    private fun hideLastToast() {
+        if (::lastToast.isInitialized) {
+            lastToast.cancel()
         }
     }
 }
