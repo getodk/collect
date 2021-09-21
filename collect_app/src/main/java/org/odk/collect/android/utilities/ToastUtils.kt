@@ -1,48 +1,57 @@
 package org.odk.collect.android.utilities
 
+import android.content.Context
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import org.odk.collect.android.application.Collect
 
 object ToastUtils {
-    lateinit var toast: Toast
+
+    private lateinit var toast: Toast
 
     @JvmStatic
-    fun showShortToast(message: String) {
-        showToast(message)
+    fun showShortToast(context: Context, message: String) {
+        showToast(context, message)
     }
 
     @JvmStatic
-    fun showShortToast(messageResource: Int) {
-        showToast(TranslationHandler.getString(Collect.getInstance(), messageResource))
+    fun showShortToast(context: Context, messageResource: Int) {
+        showToast(context, TranslationHandler.getString(context, messageResource))
     }
 
     @JvmStatic
-    fun showLongToast(message: String) {
-        showToast(message, Toast.LENGTH_LONG)
+    fun showLongToast(context: Context, message: String) {
+        showToast(context, message, Toast.LENGTH_LONG)
     }
 
     @JvmStatic
-    fun showLongToast(messageResource: Int) {
-        showToast(TranslationHandler.getString(Collect.getInstance(), messageResource), Toast.LENGTH_LONG)
+    fun showLongToast(context: Context, messageResource: Int) {
+        showToast(
+            context,
+            TranslationHandler.getString(context, messageResource),
+            Toast.LENGTH_LONG
+        )
     }
 
     @JvmStatic
-    fun showShortToastInMiddle(message: String) {
-        showToastInMiddle(message)
+    fun showShortToastInMiddle(context: Context, message: String) {
+        showToastInMiddle(context, message)
     }
 
-    private fun showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
         hideOldToast()
-        toast = Toast.makeText(Collect.getInstance(), message, duration)
+        toast = Toast.makeText(context, message, duration)
         toast.show()
     }
 
-    private fun showToastInMiddle(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToastInMiddle(
+        context: Context,
+        message: String,
+        duration: Int = Toast.LENGTH_SHORT
+    ) {
         hideOldToast()
-        toast = Toast.makeText(Collect.getInstance(), message, duration)
+        toast = Toast.makeText(context, message, duration)
         try {
             val group = toast.view as ViewGroup?
             val messageTextView = group!!.getChildAt(0) as TextView

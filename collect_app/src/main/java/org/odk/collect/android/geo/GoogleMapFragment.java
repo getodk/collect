@@ -125,7 +125,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync((GoogleMap map) -> {
             if (map == null) {
-                ToastUtils.showShortToast(R.string.google_play_services_error_occured);
+                ToastUtils.showShortToast(requireContext(), R.string.google_play_services_error_occured);
                 if (errorListener != null) {
                     errorListener.onError();
                 }

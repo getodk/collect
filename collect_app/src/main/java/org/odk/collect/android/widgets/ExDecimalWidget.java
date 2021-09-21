@@ -54,7 +54,7 @@ public class ExDecimalWidget extends ExStringWidget {
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
         } catch (SecurityException e) {
             Timber.i(e);
-            ToastUtils.showLongToast(R.string.not_granted_permission);
+            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
         }
     }
 

@@ -61,7 +61,10 @@ class AdminPasswordDialogFragment : DialogFragment() {
                 if (adminPasswordProvider.adminPassword == binding.editText.text.toString()) {
                     projectPreferencesViewModel.setStateUnlocked()
                 } else {
-                    ToastUtils.showShortToast(R.string.admin_password_incorrect)
+                    ToastUtils.showShortToast(
+                        requireContext(),
+                        R.string.admin_password_incorrect
+                    )
                 }
                 dismiss()
             }

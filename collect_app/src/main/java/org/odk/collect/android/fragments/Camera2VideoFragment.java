@@ -369,7 +369,7 @@ public class Camera2VideoFragment extends Fragment
             mediaRecorder = new MediaRecorder();
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
-            ToastUtils.showShortToast("Cannot access the camera.");
+            ToastUtils.showShortToast(getActivity(), "Cannot access the camera.");
             activity.finish();
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
@@ -430,7 +430,7 @@ public class Camera2VideoFragment extends Fragment
                         public void onConfigureFailed(@NonNull CameraCaptureSession session) {
                             Activity activity = getActivity();
                             if (null != activity) {
-                                ToastUtils.showShortToast("Failed");
+                                ToastUtils.showShortToast(getActivity(), "Failed");
                             }
                         }
                     }, backgroundHandler);
@@ -559,7 +559,7 @@ public class Camera2VideoFragment extends Fragment
 
                             // Start recording
                             mediaRecorder.start();
-                            ToastUtils.showLongToast(getActivity().getString(R.string.stop_video_capture_instruction));
+                            ToastUtils.showLongToast(getActivity(), getActivity().getString(R.string.stop_video_capture_instruction));
                         }
                     });
                 }
@@ -568,7 +568,7 @@ public class Camera2VideoFragment extends Fragment
                 public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
                     Activity activity = getActivity();
                     if (null != activity) {
-                        ToastUtils.showShortToast("Failed");
+                        ToastUtils.showShortToast(getActivity(), "Failed");
                     }
                 }
             }, backgroundHandler);

@@ -110,7 +110,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         if (selfie) {
             if (!cameraUtils.isFrontCameraAvailable()) {
                 captureButton.setEnabled(false);
-                ToastUtils.showLongToast(R.string.error_front_camera_unavailable);
+                ToastUtils.showLongToast(getContext(), R.string.error_front_camera_unavailable);
             }
         }
     }

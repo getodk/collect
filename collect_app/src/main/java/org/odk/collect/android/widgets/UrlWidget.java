@@ -24,7 +24,6 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -53,7 +52,7 @@ public class UrlWidget extends QuestionWidget {
 
     @Override
     public void clearAnswer() {
-        ToastUtils.showShortToast("URL is readonly");
+        ToastUtils.showShortToast(getContext(), "URL is readonly");
     }
 
     @Override
@@ -87,7 +86,7 @@ public class UrlWidget extends QuestionWidget {
             externalWebPageHelper.bindCustomTabsService(getContext(), null);
             externalWebPageHelper.openWebPageInCustomTab((Activity) getContext(), Uri.parse(getFormEntryPrompt().getAnswerText()));
         } else {
-            ToastUtils.showShortToast("No URL set");
+            ToastUtils.showShortToast(getContext(), "No URL set");
         }
     }
 }

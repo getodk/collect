@@ -20,6 +20,8 @@
 
 package org.odk.collect.android.gdrive;
 
+import static org.odk.collect.android.gdrive.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,8 +56,6 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.gdrive.GoogleSheetsUploaderProgressDialog.GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG;
 
 public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 
@@ -156,7 +156,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         if (!accountsManager.isAccountSelected()) {
             selectAccount();
         } else if (!connectivityProvider.isDeviceOnline()) {
-            ToastUtils.showShortToast("No network connection available.");
+            ToastUtils.showShortToast(this, "No network connection available.");
         } else {
             runTask();
         }

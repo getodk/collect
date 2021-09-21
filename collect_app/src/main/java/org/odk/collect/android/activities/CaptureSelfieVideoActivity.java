@@ -40,6 +40,6 @@ public class CaptureSelfieVideoActivity extends CollectAbstractActivity {
                     .replace(R.id.container, Camera2VideoFragment.newInstance())
                     .commit();
         }
-        ToastUtils.showLongToast(getString(R.string.start_video_capture_instruction));
+        ToastUtils.showLongToast(this, getString(R.string.start_video_capture_instruction));
     }
 }

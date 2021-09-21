@@ -44,6 +44,6 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
                     .replace(R.id.container, Camera2Fragment.newInstance())
                     .commit();
         }
-        ToastUtils.showLongToast(R.string.take_picture_instruction);
+        ToastUtils.showLongToast(this, R.string.take_picture_instruction);
     }
 }

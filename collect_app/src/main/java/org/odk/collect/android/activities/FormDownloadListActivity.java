@@ -270,7 +270,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      */
     private void downloadFormList() {
         if (!connectivityProvider.isDeviceOnline()) {
-            ToastUtils.showShortToast(R.string.no_connection);
+            ToastUtils.showShortToast(Collect.getInstance(), R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
                 setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResults());
@@ -408,7 +408,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
             downloadFormsTask.execute(filesToDownload);
         } else {
-            ToastUtils.showShortToast(R.string.noselect_error);
+            ToastUtils.showShortToast(Collect.getInstance(), R.string.noselect_error);
         }
     }
 

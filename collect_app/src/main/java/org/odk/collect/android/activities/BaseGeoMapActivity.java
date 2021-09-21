@@ -34,7 +34,7 @@ public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
         previousState = savedInstanceState;
 
         if (!permissionsProvider.areLocationPermissionsGranted()) {
-            ToastUtils.showLongToast(R.string.not_granted_permission);
+            ToastUtils.showLongToast(this, R.string.not_granted_permission);
             finish();
         }
     }

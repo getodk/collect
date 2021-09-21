@@ -128,7 +128,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
         } catch (SecurityException e) {
             Timber.i(e);
-            ToastUtils.showLongToast(R.string.not_granted_permission);
+            ToastUtils.showLongToast(Collect.getInstance(), R.string.not_granted_permission);
         }
     }
 

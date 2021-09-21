@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.utilities;
 
+import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,8 +27,6 @@ import org.odk.collect.android.R;
 import java.io.File;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FileUtils.deleteAndReport;
 
 /**
  * Consolidate all interactions with media providers here.
@@ -58,7 +58,7 @@ public class MediaUtils {
             context.startActivity(intent);
         } else {
             String message = context.getString(R.string.activity_not_found, context.getString(R.string.open_file));
-            ToastUtils.showLongToast(message);
+            ToastUtils.showLongToast(context, message);
             Timber.w(message);
         }
     }

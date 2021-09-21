@@ -448,11 +448,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             } catch (ExternalParamsException e) {
                 Timber.e(e, "ExternalParamsException");
 
-                ToastUtils.showShortToast(e.getMessage());
+                ToastUtils.showShortToast(Collect.getInstance(), e.getMessage());
             } catch (ActivityNotFoundException e) {
                 Timber.d(e, "ActivityNotFoundExcept");
 
-                ToastUtils.showShortToast(errorString);
+                ToastUtils.showShortToast(Collect.getInstance(), errorString);
             }
         });
     }

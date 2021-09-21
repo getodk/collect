@@ -109,7 +109,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
             }
         } else if (object != null) {
             if (object instanceof File) {
-                ToastUtils.showLongToast(R.string.invalid_file_type);
+                ToastUtils.showLongToast(Collect.getInstance(), R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
                 Timber.e("ExImageWidget's setBinaryData must receive an image file but received: %s", FileUtils.getMimeType((File) object));
             } else {
@@ -137,7 +137,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
             Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
             fireActivityForResult(intent);
         } catch (Exception | Error e) {
-            ToastUtils.showLongToast(e.getMessage());
+            ToastUtils.showLongToast(Collect.getInstance(), e.getMessage());
         }
     }
 
@@ -146,7 +146,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
             ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER);
         } catch (SecurityException e) {
             Timber.i(e);
-            ToastUtils.showLongToast(R.string.not_granted_permission);
+            ToastUtils.showLongToast(Collect.getInstance(), R.string.not_granted_permission);
         }
     }
 

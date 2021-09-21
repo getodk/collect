@@ -96,9 +96,15 @@ class QrCodeProjectCreatorDialog :
                                         val settingsJson = qrCodeDecoder.decode(it)
                                         createProjectOrError(settingsJson)
                                     } catch (e: QRCodeDecoder.InvalidException) {
-                                        showShortToast(R.string.invalid_qrcode)
+                                        showShortToast(
+                                            requireContext(),
+                                            R.string.invalid_qrcode
+                                        )
                                     } catch (e: QRCodeDecoder.NotFoundException) {
-                                        showShortToast(R.string.qr_code_not_found)
+                                        showShortToast(
+                                            requireContext(),
+                                            R.string.qr_code_not_found
+                                        )
                                     }
                                 }
                             }
@@ -165,6 +171,7 @@ class QrCodeProjectCreatorDialog :
                         imageQrCodeImportResultLauncher.launch(photoPickerIntent)
                     } else {
                         showShortToast(
+                            requireContext(),
                             getString(
                                 R.string.activity_not_found,
                                 getString(R.string.choose_image)
@@ -237,7 +244,7 @@ class QrCodeProjectCreatorDialog :
                     val settingsJson = CompressionUtils.decompress(barcodeResult.text)
                     createProjectOrError(settingsJson)
                 } catch (e: Exception) {
-                    showShortToast(getString(R.string.invalid_qrcode))
+                    showShortToast(requireContext(), getString(R.string.invalid_qrcode))
                 }
             }
         )
@@ -261,7 +268,7 @@ class QrCodeProjectCreatorDialog :
                 createProject(settingsJson)
             }
         } catch (e: Exception) {
-            showShortToast(getString(R.string.invalid_qrcode))
+            showShortToast(requireContext(), getString(R.string.invalid_qrcode))
         }
     }
 
@@ -273,13 +280,14 @@ class QrCodeProjectCreatorDialog :
 
             ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
             ToastUtils.showLongToast(
+                requireContext(),
                 getString(
                     R.string.switched_project,
                     currentProjectProvider.getCurrentProject().name
                 )
             )
         } else {
-            ToastUtils.showLongToast(getString(R.string.invalid_qrcode))
+            ToastUtils.showLongToast(requireContext(), getString(R.string.invalid_qrcode))
         }
     }
 
@@ -287,6 +295,7 @@ class QrCodeProjectCreatorDialog :
         currentProjectProvider.setCurrentProject(uuid)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(
+            requireContext(),
             getString(
                 R.string.switched_project,
                 currentProjectProvider.getCurrentProject().name

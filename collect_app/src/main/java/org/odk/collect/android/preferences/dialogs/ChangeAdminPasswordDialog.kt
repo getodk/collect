@@ -65,10 +65,16 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
                 if (password.isEmpty()) {
                     projectPreferencesViewModel.setStateNotProtected()
-                    ToastUtils.showShortToast(R.string.admin_password_disabled)
+                    ToastUtils.showShortToast(
+                        requireContext(),
+                        R.string.admin_password_disabled
+                    )
                 } else {
                     projectPreferencesViewModel.setStateUnlocked()
-                    ToastUtils.showShortToast(R.string.admin_password_changed)
+                    ToastUtils.showShortToast(
+                        requireContext(),
+                        R.string.admin_password_changed
+                    )
                 }
                 dismiss()
             }
