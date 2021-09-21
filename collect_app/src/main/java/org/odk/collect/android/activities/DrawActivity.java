@@ -147,6 +147,13 @@ public class DrawActivity extends CollectAbstractActivity {
             }
         });
 
+        cardViewClear.setOnClickListener(this::clear);
+        fabClear.setOnClickListener(this::clear);
+        cardViewSaveAndClose.setOnClickListener(this::close);
+        fabSaveAndClose.setOnClickListener(this::close);
+        cardViewSetColor.setOnClickListener(this::setColor);
+        fabSetColor.setOnClickListener(this::setColor);
+
         Bundle extras = getIntent().getExtras();
         StoragePathProvider storagePathProvider = new StoragePathProvider();
         if (extras == null) {
@@ -309,21 +316,21 @@ public class DrawActivity extends CollectAbstractActivity {
         alertDialog.show();
     }
 
-    public void clear(View view) {
+    private void clear(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             reset();
         }
     }
 
-    public void close(View view) {
+    private void close(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
             saveAndClose();
         }
     }
 
-    public void setColor(View view) {
+    private void setColor(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
 

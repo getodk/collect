@@ -24,6 +24,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.views.DayNightProgressDialog;
 
 import java.util.Locale;
 
@@ -77,7 +78,7 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
      */
     private void setupBearingDialog() {
         // dialog displayed while fetching bearing
-        bearingDialog = new ProgressDialog(this);
+        bearingDialog = new DayNightProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
                 new DialogInterface.OnClickListener() {
                     @Override

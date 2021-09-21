@@ -7,11 +7,13 @@ OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
 <resources>
     <string-array name="theme_entries">
+        <item>@string/theme_system</item>
         <item>@string/theme_light</item>
         <item>@string/theme_dark</item>
     </string-array>
     <!-- DO NOT translate theme_entry_values - only used internally -->
     <string-array name="theme_entry_values" translatable="false">
+        <item>@string/app_theme_system</item>
         <item>@string/app_theme_light</item>
         <item>@string/app_theme_dark</item>
     </string-array>

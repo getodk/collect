@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.Collect" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
+        <!--Material theme attributes from https://material.io/develop/android/theming -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">?colorPrimary</item>
+        <item name="colorSecondaryVariant">?colorPrimaryVariant</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="colorSurface">@color/colorSurface</item>
+
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">?colorOnPrimary</item>
+        <item name="colorOnError">@color/colorOnError</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
+        </item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2
+        </item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3
+        </item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.Collect.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.Collect.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.Collect.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.Collect.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2
+        </item>
+        <item name="textAppearanceBody1">@style/TextAppearance.Collect.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.Collect.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.Collect.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
+
+        <item name="shapeAppearanceSmallComponent">
+            @style/ShapeAppearance.MaterialComponents.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.Collect.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">
+            @style/ShapeAppearance.MaterialComponents.LargeComponent
+        </item>
+        <!--/Material theme attributes-->
+
+        <!-- Needed to customize the status bar color -->
+        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightStatusBar</item>
+
+        <!-- Used as divider in many places. Not sure why. -->
+        <item name="dividerCompat">@android:drawable/divider_horizontal_bright</item>
+
+        <!-- Remove icon from SearchView -->
+        <item name="searchViewStyle">@style/Widget.Collect.SearchView.NoIcon</item>
+
+        <!-- Always show scrollbars for a11y reasons -->
+        <item name="android:fadeScrollbars">false</item>
+
+        <!-- Use locale for text direction in views -->
+        <item name="android:textDirection">locale</item>
+
+        <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
+        <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+        <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+    </style>
+
+    <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
+    <style name="Theme.Collect.Dialog.Alert" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:background">@color/colorSurface</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.Collect.SearchView.NoIcon" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@null</item>
+    </style>
+</resources>

@@ -9,13 +9,14 @@
         android:id="@+id/add_new_project_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
             app:title="@string/add_project"
             app:menu="@menu/qr_code_scan_menu"
             android:layout_width="match_parent"
@@ -99,7 +100,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        android:theme="@style/Theme.AndroidShared.MaterialComponents.Polyfill.Button.TextButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

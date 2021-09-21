@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Provides a medium emphasis version of the `colorOnSurface` Material Theming attribute (found
+here: https://material.io/develop/android/theming/typography/). Material Themes suggest using
+different emphasis/transparency values on text but Android doesn't have a way to set this on a
+`TextView` itself.
+-->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:alpha="0.12" android:color="?attr/colorPrimary" />
+</selector>

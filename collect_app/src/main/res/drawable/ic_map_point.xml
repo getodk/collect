@@ -3,6 +3,6 @@
         android:height="36dp"
         android:viewportWidth="36"
         android:viewportHeight="36">
-    <path android:fillColor="@color/mapPointCircle" android:pathData="M18,13c-2.77,0 -5,2.24 -5,5s2.24,5 5,5s5,-2.24 5,-5s-2.24,-5 -5,-5z"/>
-    <path android:fillColor="@color/mapPointFill" android:pathData="M18,21.33c-1.84,0 -3.33,-1.5 -3.33,-3.33s1.5,-3.33 3.33,-3.33s3.33,1.5 3.33,3.33s-1.5,3.33 -3.33,3.33z"/>
+    <path android:fillColor="@color/mapLineColor" android:pathData="M18,13c-2.77,0 -5,2.24 -5,5s2.24,5 5,5s5,-2.24 5,-5s-2.24,-5 -5,-5z"/>
+    <path android:fillColor="#ffffff" android:pathData="M18,21.33c-1.84,0 -3.33,-1.5 -3.33,-3.33s1.5,-3.33 3.33,-3.33s3.33,1.5 3.33,3.33s-1.5,3.33 -3.33,3.33z"/>
 </vector>

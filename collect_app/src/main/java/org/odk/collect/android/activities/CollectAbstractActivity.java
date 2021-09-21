@@ -21,16 +21,16 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.LocaleHelper;
-import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.ThemeUtils;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Locale;
 
@@ -49,9 +49,9 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         themeUtils = new ThemeUtils(this);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
-        super.onCreate(savedInstanceState);
     }
 
     @Override

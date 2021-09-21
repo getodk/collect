@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_standard"
-        android:textColor="?colorSecondary"
+        android:textColor="?colorPrimary"
         tools:text="00:07" />
 
     <org.odk.collect.android.audio.Waveform

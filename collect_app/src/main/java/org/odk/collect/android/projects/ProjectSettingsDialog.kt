@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.ActivityUtils
@@ -82,7 +82,7 @@ class ProjectSettingsDialog : DialogFragment() {
             dismiss()
         }
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .create()
     }

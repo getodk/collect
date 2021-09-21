@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.application;
 
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -53,8 +55,6 @@ import java.io.File;
 import java.util.Locale;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 public class Collect extends Application implements
         LocalizedApplication,

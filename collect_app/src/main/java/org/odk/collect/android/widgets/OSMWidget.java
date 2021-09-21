@@ -1,14 +1,16 @@
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
+
+import androidx.appcompat.app.AlertDialog;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -27,8 +29,6 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-
 /**
  * Widget that allows the user to launch OpenMapKit to get an OSM Feature with a
  * predetermined set of tags that are edited in the application.
@@ -44,10 +44,6 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     public static final String INSTANCE_DIR = "INSTANCE_DIR";
     public static final String FORM_FILE_NAME = "FORM_FILE_NAME";
     public static final String OSM_EDIT_FILE_NAME = "OSM_EDIT_FILE_NAME";
-
-    // button colors
-    private static final int OSM_GREEN = Color.rgb(126, 188, 111);
-    private static final int OSM_BLUE = Color.rgb(112, 146, 255);
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final ActivityAvailability activityAvailability;
@@ -78,11 +74,8 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
 
         if (osmFileName != null) {
             binding.launchOpenMapKitButton.setText(getContext().getString(R.string.recapture_osm));
-            binding.launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
-
             binding.osmFileText.setText(osmFileName);
         } else {
-            binding.launchOpenMapKitButton.setBackgroundColor(OSM_GREEN);
             binding.osmFileHeaderText.setVisibility(View.GONE);
         }
     }
@@ -179,7 +172,6 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     private void onButtonClick() {
-        binding.launchOpenMapKitButton.setBackgroundColor(OSM_BLUE);
         binding.errorText.setVisibility(View.GONE);
         launchOpenMapKit();
     }

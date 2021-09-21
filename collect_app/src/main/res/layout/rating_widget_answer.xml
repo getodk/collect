@@ -9,9 +9,6 @@
         android:id="@+id/rating_bar1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:progressBackgroundTint="#61000000"
-        android:progressTint="@color/highContrastHighlight"
-        android:secondaryProgressTint="@android:color/transparent"
         android:saveEnabled="false"
         android:stepSize="1.0" />
 
@@ -20,9 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:progressBackgroundTint="#61000000"
-        android:progressTint="@color/highContrastHighlight"
-        android:secondaryProgressTint="@android:color/transparent"
         android:saveEnabled="false"
         android:stepSize="1.0" />
 

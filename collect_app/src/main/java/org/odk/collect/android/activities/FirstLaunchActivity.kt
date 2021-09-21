@@ -11,6 +11,7 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.projects.Project
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_Collect_Light)
+        setTheme(ThemeUtils(this).appTheme)
 
         binding = FirstLaunchLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)

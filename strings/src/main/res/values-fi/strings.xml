@@ -582,8 +582,7 @@
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
   <string name="theme_dark">Tumma teema</string>
-  <string name="theme_magenta">Purppurateema</string>
-  <string name="language">Kieli</string>
+    <string name="language">Kieli</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>

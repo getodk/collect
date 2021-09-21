@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- These colors are used to mark form items in different states -->
+
+<resources>
+    <color name="formStateIncomplete">#2196F3</color>
+    <color name="formStateComplete">#673AB7</color>
+    <color name="formStateSubmitted">#4CAF50</color>
+    <color name="formStateSubmissionFailed">#F44336</color>
+</resources>

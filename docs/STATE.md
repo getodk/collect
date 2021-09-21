@@ -25,7 +25,7 @@ and update this document as the code evolves.
 * App stores data in flat files indexed in SQLite
 * Access to data in SQLite happens through repository objects which deal in data/domain objects (`FormsRepository` and `Form` for example)
 * Settings for the app use Android's Preferences abstraction
-* Material Components styles are used in some places but app still uses AppCompat theme
+* App uses [Material Theming](https://material.io/develop/android/theming/theming-overview) so [Material components](https://material.io/components?platform=android) are preferred over custom or platform ones.
 * Dagger is used to inject "black box" objects such as Activity and just uses a very basic setup
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask (and some Rx)
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does
@@ -37,7 +37,6 @@ and update this document as the code evolves.
 ## Where we're going
 
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
-* Trying to adopt Material Design's language to make design decisions and conversations easier in the absence of designers and to make the UI more consistent for enumerators ([“Typography rework” discussion](https://forum.getodk.org/t/reworking-collects-typography/20634))
 * Slowly moving responsibilities out of FormEntryActivity
 * Writing pretty much all new code in Kotlin
 * Writing new code using a multi-module approach (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up

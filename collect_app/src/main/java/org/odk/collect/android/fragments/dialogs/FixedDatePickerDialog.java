@@ -3,6 +3,7 @@ package org.odk.collect.android.fragments.dialogs;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -73,6 +74,16 @@ public class FixedDatePickerDialog extends DialogFragment {
         }
 
         return dialog;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Needed because the DatePickerDialog doesn't pick up theme colors properly for some reason
+        DatePickerDialog dialog = (DatePickerDialog) getDialog();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
     }
 
     private void hidePickersIfNeeded(DatePickerDialog dialog, LocalDateTime date) {

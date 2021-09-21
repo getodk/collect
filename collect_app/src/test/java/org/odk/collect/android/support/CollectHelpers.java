@@ -66,12 +66,8 @@ public final class CollectHelpers {
         ((Collect) ApplicationProvider.getApplicationContext()).setComponent(testComponent);
     }
 
-    public static void createThemedContext() {
-        ApplicationProvider.getApplicationContext().setTheme(R.style.Theme_Collect_Light);
-    }
-
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
-        return RobolectricHelpers.createThemedActivity(clazz, R.style.Theme_Collect_Light);
+        return RobolectricHelpers.createThemedActivity(clazz, R.style.Theme_MaterialComponents);
     }
 
     public static FragmentActivity createThemedActivity() {
@@ -80,7 +76,7 @@ public final class CollectHelpers {
 
     public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz);
-        activity.get().setTheme(R.style.Theme_Collect_Light);
+        activity.get().setTheme(R.style.Theme_MaterialComponents);
 
         return activity;
     }

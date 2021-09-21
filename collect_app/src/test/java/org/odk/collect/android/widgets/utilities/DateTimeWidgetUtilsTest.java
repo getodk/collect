@@ -77,7 +77,7 @@ public class DateTimeWidgetUtilsTest {
     public void setUp() {
         dateTimeWidgetUtils = new DateTimeWidgetUtils();
 
-        activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class, R.style.Theme_Collect_Light);
+        activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class, R.style.Theme_MaterialComponents);
         datePickerDetails = mock(DatePickerDetails.class);
 
         when(datePickerDetails.getDatePickerType()).thenReturn(GREGORIAN);

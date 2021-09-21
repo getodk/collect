@@ -1,41 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-Copyright (C) 2009 University of Washington
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not
-use this file except in compliance with the License. You may obtain a copy of
-the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-License for the specific language governing permissions and limitations under
-the License.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Material Design color palette -->
-    <color name="red_500">#F44336</color>
-    <color name="blue_500">#2196F3</color>
-    <color name="green_500">#4CAF50</color>
-    <color name="deep_purple_500">#673AB7</color>
+    <color name="colorPrimary">#3e9fcc</color>
+    <color name="colorPrimaryVariant">#00719b</color>
+    <color name="colorOnPrimary">#ffffff</color>
 
-    <color name="highContrastHighlight">#ff8c00</color>
+    <color name="colorError">#D42C2C</color>
+    <color name="colorOnError">#ffffff</color>
 
-    <!-- Background colors in the GeoTrace status bar, under white text. -->
-    <color name="locationStatusSearching">#333333</color>
-    <color name="locationStatusAcceptable">#337733</color>
-    <color name="locationStatusUnacceptable">#773333</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnSurface">#000000</color>
 
-    <!-- Colors for location indicators on the map; chosen to resemble the -->
-    <!-- bright blue location dot on Google Maps and Apple Maps and the -->
-    <!-- shaded blue accuracy circle in OSMDroid. -->
-    <color name="locationCrosshairs">#ff0099ff</color>
-    <color name="locationAccuracyCircle">#800099ff</color>
-    <color name="locationAccuracyFill">#200099ff</color>
+    <bool name="lightStatusBar">true</bool>
 
-    <!-- Colors for recorded points and lines drawn on the map. -->
-    <color name="mapPointCircle">#ffff0000</color>
-    <color name="mapPointFill">#ffffffff</color>
-    <color name="mapLine">#ffff0000</color>
+    <!-- This color is used for buttons that should have a similar color to colorSurface (but still
+    stand out from the background).
+
+    {@deprecated These components should be replaced with material ones and this
+    color should be deleted} -->
+    <color name="surfaceButtonColor">#f7f7f7</color>
 </resources>

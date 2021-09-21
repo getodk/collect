@@ -19,25 +19,6 @@
         <item name="android:textColor">?colorOnSurface</item>
     </style>
 
-    <style name="Theme.Collect.MaterialDialogSheet.Dark" parent="Theme.Design.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.Collect.BottomSheet.Modal</item>
-        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
-    </style>
-
-    <style name="Theme.Collect.MaterialDialogSheet.Light" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/Widget.Collect.BottomSheet.Modal</item>
-        <item name="android:windowAnimationStyle">@style/MaterialDialogSheetAnimation</item>
-    </style>
-
-    <style name="MaterialDialogSheetAnimation">
-        <item name="android:windowEnterAnimation">@anim/popup_show</item>
-        <item name="android:windowExitAnimation">@anim/popup_hide</item>
-    </style>
-
-    <style name="Widget.Collect.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
-        <item name="behavior_peekHeight">300dp</item>
-    </style>
-
     <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="shapeAppearance">@style/ShapeAppearance.Collect.SmallComponent</item>
         <item name="android:textColor">?colorOnSurface</item>
@@ -54,9 +35,5 @@
 
     <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">?attr/colorSecondary</item>
-    </style>
-
-    <style name="Widget.Collect.SearchView" parent="Widget.AppCompat.SearchView">
-        <item name="searchHintIcon">@null</item>
     </style>
 </resources>

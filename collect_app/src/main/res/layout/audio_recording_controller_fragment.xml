@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?colorSurface"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?colorPrimary"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:paddingVertical="@dimen/margin_small"
@@ -26,7 +26,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_baseline_mic_24"
-            app:tint="?colorOnPrimary" />
+            app:tint="?colorOnSurface" />
 
         <TextView
             android:id="@+id/time_code"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:text="@string/recording"
-            android:textColor="?colorOnPrimary" />
+            android:textColor="?colorOnSurface"/>
 
         <org.odk.collect.android.audio.VolumeBar
             android:id="@+id/volume_bar"
@@ -58,8 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
             android:contentDescription="@string/pause_recording"
-            app:icon="@drawable/ic_pause_24dp"
-            app:iconTint="?colorOnPrimary" />
+            app:icon="@drawable/ic_pause_24dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/stop_recording"

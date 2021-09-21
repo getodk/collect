@@ -99,7 +99,7 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         public void updateItemColor(int selectedSortingOrder) {
             ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
             previousHolder.txtViewTitle.setTextColor(themeUtils.getColorOnSurface());
-            txtViewTitle.setTextColor(themeUtils.getAccentColor());
+            txtViewTitle.setTextColor(themeUtils.getColorPrimary());
             try {
                 DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
                 DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());

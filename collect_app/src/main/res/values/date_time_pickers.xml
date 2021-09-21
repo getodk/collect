@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- This file contains themes and styles needed to fix broken compatibility between Date/TimePickerDialog
+and newer themes. This probably has a lot to do with these components relying on platform dependencies
+rather than AndroidX/Library dependencies.
+
+These dialog themes need to reference `colorPrimary` directly as they do not inherit from our app theme. -->
+
+<resources>
+
+    <!-- Dark styles -->
+
+    <style name="Theme.Collect.Dark.Dialog.Alert" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.DatePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.TimePicker.Dialog" parent="Theme.Collect.Dark.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/Theme.Collect.Dark.Spinner.TimePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Dark.Spinner.TimePicker" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+
+    <!-- Light styles -->
+
+    <style name="Theme.Collect.Light.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="dialogCornerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.DatePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:datePickerStyle">@android:style/Widget.DatePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker.Dialog" parent="Theme.Collect.Light.Dialog.Alert">
+        <item name="android:timePickerStyle">@style/Theme.Collect.Light.Spinner.TimePicker</item>
+    </style>
+
+    <style name="Theme.Collect.Light.Spinner.TimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+</resources>

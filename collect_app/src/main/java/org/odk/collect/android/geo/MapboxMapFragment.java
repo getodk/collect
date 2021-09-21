@@ -1,5 +1,11 @@
 package org.odk.collect.android.geo;
 
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -71,12 +77,6 @@ import javax.inject.Inject;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
-
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
-import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
 
 public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.MapFragment
     implements MapFragment, OnMapReadyCallback,
@@ -841,7 +841,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
             }
             line = lineManager.create(new LineOptions()
-                .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.mapLine)))
+                .withLineColor(ColorUtils.colorToRgbaString(requireContext().getResources().getColor(R.color.mapLineColor)))
                 .withLineWidth(STROKE_WIDTH)
                 .withLatLngs(new ArrayList<>())
             );

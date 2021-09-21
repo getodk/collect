@@ -3,11 +3,5 @@
 
     <style name="Theme.MaterialComponents.Dialog.FullScreen" parent="">
         <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">?attr/colorSurface</item>
-        <item name="toolbarNavigationButtonStyle">@style/Widget.Toolbar.Navigation.Tinted</item>
-    </style>
-
-    <style name="Widget.Toolbar.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
-        <item name="tint">?attr/colorOnPrimary</item>
     </style>
 </resources>

@@ -484,11 +484,11 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                 : acceptable ? getString(R.string.location_status_acceptable, location.sd)
                 : getString(R.string.location_status_unacceptable, location.sd)
         );
-        locationStatus.setBackgroundColor(getResources().getColor(
-            location == null ? R.color.locationStatusSearching
-                : acceptable ? R.color.locationStatusAcceptable
-                : R.color.locationStatusUnacceptable
-        ));
+        locationStatus.setBackgroundColor(
+                location == null ? themeUtils.getColorPrimary()
+                        : acceptable ? themeUtils.getColorPrimary()
+                        : themeUtils.getColorError()
+        );
         collectionStatus.setText(
             !inputActive ? getString(R.string.collection_status_paused, numPoints)
                 : !recordingEnabled ? getString(R.string.collection_status_placement, numPoints)

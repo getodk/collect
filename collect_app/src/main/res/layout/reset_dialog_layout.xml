@@ -29,7 +29,7 @@ limitations under the License.
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/red_500"
+            android:textColor="?colorError"
             android:textStyle="bold"
             android:textAlignment="center"
             android:padding="5dp"

@@ -579,8 +579,7 @@
   <string name="app_theme">テーマ</string>
   <string name="theme_light">ライトテーマ</string>
   <string name="theme_dark">ダークテーマ</string>
-  <string name="theme_magenta">マゼンタテーマ</string>
-  <string name="language">言語</string>
+    <string name="language">言語</string>
   <string name="use_device_language">デバイスの言語を使用する</string>
   <string name="font_size">文字フォントサイズ</string>
   <string name="change_font_size">文字フォントサイズ</string>

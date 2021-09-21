@@ -27,9 +27,7 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true"
-        android:onClick="clear">
-
+        app:cardUseCompatPadding="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,11 +48,9 @@
         android:layout_marginRight="24dp"
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_clear_white"
-        android:onClick="clear"/>
+        app:srcCompat="@drawable/ic_clear_white" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_save_and_close"
@@ -70,8 +66,7 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true"
-        android:onClick="close">
+        app:cardUseCompatPadding="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,11 +88,9 @@
         android:layout_marginRight="24dp"
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_save_white"
-        android:onClick="close"/>
+        app:srcCompat="@drawable/ic_save_white" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_set_color"
@@ -113,8 +106,7 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true"
-        android:onClick="setColor">
+        app:cardUseCompatPadding="true">
 
         <TextView
             android:layout_width="wrap_content"
@@ -136,11 +128,9 @@
         android:layout_marginRight="24dp"
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
-        app:backgroundTint="@android:color/black"
         app:elevation="6dp"
         app:fabSize="mini"
-        app:srcCompat="@drawable/ic_color_lens_white"
-        android:onClick="setColor"/>
+        app:srcCompat="@drawable/ic_color_lens_white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_actions"
@@ -153,9 +143,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:tag="0"
-        android:tint="#FFF"
-        app:backgroundTint="@android:color/black"
-        app:elevation="6dp"
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_add_white"/>
 

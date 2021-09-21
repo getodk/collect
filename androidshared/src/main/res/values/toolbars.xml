@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.AndroidShared.Toolbar.Primary.CloseIcon" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <style name="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <!-- Note: this theme overlay will only work if the style is applied directly to a Toolbar. -->
+        <item name="android:theme">@style/ThemeOverlay.AndroidShared.Toolbar.Surface.HighEmphasisControls</item>
+    </style>
+
+    <style name="ThemeOverlay.AndroidShared.Toolbar.Surface.HighEmphasisControls" parent="">
+        <item name="colorControlNormal">?colorOnSurface</item>
+        <item name="actionMenuTextColor">?colorOnSurface</item>
+    </style>
+
+    <style name="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon" parent="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls">
         <item name="navigationIcon">@drawable/ic_close_black_24dp</item>
         <item name="navigationContentDescription">@string/close</item>
     </style>

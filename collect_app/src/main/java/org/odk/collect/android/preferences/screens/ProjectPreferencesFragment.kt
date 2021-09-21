@@ -17,9 +17,12 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.preference.Preference
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
@@ -37,7 +40,6 @@ class ProjectPreferencesFragment :
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
-        setHasOptionsMenu(true)
 
         projectPreferencesViewModel.state.observe(
             this,
@@ -103,6 +105,15 @@ class ProjectPreferencesFragment :
                 menu.findItem(R.id.menu_unlocked).isVisible = false
             }
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true) // Needs to be here rather than `onAttach` or crash can occur when switching system theme
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {

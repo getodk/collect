@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSurface">#121212</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+
+    <bool name="lightStatusBar">false</bool>
+
+    <!-- This color is used for buttons that should have a similar color to colorSurface (but still
+    stand out from the background).
+
+    {@deprecated These components should be replaced with material ones and this
+    color should be deleted} -->
+    <color name="surfaceButtonColor">#282828</color>
+</resources>

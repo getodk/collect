@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Collect.Activity.FormEntryActivity.Dark" parent="Theme.Collect.Dark">
-        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
-    </style>
-
-    <style name="Theme.Collect.Activity.FormEntryActivity.Light" parent="Theme.Collect.Light">
-        <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
-    </style>
-
-    <style name="Theme.Collect.Activity.FormEntryActivity.Magenta" parent="Theme.Collect.Magenta">
+    <style name="Theme.Collect.Activity.FormEntryActivity.Magenta" parent="Theme.Collect">
         <item name="android:textDirection" tools:targetApi="17">firstStrong</item>
     </style>
 

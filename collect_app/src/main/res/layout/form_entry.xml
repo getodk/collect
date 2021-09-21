@@ -20,14 +20,14 @@ the License.
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="0dp" />
+            android:layout_height="wrap_content" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/audio_recording_controller"
@@ -54,19 +54,13 @@ the License.
         android:layout_above="@+id/buttonholder"
         android:layout_below="@id/appBarLayout" />
 
-    <ImageView
-        android:id="@+id/shadow_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonholder"
-        android:src="@drawable/shadow_up" />
-
     <LinearLayout
         android:id="@+id/buttonholder"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="?colorPrimary"
+        android:background="?colorSurface"
+        android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -83,7 +77,6 @@ the License.
             android:text="@string/form_backward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -105,7 +98,6 @@ the License.
             android:text="@string/form_forward"
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             android:visibility="gone" />
     </LinearLayout>

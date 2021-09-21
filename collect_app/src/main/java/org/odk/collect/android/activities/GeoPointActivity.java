@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -35,6 +38,7 @@ import com.google.android.gms.location.LocationListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -44,9 +48,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
@@ -200,7 +201,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     @SuppressWarnings("deprecation")
     private void setupLocationDialog() {
         // dialog displayed while fetching gps location
-        locationDialog = new ProgressDialog(this);
+        locationDialog = new DayNightProgressDialog(this);
 
         locationDialog.setCancelable(false); // taping outside the dialog doesn't cancel
         locationDialog.setIndeterminate(true);

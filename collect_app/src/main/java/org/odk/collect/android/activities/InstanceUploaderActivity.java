@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import static java.util.Arrays.stream;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -32,6 +34,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -43,8 +46,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static java.util.Arrays.stream;
 
 /**
  * Activity to upload completed forms.
@@ -263,7 +264,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                progressDialog = new ProgressDialog(this);
+                progressDialog = new DayNightProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
                         new DialogInterface.OnClickListener() {
                             @Override

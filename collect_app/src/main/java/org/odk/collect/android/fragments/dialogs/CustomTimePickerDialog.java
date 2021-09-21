@@ -3,6 +3,7 @@ package org.odk.collect.android.fragments.dialogs;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
 
@@ -62,6 +64,16 @@ public class CustomTimePickerDialog extends DialogFragment {
                 viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
         return dialog;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Needed because the TimePickerDialog doesn't pick up theme colors properly for some reason
+        TimePickerDialog dialog = (TimePickerDialog) getDialog();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(new ThemeUtils(getContext()).getColorPrimary());
     }
 
     /**

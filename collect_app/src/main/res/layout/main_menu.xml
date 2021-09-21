@@ -8,7 +8,6 @@
   the specific language governing permissions and limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            
+
             <androidx.fragment.app.FragmentContainerView
                 android:name="org.odk.collect.android.fragments.MapBoxInitializationFragment"
                 android:id="@+id/map_box_initialization_fragment"
@@ -36,57 +35,79 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="@dimen/margin_standard"
                 android:paddingTop="@dimen/margin_small"
-                android:paddingRight="@dimen/margin_standard"
                 android:paddingBottom="@dimen/margin_standard">
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/enter_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/enter_data" />
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/review_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/review_data" />
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/send_data"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/send_data" />
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/view_sent_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     android:text="@string/view_sent_forms" />
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/get_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/get_forms" />
 
                 <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/manage_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
+                    android:backgroundTint="@color/surfaceButtonColor"
+                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:layout_marginStart="@dimen/margin_standard"
+                    android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/manage_files" />
 
                 <TextView

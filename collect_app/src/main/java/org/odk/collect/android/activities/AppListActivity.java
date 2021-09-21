@@ -24,23 +24,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.SortDialogAdapter;
-import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.android.utilities.SnackbarUtils;
-
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -50,6 +36,19 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.SortDialogAdapter;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.android.utilities.SnackbarUtils;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -167,8 +166,6 @@ abstract class AppListActivity extends CollectAbstractActivity {
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(themeUtils.getColorOnPrimary());
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -286,7 +283,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
     }
 
     private void showBottomSheetDialog() {
-        bottomSheetDialog = new BottomSheetDialog(this, themeUtils.getBottomDialogTheme());
+        bottomSheetDialog = new BottomSheetDialog(this);
         final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 

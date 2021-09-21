@@ -7,11 +7,12 @@
 
     <com.google.android.material.appbar.AppBarLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Primary.CloseIcon"
+            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             tools:title="Title" />
