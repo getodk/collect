@@ -139,6 +139,11 @@ public class GoogleFusedLocationClient
     }
 
     @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
