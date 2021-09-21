@@ -1,5 +1,6 @@
 package org.odk.collect.android.utilities
 
+import android.app.Application
 import android.content.Context
 import android.view.Gravity
 import android.view.ViewGroup
@@ -12,23 +13,23 @@ object ToastUtils {
 
     @JvmStatic
     fun showShortToast(context: Context, message: String) {
-        showToast(context, message)
+        showToast(context.applicationContext as Application, message)
     }
 
     @JvmStatic
     fun showShortToast(context: Context, messageResource: Int) {
-        showToast(context, TranslationHandler.getString(context, messageResource))
+        showToast(context.applicationContext as Application, TranslationHandler.getString(context, messageResource))
     }
 
     @JvmStatic
     fun showLongToast(context: Context, message: String) {
-        showToast(context, message, Toast.LENGTH_LONG)
+        showToast(context.applicationContext as Application, message, Toast.LENGTH_LONG)
     }
 
     @JvmStatic
     fun showLongToast(context: Context, messageResource: Int) {
         showToast(
-            context,
+            context.applicationContext as Application,
             TranslationHandler.getString(context, messageResource),
             Toast.LENGTH_LONG
         )
@@ -36,17 +37,17 @@ object ToastUtils {
 
     @JvmStatic
     fun showShortToastInMiddle(context: Context, message: String) {
-        showToastInMiddle(context, message)
+        showToastInMiddle(context.applicationContext as Application, message)
     }
 
-    private fun showToast(context: Context, message: String, duration: Int = Toast.LENGTH_SHORT) {
+    private fun showToast(context: Application, message: String, duration: Int = Toast.LENGTH_SHORT) {
         hideLastToast()
         lastToast = Toast.makeText(context, message, duration)
         lastToast.show()
     }
 
     private fun showToastInMiddle(
-        context: Context,
+        context: Application,
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
