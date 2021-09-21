@@ -24,11 +24,12 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.R;
 import org.odk.collect.android.exception.ExternalDataException;
+import org.odk.collect.android.externaldata.ExternalDataUtil;
 import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.externaldata.ExternalDataUtil;
-import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fastexternalitemset.XPathParseTool;
+import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.FileNotFoundException;
@@ -89,5 +90,10 @@ public abstract class ItemsWidget extends QuestionWidget {
     @Override
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
     public void setOnLongClickListener(OnLongClickListener l) {
+    }
+
+    //#4500 - Widget per view
+    protected final void clearFollowingItemsetWidgets() {
+        SelectOneWidgetUtils.checkFastExternalCascade(this);
     }
 }
