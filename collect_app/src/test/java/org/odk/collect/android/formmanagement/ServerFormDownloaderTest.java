@@ -180,7 +180,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception because of missing form hash");
-        } catch (FormSourceException e) {
+        } catch (FormSourceException.FormWithNoHashException e) {
             // pass
         }
     }
@@ -291,7 +291,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormSourceException e) {
+        } catch (FormSourceException.FetchError e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -325,7 +325,7 @@ public class ServerFormDownloaderTest {
         try {
             downloader.downloadForm(serverFormDetails, null, null);
             fail("Expected exception");
-        } catch (FormSourceException e) {
+        } catch (FormSourceException.DiskException e) {
             assertThat(formsRepository.getAll(), is(empty()));
             assertThat(asList(new File(getCacheFilesPath()).listFiles()), is(empty()));
             assertThat(asList(new File(getFormFilesPath()).listFiles()), is(empty()));
@@ -652,7 +652,7 @@ public class ServerFormDownloaderTest {
             when(formSource.fetchMediaFile("http://file1")).thenThrow(new FormSourceException.FetchError());
             downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
             fail("Expected exception");
-        } catch (FormSourceException e) {
+        } catch (FormSourceException.FetchError e) {
             // Check form is still intact
             List<Form> allForms = formsRepository.getAll();
             assertThat(allForms.size(), is(1));
