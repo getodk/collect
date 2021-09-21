@@ -33,9 +33,7 @@ SelectOneResetTest {
     enum Appearance {
         PLAIN,
         MINIMAL,
-        MINIMAL_AUTOCOMPLETE,
-//        Autocomplete
-        ;
+        MINIMAL_AUTOCOMPLETE;
 
         public boolean isMinimal() {
             return this == MINIMAL || this == MINIMAL_AUTOCOMPLETE;
