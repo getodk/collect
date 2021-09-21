@@ -2,7 +2,7 @@ package org.odk.collect.location
 
 import android.location.Location
 
-object LocationUtils {
+internal object LocationUtils {
 
     @JvmStatic
     @JvmOverloads
