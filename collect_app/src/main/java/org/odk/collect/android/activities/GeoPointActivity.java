@@ -18,7 +18,6 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.GpsSatellite;
@@ -29,15 +28,17 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.view.Window;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.GeoUtils;
-import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
@@ -60,7 +61,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     private static final String START_TIME = "startTime";
     private static final String NUMBER_OF_AVAILABLE_SATELLITES = "numberOfAvailableSatellites";
 
-    private ProgressDialog locationDialog;
+    private AlertDialog locationDialog;
 
     private LocationClient locationClient;
     private Location location;
@@ -192,29 +193,26 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     /**
      * Sets up the look and actions for the progress dialog while the GPS is searching.
      */
-    @SuppressWarnings("deprecation")
     private void setupLocationDialog() {
         // dialog displayed while fetching gps location
-        locationDialog = new DayNightProgressDialog(this);
+        locationDialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.getting_location)
+                .setView(R.layout.geopoint_dialog)
+                .setCancelable(false) // taping outside the dialog doesn't cancel
+                .create();
 
-        locationDialog.setCancelable(false); // taping outside the dialog doesn't cancel
-        locationDialog.setIndeterminate(true);
-        locationDialog.setTitle(getString(R.string.getting_location));
         dialogMessage = getString(R.string.please_wait_long);
 
         DialogInterface.OnClickListener geoPointButtonListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                returnLocation();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                location = null;
-                                finish();
-                                break;
-                        }
+                (dialog, which) -> {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            returnLocation();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            location = null;
+                            finish();
+                            break;
                     }
                 };
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
@@ -323,6 +321,9 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
     private void updateDialogMessage() {
         String timeElapsed = DateUtils.formatElapsedTime((System.currentTimeMillis() - startTime) / 1000);
         String locationMetadata = getString(R.string.location_metadata, numberOfAvailableSatellites, timeElapsed);
-        runOnUiThread(() -> locationDialog.setMessage(dialogMessage + "\n\n" + locationMetadata));
+        runOnUiThread(() -> {
+            String message = dialogMessage + "\n\n" + locationMetadata;
+            ((TextView) locationDialog.findViewById(R.id.message)).setText(message);
+        });
     }
 }
