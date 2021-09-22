@@ -54,7 +54,7 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
         super.setUp();
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra("accuracyThreshold", DEFAULT_LOCATION_ACCURACY);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
         activityController = Robolectric.buildActivity(GeoPointActivity.class, intent);
 
         activity = activityController.get();

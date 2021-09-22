@@ -17,7 +17,6 @@ import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String LOCATION = "gp";
-    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
 
@@ -41,7 +40,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                     bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
-                bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                 bundle.putBoolean(READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
