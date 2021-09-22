@@ -27,7 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.activities.GeoPointActivity;
+import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;

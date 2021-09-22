@@ -40,7 +40,14 @@ dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation Dependencies.kotlin_stdlib
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.android_material
+    implementation Dependencies.timber
+    implementation Dependencies.play_services_location
     implementation project(path: ':shared')
+    implementation project(path: ':strings')
+    implementation project(path: ':location')
+    implementation project(path: ':androidshared')
 
     testImplementation project(path: ':testshared')
     implementation Dependencies.junit
