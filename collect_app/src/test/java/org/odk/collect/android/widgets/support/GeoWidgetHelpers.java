@@ -2,7 +2,7 @@ package org.odk.collect.android.widgets.support;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.activities.GeoPointActivity.EXTRA_ACCURACY_THRESHOLD;
+import static org.odk.collect.geo.GeoPointActivity.EXTRA_ACCURACY_THRESHOLD;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;

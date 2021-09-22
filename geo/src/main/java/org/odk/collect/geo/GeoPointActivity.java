@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.geo;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -35,8 +35,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
@@ -236,7 +234,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         if (location != null) {
             Intent i = new Intent();
 
-            i.putExtra(FormEntryActivity.ANSWER_KEY, getResultStringForLocation(location));
+            i.putExtra("value", getResultStringForLocation(location));
 
             setResult(RESULT_OK, i);
         }
