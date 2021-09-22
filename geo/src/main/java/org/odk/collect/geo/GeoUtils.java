@@ -1,10 +1,8 @@
-package org.odk.collect.android.utilities;
-
-import static org.odk.collect.shared.strings.StringUtils.removeEnd;
+package org.odk.collect.geo;
 
 import android.location.Location;
 
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +34,7 @@ public final class GeoUtils {
                     Double.toString(point.alt), Float.toString((float) point.sd)));
         }
 
-        return removeEnd(result.toString().trim(), ";");
+        return StringUtils.removeEnd(result.toString().trim(), ";");
     }
 
     public static String formatLocationResultString(Location location) {

@@ -47,6 +47,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -233,7 +234,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return false;
     }
 
-    @Override public @NonNull MapPoint getCenter() {
+    @Override public @NonNull
+    MapPoint getCenter() {
         return fromGeoPoint(map.getMapCenter());
     }
 

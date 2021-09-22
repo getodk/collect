@@ -32,11 +32,11 @@ import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 
 import java.text.DecimalFormat;

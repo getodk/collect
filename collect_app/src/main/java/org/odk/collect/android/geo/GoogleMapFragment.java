@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;

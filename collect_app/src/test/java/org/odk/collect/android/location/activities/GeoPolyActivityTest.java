@@ -26,7 +26,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.support.CollectHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;

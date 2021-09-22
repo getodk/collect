@@ -24,7 +24,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;

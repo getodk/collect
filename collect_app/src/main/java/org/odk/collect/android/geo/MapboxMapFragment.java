@@ -65,6 +65,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.ReferenceLayerUtils;
+import org.odk.collect.geo.MapPoint;
 
 import java.io.File;
 import java.io.IOException;
