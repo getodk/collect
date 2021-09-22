@@ -1,8 +1,22 @@
 package org.odk.collect.android.location.activities;
 
+import static android.app.Activity.RESULT_OK;
+import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -18,19 +32,6 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-
-import static android.app.Activity.RESULT_OK;
-import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointActivityTest extends BaseGeoActivityTest {
@@ -51,14 +52,17 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        activityController = Robolectric.buildActivity(GeoPointActivity.class);
+
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra("accuracyThreshold", DEFAULT_LOCATION_ACCURACY);
+        activityController = Robolectric.buildActivity(GeoPointActivity.class, intent);
+
         activity = activityController.get();
         LocationClientProvider.setTestClient(locationClient);
     }
 
     @Test
     public void testLocationClientLifecycle() {
-
         activityController.create();
         activityController.start();
 

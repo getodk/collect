@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -67,7 +66,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
     private LocationClient locationClient;
     private Location location;
 
-    private double targetAccuracy;
+    private double targetAccuracy = Double.MAX_VALUE;
 
     private int locationCount;
     private int numberOfAvailableSatellites;
@@ -92,10 +91,9 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
 
         Intent intent = getIntent();
 
-        targetAccuracy = DEFAULT_LOCATION_ACCURACY;
         if (intent != null && intent.getExtras() != null) {
             if (intent.hasExtra(ACCURACY_THRESHOLD)) {
-                targetAccuracy = intent.getDoubleExtra(ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+                targetAccuracy = intent.getDoubleExtra(ACCURACY_THRESHOLD, Double.MAX_VALUE);
             }
         }
 
