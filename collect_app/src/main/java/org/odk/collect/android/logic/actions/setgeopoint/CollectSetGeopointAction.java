@@ -26,7 +26,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClientWrapper;
-import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 
 import timber.log.Timber;

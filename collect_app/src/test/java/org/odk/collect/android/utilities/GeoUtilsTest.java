@@ -9,7 +9,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.testshared.LocationTestUtils;
 
 import java.util.ArrayList;

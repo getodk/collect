@@ -252,6 +252,7 @@ dependencies {
     implementation project(':audiorecorder')
     implementation project(':projects')
     implementation project(':location')
+    implementation project(':geo')
 
     implementation Dependencies.androidx_legacy_support
     implementation Dependencies.androidx_core_ktx
