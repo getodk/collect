@@ -32,6 +32,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
@@ -50,7 +51,7 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
+public class GeoPointActivity extends AppCompatActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     // Default values for requesting Location updates.
