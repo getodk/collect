@@ -1,5 +1,20 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPointBundleArgumentEquals;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPolyBundleArgumentEquals;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.content.ComponentName;
 import android.content.Intent;
 
@@ -20,22 +35,6 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.shadows.ShadowActivity;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.LOCATION_CAPTURE;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPointBundleArgumentEquals;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeoPolyBundleArgumentEquals;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityGeoDataRequesterTest {
@@ -124,7 +123,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, answer.getDisplayText(), waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -178,7 +177,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoShape_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoShape(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -203,7 +202,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoTrace_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();

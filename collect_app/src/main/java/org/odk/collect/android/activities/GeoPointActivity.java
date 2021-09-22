@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
-
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +50,8 @@ import timber.log.Timber;
 
 public class GeoPointActivity extends AppCompatActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
+
+    public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
@@ -92,8 +92,8 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         Intent intent = getIntent();
 
         if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(ACCURACY_THRESHOLD)) {
-                targetAccuracy = intent.getDoubleExtra(ACCURACY_THRESHOLD, Double.MAX_VALUE);
+            if (intent.hasExtra(EXTRA_ACCURACY_THRESHOLD)) {
+                targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);
             }
         }
 
