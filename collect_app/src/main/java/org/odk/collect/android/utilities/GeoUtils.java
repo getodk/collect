@@ -1,15 +1,11 @@
 package org.odk.collect.android.utilities;
 
-import static org.odk.collect.android.geo.MapFragment.KEY_REFERENCE_LAYER;
-import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 import static org.odk.collect.shared.strings.StringUtils.removeEnd;
 
 import android.location.Location;
-import android.os.Bundle;
 
 import org.odk.collect.android.geo.MapPoint;
 
-import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,15 +49,5 @@ public final class GeoUtils {
      */
     public static String capitalizeGps(String locationProvider) {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
-    }
-
-    public static File getReferenceLayerFile(Bundle config, String layersPath) {
-        String filePath = config.getString(KEY_REFERENCE_LAYER);
-        if (filePath != null) {
-            File file = new File(getAbsoluteFilePath(layersPath, filePath));
-            return file.exists() ? file : null;
-        } else {
-            return null;
-        }
     }
 }
