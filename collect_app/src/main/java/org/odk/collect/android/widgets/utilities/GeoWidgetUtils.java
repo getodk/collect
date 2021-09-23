@@ -65,7 +65,7 @@ public final class GeoWidgetUtils {
 
     static double getAccuracyThreshold(QuestionDef questionDef) {
         // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, ActivityGeoDataRequester.ACCURACY_THRESHOLD);
+        String acc = questionDef.getAdditionalAttribute(null, "accuracyThreshold");
         return acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
     }
 

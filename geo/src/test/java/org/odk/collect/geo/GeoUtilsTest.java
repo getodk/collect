@@ -1,26 +1,20 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.geo;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import android.location.Location;
-import android.os.Bundle;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.geo.MapPoint;
-import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.LocationTestUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.odk.collect.android.geo.MapFragment.KEY_REFERENCE_LAYER;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoUtilsTest {
@@ -64,34 +58,5 @@ public class GeoUtilsTest {
 
         String nullLocationProvider = null;
         assertNull(GeoUtils.capitalizeGps(nullLocationProvider));
-    }
-
-    @Test
-    public void getReferenceLayerFile_whenPathIsNull_should_getReferenceLayerFileReturnNull() {
-        String layersPath = TempFiles.createTempDir().getAbsolutePath();
-        Bundle config = new Bundle();
-        config.putString(KEY_REFERENCE_LAYER, null);
-
-        assertNull(GeoUtils.getReferenceLayerFile(config, layersPath));
-    }
-
-    @Test
-    public void whenOfflineLayerFileDoesNotExist_should_getReferenceLayerFileReturnNull() {
-        String layersPath = TempFiles.createTempDir().getAbsolutePath();
-        Bundle config = new Bundle();
-        config.putString(KEY_REFERENCE_LAYER, "blah");
-
-        assertNull(GeoUtils.getReferenceLayerFile(config, layersPath));
-    }
-
-    @Test
-    public void whenOfflineLayerFileExist_should_getReferenceLayerFileReturnThatFile() {
-        String layersPath = TempFiles.createTempDir().getAbsolutePath();
-        FileUtils.write(new File(layersPath, "blah"), new byte[]{});
-
-        Bundle config = new Bundle();
-        config.putString(KEY_REFERENCE_LAYER, "blah");
-
-        assertNotNull(GeoUtils.getReferenceLayerFile(config, layersPath));
     }
 }

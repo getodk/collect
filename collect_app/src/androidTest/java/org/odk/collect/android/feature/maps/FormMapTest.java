@@ -20,7 +20,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.geo.GeoUtils;
 
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
@@ -52,7 +52,7 @@ public class FormMapTest {
         intent.putExtra(FormEntryActivity.ANSWER_KEY, GeoUtils.formatLocationResultString(location));
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, intent);
 
-        intending(hasComponent("org.odk.collect.android.activities.GeoPointActivity"))
+        intending(hasComponent("org.odk.collect.geo.GeoPointActivity"))
                 .respondWith(result);
     }
 

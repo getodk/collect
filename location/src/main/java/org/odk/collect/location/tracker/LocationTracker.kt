@@ -16,7 +16,8 @@ interface LocationTracker {
     /**
      * Starts tracking the device's location at a fixed interval.
      */
-    fun start()
+    fun start(retainMockAccuracy: Boolean)
+    fun start() = start(false)
 
     /**
      * Stops tracking location. Does not reset the value returned by [LocationTracker.getCurrentLocation].

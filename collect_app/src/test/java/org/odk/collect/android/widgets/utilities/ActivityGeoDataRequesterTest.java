@@ -1,28 +1,8 @@
 package org.odk.collect.android.widgets.utilities;
 
-import android.content.ComponentName;
-import android.content.Intent;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.QuestionDef;
-import org.javarosa.core.model.data.GeoPointData;
-import org.javarosa.form.api.FormEntryPrompt;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
-import org.odk.collect.android.activities.GeoPolyActivity;
-import org.odk.collect.android.fakes.FakePermissionsProvider;
-import org.odk.collect.android.support.TestScreenContextActivity;
-import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.robolectric.shadows.ShadowActivity;
-
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,8 +14,32 @@ import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeo
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.ACCURACY_THRESHOLD;
+import static org.odk.collect.geo.GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
+
+import static java.util.Arrays.asList;
+
+import android.content.ComponentName;
+import android.content.Intent;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.QuestionDef;
+import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.instance.TreeElement;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.geo.GeoPointActivity;
+import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.android.fakes.FakePermissionsProvider;
+import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.robolectric.shadows.ShadowActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityGeoDataRequesterTest {
@@ -124,7 +128,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, answer.getDisplayText(), waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -178,7 +182,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoShape_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoShape(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -203,7 +207,7 @@ public class ActivityGeoDataRequesterTest {
 
     @Test
     public void whenWidgetHasAnswerAndAccuracyValue_requestGeoTrace_launchesCorrectIntent() {
-        when(questionDef.getAdditionalAttribute(null, ACCURACY_THRESHOLD)).thenReturn("10");
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 
         activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "blah", waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -212,5 +216,26 @@ public class ActivityGeoDataRequesterTest {
         assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), "blah", GeoPolyActivity.OutputMode.GEOTRACE, false);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, GEOTRACE_CAPTURE);
+    }
+
+    @Test
+    public void requestGeoPoint_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
     }
 }

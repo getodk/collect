@@ -65,6 +65,13 @@ public interface LocationClient {
     void setPriority(@NonNull Priority priority);
 
     /**
+     * Sets whether the client will use the accuracy from mock providers or not. When {@code false}
+     * (which it should be by default) the accuracy of {@link Location} objects from mock providers
+     * will always be {@code 0}.
+     */
+    void setRetainMockAccuracy(boolean retainMockAccuracy);
+
+    /**
      * Retrieves the most recent known Location, or null if none is available.
      * This method may block if start was not called before hand.
      *

@@ -32,6 +32,7 @@ public class AndroidLocationClient
     private LocationListener locationListener;
 
     private boolean isConnected;
+    private boolean retainMockAccuracy;
 
     /**
      * Constructs a new AndroidLocationClient with the provided Context.
@@ -107,10 +108,16 @@ public class AndroidLocationClient
     }
 
     @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        this.retainMockAccuracy = retainMockAccuracy;
+    }
+
+    @Override
     public Location getLastLocation() {
         String provider = getProvider();
         if (provider != null) {
-            return LocationUtils.sanitizeAccuracy(getLocationManager().getLastKnownLocation(provider));
+            Location lastKnownLocation = getLocationManager().getLastKnownLocation(provider);
+            return sanitizeLocation(lastKnownLocation);
         }
 
         return null;
@@ -139,7 +146,7 @@ public class AndroidLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
+            locationListener.onLocationChanged(sanitizeLocation(location));
         }
     }
 
@@ -156,5 +163,9 @@ public class AndroidLocationClient
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private Location sanitizeLocation(Location location) {
+        return LocationUtils.sanitizeAccuracy(location, retainMockAccuracy);
     }
 }
