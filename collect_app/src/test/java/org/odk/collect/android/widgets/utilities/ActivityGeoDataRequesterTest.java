@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,7 +14,10 @@ import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.assertGeo
 import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.odk.collect.geo.GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
+
+import static java.util.Arrays.asList;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -23,6 +27,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -211,5 +216,26 @@ public class ActivityGeoDataRequesterTest {
         assertGeoPolyBundleArgumentEquals(startedIntent.getExtras(), "blah", GeoPolyActivity.OutputMode.GEOTRACE, false);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, GEOTRACE_CAPTURE);
+    }
+
+    @Test
+    public void requestGeoPoint_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+
+        activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
     }
 }
