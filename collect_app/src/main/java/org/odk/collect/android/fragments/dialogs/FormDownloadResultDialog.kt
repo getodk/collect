@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import org.jetbrains.annotations.TestOnly
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.ServerFormDetails
 
@@ -56,4 +57,9 @@ class FormDownloadResultDialog : DialogFragment() {
 
     private fun countFailures() =
         result.values.count { it != getString(R.string.success) }
+
+    @TestOnly
+    fun setListener(listener: FormDownloadResultDialogListener) {
+        this.listener = listener
+    }
 }
