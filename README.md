@@ -255,7 +255,7 @@ This is encountered when Robolectric has problems downloading the jars it needs 
 ```
 
 ## Creating signed releases for Google Play Store
-Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 1.8.
+Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 11.
 
 Maintainers have a `local.properties` file in the root folder with the following:
 ```

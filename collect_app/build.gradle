@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.crashlytics'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
 apply plugin: 'kotlin-android'
@@ -414,3 +413,7 @@ dependencies {
 // Must be at bottom to prevent dependency collisions
 // https://developers.google.com/android/guides/google-services-plugin
 apply plugin: 'com.google.gms.google-services'
+
+// Must be after google-services to prevent build failure
+// https://stackoverflow.com/a/67995305
+apply plugin: 'com.google.firebase.crashlytics'
