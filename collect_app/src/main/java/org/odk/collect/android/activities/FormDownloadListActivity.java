@@ -43,7 +43,7 @@ import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.fragments.dialogs.FormDownloadResultDialog;
-import org.odk.collect.android.logic.FormDownloadErrorItem;
+import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -657,10 +657,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-        ArrayList<FormDownloadErrorItem> failures = new ArrayList<>();
+        ArrayList<FormsDownloadErrorItem> failures = new ArrayList<>();
         for (Map.Entry<ServerFormDetails, String> entry : result.entrySet()) {
             if (!entry.getValue().equals(getString(R.string.success))) {
-                failures.add(new FormDownloadErrorItem(entry.getKey().getFormName(), entry.getKey().getFormId(), entry.getKey().getFormVersion(), entry.getValue()));
+                failures.add(new FormsDownloadErrorItem(entry.getKey().getFormName(), entry.getKey().getFormId(), entry.getKey().getFormVersion(), entry.getValue()));
             }
         }
 

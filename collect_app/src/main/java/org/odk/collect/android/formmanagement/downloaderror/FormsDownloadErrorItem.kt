@@ -1,8 +1,8 @@
-package org.odk.collect.android.logic
+package org.odk.collect.android.formmanagement.downloaderror
 
 import java.io.Serializable
 
-data class FormDownloadErrorItem(
+data class FormsDownloadErrorItem(
     val formName: String,
     val formId: String,
     val formVersion: String,
