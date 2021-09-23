@@ -43,7 +43,7 @@ import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem;
-import org.odk.collect.android.fragments.dialogs.FormDownloadResultDialog;
+import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -91,7 +91,7 @@ import timber.log.Timber;
 public class FormDownloadListActivity extends FormListActivity implements FormListDownloaderListener,
         DownloadFormsTaskListener, AuthDialogUtility.AuthDialogUtilityResultListener,
         AdapterView.OnItemClickListener, RefreshFormListDialogFragment.RefreshFormListDialogFragmentListener,
-        FormDownloadResultDialog.FormDownloadResultDialogListener {
+        FormsDownloadResultDialog.FormDownloadResultDialogListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
 
     public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
@@ -665,9 +665,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
 
         Bundle args = new Bundle();
-        args.putSerializable(FormDownloadResultDialog.FAILURES, failures);
-        args.putSerializable(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, result.size());
-        DialogUtils.showIfNotShowing(FormDownloadResultDialog.class, args, getSupportFragmentManager());
+        args.putSerializable(FormsDownloadResultDialog.FAILURES, failures);
+        args.putSerializable(FormsDownloadResultDialog.NUMBER_OF_ALL_FORMS, result.size());
+        DialogUtils.showIfNotShowing(FormsDownloadResultDialog.class, args, getSupportFragmentManager());
 
         // Set result to true for forms which were downloaded
         if (viewModel.isDownloadOnlyMode()) {

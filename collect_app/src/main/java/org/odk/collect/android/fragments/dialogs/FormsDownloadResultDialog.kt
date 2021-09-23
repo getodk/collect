@@ -12,7 +12,7 @@ import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorAc
 import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem
 import java.util.ArrayList
 
-class FormDownloadResultDialog : DialogFragment() {
+class FormsDownloadResultDialog : DialogFragment() {
     companion object {
         const val FAILURES = "FAILURES"
         const val NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
