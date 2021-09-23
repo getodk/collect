@@ -50,6 +50,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
+    public static String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
@@ -87,14 +88,6 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
             numberOfAvailableSatellites = savedInstanceState.getInt(NUMBER_OF_AVAILABLE_SATELLITES);
         }
 
-        Intent intent = getIntent();
-
-        if (intent != null && intent.getExtras() != null) {
-            if (intent.hasExtra(EXTRA_ACCURACY_THRESHOLD)) {
-                targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);
-            }
-        }
-
         setTitle(getString(R.string.get_location));
 
         locationClient = LocationClientProvider.getClient(this,
@@ -103,6 +96,10 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         if (locationClient.canSetUpdateIntervals()) {
             locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
         }
+
+        Intent intent = getIntent();
+        targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);
+        locationClient.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         locationClient.setListener(this);
 

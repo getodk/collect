@@ -109,7 +109,6 @@ public class GeoPointActivityTest {
         when(locationClient.isLocationAvailable()).thenReturn(false);
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         scenario.onActivity(activity -> {
@@ -124,7 +123,6 @@ public class GeoPointActivityTest {
     @Test
     public void activityShouldOpenSettingsIfLocationClientCantConnect() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         scenario.onActivity(activity -> {
@@ -139,11 +137,29 @@ public class GeoPointActivityTest {
     @Test
     public void activityShouldShutOffLocationClientWhenItPauses() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         verify(locationClient).start();
         scenario.moveToState(Lifecycle.State.STARTED);
         verify(locationClient).stop();
+    }
+
+    @Test
+    public void setsLocationClientRetainMockAccuracyToFalse() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        ActivityScenario.launch(intent);
+        verify(locationClient).setRetainMockAccuracy(false);
+    }
+
+    @Test
+    public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, true);
+        ActivityScenario.launch(intent);
+        verify(locationClient).setRetainMockAccuracy(true);
+
+        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, false);
+        ActivityScenario.launch(intent);
+        verify(locationClient).setRetainMockAccuracy(false);
     }
 }
