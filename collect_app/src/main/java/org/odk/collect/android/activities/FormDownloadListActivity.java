@@ -787,7 +787,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void onFormDownloadResultDialogOkButtonClicked() {
+    public void onCloseDownloadingResult() {
         finish();
     }
 }

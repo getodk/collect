@@ -24,7 +24,7 @@ class FormDownloadResultDialog : DialogFragment() {
     private lateinit var listener: FormDownloadResultDialogListener
 
     interface FormDownloadResultDialogListener {
-        fun onFormDownloadResultDialogOkButtonClicked()
+        fun onCloseDownloadingResult()
     }
 
     override fun onAttach(context: Context) {
@@ -43,7 +43,7 @@ class FormDownloadResultDialog : DialogFragment() {
         val builder = AlertDialog.Builder(requireContext())
             .setMessage(getMessage())
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                listener.onFormDownloadResultDialogOkButtonClicked()
+                listener.onCloseDownloadingResult()
             }
 
         if (failures.isNotEmpty()) {
@@ -52,6 +52,7 @@ class FormDownloadResultDialog : DialogFragment() {
                     putExtra(FormsDownloadErrorActivity.FAILURES, failures)
                 }
                 startActivity(intent)
+                listener.onCloseDownloadingResult()
             }
         }
 
