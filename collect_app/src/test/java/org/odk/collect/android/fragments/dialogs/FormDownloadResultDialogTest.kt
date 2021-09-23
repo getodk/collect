@@ -37,7 +37,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should have no title`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -48,7 +48,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should not be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -59,7 +59,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -70,7 +70,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -85,7 +85,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `onFormDownloadResultDialogOkButtonClicked() should be called after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -99,7 +99,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `If there are no errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         DialogFragmentTest
@@ -113,7 +113,7 @@ class FormDownloadResultDialogTest {
     @Test
     fun `If there are no errors 'SHOW DETAILS' button should be hidden`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -128,7 +128,7 @@ class FormDownloadResultDialogTest {
             DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
             DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
         )
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
 
         DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         DialogFragmentTest
@@ -148,7 +148,7 @@ class FormDownloadResultDialogTest {
             DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
             DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
         )
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -164,7 +164,7 @@ class FormDownloadResultDialogTest {
             DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
             DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
         )
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -183,7 +183,7 @@ class FormDownloadResultDialogTest {
             DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
             DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
         )
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
