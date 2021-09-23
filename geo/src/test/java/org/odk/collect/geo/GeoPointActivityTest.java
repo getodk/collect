@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.activities;
+package org.odk.collect.geo;
 
 import static android.app.Activity.RESULT_OK;
 import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
@@ -23,7 +23,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 
