@@ -50,7 +50,7 @@ public class GeoPointActivity extends AppCompatActivity implements LocationListe
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
+    public static final String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
