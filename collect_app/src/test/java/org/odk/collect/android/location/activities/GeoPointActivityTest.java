@@ -16,153 +16,141 @@ import static org.robolectric.Shadows.shadowOf;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
-import org.robolectric.Robolectric;
-import org.robolectric.android.controller.ActivityController;
-import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointActivityTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
+    LocationClient locationClient = mock(LocationClient.class);
 
-    private ActivityController<GeoPointActivity> activityController;
-
-    private GeoPointActivity activity;
-
-    @Mock
-    LocationClient locationClient;
-
-    /**
-     * Runs {@link Before} each test.
-     */
     @Before
     public void setUp() throws Exception {
-        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
-        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
         GoogleMapFragment.testMode = true;
         MapboxMapFragment.testMode = true;
-
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
-        activityController = Robolectric.buildActivity(GeoPointActivity.class, intent);
-
-        activity = activityController.get();
         LocationClientProvider.setTestClient(locationClient);
     }
 
     @Test
     public void testLocationClientLifecycle() {
-        activityController.create();
-        activityController.start();
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         // Activity.onResume() should call LocationClient.start().
-        activityController.resume();
         verify(locationClient).start();
 
         when(locationClient.isLocationAvailable()).thenReturn(true);
-        when(locationClient.getLastLocation()).thenReturn(newMockLocation());
+        when(locationClient.getLastLocation()).thenReturn(mock(Location.class));
 
         // Make sure we're requesting updates and logging our previous location:
-        activity.onClientStart();
-        verify(locationClient).requestLocationUpdates(activity);
-        verify(locationClient).getLastLocation();
+        scenario.onActivity(activity -> {
+            activity.onClientStart();
+            verify(locationClient).requestLocationUpdates(activity);
+            verify(locationClient).getLastLocation();
+        });
+
 
         // Simulate the location updating:
-        Location firstLocation = newMockLocation();
+        Location firstLocation = mock(Location.class);
         when(firstLocation.getAccuracy()).thenReturn(0.0f);
 
-        activity.onLocationChanged(firstLocation);
+        scenario.onActivity(activity -> {
+            activity.onLocationChanged(firstLocation);
 
-        // First update should never result in a selected point to avoid network location bug:
-        assertFalse(activity.isFinishing());
-        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(firstLocation)));
+            // First update should never result in a selected point to avoid network location bug:
+            assertFalse(activity.isFinishing());
+            assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(firstLocation)));
+        });
 
         // Second update with poor accuracy should change dialog message:
         float poorAccuracy = (float) DEFAULT_LOCATION_ACCURACY + 1.0f;
 
-        Location secondLocation = newMockLocation();
+        Location secondLocation = mock(Location.class);
         when(secondLocation.getAccuracy()).thenReturn(poorAccuracy);
 
-        activity.onLocationChanged(secondLocation);
+        scenario.onActivity(activity -> {
+            activity.onLocationChanged(secondLocation);
 
-        assertFalse(activity.isFinishing());
-        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(secondLocation)));
+            assertFalse(activity.isFinishing());
+            assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(secondLocation)));
+        });
 
         // Third location with good accuracy should change dialog and finish activity.
         float goodAccuracy = (float) DEFAULT_LOCATION_ACCURACY - 1.0f;
 
-        Location thirdLocation = newMockLocation();
+        Location thirdLocation = mock(Location.class);
         when(thirdLocation.getAccuracy()).thenReturn(goodAccuracy);
 
-        activity.onLocationChanged(thirdLocation);
+        scenario.onActivity(activity -> {
+            activity.onLocationChanged(thirdLocation);
 
-        assertTrue(activity.isFinishing());
-        assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(thirdLocation)));
+            assertTrue(activity.isFinishing());
+            assertThat(activity.getDialogMessage(), containsString(activity.getAccuracyMessage(thirdLocation)));
+        });
 
-        assertEquals(shadowOf(activity).getResultCode(), RESULT_OK);
+        assertEquals(scenario.getResult().getResultCode(), RESULT_OK);
 
-        Intent resultIntent = shadowOf(activity).getResultIntent();
+        Intent resultIntent = scenario.getResult().getResultData();
         String resultString = resultIntent.getStringExtra(FormEntryActivity.ANSWER_KEY);
 
-        assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
+        scenario.onActivity(activity -> {
+            assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
+        });
     }
 
     @Test
     public void activityShouldOpenSettingsIfLocationUnavailable() {
-        activityController.create();
-        activityController.start();
-
         when(locationClient.isLocationAvailable()).thenReturn(false);
 
-        activity.onClientStart();
-        assertTrue(activity.isFinishing());
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
-        Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
-        assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+        scenario.onActivity(activity -> {
+            activity.onClientStart();
+            assertTrue(activity.isFinishing());
+
+            Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
+            assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+        });
     }
 
     @Test
     public void activityShouldOpenSettingsIfLocationClientCantConnect() {
-        activityController.create();
-        activityController.start();
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
-        activity.onClientStartFailure();
-        assertTrue(activity.isFinishing());
+        scenario.onActivity(activity -> {
+            activity.onClientStartFailure();
+            assertTrue(activity.isFinishing());
 
-        Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
-        assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+            Intent nextStartedActivity = shadowOf(activity).getNextStartedActivity();
+            assertEquals(nextStartedActivity.getAction(), ACTION_LOCATION_SOURCE_SETTINGS);
+        });
     }
 
     @Test
     public void activityShouldShutOffLocationClientWhenItPauses() {
-        activityController.create();
-        activityController.start();
-        activityController.resume();
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         verify(locationClient).start();
-
-        activityController.pause();
+        scenario.moveToState(Lifecycle.State.STARTED);
         verify(locationClient).stop();
-    }
-
-    public static Location newMockLocation() {
-        return mock(Location.class);
     }
 }
