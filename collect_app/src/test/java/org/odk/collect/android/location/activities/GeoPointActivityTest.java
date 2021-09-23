@@ -10,7 +10,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Intent;
@@ -24,9 +23,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.geo.GoogleMapFragment;
-import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -38,15 +34,13 @@ public class GeoPointActivityTest {
 
     @Before
     public void setUp() throws Exception {
-        GoogleMapFragment.testMode = true;
-        MapboxMapFragment.testMode = true;
         LocationClientProvider.setTestClient(locationClient);
     }
 
     @Test
     public void testLocationClientLifecycle() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         // Activity.onResume() should call LocationClient.start().
@@ -76,7 +70,7 @@ public class GeoPointActivityTest {
         });
 
         // Second update with poor accuracy should change dialog message:
-        float poorAccuracy = (float) DEFAULT_LOCATION_ACCURACY + 1.0f;
+        float poorAccuracy = (float) 6.0;
 
         Location secondLocation = mock(Location.class);
         when(secondLocation.getAccuracy()).thenReturn(poorAccuracy);
@@ -89,7 +83,7 @@ public class GeoPointActivityTest {
         });
 
         // Third location with good accuracy should change dialog and finish activity.
-        float goodAccuracy = (float) DEFAULT_LOCATION_ACCURACY - 1.0f;
+        float goodAccuracy = (float) 4.0;
 
         Location thirdLocation = mock(Location.class);
         when(thirdLocation.getAccuracy()).thenReturn(goodAccuracy);
@@ -104,7 +98,7 @@ public class GeoPointActivityTest {
         assertEquals(scenario.getResult().getResultCode(), RESULT_OK);
 
         Intent resultIntent = scenario.getResult().getResultData();
-        String resultString = resultIntent.getStringExtra(FormEntryActivity.ANSWER_KEY);
+        String resultString = resultIntent.getStringExtra("value");
 
         scenario.onActivity(activity -> {
             assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
@@ -116,7 +110,7 @@ public class GeoPointActivityTest {
         when(locationClient.isLocationAvailable()).thenReturn(false);
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         scenario.onActivity(activity -> {
@@ -131,7 +125,7 @@ public class GeoPointActivityTest {
     @Test
     public void activityShouldOpenSettingsIfLocationClientCantConnect() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         scenario.onActivity(activity -> {
@@ -146,7 +140,7 @@ public class GeoPointActivityTest {
     @Test
     public void activityShouldShutOffLocationClientWhenItPauses() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         verify(locationClient).start();
