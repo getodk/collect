@@ -46,6 +46,7 @@ import org.odk.collect.android.fragments.dialogs.FormDownloadResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.logic.FormDownloadErrorItem;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.tasks.DownloadFormListTask;
@@ -59,7 +60,6 @@ import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -656,8 +656,17 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         cleanUpWebCredentials();
 
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+
+        ArrayList<FormDownloadErrorItem> failures = new ArrayList<>();
+        for (Map.Entry<ServerFormDetails, String> entry : result.entrySet()) {
+            if (!entry.getValue().equals(getString(R.string.success))) {
+                failures.add(new FormDownloadErrorItem(entry.getKey().getFormName(), entry.getKey().getFormId(), entry.getKey().getFormVersion(), entry.getValue()));
+            }
+        }
+
         Bundle args = new Bundle();
-        args.putSerializable(FormDownloadResultDialog.RESULT_KEY, (Serializable) result);
+        args.putSerializable(FormDownloadResultDialog.FAILURES, failures);
+        args.putSerializable(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, result.size());
         DialogUtils.showIfNotShowing(FormDownloadResultDialog.class, args, getSupportFragmentManager());
 
         // Set result to true for forms which were downloaded
