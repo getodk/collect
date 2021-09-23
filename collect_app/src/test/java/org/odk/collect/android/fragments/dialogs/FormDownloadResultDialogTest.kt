@@ -17,27 +17,21 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.formmanagement.ServerFormDetails
-import org.odk.collect.forms.ManifestFile
+import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class FormDownloadResultDialogTest {
-    companion object {
-        private val DUMMY_SERVER_FORM_DETAILS_1 = ServerFormDetails("1", "", "", "", "", false, false, ManifestFile("", emptyList()))
-        private val DUMMY_SERVER_FORM_DETAILS_2 = ServerFormDetails("2", "", "", "", "", false, false, ManifestFile("", emptyList()))
-        private const val DUMMY_ERROR_MSG = "error"
-        private val SUCCESS_MSG = ApplicationProvider.getApplicationContext<Collect>().getString(R.string.success)
-    }
-
+    private val downloadErrorItem = FormsDownloadErrorItem("", "", "", "")
     val listener = mock<FormDownloadResultDialog.FormDownloadResultDialogListener>()
 
     @Test
     fun `The dialog should have no title`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -48,7 +42,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should not be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -59,7 +54,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -70,7 +66,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -83,23 +80,40 @@ class FormDownloadResultDialogTest {
     }
 
     @Test
-    fun `onFormDownloadResultDialogOkButtonClicked() should be called after clicking on the 'POSITIVE BUTTON'`() {
+    fun `onCloseDownloadingResult() should be called after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.setListener(listener)
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             RobolectricHelpers.runLooper()
-            verify(listener).onFormDownloadResultDialogOkButtonClicked()
+            verify(listener).onCloseDownloadingResult()
+        }
+    }
+
+    @Test
+    fun `onCloseDownloadingResult() should be called after clicking on the 'NEGATIVE BUTTON'`() {
+        val args = Bundle()
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf(downloadErrorItem))
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 2)
+
+        val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
+        scenario.onFragment {
+            it.setListener(listener)
+            (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
+            RobolectricHelpers.runLooper()
+            verify(listener).onCloseDownloadingResult()
         }
     }
 
     @Test
     fun `If there are no errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         DialogFragmentTest
@@ -113,7 +127,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `If there are no errors 'SHOW DETAILS' button should be hidden`() {
         val args = Bundle()
-        args.putSerializable(FormDownloadResultDialog.FAILURES, hashMapOf(DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG))
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -124,11 +139,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `If there are errors an appropriate message should be displayed`() {
         val args = Bundle()
-        val results = hashMapOf(
-            DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
-            DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
-        )
-        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf(downloadErrorItem))
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 2)
 
         DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         DialogFragmentTest
@@ -144,11 +156,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `If there are errors 'SHOW DETAILS' button should be displayed`() {
         val args = Bundle()
-        val results = hashMapOf(
-            DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
-            DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
-        )
-        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf(downloadErrorItem))
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -160,11 +169,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'NEGATIVE BUTTON'`() {
         val args = Bundle()
-        val results = hashMapOf(
-            DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
-            DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
-        )
-        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf(downloadErrorItem))
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
@@ -179,11 +185,8 @@ class FormDownloadResultDialogTest {
     @Test
     fun `Recreation should not change the state of dialog`() {
         val args = Bundle()
-        val results = hashMapOf(
-            DUMMY_SERVER_FORM_DETAILS_1 to SUCCESS_MSG,
-            DUMMY_SERVER_FORM_DETAILS_2 to DUMMY_ERROR_MSG
-        )
-        args.putSerializable(FormDownloadResultDialog.FAILURES, results)
+        args.putSerializable(FormDownloadResultDialog.FAILURES, arrayListOf(downloadErrorItem))
+        args.putInt(FormDownloadResultDialog.NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormDownloadResultDialog::class.java, args)
         scenario.onFragment {
