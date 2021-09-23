@@ -27,14 +27,17 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.geo.GoogleMapFragment;
+import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
-public class GeoPointActivityTest extends BaseGeoActivityTest {
+public class GeoPointActivityTest {
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
@@ -51,7 +54,10 @@ public class GeoPointActivityTest extends BaseGeoActivityTest {
      */
     @Before
     public void setUp() throws Exception {
-        super.setUp();
+        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+        GoogleMapFragment.testMode = true;
+        MapboxMapFragment.testMode = true;
 
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
         intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, DEFAULT_LOCATION_ACCURACY);
