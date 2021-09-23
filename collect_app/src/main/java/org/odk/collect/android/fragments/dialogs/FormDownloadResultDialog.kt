@@ -8,8 +8,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import org.jetbrains.annotations.TestOnly
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.FormsDownloadErrorActivity
-import org.odk.collect.android.logic.FormDownloadErrorItem
+import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorActivity
+import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem
 import java.util.ArrayList
 
 class FormDownloadResultDialog : DialogFragment() {
@@ -18,7 +18,7 @@ class FormDownloadResultDialog : DialogFragment() {
         const val NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
     }
 
-    private lateinit var failures: ArrayList<FormDownloadErrorItem>
+    private lateinit var failures: ArrayList<FormsDownloadErrorItem>
     private var numberOfAllForms = 0
 
     private lateinit var listener: FormDownloadResultDialogListener
@@ -37,7 +37,7 @@ class FormDownloadResultDialog : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         isCancelable = false
 
-        failures = arguments?.getSerializable(FAILURES) as ArrayList<FormDownloadErrorItem>
+        failures = arguments?.getSerializable(FAILURES) as ArrayList<FormsDownloadErrorItem>
         numberOfAllForms = arguments?.getInt(NUMBER_OF_ALL_FORMS)!!
 
         val builder = AlertDialog.Builder(requireContext())

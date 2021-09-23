@@ -1,4 +1,4 @@
-package org.odk.collect.android.adapters
+package org.odk.collect.android.formmanagement.downloaderror
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.logic.FormDownloadErrorItem
 import org.odk.collect.android.utilities.TranslationHandler
 
-class FormsDownloadErrorAdapter(val failures: List<FormDownloadErrorItem>) : RecyclerView.Adapter<FormsDownloadErrorAdapter.ViewHolder>() {
+class FormsDownloadErrorAdapter(val failures: List<FormsDownloadErrorItem>) : RecyclerView.Adapter<FormsDownloadErrorAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val formName: TextView = view.findViewById(R.id.form_name)
