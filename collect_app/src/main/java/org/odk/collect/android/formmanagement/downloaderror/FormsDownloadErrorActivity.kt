@@ -13,8 +13,6 @@ class FormsDownloadErrorActivity : CollectAbstractActivity() {
         const val FAILURES = "FAILURES"
     }
 
-    private lateinit var failures: List<FormsDownloadErrorItem>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forms_download_error)
@@ -22,7 +20,7 @@ class FormsDownloadErrorActivity : CollectAbstractActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 
-        failures = intent.getSerializableExtra(FAILURES) as List<FormsDownloadErrorItem>
+        val failures = intent.getSerializableExtra(FAILURES) as List<FormsDownloadErrorItem>
         findViewById<RecyclerView>(R.id.errors).apply {
             adapter = FormsDownloadErrorAdapter(failures)
             layoutManager = LinearLayoutManager(context)
