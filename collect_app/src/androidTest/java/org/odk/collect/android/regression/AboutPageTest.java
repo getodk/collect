@@ -60,7 +60,7 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.imageView))
-                .check(matches(withImageDrawable(R.drawable.ic_website)));
+                .check(matches(withImageDrawable(R.drawable.ic_outline_website_24)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.title))
@@ -72,7 +72,7 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.imageView))
-                .check(matches(withImageDrawable(R.drawable.ic_forum)));
+                .check(matches(withImageDrawable(R.drawable.ic_outline_forum_24)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.title))
@@ -84,7 +84,7 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.imageView))
-                .check(matches(withImageDrawable(R.drawable.ic_share)));
+                .check(matches(withImageDrawable(R.drawable.ic_outline_share_24)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.title))
@@ -96,7 +96,7 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.imageView))
-                .check(matches(withImageDrawable(R.drawable.ic_review_rate)));
+                .check(matches(withImageDrawable(R.drawable.ic_outline_rate_review_24)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(4, R.id.title))
@@ -108,7 +108,7 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(4, R.id.imageView))
-                .check(matches(withImageDrawable(R.drawable.ic_stars)));
+                .check(matches(withImageDrawable(R.drawable.ic_outline_stars_24)));
     }
 
     @Test
