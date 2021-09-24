@@ -42,8 +42,6 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.views.DayNightProgressDialog;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
@@ -54,9 +52,11 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.forms.FormSourceException;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -270,7 +270,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      */
     private void downloadFormList() {
         if (!connectivityProvider.isDeviceOnline()) {
-            ToastUtils.showShortToast(Collect.getInstance(), R.string.no_connection);
+            ToastUtils.showShortToast(this, R.string.no_connection);
 
             if (viewModel.isDownloadOnlyMode()) {
                 setReturnResult(false, getString(R.string.no_connection), viewModel.getFormResults());
@@ -408,7 +408,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
             downloadFormsTask.execute(filesToDownload);
         } else {
-            ToastUtils.showShortToast(Collect.getInstance(), R.string.noselect_error);
+            ToastUtils.showShortToast(this, R.string.noselect_error);
         }
     }
 

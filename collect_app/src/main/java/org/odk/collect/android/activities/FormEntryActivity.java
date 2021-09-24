@@ -14,6 +14,24 @@
 
 package org.odk.collect.android.activities;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
+import static android.view.animation.AnimationUtils.loadAnimation;
+import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
+import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RESPONSE;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
+import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_NAVIGATION;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+import static org.odk.collect.android.utilities.DialogUtils.getDialog;
+import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.utils.ToastUtils.showLongToast;
+import static org.odk.collect.androidshared.utils.ToastUtils.showShortToast;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -126,8 +144,8 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.permissions.PermissionsChecker;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -147,7 +165,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
@@ -158,6 +175,7 @@ import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataReg
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -178,24 +196,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-
-import static android.content.DialogInterface.BUTTON_NEGATIVE;
-import static android.content.DialogInterface.BUTTON_POSITIVE;
-import static android.view.animation.AnimationUtils.loadAnimation;
-import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
-import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RESPONSE;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
-import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
-import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.android.utilities.DialogUtils.getDialog;
-import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
-import static org.odk.collect.androidshared.utils.ToastUtils.showLongToast;
-import static org.odk.collect.androidshared.utils.ToastUtils.showShortToast;
 
 /**
  * FormEntryActivity is responsible for displaying questions, animating
@@ -807,7 +807,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (intent == null && requestCode != RequestCodes.DRAW_IMAGE && requestCode != RequestCodes.ANNOTATE_IMAGE
                 && requestCode != RequestCodes.SIGNATURE_CAPTURE && requestCode != RequestCodes.IMAGE_CAPTURE) {
             Timber.d("The intent has a null value for requestCode: %s", requestCode);
-            showLongToast(Collect.getInstance(), getString(R.string.null_intent_value));
+            showLongToast(this, getString(R.string.null_intent_value));
             return;
         }
 
@@ -913,7 +913,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             waitingForDataRegistry.cancelWaitingForData();
                         } catch (Exception e) {
                             Timber.e(e);
-                            ToastUtils.showLongToast(Collect.getInstance(), currentViewIfODKView.getContext().getString(R.string.error_attaching_binary_file,
+                            ToastUtils.showLongToast(this, currentViewIfODKView.getContext().getString(R.string.error_attaching_binary_file,
                                     e.getMessage()));
                         }
                         set = true;
@@ -1265,7 +1265,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             @Override
             public void onSaveClicked(boolean markAsFinalized) {
                 if (saveName.length() < 1) {
-                    showShortToast(Collect.getInstance(), R.string.save_as_error);
+                    showShortToast(FormEntryActivity.this, R.string.save_as_error);
                 } else {
                     formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
@@ -1588,7 +1588,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
         }
 
-        ToastUtils.showShortToastInMiddle(Collect.getInstance(), constraintText);
+        ToastUtils.showShortToastInMiddle(this, constraintText);
     }
 
     /**
@@ -1696,7 +1696,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // save current answer
         if (current) {
             if (!saveAnswersForCurrentScreen(complete)) {
-                showShortToast(Collect.getInstance(), R.string.data_saved_error);
+                showShortToast(this, R.string.data_saved_error);
                 return false;
             }
         }
@@ -1725,7 +1725,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
-                showShortToast(Collect.getInstance(), R.string.data_saved_ok);
+                showShortToast(this, R.string.data_saved_ok);
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
@@ -1750,7 +1750,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     message = getString(R.string.data_saved_error);
                 }
 
-                showLongToast(Collect.getInstance(), message);
+                showLongToast(this, message);
                 formSaveViewModel.resumeFormEntry();
                 break;
 
@@ -1758,7 +1758,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
-                showLongToast(Collect.getInstance(), String.format(getString(R.string.encryption_error_message),
+                showLongToast(this, String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
                 finishAndReturnInstance();
                 formSaveViewModel.resumeFormEntry();
@@ -2184,7 +2184,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 boolean hasUsedSavepoint = task.hasUsedSavepoint();
 
                 if (hasUsedSavepoint) {
-                    runOnUiThread(() -> showLongToast(Collect.getInstance(), R.string.savepoint_used));
+                    runOnUiThread(() -> showLongToast(this, R.string.savepoint_used));
                 }
 
                 if (formController.getInstanceFile() == null) {
@@ -2258,7 +2258,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         } else {
             Timber.e("FormController is null");
-            showLongToast(Collect.getInstance(), R.string.loading_form_failed);
+            showLongToast(this, R.string.loading_form_failed);
             finish();
         }
     }
@@ -2280,7 +2280,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         onScreenRefresh();
 
         if (warningMsg != null) {
-            showLongToast(Collect.getInstance(), warningMsg);
+            showLongToast(this, warningMsg);
             Timber.w(warningMsg);
         }
     }
@@ -2352,14 +2352,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public void onSavePointError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            showLongToast(Collect.getInstance(), getString(R.string.save_point_error, errorMessage));
+            showLongToast(this, getString(R.string.save_point_error, errorMessage));
         }
     }
 
     @Override
     public void onSaveFormIndexError(String errorMessage) {
         if (errorMessage != null && errorMessage.trim().length() > 0) {
-            showLongToast(Collect.getInstance(), getString(R.string.save_point_error, errorMessage));
+            showLongToast(this, getString(R.string.save_point_error, errorMessage));
         }
     }
 
