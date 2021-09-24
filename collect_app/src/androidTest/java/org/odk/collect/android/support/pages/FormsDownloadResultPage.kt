@@ -20,11 +20,6 @@ class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
         return this
     }
 
-    fun clickOK(): MainMenuPage {
-        clickOnId(android.R.id.button1)
-        return MainMenuPage()
-    }
-
     fun showDetails(): FormsDownloadErrorPage {
         onView(withText(getTranslatedString(R.string.show_details))).perform(click())
         return FormsDownloadErrorPage().assertOnPage()

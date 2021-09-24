@@ -68,7 +68,7 @@ class SwitchProjectTest {
             .setServer(testDependencies.server.url)
             .clickGetBlankForm()
             .clickGetSelected()
-            .clickOK()
+            .clickOKOnDialog(MainMenuPage())
 
             // Fill form
             .startBlankForm("One Question")

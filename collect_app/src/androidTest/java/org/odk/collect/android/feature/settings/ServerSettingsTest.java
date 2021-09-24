@@ -57,7 +57,7 @@ public class ServerSettingsTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")
-                .clickOK();
+                .clickOKOnDialog(new MainMenuPage());
     }
 
     /**
