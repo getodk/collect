@@ -30,8 +30,6 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        isCancelable = false
-
         failures = arguments?.getSerializable(FAILURES) as ArrayList<FormsDownloadErrorItem>
         numberOfAllForms = arguments?.getInt(NUMBER_OF_ALL_FORMS)!!
 
