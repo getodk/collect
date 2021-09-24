@@ -665,8 +665,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         }
 
         Bundle args = new Bundle();
-        args.putSerializable(FormsDownloadResultDialog.FAILURES, failures);
-        args.putSerializable(FormsDownloadResultDialog.NUMBER_OF_ALL_FORMS, result.size());
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, failures);
+        args.putSerializable(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, result.size());
         DialogUtils.showIfNotShowing(FormsDownloadResultDialog.class, args, getSupportFragmentManager());
 
         // Set result to true for forms which were downloaded

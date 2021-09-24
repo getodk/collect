@@ -25,8 +25,8 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        failures = arguments?.getSerializable(FAILURES) as ArrayList<FormsDownloadErrorItem>
-        numberOfAllForms = arguments?.getInt(NUMBER_OF_ALL_FORMS)!!
+        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<FormsDownloadErrorItem>
+        numberOfAllForms = arguments?.getInt(ARG_NUMBER_OF_ALL_FORMS)!!
 
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())
@@ -37,7 +37,7 @@ class FormsDownloadResultDialog : DialogFragment() {
         if (failures.isNotEmpty()) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
                 val intent = Intent(context, FormsDownloadErrorActivity::class.java).apply {
-                    putExtra(FormsDownloadErrorActivity.FAILURES, failures)
+                    putExtra(FormsDownloadErrorActivity.EXTRA_FAILURES, failures)
                 }
                 startActivity(intent)
                 listener?.onCloseDownloadingResult()
@@ -60,7 +60,7 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     companion object {
-        const val FAILURES = "FAILURES"
-        const val NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
+        const val ARG_FAILURES = "FAILURES"
+        const val ARG_NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
     }
 }

@@ -10,7 +10,7 @@ import org.odk.collect.strings.getLocalizedString
 
 class FormsDownloadErrorActivity : CollectAbstractActivity() {
     companion object {
-        const val FAILURES = "FAILURES"
+        const val EXTRA_FAILURES = "FAILURES"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class FormsDownloadErrorActivity : CollectAbstractActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 
-        val failures = intent.getSerializableExtra(FAILURES) as List<FormsDownloadErrorItem>
+        val failures = intent.getSerializableExtra(EXTRA_FAILURES) as List<FormsDownloadErrorItem>
         findViewById<RecyclerView>(R.id.errors).apply {
             adapter = FormsDownloadErrorAdapter(failures)
             layoutManager = LinearLayoutManager(context)
