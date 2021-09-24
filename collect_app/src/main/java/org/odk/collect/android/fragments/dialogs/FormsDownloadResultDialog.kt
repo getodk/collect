@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.jetbrains.annotations.TestOnly
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorActivity
@@ -40,7 +40,7 @@ class FormsDownloadResultDialog : DialogFragment() {
         failures = arguments?.getSerializable(FAILURES) as ArrayList<FormsDownloadErrorItem>
         numberOfAllForms = arguments?.getInt(NUMBER_OF_ALL_FORMS)!!
 
-        val builder = AlertDialog.Builder(requireContext())
+        val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
                 listener.onCloseDownloadingResult()
