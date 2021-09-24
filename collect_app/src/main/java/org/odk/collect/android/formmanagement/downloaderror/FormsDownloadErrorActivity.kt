@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.CollectAbstractActivity
-import org.odk.collect.android.utilities.TranslationHandler
+import org.odk.collect.strings.getLocalizedString
 
 class FormsDownloadErrorActivity : CollectAbstractActivity() {
     companion object {
@@ -16,7 +16,7 @@ class FormsDownloadErrorActivity : CollectAbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forms_download_error)
-        initToolbar(TranslationHandler.getString(this, R.string.errors))
+        initToolbar(getLocalizedString(R.string.errors))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 

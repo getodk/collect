@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.TranslationHandler
+import org.odk.collect.strings.getLocalizedString
 
 class FormsDownloadErrorAdapter(val failures: List<FormsDownloadErrorItem>) : RecyclerView.Adapter<FormsDownloadErrorAdapter.ViewHolder>() {
 
@@ -24,7 +24,7 @@ class FormsDownloadErrorAdapter(val failures: List<FormsDownloadErrorItem>) : Re
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.formName.text = failures[position].formName
-        holder.formDetails.text = TranslationHandler.getString(holder.itemView.context, R.string.form_details, failures[position].formId, failures[position].formVersion)
+        holder.formDetails.text = holder.itemView.context.getLocalizedString(R.string.form_details, failures[position].formId, failures[position].formVersion)
         holder.errorMessage.text = failures[position].errorMessage
     }
 
