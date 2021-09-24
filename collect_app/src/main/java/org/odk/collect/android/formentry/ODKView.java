@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -73,7 +77,6 @@ import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.StringWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -83,6 +86,7 @@ import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
@@ -98,10 +102,6 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Contains either one {@link QuestionWidget} if the current form element is a question or
@@ -448,11 +448,11 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             } catch (ExternalParamsException e) {
                 Timber.e(e, "ExternalParamsException");
 
-                ToastUtils.showShortToast(e.getMessage());
+                ToastUtils.showShortToast(getContext(), e.getMessage());
             } catch (ActivityNotFoundException e) {
                 Timber.d(e, "ActivityNotFoundExcept");
 
-                ToastUtils.showShortToast(errorString);
+                ToastUtils.showShortToast(getContext(), errorString);
             }
         });
     }

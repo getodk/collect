@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.widgets;
 
+import static android.content.Intent.ACTION_SENDTO;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -35,19 +40,14 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
-import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.ToastUtils;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static android.content.Intent.ACTION_SENDTO;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * <p>Launch an external app to supply a string value. If the app
@@ -128,7 +128,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
             ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
         } catch (SecurityException e) {
             Timber.i(e);
-            ToastUtils.showLongToast(R.string.not_granted_permission);
+            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
         }
     }
 
