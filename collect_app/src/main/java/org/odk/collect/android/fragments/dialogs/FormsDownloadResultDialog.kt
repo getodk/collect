@@ -12,11 +12,6 @@ import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorIt
 import java.util.ArrayList
 
 class FormsDownloadResultDialog : DialogFragment() {
-    companion object {
-        const val FAILURES = "FAILURES"
-        const val NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
-    }
-
     private lateinit var failures: ArrayList<FormsDownloadErrorItem>
     private var numberOfAllForms = 0
 
@@ -62,5 +57,10 @@ class FormsDownloadResultDialog : DialogFragment() {
 
     interface FormDownloadResultDialogListener {
         fun onCloseDownloadingResult()
+    }
+
+    companion object {
+        const val FAILURES = "FAILURES"
+        const val NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
     }
 }
