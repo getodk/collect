@@ -14,14 +14,14 @@
         android:padding="@dimen/margin_standard">
 
         <TextView
-            android:id="@+id/form_name"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceHeadline6"
             tool:text="Form 1"/>
 
         <TextView
-            android:id="@+id/form_details"
+            android:id="@+id/secondary_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -30,7 +30,7 @@
             tool:text="ID: form-1 Version: 202122"/>
 
         <TextView
-            android:id="@+id/error_message"
+            android:id="@+id/supporting_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_standard"

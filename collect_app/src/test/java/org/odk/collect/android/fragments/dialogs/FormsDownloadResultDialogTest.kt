@@ -17,20 +17,20 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem
+import org.odk.collect.android.errors.ErrorItem
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows
 
 @RunWith(AndroidJUnit4::class)
 class FormsDownloadResultDialogTest {
-    private val downloadErrorItem = FormsDownloadErrorItem("", "", "", "")
+    private val downloadErrorItem = ErrorItem("", "", "")
     val listener = mock<FormsDownloadResultDialog.FormDownloadResultDialogListener>()
 
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -42,7 +42,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -54,7 +54,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -70,7 +70,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `onCloseDownloadingResult() should be called after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -100,7 +100,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -115,7 +115,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors 'SHOW DETAILS' button should be hidden`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<FormsDownloadErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)

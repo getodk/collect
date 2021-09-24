@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement.downloaderror
+package org.odk.collect.android.errors
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
@@ -8,21 +8,21 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.strings.getLocalizedString
 
-class FormsDownloadErrorActivity : CollectAbstractActivity() {
+class ErrorActivity : CollectAbstractActivity() {
     companion object {
-        const val EXTRA_FAILURES = "FAILURES"
+        const val EXTRA_ERRORS = "ERRORS"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_forms_download_error)
+        setContentView(R.layout.activity_error)
         initToolbar(getLocalizedString(R.string.errors))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 
-        val failures = intent.getSerializableExtra(EXTRA_FAILURES) as List<FormsDownloadErrorItem>
+        val failures = intent.getSerializableExtra(EXTRA_ERRORS) as List<ErrorItem>
         findViewById<RecyclerView>(R.id.errors).apply {
-            adapter = FormsDownloadErrorAdapter(failures)
+            adapter = ErrorAdapter(failures)
             layoutManager = LinearLayoutManager(context)
         }
     }

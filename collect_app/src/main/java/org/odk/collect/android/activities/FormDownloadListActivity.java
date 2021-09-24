@@ -37,12 +37,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.errors.ErrorItem;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -657,10 +657,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-        ArrayList<FormsDownloadErrorItem> failures = new ArrayList<>();
+        ArrayList<ErrorItem> failures = new ArrayList<>();
         for (Map.Entry<ServerFormDetails, String> entry : result.entrySet()) {
             if (!entry.getValue().equals(getString(R.string.success))) {
-                failures.add(new FormsDownloadErrorItem(entry.getKey().getFormName(), entry.getKey().getFormId(), entry.getKey().getFormVersion(), entry.getValue()));
+                failures.add(new ErrorItem(entry.getKey().getFormName(), getString(R.string.form_details, entry.getKey().getFormId(), entry.getKey().getFormVersion()), entry.getValue()));
             }
         }
 
