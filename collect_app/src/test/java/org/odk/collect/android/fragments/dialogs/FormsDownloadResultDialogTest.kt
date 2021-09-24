@@ -28,18 +28,6 @@ class FormsDownloadResultDialogTest {
     val listener = mock<FormsDownloadResultDialog.FormDownloadResultDialogListener>()
 
     @Test
-    fun `The dialog should have no title`() {
-        val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
-        args.putInt(FormsDownloadResultDialog.NUMBER_OF_ALL_FORMS, 1)
-
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
-        scenario.onFragment {
-            assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
-        }
-    }
-
-    @Test
     fun `The dialog should not be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
         args.putSerializable(FormsDownloadResultDialog.FAILURES, arrayListOf<FormsDownloadErrorItem>())
