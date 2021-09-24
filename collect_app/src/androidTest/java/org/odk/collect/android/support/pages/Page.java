@@ -197,6 +197,12 @@ public abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public <D extends Page<D>> D clickOKOnDialog(D destination) {
+        closeSoftKeyboard(); // Make sure to avoid issues with keyboard being up
+        clickOnId(android.R.id.button1);
+        return destination.assertOnPage();
+    }
+
     String getTranslatedString(Integer id) {
         Activity currentActivity = getCurrentActivity();
 

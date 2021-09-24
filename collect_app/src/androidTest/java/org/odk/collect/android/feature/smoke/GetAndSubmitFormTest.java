@@ -40,7 +40,7 @@ public class GetAndSubmitFormTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")
-                .clickOK()
+                .clickOKOnDialog(new MainMenuPage())
 
                 // Fill out form
                 .startBlankForm("One Question")

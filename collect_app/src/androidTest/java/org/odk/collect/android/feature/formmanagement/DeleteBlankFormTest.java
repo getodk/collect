@@ -72,7 +72,7 @@ public class DeleteBlankFormTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")
-                .clickOK()
+                .clickOKOnDialog(new MainMenuPage())
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
                 .swipeToEndScreen()
@@ -88,7 +88,7 @@ public class DeleteBlankFormTest {
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")
-                .clickOK()
+                .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
     }
