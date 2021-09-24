@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.jetbrains.annotations.TestOnly
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorActivity
 import org.odk.collect.android.formmanagement.downloaderror.FormsDownloadErrorItem
@@ -21,11 +20,7 @@ class FormsDownloadResultDialog : DialogFragment() {
     private lateinit var failures: ArrayList<FormsDownloadErrorItem>
     private var numberOfAllForms = 0
 
-    private lateinit var listener: FormDownloadResultDialogListener
-
-    interface FormDownloadResultDialogListener {
-        fun onCloseDownloadingResult()
-    }
+    var listener: FormDownloadResultDialogListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,7 +38,7 @@ class FormsDownloadResultDialog : DialogFragment() {
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                listener.onCloseDownloadingResult()
+                listener?.onCloseDownloadingResult()
             }
 
         if (failures.isNotEmpty()) {
@@ -52,7 +47,7 @@ class FormsDownloadResultDialog : DialogFragment() {
                     putExtra(FormsDownloadErrorActivity.FAILURES, failures)
                 }
                 startActivity(intent)
-                listener.onCloseDownloadingResult()
+                listener?.onCloseDownloadingResult()
             }
         }
 
@@ -67,8 +62,7 @@ class FormsDownloadResultDialog : DialogFragment() {
         }
     }
 
-    @TestOnly
-    fun setListener(listener: FormDownloadResultDialogListener) {
-        this.listener = listener
+    interface FormDownloadResultDialogListener {
+        fun onCloseDownloadingResult()
     }
 }

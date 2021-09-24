@@ -59,7 +59,7 @@ class FormsDownloadResultDialogTest {
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            it.setListener(listener)
+            it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             RobolectricHelpers.runLooper()
@@ -75,7 +75,7 @@ class FormsDownloadResultDialogTest {
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            it.setListener(listener)
+            it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             RobolectricHelpers.runLooper()
             verify(listener).onCloseDownloadingResult()
@@ -90,7 +90,7 @@ class FormsDownloadResultDialogTest {
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            it.setListener(listener)
+            it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
             RobolectricHelpers.runLooper()
             verify(listener).onCloseDownloadingResult()
@@ -162,7 +162,7 @@ class FormsDownloadResultDialogTest {
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            it.setListener(listener)
+            it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
             RobolectricHelpers.runLooper()
