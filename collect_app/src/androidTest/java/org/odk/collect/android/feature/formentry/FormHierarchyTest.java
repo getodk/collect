@@ -174,12 +174,14 @@ public class FormHierarchyTest {
 
     @Test
     //https://github.com/getodk/collect/issues/4570
-    public void showsRepeatsWhenFirstIsEmpty() {
+    public void showRepeatsPickerWhenFirstRepeatIsEmpty() {
         new MainMenuPage()
-                .startBlankForm("Empty First Repeat")
+                .startBlankFormWithRepeatGroup("Empty First Repeat", "Repeat")
+                .clickOnAdd(new FormEntryPage("Empty First Repeat"))
+                .answerQuestion("Question in repeat", "Not empty!")
                 .clickGoToArrow()
-                .assertText("Beet, Bell pepper, Cabbage")
-                .clickOnText("Frequencies")
-                .assertText("2.\u200E Beet", "3.\u200E Bell pepper", "5.\u200E Cabbage");
+                .clickGoUpIcon()
+                .clickGoUpIcon()
+                .assertText("Repeat", "Repeatable Group");
     }
 }
