@@ -152,7 +152,7 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
 
       - run:
-          name: Assemble self siggned release build
+          name: Assemble self signed release build
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleSelSignedRelease
 
   test_instrumented:
