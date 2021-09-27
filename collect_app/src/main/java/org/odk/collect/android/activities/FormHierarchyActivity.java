@@ -486,27 +486,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         refreshView(false);
     }
 
-    public enum Scenarios4570 {
-        WITH_BEANS_OLD_CODE,
-        WITHOUT_BEANS_OLD_CODE,
-        WITH_BEANS_NEW_CODE,
-        WITHOUT_BEANS_NEW_CODE;
-
-        public boolean testWithBeans() {
-            return this.ordinal() % 2 == 0;
-        }
-
-        public boolean restoreOldLogic() {
-            return this.ordinal() < 2;
-        }
-
-        public boolean willPassTest() {
-            return this != WITHOUT_BEANS_OLD_CODE;
-        }
-    }
-
-    public static final Scenarios4570 SCENARIO_4570 = Scenarios4570.values()[3];
-
     /**
      * @see #refreshView()
      */
@@ -627,9 +606,9 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                         boolean isFirst = fc.getMultiplicity() == 0;
                         boolean forPicker = shouldShowRepeatGroupPicker();
                         boolean isEmpty = !formController.isGroupRelevant();
-                        if (isEmpty && (SCENARIO_4570.restoreOldLogic() ||
-                                (!isFirst || forPicker))
-                        ) {
+                        if (isEmpty &&
+                                // For #4570
+                                (!isFirst || forPicker)) {
                             break;
                         }
 
