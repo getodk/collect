@@ -143,6 +143,18 @@ jobs:
           name: Assemble connected test build
           command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
 
+  build_release:
+    <<: *android_config
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - restore_cache:
+          key: deps-{{ checksum "deps.txt" }}
+
+      - run:
+          name: Assemble self signed release build
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleSelfSignedRelease
+
   test_instrumented:
     <<: *android_config
     steps:
@@ -190,6 +202,9 @@ workflows:
           requires:
             - compile
       - test_app:
+          requires:
+            - compile
+      - build_release:
           requires:
             - compile
       - build_instrumented:
