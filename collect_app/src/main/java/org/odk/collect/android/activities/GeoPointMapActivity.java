@@ -32,12 +32,13 @@ import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.MapPoint;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
 
@@ -50,7 +51,8 @@ import timber.log.Timber;
  * by touching a point on the map or by tapping a button to place the marker
  * at the current location (obtained from GPS or other location sensors).
  */
-public class GeoPointMapActivity extends CollectAbstractActivity {
+public class GeoPointMapActivity extends LocalizedActivity {
+
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
