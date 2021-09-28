@@ -29,8 +29,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.strings.LocalizedApplication;
 
 import java.util.Locale;
 
@@ -93,7 +93,7 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
             }
         }
 
-        Locale locale = new LocaleHelper().getLocale(settingsProvider.getGeneralSettings());
+        Locale locale = ((LocalizedApplication) getApplicationContext()).getLocale();
         if (locale != null) {
             config.setLocale(locale);
             config.setLayoutDirection(locale);
