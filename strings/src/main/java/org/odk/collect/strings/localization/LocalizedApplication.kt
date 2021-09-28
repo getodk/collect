@@ -1,4 +1,4 @@
-package org.odk.collect.strings
+package org.odk.collect.strings.localization
 
 import android.content.Context
 import android.content.res.Configuration

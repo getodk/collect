@@ -19,7 +19,7 @@ import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.R
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker.Companion.notificationIcon
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 private const val LOCATION_KEY = "location"
 

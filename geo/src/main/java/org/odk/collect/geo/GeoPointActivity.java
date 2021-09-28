@@ -29,7 +29,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
@@ -39,6 +38,7 @@ import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
@@ -46,7 +46,7 @@ import java.util.TimerTask;
 
 import timber.log.Timber;
 
-public class GeoPointActivity extends AppCompatActivity implements LocationListener,
+public class GeoPointActivity extends LocalizedActivity implements LocationListener,
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";

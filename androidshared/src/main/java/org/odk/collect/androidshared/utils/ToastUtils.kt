@@ -10,7 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.R
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 /**
  * Convenience wrapper around Android's [Toast] API.

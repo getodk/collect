@@ -13,7 +13,7 @@ import org.odk.collect.androidshared.ui.ReturnToAppActivity
 import org.odk.collect.audiorecorder.R
 import org.odk.collect.audiorecorder.recording.RecordingSession
 import org.odk.collect.strings.format.formatLength
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 internal class RecordingForegroundServiceNotification(private val service: Service, private val recordingRepository: RecordingRepository) {
 

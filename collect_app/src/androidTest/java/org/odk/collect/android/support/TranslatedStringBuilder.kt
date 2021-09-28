@@ -2,7 +2,7 @@ package org.odk.collect.android.support
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 class TranslatedStringBuilder(private val separator: String = " ") {
 

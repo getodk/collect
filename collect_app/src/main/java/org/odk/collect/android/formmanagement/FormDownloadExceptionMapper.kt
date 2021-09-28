@@ -2,7 +2,7 @@ package org.odk.collect.android.formmanagement
 
 import android.content.Context
 import org.odk.collect.android.R
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 class FormDownloadExceptionMapper(private val context: Context) {
     fun getMessage(exception: FormDownloadException?): String {
