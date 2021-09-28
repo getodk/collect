@@ -69,6 +69,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     public static final String CLEAR_BUTTON_ENABLED_KEY = "clear_button_enabled";
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
+    protected Bundle previousState;
 
     @Inject
     MapProvider mapProvider;
@@ -110,6 +111,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
+
         DaggerUtils.getComponent(this).inject(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

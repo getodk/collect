@@ -27,11 +27,9 @@ import org.odk.collect.androidshared.utils.ToastUtils;
  * though this will probably grow as we add more geospatial capabilities.)
  */
 public abstract class BaseGeoMapActivity extends CollectAbstractActivity {
-    protected Bundle previousState;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
 
         if (!permissionsProvider.areLocationPermissionsGranted()) {
             ToastUtils.showLongToast(this, R.string.not_granted_permission);

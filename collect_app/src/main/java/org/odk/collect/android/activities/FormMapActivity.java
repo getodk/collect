@@ -71,6 +71,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     public static final String EXTRA_FORM_ID = "form_id";
+    protected Bundle previousState;
 
     private FormMapViewModel viewModel;
 
@@ -112,6 +113,8 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
+
         DaggerUtils.getComponent(this).inject(this);
 
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));

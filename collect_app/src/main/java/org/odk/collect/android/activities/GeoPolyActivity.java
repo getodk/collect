@@ -61,6 +61,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
+    protected Bundle previousState;
 
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
@@ -117,6 +118,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
+
         DaggerUtils.getComponent(this).inject(this);
 
         if (savedInstanceState != null) {
