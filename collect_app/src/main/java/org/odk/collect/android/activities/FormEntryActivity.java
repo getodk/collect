@@ -248,8 +248,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String mSurveyNotes = null;                                 // smap
     private boolean mCanUpdate = true;                                  // smap
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
-    ProgressDialog progressBar = null;                                  // smap
-    Direction swipeDirection;                                              // smap
+    private ProgressDialog progressBar = null;                          // smap
+    Direction swipeDirection;                                           // smap
     private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
@@ -415,6 +415,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }));
 
         errorMessage = null;
+        progressBar = null;   // smap
 
         questionHolder = findViewById(R.id.questionholder);
 
@@ -1500,6 +1501,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (!saveBeforeNextView(formController)) {
                 formEntryViewModel.moveForward();
                 formIndexAnimationHandler.handle(formController.getFormIndex());
+                if (Collect.getInstance().inRemoteCall()) { // smap wait for lookup to complete
+                    swipeDirection = FORWARDS;  // smap need to set direction back to forwards as the forward swipe has been processed
+                    direction = FORWARDS;
+                    formEntryViewModel.moveBackward();
+                    formIndexAnimationHandler.handle(formController.getFormIndex());
+                    return false;
+                }
                 return true;
             } else {
                 return false;
@@ -2105,6 +2113,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
         if (progressBar != null) {    // smap
             progressBar.dismiss();
+            progressBar = null;
         }
 
         super.onPause();
@@ -2240,6 +2249,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         releaseOdkView();
         if (progressBar != null) {    // smap
             progressBar.dismiss();
+            progressBar = null;
         }
         compositeDisposable.dispose();
 
@@ -2676,7 +2686,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void remoteComplete(SmapRemoteDataItem item) {
         Collect app = Collect.getInstance();
         app.setRemoteItem(item);
-        app.endRemoteCall(item.key);
+        app.endRemoteCall();
 
         if (!app.inRemoteCall()) {
             if (progressBar != null) {

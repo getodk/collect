@@ -75,7 +75,7 @@ public class Collect extends Application implements LocalizedApplication {
     // Keep a reference to form entry activity to allow cancel dialogs to be shown during remote calls
     private FormEntryActivity formEntryActivity = null; // smap
     private HashMap<String, SmapRemoteDataItem> remoteCache = null;         // smap
-    private HashMap<String, String> remoteCalls = null;                     // smap
+    private int remoteCalls;                                                // smap
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
     private FormRestartDetails mRestartDetails;                             // smap
     private String formId;                                                  // smap
@@ -263,7 +263,7 @@ public class Collect extends Application implements LocalizedApplication {
                 }
             }
         }
-        remoteCalls = new HashMap<String, String>();
+        remoteCalls = 0;
     }
     public String getRemoteData(String key) {
         SmapRemoteDataItem item = remoteCache.get(key);
@@ -281,14 +281,14 @@ public class Collect extends Application implements LocalizedApplication {
             remoteCache.put(item.key, item);
         }
     }
-    public void startRemoteCall(String key) {
-        remoteCalls.put(key, "started");
+    public void startRemoteCall() {
+        remoteCalls++;
     }
-    public void endRemoteCall(String key) {
-        remoteCalls.remove(key);
+    public void endRemoteCall() {
+        remoteCalls--;
     }
     public boolean inRemoteCall() {
-        return remoteCalls.size() > 0;
+        return remoteCalls > 0;
     }
 
     public void setFormRestartDetails(FormRestartDetails restartDetails) {

@@ -109,7 +109,7 @@ public class SmapRemoteWebServiceTask extends AsyncTask<String, Void, SmapRemote
                     remoteListener.remoteComplete(data);
                 } else {
                     Collect app = Collect.getInstance();
-                    app.endRemoteCall(data.key);
+                    app.endRemoteCall();
                     throw new Exception("Listener for remote web service task is null");
                 }
             } catch (Exception e) {

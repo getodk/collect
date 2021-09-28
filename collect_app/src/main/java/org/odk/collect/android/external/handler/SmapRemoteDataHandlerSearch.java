@@ -197,7 +197,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 }
             }
 
-            Timber.i("++++ Remote Search: " + url.toString());
+            Timber.i("++++ Remote Search: %s", url.toString());
             // Get the cache results if they exist
             String urlString = url.toString();
             String data = app.getRemoteData(urlString);
@@ -221,7 +221,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             } else {
                 // Call a webservice to get the remote record
                 Timber.i("++++ Make the call");
-                app.startRemoteCall(urlString);
+                app.startRemoteCall();
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(urlString, timeoutValue, "true", null, null, "true");

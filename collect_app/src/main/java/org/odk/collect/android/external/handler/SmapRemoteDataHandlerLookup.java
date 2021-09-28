@@ -186,17 +186,19 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         // Get the cache results if they exist
         String data = app.getRemoteData(url);
         HashMap<String, String> record = null;
-        try {
-            record =
-                    new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
-                    }.getType());
-        } catch (Exception e) {
-            return data;            // Assume the data contains the error message
+        if(data != null) {
+            try {
+                record =
+                        new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
+                        }.getType());
+            } catch (Exception e) {
+                return data;            // Assume the data contains the error message
+            }
         }
         Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
         if (record == null) {
             // Call a webservice to get the remote record
-            app.startRemoteCall(url);
+            app.startRemoteCall();
             SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
             task.setSmapRemoteListener(app.getFormEntryActivity());
             task.execute(url, "0", "false", null, null, "true");
