@@ -50,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
+public class GeoPolyActivity extends CollectAbstractActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";

@@ -66,7 +66,7 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends BaseGeoMapActivity {
+public class FormMapActivity extends CollectAbstractActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";

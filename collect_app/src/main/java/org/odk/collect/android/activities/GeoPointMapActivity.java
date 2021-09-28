@@ -50,7 +50,7 @@ import timber.log.Timber;
  * by touching a point on the map or by tapping a button to place the marker
  * at the current location (obtained from GPS or other location sensors).
  */
-public class GeoPointMapActivity extends BaseGeoMapActivity {
+public class GeoPointMapActivity extends CollectAbstractActivity {
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
