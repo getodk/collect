@@ -39,6 +39,7 @@ import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.geo.MapFragment;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -116,6 +117,11 @@ public class FormMapActivity extends BaseGeoMapActivity {
         previousState = savedInstanceState;
 
         DaggerUtils.getComponent(this).inject(this);
+
+        if (!permissionsProvider.areLocationPermissionsGranted()) {
+            ToastUtils.showLongToast(this, R.string.not_granted_permission);
+            finish();
+        }
 
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
