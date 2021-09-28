@@ -153,7 +153,7 @@ jobs:
 
       - run:
           name: Assemble self signed release build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleSelSignedRelease
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleSelfSignedRelease
 
   test_instrumented:
     <<: *android_config
