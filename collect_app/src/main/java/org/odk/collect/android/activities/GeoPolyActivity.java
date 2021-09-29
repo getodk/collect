@@ -264,7 +264,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (map.getPolyPoints(featureId).size() > 1) {
             finishWithResult();
         } else {
-            ToastUtils.showShortToastInMiddle(this, getString(R.string.polyline_validator));
+            ToastUtils.showShortToast(this, getString(R.string.polyline_validator));
         }
     }
 
@@ -278,7 +278,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             }
             finishWithResult();
         } else {
-            ToastUtils.showShortToastInMiddle(this, getString(R.string.polygon_validator));
+            ToastUtils.showShortToast(this, getString(R.string.polygon_validator));
         }
     }
 
