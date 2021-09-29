@@ -657,13 +657,13 @@
     <string name="invalid_response">The server %s provided an invalid response.</string>
 
     <!-- Error message displayed when the server has not provided a hash identifier for the form being downloaded -->
-    <string name="form_with_no_hash_error">This form has no hash.</string>
+    <string name="form_with_no_hash_error">The server did not provide a hash for this form.</string>
 
     <!-- Error message displayed when a form being downloaded cannot be parsed -->
-    <string name="form_parsing_error">This form cannot be parsed.</string>
+    <string name="form_parsing_error">This form cannot be processed.</string>
 
     <!-- Error message displayed when a disk error occurs during form download -->
-    <string name="form_save_disk_error">Disk error occurred while downloading this form.</string>
+    <string name="form_save_disk_error">A disk error occurred on device while downloading this form.</string>
 
     <!-- Error message displayed when a form being downloaded specifies an invalid submission URL -->
     <string name="form_with_invalid_submission_error">This form has an invalid submission URL.</string>
