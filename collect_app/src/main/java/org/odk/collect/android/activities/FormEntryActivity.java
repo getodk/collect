@@ -2694,17 +2694,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 progressBar = null;
             }
 
-            if(item.choices) {
-                onScreenRefresh();
-            } else {
-                // calculate
-                if (swipeDirection != null) {
-                    if (swipeDirection.equals(Direction.FORWARDS)) {
-                        swipeDirection = null;
-                        moveScreen(Direction.FORWARDS);
-                    }
+            if (swipeDirection != null) {
+                if (swipeDirection.equals(Direction.FORWARDS)) {
+                    swipeDirection = null;
+                    moveScreen(Direction.FORWARDS);
                 }
+            } else {
+                onScreenRefresh();
             }
+            
         }
     }
 
