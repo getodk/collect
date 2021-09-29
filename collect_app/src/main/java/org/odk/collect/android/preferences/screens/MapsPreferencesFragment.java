@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.preferences.screens;
 
+import static org.odk.collect.android.preferences.keys.ProjectKeys.CATEGORY_BASEMAP;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -36,14 +39,12 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.shared.PathUtils;
+import org.odk.collect.shared.files.DirectoryUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.CATEGORY_BASEMAP;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
 
 public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
 
@@ -245,11 +246,12 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
     /** Gets the list of layer data files supported by the current MapConfigurator. */
     private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
         List<File> files = new ArrayList<>();
-        for (File file : FileUtils.walk(new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS)))) {
+        for (File file : DirectoryUtils.listFilesRecursively(new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS)))) {
             if (cftor.supportsLayer(file)) {
                 files.add(file);
             }
         }
+
         return files;
     }
 }
