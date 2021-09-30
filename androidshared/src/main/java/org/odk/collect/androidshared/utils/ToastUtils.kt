@@ -1,11 +1,15 @@
 package org.odk.collect.androidshared.utils
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Build
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.androidshared.R
 import org.odk.collect.strings.getLocalizedString
 
 /**
@@ -43,8 +47,8 @@ object ToastUtils {
     }
 
     @JvmStatic
-    fun showShortToastInMiddle(context: Context, message: String) {
-        showToastInMiddle(context.applicationContext as Application, message)
+    fun showShortToastInMiddle(activity: Activity, message: String) {
+        showToastInMiddle(activity, message)
     }
 
     private fun showToast(
@@ -58,22 +62,30 @@ object ToastUtils {
     }
 
     private fun showToastInMiddle(
-        context: Application,
+        activity: Activity,
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
-        hideLastToast()
-        lastToast = Toast.makeText(context, message, duration)
-        try {
-            val group = lastToast.view as ViewGroup?
-            val messageTextView = group!!.getChildAt(0) as TextView
-            messageTextView.textSize = 21f
-            messageTextView.gravity = Gravity.CENTER
-        } catch (ignored: Exception) {
-            // ignored
+        if (Build.VERSION.SDK_INT < 30) {
+            hideLastToast()
+            lastToast = Toast.makeText(activity.applicationContext, message, duration)
+            try {
+                val group = lastToast.view as ViewGroup?
+                val messageTextView = group!!.getChildAt(0) as TextView
+                messageTextView.textSize = 21f
+                messageTextView.gravity = Gravity.CENTER
+            } catch (ignored: Exception) {
+                // ignored
+            }
+            lastToast.setGravity(Gravity.CENTER, 0, 0)
+            lastToast.show()
+        } else {
+            MaterialAlertDialogBuilder(activity)
+                .setMessage(message)
+                .setPositiveButton(R.string.ok, null)
+                .create()
+                .show()
         }
-        lastToast.setGravity(Gravity.CENTER, 0, 0)
-        lastToast.show()
     }
 
     private fun hideLastToast() {
