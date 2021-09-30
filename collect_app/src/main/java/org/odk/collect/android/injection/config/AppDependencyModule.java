@@ -65,7 +65,9 @@ import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
+import org.odk.collect.android.geo.DirectoryReferenceLayerRepository;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.ReferenceLayerRepository;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
@@ -608,5 +610,10 @@ public class AppDependencyModule {
     @Provides
     public PreferenceVisibilityHandler providesDisabledPreferencesRemover(SettingsProvider settingsProvider, VersionInformation versionInformation) {
         return new PreferenceVisibilityHandler(settingsProvider, versionInformation);
+    }
+
+    @Provides
+    public ReferenceLayerRepository providesReferenceLayerRepository(StoragePathProvider storagePathProvider) {
+        return new DirectoryReferenceLayerRepository(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
     }
 }

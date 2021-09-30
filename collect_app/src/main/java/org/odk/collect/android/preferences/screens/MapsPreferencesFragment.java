@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.ListPreference;
@@ -30,6 +31,8 @@ import androidx.preference.PreferenceCategory;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.ReferenceLayerRepository;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
 import org.odk.collect.android.preferences.PrefUtils;
@@ -39,12 +42,13 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.shared.PathUtils;
-import org.odk.collect.shared.files.DirectoryUtils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
 
@@ -52,6 +56,9 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
     private ListPreference basemapSourcePref;
     private CaptionedListPreference referenceLayerPref;
     private boolean autoShowReferenceLayerDialog;
+
+    @Inject
+    ReferenceLayerRepository referenceLayerRepository;
 
     @Override
     public void onDisplayPreferenceDialog(Preference preference) {
@@ -97,6 +104,12 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
             /** Opens the dialog programmatically, rather than by a click from the user. */
             onDisplayPreferenceDialog(getPreferenceManager().findPreference("reference_layer"));
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        DaggerUtils.getComponent(context).inject(this);
     }
 
     @Override
@@ -234,24 +247,25 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
 
         referenceLayerPref.setItems(items);
 
-        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
-        referenceLayerPref.setDialogCaption(context.getString(
-            items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
-            layerDir, context.getString(MapProvider.getSourceLabelId())
-        ));
+//        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
+//        referenceLayerPref.setDialogCaption(context.getString(
+//            items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
+//            layerDir, context.getString(MapProvider.getSourceLabelId())
+//        ));
 
         referenceLayerPref.updateContent();
     }
 
     /** Gets the list of layer data files supported by the current MapConfigurator. */
-    private static List<File> getSupportedLayerFiles(MapConfigurator cftor) {
-        List<File> files = new ArrayList<>();
-        for (File file : DirectoryUtils.listFilesRecursively(new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS)))) {
-            if (cftor.supportsLayer(file)) {
-                files.add(file);
+    private List<File> getSupportedLayerFiles(MapConfigurator cftor) {
+        List<File> supportedLayers = new ArrayList<>();
+        for (File layer : referenceLayerRepository.getAll()) {
+            if (cftor.supportsLayer(layer)) {
+                supportedLayers.add(layer);
             }
         }
 
-        return files;
+        return supportedLayers;
     }
+
 }

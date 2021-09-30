@@ -69,6 +69,7 @@ import org.odk.collect.android.preferences.screens.ExperimentalPreferencesFragme
 import org.odk.collect.android.preferences.screens.FormManagementPreferencesFragment;
 import org.odk.collect.android.preferences.screens.FormMetadataPreferencesFragment;
 import org.odk.collect.android.preferences.screens.IdentityPreferencesFragment;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectDisplayPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectManagementPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
@@ -282,6 +283,8 @@ public interface AppDependencyComponent {
     void inject(InstanceUploader instanceUploader);
 
     void inject(FormUriActivity formUriActivity);
+
+    void inject(MapsPreferencesFragment mapsPreferencesFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

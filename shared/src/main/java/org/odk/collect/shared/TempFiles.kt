@@ -20,6 +20,13 @@ object TempFiles {
     }
 
     @JvmStatic
+    fun createTempFile(parent: File): File {
+        val tempFile = File.createTempFile(getRandomString(), ".temp", parent)
+        tempFile.deleteOnExit()
+        return tempFile
+    }
+
+    @JvmStatic
     fun getPathInTempDir(name: String, extension: String): String {
         val tmpDir = System.getProperty("java.io.tmpdir", ".")
         val file = File(tmpDir, name + extension)
@@ -30,13 +37,21 @@ object TempFiles {
     @JvmStatic
     fun getPathInTempDir(): String {
         val tmpDir = System.getProperty("java.io.tmpdir", ".")
-        return File(tmpDir, RandomString.randomString(16)).absolutePath
+        return File(tmpDir, getRandomString()).absolutePath
     }
 
     @JvmStatic
-    fun createTempDir(): File {
-        val dir = File(getPathInTempDir())
+    @JvmOverloads
+    fun createTempDir(parent: File? = null): File {
+        val dir = if (parent != null) {
+            File(parent, getRandomString())
+        } else {
+            File(getPathInTempDir())
+        }
+
         dir.mkdir()
         return dir
     }
+
+    private fun getRandomString() = RandomString.randomString(16)
 }
