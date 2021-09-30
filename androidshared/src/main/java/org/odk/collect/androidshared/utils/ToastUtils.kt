@@ -47,6 +47,7 @@ object ToastUtils {
     }
 
     @JvmStatic
+    @Deprecated("Toast position cannot be customized on API 30 and above. A dialog is shown instead for this API levels.")
     fun showShortToastInMiddle(activity: Activity, message: String) {
         showToastInMiddle(activity, message)
     }
