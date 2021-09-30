@@ -34,10 +34,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
@@ -75,6 +75,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     @Inject
     MapProvider mapProvider;
+
+    @Inject
+    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
+
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
 
@@ -211,7 +215,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
         });
 
         clearButton = findViewById(R.id.clear);

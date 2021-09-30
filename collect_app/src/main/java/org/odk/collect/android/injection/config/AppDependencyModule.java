@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -88,6 +89,7 @@ import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
@@ -125,6 +127,7 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.ProjectsRepository;
@@ -618,5 +621,15 @@ public class AppDependencyModule {
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
         );
+    }
+
+    @Provides
+    public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
+        return new ReferenceLayerSettingsNavigator() {
+            @Override
+            public void navigateToReferenceLayerSettings(@NonNull AppCompatActivity activity) {
+                MapsPreferencesFragment.showReferenceLayerDialog(activity);
+            }
+        };
     }
 }

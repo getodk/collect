@@ -13,7 +13,6 @@
  */
 package org.odk.collect.android.preferences.screens
 
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -192,7 +191,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
 
         /** Pops up the preference dialog that lets the user choose a reference layer.  */
         @JvmStatic
-        fun showReferenceLayerDialog(activity: Activity) {
+        fun showReferenceLayerDialog(activity: AppCompatActivity) {
             // Unfortunately, the Preference class is designed so that it is impossible
             // to just open a preference dialog without building a PreferenceFragment
             // and attaching it to an activity.  So, we instantiate a MapsPreference
@@ -200,7 +199,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
             // attached, then instantiate it and attach it.
             val prefs = MapsPreferencesFragment()
             prefs.autoShowReferenceLayerDialog = true // makes dialog open immediately
-            (activity as AppCompatActivity).supportFragmentManager
+            activity.supportFragmentManager
                 .beginTransaction()
                 .add(prefs, null)
                 .commit()
