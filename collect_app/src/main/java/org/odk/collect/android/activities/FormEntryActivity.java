@@ -1588,7 +1588,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
         }
 
-        ToastUtils.showShortToast(this, constraintText);
+        ToastUtils.showShortToastInMiddle(this, constraintText);
     }
 
     /**
