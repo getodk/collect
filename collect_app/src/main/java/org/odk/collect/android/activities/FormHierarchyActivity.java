@@ -602,13 +602,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                         break;
                     }
                     case FormEntryController.EVENT_REPEAT: {
-                        FormEntryCaption fc = formController.getCaptionPrompt();
-                        boolean isFirst = fc.getMultiplicity() == 0;
                         boolean forPicker = shouldShowRepeatGroupPicker();
-                        boolean isEmpty = !formController.isGroupRelevant();
-                        if (isEmpty &&
-                                // For #4570
-                                (!isFirst || forPicker)) {
+                        // For #4570
+                        if (!formController.isGroupRelevant()
+                                && forPicker // Comment out this line to restore old logic
+                        ) {
                             break;
                         }
 
@@ -618,6 +616,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                         if (contextGroupRef != null && !contextGroupRef.isParentOf(currentRef, false)) {
                             break;
                         }
+
+                        FormEntryCaption fc = formController.getCaptionPrompt();
 
                         if (forPicker) {
                             // Don't render other groups' instances.
@@ -645,7 +645,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                                     repeatLabel, null,
                                     null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
                             elementsToDisplay.add(instance);
-                        } else if (isFirst) {
+                        } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
                                     fc.getShortText(), getString(R.string.repeatable_group_label),
