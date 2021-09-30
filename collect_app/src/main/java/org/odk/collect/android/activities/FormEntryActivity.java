@@ -2702,7 +2702,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             } else {
                 onScreenRefresh();
             }
-            
+
         }
     }
 

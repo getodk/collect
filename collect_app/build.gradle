@@ -67,51 +67,51 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.505"
+            versionName "6.506"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.505-plan"
+            versionName "6.506-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.505-kontrolid"
+            versionName "6.506-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.505-supply"
+            versionName "6.506-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.505-seracis"
+            versionName "6.506-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.505-meqa"
+            versionName "6.506-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.505-atempi"
+            versionName "6.506-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.505-pop"
+            versionName "6.506-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.505-tdh"
+            versionName "6.506-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.505-assignfield"
+            versionName "6.506-assignfield"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.505-informEd"
+            versionName "6.506-informEd"
         }
         stl {
             applicationId "org.smap.smapTask.android.stl"
-            versionName "6.505-stl"
+            versionName "6.506-stl"
         }
         ljs {
             applicationId "org.smap.smapTask.android.ljs"
