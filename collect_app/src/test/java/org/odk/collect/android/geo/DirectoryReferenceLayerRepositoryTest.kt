@@ -1,11 +1,9 @@
 package org.odk.collect.android.geo
 
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.mockito.kotlin.isNull
 import org.odk.collect.shared.TempFiles
 
 class DirectoryReferenceLayerRepositoryTest {
