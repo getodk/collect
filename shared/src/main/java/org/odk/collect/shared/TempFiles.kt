@@ -14,9 +14,10 @@ object TempFiles {
 
     @JvmStatic
     fun createTempFile(parent: File, name: String, extension: String): File {
-        val tempFile = File.createTempFile(name, extension, parent)
-        tempFile.deleteOnExit()
-        return tempFile
+        return File(parent, name + extension).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
     }
 
     @JvmStatic
