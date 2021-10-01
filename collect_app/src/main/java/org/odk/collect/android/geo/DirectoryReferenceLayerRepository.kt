@@ -4,30 +4,37 @@ import org.odk.collect.shared.PathUtils
 import org.odk.collect.shared.files.DirectoryUtils.listFilesRecursively
 import java.io.File
 
-class DirectoryReferenceLayerRepository(private val directoryPath: String) :
+class DirectoryReferenceLayerRepository(private val directoryPaths: List<String>) :
     ReferenceLayerRepository {
 
+    /**
+     * Convenience constructors
+     */
+    constructor(vararg directoryPaths: String) : this(directoryPaths.toList())
+    constructor(directoryPath: String) : this(listOf(directoryPath))
+
     override fun getAll(): List<ReferenceLayer> {
-        return listFilesRecursively(File(directoryPath)).map {
-            ReferenceLayer(
-                getIdForFile(it),
-                it
-            )
+        return getAllFilesWithDirectory().map {
+            ReferenceLayer(getIdForFile(it.second, it.first), it.first)
         }
     }
 
     override fun get(id: String): ReferenceLayer? {
-        val file = listFilesRecursively(File(directoryPath)).firstOrNull {
-            id == getIdForFile(it)
-        }
+        val file = getAllFilesWithDirectory().firstOrNull { getIdForFile(it.second, it.first) == id }
 
         return if (file != null) {
-            ReferenceLayer(getIdForFile(file), file)
+            ReferenceLayer(getIdForFile(file.second, file.first), file.first)
         } else {
             null
         }
     }
 
-    private fun getIdForFile(it: File) =
-        PathUtils.getRelativeFilePath(directoryPath, it.absolutePath)
+    private fun getAllFilesWithDirectory() = directoryPaths.flatMap { dir ->
+        listFilesRecursively(File(dir)).map { file ->
+            Pair(file, dir)
+        }
+    }
+
+    private fun getIdForFile(directoryPath: String, file: File) =
+        PathUtils.getRelativeFilePath(directoryPath, file.absolutePath)
 }
