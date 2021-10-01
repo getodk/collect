@@ -38,11 +38,8 @@ import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.CaptionedListPreference.Item;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.shared.PathUtils;
 
 import java.io.File;
 import java.util.ArrayList;
