@@ -31,6 +31,7 @@ import androidx.preference.PreferenceCategory;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapConfigurator;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.ReferenceLayer;
 import org.odk.collect.android.geo.ReferenceLayerRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.CaptionedListPreference;
@@ -179,10 +180,7 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
             return false;
         });
 
-        String layersPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS);
-
-        if (referenceLayerPref.getValue() == null
-                || new File(PathUtils.getAbsoluteFilePath(layersPath, referenceLayerPref.getValue())).exists()) {
+        if (referenceLayerPref.getValue() == null || referenceLayerRepository.get(referenceLayerPref.getValue()) != null) {
             updateReferenceLayerSummary(referenceLayerPref.getValue());
         } else {
             referenceLayerPref.setValue(null);
@@ -206,7 +204,7 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
                 summary = getString(R.string.none);
             } else {
                 MapConfigurator cftor = MapProvider.getConfigurator();
-                String path = PathUtils.getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), value.toString());
+                String path = referenceLayerRepository.get(value.toString()).getFile().getAbsolutePath();
                 summary = cftor.getDisplayName(new File(path));
             }
             referenceLayerPref.setSummary(summary);
@@ -217,14 +215,12 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
     /** Sets up the contents of the reference layer selection dialog. */
     private void populateReferenceLayerPref() {
         MapConfigurator cftor = MapProvider.getConfigurator();
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
-
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, getString(R.string.none), ""));
-        for (File file : getSupportedLayerFiles(cftor)) {
-            String path = FileUtils.expandAndroidStoragePath(file.getPath());
-            String value = PathUtils.getRelativeFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), file.getAbsolutePath());
-            String name = cftor.getDisplayName(new File(file.getAbsolutePath()));
+        for (ReferenceLayer layer : getSupportedLayerFiles(cftor)) {
+            String path = FileUtils.expandAndroidStoragePath(layer.getFile().getPath());
+            String value = layer.getId();
+            String name = cftor.getDisplayName(new File(layer.getFile().getAbsolutePath()));
             items.add(new Item(value, name, path));
         }
 
@@ -257,15 +253,14 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
     }
 
     /** Gets the list of layer data files supported by the current MapConfigurator. */
-    private List<File> getSupportedLayerFiles(MapConfigurator cftor) {
-        List<File> supportedLayers = new ArrayList<>();
-        for (File layer : referenceLayerRepository.getAll()) {
-            if (cftor.supportsLayer(layer)) {
+    private List<ReferenceLayer> getSupportedLayerFiles(MapConfigurator cftor) {
+        List<ReferenceLayer> supportedLayers = new ArrayList<>();
+        for (ReferenceLayer layer : referenceLayerRepository.getAll()) {
+            if (cftor.supportsLayer(layer.getFile())) {
                 supportedLayers.add(layer);
             }
         }
 
         return supportedLayers;
     }
-
 }
