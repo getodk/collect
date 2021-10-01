@@ -51,7 +51,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.ReferenceLayerUtils;
+import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.MapPoint;
@@ -186,7 +186,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
         if (map != null) {
             map.setMapType(mapType);
             loadReferenceOverlay();

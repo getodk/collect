@@ -12,7 +12,7 @@ import org.odk.collect.shared.TempFiles.createTempDir
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class ReferenceLayerUtilsTest {
+class MapFragmentReferenceLayerUtilsTest {
 
     @Test
     fun getReferenceLayerFile_whenPathIsNull_should_getReferenceLayerFileReturnNull() {
@@ -20,7 +20,7 @@ class ReferenceLayerUtilsTest {
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, null)
         assertNull(
-            ReferenceLayerUtils.getReferenceLayerFile(
+            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
                 DirectoryReferenceLayerRepository(layersPath)
             )
@@ -33,7 +33,7 @@ class ReferenceLayerUtilsTest {
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
         assertNull(
-            ReferenceLayerUtils.getReferenceLayerFile(
+            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
                 DirectoryReferenceLayerRepository(layersPath)
             )
@@ -48,7 +48,7 @@ class ReferenceLayerUtilsTest {
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
 
         assertNotNull(
-            ReferenceLayerUtils.getReferenceLayerFile(
+            MapFragmentReferenceLayerUtils.getReferenceLayerFile(
                 config,
                 DirectoryReferenceLayerRepository(layersPath)
             )

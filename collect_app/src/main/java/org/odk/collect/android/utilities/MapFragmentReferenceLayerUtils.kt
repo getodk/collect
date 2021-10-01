@@ -5,7 +5,7 @@ import org.odk.collect.android.geo.MapFragment
 import org.odk.collect.android.geo.ReferenceLayerRepository
 import java.io.File
 
-object ReferenceLayerUtils {
+object MapFragmentReferenceLayerUtils {
 
     @JvmStatic
     fun getReferenceLayerFile(
