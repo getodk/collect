@@ -6,6 +6,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.geo.DirectoryReferenceLayerRepository
 import org.odk.collect.android.geo.MapFragment
 import org.odk.collect.shared.TempFiles.createTempDir
 import java.io.File
@@ -18,7 +19,12 @@ class ReferenceLayerUtilsTest {
         val layersPath = createTempDir().absolutePath
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, null)
-        assertNull(ReferenceLayerUtils.getReferenceLayerFile(config, layersPath))
+        assertNull(
+            ReferenceLayerUtils.getReferenceLayerFile(
+                config,
+                DirectoryReferenceLayerRepository(layersPath)
+            )
+        )
     }
 
     @Test
@@ -26,7 +32,12 @@ class ReferenceLayerUtilsTest {
         val layersPath = createTempDir().absolutePath
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
-        assertNull(ReferenceLayerUtils.getReferenceLayerFile(config, layersPath))
+        assertNull(
+            ReferenceLayerUtils.getReferenceLayerFile(
+                config,
+                DirectoryReferenceLayerRepository(layersPath)
+            )
+        )
     }
 
     @Test
@@ -35,6 +46,12 @@ class ReferenceLayerUtilsTest {
         FileUtils.write(File(layersPath, "blah"), byteArrayOf())
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
-        assertNotNull(ReferenceLayerUtils.getReferenceLayerFile(config, layersPath))
+
+        assertNotNull(
+            ReferenceLayerUtils.getReferenceLayerFile(
+                config,
+                DirectoryReferenceLayerRepository(layersPath)
+            )
+        )
     }
 }

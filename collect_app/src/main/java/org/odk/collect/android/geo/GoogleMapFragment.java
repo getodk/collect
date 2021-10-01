@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.geo;
 
-import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -52,7 +50,6 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.ReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -86,7 +83,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     MapProvider mapProvider;
 
     @Inject
-    StoragePathProvider storagePathProvider;
+    ReferenceLayerRepository referenceLayerRepository;
 
     private GoogleMap map;
     private Marker locationCrosshairs;
@@ -189,7 +186,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void applyConfig(Bundle config) {
         mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, storagePathProvider.getOdkDirPath(LAYERS));
+        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
         if (map != null) {
             map.setMapType(mapType);
             loadReferenceOverlay();

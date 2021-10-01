@@ -1,18 +1,21 @@
 package org.odk.collect.android.utilities
 
 import android.os.Bundle
-import org.odk.collect.android.geo.DirectoryReferenceLayerRepository
 import org.odk.collect.android.geo.MapFragment
+import org.odk.collect.android.geo.ReferenceLayerRepository
 import java.io.File
 
 object ReferenceLayerUtils {
 
     @JvmStatic
-    fun getReferenceLayerFile(config: Bundle, layersPath: String?): File? {
+    fun getReferenceLayerFile(
+        config: Bundle,
+        layerRepository: ReferenceLayerRepository
+    ): File? {
         val filePath = config.getString(MapFragment.KEY_REFERENCE_LAYER)
         return if (filePath != null) {
-            val referenceLayer = DirectoryReferenceLayerRepository(layersPath!!).get(filePath)
-            return referenceLayer?.file
+            val referenceLayer = layerRepository.get(filePath)
+            referenceLayer?.file
         } else {
             null
         }
