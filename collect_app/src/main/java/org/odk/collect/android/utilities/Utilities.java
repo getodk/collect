@@ -32,7 +32,7 @@ import com.google.gson.GsonBuilder;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.InstancesDao;
-import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.database.TaskResponseAssignment;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -582,7 +582,7 @@ public class Utilities {
      * This can be used to remove tasks that have been removed from the server
      * (Do not reject repeating tasks?????? is this comment valid)
      */
-    public static int rejectObsoleteTasks(List<TaskAssignment> assignmentsToKeep) {
+    public static int rejectObsoleteTasks(List<TaskResponseAssignment> assignmentsToKeep) {
 
         Uri dbUri = InstanceColumns.CONTENT_URI;
         int nIds = 0;
@@ -729,7 +729,7 @@ public class Utilities {
     /*
      * Update parameters for the provided assignment id
      */
-    public static void updateParametersForAssignment(long assId, TaskAssignment ta) {
+    public static void updateParametersForAssignment(long assId, TaskResponseAssignment ta) {
 
         Uri dbUri = InstanceColumns.CONTENT_URI;
 

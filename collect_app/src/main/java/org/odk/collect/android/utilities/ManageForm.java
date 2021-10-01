@@ -18,18 +18,14 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.database.TaskResponseAssignment;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
-import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.STFileUtils;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -288,7 +284,7 @@ public class ManageForm {
 	 *   			Not stored
 	 *    
 	 */
-    public ManageFormResponse insertInstance(TaskAssignment ta, long assignmentId, String source, String serverUrl, int version) {
+    public ManageFormResponse insertInstance(TaskResponseAssignment ta, long assignmentId, String source, String serverUrl, int version) {
 
         int formVersion = ta.task.form_version;
         String initialDataURL = ta.task.initial_data;
@@ -343,8 +339,8 @@ public class ManageForm {
          return mfResponse;
     }
     
-    private Uri writeInstanceDatabase(String jrformid, String jrVersion, String formName, 
-			String submissionUri, String instancePath, TaskAssignment ta, String formPath) throws Throwable {
+    private Uri writeInstanceDatabase(String jrformid, String jrVersion, String formName,
+                                      String submissionUri, String instancePath, TaskResponseAssignment ta, String formPath) throws Throwable {
     
     	ContentValues values = new ContentValues();
 	 

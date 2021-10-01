@@ -16,7 +16,7 @@ package org.odk.collect.android.taskModel;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.database.TaskResponseAssignment;
 import org.odk.collect.android.loaders.PointEntry;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class TaskResponse {
 	public String deviceId;
     public long time_difference;                           // Difference in time in milliseconds between the server and the phone
 	@SerializedName("data")
-	public List<TaskAssignment> taskAssignments;
+	public List<TaskResponseAssignment> taskAssignments;
 	public List<FormLocator> forms;
     public FieldTaskSettings settings;
     public List<TaskCompletionInfo> taskCompletionInfo;
