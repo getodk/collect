@@ -1,12 +1,10 @@
 package org.odk.collect.android.geo
 
-import org.apache.commons.io.FileUtils
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.odk.collect.shared.TempFiles
-import java.io.File
 
 class DirectoryReferenceLayerRepositoryTest {
 

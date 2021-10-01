@@ -85,4 +85,11 @@ public class StoragePathProviderTest {
         assertThat(path, is(root.getAbsolutePath() + "/projects/123/settings"));
         assertThat(new File(path).exists(), is(true));
     }
+
+    @Test
+    public void getOdkDirPath_withSharedLayers_returnsAndCreatesSharedLayersDir() {
+        String path = storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS);
+        assertThat(path, is(root.getAbsolutePath() + "/layers"));
+        assertThat(new File(path).exists(), is(true));
+    }
 }

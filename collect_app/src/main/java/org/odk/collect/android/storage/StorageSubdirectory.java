@@ -7,7 +7,8 @@ public enum StorageSubdirectory {
     METADATA("metadata"),
     LAYERS("layers"),
     SETTINGS("settings"),
-    PROJECTS("projects");
+    PROJECTS("projects"),
+    SHARED_LAYERS("layers");
 
     private final String directoryName;
 

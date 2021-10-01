@@ -614,6 +614,9 @@ public class AppDependencyModule {
 
     @Provides
     public ReferenceLayerRepository providesReferenceLayerRepository(StoragePathProvider storagePathProvider) {
-        return new DirectoryReferenceLayerRepository(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
+        return new DirectoryReferenceLayerRepository(
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
+                storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
+        );
     }
 }
