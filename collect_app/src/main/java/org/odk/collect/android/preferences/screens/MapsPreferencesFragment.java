@@ -222,7 +222,7 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, getString(R.string.none), ""));
         for (File file : getSupportedLayerFiles(cftor)) {
-            String path = FileUtils.simplifyScopedStoragePath(file.getPath());
+            String path = FileUtils.expandAndroidStoragePath(file.getPath());
             String value = PathUtils.getRelativeFilePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS), file.getAbsolutePath());
             String name = cftor.getDisplayName(new File(file.getAbsolutePath()));
             items.add(new Item(value, name, path));

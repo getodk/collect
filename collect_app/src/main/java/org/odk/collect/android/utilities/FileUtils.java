@@ -535,7 +535,7 @@ public final class FileUtils {
     }
 
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    public static String simplifyScopedStoragePath(String path) {
+    public static String expandAndroidStoragePath(String path) {
         if (path != null && path.startsWith("/storage/emulated/0/")) {
             return "/sdcard/" + path.substring("/storage/emulated/0/".length());
         }
