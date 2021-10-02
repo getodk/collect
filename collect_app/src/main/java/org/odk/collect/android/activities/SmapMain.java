@@ -53,6 +53,7 @@ import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
+import org.odk.collect.android.database.Location;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
@@ -73,6 +74,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.services.LocationService;
 import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
 import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
+import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageStateProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -244,25 +246,31 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         // Start the location service
         currentActivity = this;
-        permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
-            @Override public void granted() {
+        LocationRegister lr = new LocationRegister();
+        if(lr.locationEnabled()) {
+            permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
+                @Override
+                public void granted() {
 
-                permissionsProvider.requestBackgroundLocationPermissions(currentActivity, new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        startLocationService();
-                    }
+                    permissionsProvider.requestBackgroundLocationPermissions(currentActivity, new PermissionListener() {
+                        @Override
+                        public void granted() {
+                            startLocationService();
+                        }
 
-                    @Override
-                    public void denied() {
-                        startLocationService();     // Start the service anyway it will only work when the app is in the foreground
-                    }
-                });
+                        @Override
+                        public void denied() {
+                            startLocationService();     // Start the service anyway it will only work when the app is in the foreground
+                        }
+                    });
 
-            }
+                }
 
-            @Override public void denied() { }
-        });
+                @Override
+                public void denied() {
+                }
+            });
+        }
 
 
         LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, null, settingsImporter);

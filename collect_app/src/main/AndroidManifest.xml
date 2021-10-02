@@ -39,8 +39,6 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- smap - add foreground service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <!-- smap add background location -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
