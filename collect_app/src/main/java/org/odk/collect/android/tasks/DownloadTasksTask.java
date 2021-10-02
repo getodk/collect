@@ -61,6 +61,7 @@ import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
 import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
 import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 import org.odk.collect.android.smap.tasks.DownloadFormsTaskSmap;
+import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLocator;
@@ -849,15 +850,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             /*
              * Override the user trail setting if this is set from the server
              */
-            if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-            } else if(tr.settings.ft_send_location.equals("on")) {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, true);
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-            } else {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
-            }
+            LocationRegister lr = new LocationRegister();
+            lr.set(editor, tr.settings.ft_send_location);
 
             /*
              * Override the autosend setting if this is set from the server

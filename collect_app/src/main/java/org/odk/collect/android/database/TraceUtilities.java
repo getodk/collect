@@ -99,7 +99,7 @@ public class TraceUtilities {
                 id = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID));
 
                 if(!logged) {  // Hack to prevent the time being optimised away so it is not present in the class. Keep this!
-                    Timber.i("First Entry %f, %f, %l", entry.lat, entry.lon, entry.time);
+                    Timber.i("First Entry %f, %f, %d", entry.lat, entry.lon, entry.time);
                     logged = true;
                 }
                 entries.add(entry);
