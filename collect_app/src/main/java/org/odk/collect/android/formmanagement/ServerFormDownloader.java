@@ -415,7 +415,7 @@ public class ServerFormDownloader implements FormDownloader {
 
     @NotNull
     private static String getFormFileName(String formName, String formsDirPath) {
-        String formattedFormName = FormNameUtils.formatFilenameFromFormName(formName);
+        String formattedFormName = FormNameUtils.formatFilenameFromFormName("project", formName);   // smap add dummy project
         String fileName = formattedFormName + ".xml";
         int i = 2;
         while (new File(formsDirPath + File.separator + fileName).exists()) {

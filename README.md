@@ -7,6 +7,7 @@ Field Task is an Android app that can be used for collecting data for Monitoring
 * [Dependencies](#dependencies)
 * [Setting up your development environment](#setting-up-your-development-environment)
 * [Branches](#branches)
+* [Variants](#variants)
 * [Incorporating the latest upstream changes](#incorporating-the-latest-upstream-changes)
 * [Changes in the Field Task fork](#changes-in-the-field-task-fork)
 * [Acknowledgements](#acknowledgements)
@@ -19,6 +20,8 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 1. Download and install [Git](https://git-scm.com/downloads) if you don't have it already
 
 1. Download and install [Android Studio](https://developer.android.com/studio/index.html) if you don't have it already
+
+1. In Android Studio install the target SDK
 
 1. [Add Smap JavaRosa as a project in Android Studio](https://github.com/smap-consulting/javarosa)
 
@@ -70,6 +73,9 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 ## Branches
 * production - The latest Field Task code
 * master - The latest unmodifield code from the upstream repository
+
+## Variants
+The variant in the github repository that you will want to start with is "standard".  This contains some resources and Java code to handle customisable processing around location change.  Background location recording can be enabled on FieldTask and by default this is used only for geo fencing and the location data is not stored.   The register function in the LocationRegister file can be modified to do additional processing of location changes if you need that. 
 
 ## Incorporating the latest upstream changes
 

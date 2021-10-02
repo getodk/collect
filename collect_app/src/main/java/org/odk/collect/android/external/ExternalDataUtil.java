@@ -214,6 +214,7 @@ public final class ExternalDataUtil {
 
                     FormInstance formInstance =
                             Collect.getInstance().getFormController().getFormDef().getInstance();
+
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
@@ -449,7 +450,7 @@ public final class ExternalDataUtil {
                     } else if (o.getClass() == Date.class) {
                         Date d = (Date) o;
                         SimpleDateFormat sdf;
-                        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+                        sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
                         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));   // Dates on server will be in UTC
                         s = "'" + sdf.format(d) + "'::timestamptz";
                     } else {

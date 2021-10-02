@@ -23,7 +23,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.net.URI;
 import com.google.gson.Gson;
@@ -38,9 +37,8 @@ import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
 import org.odk.collect.android.dao.SmapReferencesDao;
-import org.odk.collect.android.database.Assignment;
-import org.odk.collect.android.database.SmapReferenceDatabaseHelper;
-import org.odk.collect.android.database.TaskAssignment;
+import org.odk.collect.android.database.TrAssignment;
+import org.odk.collect.android.database.TaskResponseAssignment;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
@@ -63,6 +61,7 @@ import org.odk.collect.android.smap.formmanagement.MultiFormDownloaderSmap;
 import org.odk.collect.android.smap.formmanagement.ServerFormDetailsSmap;
 import org.odk.collect.android.smap.listeners.DownloadFormsTaskListenerSmap;
 import org.odk.collect.android.smap.tasks.DownloadFormsTaskSmap;
+import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLocator;
@@ -89,8 +88,6 @@ import javax.inject.Inject;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
-
-import static org.odk.collect.utilities.PathUtils.getAbsoluteFilePath;
 
 
 /**
@@ -160,13 +157,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             sdfNew.setTimeZone(TimeZone.getTimeZone("UTC"));
             Date date = null;
             try {
-                Timber.i("Date string primitive: " + json.getAsJsonPrimitive().getAsString());
+                Timber.i("Date string primitive: %s", json.getAsJsonPrimitive().getAsString());
                 try {
                     date = sdfNew.parse(json.getAsJsonPrimitive().getAsString());
                 } catch (Exception e) {
                     date = sdfOld.parse(json.getAsJsonPrimitive().getAsString());
                 }
-                Timber.i("Parsed date: " + date.getTime());
+                Timber.i("Parsed date: %s", date.getTime());
                 return date;
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -347,7 +344,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     throw new Exception(resp);
                 }
                 tr = gson.fromJson(resp, TaskResponse.class);
-                Timber.i("Message:" + tr.message);
+                Timber.i("Message:%s", tr.message);
 
                 // Report time difference
                 if(Math.abs(tr.time_difference) > 60000 ) {
@@ -390,7 +387,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             	 */
 		        updateTaskStatusToServer();
 
-                if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
+                if(isCancelled()) { throw new CancelException("cancelled"); }		// Return if the user cancels
 
 
             	/*
@@ -508,19 +505,21 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         /*
          * Set updates to task status
          */
-        updateResponse.taskAssignments = new ArrayList<TaskAssignment> ();          // Updates to task status
+        updateResponse.taskAssignments = new ArrayList<TaskResponseAssignment> ();          // Updates to task status
 
         for(TaskEntry t : nonSynchTasks) {
   	  		if(t.taskStatus != null && t.isSynced.equals(Utilities.STATUS_SYNC_NO)) {
-  	  			TaskAssignment ta = new TaskAssignment();
-  	  			ta.assignment = new Assignment();
+  	  			TaskResponseAssignment ta = new TaskResponseAssignment();
+  	  			ta.assignment = new TrAssignment();
   	  			ta.assignment.assignment_id = (int) t.assId;
-  	  			ta.assignment.dbId = (int) t.id;
+  	  			ta.assignment.dbId = t.id;
   	  			ta.assignment.assignment_status = t.taskStatus;
                 ta.assignment.task_comment = t.taskComment;
                 ta.assignment.uuid = t.uuid;
 
 	            updateResponse.taskAssignments.add(ta);
+
+	            Timber.i("################## Task Comment: %s", t.taskComment);
   	  		}
         }
 
@@ -574,8 +573,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
 
-            for (TaskAssignment ta : updateResponse.taskAssignments) {
-                Utilities.setTaskSynchronized((long) ta.assignment.dbId);        // Mark the task status as synchronised
+            for (TaskResponseAssignment ta : updateResponse.taskAssignments) {
+                Utilities.setTaskSynchronized(ta.assignment.dbId);        // Mark the task status as synchronised
             }
             TraceUtilities.deleteSource(lastTraceIdSent);
         }
@@ -590,24 +589,24 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     	if(tr.taskAssignments != null) {
             int count = 1;
-        	for(TaskAssignment ta : tr.taskAssignments) {
+        	for(TaskResponseAssignment ta : tr.taskAssignments) {
 
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
-                Assignment assignment = ta.assignment;
+                TrAssignment assignment = ta.assignment;
 
-                Timber.i("Task: " + assignment.assignment_id + " Status:" +
-                        assignment.assignment_status + " Mode:" + ta.task.assignment_mode +
+                Timber.i("Task: " + assignment.assignment_id +
+                        " Status:" + assignment.assignment_status +
+                        " Comment:" + assignment.task_comment +             // Keep this to prevent attributes that are used by GSON from being optimised away
                         " Address: " + ta.task.address +
                         " NFC: " + ta.task.location_trigger +
-                        " Form: " + ta.task.form_id + " version: " + ta.task.form_version +
-                        "Assignee: " + assignment.assignee);
+                        " Form: " + ta.task.form_id + " version: " + ta.task.form_version);
 
 
                 // Find out if this task is already on the phone
                 TaskStatus ts = taskMap.get(Long.valueOf((long) assignment.assignment_id));
                 if(ts == null) {
-                    Timber.i("New task: " + assignment.assignment_id);
+                    Timber.i("New task: %s", assignment.assignment_id);
                     // New task
                     if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED) ||
                             assignment.assignment_status.equals(Utilities.STATUS_T_NEW)) {
@@ -630,7 +629,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                                 }
                             }
                         }
-                        Timber.i("Instance url: " + ta.task.initial_data);
+                        Timber.i("Instance url: %s", ta.task.initial_data);
 
                         // Add instance data
                         ManageForm mf = new ManageForm();
@@ -767,7 +766,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             // 1. Get the list of shared files
             File[] sharedFiles = orgMediaDir.listFiles();
             for(File sf : sharedFiles) {
-                Timber.i( "Shared File: " + sf.getAbsolutePath());
+                Timber.i( "Shared File: %s", sf.getAbsolutePath());
             }
 
             // 2. Get the files used by this organisation
@@ -791,11 +790,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                             if (idx >= 0) {
                                 String mPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + f.substring(0, idx) + "-media";
                                 File mDir = new File(mPath);
-                                Timber.i("Media Dir is: " + mPath);
+                                Timber.i("Media Dir is: %s", mPath);
                                 if (mDir.exists() && mDir.isDirectory()) {
                                     File[] mFiles = mDir.listFiles();
                                     for (File mf : mFiles) {
-                                        Timber.i("Adding reference file: " + mf.getName());
+                                        Timber.i("Adding reference file: %s", mf.getName());
                                         referencedFiles.put(mf.getName(), mf.getName());
                                     }
                                 }
@@ -812,10 +811,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 // 3. Remove shared files that are not referenced
                 for(File sf : sharedFiles) {
                     if(referencedFiles.get(sf.getName()) == null) {
-                        Timber.i("Deleting shared file: " + sf.getName());
+                        Timber.i("Deleting shared file: %s", sf.getName());
                         sf.delete();
                     } else {
-                        Timber.i("Retaining shared file: " + sf.getName());
+                        Timber.i("Retaining shared file: %s", sf.getName());
                     }
                 }
             }
@@ -851,15 +850,8 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             /*
              * Override the user trail setting if this is set from the server
              */
-            if(tr.settings.ft_send_location == null || tr.settings.ft_send_location.equals("off")) {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-            } else if(tr.settings.ft_send_location.equals("on")) {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, true);
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
-            } else {
-                editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, false);
-            }
+            LocationRegister lr = new LocationRegister();
+            lr.set(editor, tr.settings.ft_send_location);
 
             /*
              * Override the autosend setting if this is set from the server

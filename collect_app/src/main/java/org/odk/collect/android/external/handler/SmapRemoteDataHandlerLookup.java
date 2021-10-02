@@ -96,6 +96,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         String dataSetName = XPathFuncExpr.toString(args[0]);
         String queriedColumn = XPathFuncExpr.toString(args[1]);
 
+        boolean hasParam = false;
         String filter = null;
         String referenceColumn = null;
         String referenceValue = null;
@@ -110,7 +111,7 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             referenceColumn = XPathFuncExpr.toString(args[2]);
             referenceValue = XPathFuncExpr.toString(args[3]);
         } else if(args.length == 5) {
-            filter = XPathFuncExpr.toString(args[2]);
+            filter = ExternalDataUtil.evaluateExpressionNodes(XPathFuncExpr.toString(args[2]), ec);
             fn = XPathFuncExpr.toString(args[3]).toLowerCase();
         } else if(args.length == 6) {
             referenceColumn = XPathFuncExpr.toString(args[2]);
@@ -148,46 +149,44 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
                     index = Integer.valueOf(fn);
                     if(index > 0) {
                         fn = ExternalDataHandlerPull.FN_INDEX;
-                    } else if(index < 0) {
-                        fn = ExternalDataHandlerPull.FN_COUNT;
-                    } else {
-                        fn = ExternalDataHandlerPull.FN_LIST;
                     }
                 } catch (Exception e) {
 
                 }
+
+
             } catch (Exception e) {
                 fn = ExternalDataHandlerPull.FN_LIST;        // default
             }
 
         }
 
-        if(args.length == 3 || args.length == 5 || referenceValue.length() > 0) {
+        // Get the url which doubles as the cache key - url encode it by converting to a URI
+        String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
+        if(args.length == 3 || args.length == 5) {
+            url += (hasParam ? "&" : "?") + "expression=" + filter;
+            hasParam = true;
+        }
 
-            // Get the url which doubles as the cache key - url encode it by converting to a URI
-            String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
-            if(args.length == 3 || args.length == 5) {
-                try {
-                    url +="?expression=" + URLEncoder.encode(filter, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-            if(args.length == 6 || args.length == 5) {
-                url += "?index=" + index;
-                url += "&searchType=" + searchType;
-                url += "&fn=" + fn;
-            }
-            try {
-                URL u = new URL(url);
-                URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
-                u = uri.toURL();
-                url = u.toString();
-            } catch (Exception e) {}
+        if(args.length == 6 || args.length == 5) {
+            url += (hasParam ? "&" : "?") + "index=" + (index > 0 ? index : fn);
+            url += "&searchType=" + searchType;
+            hasParam = true;
+        }
+        try {
+            URL u = new URL(url);
+            URI uri = new URI(u.getProtocol(), u.getUserInfo(), u.getHost(), u.getPort(), u.getPath(), u.getQuery(), u.getRef());
+            u = uri.toURL();
+            url = u.toString();
+        } catch (Exception e) {}
 
-            // Get the cache results if they exist
-            String data = app.getRemoteData(url);
-            HashMap<String, String> record = null;
+        // The first # in an expression will not have been encoded
+        url = url.replace("#", "%23");
+
+        // Get the cache results if they exist
+        String data = app.getRemoteData(url);
+        HashMap<String, String> record = null;
+        if(data != null) {
             try {
                 record =
                         new Gson().fromJson(data, new TypeToken<HashMap<String, String>>() {
@@ -195,25 +194,21 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
             } catch (Exception e) {
                 return data;            // Assume the data contains the error message
             }
-            Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
-            if (record == null) {
-                // Call a webservice to get the remote record
-                app.startRemoteCall(url);
-                SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
-                task.setSmapRemoteListener(app.getFormEntryActivity());
-                task.execute(url, "0", "false", null, null, "true");
-                return "";
-            } else {
-                if(index == -1) {
-                    return ExternalDataUtil.nullSafe(record.get("_count"));
-                } else {
-                    return ExternalDataUtil.nullSafe(record.get(queriedColumn));
-                }
-            }
-        } else {
-            // No data to lookup
-            return "";
         }
-
+        Timber.i("@@@@@@@@@@@@@@@@: " + url + " : " + data);
+        if (record == null) {
+            // Call a webservice to get the remote record
+            app.startRemoteCall();
+            SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
+            task.setSmapRemoteListener(app.getFormEntryActivity());
+            task.execute(url, "0", "false", null, null, "true");
+            return "";
+        } else {
+            if(index == -1 || (fn != null && fn.equals(ExternalDataHandlerPull.FN_COUNT))) {
+                return ExternalDataUtil.nullSafe(record.get("_count"));
+            } else {
+                return ExternalDataUtil.nullSafe(record.get(queriedColumn));
+            }
+        }
     }
 }

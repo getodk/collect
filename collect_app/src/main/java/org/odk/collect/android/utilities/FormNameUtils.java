@@ -39,7 +39,7 @@ public class FormNameUtils {
     }
 
     // Create a sanitized filename prefix from the given form name. No extension is added.
-    public static String formatFilenameFromFormName(String formName) {
+    public static String formatFilenameFromFormName(String project, String formName) {
         if (formName == null) {
             return null;
         }
@@ -47,6 +47,16 @@ public class FormNameUtils {
         String fileName = formName.replaceAll("[^\\p{L}\\p{Digit}]", " ");
         // Replace consecutive whitespace characters with single space
         fileName = fileName.replaceAll("\\p{javaWhitespace}+", " ");
-        return fileName.trim();
+
+        // start smap
+        if(project == null) {
+            project = "";
+        }
+        project = project.replaceAll("[^\\p{L}\\p{Digit}]", " ");
+        project = project.replaceAll("\\p{javaWhitespace}+", " ");
+
+        String source = Utilities.getSource();
+        // smap
+        return source + "-" + project + "-" + fileName.trim();   // include source and project
     }
 }

@@ -29,8 +29,9 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.utilities.STFileUtils;
 import org.odk.collect.android.utilities.Utilities;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class TraceUtilities {
 
@@ -43,7 +44,7 @@ public class TraceUtilities {
         ContentValues values = new ContentValues();
         values.put(TraceColumns.LAT, location.getLatitude());
         values.put(TraceColumns.LON, location.getLongitude());
-        values.put(TraceColumns.TIME, Long.valueOf(System.currentTimeMillis()));
+        values.put(TraceColumns.TIME, System.currentTimeMillis());
 
         values.put(TraceColumns.SOURCE, getSource());
 
@@ -86,6 +87,7 @@ public class TraceUtilities {
         if(pointListCursor != null) {
 
             pointListCursor.moveToFirst();
+            boolean logged = false;
             while (!pointListCursor.isAfterLast()) {
 
                 org.odk.collect.android.loaders.PointEntry entry = new PointEntry();
@@ -96,6 +98,10 @@ public class TraceUtilities {
 
                 id = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID));
 
+                if(!logged) {  // Hack to prevent the time being optimised away so it is not present in the class. Keep this!
+                    Timber.i("First Entry %f, %f, %d", entry.lat, entry.lon, entry.time);
+                    logged = true;
+                }
                 entries.add(entry);
                 pointListCursor.moveToNext();
             }
@@ -123,7 +129,7 @@ public class TraceUtilities {
         String selectClauseAll = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.SOURCE + " = ?";
         String selectClauseLimit = org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.SOURCE + " = ? and "
                 + org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID + " <= ?";
-        String selectClause = null;
+        String selectClause;
 
         if(lastId > 0) {
             selectClause = selectClauseLimit;
@@ -137,7 +143,7 @@ public class TraceUtilities {
 
         boolean status;
         try {
-            int count = Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+            Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
             status = true;
         } catch (Exception e) {
             status = false;

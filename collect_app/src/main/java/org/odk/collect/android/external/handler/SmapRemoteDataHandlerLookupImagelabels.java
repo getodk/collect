@@ -99,7 +99,7 @@ public class SmapRemoteDataHandlerLookupImagelabels implements IFunctionHandler 
 
             if (data == null) {
                 // Call a webservice to get the remote record
-                app.startRemoteCall(url);
+                app.startRemoteCall();
                 SmapRemoteWebServicePostTask task = new SmapRemoteWebServicePostTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(url, imageName, timeoutValue);

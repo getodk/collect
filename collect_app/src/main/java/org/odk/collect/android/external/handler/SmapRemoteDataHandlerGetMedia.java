@@ -91,7 +91,7 @@ public class SmapRemoteDataHandlerGetMedia implements IFunctionHandler {
 
             // Get the file if it does not exist and there is nothing in the cache indicating that an attempt has already been made to get it
             if(!f.exists() && app.getRemoteData(url) == null) {
-                app.startRemoteCall(url);
+                app.startRemoteCall();
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(url, timeoutValue, "false", f.getAbsolutePath(), mediaName, "false");

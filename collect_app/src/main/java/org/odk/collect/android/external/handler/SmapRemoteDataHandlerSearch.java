@@ -24,15 +24,10 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.condition.IFunctionHandler;
-import org.javarosa.core.model.instance.FormInstance;
-import org.javarosa.model.xform.XPathReference;
-import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -42,12 +37,9 @@ import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.tasks.SmapRemoteWebServiceTask;
 import org.odk.collect.android.utilities.ToastUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.net.URLEncoder;
-import java.util.TimeZone;
 
 import timber.log.Timber;
 
@@ -205,7 +197,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
                 }
             }
 
-            Timber.i("++++ Remote Search: " + url.toString());
+            Timber.i("++++ Remote Search: %s", url.toString());
             // Get the cache results if they exist
             String urlString = url.toString();
             String data = app.getRemoteData(urlString);
@@ -229,7 +221,7 @@ public class SmapRemoteDataHandlerSearch implements IFunctionHandler {
             } else {
                 // Call a webservice to get the remote record
                 Timber.i("++++ Make the call");
-                app.startRemoteCall(urlString);
+                app.startRemoteCall();
                 SmapRemoteWebServiceTask task = new SmapRemoteWebServiceTask();
                 task.setSmapRemoteListener(app.getFormEntryActivity());
                 task.execute(urlString, timeoutValue, "true", null, null, "true");
