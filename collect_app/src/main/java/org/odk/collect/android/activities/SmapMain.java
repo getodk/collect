@@ -293,21 +293,22 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_nav);
         stateChanged();
-
     }
+
     /*
      * Start a foreground service
      */
     public void startLocationService() {
 
-                mLocationService = new LocationService();
-                mLocationServiceIntent = new Intent(Collect.getInstance().getApplicationContext(), mLocationService.getClass());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(mLocationServiceIntent);
-                } else {
-                    startService(mLocationServiceIntent);
-                }
+        mLocationService = new LocationService();
+        mLocationServiceIntent = new Intent(Collect.getInstance().getApplicationContext(), mLocationService.getClass());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(mLocationServiceIntent);
+        } else {
+            startService(mLocationServiceIntent);
         }
+    }
+
     /*
      * Do all the actions required on create or rotate
      */
@@ -1020,11 +1021,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             displayBannerWithSuccessStorageMigrationResult();
         } else {
             DialogUtils.dismissDialog(StorageMigrationDialog.class, getSupportFragmentManager());
-            //StorageMigrationDialog dialog = showStorageMigrationDialog();
-
-            //if (dialog != null) {
-            //    dialog.handleMigrationError(result);
-            //}
         }
     }
 
@@ -1038,20 +1034,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     }
 
     private void setUpStorageMigrationBanner() {
-        //storageStateProvider.disableUsingScopedStorage();       // debug
-        if (!storageStateProvider.isScopedStorageUsed()) {
-            //displayStorageMigrationBanner();
-        }
-    }
 
-    private void displayStorageMigrationBanner() {
-        storageMigrationBanner.setVisibility(View.VISIBLE);
-        storageMigrationBanner.setText(getText(R.string.scoped_storage_banner_text));
-        storageMigrationBanner.setActionText(getString(R.string.scoped_storage_learn_more));
-        storageMigrationBanner.setAction(() -> {
-            showStorageMigrationDialog();
-            //getContentResolver().unregisterContentObserver(contentObserver);
-        });
     }
 
     private void displayBannerWithSuccessStorageMigrationResult() {

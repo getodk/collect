@@ -27,7 +27,6 @@ public class LocationRegister {
      */
     public void set(SharedPreferences.Editor editor, String sendLocation) {
         editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
-        editor.putBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, false);
         editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);
     }
 }
