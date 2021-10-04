@@ -240,11 +240,9 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
 
         referenceLayerPref.setItems(items);
 
-//        String layerDir = FileUtils.simplifyScopedStoragePath(storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
-//        referenceLayerPref.setDialogCaption(context.getString(
-//            items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none,
-//            layerDir, context.getString(MapProvider.getSourceLabelId())
-//        ));
+        referenceLayerPref.setDialogCaption(context.getString(
+                items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none, context.getString(MapProvider.getSourceLabelId())
+        ));
 
         referenceLayerPref.updateContent();
     }
