@@ -13,6 +13,7 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/llParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -23,7 +24,7 @@ the License.
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
-        <com.google.android.material.appbar.MaterialToolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
             android:layout_width="match_parent"
@@ -59,7 +60,7 @@ the License.
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="?colorSurface"
+        android:background="@color/surfaceButtonColor"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -78,7 +79,8 @@ the License.
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <View
             android:layout_width="0dp"
@@ -99,6 +101,7 @@ the License.
             android:textAllCaps="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </LinearLayout>
 </RelativeLayout>
