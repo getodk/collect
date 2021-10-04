@@ -31,7 +31,6 @@ public class FormHierarchyTest {
             .around(new CopyFormRule("formHierarchy3.xml", null))
             .around(new CopyFormRule("repeat_group_new.xml", null))
             .around(new CopyFormRule("Empty First Repeat.xml", null))
-            .around(new CopyFormRule("empty_first_repeat.xml", null))
             .around(rule);
 
     @Test
@@ -184,15 +183,5 @@ public class FormHierarchyTest {
                 .clickGoUpIcon()
                 .clickGoUpIcon()
                 .assertText("Repeat", "Repeatable Group");
-    }
-
-    @Test
-    public void empty_first_repeat() {
-        new MainMenuPage()
-                .startBlankForm("empty_first_repeat")
-                .clickGoToArrow()
-                .assertText("Beet, Bell pepper, Cabbage")
-                .clickOnText("Frequencies")
-                .assertText("2.\u200E Beet", "3.\u200E Bell pepper", "5.\u200E Cabbage");
     }
 }
