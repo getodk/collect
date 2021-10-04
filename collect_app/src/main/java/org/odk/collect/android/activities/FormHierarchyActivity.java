@@ -603,10 +603,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                     }
                     case FormEntryController.EVENT_REPEAT: {
                         boolean forPicker = shouldShowRepeatGroupPicker();
-                        // For #4570
-                        if (!formController.isGroupRelevant()
-                                && forPicker // Comment out this line to restore old logic
-                        ) {
+                        // Only break to exclude non-relevant repeat from picker
+                        if (!formController.isGroupRelevant() && forPicker) {
                             break;
                         }
 
