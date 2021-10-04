@@ -11,13 +11,11 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 
 public class FormHierarchyTest {
 
@@ -26,17 +24,13 @@ public class FormHierarchyTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule("formHierarchy1.xml", null))
-            .around(new CopyFormRule("formHierarchy2.xml", null))
-            .around(new CopyFormRule("formHierarchy3.xml", null))
-            .around(new CopyFormRule("repeat_group_new.xml", null))
-            .around(new CopyFormRule("Empty First Repeat.xml", null))
             .around(rule);
 
     @Test
     //https://github.com/getodk/collect/issues/2871
     public void allRelevantQuestionsShouldBeVisibleInHierarchyView() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("formHierarchy1.xml")
                 .startBlankForm("formHierarchy1")
                 .clickGoToArrow();
 
@@ -52,7 +46,8 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2944
     public void notRelevantRepeatGroupsShouldNotBeVisibleInHierarchy() {
-        final FormHierarchyPage page = new MainMenuPage()
+        final FormHierarchyPage page = rule.startAtMainMenu()
+                .copyForm("formHierarchy2.xml")
                 .startBlankForm("formHierarchy2")
                 .inputText("2")
                 .clickGoToArrow();
@@ -98,7 +93,8 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2936
     public void repeatGroupsShouldBeVisibleAsAppropriate() {
-        FormHierarchyPage page = new MainMenuPage()
+        FormHierarchyPage page = rule.startAtMainMenu()
+                .copyForm("formHierarchy3.xml")
                 .startBlankForm("formHierarchy3")
                 .assertQuestion("Intro")
                 .swipeToNextQuestion("Text")
@@ -127,22 +123,26 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/2942
     public void deletingLastGroupShouldNotBreakHierarchy() {
-        FormHierarchyPage page = new MainMenuPage()
+        FormHierarchyPage page = rule.startAtMainMenu()
+                .copyForm("formHierarchy3.xml")
                 .startBlankForm("formHierarchy3")
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat)
-                .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat)
-                .swipeToNextQuestion()
-                .clickOnString(R.string.add_repeat)
-                .swipeToNextQuestion()
-                .clickOnDoNotAddGroup()
-                .clickOnDoNotAddGroup()
+                .swipeToNextQuestion("Text")
+                .swipeToNextQuestion("Integer 1_1")
+                .swipeToNextQuestion("Integer 1_2")
+                .swipeToNextQuestion("Integer 2_1")
+                .swipeToNextQuestion("Integer 2_2")
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1")
+                .clickOnAdd(new FormEntryPage("formHierarchy3"))
+                .assertQuestion("Barcode")
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
+                .clickOnAdd(new FormEntryPage("formHierarchy3"))
+                .assertQuestion("Date")
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
+                .clickOnAdd(new FormEntryPage("formHierarchy3"))
+                .assertQuestion("Date")
+                .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat Group 1_1"))
+                .clickOnDoNotAdd(new FormEntryPage("formHierarchy3"))
                 .clickGoToArrow()
                 .clickOnText("Repeat Group 1")
                 .clickOnText("Repeat Group 1 > 1")
@@ -158,15 +158,18 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/3971
     public void deletingLastGroupAndAddingOneShouldNotBreakHierarchy() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("repeat_group_new.xml")
                 .startBlankFormWithRepeatGroup("RepeatGroupNew", "People")
                 .clickOnAdd(new FormEntryPage("RepeatGroupNew"))
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
+                .assertQuestion("Name")
+                .swipeToNextQuestion("Age")
+                .swipeToNextQuestionWithRepeatGroup("People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew"))
+                .assertQuestion("Name")
+                .swipeToNextQuestion("Age")
+                .swipeToNextQuestionWithRepeatGroup("People")
+                .clickOnAdd(new FormEntryPage("RepeatGroupNew"))
                 .clickGoToArrow()
                 .deleteGroup()
                 .addGroup();
@@ -175,7 +178,8 @@ public class FormHierarchyTest {
     @Test
     //https://github.com/getodk/collect/issues/4570
     public void showRepeatsPickerWhenFirstRepeatIsEmpty() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("Empty First Repeat.xml")
                 .startBlankFormWithRepeatGroup("Empty First Repeat", "Repeat")
                 .clickOnAdd(new FormEntryPage("Empty First Repeat"))
                 .answerQuestion("Question in repeat", "Not empty!")
