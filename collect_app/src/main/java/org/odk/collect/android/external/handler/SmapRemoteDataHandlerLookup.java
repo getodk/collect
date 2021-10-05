@@ -162,6 +162,9 @@ public class SmapRemoteDataHandlerLookup implements IFunctionHandler {
         }
 
         // Get the url which doubles as the cache key - url encode it by converting to a URI
+        if(referenceValue == null || referenceValue.trim().length() == 0) {
+            referenceValue = "_null";   // Need to have something in the path - maybe this should be a query param?
+        }
         String url = mServerUrlBase + dataSetName + "/" + referenceColumn + "/" + referenceValue;
         if(args.length == 3 || args.length == 5) {
             url += (hasParam ? "&" : "?") + "expression=" + filter;
