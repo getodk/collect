@@ -169,38 +169,15 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
 
 ## Debugging JavaRosa
 
-JavaRosa is the form engine that powers Collect. If you want to debug or change that code while running Collect, you have two options. You can include the source tree as a module in Android Studio or include a custom jar file you build.
+JavaRosa is the form engine that powers Collect. If you want to debug or change that code while running Collect you can deploy it locally with Maven (you'll need `mvn` and `sed` installed):
 
-**Source tree**
+1. Build and install your changes of JavaRosa (into your local Maven repo):
 
-1. Get the code from the [JavaRosa repo](https://github.com/getodk/javarosa)
-1. In Android Studio, select `File` -> `New` -> `New Module` -> `Import Gradle Project` and choose the project
-1. In Collect's `build.gradle` file, find the JavaRosa section:
-    ```gradle
-    implementation("org.getodk:javarosa:x.y.z") {
-        ...
-    }
-    ```
-1. Replace the first line like this, using `javarosa` or whatever name you specified when importing:
-    ```gradle
-    implementation (project(path: ':javarosa')) {
-        ...
-    }
-    ```
+```bash
+./install-local-version.sh
+```
 
-**Jar file**
-
-1. In JavaRosa, change the version in `build.gradle` and build the jar
-	```gradle
-	jar {
-	    baseName = 'javarosa'
-	    version = 'x.y.z-SNAPSHOT'
-	```
-
-1. In Collect, add the path to the jar to the dependencies in `build.gradle`
-	```gradle
-	compile files('/path/to/javarosa/build/libs/javarosa-x.y.z-SNAPSHOT.jar')
-	```
+1. Change `implementation(Dependencies.javarosa)` in Collect's `build.gradle` to `implementation(Dependencies.javarosa_local)`
 
 ## Troubleshooting
 
