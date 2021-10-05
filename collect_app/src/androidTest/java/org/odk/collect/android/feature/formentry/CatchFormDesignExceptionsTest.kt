@@ -23,9 +23,14 @@ class CatchFormDesignExceptionsTest {
         rule.startAtMainMenu()
             .copyForm("form_design_error.xml")
             .clickFillBlankForm()
-            .clickOnForm("form_design_error")
-            .openSelectMinimalDialog()
-            .clickOnText("A")
+            .clickOnForm("Relevance and calculate loop")
+            .answerQuestion(1, "B")
+            .scrollToAndAssertText("third")
+            .answerQuestion(2, "C")
+            // Answering C above triggers a recomputation round which resets fullName to name.
+            // They're then equal which makes the third question non-relevant. Trying to change the
+            // value of a non-relevant node throws an exception.
+            .answerQuestion(2, "D")
             .assertText(R.string.update_widgets_error)
             .clickOKOnDialog()
             .assertOnPage(MainMenuPage())

@@ -34,13 +34,13 @@ public class FormValidationTest {
 
         new MainMenuPage()
                 .startBlankForm("OnePageFormShort")
-                .putTextOnIndex(0, "A")
+                .answerQuestion(0, "A")
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExitWithError()
                 .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
                 .assertText("Integer")
-                .putTextOnIndex(0, "Aaaaa")
+                .answerQuestion(0, "Aaaaa")
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAndExit();

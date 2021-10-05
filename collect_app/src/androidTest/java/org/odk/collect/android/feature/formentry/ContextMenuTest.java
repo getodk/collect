@@ -24,15 +24,15 @@ public class ContextMenuTest {
     @Test
     public void whenRemoveStringAnswer_ShouldAppropriateQuestionBeCleared() {
         new FormEntryPage("string_widgets")
-                .putTextOnIndex(0, "TestString")
-                .putTextOnIndex(1, "1234")
+                .answerQuestion(0, "TestString")
+                .answerQuestion(1, "1234")
                 .assertText("TestString")
                 .assertText("1234")
                 .longPressOnView("Question1")
                 .removeResponse()
                 .assertTextDoesNotExist("TestString")
                 .assertText("1234")
-                .putTextOnIndex(0, "TestString")
+                .answerQuestion(0, "TestString")
                 .assertText("TestString")
                 .longPressOnView("Question2")
                 .removeResponse()
