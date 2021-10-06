@@ -163,6 +163,8 @@
   <string name="recording_disabled">Nahrávání zakázáno. Povolit v %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
   <string name="instance_deleted_message">Vyplněný formulář byl smazán!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Selhání při pokusu o aktualizaci hodnot. Důvodem je obvykle nesprávné použití výpočtů v návrhu formuláře.\n\nPokud se tento problém opakuje, nahlaste jej osobě, která vás požádala o sběr dat.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -190,6 +192,7 @@
   <string name="svg_file_does_not_exist">Soubor SVG neexistuje!</string>
   <string name="capture_image">Udělat fotku</string>
   <string name="choose_image">Vyberte obrázek</string>
+  <string name="choose_account">Zvolte účet</string>
   <string name="selected_invalid_image">Vybraný soubor není platný obrázek</string>
   <string name="view_image">Zobrazit obrázek</string>
   <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
@@ -518,13 +521,24 @@
   <string name="newer_version_of_a_form_info">Toto je aktualizace formuláře, který máte</string>
   <string name="form_update_error">Aktualizace formuláře se nezdařila</string>
   <string name="form_update_succeeded">Aktualizace formuláře byla úspěšná</string>
-  <string name="report_to_project_lead">Pokud problém přetrvává, nahlaste jej osobě, která vás požádala o sběr dat.</string>
-  <string name="unreachable_error">Collect nemůže kontaktovat server na %s. Zadali jste adresu URL správně?</string>
-  <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
-  <string name="server_error">Server %1$s vrátil stavový kód %2$s.</string>
-  <string name="invalid_response">Server %s poskytl neplatnou odpověď.</string>
-  <string name="failure">Selhání</string>
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
+  <string name="failure">Selhání</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">Pokud problém přetrvává, nahlaste jej osobě, která vás požádala o sběr dat.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">Collect nemůže kontaktovat server na %s. Zadali jste adresu URL správně?</string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">Server %1$s vrátil stavový kód %2$s.</string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">Server %s poskytl neplatnou odpověď.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -607,7 +621,8 @@
   <string name="app_theme">Vizuální styl</string>
   <string name="theme_light">Světlý styl</string>
   <string name="theme_dark">Tmavý styl</string>
-    <string name="language">Jazyk</string>
+  <string name="theme_system">Použít motiv zařízení</string>
+  <string name="language">Jazyk</string>
   <string name="use_device_language">Použít jazyk zařízení</string>
   <string name="font_size">Velikost písma</string>
   <string name="change_font_size">Velikost písma</string>
@@ -866,8 +881,11 @@
   <string name="project_name">Název projektu</string>
   <string name="project_icon">Ikona projektu</string>
   <string name="project_color">Barva projektu</string>
+  <!--Toast text shown when the current project is changed-->
   <string name="switched_project">Přepnuto na %s</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <string name="using_project">S pomocí %s</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
   <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
   <string name="delete_project_yes">Ano</string>
@@ -899,4 +917,8 @@
   <string name="try_demo">Vyzkoušejte si demo</string>
   <string name="scan_configuration_qr_code">Naskenování konfiguračního kódu QR</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Chcete-li otevřít tento formulář, musíte nejprve otevřít ODK Collect a přepnout na projekt, který jej obsahuje.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
 </resources>
