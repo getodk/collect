@@ -198,16 +198,28 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    /**
+     * Tests using this should be using {@link AddNewRepeatDialog} instead
+     */
+    @Deprecated
     public FormEntryPage clickOnDoNotAddGroup() {
         clickOnString(R.string.dont_add_repeat);
         return this;
     }
 
+    /**
+     * Tests using this should be using {@link AddNewRepeatDialog} instead
+     */
+    @Deprecated
     public FormEndPage clickOnDoNotAddGroupEndingForm() {
         clickOnString(R.string.dont_add_repeat);
         return new FormEndPage(formName).assertOnPage();
     }
 
+    /**
+     * Tests using this should be using {@link AddNewRepeatDialog} instead
+     */
+    @Deprecated
     public FormEntryPage clickOnAddGroup() {
         clickOnString(R.string.add_repeat);
         return this;
