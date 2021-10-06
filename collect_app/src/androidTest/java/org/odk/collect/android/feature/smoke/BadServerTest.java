@@ -53,7 +53,7 @@ public class BadServerTest {
                 .clickGetSelected()
                 .assertMessage("1 of 1 downloads failed!")
                 .showDetails()
-                .assertError("The form has no hash. If you keep having this problem, report it to the person who asked you to collect data.")
+                .assertError("The server did not provide a hash for this form. If you keep having this problem, report it to the person who asked you to collect data.")
                 .navigateBack();
     }
 }
