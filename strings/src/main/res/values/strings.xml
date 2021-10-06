@@ -628,19 +628,45 @@
     <string name="form_update_error">Form update failed</string>
     <string name="form_update_succeeded">Form update succeeded</string>
 
-    <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
-    <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
-    <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
-    <string name="server_error">The server %1$s returned status code %2$s.</string>
-    <string name="invalid_response">The server %s provided an invalid response.</string>
-    <string name="failure">Failure</string>
-
     <string name="load_remote_form_error">Form list download failed</string>
 
-    <string name="form_with_no_hash_error">The form has no hash.</string>
-    <string name="form_parsing_error">The form can not be parsed.</string>
-    <string name="form_save_disk_error">Disk exception occurred during saving the form.</string>
-    <string name="form_with_invalid_submission_error">The form has invalid submission.</string>
+    <string name="all_downloads_succeeded">All downloads succeeded!</string>
+    <string name="some_downloads_failed">%1$s of %2$s downloads failed!</string>
+    <string name="show_details">Show details</string>
+    <string name="form_details">ID: %1$s Version: %2$s</string>
+    <string name="failure">Failure</string>
+
+    <!--
+    ##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################
+    -->
+
+    <string name="report_to_project_lead">If you keep having this problem, report it to the person who asked you to collect data.</string>
+
+    <!-- Error message displayed when Collect can't connect to a server -->
+    <string name="unreachable_error">Collect can\'t reach the server at %s. Did you enter the URL correctly?</string>
+
+    <!-- Error message displayed when Collect can't connect to a server because of a security issue -->
+    <string name="security_error">Collect can\'t connect securely to the server at %s. Did you enter the URL correctly?</string>
+
+    <!-- Error message displayed when a server returns an error status code -->
+    <string name="server_error">The server %1$s returned status code %2$s.</string>
+
+    <!-- Error message displayed when a server returns an invalid response body -->
+    <string name="invalid_response">The server %s provided an invalid response.</string>
+
+    <!-- Error message displayed when the server has not provided a hash identifier for the form being downloaded -->
+    <string name="form_with_no_hash_error">The server did not provide a hash for this form.</string>
+
+    <!-- Error message displayed when a form being downloaded cannot be parsed -->
+    <string name="form_parsing_error">This form cannot be processed.</string>
+
+    <!-- Error message displayed when a disk error occurs during form download -->
+    <string name="form_save_disk_error">A disk error occurred on device while downloading this form.</string>
+
+    <!-- Error message displayed when a form being downloaded specifies an invalid submission URL -->
+    <string name="form_with_invalid_submission_error">This form has an invalid submission URL.</string>
 
     <!--
     ##############################################
@@ -1083,4 +1109,11 @@
 
     <!-- Error shown when a user tries to open a form that's in a different project -->
     <string name="wrong_project_selected_for_form">To open this form, you must first open ODK Collect and switch to the project that contains it.</string>
+
+    <!--
+    ##############################################
+    # Errors
+    ##############################################
+    -->
+    <string name="errors">Errors</string>
 </resources>
