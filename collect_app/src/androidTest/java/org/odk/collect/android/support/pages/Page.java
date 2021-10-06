@@ -1,37 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import android.app.Activity;
-import android.content.pm.ActivityInfo;
-
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
-import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import androidx.test.runner.lifecycle.Stage;
-
-import junit.framework.AssertionFailedError;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
-import org.odk.collect.android.support.actions.RotateAction;
-import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
-import org.odk.collect.android.support.matchers.ToastMatcher;
-import org.odk.collect.android.utilities.TranslationHandler;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.Callable;
-
-import kotlin.Pair;
-import timber.log.Timber;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.clearText;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -63,6 +31,37 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
+import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.test.runner.lifecycle.Stage;
+
+import junit.framework.AssertionFailedError;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.actions.RotateAction;
+import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.android.support.matchers.ToastMatcher;
+import org.odk.collect.android.utilities.TranslationHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+import timber.log.Timber;
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
