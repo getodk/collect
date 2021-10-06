@@ -162,6 +162,7 @@
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">التسجيل معطل. تمكين في %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -521,13 +522,24 @@
   <string name="newer_version_of_a_form_info">هذا تحديث للإستمارة التي لديك</string>
   <string name="form_update_error">فشل تحديث الإستمارة</string>
   <string name="form_update_succeeded">نجاح تحديث الإستمارة</string>
-  <string name="report_to_project_lead">إذا استمرت هذه المشكلة، فأبلغ عنها الشخص الذي طلب منك جمع البيانات.</string>
-  <string name="unreachable_error">التطبيق لا يمكن أن يصل إلى الخادم في %s. هل أدخلت عنوان URL بشكل صحيح؟</string>
-  <string name="security_error">التطبيق لا يمكن أن يصل إلى الخادم في %s بشكل آمن. هل أدخلت عنوان URL بشكل صحيح؟</string>
-  <string name="server_error">الخادم %1$s ارجع خطأ بكود %2$s</string>
-  <string name="invalid_response">قدم الخادم %s بإرجاع استجابة غير صالحة.</string>
-  <string name="failure">فشل</string>
   <string name="load_remote_form_error">خطأ في تنزيل قائمة الإستمارة</string>
+  <string name="failure">فشل</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">إذا استمرت هذه المشكلة، فأبلغ عنها الشخص الذي طلب منك جمع البيانات.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">التطبيق لا يمكن أن يصل إلى الخادم في %s. هل أدخلت عنوان URL بشكل صحيح؟</string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">التطبيق لا يمكن أن يصل إلى الخادم في %s بشكل آمن. هل أدخلت عنوان URL بشكل صحيح؟</string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">الخادم %1$s ارجع خطأ بكود %2$s</string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">قدم الخادم %s بإرجاع استجابة غير صالحة.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -594,7 +606,7 @@
   <string name="app_theme">المظهر</string>
   <string name="theme_light">مظهر فاتح</string>
   <string name="theme_dark">مظهر داكن</string>
-    <string name="language">اللغة</string>
+  <string name="language">اللغة</string>
   <string name="use_device_language">استخدم لغة الجهاز</string>
   <string name="font_size">حجم الخط</string>
   <string name="change_font_size">حجم الخط</string>
@@ -833,6 +845,9 @@
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <!--Button text for adding a duplicate project-->
   <!--Buton text for switching to an existing project-->
+  <!--Toast text shown when the current project is changed-->
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="delete_project_yes">نعم</string>
   <string name="delete_project_no">لا</string>
   <!--##############################################
@@ -847,4 +862,7 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--##############################################
+    # Errors
+    ##############################################-->
 </resources>

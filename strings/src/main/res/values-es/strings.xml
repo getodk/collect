@@ -163,6 +163,8 @@
   <string name="recording_disabled">Grabación deshabilitada. Habilitar en %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
   <string name="instance_deleted_message">Formulario lleno ha sido eliminado!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Error al intentar actualizar los valores. Esto generalmente se debe a un uso incorrecto de los cálculos en el diseño del formulario.\n\nSi sigue teniendo este problema, infórmelo a la persona que le pidió que recopilara los datos.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -190,6 +192,7 @@
   <string name="svg_file_does_not_exist">Archivo SVG no existe</string>
   <string name="capture_image">Tomar la Foto</string>
   <string name="choose_image">Escoja la Imagen</string>
+  <string name="choose_account">Elegir cuenta</string>
   <string name="selected_invalid_image">El archivo seleccionado no es una imagen válida</string>
   <string name="view_image">Ver imagen</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
@@ -512,13 +515,24 @@
   <string name="newer_version_of_a_form_info">Esta es una actualización a un formulario que tiene</string>
   <string name="form_update_error">Error al actualizar formulario</string>
   <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
-  <string name="report_to_project_lead">Si sigue teniendo este problema, infórmelo a la persona que le pidió que recopile los datos.</string>
-  <string name="unreachable_error">La aplicación no se ha podido conectar al servidor %s. ¿Ingresó la URL correctamente?</string>
-  <string name="security_error">La aplicación no se puede conectar de forma segura al servidor en %s. ¿Ingresaste la URL correctamente?</string>
-  <string name="server_error">El servidor %1$s devolvió código de estado %2$s.</string>
-  <string name="invalid_response">El servidor %s proporcionó una respuesta no válida.</string>
-  <string name="failure">Falla</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
+  <string name="failure">Falla</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">Si sigue teniendo este problema, infórmelo a la persona que le pidió que recopile los datos.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">La aplicación no se ha podido conectar al servidor %s. ¿Ingresó la URL correctamente?</string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">La aplicación no se puede conectar de forma segura al servidor en %s. ¿Ingresaste la URL correctamente?</string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">El servidor %1$s devolvió código de estado %2$s.</string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">El servidor %s proporcionó una respuesta no válida.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -601,7 +615,8 @@
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema Claro</string>
   <string name="theme_dark">Tema Oscuro</string>
-    <string name="language">Idioma</string>
+  <string name="theme_system">Usar tema del dispositivo</string>
+  <string name="language">Idioma</string>
   <string name="use_device_language">Usar el idioma del dispositivo</string>
   <string name="font_size">Tamaño del Texto</string>
   <string name="change_font_size">Tamaño del Texto</string>
@@ -861,8 +876,11 @@
   <string name="project_name">Nombre del proyecto</string>
   <string name="project_icon">Icono del proyecto</string>
   <string name="project_color">Color del proyecto</string>
+  <!--Toast text shown when the current project is changed-->
   <string name="switched_project">Cambiado a %s</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <string name="using_project">Usando %s</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambiar a %s</string>
   <string name="delete_project_confirm_message">Todos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
   <string name="delete_project_yes">Si</string>
@@ -895,4 +913,7 @@
   <string name="scan_configuration_qr_code">Escanear el código QR de configuración</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
 </resources>

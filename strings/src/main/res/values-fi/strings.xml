@@ -162,6 +162,9 @@
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Taustaäänitys estetty. Käynnistä valikossa %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Täytetty lomake on poistettu!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Arvojen päivittäminen epäonnistui. Tämä johtuu yleensä virheellisestä laskutoimitusten käytöstä lomakkeen määrittelyssä.\n\nJos ongelma esiintyy toistuvasti, ilmoita siitä henkilölle, joka pyysi sinua keräämään dataa.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -189,6 +192,7 @@
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
   <string name="capture_image">Ota kuva</string>
   <string name="choose_image">Valitse kuva</string>
+  <string name="choose_account">Valitse tili</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
   <string name="view_image">Katso kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
@@ -402,7 +406,7 @@
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Asetuksiin</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Sijainnin jäljittäminen</string>
+  <string name="track_location">Sijainnin seuranta</string>
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <string name="save_point">Tallenna GeoPoint</string>
@@ -472,7 +476,9 @@
   <!--Name of an action button-->
   <string name="view_data">Tallennetun lomakkeen tarkastelu</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Sijaintia seurataan…</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -509,13 +515,32 @@
   <string name="newer_version_of_a_form_info">Tämä on päivitys lomakkeeseen, joka sinulla on</string>
   <string name="form_update_error">Lomakkeen päivitys epäonnistui</string>
   <string name="form_update_succeeded">Lomakkeen päivitys onnistui</string>
-  <string name="report_to_project_lead">Jos ongelma jatkuu, ilmoita siitä tiedonkeruusta vastaavalle.</string>
-  <string name="unreachable_error">Collect ei tavoita palvelinta osoitteessa %s. Syötitkö URL:in oikein?</string>
-  <string name="security_error">Collect ei saa turvattua yhteyttä palvelimeen %s. Syötitkö URL:in oikein?</string>
-  <string name="server_error">Palvelin %1$s vastasi statuskoodilla %2$s.</string>
-  <string name="invalid_response">Palvelin %s antoi epäkelvon vastauksen.</string>
-  <string name="failure">Epäonnistui</string>
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
+  <string name="all_downloads_succeeded">Kaikki lataukset onnistuivat!</string>
+  <string name="some_downloads_failed">%1$s latausta epäonnistui (yhteensä %2$s)!</string>
+  <string name="show_details">Yksityiskohdat</string>
+  <string name="form_details">ID: %1$s Versio: %2$s</string>
+  <string name="failure">Epäonnistui</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">Jos ongelma jatkuu, ilmoita siitä tiedonkeruusta vastaavalle.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">Collect ei tavoita palvelinta osoitteessa %s. Syötitkö URL:in oikein?</string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">Collect ei saa turvattua yhteyttä palvelimeen %s. Syötitkö URL:in oikein?</string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">Palvelin %1$s vastasi statuskoodilla %2$s.</string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">Palvelin %s antoi epäkelvon vastauksen.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <string name="form_with_no_hash_error">Palvelin ei antanut tiivistettä tälle lomakkeelle.</string>
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <string name="form_parsing_error">Lomaketta ei voitu prosessoida.</string>
+  <!--Error message displayed when a disk error occurs during form download-->
+  <string name="form_save_disk_error">Levyvirhe laitteella ladatessa tätä lomaketta.</string>
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <string name="form_with_invalid_submission_error">Tällä lomakkeella on epäkelpo lähetys-URL.</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -535,31 +560,47 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
+  <string name="project_settings">Projektin asetukset</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Palvelin</string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, käyttäjänimi, tunnussana</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">Projektin näyttöasetukset</string>
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Nimi, kuvake, väri</string>
   <!--Title of a settings section-->
   <string name="client">Käyttöliittymä</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Sovelluksen kieli, teema, kirjasinkoko</string>
   <!--Title of a settings section-->
   <string name="maps">Kartat</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Kartasto, tyylit, tasot</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Lomakkeen hallinta</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Automaattinen päivitys, automaattinen lähetys, automaattinen poistaminen</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Käyttäjän ja laitteen tunnistaminen</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Käyttäjänimi, puhelinnumero, laitetunnus</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Kokeellinen</string>
+  <string name="protected_settings">Suojattu</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Avaa suojattujen asetusten lukitus</string>
   <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Salasanan vaihtaminen, pääsyvalvonnan asettaminen</string>
+  <string name="set_admin_password">Aseta pääkäyttäjän salasana</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">Projektihallinta</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Uudelleenkonfigurointi, palauttaminen, poistaminen</string>
   <!--Title of a settings section-->
+  <string name="access_control_section_title">Pääsynvalvonta</string>
   <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Käyttöliittymän rajoittaminen</string>
   <string name="server_preferences">Palvelinasetukset</string>
   <!--Label for server type setting-->
   <string name="type">Tyyppi</string>
@@ -582,7 +623,8 @@
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
   <string name="theme_dark">Tumma teema</string>
-    <string name="language">Kieli</string>
+  <string name="theme_system">Käytä laitteen teemaa.</string>
+  <string name="language">Kieli</string>
   <string name="use_device_language">Käytä laitteen oletuskieltä</string>
   <string name="font_size">Tekstin koko</string>
   <string name="change_font_size">Tekstin koko</string>
@@ -682,7 +724,9 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Ei käytettävissä</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Avaa asetusten lukitus</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Asetusten lukitus avattu</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -698,6 +742,7 @@
   <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="reset_project_settings_title">Palautus alkutilaan</string>
+  <string name="reset_project_settings_subtext">Valitse asetukset, lomakkeet tai data</string>
   <string name="delete_project">Poista</string>
   <string name="select_all">Valitse kaikki</string>
   <string name="clear_all">Tyhjennä kaikki</string>
@@ -717,8 +762,11 @@
   <string name="reset_layers_result">Karttatasot :: %s</string>
   <string name="reset_cache_result">Lomakkeiden latausvälimuisti :: %s</string>
   <string name="main_menu_settings">Päävalikkoasetukset</string>
+  <string name="main_menu_settings_summary">Näytä tai piilota painikkeita</string>
   <string name="user_settings">Käyttäjäasetukset</string>
+  <string name="user_setting_summary">Näytä tai piilota asetuksia</string>
   <string name="form_entry_setting">Lomakesyöttöasetukset</string>
+  <string name="form_entry_settings_summary">Näytä tai piilota toimintoja</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Siirtyminen taaksepäin</string>
   <string name="moving_backwards_disabled_title">Siirtyminen taaksepäin pois päältä</string>
@@ -773,6 +821,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">Asetusten uudelleenmäärittely QR-koodilla</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Korvaa kaikki nykyiset asetukset</string>
   <string name="qr_code">QR-koodi-asetukset</string>
   <string name="scan_qr_code_fragment_title">Skannaus</string>
   <string name="view_qr_code_fragment_title">QR-koodi</string>
@@ -819,20 +869,32 @@
      # Projects
      ##############################################-->
   <string name="projects">Projektit</string>
+  <string name="settings">Asetukset</string>
   <string name="add_project">Lisää projekti</string>
   <string name="add">Lisätään</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Kopioi projekti</string>
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Sinulla on jo projekti näillä yhteysasetuksilla. Haluatko vaihtaa olemassa olevaan projektiin vai luoda uuden?</string>
   <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Lisää projektin kopio</string>
   <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Vaihda olemassa olevaan projektiin</string>
   <string name="project_name">Projektin nimi</string>
   <string name="project_icon">Projektikuvake</string>
   <string name="project_color">Projektiväri</string>
+  <!--Toast text shown when the current project is changed-->
   <string name="switched_project">Projekti vaihdettu, nyt %s</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <string name="using_project">%s käytössä</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
+  <string name="delete_project_confirm_message">Kaikki tyhjät lomakkeet, lähetykset ja asetukset tullaan poistamaan pysyvästi.</string>
   <string name="delete_project_yes">Kyllä</string>
   <string name="delete_project_no">Ei</string>
+  <string name="cannot_delete_project_title">Projektia ei voida poistaa.</string>
+  <string name="cannot_delete_project_message_one">Sinulla on lomakkeita lähettämättä. Poistaaksesi projektin, sinun on ensin lähetettävä tai poistettava ne lomakkeet.</string>
+  <string name="cannot_delete_project_message_two">Taustatoimintoja kesken. Ole hyvä ja yritä myöhemmin uudelleen.</string>
   <string name="or">OR</string>
   <string name="hex_color">Heksadesimaalinen väri</string>
   <string name="invalid_hex_code">Heksadesimaalinen koodi ei kelpaa</string>
@@ -846,7 +908,7 @@
   <string name="configure_with_qr_code">Asetusten määrittely QR-koodilla</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Syötä projektin yksityiskohdat manuaalisesti</string>
-  <string name="project_config_tip">Kun olet lisännyt projektin, voit konfiguroida sen asetuksissa (Yleiset ja Pääkäyttäjä)</string>
+  <string name="project_config_tip">Kun olet lisännyt projektin, voit konfiguroida sen Yleisissä tai Pääkäyttäjän asetuksissa</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Projektini käyttää Google Drive -palvelua.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -857,4 +919,9 @@
   <string name="try_demo">Kokeile demoa</string>
   <string name="scan_configuration_qr_code">Skannaa asetukset QR-koodista</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Avataksesi tämän lomakkeen, avaa ensin ODK Collect ja vaihda projektiin johon se sisältyy.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
+  <string name="errors">Virheitä</string>
 </resources>

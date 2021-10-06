@@ -65,6 +65,7 @@
   <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
   <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
   <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
+  <string name="read_phone_state_runtime_permission_denied_title">Leggi l\'autorizzazione dello stato del telefono</string>
   <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect non effettua chiamate ma necessita di accedere ad alcune proprietà del tuo dispositivo quali ad esempio il numero telefonico e l\'Identificativo del dispositivo.</string>
   <!--##############################################
     # FILL BLANK FORM
@@ -161,6 +162,9 @@
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <string name="recording_disabled">Registrazione disabilitata. Abilita in %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Il modulo compilato è stato cancellato!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Errore durante il tentativo di aggiornare i valori. Ciò è generalmente dovuto a un utilizzo errato dei calcoli nella progettazione del modulo.\n\nSe continui ad avere questo problema, segnalalo alla persona che ti ha chiesto di raccogliere i dati.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -188,6 +192,7 @@
   <string name="svg_file_does_not_exist">Il file SVG non esiste!</string>
   <string name="capture_image">Scatta Foto</string>
   <string name="choose_image">Seleziona Foto</string>
+  <string name="choose_account">Scegli l\'account</string>
   <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
   <string name="view_image">Visualizza Immagine</string>
   <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
@@ -228,9 +233,11 @@
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <string name="disable_recording">Disabilita registrazione</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">La registrazione non inizierà immediatamente. Devi riaprire il modulo per registrare.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
   <string name="delete_answer_file_question">Eliminare il file?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Non sarai in grado di recuperare questo file una volta eliminato. Sei sicuro di voler procedere?</string>
   <!--Text for button that stops audio recording-->
   <string name="stop_recording">Stop</string>
   <!--Text to let the user know a recording is in progress-->
@@ -367,6 +374,7 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Mappa Base</string>
   <string name="basemap_source">Origine</string>
+  <string name="basemap_source_unavailable">Spiacente, %s le mappe di base non sono disponibili su questo dispositivo. Scegli un\'altra mappa di base in Impostazioni generali &gt; Mappe.</string>
   <string name="map_style_label">%sstile mappa</string>
   <string name="streets">Streets - Stradale</string>
   <string name="terrain">Terrain - Territoriale</string>
@@ -380,6 +388,8 @@
   <string name="carto_map_style_positron">Posizione</string>
   <string name="carto_map_style_dark_matter">Scuro è importante</string>
   <string name="reference_layer">Livello di riferimento</string>
+  <string name="layer_data_caption_none">Non ci sono files %1$s supportati dalla %2$s mappa di base.</string>
+  <string name="layer_data_caption">Sopra ci sono tutti i file di livello in %1$s supportati dalla %2$s mappe di base.</string>
   <string name="layer_data_file">File di dati del livello</string>
   <string name="view_change_location">Vedi o Cambia Posizione</string>
   <string name="change_location">Cambiare Localizzazione</string>
@@ -397,6 +407,8 @@
   <string name="go_to_settings">Vai a impostazioni</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="track_location">Registra la posizione</string>
+  <string name="background_location_disabled">Questo modulo vuole tracciare la tua posizione ma il tracciamento è disabilitato. Abilita nel %1$s menu sopra.</string>
+  <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
   <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
@@ -464,7 +476,9 @@
   <!--Name of an action button-->
   <string name="view_data">Visualizza modulo salvato</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Tracciamento della posizione</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Monitoraggio della posizione…</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -501,9 +515,24 @@
   <string name="newer_version_of_a_form_info">Questo è un aggiornamento di un form che hai già</string>
   <string name="form_update_error">Aggiornamento Formulario fallito</string>
   <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
-  <string name="report_to_project_lead">Se continui ad avere questo problema, segnalalo alla persona che ti ha chiesto di raccogliere i dati.</string>
-  <string name="failure">Errore</string>
   <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
+  <string name="failure">Errore</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">Se continui ad avere questo problema, segnalalo alla persona che ti ha chiesto di raccogliere i dati.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">Collect non può raggiungere il server %s. Hai inserito correttamente l\'URL?</string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">Collect non può connettersi in modo sicuro al server %s. Hai inserito correttamente l\'URL?</string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">Il server %1$s ha restituito il codice di stato %2$s.</string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">Il server %s ha fornito una risposta non valida.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -523,31 +552,47 @@
   <!--##############################################
     # GENERAL SETTINGS
     ##############################################-->
+  <string name="project_settings">Impostazioni del progetto</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, nome utente, password</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">Visualizzazione del progetto</string>
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Nome, icona, colore</string>
   <!--Title of a settings section-->
   <string name="client">Interfaccia utente</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">Lingua dell\'app, tema, dimensione del carattere</string>
   <!--Title of a settings section-->
   <string name="maps">Mappe</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Mappa di base, stili, livelli</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">Gestione modulo</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">Aggiornamento automatico, invio automatico, eliminazione automatica</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">Identità user e dispositivo</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">Nome utente, numero di telefono, ID dispositivo</string>
   <!--Title of a settings section only available in beta or development builds.-->
   <string name="experimental">Sperimentale</string>
+  <string name="protected_settings">Protetto</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Sblocca le impostazioni protette</string>
   <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">Cambia password, imposta i controlli di accesso</string>
+  <string name="set_admin_password">Imposta password amministratore</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">Gestione del progetto</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">Riconfigura, ripristina, elimina</string>
   <!--Title of a settings section-->
+  <string name="access_control_section_title">Controllo Accesso</string>
   <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">Limita l\'interfaccia utente</string>
   <string name="server_preferences">Impostazioni Server</string>
   <!--Label for server type setting-->
   <string name="type">Tipo</string>
@@ -570,7 +615,8 @@
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema chiaro</string>
   <string name="theme_dark">Tema scuro</string>
-    <string name="language">Lingua</string>
+  <string name="theme_system">Usa il tema del dispositivo</string>
+  <string name="language">Lingua</string>
   <string name="use_device_language">Utilizza lingua del dispositivo</string>
   <string name="font_size">Dimensione dei caratteri del testo</string>
   <string name="change_font_size">Dimensione dei caratteri del testo</string>
@@ -670,7 +716,9 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">Non disponibile</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">Sblocca le impostazioni</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Impostazioni sbloccate</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -686,6 +734,7 @@
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
   <string name="reset_project_settings_title">Reimposta</string>
+  <string name="reset_project_settings_subtext">Scegli tra impostazioni, moduli, dati</string>
   <string name="delete_project">Elimina</string>
   <string name="select_all">Seleziona tutto</string>
   <string name="clear_all">Deseleziona tutto</string>
@@ -705,14 +754,19 @@
   <string name="reset_layers_result">Livelli della mappa :: %s</string>
   <string name="reset_cache_result">Cache di caricamento dei moduli :: %s</string>
   <string name="main_menu_settings">Parametri Menu Principale</string>
+  <string name="main_menu_settings_summary">Mostra o nascondi pulsanti</string>
   <string name="user_settings">Impostazioni utente</string>
+  <string name="user_setting_summary">Mostra o nascondi le impostazioni</string>
   <string name="form_entry_setting">Settaggi Modulo Ingresso</string>
+  <string name="form_entry_settings_summary">Mostra o nascondi azioni</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Sfoglia indietro</string>
   <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
+  <string name="moving_backwards_disabled_message">Configurare il dispositivo per impedire agli utenti di ignorare questa impostazione?\n\nLe modifiche sono:\n\u2022 Disabilita modifica modulo salvato\n\u2022 Disabilita salva modulo\n\u2022 Disabilita prompt Vai a\n\u2022 Imposta elaborazione vincolo su Convalida dopo lo scorrimento in avanti</string>
   <string name="yes">Sì</string>
   <string name="no">No</string>
   <string name="moving_backwards_enabled_title">Sfoglia indietro abilitato</string>
+  <string name="moving_backwards_enabled_message">Potresti voler rivedere le seguenti impostazioni:\n\n\u2022 Modifica modulo salvato\n\u2022 Salva modulo\n\u2022 Vai al prompt\n\u2022 Elaborazione dei vincoli</string>
   <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salva Modulo</string>
   <!--##############################################
@@ -759,6 +813,8 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">Riconfigurare attraverso codice QR</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">Sostituisci tutte le impostazioni esistenti</string>
   <string name="qr_code">Configurazione con codice QR</string>
   <string name="scan_qr_code_fragment_title">Scansionare</string>
   <string name="view_qr_code_fragment_title">Codice QR</string>
@@ -805,23 +861,32 @@
      # Projects
      ##############################################-->
   <string name="projects">Progetti</string>
+  <string name="settings">Impostazioni</string>
   <string name="add_project">Aggiungere progetto</string>
   <string name="add">Aggiungere</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Duplicare progetto</string>
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">Hai già un progetto con queste impostazioni di connessione. Vuoi passare al progetto esistente o aggiungerne uno nuovo?</string>
   <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Aggiungi progetto duplicato</string>
   <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Passa a progetto esistente</string>
   <string name="project_name">Nome Progetto</string>
   <string name="project_icon">Icona del progetto</string>
   <string name="project_color">Colore Progetto</string>
+  <!--Toast text shown when the current project is changed-->
   <string name="switched_project">Cambiato a %s</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <string name="using_project">Usando %s</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambia a %s</string>
   <string name="delete_project_confirm_message">Tutti i formulari vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
   <string name="delete_project_yes">Sì</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">Il progetto non può essere cancellato</string>
   <string name="cannot_delete_project_message_one">Hai invii non inviati. Per eliminare il progetto, devi prima inviare o eliminare tali invii.</string>
+  <string name="cannot_delete_project_message_two">Processi in background in esecuzione. Per favore riprova più tardi.</string>
   <string name="or">O</string>
   <string name="hex_color">Colore esadecimale</string>
   <string name="invalid_hex_code">Invalido colore esadecimale</string>
@@ -846,4 +911,8 @@
   <string name="try_demo">Prova una demo</string>
   <string name="scan_configuration_qr_code">Scansiona codice QR</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">Per aprire questo modulo, devi prima aprire ODK Collect e passare al progetto che lo contiene.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
 </resources>

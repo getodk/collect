@@ -163,6 +163,8 @@
   <string name="recording_disabled">Aufnahme deaktiviert. Aktivieren über %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
   <string name="instance_deleted_message">Ausgefülltes Formular wurde gelöscht!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Fehler beim Versuch Werte zu aktualisieren. Dies passiert normalerweise wegen fehlerhafter Verwendung von Berechnungen im Formulardesign.\n\nWenn das Problem weiterhin besteht, wenden Sie sich an die Person, für die Sie die Daten erfassen.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -190,6 +192,7 @@
   <string name="svg_file_does_not_exist">SVG-Datei existiert nicht!</string>
   <string name="capture_image">Foto machen</string>
   <string name="choose_image">Bild auswählen</string>
+  <string name="choose_account">Konto auswählen</string>
   <string name="selected_invalid_image">Ausgewählte Datei ist kein gültiges Bild.</string>
   <string name="view_image">Bild anzeigen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
@@ -512,13 +515,24 @@
   <string name="newer_version_of_a_form_info">Dies ist eine aktualisierte Version eines bereits vorhandenen Formulars!</string>
   <string name="form_update_error">Formular-Update fehlgeschlagen</string>
   <string name="form_update_succeeded">Formular-Update erfolgreich</string>
-  <string name="report_to_project_lead">Wenn Sie weiterhin dieses Problem haben, berichten Sie es an die Person, die Sie zum Daten sammeln beauftragt hat.</string>
-  <string name="unreachable_error">Collect kann den Server unter %s nicht erreichen. Haben Sie die URL korrekt eingegeben? </string>
-  <string name="security_error">Collect kann sich nicht sicher mit dem Server unter %s verbinden. Haben Sie die URL korrekt eingegeben? </string>
-  <string name="server_error">Der Server %1$s antwortete mit Statuscode %2$s. </string>
-  <string name="invalid_response">Der Server %s gab eine ungültige Antwort.</string>
-  <string name="failure">Fehler</string>
   <string name="load_remote_form_error">Formularlisten-Download fehlgeschlagen</string>
+  <string name="failure">Fehler</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">Wenn Sie weiterhin dieses Problem haben, berichten Sie es an die Person, die Sie zum Daten sammeln beauftragt hat.</string>
+  <!--Error message displayed when Collect can't connect to a server-->
+  <string name="unreachable_error">Collect kann den Server unter %s nicht erreichen. Haben Sie die URL korrekt eingegeben? </string>
+  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <string name="security_error">Collect kann sich nicht sicher mit dem Server unter %s verbinden. Haben Sie die URL korrekt eingegeben? </string>
+  <!--Error message displayed when a server returns an error status code-->
+  <string name="server_error">Der Server %1$s antwortete mit Statuscode %2$s. </string>
+  <!--Error message displayed when a server returns an invalid response body-->
+  <string name="invalid_response">Der Server %s gab eine ungültige Antwort.</string>
+  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -601,7 +615,8 @@
   <string name="app_theme">Theme</string>
   <string name="theme_light">Helles Theme</string>
   <string name="theme_dark">Dunkles Theme</string>
-    <string name="language">Sprache</string>
+  <string name="theme_system">Gerätedesign verwenden</string>
+  <string name="language">Sprache</string>
   <string name="use_device_language">Gerätesprache benutzen</string>
   <string name="font_size">Schriftgröße</string>
   <string name="change_font_size">Schriftgröße</string>
@@ -860,8 +875,11 @@
   <string name="project_name">Projekt-Name</string>
   <string name="project_icon">Projekt-Icon</string>
   <string name="project_color">Projekt-Farbe</string>
+  <!--Toast text shown when the current project is changed-->
   <string name="switched_project">Gewechselt zu %s</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
   <string name="using_project">Verwende %s</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Wechseln zu %s</string>
   <string name="delete_project_confirm_message">Alle Blanko-Formulare, Übermittlung und Einstellungen werden dauerhaft gelöscht. </string>
   <string name="delete_project_yes">Ja</string>
@@ -894,4 +912,7 @@
   <string name="scan_configuration_qr_code">Konfigurations-QR-Code scannen</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Um dieses Formular zu öffnen, müssen Sie zuerst ODK Collect öffnen und in das Projekt wechseln, in dem es enthalten ist.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
 </resources>
