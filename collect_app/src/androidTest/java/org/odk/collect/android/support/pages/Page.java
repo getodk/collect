@@ -22,12 +22,14 @@ import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
+import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import kotlin.Pair;
 import timber.log.Timber;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -204,17 +206,11 @@ public abstract class Page<T extends Page<T>> {
     }
 
     String getTranslatedString(Integer id) {
-        Activity currentActivity = getCurrentActivity();
-
-        if (currentActivity != null) {
-            return currentActivity.getString(id);
-        } else {
-            return ApplicationProvider.getApplicationContext().getString(id);
-        }
+        return TranslationHandler.getString(ApplicationProvider.getApplicationContext(), id);
     }
 
     String getTranslatedString(Integer id, Object... formatArgs) {
-        return getCurrentActivity().getString(id, formatArgs);
+        return TranslationHandler.getString(ApplicationProvider.getApplicationContext(), id, formatArgs);
     }
 
     public T clickOnAreaWithIndex(String clazz, int index) {
