@@ -6,9 +6,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.TranslatedStringBuilder;
 
 @RunWith(AndroidJUnit4.class)
 public class BadServerTest {
@@ -33,7 +35,11 @@ public class BadServerTest {
                 .clickGetSelected()
                 .assertMessage("1 of 1 downloads failed!")
                 .showDetails()
-                .assertError("The server did not provide a hash for this form. If you keep having this problem, report it to the person who asked you to collect data.")
+                .assertError(new TranslatedStringBuilder()
+                        .addString(R.string.form_with_no_hash_error)
+                        .addString(R.string.report_to_project_lead)
+                        .build()
+                )
                 .navigateBack();
     }
 }
