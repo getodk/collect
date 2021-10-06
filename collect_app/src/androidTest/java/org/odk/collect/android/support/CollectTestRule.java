@@ -64,6 +64,13 @@ public class CollectTestRule implements TestRule {
         return new FirstLaunchPage().assertOnPage();
     }
 
+    public MainMenuPage withProject(String serverUrl) {
+        return new FirstLaunchPage().assertOnPage()
+                .clickManuallyEnterProjectDetails()
+                .inputUrl(serverUrl)
+                .addProject();
+    }
+
     public ShortcutsPage launchShortcuts() {
         ActivityScenario<AndroidShortcutsActivity> scenario = ActivityScenario.launch(AndroidShortcutsActivity.class);
         return new ShortcutsPage(scenario).assertOnPage();
