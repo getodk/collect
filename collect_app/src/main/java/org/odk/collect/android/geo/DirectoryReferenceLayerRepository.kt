@@ -16,7 +16,7 @@ class DirectoryReferenceLayerRepository(private val directoryPaths: List<String>
     override fun getAll(): List<ReferenceLayer> {
         return getAllFilesWithDirectory().map {
             ReferenceLayer(getIdForFile(it.second, it.first), it.first)
-        }
+        }.distinctBy { it.id }
     }
 
     override fun get(id: String): ReferenceLayer? {

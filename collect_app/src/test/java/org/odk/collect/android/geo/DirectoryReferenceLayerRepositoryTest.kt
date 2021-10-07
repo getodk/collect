@@ -41,6 +41,17 @@ class DirectoryReferenceLayerRepositoryTest {
     }
 
     @Test
+    fun getAll_withMultipleDirectoriesWithFilesWithTheSameRelativePath_onlyReturnsTheFileFromTheFirstDirectory() {
+        val dir1 = TempFiles.createTempDir()
+        val dir2 = TempFiles.createTempDir()
+        val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
+        TempFiles.createTempFile(dir2, "blah", ".temp")
+
+        val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
+        assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1))
+    }
+
+    @Test
     fun get_returnsLayer() {
         val dir = TempFiles.createTempDir()
         TempFiles.createTempFile(dir)
@@ -68,11 +79,11 @@ class DirectoryReferenceLayerRepositoryTest {
         val dir1 = TempFiles.createTempDir()
         val dir2 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(dir1, "blah", ".temp")
-        val file2 = TempFiles.createTempFile(dir2, "blah", ".temp")
+        TempFiles.createTempFile(dir2, "blah", ".temp")
 
         val repository = DirectoryReferenceLayerRepository(dir1.absolutePath, dir2.absolutePath)
-        val file2Layer = repository.getAll().first { it.file == file2 }
-        assertThat(repository.get(file2Layer.id)!!.file, equalTo(file1))
+        val layerId = repository.getAll().first().id
+        assertThat(repository.get(layerId)!!.file, equalTo(file1))
     }
 
     @Test
