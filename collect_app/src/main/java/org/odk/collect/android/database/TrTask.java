@@ -5,6 +5,7 @@ import java.util.Date;
 public class TrTask {
 	public int id;
 	public String title;
+	public String pid;		// used in webforms
     public String name;
 	public String url;
 	public String form_id;
