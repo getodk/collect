@@ -16,27 +16,21 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.utilities.ThemeUtils;
-
-import java.util.Locale;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
 
-public abstract class CollectAbstractActivity extends AppCompatActivity {
+public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     private boolean isInstanceStateSaved;
     protected ThemeUtils themeUtils;
@@ -50,6 +44,8 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
+
         themeUtils = new ThemeUtils(this);
         setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
     }
@@ -68,37 +64,6 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        DaggerUtils.getComponent(base).inject(this);
-        applyOverrideConfiguration(new Configuration());
-    }
-
-    @Override
-    public void applyOverrideConfiguration(Configuration newConfig) {
-        super.applyOverrideConfiguration(updateConfigurationIfSupported(newConfig));
-    }
-
-    private Configuration updateConfigurationIfSupported(Configuration config) {
-        if (Build.VERSION.SDK_INT >= 24) {
-            if (!config.getLocales().isEmpty()) {
-                return config;
-            }
-        } else {
-            if (config.locale != null) {
-                return config;
-            }
-        }
-
-        Locale locale = new LocaleHelper().getLocale(settingsProvider.getGeneralSettings());
-        if (locale != null) {
-            config.setLocale(locale);
-            config.setLayoutDirection(locale);
-        }
-        return config;
     }
 
     public void initToolbar(CharSequence title) {

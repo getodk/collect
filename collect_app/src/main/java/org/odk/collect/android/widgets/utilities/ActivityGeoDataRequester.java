@@ -6,18 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.geo.GeoPointActivity;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String LOCATION = "gp";
-    public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
 
@@ -41,7 +41,8 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                     bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
-                bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                bundle.putBoolean(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy")));
                 bundle.putBoolean(READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 

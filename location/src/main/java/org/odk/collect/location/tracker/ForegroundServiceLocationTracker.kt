@@ -19,7 +19,7 @@ import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.location.R
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker.Companion.notificationIcon
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 private const val LOCATION_KEY = "location"
 
@@ -29,8 +29,12 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
         return application.getState().get(LOCATION_KEY)
     }
 
-    override fun start() {
-        application.startService(Intent(application, LocationTrackerService::class.java))
+    override fun start(retainMockAccuracy: Boolean) {
+        val intent = Intent(application, LocationTrackerService::class.java).also {
+            it.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+        }
+
+        application.startService(intent)
     }
 
     override fun stop() {
@@ -84,6 +88,13 @@ class LocationTrackerService : Service() {
             }
         })
 
+        locationClient.setRetainMockAccuracy(
+            intent?.getBooleanExtra(
+                EXTRA_RETAIN_MOCK_ACCURACY,
+                false
+            ) ?: false
+        )
+
         locationClient.start()
         return START_NOT_STICKY
     }
@@ -122,6 +133,8 @@ class LocationTrackerService : Service() {
     }
 
     companion object {
+        const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
+
         private const val NOTIFICATION_ID = 1
         private const val NOTIFICATION_CHANNEL = "location_tracking"
     }

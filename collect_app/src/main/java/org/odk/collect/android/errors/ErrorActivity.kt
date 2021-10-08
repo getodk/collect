@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.CollectAbstractActivity
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 class ErrorActivity : CollectAbstractActivity() {
     companion object {

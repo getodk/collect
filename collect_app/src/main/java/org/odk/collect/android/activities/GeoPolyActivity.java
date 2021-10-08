@@ -30,13 +30,13 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;

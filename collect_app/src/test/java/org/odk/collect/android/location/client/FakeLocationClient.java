@@ -107,6 +107,11 @@ public class FakeLocationClient implements LocationClient {
         this.priority = priority;
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        throw new UnsupportedOperationException();
+    }
+
     public boolean canSetUpdateIntervals() {
         return false;
     }

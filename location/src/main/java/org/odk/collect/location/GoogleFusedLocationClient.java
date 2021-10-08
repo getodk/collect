@@ -61,6 +61,7 @@ public class GoogleFusedLocationClient
 
     private long updateInterval = DEFAULT_UPDATE_INTERVAL;
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
+    private boolean retainMockAccuracy;
 
     /**
      * Constructs a new GoogleFusedLocationClient with the provided Context.
@@ -139,13 +140,18 @@ public class GoogleFusedLocationClient
     }
 
     @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        this.retainMockAccuracy = retainMockAccuracy;
+    }
+
+    @Override
     public Location getLastLocation() {
         // We need to block if the Client isn't already connected:
         if (!googleApiClient.isConnected()) {
             googleApiClient.blockingConnect();
         }
 
-        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
+        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient), retainMockAccuracy);
     }
 
     @Override
@@ -207,7 +213,7 @@ public class GoogleFusedLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
+            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location, retainMockAccuracy));
         }
     }
 

@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
-import static org.odk.collect.strings.LocalizedApplicationKt.getLocalizedString;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public final class TranslationHandler {
     private TranslationHandler() {

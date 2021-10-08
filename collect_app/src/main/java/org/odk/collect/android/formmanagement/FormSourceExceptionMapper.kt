@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import org.odk.collect.android.R
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.strings.getLocalizedString
+import org.odk.collect.strings.localization.getLocalizedString
 
 class FormSourceExceptionMapper(private val context: Context) {
     fun getMessage(exception: FormSourceException?): String {

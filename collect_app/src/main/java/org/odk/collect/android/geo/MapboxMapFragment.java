@@ -64,7 +64,8 @@ import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.GeoUtils;
+import org.odk.collect.android.utilities.ReferenceLayerUtils;
+import org.odk.collect.geo.MapPoint;
 
 import java.io.File;
 import java.io.IOException;
@@ -264,7 +265,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void applyConfig(Bundle config) {
         styleUrl = config.getString(KEY_STYLE_URL);
-        referenceLayerFile = GeoUtils.getReferenceLayerFile(config, storagePathProvider.getOdkDirPath(LAYERS));
+        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, storagePathProvider.getOdkDirPath(LAYERS));
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {
                 // See addTo() above for why we add this placeholder layer.
