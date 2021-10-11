@@ -40,6 +40,11 @@ class DirectoryReferenceLayerRepositoryTest {
         assertThat(repository.getAll().map { it.file }, containsInAnyOrder(file1, file2))
     }
 
+    /**
+     * We do this so we don't end up returns a list of reference layers with non-unique IDs. If two
+     * (or more) files have the same relative path, only the first one (in the order of declared
+     * layer directories) will be returned.
+     */
     @Test
     fun getAll_withMultipleDirectoriesWithFilesWithTheSameRelativePath_onlyReturnsTheFileFromTheFirstDirectory() {
         val dir1 = TempFiles.createTempDir()
