@@ -4,6 +4,7 @@ import dependencies.Versions
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 apply from: '../config/quality.gradle'
@@ -50,6 +51,8 @@ dependencies {
     implementation Dependencies.android_material
     implementation Dependencies.timber
     implementation Dependencies.play_services_location
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
     implementation project(path: ':shared')
     implementation project(path: ':strings')
     implementation project(path: ':location')

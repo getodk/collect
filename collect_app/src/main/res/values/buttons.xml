@@ -53,9 +53,4 @@
         <item name="android:textSize">21sp</item>
     </style>
 
-    <style name="Widget.Collect.ImageButton.MapButton" parent="Widget.AppCompat.ImageButton">
-        <item name="android:tintMode">src_in</item>
-        <item name="android:tint">@color/color_on_surface_tint_list</item>
-    </style>
-
 </resources>

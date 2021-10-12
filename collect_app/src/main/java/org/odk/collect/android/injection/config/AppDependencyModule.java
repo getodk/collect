@@ -1,12 +1,16 @@
 package org.odk.collect.android.injection.config;
 
+import static androidx.core.content.FileProvider.getUriForFile;
+import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -67,7 +71,6 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.DirectoryReferenceLayerRepository;
-import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.ReferenceLayerRepository;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
@@ -87,10 +90,9 @@ import org.odk.collect.android.permissions.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.MetaKeys;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
+import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.preferences.source.SettingsStore;
 import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvider;
@@ -128,7 +130,6 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.ProjectsRepository;
@@ -145,11 +146,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
-
-import static androidx.core.content.FileProvider.getUriForFile;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
 
 /**
  * Add dependency providers here (annotated with @Provides)
@@ -622,20 +618,5 @@ public class AppDependencyModule {
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
         );
-    }
-
-    @Provides
-    public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
-        return new ReferenceLayerSettingsNavigator() {
-            @Override
-            public void navigateToReferenceLayerSettings(@NonNull AppCompatActivity activity) {
-                MapsPreferencesFragment.showReferenceLayerDialog(activity);
-            }
-        };
-    }
-
-    @Provides
-    public MapFragmentFactory providesMapFragmentFactory(MapProvider mapProvider) {
-        return mapProvider;
     }
 }

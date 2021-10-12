@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.geo;
 
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
@@ -29,14 +29,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import org.odk.collect.android.R;
+import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
@@ -121,7 +117,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         super.onCreate(savedInstanceState);
         previousState = savedInstanceState;
 
-        DaggerUtils.getComponent(this).inject(this);
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
@@ -188,7 +184,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         }
 
         if (result != null) {
-            setResult(RESULT_OK, new Intent().putExtra(FormEntryActivity.ANSWER_KEY, result));
+            setResult(RESULT_OK, new Intent().putExtra("value", result));
         }
         finish();
     }

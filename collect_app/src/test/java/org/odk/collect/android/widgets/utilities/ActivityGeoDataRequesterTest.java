@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.geo.GeoPointActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
+import org.odk.collect.geo.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.TestScreenContextActivity;

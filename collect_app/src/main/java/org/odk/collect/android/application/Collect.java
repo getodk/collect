@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.StrictMode;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
@@ -28,9 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -41,6 +44,12 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.forms.Form;
+import org.odk.collect.geo.DaggerGeoDependencyComponent;
+import org.odk.collect.geo.GeoDependencyComponent;
+import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.geo.GeoDependencyModule;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -56,10 +65,13 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import dagger.Provides;
+
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
+        GeoDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -82,6 +94,7 @@ public class Collect extends Application implements
 
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
+    private GeoDependencyComponent geoDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -247,5 +260,31 @@ public class Collect extends Application implements
     @Override
     public AppState getState() {
         return appState;
+    }
+
+    @NonNull
+    @Override
+    public GeoDependencyComponent getGeoDependencyComponent() {
+        if (geoDependencyComponent == null) {
+            geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+                    .geoDependencyModule(new GeoDependencyModule() {
+                        @NonNull
+                        @Provides
+                        @Override
+                        public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
+                            return MapsPreferencesFragment::showReferenceLayerDialog;
+                        }
+
+                        @NonNull
+                        @Provides
+                        @Override
+                        public MapFragmentFactory providesMapFragmentFactory() {
+                            return new MapProvider();
+                        }
+                    })
+                    .build();
+        }
+
+        return geoDependencyComponent;
     }
 }
