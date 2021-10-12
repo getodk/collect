@@ -29,8 +29,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;

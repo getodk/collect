@@ -38,9 +38,9 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFo
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
-import org.odk.collect.android.geo.MapFragment;
+import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.androidshared.utils.ToastUtils;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;

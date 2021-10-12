@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.geo.maps;
 
 import android.os.Bundle;
 
@@ -20,8 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 import androidx.fragment.app.FragmentActivity;
-
-import org.odk.collect.geo.MapPoint;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

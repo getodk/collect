@@ -31,12 +31,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.android.geo.MapFragmentFactory;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.GeoUtils;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.strings.localization.LocalizedActivity;
 

@@ -37,7 +37,7 @@ import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
