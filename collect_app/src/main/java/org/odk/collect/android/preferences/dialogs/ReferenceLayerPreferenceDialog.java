@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreferenceDialogFragmentCompat;
@@ -14,8 +13,14 @@ import org.odk.collect.android.preferences.CaptionedListPreference;
 
 public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat implements DialogInterface.OnClickListener {
 
+    /**
+     * Views should not be stored statically like this. The relationship on how the list is setup
+     * here should be inverted - {@link ReferenceLayerPreferenceDialog} should be asking
+     * {@link CaptionedListPreference} for items  rather than having them pushed through this static
+     * field.
+     */
+    @Deprecated
     public static ViewGroup listView;
-    public static TextView captionView;
 
     public static ReferenceLayerPreferenceDialog newInstance(String key) {
         ReferenceLayerPreferenceDialog fragment = new ReferenceLayerPreferenceDialog();
@@ -39,7 +44,6 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
             preference = (CaptionedListPreference) getPreference();
         }
         listView = view.findViewById(R.id.list);
-        captionView = view.findViewById(R.id.dialog_caption);
 
         if (preference != null) {
             preference.updateContent();
@@ -52,7 +56,6 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
     public void onClick(DialogInterface dialog, int which) {
         super.onClick(dialog, which);
         listView = null;
-        captionView = null;
         if (getDialog() != null) {
             getDialog().dismiss();
         }
@@ -62,7 +65,6 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
     public void onDestroy() {
         super.onDestroy();
         listView = null;
-        captionView = null;
         if (getDialog() != null) {
             getDialog().dismiss();
         }

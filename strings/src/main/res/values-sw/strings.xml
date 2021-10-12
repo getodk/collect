@@ -340,8 +340,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Jambo la Giza</string>
   <string name="reference_layer">Safu ya Kumbukumbu</string>
-  <string name="layer_data_caption_none">Hakuna faili za safu katika %1$s ambazo zinasaidiwa na sura ya %2$s.</string>
-  <string name="layer_data_caption">Hapo juu kuna faili zote za safu katika 1%1$s ambazo zinasaidiwa na sura ya 2%2$s.</string>
   <string name="layer_data_file">Safu ya faili la data</string>
   <string name="view_change_location">Tazama au badilisha eneo</string>
   <string name="change_location">Badilisha eneo</string>

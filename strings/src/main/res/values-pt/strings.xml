@@ -379,8 +379,6 @@ Escolher Imagem</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matéria escura</string>
   <string name="reference_layer">Camada de referência</string>
-  <string name="layer_data_caption_none">Não há arquivos de camadas em %1$s que sejam compatíveis pelo mapa de base %2$s.</string>
-  <string name="layer_data_caption">Acima estão todos os arquivos de camada em %1$s que são compatíveis com o mapa de base %2$s.</string>
   <string name="layer_data_file">Arquivo de dados da camada</string>
   <string name="view_change_location">Ver ou modificar localização</string>
   <string name="change_location">Mudar Localização</string>

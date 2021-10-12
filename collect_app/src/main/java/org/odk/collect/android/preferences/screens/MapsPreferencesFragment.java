@@ -239,11 +239,6 @@ public class MapsPreferencesFragment extends BaseProjectPreferencesFragment {
         });
 
         referenceLayerPref.setItems(items);
-
-        referenceLayerPref.setDialogCaption(context.getString(
-                items.size() > 1 ? R.string.layer_data_caption : R.string.layer_data_caption_none, context.getString(MapProvider.getSourceLabelId())
-        ));
-
         referenceLayerPref.updateContent();
     }
 

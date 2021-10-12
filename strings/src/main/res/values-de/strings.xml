@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Dunkle Materie</string>
   <string name="reference_layer">Referenzebene</string>
-  <string name="layer_data_caption_none">Es gibt keine Ebenen-Dateien in %1$s die von der %2$s Basiskarte unterstützt werden. </string>
-  <string name="layer_data_caption">Oben sind alle Ebenen-Dateien in %1$s die von der %2$s Basiskarte unterstützt werden.</string>
   <string name="layer_data_file">Ebenendaten-Datei</string>
   <string name="view_change_location">Standort anzeigen oder ändern</string>
   <string name="change_location">Standort ändern</string>

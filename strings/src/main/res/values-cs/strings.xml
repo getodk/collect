@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Temná hmota</string>
   <string name="reference_layer">Referenční vrstva</string>
-  <string name="layer_data_caption_none">V podkladové mapě %2$s nejsou podporované žádné soubory vrstev %1$s.</string>
-  <string name="layer_data_caption">Výše jsou všechny soubory vrstev v %1$s, které jsou podporovány podkladovou mapou %2$s.</string>
   <string name="layer_data_file">Soubor datové vrstvy</string>
   <string name="view_change_location">Prohlédnout nebo změnit polohu</string>
   <string name="change_location">Změnit lokaci</string>

@@ -385,8 +385,6 @@
   <string name="carto_map_style_positron">位置</string>
   <string name="carto_map_style_dark_matter">ダークマター</string>
   <string name="reference_layer">参照レイヤー</string>
-  <string name="layer_data_caption_none">%1$s に %2$s ベースマップでサポートされているレイヤーファイルはありません。</string>
-  <string name="layer_data_caption">上記は %1$s の %2$s ベースマップでサポートされたすべてのレイヤーファイルです。</string>
   <string name="layer_data_file">レイヤーデータファイル</string>
   <string name="view_change_location">場所の表示または変更</string>
   <string name="change_location">場所の変更</string>

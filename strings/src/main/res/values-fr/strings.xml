@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Matière Sombre</string>
   <string name="reference_layer">Couche de référence</string>
-  <string name="layer_data_caption_none">Il n\'y a pas de calque dans %1$s qui est supporté par la carte de base %2$s</string>
-  <string name="layer_data_caption">Ci dessus figurent tous les calques de %1$s supportés par la carte de base %2$s</string>
   <string name="layer_data_file">Dossier de calques</string>
   <string name="view_change_location">Voir ou changer la position</string>
   <string name="change_location">Modifier la localisation</string>
