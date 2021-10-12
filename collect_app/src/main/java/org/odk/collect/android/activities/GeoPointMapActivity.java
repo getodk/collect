@@ -14,9 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -71,6 +70,9 @@ public class GeoPointMapActivity extends LocalizedActivity {
     public static final String CLEAR_BUTTON_ENABLED_KEY = "clear_button_enabled";
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
+
+    public static final String EXTRA_LOCATION = "gp";
+
     protected Bundle previousState;
 
     @Inject
@@ -234,20 +236,20 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
-            intentDraggable = intent.getBooleanExtra(DRAGGABLE_ONLY, false);
+            intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
                 locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
             }
 
-            intentReadOnly = intent.getBooleanExtra(READ_ONLY, false);
+            intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false);
             if (intentReadOnly) {
                 captureLocation = true;
                 clearButton.setEnabled(false);
             }
 
-            if (intent.hasExtra(LOCATION)) {
-                double[] point = intent.getDoubleArrayExtra(LOCATION);
+            if (intent.hasExtra(EXTRA_LOCATION)) {
+                double[] point = intent.getDoubleArrayExtra(EXTRA_LOCATION);
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.

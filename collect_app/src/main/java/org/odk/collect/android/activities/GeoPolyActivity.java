@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 
 import android.content.Context;
 import android.content.Intent;
@@ -134,7 +134,7 @@ public class GeoPolyActivity extends CollectAbstractActivity implements Settings
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
 
-        intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
+        intentReadOnly = getIntent().getBooleanExtra(EXTRA_READ_ONLY, false);
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
