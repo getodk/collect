@@ -34,7 +34,7 @@ import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_
  * This is the top-level class that should be used by the rest of the application.
  * The available options on the Maps preferences screen are also defined here.
  */
-public class MapProvider {
+public class MapProvider implements MapFragmentFactory {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -137,7 +137,8 @@ public class MapProvider {
     }
 
     /** Gets a new MapFragment from the selected MapConfigurator. */
-    public MapFragment createMapFragment(Context context) {
+    @Override
+    public MapFragment createMapFragment(@NonNull Context context) {
         MapConfigurator cftor = getConfigurator();
         MapFragment map = cftor.createMapFragment(context);
         if (map != null) {

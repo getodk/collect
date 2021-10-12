@@ -32,7 +32,7 @@ import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapFragmentFactory;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.GeoUtils;
@@ -74,7 +74,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     protected Bundle previousState;
 
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
@@ -137,7 +137,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         zoomButton = findViewById(R.id.zoom);
 
         Context context = getApplicationContext();
-        mapProvider.createMapFragment(context)
+        mapFragmentFactory.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 

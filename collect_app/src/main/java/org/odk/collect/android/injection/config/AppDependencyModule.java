@@ -67,6 +67,7 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.DirectoryReferenceLayerRepository;
+import org.odk.collect.android.geo.MapFragmentFactory;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.ReferenceLayerRepository;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
@@ -631,5 +632,10 @@ public class AppDependencyModule {
                 MapsPreferencesFragment.showReferenceLayerDialog(activity);
             }
         };
+    }
+
+    @Provides
+    public MapFragmentFactory providesMapFragmentFactory(MapProvider mapProvider) {
+        return mapProvider;
     }
 }
