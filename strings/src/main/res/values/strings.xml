@@ -571,6 +571,9 @@
     <!-- Title for notification that lets user know their location is currently being tracked -->
     <string name="location_tracking_notification_title">Tracking location…</string>
 
+    <!-- Text of button user can press to get help when setting up Reference Layers -->
+    <string name="get_help_with_reference_layers">Get help with Reference Layers</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM

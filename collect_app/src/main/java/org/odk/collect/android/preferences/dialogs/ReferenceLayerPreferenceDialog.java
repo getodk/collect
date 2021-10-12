@@ -1,15 +1,19 @@
 package org.odk.collect.android.preferences.dialogs;
 
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.ListPreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.CaptionedListPreference;
+import org.odk.collect.android.utilities.ExternalWebPageHelper;
 
 public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragmentCompat implements DialogInterface.OnClickListener {
 
@@ -43,6 +47,9 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
         if (getPreference() instanceof CaptionedListPreference) {
             preference = (CaptionedListPreference) getPreference();
         }
+
+        addHelpFooter(view);
+
         listView = view.findViewById(R.id.list);
 
         if (preference != null) {
@@ -68,5 +75,14 @@ public class ReferenceLayerPreferenceDialog extends ListPreferenceDialogFragment
         if (getDialog() != null) {
             getDialog().dismiss();
         }
+    }
+
+    private void addHelpFooter(View view) {
+        LinearLayout layout = (LinearLayout) view;
+        View helpFooter = LayoutInflater.from(requireContext()).inflate(R.layout.reference_layer_help_footer, layout, false);
+        helpFooter.findViewById(R.id.help_button).setOnClickListener(v -> {
+            new ExternalWebPageHelper().openWebPageInCustomTab(requireActivity(), Uri.parse("https://docs.getodk.org/collect-offline-maps/#transferring-offline-tilesets-to-devices"));
+        });
+        layout.addView(helpFooter);
     }
 }
