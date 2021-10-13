@@ -26,6 +26,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -42,8 +44,6 @@ import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.tracker.LocationTracker;
-import org.robolectric.Robolectric;
-import org.robolectric.android.controller.ActivityController;
 
 import java.util.List;
 
@@ -52,8 +52,6 @@ public class GeoPolyActivityTest {
 
     private final FakeMapFragment mapFragment = new FakeMapFragment();
     private final LocationTracker locationTracker = mock(LocationTracker.class);
-
-    private ActivityController<GeoPolyActivity> controller;
 
     @Before
     public void setUp() throws Exception {
@@ -79,33 +77,37 @@ public class GeoPolyActivityTest {
                     }
                 })
                 .build();
-
-        controller = Robolectric.buildActivity(GeoPolyActivity.class);
     }
 
     @Test
     public void testLocationTrackerLifecycle() {
-        controller.create().start().resume().visible().get();
+        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
 
         // Stopping the activity should stop the location tracker
-        controller.stop().destroy();
+        scenario.moveToState(Lifecycle.State.DESTROYED);
         verify(locationTracker).stop();
     }
 
     @Test
     public void recordButton_should_beHiddenForAutomaticMode() {
-        GeoPolyActivity activity = controller.create().start().resume().visible().get();
-        activity.updateRecordingMode(R.id.automatic_mode);
-        activity.startInput();
-        assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
+        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
+
+        scenario.onActivity((activity -> {
+            activity.updateRecordingMode(R.id.automatic_mode);
+            activity.startInput();
+            assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
+        }));
     }
 
     @Test
     public void recordButton_should_beVisibleForManualMode() {
-        GeoPolyActivity activity = controller.create().start().resume().visible().get();
-        activity.updateRecordingMode(R.id.manual_mode);
-        activity.startInput();
-        assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
+        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
+
+        scenario.onActivity((activity -> {
+            activity.updateRecordingMode(R.id.manual_mode);
+            activity.startInput();
+            assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
+        }));
     }
 
     private static class FakeMapFragment implements MapFragment {
