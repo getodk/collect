@@ -1,26 +1,23 @@
 package org.odk.collect.android.location.activities;
 
 import static android.app.Activity.RESULT_OK;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.robolectric.Shadows.shadowOf;
 
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.RobolectricApplication;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
@@ -29,17 +26,12 @@ import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
-import org.robolectric.Robolectric;
-import org.robolectric.android.controller.ActivityController;
 
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
 
-    @Rule
-    public MockitoRule rule = MockitoJUnit.rule();
-    private ActivityController<GeoPointMapActivity> controller;
     private final FakeMapFragment mapFragment = new FakeMapFragment();
 
     @Before
@@ -60,29 +52,35 @@ public class GeoPointMapActivityTest {
                     }
                 })
                 .build());
-
-        controller = Robolectric.buildActivity(GeoPointMapActivity.class);
     }
 
     @Test
     public void shouldReturnPointFromSecondLocationFix() {
-        GeoPointMapActivity activity = controller.create().start().resume().visible().get();
+        ActivityScenario<GeoPointMapActivity> scenario = ActivityScenario.launch(GeoPointMapActivity.class);
 
         // The very first fix is ignored.
         mapFragment.setLocationProvider("GPS");
         mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
-        assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus());
+        scenario.onActivity(activity -> {
+            assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus());
+        });
+
 
         // The second fix changes the status message.
         mapFragment.setLocation(new MapPoint(5, 6, 7, 8f));
-        assertEquals(activity.formatLocationStatus("gps", 8f), activity.getLocationStatus());
+        scenario.onActivity(activity -> {
+            assertEquals(activity.formatLocationStatus("gps", 8f), activity.getLocationStatus());
+        });
 
         // When the user clicks the "Save" button, the fix location should be returned.
-        activity.findViewById(R.id.accept_location).performClick();
-        assertTrue(activity.isFinishing());
-        assertEquals(RESULT_OK, shadowOf(activity).getResultCode());
-        String result = shadowOf(activity).getResultIntent().getStringExtra(FormEntryActivity.ANSWER_KEY);
-        assertEquals(activity.formatResult(new MapPoint(5, 6, 7, 8)), result);
+        scenario.onActivity(activity -> {
+            activity.findViewById(R.id.accept_location).performClick();
+        });
+
+        assertThat(scenario.getResult().getResultCode(), is(RESULT_OK));
+        scenario.onActivity(activity -> {
+            assertThat(scenario.getResult().getResultData().getStringExtra("value"), is(activity.formatResult(new MapPoint(5, 6, 7, 8))));
+        });
     }
 
     private static class FakeMapFragment implements MapFragment {
