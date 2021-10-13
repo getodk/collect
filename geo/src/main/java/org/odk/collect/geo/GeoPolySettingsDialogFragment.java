@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.geo;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,9 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import org.odk.collect.android.R;
-
-public class SettingsDialogFragment extends DialogFragment {
+public class GeoPolySettingsDialogFragment extends DialogFragment {
 
     private static final int[] INTERVAL_OPTIONS = {
             1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800

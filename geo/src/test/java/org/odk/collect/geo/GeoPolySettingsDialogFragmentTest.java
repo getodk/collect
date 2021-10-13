@@ -1,4 +1,14 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.geo;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.content.DialogInterface;
 import android.view.View;
@@ -15,36 +25,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
-
 @RunWith(AndroidJUnit4.class)
-public class SettingsDialogFragmentTest {
+public class GeoPolySettingsDialogFragmentTest {
 
     private final int sampleId = R.id.automatic_mode;
 
     private FragmentManager fragmentManager;
-    private SettingsDialogFragment dialogFragment;
+    private GeoPolySettingsDialogFragment dialogFragment;
 
     @Before
     public void setup() {
-        FragmentActivity activity = CollectHelpers.createThemedActivity(FragmentActivity.class);
+        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class, R.style.Theme_AppCompat);
         fragmentManager = activity.getSupportFragmentManager();
-        dialogFragment = new SettingsDialogFragment();
+        dialogFragment = new GeoPolySettingsDialogFragment();
 
-        dialogFragment.callback = mock(SettingsDialogFragment.SettingsDialogCallback.class);
+        dialogFragment.callback = mock(GeoPolySettingsDialogFragment.SettingsDialogCallback.class);
     }
 
     @Test

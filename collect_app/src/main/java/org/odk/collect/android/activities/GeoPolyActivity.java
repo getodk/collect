@@ -31,7 +31,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.geo.SettingsDialogFragment;
+import org.odk.collect.geo.GeoPolySettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.androidshared.utils.DialogFragmentUtils;
@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class GeoPolyActivity extends LocalizedActivity implements SettingsDialogFragment.SettingsDialogCallback {
+public class GeoPolyActivity extends LocalizedActivity implements GeoPolySettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -219,7 +219,7 @@ public class GeoPolyActivity extends LocalizedActivity implements SettingsDialog
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
             if (map.getPolyPoints(featureId).isEmpty()) {
-                DialogFragmentUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(GeoPolySettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();
             }
