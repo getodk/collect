@@ -29,8 +29,8 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.ActivityAvailability
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
+import org.odk.collect.androidshared.utils.DialogFragmentUtils
 import org.odk.collect.androidshared.utils.ToastUtils
 import org.odk.collect.androidshared.utils.ToastUtils.showShortToast
 import org.odk.collect.material.MaterialFullScreenDialogFragment
@@ -133,7 +133,7 @@ class QrCodeProjectCreatorDialog :
         configureMenu()
 
         binding.configureManuallyButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(
+            DialogFragmentUtils.showIfNotShowing(
                 ManualProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )
@@ -259,7 +259,7 @@ class QrCodeProjectCreatorDialog :
                     settingsJson
                 )
                 confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
-                DialogUtils.showIfNotShowing(
+                DialogFragmentUtils.showIfNotShowing(
                     DuplicateProjectConfirmationDialog::class.java,
                     confirmationArgs,
                     childFragmentManager

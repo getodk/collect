@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
 
@@ -226,13 +227,13 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
             downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
             if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
-                DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
                 downloadFormsTask = null;
             }
         } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
                 downloadFormsTask = null;
             }
         } else if (viewModel.getFormDetailsByFormId().isEmpty()
@@ -280,7 +281,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             }
         } else {
             viewModel.clearFormDetailsByFormId();
-            DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
             if (downloadFormListTask != null
                     && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
@@ -395,7 +396,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         int totalCount = filesToDownload.size();
         if (totalCount > 0) {
             // show dialog box
-            DialogUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
             downloadFormsTask = new DownloadFormsTask(formDownloader);
             downloadFormsTask.setDownloaderListener(this);
@@ -487,7 +488,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception) {
-        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
         downloadFormListTask.setDownloaderListener(null);
         downloadFormListTask = null;
 
@@ -655,7 +656,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         cleanUpWebCredentials();
 
-        DialogUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
         ArrayList<ErrorItem> failures = new ArrayList<>();
         for (Map.Entry<ServerFormDetails, String> entry : result.entrySet()) {
@@ -667,7 +668,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         Bundle args = new Bundle();
         args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, failures);
         args.putSerializable(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, result.size());
-        DialogUtils.showIfNotShowing(FormsDownloadResultDialog.class, args, getSupportFragmentManager());
+        DialogFragmentUtils.showIfNotShowing(FormsDownloadResultDialog.class, args, getSupportFragmentManager());
 
         // Set result to true for forms which were downloaded
         if (viewModel.isDownloadOnlyMode()) {

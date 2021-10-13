@@ -28,7 +28,7 @@ import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
-import static org.odk.collect.android.utilities.DialogUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.utils.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.utils.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.utils.ToastUtils.showShortToast;
 
@@ -156,7 +156,6 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -175,6 +174,7 @@ import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataReg
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
@@ -477,15 +477,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
             if (isSavingAnswerFile) {
-                DialogUtils.showIfNotShowing(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
             } else {
-                DialogUtils.dismissDialog(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(SaveAnswerFileProgressDialogFragment.class, getSupportFragmentManager());
             }
         });
 
         formSaveViewModel.getAnswerFileError().observe(this, file -> {
             if (file != null) {
-                DialogUtils.showIfNotShowing(SaveAnswerFileErrorDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(SaveAnswerFileErrorDialogFragment.class, getSupportFragmentManager());
             }
         });
 
@@ -1052,7 +1052,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == DELETE_REPEAT) {
-            DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
         } else {
             ODKView odkView = getCurrentViewIfODKView();
             if (odkView != null) {
@@ -1335,7 +1335,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
             // We want the user to stop recording before changing screens
-            DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
             return false;
         }
 
@@ -1724,8 +1724,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case SAVED:
-                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
                 showShortToast(this, R.string.data_saved_ok);
 
@@ -1740,8 +1740,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case SAVE_ERROR:
-                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
                 String message;
 
@@ -1757,8 +1757,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case FINALIZE_ERROR:
-                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
                 showLongToast(this, String.format(getString(R.string.encryption_error_message),
                         result.getMessage()));
@@ -1767,8 +1767,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case CONSTRAINT_ERROR: {
-                DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
-                DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
                 onScreenRefresh();
 
@@ -1971,7 +1971,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
                     }
                 } else {
-                    DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
+                    DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
                     formLoaderTask = null;
                     t.cancel(true);
@@ -2016,7 +2016,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case KeyEvent.KEYCODE_BACK:
                 if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                     // We want the user to stop recording before changing screens
-                    DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+                    DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
                     return true;
                 }
 
@@ -2118,7 +2118,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void loadingComplete(FormLoaderTask task, FormDef formDef, String warningMsg) {
-        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         final FormController formController = task.getFormController();
 
@@ -2296,7 +2296,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void showFormLoadErrorAndExit(String errorMsg) {
-        DialogUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
             createErrorDialog(errorMsg, true);

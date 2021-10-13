@@ -49,9 +49,9 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -272,7 +272,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
         switch (item.getItemId()) {
             case R.id.menu_delete_child:
-                DialogUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
                 return true;
 
             case R.id.menu_add_repeat:

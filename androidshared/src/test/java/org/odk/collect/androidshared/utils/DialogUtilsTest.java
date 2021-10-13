@@ -1,4 +1,7 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.utils;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import android.os.Bundle;
 
@@ -10,47 +13,43 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.android.support.CollectHelpers.buildThemedActivity;
-import static org.odk.collect.android.support.CollectHelpers.createThemedActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class DialogUtilsTest {
 
     @Test
     public void showIfNotShowing_onlyEverOpensOneDialog() {
-        FragmentActivity activity = createThemedActivity(FragmentActivity.class);
+        FragmentActivity activity = Robolectric.setupActivity(FragmentActivity.class);
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
-        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        DialogFragmentUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(1));
         Fragment dialog1 = fragmentManager.getFragments().get(0);
 
-        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        DialogFragmentUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(1));
         assertThat(fragmentManager.getFragments().get(0), equalTo(dialog1));
     }
 
     @Test
     public void showIfNotShowing_whenActivitySavedState_doesNotShowDialog() {
-        ActivityController<FragmentActivity> activityController = buildThemedActivity(FragmentActivity.class).setup();
+        ActivityController<FragmentActivity> activityController = Robolectric.buildActivity(FragmentActivity.class).setup();
         activityController.pause().stop().saveInstanceState(new Bundle());
 
         FragmentManager fragmentManager = activityController.get().getSupportFragmentManager();
-        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        DialogFragmentUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(0));
     }
 
     @Test
     public void showIfNotShowing_whenActivityDestroyed_doesNotShowDialog() {
-        ActivityController<FragmentActivity> activityController = buildThemedActivity(FragmentActivity.class).setup();
+        ActivityController<FragmentActivity> activityController = Robolectric.buildActivity(FragmentActivity.class).setup();
         activityController.pause().stop().destroy();
 
         FragmentManager fragmentManager = activityController.get().getSupportFragmentManager();
-        DialogUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
+        DialogFragmentUtils.showIfNotShowing(DialogFragment.class, fragmentManager);
         assertThat(fragmentManager.getFragments().size(), equalTo(0));
     }
 }

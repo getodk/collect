@@ -45,9 +45,9 @@ import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
+import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 
 import javax.inject.Inject;
 
@@ -99,9 +99,9 @@ public class FillBlankFormActivity extends FormListActivity implements
 
         blankFormsListViewModel.isAuthenticationRequired().observe(this, authenticationRequired -> {
             if (authenticationRequired) {
-                DialogUtils.showIfNotShowing(ServerAuthDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(ServerAuthDialogFragment.class, getSupportFragmentManager());
             } else {
-                DialogUtils.dismissDialog(ServerAuthDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.dismissDialog(ServerAuthDialogFragment.class, getSupportFragmentManager());
             }
         });
 

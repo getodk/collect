@@ -19,7 +19,7 @@ import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.utilities.DialogUtils
+import org.odk.collect.androidshared.utils.DialogFragmentUtils
 import org.odk.collect.androidshared.utils.ToastUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -70,7 +70,7 @@ class ProjectSettingsDialog : DialogFragment() {
         }
 
         binding.addProjectButton.setOnClickListener {
-            DialogUtils.showIfNotShowing(
+            DialogFragmentUtils.showIfNotShowing(
                 QrCodeProjectCreatorDialog::class.java,
                 requireActivity().supportFragmentManager
             )

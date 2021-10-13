@@ -34,7 +34,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.maps.MapFragment;
@@ -219,7 +219,7 @@ public class GeoPolyActivity extends LocalizedActivity implements SettingsDialog
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
             if (map.getPolyPoints(featureId).isEmpty()) {
-                DialogUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();
             }

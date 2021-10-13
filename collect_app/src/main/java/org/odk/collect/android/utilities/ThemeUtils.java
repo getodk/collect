@@ -19,13 +19,10 @@ import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
 import static org.odk.collect.androidshared.utils.ContextUtils.getThemeAttributeValue;
 
 import android.content.Context;
-import android.util.TypedValue;
 
-import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
