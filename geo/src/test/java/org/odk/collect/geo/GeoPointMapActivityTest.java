@@ -216,6 +216,11 @@ public class GeoPointMapActivityTest {
             this.pointListener = listener;
         }
 
+        @Override
+        public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+
+        }
+
         public void setLocation(MapPoint mapPoint) {
             if (pointListener != null) {
                 pointListener.onPoint(mapPoint);

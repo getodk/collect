@@ -339,6 +339,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         gpsLocationListener = listener;
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
     @Override public void setGpsLocationEnabled(boolean enable) {
         if (enable != clientWantsLocationUpdates) {
             clientWantsLocationUpdates = enable;

@@ -459,6 +459,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         gpsLocationListener = listener;
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override public void setGpsLocationEnabled(boolean enable) {
         if (enable != clientWantsLocationUpdates) {
             clientWantsLocationUpdates = enable;

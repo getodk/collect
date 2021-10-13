@@ -375,6 +375,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         gpsLocationListener = listener;
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
     @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
         myLocationOverlay.runOnFirstFix(() -> getActivity().runOnUiThread(() -> listener.onReady(this)));
     }

@@ -201,6 +201,8 @@ public interface MapFragment {
      */
     void setGpsLocationListener(@Nullable PointListener listener);
 
+    void setRetainMockAccuracy(boolean retainMockAccuracy);
+
     interface ErrorListener {
         void onError();
     }

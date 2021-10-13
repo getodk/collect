@@ -219,4 +219,9 @@ public class TestMapFragment implements MapFragment {
     public void setGpsLocationListener(@Nullable PointListener listener) {
         locationListener = listener;
     }
+
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+
+    }
 }
