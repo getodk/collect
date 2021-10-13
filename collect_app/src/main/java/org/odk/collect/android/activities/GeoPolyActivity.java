@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.androidshared.utils.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 
 import android.content.Context;
@@ -29,17 +30,18 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class GeoPolyActivity extends CollectAbstractActivity implements SettingsDialogFragment.SettingsDialogCallback {
+public class GeoPolyActivity extends LocalizedActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -488,9 +490,9 @@ public class GeoPolyActivity extends CollectAbstractActivity implements Settings
                 : getString(R.string.location_status_unacceptable, location.sd)
         );
         locationStatus.setBackgroundColor(
-                location == null ? themeUtils.getColorPrimary()
-                        : acceptable ? themeUtils.getColorPrimary()
-                        : themeUtils.getColorError()
+                location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)
+                        : acceptable ? getThemeAttributeValue(this, R.attr.colorPrimary)
+                        : getThemeAttributeValue(this, R.attr.colorError)
         );
         collectionStatus.setText(
             !inputActive ? getString(R.string.collection_status_paused, numPoints)
