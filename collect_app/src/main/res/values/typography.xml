@@ -33,8 +33,11 @@
     </style>
 
     <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:letterSpacing">0.04</item>
+        <item name="android:letterSpacing">0.009375</item>
     </style>
 
     <style name="TextAppearance.Collect.Link" parent="TextAppearance.MaterialComponents.Body2">
