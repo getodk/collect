@@ -50,6 +50,8 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
+import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -280,6 +282,12 @@ public class Collect extends Application implements
                         @Override
                         public MapFragmentFactory providesMapFragmentFactory() {
                             return new MapProvider();
+                        }
+
+                        @NonNull
+                        @Override
+                        public LocationTracker providesLocationTracker() {
+                            return new ForegroundServiceLocationTracker(Collect.this);
                         }
                     })
                     .build();

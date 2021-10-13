@@ -12,7 +12,6 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
@@ -170,8 +169,6 @@ public interface AppDependencyComponent {
     void inject(ODKView odkView);
 
     void inject(FormMetadataPreferencesFragment formMetadataPreferencesFragment);
-
-    void inject(GeoPolyActivity geoPolyActivity);
 
     void inject(FormMapActivity formMapActivity);
 

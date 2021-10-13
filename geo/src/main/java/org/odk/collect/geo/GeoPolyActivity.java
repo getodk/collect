@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.geo;
 
 import static org.odk.collect.androidshared.utils.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
@@ -29,15 +29,10 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.geo.GeoPolySettingsDialogFragment;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.androidshared.utils.DialogFragmentUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
@@ -73,10 +68,13 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     private OutputMode outputMode;
 
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     LocationTracker locationTracker;
+
+    @Inject
+    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -122,7 +120,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         super.onCreate(savedInstanceState);
         previousState = savedInstanceState;
 
-        DaggerUtils.getComponent(this).inject(this);
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
@@ -145,7 +143,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         setContentView(R.layout.geopoly_layout);
 
         Context context = getApplicationContext();
-        mapProvider.createMapFragment(context)
+        mapFragmentFactory.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
@@ -229,7 +227,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
         });
 
         zoomButton = findViewById(R.id.zoom);
@@ -290,7 +288,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
+            "value", GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
         finish();
     }
 

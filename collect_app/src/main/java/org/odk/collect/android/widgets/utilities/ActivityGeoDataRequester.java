@@ -11,7 +11,7 @@ import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.geo.GeoPointMapActivity;
-import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;

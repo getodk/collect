@@ -31,7 +31,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.utilities.Appearances;

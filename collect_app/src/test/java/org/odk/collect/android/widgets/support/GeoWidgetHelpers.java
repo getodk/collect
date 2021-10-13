@@ -8,7 +8,7 @@ import static org.odk.collect.geo.GeoPointActivity.EXTRA_ACCURACY_THRESHOLD;
 
 import android.os.Bundle;
 
-import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.geo.GeoPointMapActivity;
 
 import java.util.ArrayList;
