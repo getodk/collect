@@ -94,7 +94,7 @@ public class Collect extends Application implements
 
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
-    private GeoDependencyComponent geoDependencyComponent;
+    protected GeoDependencyComponent geoDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this

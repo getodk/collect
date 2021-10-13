@@ -3,9 +3,14 @@ package org.odk.collect.android.location.activities;
 import static android.app.Activity.RESULT_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.odk.collect.testshared.LocationTestUtils.createLocation;
 import static org.robolectric.Shadows.shadowOf;
 
+import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -16,16 +21,18 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.RobolectricApplication;
+import org.odk.collect.geo.DaggerGeoDependencyComponent;
+import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.GeoPointMapActivity;
-import org.odk.collect.android.geo.GoogleMapFragment;
-import org.odk.collect.android.geo.MapboxMapFragment;
-import org.odk.collect.android.location.client.FakeLocationClient;
-import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
-import org.robolectric.shadows.ShadowApplication;
+
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
@@ -33,18 +40,27 @@ public class GeoPointMapActivityTest {
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPointMapActivity> controller;
-    private FakeLocationClient fakeLocationClient;
+    private final FakeMapFragment mapFragment = new FakeMapFragment();
 
     @Before
     public void setUp() throws Exception {
-        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_FINE_LOCATION");
-        ShadowApplication.getInstance().grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
-        GoogleMapFragment.testMode = true;
-        MapboxMapFragment.testMode = true;
-        fakeLocationClient = new FakeLocationClient();
-        LocationClientProvider.setTestClient(fakeLocationClient);
+        RobolectricApplication application = ApplicationProvider.getApplicationContext();
+        application.setGeoDependencyComponent(DaggerGeoDependencyComponent.builder()
+                .geoDependencyModule(new GeoDependencyModule() {
+                    @NonNull
+                    @Override
+                    public MapFragmentFactory providesMapFragmentFactory() {
+                        return context -> mapFragment;
+                    }
 
-        CollectHelpers.setupDemoProject();
+                    @NonNull
+                    @Override
+                    public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
+                        return activity -> { };
+                    }
+                })
+                .build());
+
         controller = Robolectric.buildActivity(GeoPointMapActivity.class);
     }
 
@@ -53,11 +69,12 @@ public class GeoPointMapActivityTest {
         GeoPointMapActivity activity = controller.create().start().resume().visible().get();
 
         // The very first fix is ignored.
-        fakeLocationClient.receiveFix(createLocation("GPS", 1, 2, 3, 4f));
+        mapFragment.setLocationProvider("GPS");
+        mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
         assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus());
 
         // The second fix changes the status message.
-        fakeLocationClient.receiveFix(createLocation("GPS", 5, 6, 7, 8f));
+        mapFragment.setLocation(new MapPoint(5, 6, 7, 8f));
         assertEquals(activity.formatLocationStatus("gps", 8f), activity.getLocationStatus());
 
         // When the user clicks the "Save" button, the fix location should be returned.
@@ -66,5 +83,155 @@ public class GeoPointMapActivityTest {
         assertEquals(RESULT_OK, shadowOf(activity).getResultCode());
         String result = shadowOf(activity).getResultIntent().getStringExtra(FormEntryActivity.ANSWER_KEY);
         assertEquals(activity.formatResult(new MapPoint(5, 6, 7, 8)), result);
+    }
+
+    private static class FakeMapFragment implements MapFragment {
+
+        private PointListener pointListener;
+        private String locationProvider;
+
+        @Override
+        public void applyConfig(Bundle config) {
+
+        }
+
+        @Override
+        public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+            readyListener.onReady(this);
+        }
+
+        @NonNull
+        @Override
+        public MapPoint getCenter() {
+            return null;
+        }
+
+        @Override
+        public double getZoom() {
+            return 0;
+        }
+
+        @Override
+        public void setCenter(@Nullable MapPoint center, boolean animate) {
+
+        }
+
+        @Override
+        public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
+
+        }
+
+        @Override
+        public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
+
+        }
+
+        @Override
+        public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
+
+        }
+
+        @Override
+        public int addMarker(MapPoint point, boolean draggable, String iconAnchor) {
+            return 0;
+        }
+
+        @Override
+        public void setMarkerIcon(int featureId, int drawableId) {
+
+        }
+
+        @Override
+        public MapPoint getMarkerPoint(int featureId) {
+            return null;
+        }
+
+        @Override
+        public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+            return 0;
+        }
+
+        @Override
+        public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
+
+        }
+
+        @Override
+        public void removePolyLastPoint(int featureId) {
+
+        }
+
+        @NonNull
+        @Override
+        public List<MapPoint> getPolyPoints(int featureId) {
+            return null;
+        }
+
+        @Override
+        public void removeFeature(int featureId) {
+
+        }
+
+        @Override
+        public void clearFeatures() {
+
+        }
+
+        @Override
+        public void setClickListener(@Nullable PointListener listener) {
+
+        }
+
+        @Override
+        public void setLongPressListener(@Nullable PointListener listener) {
+
+        }
+
+        @Override
+        public void setFeatureClickListener(@Nullable FeatureListener listener) {
+
+        }
+
+        @Override
+        public void setDragEndListener(@Nullable FeatureListener listener) {
+
+        }
+
+        @Override
+        public void setGpsLocationEnabled(boolean enabled) {
+
+        }
+
+        @Nullable
+        @Override
+        public MapPoint getGpsLocation() {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public String getLocationProvider() {
+            return locationProvider;
+        }
+
+        @Override
+        public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
+
+        }
+
+        @Override
+        public void setGpsLocationListener(@Nullable PointListener listener) {
+            this.pointListener = listener;
+        }
+
+        public void setLocation(MapPoint mapPoint) {
+            if (pointListener != null) {
+                pointListener.onPoint(mapPoint);
+            }
+        }
+
+        public void setLocationProvider(String locationProvider) {
+            this.locationProvider = locationProvider;
+        }
     }
 }
