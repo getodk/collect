@@ -35,7 +35,7 @@ object Dependencies {
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
     const val squareup_okhttp_tls = "com.squareup.okhttp3:okhttp-tls:${Versions.okhttp3}"
     const val burgstaller_okhttp_digest = "com.burgstaller:okhttp-digest:2.5"
-    const val persian_joda_time = "com.github.mohamadian:PersianJodaTime:1.2"
+    const val persian_joda_time = "com.github.mohamadian:persianjodatime:1.2"
     const val myanmar_calendar = "com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3"
     const val bikram_sambat = "bikramsambat:bikram-sambat:1.1.0"
     const val danlew_android_joda = "net.danlew:android.joda:2.10.9.1"
