@@ -68,4 +68,17 @@ public class MapboxLocationCallbackTest {
         verify(mapFragment).onLocationChanged(acLocation.capture());
         assertThat(acLocation.getValue().getAccuracy(), is(0.0f));
     }
+
+    @Test
+    public void whenLocationIsFaked_andRetainMockAccuracyIsTrue_keepsOriginalAccuracy() {
+        mapboxLocationCallback.setRetainMockAccuracy(true);
+
+        Location location = LocationTestUtils.createLocation(GPS_PROVIDER, 7d, 2d, 3d, 5.0f, true);
+        when(result.getLastLocation()).thenReturn(location);
+        mapboxLocationCallback.onSuccess(result);
+
+        ArgumentCaptor<Location> acLocation = ArgumentCaptor.forClass(Location.class);
+        verify(mapFragment).onLocationChanged(acLocation.capture());
+        assertThat(acLocation.getValue().getAccuracy(), is(5.0f));
+    }
 }

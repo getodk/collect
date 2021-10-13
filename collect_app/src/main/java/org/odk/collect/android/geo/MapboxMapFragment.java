@@ -461,7 +461,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
-        throw new UnsupportedOperationException();
+        locationCallback.setRetainMockAccuracy(retainMockAccuracy);
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {

@@ -17,6 +17,7 @@ import java.lang.ref.WeakReference;
 public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
     private final WeakReference<MapboxMapFragment> mapRef;
+    private boolean retainMockAccuracy;
 
     public MapboxLocationCallback(MapboxMapFragment map) {
         mapRef = new WeakReference<>(map);
@@ -27,10 +28,14 @@ public class MapboxLocationCallback implements LocationEngineCallback<LocationEn
         MapboxMapFragment map = mapRef.get();
         Location location = result.getLastLocation();
         if (map != null && location != null) {
-            map.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
+            map.onLocationChanged(LocationUtils.sanitizeAccuracy(location, retainMockAccuracy));
         }
     }
 
     @Override
     public void onFailure(@NonNull Exception exception) { }
+
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        this.retainMockAccuracy = retainMockAccuracy;
+    }
 }
