@@ -277,6 +277,7 @@ dependencies {
     implementation Dependencies.firebase_crashlytics
 
     implementation Dependencies.mapbox_android_sdk
+    implementation Dependencies.mapbox_android_telemetry
     implementation Dependencies.mapbox_android_plugin_annotation
 
     implementation Dependencies.guava
