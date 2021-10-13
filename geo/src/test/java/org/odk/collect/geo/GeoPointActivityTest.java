@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Intent;
@@ -154,11 +155,11 @@ public class GeoPointActivityTest {
     @Test
     public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, true);
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
         ActivityScenario.launch(intent);
         verify(locationClient).setRetainMockAccuracy(true);
 
-        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, false);
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
         ActivityScenario.launch(intent);
         verify(locationClient).setRetainMockAccuracy(false);
     }

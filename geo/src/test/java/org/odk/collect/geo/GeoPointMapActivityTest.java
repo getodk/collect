@@ -4,7 +4,9 @@ import static android.app.Activity.RESULT_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -77,10 +79,29 @@ public class GeoPointMapActivityTest {
         });
     }
 
+    @Test
+    public void mapFragmentRetainMockAccuracy_isFalse() {
+        ActivityScenario.launch(GeoPointMapActivity.class);
+        assertThat(mapFragment.isRetainMockAccuracy(), is(false));
+    }
+
+    @Test
+    public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
+        ActivityScenario.launch(intent);
+        assertThat(mapFragment.isRetainMockAccuracy(), is(true));
+
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
+        ActivityScenario.launch(intent);
+        assertThat(mapFragment.isRetainMockAccuracy(), is(false));
+    }
+
     private static class FakeMapFragment implements MapFragment {
 
         private PointListener pointListener;
         private String locationProvider;
+        private boolean retainMockAccuracy;
 
         @Override
         public void applyConfig(Bundle config) {
@@ -218,7 +239,7 @@ public class GeoPointMapActivityTest {
 
         @Override
         public void setRetainMockAccuracy(boolean retainMockAccuracy) {
-
+            this.retainMockAccuracy = retainMockAccuracy;
         }
 
         public void setLocation(MapPoint mapPoint) {
@@ -229,6 +250,10 @@ public class GeoPointMapActivityTest {
 
         public void setLocationProvider(String locationProvider) {
             this.locationProvider = locationProvider;
+        }
+
+        public boolean isRetainMockAccuracy() {
+            return retainMockAccuracy;
         }
     }
 }

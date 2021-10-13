@@ -14,6 +14,8 @@
 
 package org.odk.collect.geo;
 
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,7 +52,6 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static final String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;

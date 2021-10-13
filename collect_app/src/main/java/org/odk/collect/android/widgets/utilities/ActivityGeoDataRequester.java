@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.utilities;
 
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 
 import android.app.Activity;
 import android.content.Context;
@@ -42,7 +43,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 }
 
                 bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
-                bundle.putBoolean(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy")));
+                bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy")));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 

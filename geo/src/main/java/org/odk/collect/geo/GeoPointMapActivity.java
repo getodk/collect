@@ -16,6 +16,7 @@ package org.odk.collect.geo;
 
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -264,6 +265,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
         }
 
+        map.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 
