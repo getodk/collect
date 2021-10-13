@@ -4,6 +4,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import org.odk.collect.geo.maps.MapFragmentFactory
+import java.lang.UnsupportedOperationException
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -21,11 +22,11 @@ open class GeoDependencyModule {
 
     @Provides
     open fun providesMapFragmentFactory(): MapFragmentFactory {
-        TODO()
+        throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
     @Provides
     open fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
-        TODO()
+        throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }
