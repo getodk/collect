@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
@@ -22,9 +23,11 @@ public class StoragePathProviderTest {
     @Before
     public void setup() {
         CurrentProjectProvider currentProjectProvider = mock(CurrentProjectProvider.class);
+        ProjectsRepository projectsRepository = mock(ProjectsRepository.class);
         when(currentProjectProvider.getCurrentProject()).thenReturn(new Project.Saved("123", "Project", "D", "#ffffff"));
+        when(projectsRepository.get("123")).thenReturn(new Project.Saved("123", "Project", "D", "#ffffff"));
 
-        storagePathProvider = new StoragePathProvider(currentProjectProvider, root.getAbsolutePath());
+        storagePathProvider = new StoragePathProvider(currentProjectProvider, projectsRepository, root.getAbsolutePath());
     }
 
     @After
@@ -38,10 +41,11 @@ public class StoragePathProviderTest {
     }
 
     @Test
-    public void getProjectRootDirPath_returnsAndCreatesDirForProject() {
-        String path = storagePathProvider.getProjectRootDirPath("projectId");
-        assertThat(path, is(root.getAbsolutePath() + "/projects/projectId"));
+    public void getProjectRootDirPath_returnsAndCreatesDirForProjectWithFileRepresentingProjectName() {
+        String path = storagePathProvider.getProjectRootDirPath("123");
+        assertThat(path, is(root.getAbsolutePath() + "/projects/123"));
         assertThat(new File(path).exists(), is(true));
+        assertThat(new File(path + File.separator + "Project").exists(), is(true));
     }
 
     @Test

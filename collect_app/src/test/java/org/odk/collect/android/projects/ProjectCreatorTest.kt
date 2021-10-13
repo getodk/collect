@@ -9,17 +9,13 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.configure.SettingsImporter
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.TempFiles
-import java.io.File
 
 class ProjectCreatorTest {
     private val json = "{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}"
     private val newProject = Project.New("my-server.com", "M", "#3e9fcc")
     private val savedProject = Project.Saved("1", newProject)
-    private val storagePath = TempFiles.createTempDir().absolutePath
 
     private var projectImporter = mock<ProjectImporter> {
         on { importNewProject() } doReturn savedProject
@@ -33,15 +29,12 @@ class ProjectCreatorTest {
         on { getCurrentProject() } doReturn savedProject
     }
     private var settingsImporter = mock<SettingsImporter> {}
-    private val storagePathProvider = mock<StoragePathProvider> {
-        on { getProjectRootDirPath() } doReturn storagePath
-    }
 
     private lateinit var projectCreator: ProjectCreator
 
     @Before
     fun setup() {
-        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, storagePathProvider)
+        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter)
     }
 
     @Test
@@ -86,13 +79,5 @@ class ProjectCreatorTest {
 
         projectCreator.createNewProject(json)
         verify(currentProjectProvider).setCurrentProject("1")
-    }
-
-    @Test
-    fun `A file with project name should be created to make it easier to navigate ODK's folders`() {
-        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(true)
-
-        projectCreator.createNewProject(json)
-        assertThat(File(storagePath + File.separator + savedProject.name).exists(), `is`(true))
     }
 }
