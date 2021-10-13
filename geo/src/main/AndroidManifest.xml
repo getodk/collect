@@ -6,5 +6,9 @@
         <activity
             android:name=".GeoPointActivity"
             android:theme="@style/Theme.MaterialComponents" />
+
+        <activity
+            android:name=".GeoPointMapActivity"
+            android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>

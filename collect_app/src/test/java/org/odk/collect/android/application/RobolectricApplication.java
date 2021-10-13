@@ -1,17 +1,16 @@
 package org.odk.collect.android.application;
 
+import static android.os.Environment.MEDIA_MOUNTED;
+import static org.robolectric.Shadows.shadowOf;
+
 import androidx.test.core.app.ApplicationProvider;
 import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.geo.GeoDependencyComponent;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowEnvironment;
-
-import static android.os.Environment.MEDIA_MOUNTED;
-import static org.robolectric.Shadows.shadowOf;
 
 /**
  * @author James Knight
@@ -51,9 +50,5 @@ public class RobolectricApplication extends Collect {
         MultiClickGuard.test = true;
 
         super.onCreate();
-    }
-
-    public void setGeoDependencyComponent(GeoDependencyComponent geoDependencyComponent) {
-        this.geoDependencyComponent = geoDependencyComponent;
     }
 }

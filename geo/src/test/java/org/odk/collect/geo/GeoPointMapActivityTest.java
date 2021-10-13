@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.activities;
+package org.odk.collect.geo;
 
 import static android.app.Activity.RESULT_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,12 +17,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.RobolectricApplication;
-import org.odk.collect.geo.DaggerGeoDependencyComponent;
-import org.odk.collect.geo.GeoDependencyModule;
-import org.odk.collect.geo.GeoPointMapActivity;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
@@ -37,7 +31,7 @@ public class GeoPointMapActivityTest {
     @Before
     public void setUp() throws Exception {
         RobolectricApplication application = ApplicationProvider.getApplicationContext();
-        application.setGeoDependencyComponent(DaggerGeoDependencyComponent.builder()
+        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
                 .geoDependencyModule(new GeoDependencyModule() {
                     @NonNull
                     @Override
@@ -51,7 +45,7 @@ public class GeoPointMapActivityTest {
                         return activity -> { };
                     }
                 })
-                .build());
+                .build();
     }
 
     @Test
