@@ -196,10 +196,12 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
         val cftor = MapProvider.getConfigurator()
         val items: MutableList<CaptionedListPreference.Item> = ArrayList()
         items.add(CaptionedListPreference.Item(null, getString(R.string.none), ""))
-        for ((value, file) in getSupportedLayerFiles(cftor)) {
+        val supportedLayerFiles = getSupportedLayerFiles(cftor)
+
+        for ((id, file) in supportedLayerFiles) {
             val path = FileUtils.expandAndroidStoragePath(file.path)
             val name = cftor.getDisplayName(File(file.absolutePath))
-            items.add(CaptionedListPreference.Item(value, name, path))
+            items.add(CaptionedListPreference.Item(id, name, path))
         }
 
         // Sort by display name, then by path for files with identical names.
@@ -223,6 +225,11 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
 
             0 // both a.value and b.value are null
         }
+
+        if (referenceLayerPref!!.value != null && referenceLayerRepository.get(referenceLayerPref!!.value) == null) {
+            referenceLayerPref!!.value = null
+        }
+
         referenceLayerPref!!.setItems(items)
         referenceLayerPref!!.updateContent()
     }
