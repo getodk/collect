@@ -237,4 +237,46 @@ public class ActivityGeoDataRequesterTest {
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
         assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
     }
+
+    @Test
+    public void requestGeoShape_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
+        assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+
+        activityGeoDataRequester.requestGeoShape(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
+        assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
+    }
+
+    @Test
+    public void requestGeoTrace_whenWidgetHasAllowMockAccuracy_addsItToIntent() {
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "true")));
+
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
+        assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
+
+        when(prompt.getBindAttributes())
+                .thenReturn(asList(TreeElement.constructAttributeElement("odk", "allow-mock-accuracy", "false")));
+
+        activityGeoDataRequester.requestGeoTrace(testActivity, prompt, "blah", waitingForDataRegistry);
+
+        startedIntent = shadowActivity.getNextStartedActivity();
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPolyActivity.class));
+        assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
+    }
 }

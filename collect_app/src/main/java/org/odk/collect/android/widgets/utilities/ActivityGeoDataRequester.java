@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.geo.GeoPointMapActivity;
-import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
@@ -19,6 +17,8 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.geo.GeoPointActivity;
+import org.odk.collect.geo.GeoPointMapActivity;
+import org.odk.collect.geo.GeoPolyActivity;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
 
@@ -43,7 +43,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 }
 
                 bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
-                bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy")));
+                bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
@@ -69,6 +69,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
                 intent.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE);
             }
@@ -90,6 +91,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
                 intent.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE);
             }
@@ -98,6 +100,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
             public void denied() {
             }
         });
+    }
+
+    private boolean getAllowMockAccuracy(FormEntryPrompt prompt) {
+        return Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy"));
     }
 
     private boolean isMapsAppearance(FormEntryPrompt prompt) {
