@@ -77,6 +77,10 @@ android {
             applicationId "org.smap.smapTask.android.kontrolid"
             versionName "6.511-kontrolid"
         }
+        kontrolid_gplay {
+            applicationId "org.smap.smapTask.android.kontrolid_gplay"
+            versionName "6.511-kontrolid_gplay"
+        }
         supply {
             applicationId "org.smap.smapTask.android.supply"
             versionName "6.511-supply"
