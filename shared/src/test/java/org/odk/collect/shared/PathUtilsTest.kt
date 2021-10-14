@@ -35,4 +35,10 @@ class PathUtilsTest {
         val path = PathUtils.getRelativeFilePath("/anotherRoot/anotherDir", "/root/dir/file")
         assertThat(path, equalTo("/root/dir/file"))
     }
+
+    @Test
+    fun `reserved chars should be removed from file name`() {
+        val result = PathUtils.getPathSafeFileName("P\"1*ą/ć:!<@>#?$\\%|^&[]{}_=+")
+        assertThat(result, equalTo("P_1_ą_ć_!_@_#_\$_%_^&[]{}_=+"))
+    }
 }

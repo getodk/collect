@@ -24,7 +24,7 @@ import org.odk.collect.androidshared.ColorPickerViewModel
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.strings.StringUtils
+import org.odk.collect.shared.PathUtils
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
@@ -140,7 +140,7 @@ class ProjectDisplayPreferencesFragment :
             PROJECT_NAME_KEY -> {
                 Analytics.log(AnalyticsEvents.CHANGE_PROJECT_NAME)
 
-                val sanitizedOldProjectName = StringUtils.sanitizeFileName(name)
+                val sanitizedOldProjectName = PathUtils.getPathSafeFileName(name)
                 try {
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedOldProjectName).delete()
                 } catch (e: Exception) {
@@ -151,7 +151,7 @@ class ProjectDisplayPreferencesFragment :
                     )
                 }
 
-                val sanitizedNewProjectName = StringUtils.sanitizeFileName(newValue.toString())
+                val sanitizedNewProjectName = PathUtils.getPathSafeFileName(newValue.toString())
                 try {
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedNewProjectName).createNewFile()
                 } catch (e: Exception) {

@@ -5,7 +5,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.strings.StringUtils
+import org.odk.collect.shared.PathUtils
 import timber.log.Timber
 import java.io.File
 
@@ -24,7 +24,7 @@ class StoragePathProvider(
             File(path).mkdirs()
 
             try {
-                val sanitizedProjectName = StringUtils.sanitizeFileName(projectsRepository.get(uuid)!!.name)
+                val sanitizedProjectName = PathUtils.getPathSafeFileName(projectsRepository.get(uuid)!!.name)
                 File(path + File.separator + sanitizedProjectName).createNewFile()
             } catch (e: Exception) {
                 Timber.e(
