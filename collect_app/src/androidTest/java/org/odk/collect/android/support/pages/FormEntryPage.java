@@ -1,15 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.test.espresso.Espresso;
-
-import org.hamcrest.Matchers;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.utilities.FlingRegister;
-
-import java.util.concurrent.Callable;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
@@ -27,6 +17,16 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
+
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.test.espresso.Espresso;
+
+import org.hamcrest.Matchers;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.utilities.FlingRegister;
+
+import java.util.concurrent.Callable;
 
 public class FormEntryPage extends Page<FormEntryPage> {
 
@@ -171,11 +171,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public FormEntryPage putTextOnIndex(int index, String text) {
-        onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(text));
-        return this;
-    }
-
     public FormEntryPage deleteGroup(String questionText) {
         onView(withText(questionText)).perform(longClick());
         onView(withText(R.string.delete_repeat)).perform(click());
@@ -281,6 +276,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         assertText(question);
         inputText(answer);
         closeSoftKeyboard();
+        return this;
+    }
+
+    public FormEntryPage answerQuestion(int index, String answer) {
+        onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(answer));
         return this;
     }
 
