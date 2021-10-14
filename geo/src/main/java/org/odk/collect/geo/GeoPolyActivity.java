@@ -340,7 +340,8 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            locationTracker.start();
+            boolean retainMockAccuracy = getIntent().getBooleanExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
+            locationTracker.start(retainMockAccuracy);
 
             recordPoint(map.getGpsLocation());
             schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {

@@ -20,6 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static java.util.Collections.emptyList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -102,6 +103,25 @@ public class GeoPolyActivityTest {
             activity.startInput();
             assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
         }));
+    }
+
+    @Test
+    public void startingInput_usingAutomaticMode_usesRetainMockAccuracyToStartLocationTracker() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, true);
+        ActivityScenario.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+            activity.updateRecordingMode(R.id.automatic_mode);
+            activity.startInput();
+            verify(locationTracker).start(true);
+        });
+
+        intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
+        ActivityScenario.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+            activity.updateRecordingMode(R.id.automatic_mode);
+            activity.startInput();
+            verify(locationTracker).start(true);
+        });
     }
 
     private static class FakeMapFragment implements MapFragment {
