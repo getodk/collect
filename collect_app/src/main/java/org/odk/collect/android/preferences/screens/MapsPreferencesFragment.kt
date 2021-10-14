@@ -176,10 +176,15 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
             val summary: String = if (value == null) {
                 getString(R.string.none)
             } else {
-                val cftor = MapProvider.getConfigurator()
                 val referenceLayer = referenceLayerRepository.get(value.toString())
-                val path = referenceLayer!!.file.absolutePath
-                cftor.getDisplayName(File(path))
+
+                if (referenceLayer != null) {
+                    val path = referenceLayer.file.absolutePath
+                    val cftor = MapProvider.getConfigurator()
+                    cftor.getDisplayName(File(path))
+                } else {
+                    getString(R.string.none)
+                }
             }
 
             referenceLayerPref!!.summary = summary
