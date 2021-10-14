@@ -94,4 +94,8 @@ object StringUtils {
             str.substring(0, str.length - remove.length)
         } else str
     }
+
+    // https://stackoverflow.com/questions/2679699/what-characters-allowed-in-file-names-on-android
+    @JvmStatic
+    fun sanitizeFileName(fileName: String) = fileName.replace("[\"*/:<>?\\\\|]".toRegex(), "_")
 }

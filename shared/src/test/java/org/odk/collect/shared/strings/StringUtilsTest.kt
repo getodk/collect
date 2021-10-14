@@ -9,6 +9,7 @@ import org.junit.Test
 import org.odk.collect.shared.strings.StringUtils.ellipsizeBeginning
 import org.odk.collect.shared.strings.StringUtils.firstCharacterOrEmoji
 import org.odk.collect.shared.strings.StringUtils.isBlank
+import org.odk.collect.shared.strings.StringUtils.sanitizeFileName
 import org.odk.collect.shared.strings.StringUtils.trim
 
 class StringUtilsTest {
@@ -115,6 +116,12 @@ class StringUtilsTest {
     fun whenCharSequenceIsEmpty_shouldTrimReturnEmptyCharSequence() {
         val result = trim("")
         assertThat(result, equalTo(""))
+    }
+
+    @Test
+    fun `reserved chars should be removed from file name`() {
+        val result = sanitizeFileName("P\"1*ą/ć:!<@>#?$\\%|^&[]{}_=+")
+        assertThat(result, equalTo("P_1_ą_ć_!_@_#_\$_%_^&[]{}_=+"))
     }
 
     companion object {
