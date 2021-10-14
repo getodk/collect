@@ -14,12 +14,12 @@ import java.io.File
 
 class StoragePathProviderTest {
     private val root = createTempDir()
+    private var projectsRepository = mock(ProjectsRepository::class.java)
     private lateinit var storagePathProvider: StoragePathProvider
 
     @Before
     fun setup() {
         val currentProjectProvider = mock(CurrentProjectProvider::class.java)
-        val projectsRepository = mock(ProjectsRepository::class.java)
         `when`(currentProjectProvider.getCurrentProject()).thenReturn(
             Project.Saved(
                 "123",
@@ -50,11 +50,25 @@ class StoragePathProviderTest {
     }
 
     @Test
-    fun projectRootDirPath_returnsAndCreatesDirForProjectWithFileRepresentingProjectName() {
+    fun projectRootDirPath_returnsAndCreatesDirForProject() {
         val path = storagePathProvider.getProjectRootDirPath("123")
         assertThat(path, `is`(root.absolutePath + "/projects/123"))
         assertThat(File(path).exists(), `is`(true))
-        assertThat(File(path + File.separator + "Project").exists(), `is`(true))
+    }
+
+    @Test
+    fun projectRootDirPath_createsFileWithSanitizedProjectName() {
+        `when`(projectsRepository.get("123")).thenReturn(
+            Project.Saved(
+                "123",
+                "Project<>",
+                "D",
+                "#ffffff"
+            )
+        )
+
+        val path = storagePathProvider.getProjectRootDirPath("123")
+        assertThat(File(path + File.separator + "Project__").exists(), `is`(true))
     }
 
     @Test

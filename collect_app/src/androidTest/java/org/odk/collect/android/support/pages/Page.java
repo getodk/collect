@@ -487,10 +487,10 @@ public abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
-    public T assertFileWithProjectNameUpdated(String oldProjectName, String newProjectName) {
+    public T assertFileWithProjectNameUpdated(String sanitizedOldProjectName, String sanitizedNewProjectName) {
         StoragePathProvider storagePathProvider = new StoragePathProvider();
-        assertFalse(new File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).exists());
-        assertTrue(new File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).exists());
+        assertFalse(new File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedOldProjectName).exists());
+        assertTrue(new File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedNewProjectName).exists());
         return (T) this;
     }
 }

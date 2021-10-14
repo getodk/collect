@@ -44,4 +44,16 @@ class UpdateProjectTest {
             .openProjectSettings()
             .assertCurrentProject("Project X", "Anna / demo.getodk.org")
     }
+
+    @Test
+    fun updateProjectName_updatesProjectNameFileSanitizingIt() {
+        rule.startAtMainMenu()
+            .openProjectSettings()
+            .clickGeneralSettings()
+            .clickProjectDisplay()
+            .setProjectName("Project<>")
+            .assertFileWithProjectNameUpdated("Demo project", "Project__")
+            .setProjectName(":*Project<>")
+            .assertFileWithProjectNameUpdated("Project__", "__Project__")
+    }
 }
