@@ -32,8 +32,8 @@ public class TriggerWidgetTest {
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
@@ -49,8 +49,8 @@ public class TriggerWidgetTest {
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)

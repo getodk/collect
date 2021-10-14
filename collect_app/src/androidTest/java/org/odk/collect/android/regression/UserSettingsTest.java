@@ -26,8 +26,8 @@ public class UserSettingsTest {
     public void typeOption_ShouldNotBeVisible() {
         //TestCase1
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickAccessControl()
                 .openUserSettings()
                 .assertTextDoesNotExist("Type")

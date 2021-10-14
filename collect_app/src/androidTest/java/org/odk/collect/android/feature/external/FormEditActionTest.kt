@@ -57,7 +57,7 @@ class FormEditActionTest {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
             .addAndSwitchToProject("https://example.com")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .selectProject("Demo project")
 
         val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")

@@ -36,8 +36,8 @@ public class ServerSettingsTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
         new MainMenuPage().assertOnPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .clickOnURL()
                 .inputText(testDependencies.server.getURL())
@@ -69,8 +69,8 @@ public class ServerSettingsTest {
     @Test
     public void selectingGoogleAccount_showsGoogleAccountSettings() {
         new MainMenuPage().assertOnPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .clickOnServerType()
                 .clickOnString(R.string.server_platform_google_sheets)

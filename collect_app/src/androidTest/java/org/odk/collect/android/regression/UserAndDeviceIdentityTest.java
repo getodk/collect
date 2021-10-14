@@ -32,8 +32,8 @@ public class UserAndDeviceIdentityTest {
     public void setEmail_validatesEmail() {
         //TestCase1
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickUserAndDeviceIdentity()
                 .clickFormMetadata()
                 .clickEmail()

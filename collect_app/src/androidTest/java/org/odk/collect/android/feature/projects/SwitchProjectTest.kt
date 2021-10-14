@@ -24,7 +24,7 @@ class SwitchProjectTest {
         // Add project Turtle nesting
         rule.startAtMainMenu()
             .assertProjectIcon("D")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://my-server.com")
@@ -32,7 +32,7 @@ class SwitchProjectTest {
             .addProject()
 
             // Switch to Turtle nesting
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "John / my-server.com")
             .assertInactiveProject("Demo project", "demo.getodk.org")
             .selectProject("Demo project")
@@ -57,7 +57,7 @@ class SwitchProjectTest {
 
             // Create and switch to new project
             .assertProjectIcon("D")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://my-server.com")
@@ -79,12 +79,12 @@ class SwitchProjectTest {
             .pressBack(MainMenuPage())
 
             // Switch back to first project
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .selectProject("Demo project")
 
             // Check server
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickServerSettings()
             .clickOnURL()
             .assertText("https://demo.getodk.org")

@@ -86,8 +86,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void clickConfigureQRCode_opensScanner_andThenScanning_importsSettings() {
         QRCodePage qrCodePage = rule.startAtMainMenu()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickProjectManagement()
                 .clickConfigureQR();
 
@@ -98,8 +98,8 @@ public class ConfigureWithQRCodeTest {
 
         new MainMenuPage()
                 .assertOnPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .assertText("http://gallops.example");
     }
@@ -107,8 +107,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void clickConfigureQRCode_andClickingOnView_showsQRCode() {
         rule.startAtMainMenu()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
@@ -121,8 +121,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void whenThereIsAnAdminPassword_canRemoveFromQRCode() {
         rule.startAtMainMenu()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .setAdminPassword("blah")
                 .clickProjectManagement()
                 .clickConfigureQR()
@@ -136,8 +136,8 @@ public class ConfigureWithQRCodeTest {
     @Test
     public void whenThereIsAServerPassword_canRemoveFromQRCode() {
         rule.startAtMainMenu()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .clickServerPassword()
                 .inputText("blah")
@@ -145,8 +145,8 @@ public class ConfigureWithQRCodeTest {
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()

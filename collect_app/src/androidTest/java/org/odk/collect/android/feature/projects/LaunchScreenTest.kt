@@ -36,9 +36,9 @@ class LaunchScreenTest {
     fun clickingTryCollectAtLaunch_setsAppUpWithDemoProject() {
         rule.startAtFirstLaunch()
             .clickTryCollect()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
-            .clickGeneralSettings()
+            .clickSettings()
             .clickServerSettings()
             .clickOnURL()
             .assertText("https://demo.getodk.org")
@@ -52,7 +52,7 @@ class LaunchScreenTest {
             .inputUsername("John")
             .addProject()
             .assertProjectIcon("M")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "John / my-server.com")
     }
 
@@ -66,7 +66,7 @@ class LaunchScreenTest {
 
         MainMenuPage()
             .assertOnPage()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "adam / my-server.com")
     }
 }

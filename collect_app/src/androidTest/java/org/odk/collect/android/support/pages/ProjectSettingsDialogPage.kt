@@ -17,7 +17,7 @@ internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
         return this
     }
 
-    fun clickGeneralSettings(): ProjectSettingsPage {
+    fun clickSettings(): ProjectSettingsPage {
         clickOnString(R.string.settings)
         return ProjectSettingsPage().assertOnPage()
     }
