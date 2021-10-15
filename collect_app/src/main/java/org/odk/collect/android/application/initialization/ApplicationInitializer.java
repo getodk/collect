@@ -20,6 +20,7 @@ import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.geo.MapboxUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -38,12 +39,14 @@ public class ApplicationInitializer {
     private final AppUpgrader appUpgrader;
     private final AnalyticsInitializer analyticsInitializer;
     private final ProjectsRepository projectsRepository;
+    private final SettingsProvider settingsProvider;
 
     public ApplicationInitializer(Application context, UserAgentProvider userAgentProvider,
                                   PropertyManager propertyManager, Analytics analytics,
                                   LaunchState launchState, AppUpgrader appUpgrader,
                                   AnalyticsInitializer analyticsInitializer,
-                                  ProjectsRepository projectsRepository) {
+                                  ProjectsRepository projectsRepository,
+                                  SettingsProvider settingsProvider) {
         this.context = context;
         this.userAgentProvider = userAgentProvider;
         this.propertyManager = propertyManager;
@@ -52,6 +55,7 @@ public class ApplicationInitializer {
         this.appUpgrader = appUpgrader;
         this.analyticsInitializer = analyticsInitializer;
         this.projectsRepository = projectsRepository;
+        this.settingsProvider = settingsProvider;
     }
 
     public void initialize() {
@@ -75,7 +79,7 @@ public class ApplicationInitializer {
         initializeMapFrameworks();
         initializeJavaRosa();
         analyticsInitializer.initialize();
-        new UserPropertiesInitializer(analytics, projectsRepository).initialize();
+        new UserPropertiesInitializer(analytics, projectsRepository, settingsProvider, context).initialize();
     }
 
     private void initializeLocale() {
