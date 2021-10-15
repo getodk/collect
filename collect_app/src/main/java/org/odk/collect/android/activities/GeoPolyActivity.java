@@ -30,14 +30,14 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 
@@ -478,11 +478,20 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         int seconds = INTERVAL_OPTIONS[intervalIndex];
         int minutes = seconds / 60;
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        //Cm accuracy #4198
+        boolean useCm = location != null && location.sd < 1;
+        double accuracy = location != null ? location.sd * (useCm ? 100 : 1) : Double.NaN;
         locationStatus.setText(
-            location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
-                : getString(R.string.location_status_unacceptable, location.sd)
+                location == null ? getString(R.string.location_status_searching)
+                        : !usingThreshold ? getString(useCm ?
+                        R.string.location_status_accuracy_cm
+                        : R.string.location_status_accuracy_m, accuracy)
+                        : acceptable ? getString(useCm ?
+                        R.string.location_status_acceptable_cm
+                        : R.string.location_status_acceptable_m, accuracy)
+                        : getString(useCm ?
+                        R.string.location_status_unacceptable_cm
+                        : R.string.location_status_unacceptable_m, accuracy)
         );
         locationStatus.setBackgroundColor(
                 location == null ? themeUtils.getColorPrimary()

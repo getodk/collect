@@ -32,14 +32,12 @@ import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.androidshared.utils.ToastUtils;
-
-import java.text.DecimalFormat;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.MapPoint;
 
 import javax.inject.Inject;
 
@@ -340,7 +338,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     }
 
     public String formatLocationStatus(String provider, double accuracyRadius) {
-        return getString(R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
+        //Cm accuracy #4198
+        return GeoUtils.getAccuracyUnitString(this, accuracyRadius)
                 + " " + getString(R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 

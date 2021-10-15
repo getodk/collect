@@ -1,5 +1,6 @@
 package org.odk.collect.geo;
 
+import android.content.Context;
 import android.location.Location;
 
 import org.odk.collect.shared.strings.StringUtils;
@@ -47,5 +48,15 @@ public final class GeoUtils {
      */
     public static String capitalizeGps(String locationProvider) {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
+    }
+
+    //Cm accuracy #4198
+    public static String getAccuracyUnitString(Context context, double accuracy) {
+        if (accuracy != accuracy) {
+            return "";
+        }
+        boolean useCm = accuracy < 1;
+        return context.getString(useCm ? R.string.location_accuracy_cm : R.string.location_accuracy_m,
+                accuracy * (useCm ? 100 : 1));
     }
 }
