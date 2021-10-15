@@ -168,7 +168,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
+          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
@@ -218,9 +218,7 @@ workflows:
               ignore: master
       - test_instrumented:
           requires:
-            - check_quality
-            - test_modules
-            - test_app
+            - compile
           filters:
             branches:
               only: master
