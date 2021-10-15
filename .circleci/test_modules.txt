@@ -1,0 +1,10 @@
+shared:test
+androidshared:testDebug
+formstest:test
+async:testDebug
+strings:testDebug
+audioclips:testDebug
+audiorecorder:testDebug
+projects:testDebug
+location:testDebug
+geo:testDebug

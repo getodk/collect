@@ -60,6 +60,7 @@ jobs:
 
   test_modules:
     <<: *android_config
+    parallelism: 4
     steps:
       - attach_workspace:
           at: ~/work
@@ -67,35 +68,16 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
 
       - run:
-          name: Run shared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 shared:test
+          name: Generate list of modules for this fork
+          command: |
+            cat .circleci/test_modules.txt | circleci tests split > .circleci/fork_test_modules.txt && \
+            echo "Modules for this fork:" && \
+            cat .circleci/fork_test_modules.txt
+
       - run:
-          name: Run androidshared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidshared:testDebug
-      - run:
-          name: Run formtest unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 formstest:test
-      - run:
-          name: Run async unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
-      - run:
-          name: Run strings unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 strings:testDebug
-      - run:
-          name: Run audioclips unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audioclips:testDebug
-      - run:
-          name: Run audiorecorder unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
-      - run:
-          name: Run projects unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 projects:testDebug
-      - run:
-          name: Run location unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 location:testDebug
-      - run:
-          name: Run geo unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 geo:testDebug
+          name: Run module unit tests
+          command: |
+            ./gradlew -PdisablePreDex --no-daemon --max-workers=2 $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
