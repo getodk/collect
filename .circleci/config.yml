@@ -21,7 +21,7 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
-          command: ./gradlew -PdisablePreDex androidDependencies
+          command: ./gradlew androidDependencies
       - run:
           name: Copy gradle config
           command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -36,7 +36,7 @@ jobs:
 
       - run:
           name: Compile code
-          command: ./gradlew -PdisablePreDex assembleDebug
+          command: ./gradlew assembleDebug
 
       - persist_to_workspace:
           root: ~/work
@@ -53,7 +53,7 @@ jobs:
 
       - run:
           name: Run code quality checks
-          command: ./gradlew -PdisablePreDex checkCode
+          command: ./gradlew checkCode
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Run module unit tests
           command: |
-            ./gradlew -PdisablePreDex $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s ",$i}')
+            ./gradlew $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
@@ -108,7 +108,7 @@ jobs:
       - run:
           name: Run app unit tests
           command: |
-            ./gradlew -PdisablePreDex collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
+            ./gradlew collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
@@ -126,7 +126,7 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew -PdisablePreDex assembleDebugAndroidTest
+          command: ./gradlew assembleDebugAndroidTest
 
   build_release:
     <<: *android_config
@@ -138,7 +138,7 @@ jobs:
 
       - run:
           name: Assemble self signed release build
-          command: ./gradlew -PdisablePreDex assembleSelfSignedRelease
+          command: ./gradlew assembleSelfSignedRelease
 
   test_instrumented:
     <<: *android_config
@@ -150,7 +150,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew -PdisablePreDex assembleDebugAndroidTest
+          command: ./gradlew assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
