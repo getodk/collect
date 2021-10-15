@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Run module unit tests
           command: |
-            ./gradlew -PdisablePreDex --no-daemon --max-workers=2 $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s",$i}')
+            ./gradlew -PdisablePreDex --no-daemon --max-workers=2 $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
