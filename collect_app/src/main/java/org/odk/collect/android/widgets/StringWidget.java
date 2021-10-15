@@ -105,21 +105,17 @@ public class StringWidget extends QuestionWidget {
     }
 
     /**
-     * Registers all subviews except for the EditText to clear on long press. This makes it possible
-     * to long-press to paste or perform other text editing functions.
+     * Registers all subviews except for the answer_container (which contains the EditText) to clear on long press.
+     * This makes it possible to long-press to paste or perform other text editing functions.
      */
     @Override
     protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
-        for (int i = 0; i < viewGroup.getChildCount(); i++) {
-            View child = viewGroup.getChildAt(i);
-            if (child.getId() == R.id.help_layout) {
-                child.setId(getId());
-                activity.registerForContextMenu(child);
-            } else if (child instanceof ViewGroup) {
-                registerToClearAnswerOnLongPress(activity, (ViewGroup) child);
-            } else if (!(child instanceof EditText)) {
-                child.setId(getId());
-                activity.registerForContextMenu(child);
+        ViewGroup view = findViewById(R.id.question_widget_container);
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View childView = view.getChildAt(i);
+            if (childView.getId() != R.id.answer_container) {
+                childView.setId(getId());
+                activity.registerForContextMenu(childView);
             }
         }
     }
