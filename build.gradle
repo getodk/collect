@@ -24,6 +24,10 @@ buildscript {
     }
 }
 
+project.ext {
+    preDexLibs = !project.hasProperty('disablePreDex');
+}
+
 allprojects {
     repositories {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
@@ -35,6 +39,16 @@ allprojects {
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
+        }
+    }
+}
+
+subprojects {
+    project.plugins.whenPluginAdded { plugin ->
+        if ("com.android.build.gradle.AppPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
+        } else if ("com.android.build.gradle.LibraryPlugin".equals(plugin.class.name)) {
+            project.android.dexOptions.preDexLibraries = rootProject.ext.preDexLibs
         }
     }
 }
