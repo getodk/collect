@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.odk.collect.testshared.LocationTestUtils.createLocation;
 
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -37,6 +38,7 @@ import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
@@ -45,7 +47,11 @@ import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTest {
-    
+
+    static {
+        GeoUtils.simulateAccuracy = false;
+    }
+
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPolyActivity> controller;
@@ -97,5 +103,22 @@ public class GeoPolyActivityTest {
         activity.updateRecordingMode(R.id.manual_mode);
         activity.startInput();
         assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
+    }
+
+    @Test
+    //Cm accuracy #4198
+    public void locationAccuracyIsFormattedInAppropriateUnit() {
+        GeoPolyActivity activity = controller.create().start().resume().visible().get();
+        TextView locationStatus = activity.findViewById(R.id.location_status);
+        for (double accuracy : GeoUtils.TEST_ACCURACIES) {
+            fakeLocationClient.receiveFix(
+                    createLocation("GPS", 11, 12, 13, (float) accuracy));
+            boolean useCm = accuracy < 1;
+            String expected = activity.getString(
+                    useCm ? R.string.location_status_accuracy_cm : R.string.location_status_accuracy_m,
+                    accuracy * (useCm ? 100 : 1)
+            );
+            assertEquals(expected, locationStatus.getText());
+        }
     }
 }

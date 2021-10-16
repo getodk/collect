@@ -14,6 +14,17 @@ public final class GeoUtils {
     public static final double SIMULATED_ACCURACY = 0.2345;
     public static boolean simulateAccuracy = true;
 
+    public static final double[] TEST_ACCURACIES = {
+            0.1111,
+            0.2222,
+            0.5555,
+            0.7777,
+            1.111,
+            5.555,
+            10.01,
+            20.02
+    };
+
     private GeoUtils() {
 
     }

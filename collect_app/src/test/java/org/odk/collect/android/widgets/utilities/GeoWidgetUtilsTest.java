@@ -1,5 +1,8 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
+
 import android.content.Context;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -9,12 +12,15 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.odk.collect.android.widgets.support.GeoWidgetHelpers.getRandomDoubleArray;
+import org.odk.collect.geo.GeoUtils;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoWidgetUtilsTest {
+
+    static {
+        GeoUtils.simulateAccuracy = false;
+    }
+
     private final Context context = ApplicationProvider.getApplicationContext();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
@@ -29,16 +35,20 @@ public class GeoWidgetUtilsTest {
     }
 
     @Test
+    //Cm accuracy #4198
     public void getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsAnswer() {
         String stringAnswer = answer.getDisplayText();
+        String actual = GeoWidgetUtils.getGeoPointAnswerToDisplay(context, stringAnswer);
         String[] parts = stringAnswer.split(" ");
-        assertEquals(GeoWidgetUtils.getGeoPointAnswerToDisplay(context, stringAnswer), context.getString(
-                R.string.gps_result,
+        double accuracyCm = Double.parseDouble(parts[3]) * 100;
+        String expected = context.getString(
+                R.string.gps_result_cm,
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[0]), "lat"),
                 GeoWidgetUtils.convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[1]), "lon"),
                 GeoWidgetUtils.truncateDouble(parts[2]),
-                GeoWidgetUtils.truncateDouble(parts[3])
-        ));
+                accuracyCm
+        );
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -115,5 +125,22 @@ public class GeoWidgetUtilsTest {
         assertEquals("", GeoWidgetUtils.truncateDouble(""));
         assertEquals("", GeoWidgetUtils.truncateDouble(null));
         assertEquals("", GeoWidgetUtils.truncateDouble("qwerty"));
+    }
+
+    @Test
+    //Cm accuracy #4198
+    public void locationAccuracyIsFormattedInAppropriateUnit() {
+        for (double accuracy : GeoUtils.TEST_ACCURACIES) {
+            boolean useCm = accuracy < 1;
+            String answer = "1 1 1 " + accuracy;
+            String[] parts = answer.split(" ");
+            String expectedAccuracy = context.getString(useCm
+                            ? R.string.gps_result_cm : R.string.gps_result_m,
+                    parts[0], parts[1], parts[2], accuracy * (useCm ? 100 : 1))
+                    .split("\n")[3];
+            String actualAccuracy = GeoWidgetUtils.getGeoPointAnswerToDisplay(context, (String) answer)
+                    .split("\n")[3];
+            assertEquals(expectedAccuracy, actualAccuracy);
+        }
     }
 }
