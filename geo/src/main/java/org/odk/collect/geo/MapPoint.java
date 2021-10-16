@@ -14,6 +14,9 @@
 
 package org.odk.collect.geo;
 
+import static org.odk.collect.geo.GeoUtils.SIMULATED_ACCURACY;
+import static org.odk.collect.geo.GeoUtils.simulateAccuracy;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -46,7 +49,7 @@ public class MapPoint implements Parcelable {
         this.lat = lat;
         this.lon = lon;
         this.alt = alt;
-        this.sd = sd;
+        this.sd = simulateAccuracy ? SIMULATED_ACCURACY : sd;
     }
 
     private MapPoint(Parcel parcel) {

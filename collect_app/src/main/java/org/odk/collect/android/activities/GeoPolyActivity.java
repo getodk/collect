@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.geo.GeoUtils.simulateAccuracy;
 
 import android.content.Context;
 import android.content.Intent;
@@ -431,7 +432,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     private boolean isAccuracyThresholdActive() {
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-        return recordingEnabled && recordingAutomatic && meters > 0;
+        return simulateAccuracy || recordingEnabled && recordingAutomatic && meters > 0;
     }
 
     private void removeLastPoint() {

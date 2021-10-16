@@ -16,6 +16,9 @@
 
 package org.odk.collect.android.utilities;
 
+import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
+import static org.odk.collect.geo.GeoUtils.SIMULATED_ACCURACY;
+
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
@@ -30,6 +33,7 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDao;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.geo.GeoUtils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -39,8 +43,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
-
-import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
 public final class FormEntryPromptUtils {
 
@@ -114,6 +116,17 @@ public final class FormEntryPromptUtils {
             }
 
             return new ItemsetDao(new ItemsetDbAdapter()).getItemLabel(fep.getAnswerValue().getDisplayText(), formController.getMediaFolder().getAbsolutePath(), language);
+        }
+
+        //Cm accuracy #4198
+        if (GeoUtils.simulateAccuracy) {
+            String answer = fep.getAnswerText();
+            //37.4219983 -122.084 3.8246358027853735 20.0
+            if (answer != null && answer.matches("(-?\\d+\\.\\d+ ?){4}")) {
+                answer = answer.replaceAll("\\b\\d+\\.\\d$",
+                        String.valueOf(SIMULATED_ACCURACY));
+            }
+            return answer;
         }
 
         return fep.getAnswerText();

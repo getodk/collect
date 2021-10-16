@@ -10,6 +10,10 @@ import java.util.Locale;
 
 public final class GeoUtils {
 
+    //Cm accuracy #4198
+    public static final double SIMULATED_ACCURACY = 0.2345;
+    public static boolean simulateAccuracy = true;
+
     private GeoUtils() {
 
     }
