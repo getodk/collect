@@ -19,9 +19,7 @@ package org.odk.collect.android.activities;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -64,13 +62,5 @@ public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    public void initToolbar(CharSequence title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setTitle(title);
-            setSupportActionBar(toolbar);
-        }
     }
 }

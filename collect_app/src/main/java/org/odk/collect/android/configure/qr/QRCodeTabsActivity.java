@@ -10,9 +10,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -20,6 +20,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.utils.AppBarUtils;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
@@ -67,7 +68,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, currentProjectProvider.getCurrentProject());
         setContentView(R.layout.tabs_layout);
 
-        initToolbar(getString(R.string.reconfigure_with_qr_code_settings_title));
+        AppBarUtils.setupAppBarLayout(this, getString(R.string.reconfigure_with_qr_code_settings_title));
         menuDelegate = new QRCodeMenuDelegate(this, intentLauncher, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
 
         permissionsProvider.requestCameraPermission(this, new PermissionListener() {

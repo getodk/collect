@@ -3,16 +3,17 @@ package org.odk.collect.android.preferences.screens
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.preference.DialogPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.configure.SettingsChangeHandler
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.androidshared.utils.AppBarUtils
 import org.odk.collect.shared.Settings.OnSettingChangeListener
 import javax.inject.Inject
 
@@ -43,9 +44,12 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (activity is CollectAbstractActivity) {
-            (activity as CollectAbstractActivity).initToolbar(preferenceScreen.title)
+        requireActivity().let {
+            if (it is AppCompatActivity) {
+                AppBarUtils.setupAppBarLayout(it, preferenceScreen.title)
+            }
         }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
