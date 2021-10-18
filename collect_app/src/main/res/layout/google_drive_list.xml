@@ -17,7 +17,7 @@ the License.
     android:layout_height="match_parent"
     android:layout_alignParentTop="true">
 
-    <include layout="@layout/app_bar_layout" />
+    <include layout="@layout/app_bar_with_progress_bar_layout" />
 
     <LinearLayout
         android:id="@+id/buttonholder"

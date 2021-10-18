@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/app_bar_layout"/>
+    <include layout="@layout/app_bar_with_progress_bar_layout"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:name="org.odk.collect.android.preferences.screens.ProjectPreferencesFragment"
