@@ -21,7 +21,7 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
       - run:
           name: Download dependencies
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidDependencies
+          command: ./gradlew androidDependencies
       - run:
           name: Copy gradle config
           command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -36,7 +36,7 @@ jobs:
 
       - run:
           name: Compile code
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug
+          command: ./gradlew assembleDebug
 
       - persist_to_workspace:
           root: ~/work
@@ -53,13 +53,14 @@ jobs:
 
       - run:
           name: Run code quality checks
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 checkCode
+          command: ./gradlew checkCode
       - store_artifacts:
           path: collect_app/build/reports
           destination: reports
 
   test_modules:
     <<: *android_config
+    parallelism: 4
     steps:
       - attach_workspace:
           at: ~/work
@@ -67,35 +68,16 @@ jobs:
           key: deps-{{ checksum "deps.txt" }}
 
       - run:
-          name: Run shared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 shared:test
+          name: Generate list of modules for this fork
+          command: |
+            cat .circleci/test_modules.txt | circleci tests split > .circleci/fork_test_modules.txt && \
+            echo "Modules for this fork:" && \
+            cat .circleci/fork_test_modules.txt
+
       - run:
-          name: Run androidshared unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 androidshared:testDebug
-      - run:
-          name: Run formtest unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 formstest:test
-      - run:
-          name: Run async unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 async:testDebug
-      - run:
-          name: Run strings unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 strings:testDebug
-      - run:
-          name: Run audioclips unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audioclips:testDebug
-      - run:
-          name: Run audiorecorder unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 audiorecorder:testDebug
-      - run:
-          name: Run projects unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 projects:testDebug
-      - run:
-          name: Run location unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 location:testDebug
-      - run:
-          name: Run geo unit tests
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 geo:testDebug
+          name: Run module unit tests
+          command: |
+            ./gradlew $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
@@ -126,7 +108,7 @@ jobs:
       - run:
           name: Run app unit tests
           command: |
-            ./gradlew -PdisablePreDex --no-daemon --max-workers=2 collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
+            ./gradlew collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')
 
       - store_artifacts:
           path: collect_app/build/reports
@@ -144,7 +126,7 @@ jobs:
 
       - run:
           name: Assemble connected test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebugAndroidTest
+          command: ./gradlew assembleDebugAndroidTest
 
   build_release:
     <<: *android_config
@@ -156,7 +138,7 @@ jobs:
 
       - run:
           name: Assemble self signed release build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleSelfSignedRelease
+          command: ./gradlew assembleSelfSignedRelease
 
   test_instrumented:
     <<: *android_config
@@ -168,7 +150,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew -PdisablePreDex --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest
+          command: ./gradlew assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
@@ -218,9 +200,7 @@ workflows:
               ignore: master
       - test_instrumented:
           requires:
-            - check_quality
-            - test_modules
-            - test_app
+            - compile
           filters:
             branches:
               only: master
