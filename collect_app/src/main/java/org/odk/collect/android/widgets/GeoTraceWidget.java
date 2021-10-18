@@ -23,13 +23,12 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfigurator;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -87,6 +86,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
             }
         }
 
+        GeoWidgetUtils.logAllowMockAccuracy(prompt);
         return binding.getRoot();
     }
 

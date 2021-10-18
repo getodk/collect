@@ -6,7 +6,11 @@ import android.content.Context;
 import android.location.Location;
 
 import org.javarosa.core.model.QuestionDef;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 
 import java.text.DecimalFormat;
 
@@ -97,6 +101,15 @@ public final class GeoWidgetUtils {
             Timber.w(e);
         }
         return "";
+    }
+
+    public static void logAllowMockAccuracy(FormEntryPrompt prompt) {
+        String attributeValue = FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy");
+        boolean allowMockAccuracy = Boolean.parseBoolean(attributeValue);
+
+        if (allowMockAccuracy) {
+            AnalyticsUtils.logFormEvent(AnalyticsEvents.ALLOW_MOCK_ACCURACY);
+        }
     }
 
     private static String getCardinalDirection(Context context, double coordinate, String type) {

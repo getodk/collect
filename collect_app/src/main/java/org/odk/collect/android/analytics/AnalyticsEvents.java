@@ -230,4 +230,9 @@ public final class AnalyticsEvents {
      * when returning to or launching the app.
      */
     public static final String RECREATE_PROJECT_DIR = "RecreateProjectDir";
+
+    /**
+     * Tracks how many forms include the `allow-mock-accuracy` parameter in `geo` questions
+     */
+    public static final String ALLOW_MOCK_ACCURACY = "AllowMockAccuracy";
 }

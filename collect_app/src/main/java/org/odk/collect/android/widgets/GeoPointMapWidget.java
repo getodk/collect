@@ -75,6 +75,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             }
         }
 
+        GeoWidgetUtils.logAllowMockAccuracy(prompt);
         return binding.getRoot();
     }
 

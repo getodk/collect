@@ -74,6 +74,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
             }
         }
 
+        GeoWidgetUtils.logAllowMockAccuracy(prompt);
         return binding.getRoot();
     }
 
