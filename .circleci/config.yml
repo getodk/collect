@@ -150,7 +150,7 @@ jobs:
 
       - run:
           name: Assemble test build
-          command: ./gradlew assembleDebugAndroidTest
+          command: ./gradlew assembleDebug assembleDebugAndroidTest
       - run:
           name: Authorize gcloud
           command: |
