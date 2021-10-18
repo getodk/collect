@@ -5,11 +5,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
+import org.odk.collect.strings.localization.LocalizedActivity
 import org.odk.collect.strings.localization.getLocalizedString
 
-class ErrorActivity : CollectAbstractActivity() {
+class ErrorActivity : LocalizedActivity() {
     companion object {
         const val EXTRA_ERRORS = "ERRORS"
     }
