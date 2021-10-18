@@ -513,6 +513,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // Precondition: the instance directory must be ready so that the audit file can be created
     private void formControllerAvailable(@NonNull FormController formController) {
+        AnalyticsUtils.setForm(formController);
+
         menuDelegate.formLoaded(formController);
 
         identityPromptViewModel.formLoaded(formController);

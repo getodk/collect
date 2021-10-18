@@ -26,8 +26,12 @@ public final class AnalyticsUtils {
 
     }
 
+    public static void setForm(FormController formController) {
+        Analytics.setParam("form", getFormHash(formController));
+    }
+
     public static void logFormEvent(String event) {
-        Analytics.log(event, "form", getFormHash(Collect.getInstance().getFormController()));
+        Analytics.log(event, "form");
     }
 
     public static void logFormEvent(String event, String formId, String formTitle) {
