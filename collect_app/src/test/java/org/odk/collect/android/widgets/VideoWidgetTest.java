@@ -38,7 +38,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride), new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils(), mediaUtils);
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride), new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils(), mediaUtils);
     }
 
     @NonNull

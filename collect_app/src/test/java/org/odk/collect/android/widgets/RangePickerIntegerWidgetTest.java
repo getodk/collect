@@ -128,6 +128,6 @@ public class RangePickerIntegerWidgetTest {
     }
 
     private RangePickerIntegerWidget createWidget(FormEntryPrompt prompt) {
-        return new RangePickerIntegerWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"));
+        return new RangePickerIntegerWidget(widgetActivity, new QuestionDetails(prompt));
     }
 }

@@ -16,7 +16,7 @@ public class StringWidgetTest extends GeneralStringWidgetTest<StringWidget, Stri
     @NonNull
     @Override
     public StringWidget createWidget() {
-        return new StringWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride));
+        return new StringWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride));
     }
 
     @NonNull

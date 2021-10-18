@@ -239,6 +239,6 @@ public class DateTimeWidgetTest {
     }
 
     private DateTimeWidget createWidget(FormEntryPrompt prompt) {
-        return new DateTimeWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), widgetUtils);
+        return new DateTimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils);
     }
 }

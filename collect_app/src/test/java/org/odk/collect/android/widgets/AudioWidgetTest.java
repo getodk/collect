@@ -485,7 +485,7 @@ public class AudioWidgetTest {
     public AudioWidget createWidget(FormEntryPrompt prompt) {
         return new AudioWidget(
                 widgetActivity,
-                new QuestionDetails(prompt, "formAnalyticsID"),
+                new QuestionDetails(prompt),
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,
@@ -497,7 +497,7 @@ public class AudioWidgetTest {
     public AudioWidget createWidget(FormEntryPrompt prompt, boolean readOnlyOverride) {
         return new AudioWidget(
                 widgetActivity,
-                new QuestionDetails(prompt, "formAnalyticsID", readOnlyOverride),
+                new QuestionDetails(prompt, readOnlyOverride),
                 questionMediaManager,
                 audioPlayer,
                 recordingRequester,

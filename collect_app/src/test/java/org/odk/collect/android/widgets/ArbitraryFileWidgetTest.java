@@ -40,7 +40,7 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     @NonNull
     @Override
     public ArbitraryFileWidget createWidget() {
-        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+        return new ArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry());
     }
 

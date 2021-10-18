@@ -211,6 +211,6 @@ public class RatingWidgetTest {
     }
 
     private RatingWidget createWidget(FormEntryPrompt prompt) {
-        return new RatingWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new RatingWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
 }

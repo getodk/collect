@@ -126,6 +126,6 @@ public class UrlWidgetTest {
     }
 
     private UrlWidget createWidget(FormEntryPrompt prompt) {
-        return new UrlWidget(spyActivity, new QuestionDetails(prompt, "formAnalyticsID"), externalWebPageHelper);
+        return new UrlWidget(spyActivity, new QuestionDetails(prompt), externalWebPageHelper);
     }
 }

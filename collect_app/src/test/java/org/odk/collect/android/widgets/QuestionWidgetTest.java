@@ -62,7 +62,7 @@ public class QuestionWidgetTest {
                 .build();
 
         TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
-        TestWidget widget = new TestWidget(activity, new QuestionDetails(prompt, "formAnalyticsID"));
+        TestWidget widget = new TestWidget(activity, new QuestionDetails(prompt));
 
         AudioButton audioButton = widget.getAudioVideoImageTextLabel().findViewById(R.id.audioButton);
         verify(audioHelper).setAudio(audioButton, new Clip("i am index", "blah.mp3"));

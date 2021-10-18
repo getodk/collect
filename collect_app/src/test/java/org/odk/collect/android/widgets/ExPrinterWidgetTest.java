@@ -21,7 +21,7 @@ public class ExPrinterWidgetTest extends QuestionWidgetTest<ExPrinterWidget, IAn
     @NonNull
     @Override
     public ExPrinterWidget createWidget() {
-        return new ExPrinterWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), new FakeWaitingForDataRegistry());
+        return new ExPrinterWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry());
     }
 
     @NonNull

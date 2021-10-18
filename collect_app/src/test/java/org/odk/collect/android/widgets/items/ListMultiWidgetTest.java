@@ -26,7 +26,7 @@ public class ListMultiWidgetTest extends GeneralSelectMultiWidgetTest<ListMultiW
     @NonNull
     @Override
     public ListMultiWidget createWidget() {
-        return new ListMultiWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), true);
+        return new ListMultiWidget(activity, new QuestionDetails(formEntryPrompt), true);
     }
 
     @Test

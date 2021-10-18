@@ -45,7 +45,7 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
     @NonNull
     @Override
     public LikertWidget createWidget() {
-        return new LikertWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"));
+        return new LikertWidget(activity, new QuestionDetails(formEntryPrompt));
     }
 
     @NonNull

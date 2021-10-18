@@ -50,7 +50,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @NonNull
     @Override
     public ExArbitraryFileWidget createWidget() {
-        return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+        return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), externalAppIntentProvider, new ActivityAvailability(activity));
     }
 

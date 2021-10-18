@@ -58,7 +58,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
                 return result;
             }
         };
-        return new ImageWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+        return new ImageWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 
