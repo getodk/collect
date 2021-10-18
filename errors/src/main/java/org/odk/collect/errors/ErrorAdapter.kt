@@ -1,11 +1,10 @@
-package org.odk.collect.android.errors
+package org.odk.collect.errors
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.odk.collect.android.R
 
 class ErrorAdapter(private val errors: List<ErrorItem>) : RecyclerView.Adapter<ErrorAdapter.ViewHolder>() {
 

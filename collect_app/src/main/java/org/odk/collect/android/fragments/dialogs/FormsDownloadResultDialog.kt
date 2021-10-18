@@ -7,12 +7,11 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.android.errors.ErrorActivity
-import org.odk.collect.android.errors.ErrorItem
+import org.odk.collect.errors.ErrorActivity
 import java.util.ArrayList
 
 class FormsDownloadResultDialog : DialogFragment() {
-    private lateinit var failures: ArrayList<ErrorItem>
+    private lateinit var failures: ArrayList<org.odk.collect.errors.ErrorItem>
     private var numberOfAllForms = 0
 
     var listener: FormDownloadResultDialogListener? = null
@@ -25,7 +24,7 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<ErrorItem>
+        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<org.odk.collect.errors.ErrorItem>
         numberOfAllForms = arguments?.getInt(ARG_NUMBER_OF_ALL_FORMS)!!
 
         val builder = MaterialAlertDialogBuilder(requireContext())
@@ -36,8 +35,8 @@ class FormsDownloadResultDialog : DialogFragment() {
 
         if (failures.isNotEmpty()) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
-                val intent = Intent(context, ErrorActivity::class.java).apply {
-                    putExtra(ErrorActivity.EXTRA_ERRORS, failures)
+                val intent = Intent(context, org.odk.collect.errors.ErrorActivity::class.java).apply {
+                    putExtra(org.odk.collect.errors.ErrorActivity.EXTRA_ERRORS, failures)
                 }
                 startActivity(intent)
                 listener?.onCloseDownloadingResult()
