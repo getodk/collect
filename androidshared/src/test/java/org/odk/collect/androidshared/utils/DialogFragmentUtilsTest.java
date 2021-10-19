@@ -17,7 +17,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
 @RunWith(AndroidJUnit4.class)
-public class DialogUtilsTest {
+public class DialogFragmentUtilsTest {
 
     @Test
     public void showIfNotShowing_onlyEverOpensOneDialog() {
