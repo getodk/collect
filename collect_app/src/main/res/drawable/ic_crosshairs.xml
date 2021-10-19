@@ -3,7 +3,9 @@
         android:height="48dp"
         android:viewportWidth="48"
         android:viewportHeight="48">
+
+    <!-- Do not use theme attributes to define the color https://github.com/mapbox/mapbox-gl-native-android/issues/716 -->
     <path
-        android:fillColor="?colorPrimary"
+        android:fillColor="@color/colorPrimary"
         android:pathData="M18,23v2h-18v-2h18z m12,0h18v2h-18v-2z m-7,-5v-18h2v18h-2z m0,12h2v18h-2v-18z" />
 </vector>
