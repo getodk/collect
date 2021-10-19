@@ -143,6 +143,6 @@ public class TimeWidgetTest {
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {
-        return new TimeWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), widgetUtils);
+        return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils);
     }
 }

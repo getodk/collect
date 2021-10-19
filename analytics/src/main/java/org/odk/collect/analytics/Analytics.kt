@@ -17,6 +17,7 @@ interface Analytics {
     companion object {
 
         private var instance: Analytics = NoopAnalytics()
+        private val params = mutableMapOf<String, String>()
 
         fun setInstance(analytics: Analytics) {
             this.instance = analytics
@@ -28,8 +29,24 @@ interface Analytics {
         }
 
         @JvmStatic
+        fun log(event: String, key: String) {
+            val paramValue = params[key]
+
+            if (paramValue != null) {
+                log(event, key, paramValue)
+            } else {
+                log(event)
+            }
+        }
+
+        @JvmStatic
         fun log(event: String, key: String, value: String) {
             instance.logEventWithParam(event, key, value)
+        }
+
+        @JvmStatic
+        fun setParam(key: String, value: String) {
+            params[key] = value
         }
     }
 }

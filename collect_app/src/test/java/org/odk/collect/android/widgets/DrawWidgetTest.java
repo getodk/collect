@@ -65,7 +65,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
             }
         };
         return new DrawWidget(activity,
-                new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+                new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 

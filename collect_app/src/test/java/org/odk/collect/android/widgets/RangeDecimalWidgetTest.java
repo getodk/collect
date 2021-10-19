@@ -190,6 +190,6 @@ public class RangeDecimalWidgetTest {
     }
 
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
-        return new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
 }

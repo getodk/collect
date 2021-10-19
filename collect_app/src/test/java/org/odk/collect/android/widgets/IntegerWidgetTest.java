@@ -19,7 +19,7 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
     @NonNull
     @Override
     public IntegerWidget createWidget() {
-        return new IntegerWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride));
+        return new IntegerWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride));
     }
 
     @NonNull

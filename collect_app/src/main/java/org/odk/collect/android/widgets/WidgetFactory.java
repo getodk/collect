@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.android.utilities.Appearances.MAPS;
+import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
+import static org.odk.collect.android.utilities.Appearances.hasAppearance;
+
 import android.app.Activity;
 import android.content.Context;
 import android.hardware.SensorManager;
@@ -22,7 +26,6 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -56,10 +59,6 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-
-import static org.odk.collect.android.utilities.Appearances.MAPS;
-import static org.odk.collect.android.utilities.Appearances.PLACEMENT_MAP;
-import static org.odk.collect.android.utilities.Appearances.hasAppearance;
 
 /**
  * Convenience class that handles creation of widgets.
@@ -108,7 +107,7 @@ public class WidgetFactory {
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
         String appearance = Appearances.getSanitizedAppearanceHint(prompt);
-        QuestionDetails questionDetails = new QuestionDetails(prompt, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), readOnlyOverride);
+        QuestionDetails questionDetails = new QuestionDetails(prompt, readOnlyOverride);
 
         final QuestionWidget questionWidget;
         switch (prompt.getControlType()) {

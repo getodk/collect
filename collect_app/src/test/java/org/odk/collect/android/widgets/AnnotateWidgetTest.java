@@ -64,7 +64,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
             }
         };
         return new AnnotateWidget(activity,
-                new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+                new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 

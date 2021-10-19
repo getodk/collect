@@ -25,7 +25,7 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
     @NonNull
     @Override
     public SelectOneMinimalWidget createWidget() {
-        return new SelectOneMinimalWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID"), false, new FakeWaitingForDataRegistry());
+        return new SelectOneMinimalWidget(activity, new QuestionDetails(formEntryPrompt), false, new FakeWaitingForDataRegistry());
     }
 
     @Test

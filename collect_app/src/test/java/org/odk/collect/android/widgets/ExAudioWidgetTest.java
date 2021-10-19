@@ -64,7 +64,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @NonNull
     @Override
     public ExAudioWidget createWidget() {
-        return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
+        return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
                 new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
     }
 

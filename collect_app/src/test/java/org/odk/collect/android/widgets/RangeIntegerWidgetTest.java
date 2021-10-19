@@ -193,6 +193,6 @@ public class RangeIntegerWidgetTest {
     }
 
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
-        return new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
 }

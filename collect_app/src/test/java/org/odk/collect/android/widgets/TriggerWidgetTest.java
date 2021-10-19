@@ -85,6 +85,6 @@ public class TriggerWidgetTest {
     }
 
     private TriggerWidget createWidget(FormEntryPrompt prompt) {
-        return new TriggerWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new TriggerWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
 }

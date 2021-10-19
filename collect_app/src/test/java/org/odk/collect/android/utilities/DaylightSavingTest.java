@@ -118,7 +118,7 @@ public class DaylightSavingTest {
         when(datePickerDialog.getDatePicker().getMonth()).thenReturn(month);
         when(datePickerDialog.getDatePicker().getDayOfMonth()).thenReturn(day);
 
-        return new DateWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
+        return new DateWidget(widgetActivity, new QuestionDetails(formEntryPromptStub), widgetUtils);
     }
 
     private DateTimeWidget prepareDateTimeWidget(int year, int month, int day, int hour, int minute) {
@@ -134,7 +134,7 @@ public class DaylightSavingTest {
         when(formEntryPromptStub.getFormElement()).thenReturn(iformElementStub);
         when(formEntryPromptStub.getQuestion().getAppearanceAttr()).thenReturn("no-calendar");
 
-        DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub, "formAnalyticsID"), widgetUtils);
+        DateTimeWidget dateTimeWidget = new DateTimeWidget(widgetActivity, new QuestionDetails(formEntryPromptStub), widgetUtils);
         dateTimeWidget.setData(new LocalDateTime().withDate(year, month, day));
         dateTimeWidget.setData(new DateTime().withTime(hour, minute, 0, 0));
 

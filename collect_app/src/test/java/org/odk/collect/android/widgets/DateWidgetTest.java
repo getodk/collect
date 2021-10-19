@@ -155,6 +155,6 @@ public class DateWidgetTest {
     }
 
     private DateWidget createWidget(FormEntryPrompt prompt) {
-        return new DateWidget(widgetActivity, new QuestionDetails(prompt, "formAnalyticsID"), widgetUtils);
+        return new DateWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils);
     }
 }

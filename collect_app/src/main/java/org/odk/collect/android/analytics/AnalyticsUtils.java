@@ -1,16 +1,5 @@
 package org.odk.collect.android.analytics;
 
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.shared.strings.Md5;
-
-import java.io.ByteArrayInputStream;
-import java.util.Locale;
-
-import static java.lang.String.format;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 import static org.odk.collect.forms.FormSourceException.AuthRequired;
@@ -19,6 +8,16 @@ import static org.odk.collect.forms.FormSourceException.ParseError;
 import static org.odk.collect.forms.FormSourceException.SecurityError;
 import static org.odk.collect.forms.FormSourceException.ServerError;
 import static org.odk.collect.forms.FormSourceException.Unreachable;
+import static java.lang.String.format;
+
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.strings.Md5;
+
+import java.io.ByteArrayInputStream;
+import java.util.Locale;
 
 public final class AnalyticsUtils {
 
@@ -26,8 +25,12 @@ public final class AnalyticsUtils {
 
     }
 
+    public static void setForm(FormController formController) {
+        Analytics.setParam("form", getFormHash(formController));
+    }
+
     public static void logFormEvent(String event) {
-        Analytics.log(event, "form", getFormHash(Collect.getInstance().getFormController()));
+        Analytics.log(event, "form");
     }
 
     public static void logFormEvent(String event, String formId, String formTitle) {

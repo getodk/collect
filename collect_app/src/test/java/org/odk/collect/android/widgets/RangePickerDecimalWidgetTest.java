@@ -124,6 +124,6 @@ public class RangePickerDecimalWidgetTest {
     }
 
     private RangePickerDecimalWidget createWidget(FormEntryPrompt prompt) {
-        return new RangePickerDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt, "formAnalyticsID"));
+        return new RangePickerDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
 }
