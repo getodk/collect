@@ -93,8 +93,10 @@ class SharedPreferencesSettings(
 
     override fun registerOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
         val sharedPreferencesListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                listener.onSettingChanged(key)
+            SharedPreferences.OnSharedPreferenceChangeListener { _, key: String? ->
+                key?.let {
+                    listener.onSettingChanged(it)
+                }
             }
 
         listeners.add(Pair(WeakReference(listener), sharedPreferencesListener))
