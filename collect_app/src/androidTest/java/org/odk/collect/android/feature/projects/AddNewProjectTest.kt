@@ -23,14 +23,14 @@ class AddNewProjectTest {
     @Test
     fun addingProjectManually_addsNewProject() {
         rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
 
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "John / my-server.com")
             .assertInactiveProject("Demo project", "demo.getodk.org")
     }
@@ -41,12 +41,12 @@ class AddNewProjectTest {
         testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
 
         rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .openGooglePickerAndSelect(googleAccount)
 
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject(googleAccount, "$googleAccount / Google Drive")
             .assertInactiveProject("Demo project", "demo.getodk.org")
     }
@@ -54,7 +54,7 @@ class AddNewProjectTest {
     @Test
     fun addingProjectFromQrCode_addsNewProject() {
         val page = rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
 
         testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
@@ -62,7 +62,7 @@ class AddNewProjectTest {
 
         MainMenuPage()
             .assertOnPage()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "adam / my-server.com")
             .assertInactiveProject("Demo project", "demo.getodk.org")
     }
@@ -70,7 +70,7 @@ class AddNewProjectTest {
     @Test
     fun switchesToExistingProject_whenDuplicateProjectScanned_andOptionToSwitchToExistingSelected() {
         val page = rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
 
         testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https://demo.getodk.org\"},\"admin\":{}}")
@@ -78,7 +78,7 @@ class AddNewProjectTest {
         page.assertDuplicateDialogShown()
             .switchToExistingProject()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertNotInactiveProject("Demo project")
     }
@@ -86,7 +86,7 @@ class AddNewProjectTest {
     @Test
     fun addsDuplicateProject_whenDuplicateProjectScanned_andOptionToAddDuplicateProjectSelected() {
         val page = rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
 
         testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https://demo.getodk.org\"},\"admin\":{}}")
@@ -94,7 +94,7 @@ class AddNewProjectTest {
         page.assertDuplicateDialogShown()
             .addDuplicateProject()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertInactiveProject("Demo project", "demo.getodk.org")
     }
@@ -102,14 +102,14 @@ class AddNewProjectTest {
     @Test
     fun switchesToExistingProject_whenDuplicateProjectEnteredManually_andOptionToSwitchToExistingSelected() {
         rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://demo.getodk.org")
             .addProjectAndAssertDuplicateDialogShown()
             .switchToExistingProject()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertNotInactiveProject("Demo project")
     }
@@ -117,14 +117,14 @@ class AddNewProjectTest {
     @Test
     fun addsDuplicateProject_whenDuplicateProjectEnteredManually_andOptionToAddDuplicateProjectSelected() {
         rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://demo.getodk.org")
             .addProjectAndAssertDuplicateDialogShown()
             .addDuplicateProject()
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertInactiveProject("Demo project", "demo.getodk.org")
     }

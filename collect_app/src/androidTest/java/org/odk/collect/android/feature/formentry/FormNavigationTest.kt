@@ -56,8 +56,8 @@ class FormNavigationTest {
     @Test
     fun whenNavigatingBackwardsIsDisabled_showsAndHidesButtonsCorrectlyOnEachScreen() {
         rule.startAtMainMenu()
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
             .clickMovingBackwards()
@@ -80,8 +80,8 @@ class FormNavigationTest {
     @Test
     fun whenButtonsDisabled_buttonsNotShown() {
         rule.startAtMainMenu()
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickOnUserInterface()
             .clickNavigation()
             .clickSwipes()

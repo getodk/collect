@@ -37,8 +37,8 @@ public class HideOldVersionsTest {
     @Test
     public void whenHideOldVersionsDisabled_allVersionOfAFormShowsInFormList() {
         rule.startAtMainMenu()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .scrollToRecyclerViewItemAndClickText(R.string.hide_old_form_versions_setting_title)
                 .pressBack(new ProjectSettingsPage())

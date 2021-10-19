@@ -20,7 +20,7 @@ class DeleteProjectTest {
     fun deleteProjectTest() {
         // Add project Turtle nesting
         rule.startAtMainMenu()
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
             .inputUrl("https://my-server.com")
@@ -28,8 +28,8 @@ class DeleteProjectTest {
             .addProject()
 
             // Delete Turtle nesting project
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickProjectManagement()
             .deleteProject()
 
@@ -38,8 +38,8 @@ class DeleteProjectTest {
             .assertProjectIcon("D")
 
             // Delete Demo project
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickProjectManagement()
             .deleteLastProject()
     }

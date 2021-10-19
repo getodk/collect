@@ -66,7 +66,7 @@ class InstanceEditActionTest {
             .swipeToEndScreen()
             .clickSaveAndExit()
             .addAndSwitchToProject("https://example.com")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .selectProject("Demo project")
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")

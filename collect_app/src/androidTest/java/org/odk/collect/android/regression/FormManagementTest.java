@@ -57,8 +57,8 @@ public class FormManagementTest {
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes)
@@ -74,8 +74,8 @@ public class FormManagementTest {
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
         new MainMenuPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .openFormManagement()
                 .openShowGuidanceForQuestions()
                 .clickOnString(R.string.guidance_yes_collapsed)

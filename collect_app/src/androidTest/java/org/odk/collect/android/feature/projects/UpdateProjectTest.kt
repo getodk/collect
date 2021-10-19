@@ -21,9 +21,9 @@ class UpdateProjectTest {
     fun updateProjectTest() {
         rule.startAtMainMenu()
             .assertProjectIcon("D")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
-            .clickGeneralSettings()
+            .clickSettings()
             .clickProjectDisplay()
             .setProjectName("Project X")
             .assertFileWithProjectNameUpdated("Demo project", "Project X")
@@ -31,8 +31,8 @@ class UpdateProjectTest {
             .setProjectColor("cccccc")
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-            .openProjectSettings()
-            .clickGeneralSettings()
+            .openProjectSettingsDialog()
+            .clickSettings()
             .clickServerSettings()
             .clickServerUsername()
             .inputText("Anna")
@@ -41,7 +41,19 @@ class UpdateProjectTest {
             .pressBack(MainMenuPage())
 
             .assertProjectIcon("X")
-            .openProjectSettings()
+            .openProjectSettingsDialog()
             .assertCurrentProject("Project X", "Anna / demo.getodk.org")
+    }
+
+    @Test
+    fun updateProjectName_updatesProjectNameFileSanitizingIt() {
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectDisplay()
+            .setProjectName("Project<>")
+            .assertFileWithProjectNameUpdated("Demo project", "Project__")
+            .setProjectName(":*Project<>")
+            .assertFileWithProjectNameUpdated("Project__", "__Project__")
     }
 }

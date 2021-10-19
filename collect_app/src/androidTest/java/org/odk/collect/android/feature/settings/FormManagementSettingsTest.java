@@ -48,8 +48,8 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly);
@@ -73,8 +73,8 @@ public class FormManagementSettingsTest {
         assertThat(deferredTasks, is(empty()));
 
         FormManagementPage page = new MainMenuPage().assertOnPage()
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only);
@@ -96,8 +96,8 @@ public class FormManagementSettingsTest {
     public void whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms() throws Exception {
         FormManagementPage page = new MainMenuPage().assertOnPage()
                 .setServer(testDependencies.server.getURL())
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only)
@@ -123,8 +123,8 @@ public class FormManagementSettingsTest {
         new MainMenuPage().assertOnPage()
                 .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
                 .setGoogleAccount("steph@curry.basket")
-                .openProjectSettings()
-                .clickGeneralSettings()
+                .openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .assertDisabled(R.string.form_update_mode_title)
                 .assertDisabled(R.string.form_update_frequency_title)

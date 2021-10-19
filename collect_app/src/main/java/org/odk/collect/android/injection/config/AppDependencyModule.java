@@ -251,8 +251,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public StoragePathProvider providesStoragePathProvider(Context context, CurrentProjectProvider currentProjectProvider) {
-        return new StoragePathProvider(currentProjectProvider, context.getExternalFilesDir(null).getAbsolutePath());
+    public StoragePathProvider providesStoragePathProvider(Context context, CurrentProjectProvider currentProjectProvider, ProjectsRepository projectsRepository) {
+        return new StoragePathProvider(currentProjectProvider, projectsRepository, context.getExternalFilesDir(null).getAbsolutePath());
     }
 
     @Provides
@@ -464,8 +464,8 @@ public class AppDependencyModule {
     @Provides
     public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
                                                  CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter,
-                                                 Context context, StoragePathProvider storagePathProvider) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter, storagePathProvider);
+                                                 Context context) {
+        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
     }
 
     @Provides

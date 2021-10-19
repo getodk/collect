@@ -31,7 +31,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         });
     }
 
-    public ProjectSettingsDialogPage openProjectSettings() {
+    public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
 
         onView(withId(R.id.projects)).perform(click());
@@ -110,8 +110,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage setServer(String url) {
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .clickOnURL()
                 .inputText(url)
@@ -121,8 +121,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableManualUpdates() {
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.manual)
@@ -131,8 +131,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enablePreviouslyDownloadedOnlyUpdates() {
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.previously_downloaded_only)
@@ -141,8 +141,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableMatchExactly() {
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
                 .clickOption(R.string.match_exactly)
@@ -151,8 +151,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage enableAutoSend() {
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
                 .clickOnString(R.string.wifi_cellular_autosend)
@@ -166,8 +166,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
         intending(hasAction("com.google.android.gms.common.account.CHOOSE_ACCOUNT")).respondWith(activityResult);
 
-        return openProjectSettings()
-                .clickGeneralSettings()
+        return openProjectSettingsDialog()
+                .clickSettings()
                 .clickServerSettings()
                 .clickOnServerType()
                 .clickOnString(R.string.server_platform_google_sheets)
@@ -177,7 +177,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public MainMenuPage addAndSwitchToProject(String serverUrl) {
-        return openProjectSettings()
+        return openProjectSettingsDialog()
                 .clickAddProject()
                 .switchToManualMode()
                 .inputUrl(serverUrl)
