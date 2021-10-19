@@ -42,10 +42,8 @@ import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.ReferenceLayerUtils;
+import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.GoogleFusedLocationClient;
@@ -91,7 +89,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     MapProvider mapProvider;
 
     @Inject
-    StoragePathProvider storagePathProvider;
+    ReferenceLayerRepository referenceLayerRepository;
 
     private MapView map;
     private ReadyListener readyListener;
@@ -169,7 +167,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override public void applyConfig(Bundle config) {
         webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
-        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS));
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
         if (map != null) {
             map.setTileSource(webMapService.asOnlineTileSource());
             loadReferenceOverlay();

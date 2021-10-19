@@ -385,8 +385,6 @@
   <string name="carto_map_style_positron">بوزيترون</string>
   <string name="carto_map_style_dark_matter">المادة المظلمة</string>
   <string name="reference_layer">الطبقة المرجعية</string>
-  <string name="layer_data_caption_none">لا توجد ملفات طبقة في %1$s مدعومة من قبل الخريطة الأساسية في %2$s.</string>
-  <string name="layer_data_caption">المعروض أعلاه هي كافة ملفات الطبقات في %1$s المدعومة من قبل الخريطة الأساسية في %2$s.</string>
   <string name="layer_data_file">ملف بيانات الطبقة</string>
   <string name="view_change_location">الاطلاع على الموقع أو تغيير الموقع</string>
   <string name="change_location">تغيير الموقع</string>

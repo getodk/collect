@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Posizione</string>
   <string name="carto_map_style_dark_matter">Scuro è importante</string>
   <string name="reference_layer">Livello di riferimento</string>
-  <string name="layer_data_caption_none">Non ci sono files %1$s supportati dalla %2$s mappa di base.</string>
-  <string name="layer_data_caption">Sopra ci sono tutti i file di livello in %1$s supportati dalla %2$s mappe di base.</string>
   <string name="layer_data_file">File di dati del livello</string>
   <string name="view_change_location">Vedi o Cambia Posizione</string>
   <string name="change_location">Cambiare Localizzazione</string>

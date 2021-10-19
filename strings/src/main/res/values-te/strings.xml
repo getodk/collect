@@ -364,8 +364,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">రిఫరెన్స్ లేయర్</string>
-  <string name="layer_data_caption_none">%1$sలో %2$sబేస్‌మ్యాప్‌ చేత మద్దతిచ్చే లేయర్ ఫైల్స్ లేవు.</string>
-  <string name="layer_data_caption">బేస్‌మ్యాప్‌ %2$s చేత మద్దతిచ్చే %1$sలోని అన్ని లేయర్ ఫైల్స్ పైన ఉన్నాయి</string>
   <string name="layer_data_file">లేయర్ డేటా ఫైల్ </string>
   <string name="view_change_location">లొకేషన్ చూడండి లేదా మార్చండి</string>
   <string name="change_location">లొకేషన్ మార్చండి</string>

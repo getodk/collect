@@ -30,13 +30,14 @@ class StoragePathProvider @JvmOverloads constructor(
     @JvmOverloads
     fun getOdkDirPath(subdirectory: StorageSubdirectory, projectId: String? = null): String {
         val path = when (subdirectory) {
+            StorageSubdirectory.PROJECTS,
+            StorageSubdirectory.SHARED_LAYERS -> odkRootDirPath + File.separator + subdirectory.directoryName
             StorageSubdirectory.FORMS,
             StorageSubdirectory.INSTANCES,
             StorageSubdirectory.CACHE,
             StorageSubdirectory.METADATA,
             StorageSubdirectory.LAYERS,
             StorageSubdirectory.SETTINGS -> getProjectRootDirPath(projectId) + File.separator + subdirectory.directoryName
-            StorageSubdirectory.PROJECTS -> odkRootDirPath + File.separator + subdirectory.directoryName
         }
 
         if (!File(path).exists()) {

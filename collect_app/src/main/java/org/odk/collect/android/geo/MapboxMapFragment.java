@@ -4,7 +4,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
-import static org.odk.collect.android.storage.StorageSubdirectory.LAYERS;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -63,8 +62,7 @@ import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.ReferenceLayerUtils;
+import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.geo.MapPoint;
 
 import java.io.File;
@@ -98,7 +96,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     MapProvider mapProvider;
 
     @Inject
-    StoragePathProvider storagePathProvider;
+    ReferenceLayerRepository referenceLayerRepository;
 
     private MapboxMap map;
     private ReadyListener mapReadyListener;
@@ -265,7 +263,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void applyConfig(Bundle config) {
         styleUrl = config.getString(KEY_STYLE_URL);
-        referenceLayerFile = ReferenceLayerUtils.getReferenceLayerFile(config, storagePathProvider.getOdkDirPath(LAYERS));
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
         if (map != null) {
             map.setStyle(getStyleBuilder(), style -> {
                 // See addTo() above for why we add this placeholder layer.

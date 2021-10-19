@@ -14,12 +14,16 @@
 
 package org.odk.collect.android.utilities;
 
+import static java.util.Arrays.asList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
+
+import com.google.common.base.CharMatcher;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.core.model.Constants;
@@ -48,27 +52,20 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import timber.log.Timber;
-
-import static java.util.Arrays.asList;
-
-import com.google.common.base.CharMatcher;
 
 /**
  * Static methods used for common file operations.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FileUtils {
+public final class FileUtils {
 
     // Used to validate and display valid form names.
     public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
@@ -538,17 +535,12 @@ public class FileUtils {
     }
 
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
-    public static String simplifyScopedStoragePath(String path) {
+    public static String expandAndroidStoragePath(String path) {
         if (path != null && path.startsWith("/storage/emulated/0/")) {
             return "/sdcard/" + path.substring("/storage/emulated/0/".length());
         }
 
         return path;
-    }
-
-    /** Iterates over all directories and files under a root path. */
-    public static Iterable<File> walk(File root) {
-        return () -> new Walker(root, true);
     }
 
     public static String getMimeType(File file) {
@@ -598,31 +590,5 @@ public class FileUtils {
         boolean containsNonAscii = CharMatcher.ascii().matchesAllOf(filename);
         boolean containsPossiblyRestricted = CharMatcher.anyOf(possiblyRestricted).matchesAnyOf(possiblyRestricted);
         return "Problem with project name file. Contains @: " + containsAt + ", Contains non-ascii: " + containsNonAscii + ", Contains restricted: " + containsPossiblyRestricted;
-    }
-
-    /** An iterator that walks over all the directories and files under a given path. */
-    private static class Walker implements Iterator<File> {
-        private final List<File> queue = new ArrayList<>();
-        private final boolean depthFirst;
-
-        Walker(File root, boolean depthFirst) {
-            queue.add(root);
-            this.depthFirst = depthFirst;
-        }
-
-        @Override public boolean hasNext() {
-            return !queue.isEmpty();
-        }
-
-        @Override public File next() {
-            if (queue.isEmpty()) {
-                throw new NoSuchElementException();
-            }
-            File next = queue.remove(0);
-            if (next.isDirectory()) {
-                queue.addAll(depthFirst ? 0 : queue.size(), Arrays.asList(next.listFiles()));
-            }
-            return next;
-        }
     }
 }

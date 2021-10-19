@@ -386,8 +386,6 @@
   <string name="carto_map_style_positron">Utunyangingo.</string>
   <string name="carto_map_style_dark_matter">Ibibazo bidasobanutse cg byijimye.</string>
   <string name="reference_layer">Indangakitegererezo.</string>
-  <string name="layer_data_caption_none">Nta bubiko shingiro buhari bugaragaza %1$s mu gihe hari amakuru fatizo ashingiye kuri %2$s</string>
-  <string name="layer_data_caption">Haruguru aha habanje ububiko bwose bugaragaza %1$s mu gihe hari amakuru fatizo ashingiye kuri %2$s</string>
   <string name="layer_data_file">Ububiko bw\'amakuru shingiro.</string>
   <string name="view_change_location">Kora igenzura cyangwa uhindure ujye ahandi</string>
   <string name="change_location">Hindura ujye ahandi</string>

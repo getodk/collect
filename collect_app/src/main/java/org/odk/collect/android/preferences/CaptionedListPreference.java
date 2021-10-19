@@ -23,14 +23,10 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog.captionView;
-
-/** A ListPreference where each item has a caption and the entire dialog also has a caption. */
+/** A ListPreference where each item has a caption **/
 public class CaptionedListPreference extends ListPreference {
 
     private CharSequence[] captions;
-    private String dialogCaption;
-
     private int clickedIndex = -1;
 
     @Inject
@@ -67,11 +63,6 @@ public class CaptionedListPreference extends ListPreference {
         this.captions = captions;
     }
 
-    /** Sets the caption to show at the bottom of the dialog. */
-    public void setDialogCaption(String dialogCaption) {
-        this.dialogCaption = dialogCaption;
-    }
-
     /** Updates the contents of the dialog to show the items passed in by setItems etc.*/
     public void updateContent() {
         CharSequence[] values = getEntryValues();
@@ -82,9 +73,6 @@ public class CaptionedListPreference extends ListPreference {
             for (int i = 0; i < values.length; i++) {
                 inflateItem(ReferenceLayerPreferenceDialog.listView, i, values[i], labels[i], captions[i]);
             }
-        }
-        if (captionView != null) {
-            captionView.setText(dialogCaption);
         }
     }
 

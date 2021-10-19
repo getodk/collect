@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positrón</string>
   <string name="carto_map_style_dark_matter">Materia oscura</string>
   <string name="reference_layer">Capa de referencia</string>
-  <string name="layer_data_caption_none">No hay archivos de capas en %1$s que estén soportados por el mapa base %2$s .</string>
-  <string name="layer_data_caption">Arriba están todos los archivos de capas en %1$s que están soportados por el mapa base %2$s .</string>
   <string name="layer_data_file">Archivo de datos de capa</string>
   <string name="view_change_location">Ver o cambiar de localización</string>
   <string name="change_location">Cambiar Ubicación</string>

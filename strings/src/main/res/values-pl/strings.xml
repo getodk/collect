@@ -364,8 +364,6 @@
   <string name="carto_map_style_positron">Pozyton</string>
   <string name="carto_map_style_dark_matter">Ciemna Materia</string>
   <string name="reference_layer">Warstwa referencyjna</string>
-  <string name="layer_data_caption_none">Brak plików warstw w %1$s , które wspierane są przez mapę bazową %2$s .</string>
-  <string name="layer_data_caption">Powyższe pliki warstw w %1$s są wspierane przez mapę bazową %2$s .</string>
   <string name="layer_data_file">Plik danych warstwy</string>
   <string name="view_change_location">Obejrzyj lub Zmień Lokalizację</string>
   <string name="change_location">Zmień Lokalizację</string>

@@ -298,11 +298,11 @@ public class FileUtilsTest {
     @Test
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public void simplifyScopedStoragePathTest() {
-        assertThat(FileUtils.simplifyScopedStoragePath(null), is(nullValue()));
-        assertThat(FileUtils.simplifyScopedStoragePath(""), is(""));
-        assertThat(FileUtils.simplifyScopedStoragePath("blahblahblah"), is("blahblahblah"));
-        assertThat(FileUtils.simplifyScopedStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers"), is("/sdcard/Android/data/org.odk.collect.android/files/layers"));
-        assertThat(FileUtils.simplifyScopedStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/sdcard/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
+        assertThat(FileUtils.expandAndroidStoragePath(null), is(nullValue()));
+        assertThat(FileUtils.expandAndroidStoragePath(""), is(""));
+        assertThat(FileUtils.expandAndroidStoragePath("blahblahblah"), is("blahblahblah"));
+        assertThat(FileUtils.expandAndroidStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers"), is("/sdcard/Android/data/org.odk.collect.android/files/layers"));
+        assertThat(FileUtils.expandAndroidStoragePath("/storage/emulated/0/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"), is("/sdcard/Android/data/org.odk.collect.android/files/layers/countries/countries-raster.mbtiles"));
     }
 
     @Test

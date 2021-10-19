@@ -475,8 +475,6 @@
     <string name="carto_map_style_dark_matter">Dark Matter</string>
 
     <string name="reference_layer">Reference layer</string>
-    <string name="layer_data_caption_none">There are no layer files in %1$s that are supported by the %2$s basemap.</string>
-    <string name="layer_data_caption">Above are all the layer files in %1$s that are supported by the %2$s basemap.</string>
     <string name="layer_data_file">Layer data file</string>
 
     <string name="view_change_location">View or Change Location</string>
@@ -572,6 +570,9 @@
 
     <!-- Title for notification that lets user know their location is currently being tracked -->
     <string name="location_tracking_notification_title">Tracking location…</string>
+
+    <!-- Text of button user can press to get help when setting up Reference Layers -->
+    <string name="get_help_with_reference_layers">Get help with Reference Layers</string>
 
     <!--
     ##############################################

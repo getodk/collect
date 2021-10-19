@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positron</string>
   <string name="carto_map_style_dark_matter">Dark Matter</string>
   <string name="reference_layer">Lapisan referensi</string>
-  <string name="layer_data_caption_none">Tidak terdapat berkas lapisan di %1$s yang didukung oleh peta dasar %2$s.</string>
-  <string name="layer_data_caption">Di atas merupakan seluruh berkas lapisan di %1$s yang didukung oleh peta dasar %2$s .</string>
   <string name="layer_data_file">Berkas data lapisan</string>
   <string name="view_change_location">Lihat atau Ubah Lokasi</string>
   <string name="change_location">Ubah Lokasi</string>

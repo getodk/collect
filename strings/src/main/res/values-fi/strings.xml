@@ -388,8 +388,6 @@
   <string name="carto_map_style_positron">Positroni</string>
   <string name="carto_map_style_dark_matter">Pimeä aine</string>
   <string name="reference_layer">Viitekerros</string>
-  <string name="layer_data_caption_none">%1$s ei sisällä kerroksia jotka olisivat %2$s pohjakartan tukemia.</string>
-  <string name="layer_data_caption">Yllä kaikki %1$s sisältämät kerrostiedostot pohjakartta %2$s tukee.</string>
   <string name="layer_data_file">Kerrosdatatiedosto</string>
   <string name="view_change_location">Tarkastele tai vaihda sijaintia</string>
   <string name="change_location">Vaihda sijaintia</string>
