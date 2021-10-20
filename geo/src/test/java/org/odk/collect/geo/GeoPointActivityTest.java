@@ -14,7 +14,6 @@ import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 
@@ -26,6 +25,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.shadows.ShadowApplication;
@@ -105,7 +105,7 @@ public class GeoPointActivityTest {
         assertEquals(scenario.getResult().getResultCode(), RESULT_OK);
 
         Intent resultIntent = scenario.getResult().getResultData();
-        String resultString = resultIntent.getStringExtra("value");
+        String resultString = ExternalAppUtils.getReturnedSingleValue(resultIntent);
 
         scenario.onActivity(activity -> {
             assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));

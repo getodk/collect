@@ -18,6 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.geo.support.FakeMapFragment;
@@ -77,7 +78,8 @@ public class GeoPointMapActivityTest {
 
         assertThat(scenario.getResult().getResultCode(), is(RESULT_OK));
         scenario.onActivity(activity -> {
-            assertThat(scenario.getResult().getResultData().getStringExtra("value"), is(activity.formatResult(new MapPoint(5, 6, 7, 8))));
+            Intent resultData = scenario.getResult().getResultData();
+            assertThat(ExternalAppUtils.getReturnedSingleValue(resultData), is(activity.formatResult(new MapPoint(5, 6, 7, 8))));
         });
     }
 

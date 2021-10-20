@@ -12,4 +12,9 @@ object ExternalAppUtils {
         activity.setResult(Activity.RESULT_OK, intent)
         activity.finish()
     }
+
+    @JvmStatic
+    fun getReturnedSingleValue(data: Intent): String? {
+        return data.getStringExtra("value")
+    }
 }
