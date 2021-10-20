@@ -220,6 +220,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
 
+    /**
+     * Should use {@link org.odk.collect.android.externaldata.ExternalAppsUtils} instead
+     */
+    @Deprecated
     public static final String ANSWER_KEY = "value"; // this value can not be changed because it is also used by external apps
 
     public static final String KEY_INSTANCES = "instances";
