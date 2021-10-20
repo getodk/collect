@@ -5,6 +5,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -265,6 +266,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         styleUrl = config.getString(KEY_STYLE_URL);
         referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
         if (map != null) {
+            resetLocationComponent();
+
             map.setStyle(getStyleBuilder(), style -> {
                 // See addTo() above for why we add this placeholder layer.
                 style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
@@ -280,6 +283,16 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 }
             });
         }
+    }
+
+    /**
+     * Reset the location component so that it is not tied to the placeholder layer.
+     * We need to do this before re-setting map style to avoid exceptions.
+     */
+    @SuppressLint("MissingPermission")
+    private void resetLocationComponent() {
+        map.getLocationComponent().setLocationComponentEnabled(false);
+        map.getLocationComponent().activateLocationComponent(LocationComponentActivationOptions.builder(getContext(), map.getStyle()).build());
     }
 
     @Override public @NonNull MapPoint getCenter() {
@@ -705,6 +718,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 .locationEngine(engine)
                 .locationComponentOptions(
                     LocationComponentOptions.builder(getContext())
+                        .layerAbove(PLACEHOLDER_LAYER_ID)
                         .foregroundDrawable(R.drawable.ic_crosshairs)
                         .backgroundDrawable(R.drawable.empty)
                         .enableStaleState(false)  // don't switch to other drawables
