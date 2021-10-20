@@ -16,6 +16,7 @@ package org.odk.collect.geo;
 
 import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.content.Context;
 import android.content.Intent;
@@ -118,6 +119,8 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requireLocationPermissions(this);
+
         previousState = savedInstanceState;
 
         ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);

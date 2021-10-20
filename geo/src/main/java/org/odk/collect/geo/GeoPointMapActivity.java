@@ -17,6 +17,7 @@ package org.odk.collect.geo;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -116,6 +117,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requireLocationPermissions(this);
+
         previousState = savedInstanceState;
 
         ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);

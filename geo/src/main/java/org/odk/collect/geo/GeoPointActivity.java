@@ -15,6 +15,7 @@
 package org.odk.collect.geo;
 
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
@@ -80,6 +81,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requireLocationPermissions(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
