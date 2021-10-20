@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
@@ -188,9 +189,10 @@ public class GeoPointMapActivity extends LocalizedActivity {
         }
 
         if (result != null) {
-            setResult(RESULT_OK, new Intent().putExtra("value", result));
+            ExternalAppUtils.returnSingleValue(this, result);
+        } else {
+            finish();
         }
-        finish();
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor

@@ -38,6 +38,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -232,14 +233,10 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     private void returnLocation() {
         if (location != null) {
-            Intent i = new Intent();
-
-            i.putExtra("value", getResultStringForLocation(location));
-
-            setResult(RESULT_OK, i);
+            ExternalAppUtils.returnSingleValue(this, getResultStringForLocation(location));
+        } else {
+            finish();
         }
-
-        finish();
     }
 
     private void finishOnError() {

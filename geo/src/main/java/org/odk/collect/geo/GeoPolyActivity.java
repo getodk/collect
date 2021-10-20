@@ -32,6 +32,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
@@ -290,9 +291,8 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
-        setResult(RESULT_OK, new Intent().putExtra(
-            "value", GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
-        finish();
+        String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
+        ExternalAppUtils.returnSingleValue(this, result);
     }
 
     @Override public void onBackPressed() {
