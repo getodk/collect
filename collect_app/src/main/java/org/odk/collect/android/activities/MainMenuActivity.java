@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.androidshared.utils.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 
 import android.content.Intent;
 import android.os.Bundle;

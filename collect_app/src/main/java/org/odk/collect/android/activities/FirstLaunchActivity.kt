@@ -12,7 +12,7 @@ import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.utils.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.projects.Project
 import javax.inject.Inject
 

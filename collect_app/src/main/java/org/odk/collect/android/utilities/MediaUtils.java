@@ -23,7 +23,7 @@ import android.net.Uri;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 

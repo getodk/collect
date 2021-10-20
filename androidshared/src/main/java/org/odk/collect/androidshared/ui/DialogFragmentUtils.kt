@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.utils
+package org.odk.collect.androidshared.ui
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment

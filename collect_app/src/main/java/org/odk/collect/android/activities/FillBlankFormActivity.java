@@ -47,7 +47,7 @@ import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import javax.inject.Inject;
 

@@ -25,7 +25,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;

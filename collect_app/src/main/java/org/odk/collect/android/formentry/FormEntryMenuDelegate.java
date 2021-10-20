@@ -22,7 +22,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;

@@ -28,9 +28,9 @@ import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
-import static org.odk.collect.androidshared.utils.DialogFragmentUtils.showIfNotShowing;
-import static org.odk.collect.androidshared.utils.ToastUtils.showLongToast;
-import static org.odk.collect.androidshared.utils.ToastUtils.showShortToast;
+import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
+import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -143,7 +143,7 @@ import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -174,8 +174,8 @@ import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataReg
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;

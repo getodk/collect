@@ -28,7 +28,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

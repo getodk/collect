@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.utils
+package org.odk.collect.androidshared.system
 
 import android.content.Context
 import java.io.File

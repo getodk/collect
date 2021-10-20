@@ -14,7 +14,7 @@
 
 package org.odk.collect.geo;
 
-import static org.odk.collect.androidshared.utils.ContextUtils.getThemeAttributeValue;
+import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 
 import android.content.Context;
@@ -29,8 +29,8 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;

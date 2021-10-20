@@ -28,8 +28,8 @@ import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHIN
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
 import org.odk.collect.android.utilities.ActivityAvailability
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.androidshared.utils.DialogFragmentUtils
-import org.odk.collect.androidshared.utils.ToastUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.Validator

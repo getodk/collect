@@ -23,7 +23,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.permissions.PermissionsChecker;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.support.CollectHelpers;

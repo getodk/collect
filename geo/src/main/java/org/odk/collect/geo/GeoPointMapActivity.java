@@ -30,7 +30,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;

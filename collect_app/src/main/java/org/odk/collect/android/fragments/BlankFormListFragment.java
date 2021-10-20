@@ -39,8 +39,8 @@ import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import javax.inject.Inject;
 

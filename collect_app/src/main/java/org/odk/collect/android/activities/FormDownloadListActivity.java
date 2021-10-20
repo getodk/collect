@@ -57,8 +57,8 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
 
 import java.net.URI;

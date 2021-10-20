@@ -21,7 +21,7 @@ import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.ColorPickerDialog
 import org.odk.collect.androidshared.ColorPickerViewModel
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
-import org.odk.collect.androidshared.utils.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.PathUtils

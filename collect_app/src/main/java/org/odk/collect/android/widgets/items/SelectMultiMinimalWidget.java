@@ -15,7 +15,7 @@ import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
-import org.odk.collect.androidshared.utils.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;

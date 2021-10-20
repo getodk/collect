@@ -39,7 +39,7 @@ import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;

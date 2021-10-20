@@ -27,7 +27,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.UrlWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 @SuppressLint("ViewConstructor")
 public class UrlWidget extends QuestionWidget {

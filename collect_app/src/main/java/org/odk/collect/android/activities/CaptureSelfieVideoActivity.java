@@ -21,7 +21,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.Camera2VideoFragment;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 public class CaptureSelfieVideoActivity extends CollectAbstractActivity {
 

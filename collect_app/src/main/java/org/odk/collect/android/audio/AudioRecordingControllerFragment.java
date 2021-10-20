@@ -29,7 +29,7 @@ import javax.inject.Inject;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.odk.collect.androidshared.utils.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.zip4;
 
 public class AudioRecordingControllerFragment extends Fragment {
