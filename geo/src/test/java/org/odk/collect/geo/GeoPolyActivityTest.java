@@ -31,6 +31,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.location.tracker.LocationTracker;
@@ -109,11 +110,13 @@ public class GeoPolyActivityTest {
             verify(locationTracker).start(true);
         });
 
+        Mockito.reset(locationTracker); // Ignore previous calls
+
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
         ActivityScenario.<GeoPolyActivity>launch(intent).onActivity(activity -> {
             activity.updateRecordingMode(R.id.automatic_mode);
             activity.startInput();
-            verify(locationTracker).start(true);
+            verify(locationTracker).start(false);
         });
     }
 }
