@@ -18,7 +18,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.robolectric.Shadows.shadowOf;
 
+import android.app.Application;
 import android.content.Intent;
 import android.view.View;
 
@@ -35,6 +37,7 @@ import org.mockito.Mockito;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTest {
@@ -44,6 +47,10 @@ public class GeoPolyActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
+        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+
         RobolectricApplication application = ApplicationProvider.getApplicationContext();
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
                 .geoDependencyModule(new GeoDependencyModule() {

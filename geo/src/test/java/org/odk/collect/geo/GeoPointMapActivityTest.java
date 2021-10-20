@@ -5,7 +5,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+import static org.robolectric.Shadows.shadowOf;
 
+import android.app.Application;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.geo.support.FakeMapFragment;
+import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
@@ -27,6 +30,10 @@ public class GeoPointMapActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
+        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+
         RobolectricApplication application = ApplicationProvider.getApplicationContext();
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
                 .geoDependencyModule(new GeoDependencyModule() {

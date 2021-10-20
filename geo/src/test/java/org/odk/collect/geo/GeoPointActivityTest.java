@@ -13,6 +13,8 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 
@@ -26,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
+import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointActivityTest {
@@ -34,6 +37,10 @@ public class GeoPointActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
+        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+
         LocationClientProvider.setTestClient(locationClient);
     }
 
