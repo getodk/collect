@@ -19,6 +19,7 @@ import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
+import java.util.List;
 import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -153,5 +154,15 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         QuestionWidget widget = (QuestionWidget) getWidget();
         assertThat(widget.findViewById(R.id.answer_container).getVisibility(), is(View.VISIBLE));
         assertThat(widget.findViewById(R.id.space_box).getVisibility(), is(View.GONE));
+    }
+
+    // The whole widget should be registered for context menu to support removing answers/groups
+    @Test
+    public void widgetShouldBeRegisteredForContextMenu() {
+        QuestionWidget widget = (QuestionWidget) createWidget();
+        List<View> viewsRegisterForContextMenu = ((TestScreenContextActivity) activity).viewsRegisterForContextMenu;
+
+        assertThat(viewsRegisterForContextMenu.size(), is(1));
+        assertThat(viewsRegisterForContextMenu.get(0), is(widget));
     }
 }

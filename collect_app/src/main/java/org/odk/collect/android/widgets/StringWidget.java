@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.Selection;
@@ -33,7 +34,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 
@@ -109,11 +109,12 @@ public class StringWidget extends QuestionWidget {
      * This makes it possible to long-press to paste or perform other text editing functions.
      */
     @Override
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
+    protected void registerToClearAnswerOnLongPress(Activity activity, ViewGroup viewGroup) {
         ViewGroup view = findViewById(R.id.question_widget_container);
         for (int i = 0; i < view.getChildCount(); i++) {
             View childView = view.getChildAt(i);
             if (childView.getId() != R.id.answer_container) {
+                childView.setTag(childView.getId());
                 childView.setId(getId());
                 activity.registerForContextMenu(childView);
             }
