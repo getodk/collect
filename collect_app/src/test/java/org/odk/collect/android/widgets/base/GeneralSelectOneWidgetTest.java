@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.base;
 
-import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
@@ -9,8 +8,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
-import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.support.TestScreenContextActivity;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.util.List;
@@ -24,8 +21,6 @@ import static org.junit.Assert.assertNull;
 
 public abstract class GeneralSelectOneWidgetTest<W extends MultiChoiceWidget>
         extends SelectWidgetTest<W, SelectOneData> {
-
-    protected Activity activity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
 
     @NonNull
     @Override
