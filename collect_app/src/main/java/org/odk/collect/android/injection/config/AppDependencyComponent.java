@@ -51,6 +51,7 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
@@ -91,6 +92,7 @@ import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Singleton;
@@ -313,4 +315,6 @@ public interface AppDependencyComponent {
     ExistingProjectMigrator existingProjectMigrator();
 
     ProjectResetter projectResetter();
+
+    MapProvider mapProvider();
 }
