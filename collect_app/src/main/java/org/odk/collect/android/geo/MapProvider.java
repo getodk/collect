@@ -31,11 +31,17 @@ import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MA
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
+import javax.inject.Singleton;
+
 /**
  * Obtains a MapFragment according to the user's preferences.
  * This is the top-level class that should be used by the rest of the application.
  * The available options on the Maps preferences screen are also defined here.
+ *
+ * This needs to be used as a singleton for maps to work (Google Maps appears as blank otherwise)
+ * but it's not clear if that's intentional or not.
  */
+@Singleton
 public class MapProvider implements MapFragmentFactory {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
