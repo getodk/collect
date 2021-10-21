@@ -92,7 +92,6 @@ import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Singleton;

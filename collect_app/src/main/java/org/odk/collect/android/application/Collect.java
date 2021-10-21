@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
