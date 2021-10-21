@@ -30,6 +30,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -91,9 +92,6 @@ public class Collect extends Application implements
     @Inject
     SettingsProvider settingsProvider;
 
-    @Inject
-    ProjectsRepository projectsRepository;
-
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
@@ -140,12 +138,11 @@ public class Collect extends Application implements
         ExternalFilesUtils.testExternalFilesAccess(this);
 
         singleton = this;
-
         setupDagger();
+        DaggerUtils.getComponent(this).inject(this);
+
         applicationInitializer.initialize();
-
         fixGoogleBug154855417();
-
         setupStrictMode();
     }
 
@@ -172,7 +169,6 @@ public class Collect extends Application implements
         applicationComponent = DaggerAppDependencyComponent.builder()
                 .application(this)
                 .build();
-        applicationComponent.inject(this);
 
         audioRecorderDependencyComponent = DaggerAudioRecorderDependencyComponent.builder()
                 .application(this)
@@ -183,7 +179,7 @@ public class Collect extends Application implements
                     @NotNull
                     @Override
                     public ProjectsRepository providesProjectsRepository() {
-                        return projectsRepository;
+                        return applicationComponent.projectsRepository();
                     }
                 })
                 .build();
