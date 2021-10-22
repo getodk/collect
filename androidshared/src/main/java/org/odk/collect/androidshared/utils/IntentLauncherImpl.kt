@@ -3,6 +3,7 @@ package org.odk.collect.androidshared.utils
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 
 object IntentLauncherImpl : IntentLauncher {
     override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
@@ -24,10 +25,26 @@ object IntentLauncherImpl : IntentLauncher {
             onError()
         }
     }
+
+    override fun launchForResult(
+        resultLauncher: ActivityResultLauncher<Intent>,
+        intent: Intent,
+        onError: () -> Unit
+    ) {
+        try {
+            resultLauncher.launch(intent)
+        } catch (e: Exception) {
+            onError()
+        } catch (e: Error) {
+            onError()
+        }
+    }
 }
 
 interface IntentLauncher {
     fun launch(context: Context, intent: Intent, onError: () -> Unit)
 
     fun launchForResult(activity: Activity, intent: Intent, requestCode: Int, onError: () -> Unit)
+
+    fun launchForResult(resultLauncher: ActivityResultLauncher<Intent>, intent: Intent, onError: () -> Unit)
 }
