@@ -17,9 +17,9 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;
@@ -32,7 +32,7 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
     QRCodeGenerator qrCodeGenerator;
 
     @Inject
-    ActivityAvailability activityAvailability;
+    IntentLauncher intentLauncher;
 
     @Inject
     FileProvider fileProvider;
@@ -63,12 +63,12 @@ public class QRCodeTabsActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
 
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
+        menuDelegate = new QRCodeMenuDelegate(this, intentLauncher, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
         activityResultDelegate = new QRCodeActivityResultDelegate(this, settingsImporter, qrCodeDecoder, currentProjectProvider.getCurrentProject());
         setContentView(R.layout.tabs_layout);
 
         initToolbar(getString(R.string.reconfigure_with_qr_code_settings_title));
-        menuDelegate = new QRCodeMenuDelegate(this, activityAvailability, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
+        menuDelegate = new QRCodeMenuDelegate(this, intentLauncher, qrCodeGenerator, appConfigurationGenerator, fileProvider, settingsProvider, scheduler);
 
         permissionsProvider.requestCameraPermission(this, new PermissionListener() {
             @Override

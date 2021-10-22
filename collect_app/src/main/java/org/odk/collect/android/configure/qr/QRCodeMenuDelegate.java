@@ -10,10 +10,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 
 import timber.log.Timber;
@@ -23,16 +23,16 @@ public class QRCodeMenuDelegate implements MenuDelegate {
     public static final int SELECT_PHOTO = 111;
 
     private final FragmentActivity activity;
-    private final ActivityAvailability activityAvailability;
+    private final IntentLauncher intentLauncher;
     private final FileProvider fileProvider;
 
     private String qrFilePath;
 
-    QRCodeMenuDelegate(FragmentActivity activity, ActivityAvailability activityAvailability, QRCodeGenerator qrCodeGenerator,
+    QRCodeMenuDelegate(FragmentActivity activity, IntentLauncher intentLauncher, QRCodeGenerator qrCodeGenerator,
                        AppConfigurationGenerator appConfigurationGenerator, FileProvider fileProvider,
                        SettingsProvider settingsProvider, Scheduler scheduler) {
         this.activity = activity;
-        this.activityAvailability = activityAvailability;
+        this.intentLauncher = intentLauncher;
         this.fileProvider = fileProvider;
 
         QRCodeViewModel qrCodeViewModel = new ViewModelProvider(
@@ -57,13 +57,11 @@ public class QRCodeMenuDelegate implements MenuDelegate {
             case R.id.menu_item_scan_sd_card:
                 Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 photoPickerIntent.setType("image/*");
-                if (activityAvailability.isActivityAvailable(photoPickerIntent)) {
-                    activity.startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-                } else {
+                intentLauncher.launchForResult(activity, photoPickerIntent, SELECT_PHOTO, () -> {
                     ToastUtils.showShortToast(activity, activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
                     Timber.w(activity.getString(R.string.activity_not_found, activity.getString(R.string.choose_image)));
-                }
-
+                    return null;
+                });
                 return true;
 
             case R.id.menu_item_share:
