@@ -206,7 +206,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
-                GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, activityAvailability, waitingForDataRegistry, formEntryViewModel);
+                GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, IntentLauncherImpl.INSTANCE, waitingForDataRegistry, formEntryViewModel);
 
                 if (appearance.startsWith(Appearances.EX)) {
                     questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
