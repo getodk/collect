@@ -16,7 +16,12 @@ object IntentLauncherImpl : IntentLauncher {
         }
     }
 
-    override fun launchForResult(activity: Activity, intent: Intent, requestCode: Int, onError: () -> Unit) {
+    override fun launchForResult(
+        activity: Activity,
+        intent: Intent,
+        requestCode: Int,
+        onError: () -> Unit
+    ) {
         try {
             activity.startActivityForResult(intent, requestCode)
         } catch (e: Exception) {
@@ -46,5 +51,9 @@ interface IntentLauncher {
 
     fun launchForResult(activity: Activity, intent: Intent, requestCode: Int, onError: () -> Unit)
 
-    fun launchForResult(resultLauncher: ActivityResultLauncher<Intent>, intent: Intent, onError: () -> Unit)
+    fun launchForResult(
+        resultLauncher: ActivityResultLauncher<Intent>,
+        intent: Intent,
+        onError: () -> Unit
+    )
 }
