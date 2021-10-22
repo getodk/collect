@@ -18,7 +18,7 @@ import android.content.Context
 import android.content.Intent
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.utils.IntentLauncherImpl
 import org.odk.collect.androidshared.utils.ToastUtils.showLongToast
 import timber.log.Timber
 import java.io.File
@@ -56,7 +56,7 @@ class MediaUtils {
         intent.setDataAndType(contentUri, mimeType)
         FileUtils.grantFileReadPermissions(intent, contentUri, context)
 
-        IntentLauncher.launch(context, intent) {
+        IntentLauncherImpl.launch(context, intent) {
             val message = context.getString(
                 R.string.activity_not_found,
                 context.getString(R.string.open_file)
