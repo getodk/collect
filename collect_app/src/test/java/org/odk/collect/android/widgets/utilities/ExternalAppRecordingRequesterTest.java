@@ -13,9 +13,11 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.utils.IntentLauncherImpl;
+import org.odk.collect.testshared.ErrorIntentLauncher;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -24,16 +26,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class ExternalAppRecordingRequesterTest {
 
-    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
+    private IntentLauncher intentLauncher;
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
@@ -43,12 +43,17 @@ public class ExternalAppRecordingRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, mock(FormEntryViewModel.class));
+    }
+
+    private void setupRequester() {
+        requester = new ExternalAppRecordingRequester(activity, intentLauncher, waitingForDataRegistry, permissionsProvider, mock(FormEntryViewModel.class));
     }
 
     @Test
     public void requestRecording_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
+        intentLauncher = new ErrorIntentLauncher();
+        setupRequester();
+
         permissionsProvider.setPermissionGranted(true);
 
         requester.requestRecording(promptWithAnswer(null));
@@ -62,7 +67,9 @@ public class ExternalAppRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
+        intentLauncher = IntentLauncherImpl.INSTANCE;
+        setupRequester();
+
         permissionsProvider.setPermissionGranted(false);
 
         requester.requestRecording(promptWithAnswer(null));
@@ -74,7 +81,9 @@ public class ExternalAppRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
+        intentLauncher = IntentLauncherImpl.INSTANCE;
+        setupRequester();
+
         permissionsProvider.setPermissionGranted(true);
 
         FormEntryPrompt prompt = promptWithAnswer(null);
