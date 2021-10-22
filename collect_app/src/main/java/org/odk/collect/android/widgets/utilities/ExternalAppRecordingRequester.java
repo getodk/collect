@@ -11,21 +11,21 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 
 public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final PermissionsProvider permissionsProvider;
-    private final ActivityAvailability activityAvailability;
+    private final IntentLauncher intentLauncher;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final FormEntryViewModel formEntryViewModel;
 
-    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
+    public ExternalAppRecordingRequester(Activity activity, IntentLauncher intentLauncher, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.permissionsProvider = permissionsProvider;
-        this.activityAvailability = activityAvailability;
+        this.intentLauncher = intentLauncher;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.formEntryViewModel = formEntryViewModel;
     }
@@ -39,14 +39,13 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
 
-                if (activityAvailability.isActivityAvailable(intent)) {
-                    waitingForDataRegistry.waitForData(prompt.getIndex());
-                    activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.AUDIO_CAPTURE);
-                } else {
+                waitingForDataRegistry.waitForData(prompt.getIndex());
+                intentLauncher.launchForResult(activity, intent, ApplicationConstants.RequestCodes.AUDIO_CAPTURE, () -> {
                     Toast.makeText(activity, activity.getString(R.string.activity_not_found,
                             activity.getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
                     waitingForDataRegistry.cancelWaitingForData();
-                }
+                    return null;
+                });
             }
 
             @Override

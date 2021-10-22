@@ -152,7 +152,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
@@ -176,6 +175,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -343,9 +343,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PermissionsChecker permissionsChecker;
 
     @Inject
-    ActivityAvailability activityAvailability;
-
-    @Inject
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Inject
@@ -353,6 +350,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    IntentLauncher intentLauncher;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -496,7 +496,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
-        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, intentLauncher , waitingForDataRegistry, permissionsProvider, formEntryViewModel);
 
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
         audioRecorder.getCurrentSession().observe(this, session -> {
