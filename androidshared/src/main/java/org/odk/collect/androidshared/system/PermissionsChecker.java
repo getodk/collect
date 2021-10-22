@@ -1,4 +1,4 @@
-package org.odk.collect.android.permissions;
+package org.odk.collect.androidshared.system;
 
 import android.content.Context;
 import android.content.pm.PackageManager;

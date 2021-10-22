@@ -12,11 +12,12 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.geo;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -30,14 +31,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
-import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.geo.GeoUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
 
@@ -50,7 +49,8 @@ import timber.log.Timber;
  * by touching a point on the map or by tapping a button to place the marker
  * at the current location (obtained from GPS or other location sensors).
  */
-public class GeoPointMapActivity extends BaseGeoMapActivity {
+public class GeoPointMapActivity extends LocalizedActivity {
+
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
@@ -70,8 +70,16 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     public static final String LOCATION_STATUS_VISIBILITY_KEY = "location_status_visibility";
     public static final String LOCATION_INFO_VISIBILITY_KEY = "location_info_visibility";
 
+    public static final String EXTRA_LOCATION = "gp";
+
+    protected Bundle previousState;
+
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
+
+    @Inject
+    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
+
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
 
@@ -110,7 +118,11 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DaggerUtils.getComponent(this).inject(this);
+        requireLocationPermissions(this);
+
+        previousState = savedInstanceState;
+
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         try {
@@ -128,7 +140,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         zoomButton = findViewById(R.id.zoom);
 
         Context context = getApplicationContext();
-        mapProvider.createMapFragment(context)
+        mapFragmentFactory.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
@@ -177,9 +189,10 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         }
 
         if (result != null) {
-            setResult(RESULT_OK, new Intent().putExtra(FormEntryActivity.ANSWER_KEY, result));
+            ExternalAppUtils.returnSingleValue(this, result);
+        } else {
+            finish();
         }
-        finish();
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
@@ -206,7 +219,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         // Menu Layer Toggle
         findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
         });
 
         clearButton = findViewById(R.id.clear);
@@ -225,20 +238,20 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.getExtras() != null) {
-            intentDraggable = intent.getBooleanExtra(DRAGGABLE_ONLY, false);
+            intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
                 locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
             }
 
-            intentReadOnly = intent.getBooleanExtra(READ_ONLY, false);
+            intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false);
             if (intentReadOnly) {
                 captureLocation = true;
                 clearButton.setEnabled(false);
             }
 
-            if (intent.hasExtra(LOCATION)) {
-                double[] point = intent.getDoubleArrayExtra(LOCATION);
+            if (intent.hasExtra(EXTRA_LOCATION)) {
+                double[] point = intent.getDoubleArrayExtra(EXTRA_LOCATION);
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.
@@ -257,6 +270,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
             }
         }
 
+        map.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 

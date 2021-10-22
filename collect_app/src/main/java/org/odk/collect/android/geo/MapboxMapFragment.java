@@ -63,7 +63,8 @@ import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
 
 import java.io.File;
 import java.io.IOException;
@@ -456,6 +457,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void setGpsLocationListener(@Nullable PointListener listener) {
         gpsLocationListener = listener;
+    }
+
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationCallback.setRetainMockAccuracy(retainMockAccuracy);
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {

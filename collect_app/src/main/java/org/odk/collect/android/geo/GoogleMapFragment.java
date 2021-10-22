@@ -53,8 +53,9 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -71,7 +72,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import timber.log.Timber;
 
 public class GoogleMapFragment extends SupportMapFragment implements
-    MapFragment, LocationListener, LocationClient.LocationClientListener,
+        MapFragment, LocationListener, LocationClient.LocationClientListener,
     GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
     GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
     GoogleMap.OnPolylineClickListener {
@@ -336,6 +337,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void setGpsLocationListener(@Nullable PointListener listener) {
         gpsLocationListener = listener;
+    }
+
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy);
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {

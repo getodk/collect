@@ -16,11 +16,11 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.ColorPickerDialog
 import org.odk.collect.androidshared.ColorPickerViewModel
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.OneSignTextWatcher
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -122,7 +122,7 @@ class ProjectDisplayPreferencesFragment :
                     val bundle = Bundle()
                     bundle.putString(ColorPickerDialog.CURRENT_COLOR, color)
                     bundle.putString(ColorPickerDialog.CURRENT_ICON, icon)
-                    DialogUtils.showIfNotShowing(
+                    DialogFragmentUtils.showIfNotShowing(
                         ColorPickerDialog::class.java,
                         bundle,
                         requireActivity().supportFragmentManager

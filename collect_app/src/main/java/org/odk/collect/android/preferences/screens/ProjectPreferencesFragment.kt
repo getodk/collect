@@ -29,9 +29,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 
 class ProjectPreferencesFragment :
     BaseProjectPreferencesFragment(),
@@ -80,8 +80,14 @@ class ProjectPreferencesFragment :
                 FORM_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(FormManagementPreferencesFragment())
                 USER_AND_DEVICE_IDENTITY_PREFERENCE_KEY -> displayPreferences(IdentityPreferencesFragment())
                 EXPERIMENTAL_PREFERENCE_KEY -> displayPreferences(ExperimentalPreferencesFragment())
-                UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY -> DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
-                CHANGE_ADMIN_PASSWORD_PREFERENCE_KEY -> DialogUtils.showIfNotShowing(ChangeAdminPasswordDialog::class.java, requireActivity().supportFragmentManager)
+                UNLOCK_PROTECTED_SETTINGS_PREFERENCE_KEY -> DialogFragmentUtils.showIfNotShowing(
+                    AdminPasswordDialogFragment::class.java,
+                    requireActivity().supportFragmentManager
+                )
+                CHANGE_ADMIN_PASSWORD_PREFERENCE_KEY -> DialogFragmentUtils.showIfNotShowing(
+                    ChangeAdminPasswordDialog::class.java,
+                    requireActivity().supportFragmentManager
+                )
                 PROJECT_MANAGEMENT_PREFERENCE_KEY -> displayPreferences(ProjectManagementPreferencesFragment())
                 ACCESS_CONTROL_PREFERENCE_KEY -> displayPreferences(AccessControlPreferencesFragment())
             }
@@ -122,7 +128,10 @@ class ProjectPreferencesFragment :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_locked) {
-            DialogUtils.showIfNotShowing(AdminPasswordDialogFragment::class.java, requireActivity().supportFragmentManager)
+            DialogFragmentUtils.showIfNotShowing(
+                AdminPasswordDialogFragment::class.java,
+                requireActivity().supportFragmentManager
+            )
             return true
         }
         return false

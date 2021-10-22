@@ -12,9 +12,11 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.geo;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,18 +30,15 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
-import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.geo.SettingsDialogFragment;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.geo.GeoUtils;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
+public class GeoPolyActivity extends LocalizedActivity implements GeoPolySettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -61,6 +60,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
+    protected Bundle previousState;
 
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
@@ -70,10 +70,13 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private OutputMode outputMode;
 
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     LocationTracker locationTracker;
+
+    @Inject
+    ReferenceLayerSettingsNavigator referenceLayerSettingsNavigator;
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
@@ -117,7 +120,11 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DaggerUtils.getComponent(this).inject(this);
+        requireLocationPermissions(this);
+
+        previousState = savedInstanceState;
+
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         if (savedInstanceState != null) {
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
@@ -131,7 +138,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
         }
 
-        intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
+        intentReadOnly = getIntent().getBooleanExtra(EXTRA_READ_ONLY, false);
         outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -140,7 +147,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         setContentView(R.layout.geopoly_layout);
 
         Context context = getApplicationContext();
-        mapProvider.createMapFragment(context)
+        mapFragmentFactory.createMapFragment(context)
             .addTo(this, R.id.map_container, this::initMap, this::finish);
     }
 
@@ -214,7 +221,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
             if (map.getPolyPoints(featureId).isEmpty()) {
-                DialogUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(GeoPolySettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();
             }
@@ -224,7 +231,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         recordButton.setOnClickListener(v -> recordPoint(map.getGpsLocation()));
 
         findViewById(R.id.layers).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this);
         });
 
         zoomButton = findViewById(R.id.zoom);
@@ -284,9 +291,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
-        setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
-        finish();
+        String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
+        ExternalAppUtils.returnSingleValue(this, result);
     }
 
     @Override public void onBackPressed() {
@@ -337,7 +343,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public void startInput() {
         inputActive = true;
         if (recordingEnabled && recordingAutomatic) {
-            locationTracker.start();
+            boolean retainMockAccuracy = getIntent().getBooleanExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
+            locationTracker.start(retainMockAccuracy);
 
             recordPoint(map.getGpsLocation());
             schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
@@ -485,9 +492,9 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                 : getString(R.string.location_status_unacceptable, location.sd)
         );
         locationStatus.setBackgroundColor(
-                location == null ? themeUtils.getColorPrimary()
-                        : acceptable ? themeUtils.getColorPrimary()
-                        : themeUtils.getColorError()
+                location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)
+                        : acceptable ? getThemeAttributeValue(this, R.attr.colorPrimary)
+                        : getThemeAttributeValue(this, R.attr.colorError)
         );
         collectionStatus.setText(
             !inputActive ? getString(R.string.collection_status_paused, numPoints)

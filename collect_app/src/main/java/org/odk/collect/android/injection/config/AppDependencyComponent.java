@@ -12,8 +12,6 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
-import org.odk.collect.android.activities.GeoPointMapActivity;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
@@ -53,6 +51,7 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
+import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
@@ -171,10 +170,6 @@ public interface AppDependencyComponent {
     void inject(ODKView odkView);
 
     void inject(FormMetadataPreferencesFragment formMetadataPreferencesFragment);
-
-    void inject(GeoPointMapActivity geoMapActivity);
-
-    void inject(GeoPolyActivity geoPolyActivity);
 
     void inject(FormMapActivity formMapActivity);
 
@@ -319,4 +314,6 @@ public interface AppDependencyComponent {
     ExistingProjectMigrator existingProjectMigrator();
 
     ProjectResetter projectResetter();
+
+    MapProvider mapProvider();
 }

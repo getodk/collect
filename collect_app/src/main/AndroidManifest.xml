@@ -137,9 +137,15 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name="org.odk.collect.geo.GeoPointActivity"
             android:theme="@style/Theme.Collect"
-            tools:replace="android:theme"/>
-        <activity android:name=".activities.GeoPointMapActivity" />
-        <activity android:name=".activities.GeoPolyActivity" />
+            tools:replace="android:theme" />
+        <activity
+            android:name="org.odk.collect.geo.GeoPointMapActivity"
+            android:theme="@style/Theme.Collect"
+            tools:replace="android:theme" />
+        <activity
+            android:name="org.odk.collect.geo.GeoPolyActivity"
+            android:theme="@style/Theme.Collect"
+            tools:replace="android:theme" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
         <activity

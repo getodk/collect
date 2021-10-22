@@ -1,13 +1,15 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.activities.GeoPointMapActivity;
-import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
@@ -15,11 +17,10 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.geo.GeoPointActivity;
+import org.odk.collect.geo.GeoPointMapActivity;
+import org.odk.collect.geo.GeoPolyActivity;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
-    public static final String LOCATION = "gp";
-    public static final String READ_ONLY = "readOnly";
-    public static final String DRAGGABLE_ONLY = "draggable";
 
     private final PermissionsProvider permissionsProvider;
 
@@ -38,13 +39,13 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 Bundle bundle = new Bundle();
 
                 if (answerText != null && !answerText.isEmpty()) {
-                    bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
+                    bundle.putDoubleArray(GeoPointMapActivity.EXTRA_LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
                 bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
-                bundle.putBoolean(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy")));
-                bundle.putBoolean(READ_ONLY, prompt.isReadOnly());
-                bundle.putBoolean(DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
+                bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
+                bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
+                bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
                 Intent intent = new Intent(context, isMapsAppearance(prompt) ? GeoPointMapActivity.class : GeoPointActivity.class);
                 intent.putExtras(bundle);
@@ -67,7 +68,8 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 Intent intent = new Intent(context, GeoPolyActivity.class);
                 intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
-                intent.putExtra(READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE);
             }
@@ -88,7 +90,8 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 Intent intent = new Intent(context, GeoPolyActivity.class);
                 intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOTRACE);
-                intent.putExtra(READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE);
             }
@@ -97,6 +100,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
             public void denied() {
             }
         });
+    }
+
+    private boolean getAllowMockAccuracy(FormEntryPrompt prompt) {
+        return Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy"));
     }
 
     private boolean isMapsAppearance(FormEntryPrompt prompt) {

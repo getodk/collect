@@ -19,11 +19,10 @@ import static android.content.res.Configuration.UI_MODE_NIGHT_YES;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
 
 import android.content.Context;
-import android.util.TypedValue;
 
-import androidx.annotation.AttrRes;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StyleRes;
@@ -94,12 +93,6 @@ public final class ThemeUtils {
                 R.style.Theme_Collect_Light_Spinner_TimePicker_Dialog;
     }
 
-    private int getAttributeValue(@AttrRes int resId) {
-        TypedValue outValue = new TypedValue();
-        context.getTheme().resolveAttribute(resId, outValue, true);
-        return outValue.data;
-    }
-
     public int getAccountPickerTheme() {
         return isDarkTheme() ? 0 : 1;
     }
@@ -135,7 +128,7 @@ public final class ThemeUtils {
      */
     @ColorInt
     public int getColorOnSurface() {
-        return getAttributeValue(R.attr.colorOnSurface);
+        return getThemeAttributeValue(context, R.attr.colorOnSurface);
     }
 
     @ColorInt
@@ -145,36 +138,36 @@ public final class ThemeUtils {
 
     @ColorInt
     public int getAccentColor() {
-        return getAttributeValue(R.attr.colorAccent);
+        return getThemeAttributeValue(context, R.attr.colorAccent);
     }
 
     @ColorInt
     public int getIconColor() {
-        return getAttributeValue(R.attr.colorOnSurface);
+        return getThemeAttributeValue(context, R.attr.colorOnSurface);
     }
 
     @ColorInt
     public int getColorPrimary() {
-        return getAttributeValue(R.attr.colorPrimary);
+        return getThemeAttributeValue(context, R.attr.colorPrimary);
     }
 
     @ColorInt
     public int getColorOnPrimary() {
-        return getAttributeValue(R.attr.colorOnPrimary);
+        return getThemeAttributeValue(context, R.attr.colorOnPrimary);
     }
 
     @ColorInt
     public int getColorSecondary() {
-        return getAttributeValue(R.attr.colorSecondary);
+        return getThemeAttributeValue(context, R.attr.colorSecondary);
     }
 
     @ColorInt
     public int getColorError() {
-        return getAttributeValue(R.attr.colorError);
+        return getThemeAttributeValue(context, R.attr.colorError);
     }
 
     @ColorInt
     public int getColorPrimaryDark() {
-        return getAttributeValue(R.attr.colorPrimaryDark);
+        return getThemeAttributeValue(context, R.attr.colorPrimaryDark);
     }
 }

@@ -21,6 +21,7 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.DialogUtils;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 
 import java.util.List;
 

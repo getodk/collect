@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
+import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.shared.Settings;
 
 import java.io.File;
@@ -39,7 +40,8 @@ public interface MapConfigurator {
      * MapConfigurator).  This method may return null to indicate that there is
      * no suitable MapFragment implementation available.
      */
-    @Nullable MapFragment createMapFragment(Context context);
+    @Nullable
+    MapFragment createMapFragment(Context context);
 
     /** Constructs any preference widgets that are specific to this map implementation. */
     List<Preference> createPrefs(Context context);

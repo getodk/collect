@@ -14,7 +14,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.CompressionUtils
-import org.odk.collect.androidshared.utils.ToastUtils.showLongToast
+import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import java.io.File
 import java.io.IOException
 import java.util.zip.DataFormatException

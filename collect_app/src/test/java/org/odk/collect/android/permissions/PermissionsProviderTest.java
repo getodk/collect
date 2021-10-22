@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.odk.collect.android.listeners.PermissionListener;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

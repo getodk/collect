@@ -12,6 +12,8 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.shared.Settings;
 
 import java.util.Map;
@@ -29,12 +31,18 @@ import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MA
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
+import javax.inject.Singleton;
+
 /**
  * Obtains a MapFragment according to the user's preferences.
  * This is the top-level class that should be used by the rest of the application.
  * The available options on the Maps preferences screen are also defined here.
+ *
+ * This needs to be used as a singleton for maps to work (Google Maps appears as blank otherwise)
+ * but it's not clear if that's intentional or not.
  */
-public class MapProvider {
+@Singleton
+public class MapProvider implements MapFragmentFactory {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -137,7 +145,8 @@ public class MapProvider {
     }
 
     /** Gets a new MapFragment from the selected MapConfigurator. */
-    public MapFragment createMapFragment(Context context) {
+    @Override
+    public MapFragment createMapFragment(@NonNull Context context) {
         MapConfigurator cftor = getConfigurator();
         MapFragment map = cftor.createMapFragment(context);
         if (map != null) {

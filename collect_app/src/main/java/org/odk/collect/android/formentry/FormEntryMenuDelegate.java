@@ -20,9 +20,9 @@ import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
@@ -111,7 +111,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_add_repeat) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
-                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.promptForNewRepeat();
@@ -121,7 +121,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             return true;
         } else if (item.getItemId() == R.id.menu_preferences) {
             if (audioRecorder.isRecording()) {
-                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 Intent pref = new Intent(activity, ProjectPreferencesActivity.class);
                 activity.startActivityForResult(pref, ApplicationConstants.RequestCodes.CHANGE_SETTINGS);
@@ -133,7 +133,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
-                DialogUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
+                DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
 

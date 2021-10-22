@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Geo.MapButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tintMode">src_in</item>
+        <item name="android:tint">@color/color_on_surface_tint_list</item>
+    </style>
+</resources>

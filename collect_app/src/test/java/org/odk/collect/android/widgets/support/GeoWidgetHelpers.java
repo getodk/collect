@@ -2,14 +2,14 @@ package org.odk.collect.android.widgets.support;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
+import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.GeoPointActivity.EXTRA_ACCURACY_THRESHOLD;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
 
 import android.os.Bundle;
 
-import org.odk.collect.android.activities.GeoPolyActivity;
+import org.odk.collect.geo.GeoPolyActivity;
+import org.odk.collect.geo.GeoPointMapActivity;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,16 +20,16 @@ public final class GeoWidgetHelpers {
     }
 
     public static void assertGeoPointBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, Boolean readOnly, Object draggableOnly) {
-        assertThat(bundle.getDoubleArray(LOCATION), equalTo(location));
+        assertThat(bundle.getDoubleArray(GeoPointMapActivity.EXTRA_LOCATION), equalTo(location));
         assertThat(bundle.getDouble(EXTRA_ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
-        assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
-        assertThat(bundle.getBoolean(DRAGGABLE_ONLY), equalTo(draggableOnly));
+        assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(readOnly));
+        assertThat(bundle.getBoolean(EXTRA_DRAGGABLE_ONLY), equalTo(draggableOnly));
     }
 
     public static void assertGeoPolyBundleArgumentEquals(Bundle bundle, String answer, GeoPolyActivity.OutputMode outputMode, boolean readOnly) {
         assertThat(bundle.getString(GeoPolyActivity.ANSWER_KEY), equalTo(answer));
         assertThat(bundle.get(GeoPolyActivity.OUTPUT_MODE_KEY), equalTo(outputMode));
-        assertThat(bundle.getBoolean(READ_ONLY), equalTo(readOnly));
+        assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(readOnly));
     }
 
     public static double[] getRandomDoubleArray() {

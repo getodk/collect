@@ -10,8 +10,10 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
+import android.app.Application;
 import android.content.Intent;
 import android.location.Location;
 
@@ -23,8 +25,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
+import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointActivityTest {
@@ -33,6 +37,10 @@ public class GeoPointActivityTest {
 
     @Before
     public void setUp() throws Exception {
+        ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
+        shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
+        shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
+
         LocationClientProvider.setTestClient(locationClient);
     }
 
@@ -97,7 +105,7 @@ public class GeoPointActivityTest {
         assertEquals(scenario.getResult().getResultCode(), RESULT_OK);
 
         Intent resultIntent = scenario.getResult().getResultData();
-        String resultString = resultIntent.getStringExtra("value");
+        String resultString = ExternalAppUtils.getReturnedSingleValue(resultIntent);
 
         scenario.onActivity(activity -> {
             assertEquals(resultString, activity.getResultStringForLocation(thirdLocation));
@@ -154,11 +162,11 @@ public class GeoPointActivityTest {
     @Test
     public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, true);
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
         ActivityScenario.launch(intent);
         verify(locationClient).setRetainMockAccuracy(true);
 
-        intent.putExtra(GeoPointActivity.EXTRA_RETAIN_MOCK_ACCURACY, false);
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
         ActivityScenario.launch(intent);
         verify(locationClient).setRetainMockAccuracy(false);
     }

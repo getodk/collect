@@ -37,10 +37,10 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import javax.inject.Inject;
 
@@ -111,7 +111,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             deleteComplete(backgroundTasks.deleteFormsTask.getDeleteCount());
         }
         if (backgroundTasks.deleteFormsTask == null) {
-            DialogUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
+            DialogFragmentUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
         }
     }
 
@@ -204,7 +204,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             Bundle args = new Bundle();
             args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
             args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
-            DialogUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
 
             backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
@@ -248,7 +248,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
         deleteButton.setEnabled(false);
 
         updateAdapter();
-        DialogUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
     }
 
     @Override

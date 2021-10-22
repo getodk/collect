@@ -38,8 +38,9 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFo
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
-import org.odk.collect.android.geo.MapFragment;
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
@@ -65,12 +66,13 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends BaseGeoMapActivity {
+public class FormMapActivity extends CollectAbstractActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     public static final String EXTRA_FORM_ID = "form_id";
+    protected Bundle previousState;
 
     private FormMapViewModel viewModel;
 
@@ -112,7 +114,14 @@ public class FormMapActivity extends BaseGeoMapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
+
         DaggerUtils.getComponent(this).inject(this);
+
+        if (!permissionsProvider.areLocationPermissionsGranted()) {
+            ToastUtils.showLongToast(this, R.string.not_granted_permission);
+            finish();
+        }
 
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 

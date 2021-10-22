@@ -16,7 +16,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.androidshared.utils.ToastUtils
+import org.odk.collect.androidshared.ui.ToastUtils
 import javax.inject.Inject
 
 class AdminPasswordDialogFragment : DialogFragment() {

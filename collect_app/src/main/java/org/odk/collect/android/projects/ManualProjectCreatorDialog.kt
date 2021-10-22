@@ -27,9 +27,9 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
 import org.odk.collect.android.utilities.ActivityAvailability
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.android.utilities.SoftKeyboardController
-import org.odk.collect.androidshared.utils.ToastUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.Validator
@@ -88,7 +88,7 @@ class ManualProjectCreatorDialog :
                         val confirmationArgs = Bundle()
                         confirmationArgs.putString(SETTINGS_JSON, settingsJson)
                         confirmationArgs.putString(MATCHING_PROJECT, uuid)
-                        DialogUtils.showIfNotShowing(
+                        DialogFragmentUtils.showIfNotShowing(
                             DuplicateProjectConfirmationDialog::class.java,
                             confirmationArgs,
                             childFragmentManager
@@ -170,7 +170,7 @@ class ManualProjectCreatorDialog :
                 val confirmationArgs = Bundle()
                 confirmationArgs.putString(SETTINGS_JSON, settingsJson)
                 confirmationArgs.putString(MATCHING_PROJECT, uuid)
-                DialogUtils.showIfNotShowing(
+                DialogFragmentUtils.showIfNotShowing(
                     DuplicateProjectConfirmationDialog::class.java,
                     confirmationArgs,
                     childFragmentManager

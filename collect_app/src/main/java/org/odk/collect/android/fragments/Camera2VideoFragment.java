@@ -50,7 +50,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;

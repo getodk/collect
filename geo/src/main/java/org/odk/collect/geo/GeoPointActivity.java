@@ -14,6 +14,9 @@
 
 package org.odk.collect.geo;
 
+import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
+import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
+
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +37,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.androidshared.utils.ToastUtils;
+import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -50,7 +54,6 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
         LocationClient.LocationClientListener, GpsStatus.Listener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
-    public static final String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
@@ -79,6 +82,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requireLocationPermissions(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -229,14 +233,10 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     private void returnLocation() {
         if (location != null) {
-            Intent i = new Intent();
-
-            i.putExtra("value", getResultStringForLocation(location));
-
-            setResult(RESULT_OK, i);
+            ExternalAppUtils.returnSingleValue(this, getResultStringForLocation(location));
+        } else {
+            finish();
         }
-
-        finish();
     }
 
     private void finishOnError() {

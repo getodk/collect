@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import org.odk.collect.geo.MapPoint;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
 
 import java.util.HashMap;
 import java.util.List;
@@ -217,5 +218,10 @@ public class TestMapFragment implements MapFragment {
     @Override
     public void setGpsLocationListener(@Nullable PointListener listener) {
         locationListener = listener;
+    }
+
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+
     }
 }

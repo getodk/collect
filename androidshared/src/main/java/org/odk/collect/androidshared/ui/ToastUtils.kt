@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.utils
+package org.odk.collect.androidshared.ui
 
 import android.app.Activity
 import android.app.Application
