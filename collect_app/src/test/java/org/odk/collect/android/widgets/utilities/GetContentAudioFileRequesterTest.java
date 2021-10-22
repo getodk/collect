@@ -11,9 +11,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.utils.IntentLauncherImpl;
+import org.odk.collect.testshared.ErrorIntentLauncher;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -22,16 +24,14 @@ import static android.content.Intent.ACTION_GET_CONTENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class GetContentAudioFileRequesterTest {
 
-    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
+    private IntentLauncher intentLauncher;
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
     private Activity activity;
@@ -40,12 +40,16 @@ public class GetContentAudioFileRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new GetContentAudioFileRequester(activity, activityAvailability, waitingForDataRegistry, mock(FormEntryViewModel.class));
+    }
+
+    private void setupRequester() {
+        requester = new GetContentAudioFileRequester(activity, intentLauncher, waitingForDataRegistry, mock(FormEntryViewModel.class));
     }
 
     @Test
     public void requestFile_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
+        intentLauncher = new ErrorIntentLauncher();
+        setupRequester();
 
         requester.requestFile(promptWithAnswer(null));
         Intent startedActivity = shadowOf(activity).getNextStartedActivity();
@@ -58,7 +62,8 @@ public class GetContentAudioFileRequesterTest {
 
     @Test
     public void requestFile_startsChooseAudioFileActivityAndSetsWidgetWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
+        intentLauncher = IntentLauncherImpl.INSTANCE;
+        setupRequester();
 
         FormEntryPrompt prompt = promptWithAnswer(null);
         requester.requestFile(prompt);
