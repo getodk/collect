@@ -19,7 +19,6 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -30,11 +29,12 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
-import org.odk.collect.android.utilities.ActivityAvailability
+import org.odk.collect.androidshared.utils.IntentLauncher
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.testshared.ErrorIntentLauncher
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -155,12 +155,9 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `If activity to choose google account is not found the app should not crash`() {
-        val activityAvailability = mock<ActivityAvailability> {
-            on { isActivityAvailable(any()) } doReturn false
-        }
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesActivityAvailability(context: Context?): ActivityAvailability {
-                return activityAvailability
+            override fun providesIntentLauncher(): IntentLauncher {
+                return ErrorIntentLauncher()
             }
         })
 
