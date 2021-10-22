@@ -57,6 +57,7 @@ import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.utils.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 
 /**
@@ -201,7 +202,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
                 questionWidget = new OSMWidget(context, questionDetails, waitingForDataRegistry,
-                        new ActivityAvailability(context), Collect.getInstance().getFormController());
+                        IntentLauncherImpl.INSTANCE, Collect.getInstance().getFormController());
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
