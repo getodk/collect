@@ -24,6 +24,7 @@ import android.net.Uri;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 
 import java.io.File;
 
@@ -55,13 +56,12 @@ public class MediaUtils {
         intent.setDataAndType(contentUri, mimeType);
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
 
-        if (new ActivityAvailability(context).isActivityAvailable(intent)) {
-            context.startActivity(intent);
-        } else {
+        IntentLauncher.INSTANCE.launch(context, intent, () -> {
             String message = context.getString(R.string.activity_not_found, context.getString(R.string.open_file));
             ToastUtils.showLongToast(context, message);
             Timber.w(message);
-        }
+            return null;
+        });
     }
 
     public void pickFile(Activity activity, String mimeType, int requestCode) {
