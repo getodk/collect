@@ -37,6 +37,9 @@ import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
+import org.odk.collect.androidshared.AndroidSharedDependencyComponent;
+import org.odk.collect.androidshared.AndroidSharedDependencyComponentProvider;
+import org.odk.collect.androidshared.DaggerAndroidSharedDependencyComponent;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
@@ -74,6 +77,7 @@ public class Collect extends Application implements
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
+        AndroidSharedDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -94,6 +98,7 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
+    private AndroidSharedDependencyComponent androidSharedDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -182,6 +187,9 @@ public class Collect extends Application implements
                     }
                 })
                 .build();
+
+        androidSharedDependencyComponent = DaggerAndroidSharedDependencyComponent.builder()
+                .build();
     }
 
     @NotNull
@@ -194,6 +202,12 @@ public class Collect extends Application implements
     @Override
     public ProjectsDependencyComponent getProjectsDependencyComponent() {
         return projectsDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public AndroidSharedDependencyComponent getAndroidSharedDependencyComponent() {
+        return androidSharedDependencyComponent;
     }
 
     @Override

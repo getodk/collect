@@ -123,6 +123,8 @@ import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.utils.IntentLauncherImpl;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -229,6 +231,7 @@ public class AppDependencyModule {
     public SettingsProvider providesSettingsProvider(Context context) {
         return new SharedPreferencesSettingsProvider(context);
     }
+
 
     @Provides
     InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
@@ -608,5 +611,10 @@ public class AppDependencyModule {
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
         );
+    }
+
+    @Provides
+    public IntentLauncher providesIntentLauncher() {
+        return IntentLauncherImpl.INSTANCE;
     }
 }
