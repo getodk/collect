@@ -23,7 +23,6 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.projects.Project;
 import org.odk.collect.testshared.FakeScheduler;

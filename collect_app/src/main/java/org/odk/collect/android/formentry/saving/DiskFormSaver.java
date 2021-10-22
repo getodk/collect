@@ -6,7 +6,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
-import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 
