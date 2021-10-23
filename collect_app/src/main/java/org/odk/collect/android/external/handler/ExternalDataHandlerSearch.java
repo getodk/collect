@@ -258,7 +258,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
 
                 // the value is always the first column
                 String value = c.getString(0);
-                if (!uniqueValues.contains(value)) {
+                if (value != null && value.trim().length() >0 && !uniqueValues.contains(value)) {   // smap make sure value is not null
                     String label = buildLabel(c, selectColumnMap, columnsToExcludeFromLabels);
 
                     ExternalSelectChoice selectChoice;
