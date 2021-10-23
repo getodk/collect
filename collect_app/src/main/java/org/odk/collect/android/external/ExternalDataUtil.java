@@ -191,7 +191,7 @@ public final class ExternalDataUtil {
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
             XPathFuncExpr xpathfuncexpr) throws FileNotFoundException, InvalidSyntaxException {     // Smap add InvalidSyntax Exception
-        ArrayList<SelectChoice> returnedChoices = new ArrayList<SelectChoice>();        // smap
+        ArrayList<SelectChoice> returnedChoices = new ArrayList<>();        // smap
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             //ArrayList<SelectChoice> returnedChoices = new ArrayList<>();  // smap
