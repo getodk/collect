@@ -18,6 +18,10 @@ public class LocationRegister {
         return false;
     }
 
+    public boolean taskLocationEnabled() {
+        return false;
+    }
+
     public void register(Context context, Location location) {
        // Do nothing
     }
