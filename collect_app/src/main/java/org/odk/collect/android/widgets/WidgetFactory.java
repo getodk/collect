@@ -195,7 +195,7 @@ public class WidgetFactory {
                 } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
+                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider());
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 }
