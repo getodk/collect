@@ -32,7 +32,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
@@ -75,7 +74,6 @@ public class WidgetFactory {
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final AudioPlayer audioPlayer;
-    private final ActivityAvailability activityAvailability;
     private final RecordingRequesterProvider recordingRequesterProvider;
     private final FormEntryViewModel formEntryViewModel;
     private final AudioRecorder audioRecorder;
@@ -87,7 +85,6 @@ public class WidgetFactory {
                          WaitingForDataRegistry waitingForDataRegistry,
                          QuestionMediaManager questionMediaManager,
                          AudioPlayer audioPlayer,
-                         ActivityAvailability activityAvailability,
                          RecordingRequesterProvider recordingRequesterProvider,
                          FormEntryViewModel formEntryViewModel,
                          AudioRecorder audioRecorder,
@@ -98,7 +95,6 @@ public class WidgetFactory {
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.audioPlayer = audioPlayer;
-        this.activityAvailability = activityAvailability;
         this.recordingRequesterProvider = recordingRequesterProvider;
         this.formEntryViewModel = formEntryViewModel;
         this.audioRecorder = audioRecorder;
@@ -216,7 +212,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
+                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider());
                 } else {
                     questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }

@@ -14,7 +14,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExVideoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -36,20 +35,18 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ActivityAvailability activityAvailability;
 
     File answerFile;
 
     public ExVideoWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
+                         ExternalAppIntentProvider externalAppIntentProvider) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.activityAvailability = activityAvailability;
     }
 
     @Override
@@ -128,19 +125,24 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
-            fireActivityForResult(intent);
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getFormEntryPrompt());
+            intentLauncher.launchForResult((Activity) getContext(), intent, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, () -> {
+                try {
+                    Intent intentWithoutDefaultCategory = externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(getFormEntryPrompt(), Collect.getInstance().getPackageManager());
+                    intentLauncher.launchForResult((Activity) getContext(), intentWithoutDefaultCategory, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, () -> {
+                        final String errorString;
+                        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+                        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+                        ToastUtils.showLongToast(getContext(), errorString);
+                        return null;
+                    });
+                } catch (Exception | Error e) {
+                    ToastUtils.showLongToast(getContext(), e.getMessage());
+                }
+                return null;
+            });
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(getContext(), e.getMessage());
-        }
-    }
-
-    private void fireActivityForResult(Intent intent) {
-        try {
-            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
         }
     }
 

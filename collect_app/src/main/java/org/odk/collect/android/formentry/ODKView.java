@@ -70,7 +70,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -122,9 +121,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public AudioHelperFactory audioHelperFactory;
 
     @Inject
-    ActivityAvailability activityAvailability;
-
-    @Inject
     PermissionsProvider permissionsProvider;
 
     @Inject
@@ -174,7 +170,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 waitingForDataRegistry,
                 questionMediaManager,
                 audioPlayer,
-                activityAvailability,
                 new RecordingRequesterProvider(
                         internalRecordingRequester,
                         externalAppRecordingRequester
