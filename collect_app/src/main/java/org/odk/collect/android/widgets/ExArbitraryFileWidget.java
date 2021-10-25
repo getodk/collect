@@ -14,28 +14,23 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
-import timber.log.Timber;
-
 @SuppressLint("ViewConstructor")
 public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
 
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ActivityAvailability activityAvailability;
 
     public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
-                                 ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
+                                 ExternalAppIntentProvider externalAppIntentProvider) {
         super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.activityAvailability = activityAvailability;
     }
 
     @Override
@@ -87,20 +82,26 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+
         try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
-            fireActivityForResult(intent);
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getFormEntryPrompt());
+            intentLauncher.launchForResult((Activity) getContext(), intent, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, () -> {
+                try {
+                    Intent intentWithoutDefaultCategory = externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(getFormEntryPrompt(), Collect.getInstance().getPackageManager());
+                    intentLauncher.launchForResult((Activity) getContext(), intentWithoutDefaultCategory, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, () -> {
+                        final String errorString;
+                        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+                        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+                        ToastUtils.showLongToast(getContext(), errorString);
+                        return null;
+                    });
+                } catch (Exception | Error e) {
+                    ToastUtils.showLongToast(getContext(), e.getMessage());
+                }
+                return null;
+            });
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(getContext(), e.getMessage());
-        }
-    }
-
-    private void fireActivityForResult(Intent intent) {
-        try {
-            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
         }
     }
 }

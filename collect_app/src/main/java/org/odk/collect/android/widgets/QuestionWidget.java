@@ -53,6 +53,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
+import org.odk.collect.androidshared.utils.IntentLauncher;
 
 import java.io.File;
 import java.util.Locale;
@@ -105,6 +106,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    IntentLauncher intentLauncher;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
