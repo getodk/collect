@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -19,10 +18,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.RunnableRule;
-import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,22 +31,10 @@ import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 @RunWith(AndroidJUnit4.class)
 public class ExternalAudioRecordingTest {
 
-    public final TestDependencies testDependencies = new TestDependencies() {
-        @Override
-        public ActivityAvailability providesActivityAvailability(Context context) {
-            return new ActivityAvailability(context) {
-                @Override
-                public boolean isActivityAvailable(Intent intent) {
-                    return true;
-                }
-            };
-        }
-    };
-
     public final CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public final RuleChain chain = TestRuleChain.chain(testDependencies)
+    public final RuleChain chain = TestRuleChain.chain()
             .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(new RecordedIntentsRule())
             .around(new RunnableRule(() -> {

@@ -103,7 +103,6 @@ import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.ChangeLockProvider;
@@ -219,11 +218,6 @@ public class AppDependencyModule {
     @Provides
     public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
         return new ScreenContextAudioHelperFactory(scheduler, MediaPlayer::new);
-    }
-
-    @Provides
-    public ActivityAvailability providesActivityAvailability(Context context) {
-        return new ActivityAvailability(context);
     }
 
     @Provides

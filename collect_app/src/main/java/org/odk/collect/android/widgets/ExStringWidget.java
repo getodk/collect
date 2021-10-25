@@ -38,14 +38,11 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -95,9 +92,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
-
-    @Inject
-    public ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
