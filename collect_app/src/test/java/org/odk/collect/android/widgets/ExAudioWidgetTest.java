@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
@@ -64,7 +63,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Override
     public ExAudioWidget createWidget() {
         return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
+                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider);
     }
 
     @Test
@@ -122,7 +121,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Test
     public void whenLaunchButtonClicked_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
         Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
+        when(externalAppIntentProvider.getIntentToRunExternalApp(any())).thenReturn(intent);
         getWidget().binding.launchExternalAppButton.performClick();
         assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
     }

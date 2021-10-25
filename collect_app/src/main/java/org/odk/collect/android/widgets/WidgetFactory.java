@@ -209,7 +209,7 @@ public class WidgetFactory {
                 GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, IntentLauncherImpl.INSTANCE, waitingForDataRegistry, formEntryViewModel);
 
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), activityAvailability);
+                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider());
                 } else {
                     questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new AudioRecorderRecordingStatusHandler(audioRecorder, formEntryViewModel, viewLifecycle));
                 }
