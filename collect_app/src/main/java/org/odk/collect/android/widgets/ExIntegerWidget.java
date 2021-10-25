@@ -17,21 +17,16 @@ package org.odk.collect.android.widgets;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
-import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-
-import timber.log.Timber;
 
 /**
  * Launch an external app to supply an integer value. If the app
@@ -48,14 +43,13 @@ public class ExIntegerWidget extends ExStringWidget {
     }
 
     @Override
-    protected void fireActivity(Intent i) throws ActivityNotFoundException {
+    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
         i.putExtra(DATA_NAME, StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
-        try {
-            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_INT_CAPTURE);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+    }
+
+    @Override
+    protected int getRequestCode() {
+        return RequestCodes.EX_INT_CAPTURE;
     }
 
     @Override

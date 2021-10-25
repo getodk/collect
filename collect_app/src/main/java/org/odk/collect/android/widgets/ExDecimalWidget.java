@@ -15,21 +15,16 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-
-import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
@@ -48,14 +43,13 @@ public class ExDecimalWidget extends ExStringWidget {
     }
 
     @Override
-    protected void fireActivity(Intent i) throws ActivityNotFoundException {
+    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
         i.putExtra(DATA_NAME, StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
-        try {
-            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+    }
+
+    @Override
+    protected int getRequestCode() {
+        return RequestCodes.EX_DECIMAL_CAPTURE;
     }
 
     @Override

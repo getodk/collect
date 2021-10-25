@@ -122,14 +122,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         return v != null ? v : getContext().getString(R.string.launch_app);
     }
 
-    protected void fireActivity(Intent i) throws ActivityNotFoundException {
+    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
         i.putExtra(DATA_NAME, getFormEntryPrompt().getAnswerText());
-        try {
-            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+    }
+
+    protected int getRequestCode() {
+        return RequestCodes.EX_STRING_CAPTURE;
     }
 
     @Override
@@ -181,13 +179,31 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
+            ExternalAppIntentProvider externalAppIntentProvider = new ExternalAppIntentProvider();
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getFormEntryPrompt());
             // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (ACTION_SENDTO.equals(intent.getAction())) {
-                getContext().startActivity(intent);
-            } else {
-                fireActivity(intent);
+            if (!ACTION_SENDTO.equals(intent.getAction())) {
+                addAnswerToIntent(intent);
             }
+            intentLauncher.launchForResult((Activity) getContext(), intent, getRequestCode(), () -> {
+                try {
+                    Intent intentWithoutDefaultCategory = externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(getFormEntryPrompt(), Collect.getInstance().getPackageManager());
+                    // ACTION_SENDTO used for sending text messages or emails doesn't require any results
+                    if (!ACTION_SENDTO.equals(intentWithoutDefaultCategory.getAction())) {
+                        addAnswerToIntent(intentWithoutDefaultCategory);
+                    }
+                    intentLauncher.launchForResult((Activity) getContext(), intentWithoutDefaultCategory, getRequestCode(), () -> {
+                        final String errorString;
+                        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
+                        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
+                        ToastUtils.showLongToast(getContext(), errorString);
+                        return null;
+                    });
+                } catch (Exception | Error e) {
+                    ToastUtils.showLongToast(getContext(), e.getMessage());
+                }
+                return null;
+            });
         } catch (Exception | Error e) {
             onException(e.getMessage());
         }
