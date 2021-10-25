@@ -18,8 +18,8 @@ import android.content.Context
 import android.content.Intent
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
+import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.utils.IntentLauncherImpl
-import org.odk.collect.androidshared.utils.ToastUtils.showLongToast
 import timber.log.Timber
 import java.io.File
 

@@ -53,6 +53,7 @@ import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformatio
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
