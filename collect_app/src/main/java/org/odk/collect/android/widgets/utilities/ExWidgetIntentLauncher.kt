@@ -11,7 +11,7 @@ import java.lang.Error
 import java.lang.Exception
 
 object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
-    override fun launch(
+    override fun launchForFileWidget(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
@@ -32,11 +32,7 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
                     intentLauncher.launchForResult(
                         activity, intentWithoutDefaultCategory, requestCode
                     ) {
-                        val errorString: String
-                        val v: String? =
-                            formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")
-                        errorString = v ?: activity.getString(R.string.no_app)
-                        showLongToast(activity, errorString)
+                        showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
                     }
                 } catch (e: Exception) {
                     showLongToast(activity, e.message!!)
@@ -74,11 +70,7 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
                         intentLauncher.launch(
                             activity, intentWithoutDefaultCategory
                         ) {
-                            val errorString: String
-                            val v: String? =
-                                formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")
-                            errorString = v ?: activity.getString(R.string.no_app)
-                            showLongToast(activity, errorString)
+                            onError(getErrorMessage(formEntryPrompt, activity))
                         }
                     } catch (e: Exception) {
                         onError(e.message!!)
@@ -99,11 +91,7 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
                         intentLauncher.launchForResult(
                             activity, intentWithoutDefaultCategory, requestCode
                         ) {
-                            val errorString: String
-                            val v: String? =
-                                formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")
-                            errorString = v ?: activity.getString(R.string.no_app)
-                            showLongToast(activity, errorString)
+                            onError(getErrorMessage(formEntryPrompt, activity))
                         }
                     } catch (e: Exception) {
                         onError(e.message!!)
@@ -118,10 +106,15 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
             onError(e.message!!)
         }
     }
+
+    private fun getErrorMessage(formEntryPrompt: FormEntryPrompt, activity: Activity): String {
+        val customErrorMessage = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")
+        return customErrorMessage ?: activity.getString(R.string.no_app)
+    }
 }
 
 interface ExWidgetIntentLauncher {
-    fun launch(
+    fun launchForFileWidget(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,

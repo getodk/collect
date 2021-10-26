@@ -82,6 +82,6 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        exWidgetIntentLauncher.launchForFileWidget(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 }

@@ -117,7 +117,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Test
     public void whenCaptureVideoButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.captureVideoButton.performClick();
-        verify(exWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

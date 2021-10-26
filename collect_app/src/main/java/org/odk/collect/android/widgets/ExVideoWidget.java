@@ -126,7 +126,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        exWidgetIntentLauncher.launchForFileWidget(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {

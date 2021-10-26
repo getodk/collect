@@ -198,7 +198,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        exWidgetIntentLauncher.launchForFileWidget(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {

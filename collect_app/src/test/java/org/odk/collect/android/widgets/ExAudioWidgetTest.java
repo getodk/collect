@@ -123,7 +123,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Test
     public void whenLaunchButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.launchExternalAppButton.performClick();
-        verify(exWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

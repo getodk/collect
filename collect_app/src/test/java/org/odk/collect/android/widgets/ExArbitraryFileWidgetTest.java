@@ -84,7 +84,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @Test
     public void whenClickingOnButton_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.exArbitraryFileButton.performClick();
-        verify(exWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test
