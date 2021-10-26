@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
 
 import static org.mockito.Mockito.when;
 
@@ -20,12 +20,12 @@ import static org.mockito.Mockito.when;
 public class ExStringWidgetTest extends GeneralExStringWidgetTest<ExStringWidget, StringData> {
 
     @Mock
-    ExWidgetIntentLauncher exWidgetIntentLauncher;
+    ExStringWidgetIntentLauncher exStringWidgetIntentLauncher;
 
     @NonNull
     @Override
     public ExStringWidget createWidget() {
-        return new ExStringWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exWidgetIntentLauncher);
+        return new ExStringWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exStringWidgetIntentLauncher);
     }
 
     @NonNull

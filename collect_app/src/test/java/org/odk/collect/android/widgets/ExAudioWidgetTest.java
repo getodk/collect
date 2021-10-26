@@ -16,7 +16,7 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
 import org.odk.collect.androidshared.utils.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
@@ -43,7 +43,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     AudioPlayer audioPlayer;
 
     @Mock
-    ExWidgetIntentLauncher exWidgetIntentLauncher;
+    ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
 
     @Before
     public void setup() {
@@ -65,7 +65,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Override
     public ExAudioWidget createWidget() {
         return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exWidgetIntentLauncher);
+                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exFileWidgetIntentLauncher);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Test
     public void whenLaunchButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.launchExternalAppButton.performClick();
-        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exFileWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

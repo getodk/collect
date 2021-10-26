@@ -15,7 +15,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
@@ -23,14 +23,14 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
 
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ExWidgetIntentLauncher exWidgetIntentLauncher;
+    private final ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
 
     public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
-                                 ExternalAppIntentProvider externalAppIntentProvider, ExWidgetIntentLauncher exWidgetIntentLauncher) {
+                                 ExternalAppIntentProvider externalAppIntentProvider, ExFileWidgetIntentLauncher exFileWidgetIntentLauncher) {
         super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.exWidgetIntentLauncher = exWidgetIntentLauncher;
+        this.exFileWidgetIntentLauncher = exFileWidgetIntentLauncher;
     }
 
     @Override
@@ -82,6 +82,6 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launchForFileWidget(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        exFileWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 }

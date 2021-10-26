@@ -23,7 +23,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -38,8 +38,8 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ExDecimalWidget extends ExStringWidget {
 
-    public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExWidgetIntentLauncher exWidgetIntentLauncher) {
-        super(context, questionDetails, waitingForDataRegistry, exWidgetIntentLauncher);
+    public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExStringWidgetIntentLauncher exStringWidgetIntentLauncher) {
+        super(context, questionDetails, waitingForDataRegistry, exStringWidgetIntentLauncher);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 

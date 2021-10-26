@@ -53,7 +53,8 @@ import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncherImpl;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncherImpl;
+import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncherImpl;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
@@ -122,7 +123,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
+                            questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry, ExStringWidgetIntentLauncherImpl.INSTANCE);
                         } else if (appearance.equals(Appearances.BEARING)) {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
@@ -132,7 +133,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
+                            questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry, ExStringWidgetIntentLauncherImpl.INSTANCE);
                         } else {
                             questionWidget = new IntegerWidget(context, questionDetails);
                         }
@@ -164,7 +165,7 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
+                            questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry, ExStringWidgetIntentLauncherImpl.INSTANCE);
                         } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(Appearances.URL)) {
@@ -180,7 +181,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, new ExternalAppIntentProvider(), ExWidgetIntentLauncherImpl.INSTANCE);
+                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, new ExternalAppIntentProvider(), ExFileWidgetIntentLauncherImpl.INSTANCE);
                 } else {
                     questionWidget = new ArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
                 }
@@ -193,7 +194,7 @@ public class WidgetFactory {
                 } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExWidgetIntentLauncherImpl.INSTANCE);
+                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExFileWidgetIntentLauncherImpl.INSTANCE);
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 }
@@ -207,14 +208,14 @@ public class WidgetFactory {
                 GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, IntentLauncherImpl.INSTANCE, waitingForDataRegistry, formEntryViewModel);
 
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExWidgetIntentLauncherImpl.INSTANCE);
+                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExFileWidgetIntentLauncherImpl.INSTANCE);
                 } else {
                     questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new AudioRecorderRecordingStatusHandler(audioRecorder, formEntryViewModel, viewLifecycle));
                 }
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExWidgetIntentLauncherImpl.INSTANCE);
+                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), new ExternalAppIntentProvider(), ExFileWidgetIntentLauncherImpl.INSTANCE);
                 } else {
                     questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }

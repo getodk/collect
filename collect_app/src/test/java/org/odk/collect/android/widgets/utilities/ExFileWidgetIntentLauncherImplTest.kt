@@ -22,12 +22,12 @@ import org.robolectric.shadows.ShadowToast
 import java.lang.Exception
 
 @RunWith(AndroidJUnit4::class)
-class ExWidgetIntentLauncherImplTest {
+class ExFileWidgetIntentLauncherImplTest {
     private val intentLauncher = spy(FakeIntentLauncher())
     private val requestCode = 99
     private val externalAppIntentProvider = mock<ExternalAppIntentProvider>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val exWidgetIntentLauncher = ExWidgetIntentLauncherImpl
+    private val exWidgetIntentLauncher = ExFileWidgetIntentLauncherImpl
     private val availableIntent = Intent()
     private val unAvailableIntent = Intent().also {
         it.putExtra("fail", "fail")
@@ -45,7 +45,7 @@ class ExWidgetIntentLauncherImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("exception")
         }
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -66,7 +66,7 @@ class ExWidgetIntentLauncherImplTest {
         ).then {
             throw Exception("exception")
         }
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -82,7 +82,7 @@ class ExWidgetIntentLauncherImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("error")
         }
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -103,7 +103,7 @@ class ExWidgetIntentLauncherImplTest {
         ).then {
             throw Exception("error")
         }
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -120,7 +120,7 @@ class ExWidgetIntentLauncherImplTest {
             availableIntent
         )
 
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -143,7 +143,7 @@ class ExWidgetIntentLauncherImplTest {
             )
         ).thenReturn(availableIntent)
 
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -167,7 +167,7 @@ class ExWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -195,7 +195,7 @@ class ExWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exWidgetIntentLauncher.launchForFileWidget(
+        exWidgetIntentLauncher.launch(
             intentLauncher,
             activity,
             requestCode,

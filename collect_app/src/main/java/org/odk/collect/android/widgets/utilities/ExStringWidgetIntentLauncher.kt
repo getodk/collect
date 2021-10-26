@@ -1,48 +1,16 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.app.Activity
-import android.content.Intent.ACTION_SENDTO
+import android.content.Intent
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
-import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.utils.IntentLauncher
 import java.lang.Error
 import java.lang.Exception
 
-object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
-    override fun launchForFileWidget(
-        intentLauncher: IntentLauncher,
-        activity: Activity,
-        requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
-        formEntryPrompt: FormEntryPrompt
-    ) {
-        try {
-            val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
-            val intentWithoutDefaultCategory =
-                externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
-                    formEntryPrompt,
-                    activity.packageManager
-                )
-
-            intentLauncher.launchForResult(
-                activity, intent, requestCode
-            ) {
-                intentLauncher.launchForResult(
-                    activity, intentWithoutDefaultCategory, requestCode
-                ) {
-                    showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
-                }
-            }
-        } catch (e: Exception) {
-            showLongToast(activity, e.message!!)
-        } catch (e: Error) {
-            showLongToast(activity, e.message!!)
-        }
-    }
-
-    override fun launchForStringWidget(
+object ExStringWidgetIntentLauncherImpl : ExStringWidgetIntentLauncher {
+    override fun launch(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
@@ -59,7 +27,7 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
                 )
 
             // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (ACTION_SENDTO == intent.action) {
+            if (Intent.ACTION_SENDTO == intent.action) {
                 intentLauncher.launch(activity, intent) {
                     intentLauncher.launch(
                         activity, intentWithoutDefaultCategory
@@ -89,16 +57,8 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
     }
 }
 
-interface ExWidgetIntentLauncher {
-    fun launchForFileWidget(
-        intentLauncher: IntentLauncher,
-        activity: Activity,
-        requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
-        formEntryPrompt: FormEntryPrompt
-    )
-
-    fun launchForStringWidget(
+interface ExStringWidgetIntentLauncher {
+    fun launch(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,

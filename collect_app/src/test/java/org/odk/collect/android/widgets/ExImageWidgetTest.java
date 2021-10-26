@@ -15,7 +15,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
 import org.odk.collect.androidshared.utils.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
@@ -39,7 +39,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Mock
-    ExWidgetIntentLauncher exWidgetIntentLauncher;
+    ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
 
     @Before
     public void setup() {
@@ -61,7 +61,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     @Override
     public ExImageWidget createWidget() {
         return new ExImageWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exWidgetIntentLauncher);
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exFileWidgetIntentLauncher);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     @Test
     public void whenLaunchButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.launchExternalAppButton.performClick();
-        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exFileWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

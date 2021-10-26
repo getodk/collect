@@ -39,7 +39,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import timber.log.Timber;
@@ -90,12 +90,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
-    private final ExWidgetIntentLauncher exWidgetIntentLauncher;
+    private final ExStringWidgetIntentLauncher exStringWidgetIntentLauncher;
 
-    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExWidgetIntentLauncher exWidgetIntentLauncher) {
+    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExStringWidgetIntentLauncher exStringWidgetIntentLauncher) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.exWidgetIntentLauncher = exWidgetIntentLauncher;
+        this.exStringWidgetIntentLauncher = exStringWidgetIntentLauncher;
         getComponent(context).inject(this);
     }
 
@@ -172,7 +172,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launchForStringWidget(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
+        exStringWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
             onException(errorMsg);
             return null;
         });

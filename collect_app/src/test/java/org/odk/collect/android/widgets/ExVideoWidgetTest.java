@@ -15,7 +15,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
 import org.odk.collect.androidshared.utils.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
@@ -39,7 +39,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Mock
-    ExWidgetIntentLauncher exWidgetIntentLauncher;
+    ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
 
     @Before
     public void setup() {
@@ -61,7 +61,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Override
     public ExVideoWidget createWidget() {
         return new ExVideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exWidgetIntentLauncher);
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, exFileWidgetIntentLauncher);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Test
     public void whenCaptureVideoButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.captureVideoButton.performClick();
-        verify(exWidgetIntentLauncher).launchForFileWidget(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(exFileWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

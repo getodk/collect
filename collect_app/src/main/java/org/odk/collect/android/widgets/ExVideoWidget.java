@@ -19,7 +19,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
@@ -35,20 +35,20 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ExWidgetIntentLauncher exWidgetIntentLauncher;
+    private final ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
 
     File answerFile;
 
     public ExVideoWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         ExternalAppIntentProvider externalAppIntentProvider, ExWidgetIntentLauncher exWidgetIntentLauncher) {
+                         ExternalAppIntentProvider externalAppIntentProvider, ExFileWidgetIntentLauncher exFileWidgetIntentLauncher) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.exWidgetIntentLauncher = exWidgetIntentLauncher;
+        this.exFileWidgetIntentLauncher = exFileWidgetIntentLauncher;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exWidgetIntentLauncher.launchForFileWidget(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        exFileWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {
