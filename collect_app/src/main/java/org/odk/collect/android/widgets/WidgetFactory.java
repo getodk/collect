@@ -180,7 +180,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, new ExternalAppIntentProvider());
+                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, new ExternalAppIntentProvider(), ExWidgetIntentLauncherImpl.INSTANCE);
                 } else {
                     questionWidget = new ArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
                 }
