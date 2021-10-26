@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
@@ -34,15 +33,14 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.ExWidgetIntentLauncher;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.ui.ToastUtils;
 
 import timber.log.Timber;
 
@@ -92,10 +90,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
+    private final ExWidgetIntentLauncher exWidgetIntentLauncher;
 
-    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExWidgetIntentLauncher exWidgetIntentLauncher) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.exWidgetIntentLauncher = exWidgetIntentLauncher;
         getComponent(context).inject(this);
     }
 
@@ -172,35 +172,10 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        try {
-            ExternalAppIntentProvider externalAppIntentProvider = new ExternalAppIntentProvider();
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getFormEntryPrompt());
-            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (!ACTION_SENDTO.equals(intent.getAction())) {
-                addAnswerToIntent(intent);
-            }
-            intentLauncher.launchForResult((Activity) getContext(), intent, getRequestCode(), () -> {
-                try {
-                    Intent intentWithoutDefaultCategory = externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(getFormEntryPrompt(), Collect.getInstance().getPackageManager());
-                    // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-                    if (!ACTION_SENDTO.equals(intentWithoutDefaultCategory.getAction())) {
-                        addAnswerToIntent(intentWithoutDefaultCategory);
-                    }
-                    intentLauncher.launchForResult((Activity) getContext(), intentWithoutDefaultCategory, getRequestCode(), () -> {
-                        final String errorString;
-                        String v = getFormEntryPrompt().getSpecialFormQuestionText("noAppErrorString");
-                        errorString = (v != null) ? v : getContext().getString(R.string.no_app);
-                        ToastUtils.showLongToast(getContext(), errorString);
-                        return null;
-                    });
-                } catch (Exception | Error e) {
-                    ToastUtils.showLongToast(getContext(), e.getMessage());
-                }
-                return null;
-            });
-        } catch (Exception | Error e) {
-            onException(e.getMessage());
-        }
+        exWidgetIntentLauncher.launchForStringWidget(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
+            onException(errorMsg);
+            return null;
+        });
     }
 
     private void focusAnswer() {

@@ -122,7 +122,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry);
+                            questionWidget = new ExDecimalWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
                         } else if (appearance.equals(Appearances.BEARING)) {
                             questionWidget = new BearingWidget(context, questionDetails, waitingForDataRegistry,
                                     (SensorManager) context.getSystemService(Context.SENSOR_SERVICE));
@@ -132,7 +132,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_INTEGER:
                         if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry);
+                            questionWidget = new ExIntegerWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
                         } else {
                             questionWidget = new IntegerWidget(context, questionDetails);
                         }
@@ -164,7 +164,7 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(context, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
-                            questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry);
+                            questionWidget = new ExStringWidget(context, questionDetails, waitingForDataRegistry, ExWidgetIntentLauncherImpl.INSTANCE);
                         } else if (appearance.contains(Appearances.NUMBERS)) {
                             questionWidget = new StringNumberWidget(context, questionDetails);
                         } else if (appearance.equals(Appearances.URL)) {
