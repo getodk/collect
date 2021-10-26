@@ -20,24 +20,19 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
     ) {
         try {
             val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+            val intentWithoutDefaultCategory =
+                externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                    formEntryPrompt,
+                    activity.packageManager
+                )
+
             intentLauncher.launchForResult(
                 activity, intent, requestCode
             ) {
-                try {
-                    val intentWithoutDefaultCategory =
-                        externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
-                            formEntryPrompt,
-                            activity.packageManager
-                        )
-                    intentLauncher.launchForResult(
-                        activity, intentWithoutDefaultCategory, requestCode
-                    ) {
-                        showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
-                    }
-                } catch (e: Exception) {
-                    showLongToast(activity, e.message!!)
-                } catch (e: Error) {
-                    showLongToast(activity, e.message!!)
+                intentLauncher.launchForResult(
+                    activity, intentWithoutDefaultCategory, requestCode
+                ) {
+                    showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
                 }
             }
         } catch (e: Exception) {
@@ -57,46 +52,27 @@ object ExWidgetIntentLauncherImpl : ExWidgetIntentLauncher {
     ) {
         try {
             val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+            val intentWithoutDefaultCategory =
+                externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                    formEntryPrompt,
+                    activity.packageManager
+                )
+
+            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
             if (ACTION_SENDTO == intent.action) {
-                intentLauncher.launch(
-                    activity, intent
-                ) {
-                    try {
-                        val intentWithoutDefaultCategory =
-                            externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
-                                formEntryPrompt,
-                                activity.packageManager
-                            )
-                        intentLauncher.launch(
-                            activity, intentWithoutDefaultCategory
-                        ) {
-                            onError(getErrorMessage(formEntryPrompt, activity))
-                        }
-                    } catch (e: Exception) {
-                        onError(e.message!!)
-                    } catch (e: Error) {
-                        onError(e.message!!)
+                intentLauncher.launch(activity, intent) {
+                    intentLauncher.launch(
+                        activity, intentWithoutDefaultCategory
+                    ) {
+                        onError(getErrorMessage(formEntryPrompt, activity))
                     }
                 }
             } else {
-                intentLauncher.launchForResult(
-                    activity, intent, requestCode
-                ) {
-                    try {
-                        val intentWithoutDefaultCategory =
-                            externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
-                                formEntryPrompt,
-                                activity.packageManager
-                            )
-                        intentLauncher.launchForResult(
-                            activity, intentWithoutDefaultCategory, requestCode
-                        ) {
-                            onError(getErrorMessage(formEntryPrompt, activity))
-                        }
-                    } catch (e: Exception) {
-                        onError(e.message!!)
-                    } catch (e: Error) {
-                        onError(e.message!!)
+                intentLauncher.launchForResult(activity, intent, requestCode) {
+                    intentLauncher.launchForResult(
+                        activity, intentWithoutDefaultCategory, requestCode
+                    ) {
+                        onError(getErrorMessage(formEntryPrompt, activity))
                     }
                 }
             }
