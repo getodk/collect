@@ -10,13 +10,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -34,9 +32,6 @@ import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FO
 public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Mock
     MediaUtils mediaUtils;
-
-    @Mock
-    ExternalAppIntentProvider externalAppIntentProvider;
 
     @Mock
     FileRequester fileRequester;
@@ -61,7 +56,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Override
     public ExVideoWidget createWidget() {
         return new ExVideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, fileRequester);
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, fileRequester);
     }
 
     @Test
@@ -117,7 +112,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Test
     public void whenCaptureVideoButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.captureVideoButton.performClick();
-        verify(fileRequester).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, formEntryPrompt);
     }
 
     @Test

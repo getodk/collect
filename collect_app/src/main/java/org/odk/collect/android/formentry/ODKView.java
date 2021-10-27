@@ -82,8 +82,10 @@ import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.PlaybackFailedException;
@@ -125,6 +127,12 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    FileRequester fileRequester;
+
+    @Inject
+    StringRequester stringRequester;
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
@@ -176,7 +184,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 ),
                 formEntryViewModel,
                 audioRecorder,
-                viewLifecycle
+                viewLifecycle,
+                fileRequester,
+                stringRequester
         );
 
         widgets = new ArrayList<>();

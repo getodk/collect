@@ -27,17 +27,18 @@ class FileRequesterImplTest {
     private val requestCode = 99
     private val externalAppIntentProvider = mock<ExternalAppIntentProvider>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val exWidgetIntentLauncher = FileRequesterImpl
     private val availableIntent = Intent()
     private val unAvailableIntent = Intent().also {
         it.putExtra("fail", "fail")
     }
 
     private lateinit var activity: Activity
+    private lateinit var fileRequester: FileRequester
 
     @Before
     fun setup() {
         activity = Robolectric.buildActivity(Activity::class.java).get()
+        fileRequester = FileRequesterImpl(intentLauncher, externalAppIntentProvider)
     }
 
     @Test
@@ -45,11 +46,9 @@ class FileRequesterImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("exception")
         }
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
         val toastText = ShadowToast.getTextOfLatestToast()
@@ -66,11 +65,9 @@ class FileRequesterImplTest {
         ).then {
             throw Exception("exception")
         }
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
         val toastText = ShadowToast.getTextOfLatestToast()
@@ -82,11 +79,9 @@ class FileRequesterImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("error")
         }
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
         val toastText = ShadowToast.getTextOfLatestToast()
@@ -103,11 +98,9 @@ class FileRequesterImplTest {
         ).then {
             throw Exception("error")
         }
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
         val toastText = ShadowToast.getTextOfLatestToast()
@@ -120,11 +113,9 @@ class FileRequesterImplTest {
             availableIntent
         )
 
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
         assertThat(intentLauncher.callCounter, `is`(1))
@@ -143,11 +134,9 @@ class FileRequesterImplTest {
             )
         ).thenReturn(availableIntent)
 
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
 
@@ -167,11 +156,9 @@ class FileRequesterImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
 
@@ -195,11 +182,9 @@ class FileRequesterImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exWidgetIntentLauncher.launch(
-            intentLauncher,
+        fileRequester.launch(
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt
         )
 

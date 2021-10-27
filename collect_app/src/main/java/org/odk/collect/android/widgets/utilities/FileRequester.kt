@@ -9,12 +9,14 @@ import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import java.lang.Error
 import java.lang.Exception
 
-object FileRequesterImpl : FileRequester {
+class FileRequesterImpl(
+    val intentLauncher: IntentLauncher,
+    val externalAppIntentProvider: ExternalAppIntentProvider,
+) : FileRequester {
+
     override fun launch(
-        intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
         formEntryPrompt: FormEntryPrompt
     ) {
         try {
@@ -49,10 +51,8 @@ object FileRequesterImpl : FileRequester {
 
 interface FileRequester {
     fun launch(
-        intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
         formEntryPrompt: FormEntryPrompt
     )
 }

@@ -9,12 +9,14 @@ import org.odk.collect.androidshared.system.IntentLauncher
 import java.lang.Error
 import java.lang.Exception
 
-object StringRequesterImpl : StringRequester {
+class StringRequesterImpl(
+    val intentLauncher: IntentLauncher,
+    val externalAppIntentProvider: ExternalAppIntentProvider,
+) : StringRequester {
+
     override fun launch(
-        intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
         formEntryPrompt: FormEntryPrompt,
         onError: (String) -> Unit
     ) {
@@ -59,10 +61,8 @@ object StringRequesterImpl : StringRequester {
 
 interface StringRequester {
     fun launch(
-        intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
-        externalAppIntentProvider: ExternalAppIntentProvider,
         formEntryPrompt: FormEntryPrompt,
         onError: (String) -> Unit
     )

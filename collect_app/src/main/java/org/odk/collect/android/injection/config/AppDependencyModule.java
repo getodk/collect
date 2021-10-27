@@ -87,6 +87,10 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
+import org.odk.collect.android.widgets.utilities.StringRequester;
+import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
@@ -611,5 +615,15 @@ public class AppDependencyModule {
     @Provides
     public IntentLauncher providesIntentLauncher() {
         return IntentLauncherImpl.INSTANCE;
+    }
+
+    @Provides
+    public FileRequester providesFileRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
+        return new FileRequesterImpl(intentLauncher, externalAppIntentProvider);
+    }
+
+    @Provides
+    public StringRequester providesStringRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
+        return new StringRequesterImpl(intentLauncher, externalAppIntentProvider);
     }
 }

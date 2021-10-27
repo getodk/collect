@@ -27,7 +27,6 @@ class StringRequesterImplTest {
     private val requestCode = 99
     private val externalAppIntentProvider = mock<ExternalAppIntentProvider>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val stringRequester = StringRequesterImpl
     private val onError: (String) -> Unit = mock()
     private val availableActionSendToIntent = Intent(Intent.ACTION_SENDTO)
     private val unAvailableActionSendToIntent = Intent(Intent.ACTION_SENDTO).also {
@@ -39,10 +38,12 @@ class StringRequesterImplTest {
     }
 
     private lateinit var activity: Activity
+    private lateinit var stringRequester: StringRequester
 
     @Before
     fun setup() {
         activity = Robolectric.buildActivity(Activity::class.java).get()
+        stringRequester = StringRequesterImpl(intentLauncher, externalAppIntentProvider)
     }
 
     @Test
@@ -51,10 +52,8 @@ class StringRequesterImplTest {
             throw Exception("exception")
         }
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -73,10 +72,8 @@ class StringRequesterImplTest {
             throw Exception("exception")
         }
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -90,10 +87,8 @@ class StringRequesterImplTest {
             throw Exception("error")
         }
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -112,10 +107,8 @@ class StringRequesterImplTest {
             throw Exception("error")
         }
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -130,10 +123,8 @@ class StringRequesterImplTest {
         )
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -150,10 +141,8 @@ class StringRequesterImplTest {
         )
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -176,10 +165,8 @@ class StringRequesterImplTest {
         ).thenReturn(availableIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -202,10 +189,8 @@ class StringRequesterImplTest {
         ).thenReturn(availableIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -228,10 +213,8 @@ class StringRequesterImplTest {
         ).thenReturn(unAvailableIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -256,10 +239,8 @@ class StringRequesterImplTest {
         ).thenReturn(unAvailableActionSendToIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -285,10 +266,8 @@ class StringRequesterImplTest {
         ).thenReturn(unAvailableIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )
@@ -310,10 +289,8 @@ class StringRequesterImplTest {
         ).thenReturn(unAvailableActionSendToIntent)
 
         stringRequester.launch(
-            intentLauncher,
             activity,
             requestCode,
-            externalAppIntentProvider,
             formEntryPrompt,
             onError
         )

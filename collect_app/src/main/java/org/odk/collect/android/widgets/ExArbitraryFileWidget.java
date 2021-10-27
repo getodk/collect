@@ -12,7 +12,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.FileRequester;
@@ -22,14 +21,12 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
 
-    private final ExternalAppIntentProvider externalAppIntentProvider;
     private final FileRequester fileRequester;
 
     public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
-                                 ExternalAppIntentProvider externalAppIntentProvider, FileRequester fileRequester) {
+                                 FileRequester fileRequester) {
         super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
-        this.externalAppIntentProvider = externalAppIntentProvider;
         this.fileRequester = fileRequester;
     }
 
@@ -82,6 +79,6 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        fileRequester.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        fileRequester.launch((Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, getFormEntryPrompt());
     }
 }

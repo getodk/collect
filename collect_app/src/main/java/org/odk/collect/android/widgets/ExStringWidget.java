@@ -36,7 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -172,7 +171,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        stringRequester.launch(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
+        stringRequester.launch((Activity) getContext(), getRequestCode(), getFormEntryPrompt(), (String errorMsg) -> {
             onException(errorMsg);
             return null;
         });

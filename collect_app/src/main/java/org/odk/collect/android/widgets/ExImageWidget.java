@@ -15,7 +15,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ExImageWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -36,20 +35,18 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
-    private final ExternalAppIntentProvider externalAppIntentProvider;
     private final FileRequester fileRequester;
 
     File answerFile;
 
     public ExImageWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         ExternalAppIntentProvider externalAppIntentProvider, FileRequester fileRequester) {
+                         FileRequester fileRequester) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
-        this.externalAppIntentProvider = externalAppIntentProvider;
         this.fileRequester = fileRequester;
     }
 
@@ -131,7 +128,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        fileRequester.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        fileRequester.launch((Activity) getContext(), ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {

@@ -10,14 +10,12 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -35,9 +33,6 @@ import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FO
 public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Mock
     MediaUtils mediaUtils;
-
-    @Mock
-    ExternalAppIntentProvider externalAppIntentProvider;
 
     @Mock
     AudioPlayer audioPlayer;
@@ -65,7 +60,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Override
     public ExAudioWidget createWidget() {
         return new ExAudioWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, fileRequester);
+                new FakeQuestionMediaManager(), audioPlayer, new FakeWaitingForDataRegistry(), mediaUtils, fileRequester);
     }
 
     @Test
@@ -123,7 +118,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     @Test
     public void whenLaunchButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.launchExternalAppButton.performClick();
-        verify(fileRequester).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, formEntryPrompt);
     }
 
     @Test
