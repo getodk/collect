@@ -4,11 +4,10 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import org.odk.collect.android.utilities.ScreenContext
-import java.util.ArrayList
 
 class WidgetTestActivity : FragmentActivity(), ScreenContext {
     @JvmField
-    val viewsRegisterForContextMenu: MutableList<View> = ArrayList()
+    val viewsRegisterForContextMenu = mutableListOf<View>()
 
     override fun getActivity(): FragmentActivity {
         return this
