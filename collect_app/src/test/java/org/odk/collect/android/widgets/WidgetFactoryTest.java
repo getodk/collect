@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.items.LabelWidget;
 import org.odk.collect.android.widgets.items.LikertWidget;
 import org.odk.collect.android.widgets.items.ListMultiWidget;
@@ -33,7 +33,7 @@ public class WidgetFactoryTest {
 
     @Before
     public void setup() {
-        Activity activity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        Activity activity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
 
         widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null);
     }

@@ -19,7 +19,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -44,11 +44,11 @@ public class AudioVideoImageTextLabelTest {
     @Mock
     public AudioHelper audioHelper;
 
-    private TestScreenContextActivity activity;
+    private WidgetTestActivity activity;
 
     @Before
     public void setup() {
-        activity = createThemedActivity(TestScreenContextActivity.class);
+        activity = createThemedActivity(WidgetTestActivity.class);
     }
 
     @Test

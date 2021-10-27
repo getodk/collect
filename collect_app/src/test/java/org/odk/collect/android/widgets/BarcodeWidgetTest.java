@@ -14,7 +14,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -42,7 +42,7 @@ public class BarcodeWidgetTest {
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
 
-    private TestScreenContextActivity widgetTestActivity;
+    private WidgetTestActivity widgetTestActivity;
     private ShadowActivity shadowActivity;
     private CameraUtils cameraUtils;
     private View.OnLongClickListener listener;

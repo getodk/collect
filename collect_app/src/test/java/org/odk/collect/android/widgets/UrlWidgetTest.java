@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.robolectric.shadows.ShadowToast;
 
@@ -34,7 +34,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(AndroidJUnit4.class)
 public class UrlWidgetTest {
-    private TestScreenContextActivity spyActivity;
+    private WidgetTestActivity spyActivity;
     private ExternalWebPageHelper externalWebPageHelper;
     private OnLongClickListener listener;
 

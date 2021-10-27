@@ -34,7 +34,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
@@ -60,7 +60,7 @@ import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView
 public class ChoicesRecyclerViewTest {
     private ChoicesRecyclerView recyclerView;
 
-    private ActivityController<TestScreenContextActivity> activityController;
+    private ActivityController<WidgetTestActivity> activityController;
 
     private FormEntryPrompt formEntryPrompt;
     private ReferenceManager referenceManager;
@@ -69,7 +69,7 @@ public class ChoicesRecyclerViewTest {
     @Before
     public void setUp() throws InvalidReferenceException {
         audioHelper = mock(AudioHelper.class);
-        activityController = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class);
+        activityController = CollectHelpers.buildThemedActivity(WidgetTestActivity.class);
         Activity activity = activityController.get();
         FrameLayout frameLayout = new FrameLayout(activity);
         activity.setContentView(frameLayout);

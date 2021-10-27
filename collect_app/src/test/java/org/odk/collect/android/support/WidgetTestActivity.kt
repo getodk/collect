@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 import org.odk.collect.android.utilities.ScreenContext
 import java.util.ArrayList
 
-class TestScreenContextActivity : FragmentActivity(), ScreenContext {
+class WidgetTestActivity : FragmentActivity(), ScreenContext {
     @JvmField
     val viewsRegisterForContextMenu: MutableList<View> = ArrayList()
 

@@ -6,7 +6,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.QuestionWidget;
 
 import static org.mockito.Mockito.mock;
@@ -17,8 +17,8 @@ public final class QuestionWidgetHelpers {
 
     }
 
-    public static TestScreenContextActivity widgetTestActivity() {
-        return CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+    public static WidgetTestActivity widgetTestActivity() {
+        return CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
     }
 
     public static <T extends QuestionWidget> WidgetValueChangedListener mockValueChangedListener(T widget) {

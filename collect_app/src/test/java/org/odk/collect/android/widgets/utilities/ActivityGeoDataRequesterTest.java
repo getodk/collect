@@ -36,7 +36,7 @@ import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.shadows.ShadowActivity;
@@ -48,7 +48,7 @@ public class ActivityGeoDataRequesterTest {
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private TestScreenContextActivity testActivity;
+    private WidgetTestActivity testActivity;
     private ShadowActivity shadowActivity;
     private FormEntryPrompt prompt;
     private FormIndex formIndex;

@@ -7,7 +7,7 @@ import android.view.View;
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.StringWidget;
 
@@ -55,7 +55,7 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
     @Test
     public void widgetShouldBeRegisteredForContextMenu() {
         StringWidget widget = createWidget();
-        List<View> viewsRegisterForContextMenu = ((TestScreenContextActivity) activity).viewsRegisterForContextMenu;
+        List<View> viewsRegisterForContextMenu = ((WidgetTestActivity) activity).viewsRegisterForContextMenu;
 
         assertThat(viewsRegisterForContextMenu.size(), is(3));
 

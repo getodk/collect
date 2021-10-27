@@ -15,7 +15,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.Widget;
 
@@ -36,7 +36,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         extends WidgetTest {
 
     protected Random random = new Random();
-    protected Activity activity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+    protected Activity activity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
 
     private W widget;
     private W actualWidget;
@@ -160,7 +160,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     @Test
     public void widgetShouldBeRegisteredForContextMenu() {
         QuestionWidget widget = (QuestionWidget) createWidget();
-        List<View> viewsRegisterForContextMenu = ((TestScreenContextActivity) activity).viewsRegisterForContextMenu;
+        List<View> viewsRegisterForContextMenu = ((WidgetTestActivity) activity).viewsRegisterForContextMenu;
 
         assertThat(viewsRegisterForContextMenu.size(), is(1));
         assertThat(viewsRegisterForContextMenu.get(0), is(widget));

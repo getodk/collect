@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
@@ -56,13 +56,13 @@ public class DaylightSavingTest {
     private static final String EAT_IME_ZONE = "Africa/Nairobi";
     private static final String CET_TIME_ZONE = "Europe/Warsaw";
 
-    private TestScreenContextActivity widgetActivity;
+    private WidgetTestActivity widgetActivity;
     private DateTimeWidgetUtils widgetUtils;
     private TimeZone currentTimeZone;
 
     @Before
     public void setUp() {
-        widgetActivity = CollectHelpers.buildThemedActivity(TestScreenContextActivity.class).get();
+        widgetActivity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
         widgetUtils = mock(DateTimeWidgetUtils.class);
         currentTimeZone = TimeZone.getDefault();
     }
