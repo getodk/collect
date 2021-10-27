@@ -41,7 +41,7 @@ class ExFileWidgetIntentLauncherImplTest {
     }
 
     @Test
-    fun `When exceptions is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp a toast should be displayed`() {
+    fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp a toast should be displayed`() {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("exception")
         }
@@ -57,7 +57,7 @@ class ExFileWidgetIntentLauncherImplTest {
     }
 
     @Test
-    fun `When exceptions is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory a toast should be displayed`() {
+    fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory a toast should be displayed`() {
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
                 formEntryPrompt,
@@ -206,42 +206,32 @@ class ExFileWidgetIntentLauncherImplTest {
         val toastText = ShadowToast.getTextOfLatestToast()
         assertThat(toastText, `is`("Custom message"))
     }
-}
 
-class FakeIntentLauncher : IntentLauncher {
-    var callCounter = 0
-    var errorCounter = 0
+    class FakeIntentLauncher : IntentLauncher {
+        var callCounter = 0
+        var errorCounter = 0
 
-    override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
-        callCounter++
-        if (intent.hasExtra("fail")) {
-            errorCounter++
-            onError()
+        override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
         }
-    }
 
-    override fun launchForResult(
-        activity: Activity,
-        intent: Intent,
-        requestCode: Int,
-        onError: () -> Unit
-    ) {
-        callCounter++
-        if (intent.hasExtra("fail")) {
-            errorCounter++
-            onError()
+        override fun launchForResult(
+            activity: Activity,
+            intent: Intent,
+            requestCode: Int,
+            onError: () -> Unit
+        ) {
+            callCounter++
+            if (intent.hasExtra("fail")) {
+                errorCounter++
+                onError()
+            }
         }
-    }
 
-    override fun launchForResult(
-        resultLauncher: ActivityResultLauncher<Intent>,
-        intent: Intent,
-        onError: () -> Unit
-    ) {
-        callCounter++
-        if (intent.hasExtra("fail")) {
-            errorCounter++
-            onError()
+        override fun launchForResult(
+            resultLauncher: ActivityResultLauncher<Intent>,
+            intent: Intent,
+            onError: () -> Unit
+        ) {
         }
     }
 }
