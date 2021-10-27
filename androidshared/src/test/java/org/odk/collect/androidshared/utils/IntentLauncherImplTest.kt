@@ -4,45 +4,25 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import java.lang.Exception
 
-@RunWith(AndroidJUnit4::class)
 class IntentLauncherImplTest {
-    lateinit var context: Context
-    lateinit var activity: Activity
-    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
-    lateinit var intent: Intent
-    lateinit var onError: () -> Unit
-    lateinit var intentLauncher: IntentLauncher
-
-    @Before
-    fun setup() {
-        context = mock()
-        activity = mock()
-        activityResultLauncher = mock()
-        intent = mock()
-        onError = mock()
-        intentLauncher = IntentLauncherImpl
-    }
+    private val context = mock<Context>()
+    private val activity = mock<Activity>()
+    private val activityResultLauncher = mock<ActivityResultLauncher<Intent>>()
+    private val intent = mock<Intent>()
+    private val onError = mock<() -> Unit>()
+    private val intentLauncher = IntentLauncherImpl
 
     @Test
     fun `startActivity with given intent should be called on the context when calling IntentLauncher#launch(context, intent, onError)`() {
         intentLauncher.launch(context, intent, onError)
         verify(context).startActivity(intent)
-        verifyNoMoreInteractions(onError)
-    }
-
-    @Test
-    fun `onError should not be called if no exception occurs when calling IntentLauncher#launch(context, intent, onError)`() {
-        intentLauncher.launch(context, intent, onError)
         verifyNoMoreInteractions(onError)
     }
 
@@ -65,15 +45,9 @@ class IntentLauncherImplTest {
     }
 
     @Test
-    fun `startActivity with given intent should be called on the context when calling IntentLauncher#launchForResult(context, intent, requestCode, onError)`() {
+    fun `startActivityForResult with given intent should be called on the context when calling IntentLauncher#launchForResult(context, intent, requestCode, onError)`() {
         intentLauncher.launchForResult(activity, intent, 1, onError)
         verify(activity).startActivityForResult(intent, 1)
-        verifyNoMoreInteractions(onError)
-    }
-
-    @Test
-    fun `onError should not be called if no exception occurs when calling IntentLauncher#launchForResult(context, intent, requestCode, onError)`() {
-        intentLauncher.launchForResult(activity, intent, 1, onError)
         verifyNoMoreInteractions(onError)
     }
 
@@ -96,7 +70,7 @@ class IntentLauncherImplTest {
     }
 
     @Test
-    fun `startActivity with given intent should be called on the context when calling IntentLauncher#launchForResult(resultLauncher, intent, onError)`() {
+    fun `startActivityForResult with given intent should be called on the context when calling IntentLauncher#launchForResult(resultLauncher, intent, onError)`() {
         intentLauncher.launchForResult(activityResultLauncher, intent, onError)
         verify(activityResultLauncher).launch(intent)
         verifyNoMoreInteractions(onError)
