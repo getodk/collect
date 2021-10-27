@@ -53,7 +53,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
 import java.io.File;
 import java.util.Locale;

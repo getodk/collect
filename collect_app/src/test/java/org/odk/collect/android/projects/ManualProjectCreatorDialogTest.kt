@@ -29,7 +29,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.Project

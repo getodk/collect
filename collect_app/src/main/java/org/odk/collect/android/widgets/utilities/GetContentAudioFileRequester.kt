@@ -8,7 +8,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 
 class GetContentAudioFileRequester(
     private val activity: Activity,

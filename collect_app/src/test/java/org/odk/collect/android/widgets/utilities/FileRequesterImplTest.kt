@@ -16,18 +16,18 @@ import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 import org.robolectric.Robolectric
 import org.robolectric.shadows.ShadowToast
 import java.lang.Exception
 
 @RunWith(AndroidJUnit4::class)
-class ExFileWidgetIntentLauncherImplTest {
+class FileRequesterImplTest {
     private val intentLauncher = spy(FakeIntentLauncher())
     private val requestCode = 99
     private val externalAppIntentProvider = mock<ExternalAppIntentProvider>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val exWidgetIntentLauncher = ExFileWidgetIntentLauncherImpl
+    private val exWidgetIntentLauncher = FileRequesterImpl
     private val availableIntent = Intent()
     private val unAvailableIntent = Intent().also {
         it.putExtra("fail", "fail")

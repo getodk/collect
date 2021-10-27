@@ -8,7 +8,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.junit.Test;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.when;
@@ -21,12 +21,12 @@ import static org.odk.collect.android.utilities.Appearances.THOUSANDS_SEP;
 public class ExIntegerWidgetTest extends GeneralExStringWidgetTest<ExIntegerWidget, IntegerData> {
 
     @Mock
-    ExStringWidgetIntentLauncher exStringWidgetIntentLauncher;
+    StringRequester stringRequester;
 
     @NonNull
     @Override
     public ExIntegerWidget createWidget() {
-        return new ExIntegerWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exStringWidgetIntentLauncher);
+        return new ExIntegerWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
     }
 
     @NonNull

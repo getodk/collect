@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.widgets.base.GeneralExStringWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -32,12 +32,12 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     IAnswerData answerData;
 
     @Mock
-    ExStringWidgetIntentLauncher exStringWidgetIntentLauncher;
+    StringRequester stringRequester;
 
     @NonNull
     @Override
     public ExDecimalWidget createWidget() {
-        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exStringWidgetIntentLauncher);
+        return new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
     }
 
     @NonNull
@@ -70,11 +70,11 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
         when(formEntryPrompt.getAnswerValue()).thenReturn(answerData);
         when(answerData.getValue()).thenReturn(eighteenDigitDouble);
 
-        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exStringWidgetIntentLauncher);
+        ExDecimalWidget exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
 
-        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), exStringWidgetIntentLauncher);
+        exDecimalWidget = new ExDecimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), stringRequester);
 
         assertThat(exDecimalWidget.getAnswerText(), is(equalTo(fifteenDigitString)));
     }

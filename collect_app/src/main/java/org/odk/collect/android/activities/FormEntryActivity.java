@@ -175,7 +175,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;

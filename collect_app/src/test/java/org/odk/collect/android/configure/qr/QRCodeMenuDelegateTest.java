@@ -13,8 +13,8 @@ import org.odk.collect.android.R;
 
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.androidshared.utils.IntentLauncher;
-import org.odk.collect.androidshared.utils.IntentLauncherImpl;
+import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.testshared.ErrorIntentLauncher;
 import org.odk.collect.testshared.FakeScheduler;
 import org.robolectric.Robolectric;

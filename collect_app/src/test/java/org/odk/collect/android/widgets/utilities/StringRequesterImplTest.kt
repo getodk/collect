@@ -17,17 +17,17 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 import org.robolectric.Robolectric
 import java.lang.Exception
 
 @RunWith(AndroidJUnit4::class)
-class ExStringWidgetIntentLauncherImplTest {
+class StringRequesterImplTest {
     private val intentLauncher = spy(FakeIntentLauncher())
     private val requestCode = 99
     private val externalAppIntentProvider = mock<ExternalAppIntentProvider>()
     private val formEntryPrompt = mock<FormEntryPrompt>()
-    private val exStringWidgetIntentLauncher = ExStringWidgetIntentLauncherImpl
+    private val stringRequester = StringRequesterImpl
     private val onError: (String) -> Unit = mock()
     private val availableActionSendToIntent = Intent(Intent.ACTION_SENDTO)
     private val unAvailableActionSendToIntent = Intent(Intent.ACTION_SENDTO).also {
@@ -50,7 +50,7 @@ class ExStringWidgetIntentLauncherImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("exception")
         }
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -72,7 +72,7 @@ class ExStringWidgetIntentLauncherImplTest {
         ).then {
             throw Exception("exception")
         }
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -89,7 +89,7 @@ class ExStringWidgetIntentLauncherImplTest {
         whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
             throw Exception("error")
         }
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -111,7 +111,7 @@ class ExStringWidgetIntentLauncherImplTest {
         ).then {
             throw Exception("error")
         }
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -129,7 +129,7 @@ class ExStringWidgetIntentLauncherImplTest {
             availableIntent
         )
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -149,7 +149,7 @@ class ExStringWidgetIntentLauncherImplTest {
             availableActionSendToIntent
         )
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -175,7 +175,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(availableIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -201,7 +201,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(availableIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -227,7 +227,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -255,7 +255,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableActionSendToIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -284,7 +284,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,
@@ -309,7 +309,7 @@ class ExStringWidgetIntentLauncherImplTest {
             )
         ).thenReturn(unAvailableActionSendToIntent)
 
-        exStringWidgetIntentLauncher.launch(
+        stringRequester.launch(
             intentLauncher,
             activity,
             requestCode,

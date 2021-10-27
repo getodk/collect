@@ -26,7 +26,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
-import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.Clip;
@@ -44,13 +44,13 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
+    private final FileRequester fileRequester;
 
     File answerFile;
 
     public ExAudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          AudioPlayer audioPlayer, WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         ExternalAppIntentProvider externalAppIntentProvider, ExFileWidgetIntentLauncher exFileWidgetIntentLauncher) {
+                         ExternalAppIntentProvider externalAppIntentProvider, FileRequester fileRequester) {
         super(context, questionDetails);
 
         this.audioPlayer = audioPlayer;
@@ -58,7 +58,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.exFileWidgetIntentLauncher = exFileWidgetIntentLauncher;
+        this.fileRequester = fileRequester;
 
         updateVisibilities();
         updatePlayerMedia();
@@ -198,7 +198,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exFileWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
+        fileRequester.launch(intentLauncher, (Activity) getContext(), ApplicationConstants.RequestCodes.EX_AUDIO_CHOOSER, externalAppIntentProvider, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {

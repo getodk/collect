@@ -23,9 +23,9 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.androidshared.utils.IntentLauncherImpl;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.testshared.ErrorIntentLauncher;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowActivity;
 
 import java.io.File;

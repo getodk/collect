@@ -25,7 +25,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -38,8 +38,8 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 @SuppressLint("ViewConstructor")
 public class ExIntegerWidget extends ExStringWidget {
 
-    public ExIntegerWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExStringWidgetIntentLauncher exStringWidgetIntentLauncher) {
-        super(context, questionDetails, waitingForDataRegistry, exStringWidgetIntentLauncher);
+    public ExIntegerWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
+        super(context, questionDetails, waitingForDataRegistry, stringRequester);
         StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, questionDetails.getPrompt());
     }
 

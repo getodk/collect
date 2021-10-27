@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 
 class ErrorIntentLauncher : IntentLauncher {
     override fun launch(context: Context, intent: Intent, onError: () -> Unit) {

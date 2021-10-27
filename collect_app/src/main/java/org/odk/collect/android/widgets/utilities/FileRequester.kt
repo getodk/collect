@@ -1,22 +1,21 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.app.Activity
-import android.content.Intent
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import java.lang.Error
 import java.lang.Exception
 
-object ExStringWidgetIntentLauncherImpl : ExStringWidgetIntentLauncher {
+object FileRequesterImpl : FileRequester {
     override fun launch(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
         externalAppIntentProvider: ExternalAppIntentProvider,
-        formEntryPrompt: FormEntryPrompt,
-        onError: (String) -> Unit
+        formEntryPrompt: FormEntryPrompt
     ) {
         try {
             val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
@@ -26,28 +25,19 @@ object ExStringWidgetIntentLauncherImpl : ExStringWidgetIntentLauncher {
                     activity.packageManager
                 )
 
-            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (Intent.ACTION_SENDTO == intent.action) {
-                intentLauncher.launch(activity, intent) {
-                    intentLauncher.launch(
-                        activity, intentWithoutDefaultCategory
-                    ) {
-                        onError(getErrorMessage(formEntryPrompt, activity))
-                    }
-                }
-            } else {
-                intentLauncher.launchForResult(activity, intent, requestCode) {
-                    intentLauncher.launchForResult(
-                        activity, intentWithoutDefaultCategory, requestCode
-                    ) {
-                        onError(getErrorMessage(formEntryPrompt, activity))
-                    }
+            intentLauncher.launchForResult(
+                activity, intent, requestCode
+            ) {
+                intentLauncher.launchForResult(
+                    activity, intentWithoutDefaultCategory, requestCode
+                ) {
+                    showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
                 }
             }
         } catch (e: Exception) {
-            onError(e.message!!)
+            showLongToast(activity, e.message!!)
         } catch (e: Error) {
-            onError(e.message!!)
+            showLongToast(activity, e.message!!)
         }
     }
 
@@ -57,13 +47,12 @@ object ExStringWidgetIntentLauncherImpl : ExStringWidgetIntentLauncher {
     }
 }
 
-interface ExStringWidgetIntentLauncher {
+interface FileRequester {
     fun launch(
         intentLauncher: IntentLauncher,
         activity: Activity,
         requestCode: Int,
         externalAppIntentProvider: ExternalAppIntentProvider,
-        formEntryPrompt: FormEntryPrompt,
-        onError: (String) -> Unit
+        formEntryPrompt: FormEntryPrompt
     )
 }

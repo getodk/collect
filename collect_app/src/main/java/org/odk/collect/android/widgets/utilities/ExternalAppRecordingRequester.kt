@@ -11,7 +11,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.utilities.ApplicationConstants
-import org.odk.collect.androidshared.utils.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncher
 
 class ExternalAppRecordingRequester(
     private val activity: Activity,

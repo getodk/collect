@@ -19,7 +19,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 
 import javax.inject.Inject;

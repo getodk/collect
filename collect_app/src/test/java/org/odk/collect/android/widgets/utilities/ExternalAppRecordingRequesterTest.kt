@@ -17,8 +17,8 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
-import org.odk.collect.androidshared.utils.IntentLauncher
-import org.odk.collect.androidshared.utils.IntentLauncherImpl
+import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.system.IntentLauncherImpl
 import org.odk.collect.testshared.ErrorIntentLauncher
 import org.robolectric.Robolectric
 import org.robolectric.Shadows

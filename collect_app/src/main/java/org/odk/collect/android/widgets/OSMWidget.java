@@ -24,7 +24,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
 import java.util.ArrayList;
 import java.util.List;

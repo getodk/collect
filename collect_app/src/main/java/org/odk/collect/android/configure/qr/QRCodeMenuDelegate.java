@@ -13,7 +13,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.androidshared.utils.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.async.Scheduler;
 
 import timber.log.Timber;

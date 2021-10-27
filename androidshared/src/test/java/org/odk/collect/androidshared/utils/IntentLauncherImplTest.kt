@@ -9,6 +9,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import org.odk.collect.androidshared.system.IntentLauncherImpl
 import java.lang.Exception
 
 class IntentLauncherImplTest {

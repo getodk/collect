@@ -14,8 +14,8 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.android.widgets.utilities.ExFileWidgetIntentLauncher;
-import org.odk.collect.androidshared.utils.IntentLauncherImpl;
+import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +33,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Mock
-    ExFileWidgetIntentLauncher exFileWidgetIntentLauncher;
+    FileRequester fileRequester;
 
     @Override
     public StringData getInitialAnswer() {
@@ -50,7 +50,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @Override
     public ExArbitraryFileWidget createWidget() {
         return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), externalAppIntentProvider, exFileWidgetIntentLauncher);
+                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), externalAppIntentProvider, fileRequester);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @Test
     public void whenClickingOnButton_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.exArbitraryFileButton.performClick();
-        verify(exFileWidgetIntentLauncher).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
+        verify(fileRequester).launch(IntentLauncherImpl.INSTANCE, activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, externalAppIntentProvider, formEntryPrompt);
     }
 
     @Test

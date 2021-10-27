@@ -39,7 +39,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.ExStringWidgetIntentLauncher;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import timber.log.Timber;
@@ -90,12 +90,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
-    private final ExStringWidgetIntentLauncher exStringWidgetIntentLauncher;
+    private final StringRequester stringRequester;
 
-    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, ExStringWidgetIntentLauncher exStringWidgetIntentLauncher) {
+    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.exStringWidgetIntentLauncher = exStringWidgetIntentLauncher;
+        this.stringRequester = stringRequester;
         getComponent(context).inject(this);
     }
 
@@ -172,7 +172,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        exStringWidgetIntentLauncher.launch(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
+        stringRequester.launch(intentLauncher, (Activity) getContext(), getRequestCode(), new ExternalAppIntentProvider(), getFormEntryPrompt(), (String errorMsg) -> {
             onException(errorMsg);
             return null;
         });
