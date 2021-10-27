@@ -24,6 +24,8 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
@@ -69,6 +71,10 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         }
 
         GeoWidgetUtils.logAllowMockAccuracy(prompt);
+        if (prompt.getQuestion().getAdditionalAttribute(null, "accuracyThreshold") != null) {
+            AnalyticsUtils.logFormEvent(AnalyticsEvents.ACCURACY_THRESHOLD);
+        }
+
         return binding.getRoot();
     }
 
