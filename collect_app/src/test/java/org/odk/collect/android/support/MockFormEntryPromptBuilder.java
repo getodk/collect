@@ -30,6 +30,9 @@ public class MockFormEntryPromptBuilder {
         when(prompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(prompt.getIndex().toString()).thenReturn("0, 0");
         when(prompt.getFormElement()).thenReturn(mock(IFormElement.class));
+
+        // Make sure we have a non-null question
+        withQuestion(mock(QuestionDef.class));
     }
 
     public MockFormEntryPromptBuilder withIndex(String index) {
