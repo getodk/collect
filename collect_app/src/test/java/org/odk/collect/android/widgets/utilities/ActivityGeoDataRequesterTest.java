@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.GeoPointActivity;
@@ -47,7 +47,7 @@ public class ActivityGeoDataRequesterTest {
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
-    private TestScreenContextActivity testActivity;
+    private WidgetTestActivity testActivity;
     private ShadowActivity shadowActivity;
     private FormEntryPrompt prompt;
     private FormIndex formIndex;

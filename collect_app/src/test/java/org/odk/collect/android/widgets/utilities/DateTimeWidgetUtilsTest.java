@@ -18,7 +18,7 @@ import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,7 +40,7 @@ import android.app.DatePickerDialog;
 public class DateTimeWidgetUtilsTest {
     private DateTimeWidgetUtils dateTimeWidgetUtils;
 
-    private TestScreenContextActivity activity;
+    private WidgetTestActivity activity;
     private DatePickerDetails datePickerDetails;
     private LocalDateTime date;
 
@@ -77,7 +77,7 @@ public class DateTimeWidgetUtilsTest {
     public void setUp() {
         dateTimeWidgetUtils = new DateTimeWidgetUtils();
 
-        activity = RobolectricHelpers.createThemedActivity(TestScreenContextActivity.class, R.style.Theme_MaterialComponents);
+        activity = RobolectricHelpers.createThemedActivity(WidgetTestActivity.class, R.style.Theme_MaterialComponents);
         datePickerDetails = mock(DatePickerDetails.class);
 
         when(datePickerDetails.getDatePickerType()).thenReturn(GREGORIAN);

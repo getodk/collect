@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 
 import java.math.BigDecimal;
 
@@ -31,7 +31,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 @RunWith(AndroidJUnit4.class)
 public class RangePickerIntegerWidgetTest {
 
-    private TestScreenContextActivity widgetActivity;
+    private WidgetTestActivity widgetActivity;
     private RangeQuestion rangeQuestion;
 
     @Before

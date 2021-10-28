@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
@@ -30,7 +30,7 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widg
 
 @RunWith(AndroidJUnit4.class)
 public class TimeWidgetTest {
-    private TestScreenContextActivity widgetActivity;
+    private WidgetTestActivity widgetActivity;
     private DateTimeWidgetUtils widgetUtils;
     private View.OnLongClickListener onLongClickListener;
 

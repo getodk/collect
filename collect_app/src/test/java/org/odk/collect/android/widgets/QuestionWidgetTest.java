@@ -26,7 +26,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
@@ -61,7 +61,7 @@ public class QuestionWidgetTest {
                 .withAudioURI("ref")
                 .build();
 
-        TestScreenContextActivity activity = CollectHelpers.createThemedActivity(TestScreenContextActivity.class);
+        WidgetTestActivity activity = CollectHelpers.createThemedActivity(WidgetTestActivity.class);
         TestWidget widget = new TestWidget(activity, new QuestionDetails(prompt));
 
         AudioButton audioButton = widget.getAudioVideoImageTextLabel().findViewById(R.id.audioButton);

@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.widgets;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
@@ -30,7 +31,6 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
@@ -135,8 +135,8 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             addAnswerView(answerView);
         }
 
-        if (context instanceof FormEntryActivity && !questionDetails.isReadOnly()) {
-            registerToClearAnswerOnLongPress((FormEntryActivity) context, this);
+        if (context instanceof Activity && !questionDetails.isReadOnly()) {
+            registerToClearAnswerOnLongPress((Activity) context, this);
         }
         hideAnswerContainerIfNeeded();
     }
@@ -365,7 +365,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      * user long presses on it. Widget subclasses may override this if some or all of their
      * components need to intercept long presses.
      */
-    protected void registerToClearAnswerOnLongPress(FormEntryActivity activity, ViewGroup viewGroup) {
+    protected void registerToClearAnswerOnLongPress(Activity activity, ViewGroup viewGroup) {
         activity.registerForContextMenu(this);
     }
 

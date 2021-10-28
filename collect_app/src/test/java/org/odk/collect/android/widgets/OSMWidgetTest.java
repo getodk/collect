@@ -21,7 +21,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.support.TestScreenContextActivity;
+import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
@@ -53,7 +53,7 @@ public class OSMWidgetTest {
     private final File instancePath = new File("instancePath/blah");
     private final File mediaFolder = new File("mediaFolderPath");
 
-    private TestScreenContextActivity widgetActivity;
+    private WidgetTestActivity widgetActivity;
     private ShadowActivity shadowActivity;
     private ActivityAvailability activityAvailability;
     private FormController formController;
