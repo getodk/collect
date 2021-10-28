@@ -135,7 +135,6 @@ class FormMetadataSettingsTest {
             .pressBack(UserAndDeviceIdentitySettingsPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-
             .addAndSwitchToProject("https://second-project.com")
             .copyForm("metadata.xml", "second-project.com")
             .openProjectSettingsDialog()
@@ -154,7 +153,6 @@ class FormMetadataSettingsTest {
             .pressBack(UserAndDeviceIdentitySettingsPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-
             .clickFillBlankForm()
             .clickOnForm("Metadata")
             .scrollToAndAssertText("john@second-project.com")
@@ -162,7 +160,6 @@ class FormMetadataSettingsTest {
             .scrollToAndAssertText("John Smith")
             .swipeToEndScreen()
             .clickSaveAndExit()
-
             .openProjectSettingsDialog()
             .selectProject("Demo project")
             .clickFillBlankForm()

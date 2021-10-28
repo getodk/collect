@@ -30,7 +30,6 @@ class SwitchProjectTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
-
             // Switch to Turtle nesting
             .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "John / my-server.com")
@@ -54,7 +53,6 @@ class SwitchProjectTest {
             .clickEditSavedForm(1)
             .assertText("Two Question")
             .pressBack(MainMenuPage())
-
             // Create and switch to new project
             .assertProjectIcon("D")
             .openProjectSettingsDialog()
@@ -63,13 +61,11 @@ class SwitchProjectTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
-
             // Set server and download form
             .setServer(testDependencies.server.url)
             .clickGetBlankForm()
             .clickGetSelected()
             .clickOKOnDialog(MainMenuPage())
-
             // Fill form
             .startBlankForm("One Question")
             .swipeToEndScreen()
@@ -77,11 +73,9 @@ class SwitchProjectTest {
             .clickEditSavedForm(1)
             .assertText("One Question")
             .pressBack(MainMenuPage())
-
             // Switch back to first project
             .openProjectSettingsDialog()
             .selectProject("Demo project")
-
             // Check server
             .openProjectSettingsDialog()
             .clickSettings()
@@ -91,12 +85,10 @@ class SwitchProjectTest {
             .clickOKOnDialog()
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-
             // Check forms
             .clickFillBlankForm()
             .assertFormExists("Two Question")
             .pressBack(MainMenuPage())
-
             // Check instances
             .clickSendFinalizedForm(1)
             .assertText("Two Question")

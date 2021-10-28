@@ -29,7 +29,6 @@ class AddNewProjectTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
-
             .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "John / my-server.com")
             .assertInactiveProject("Demo project", "demo.getodk.org")
@@ -45,7 +44,6 @@ class AddNewProjectTest {
             .clickAddProject()
             .switchToManualMode()
             .openGooglePickerAndSelect(googleAccount)
-
             .openProjectSettingsDialog()
             .assertCurrentProject(googleAccount, "$googleAccount / Google Drive")
             .assertInactiveProject("Demo project", "demo.getodk.org")

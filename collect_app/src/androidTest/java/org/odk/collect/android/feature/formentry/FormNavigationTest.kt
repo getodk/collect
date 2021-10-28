@@ -105,12 +105,10 @@ class FormNavigationTest {
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
             .assertQuestion("What is your name?")
-
             // assert that 'Swipes and buttons' mode is enabled
             .swipeToNextQuestion("What is your age?")
             .clickBackwardButton()
             .assertText("What is your name?")
-
             // change settings to 'Horizontal swipes' mode'
             .clickOptionsIcon()
             .clickGeneralSettings()
@@ -119,11 +117,9 @@ class FormNavigationTest {
             .clickSwipes()
             .pressBack(ProjectSettingsPage())
             .pressBack(FormEntryPage("Two Question"))
-
             // assert that 'Horizontal swipes' mode is enabled
             .swipeToNextQuestion("What is your age?")
             .assertNavigationButtonsAreHidden()
-
             // change settings to 'Forward/backward buttons' mode'
             .clickOptionsIcon()
             .clickGeneralSettings()
@@ -132,12 +128,10 @@ class FormNavigationTest {
             .clickUseNavigationButtons()
             .pressBack(ProjectSettingsPage())
             .pressBack(FormEntryPage("Two Question"))
-
             // assert that 'Forward/backward buttons' mode is enabled
             .swipeToPreviousQuestion("What is your age?")
             .clickBackwardButton()
             .assertText("What is your name?")
-
             // change settings to 'Swipes and buttons' mode'
             .clickOptionsIcon()
             .clickGeneralSettings()
@@ -146,7 +140,6 @@ class FormNavigationTest {
             .clickUseSwipesAndButtons()
             .pressBack(ProjectSettingsPage())
             .pressBack(FormEntryPage("Two Question"))
-
             // assert that 'Swipes and buttons' mode is enabled
             .swipeToNextQuestion("What is your age?")
             .clickBackwardButton()

@@ -39,7 +39,6 @@ class UpdateProjectTest {
             .clickOKOnDialog()
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-
             .assertProjectIcon("X")
             .openProjectSettingsDialog()
             .assertCurrentProject("Project X", "Anna / demo.getodk.org")
