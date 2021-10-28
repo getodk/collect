@@ -6,8 +6,8 @@ object Versions {
     const val android_target_sdk = 30
 
     const val androidx_fragment = "1.3.6"
-    const val okhttp3 = "4.9.1"
-    const val dagger = "2.38.1"
-    const val kotlin = "1.5.21"
-    const val mockito = "3.11.1" // the newest version is buggy https://github.com/mockito/mockito/issues/2370
+    const val okhttp3 = "4.9.2"
+    const val dagger = "2.40"
+    const val kotlin = "1.5.31"
+    const val mockito = "4.0.0"
 }
