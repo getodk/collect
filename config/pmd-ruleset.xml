@@ -100,6 +100,7 @@
     <rule ref="category/java/errorprone.xml">
         <exclude name="AssignmentInOperand" />
         <exclude name="AssignmentToNonFinalStatic" />
+        <exclude name="AvoidAccessibilityAlteration" />
         <exclude name="AvoidBranchingStatementAsLastInLoop" />
         <exclude name="AvoidCatchingNPE" />
         <exclude name="AvoidCatchingThrowable" />
