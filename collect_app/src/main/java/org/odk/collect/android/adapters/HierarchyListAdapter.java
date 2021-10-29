@@ -16,13 +16,15 @@
 
 package org.odk.collect.android.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.HierarchyElement;
@@ -48,17 +50,24 @@ public class HierarchyListAdapter extends RecyclerView.Adapter<HierarchyListAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(hierarchyElements.get(position), listener);
-        if (hierarchyElements.get(position).getIcon() != null) {
+        HierarchyElement element = hierarchyElements.get(position);
+        holder.bind(element, listener);
+        Drawable icon = element.getIcon();
+        if (icon != null) {
             holder.icon.setVisibility(View.VISIBLE);
-            holder.icon.setImageDrawable(hierarchyElements.get(position).getIcon());
+            holder.icon.setImageDrawable(icon);
         } else {
             holder.icon.setVisibility(View.GONE);
         }
-        holder.primaryText.setText(HtmlUtils.textToHtml(hierarchyElements.get(position).getPrimaryText()));
-        if (hierarchyElements.get(position).getSecondaryText() != null && !hierarchyElements.get(position).getSecondaryText().isEmpty()) {
+        holder.primaryText.setText(HtmlUtils.textToHtml(element.getPrimaryText()));
+        String secondaryText = element.getSecondaryText();
+        if (secondaryText != null && !secondaryText.isEmpty()) {
             holder.secondaryText.setVisibility(View.VISIBLE);
-            holder.secondaryText.setText(HtmlUtils.textToHtml(hierarchyElements.get(position).getSecondaryText()));
+            //For #4480
+            holder.secondaryText.setText(
+                    element.getType() == HierarchyElement.Type.QUESTION
+                            ? secondaryText
+                            : HtmlUtils.textToHtml(secondaryText));
         } else {
             holder.secondaryText.setVisibility(View.GONE);
         }
