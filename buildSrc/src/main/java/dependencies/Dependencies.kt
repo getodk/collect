@@ -97,7 +97,7 @@ object Dependencies {
     const val hamcrest = "org.hamcrest:hamcrest:2.2"
     const val powermock_module_junit4 = "org.powermock:powermock-module-junit4:2.0.9"
     const val powermock_api_mockito2 = "org.powermock:powermock-api-mockito2:2.0.9"
-    const val robolectric = "org.robolectric:robolectric:4.6.1"
-    const val robolectric_shadows_multidex = "org.robolectric:shadows-multidex:4.6.1"
+    const val robolectric = "org.robolectric:robolectric:4.5.1"
+    const val robolectric_shadows_multidex = "org.robolectric:shadows-multidex:4.5.1"
     const val uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 }
