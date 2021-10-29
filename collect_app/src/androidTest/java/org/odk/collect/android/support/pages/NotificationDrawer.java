@@ -1,5 +1,10 @@
 package org.odk.collect.android.support.pages;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Direction;
@@ -8,10 +13,6 @@ import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
 import org.jetbrains.annotations.NotNull;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 
 @SuppressWarnings("PMD.NonThreadSafeSingleton")
 public class NotificationDrawer {
@@ -86,7 +87,8 @@ public class NotificationDrawer {
     @NotNull
     private UiDevice waitForNotification(String appName) {
         UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        device.wait(Until.hasObject(By.textStartsWith(appName)), 2000L);
+        Boolean result = device.wait(Until.hasObject(By.textStartsWith(appName)), 2000L);
+        assertThat("No notification for app: " + appName, result, equalTo(true));
         return device;
     }
 
