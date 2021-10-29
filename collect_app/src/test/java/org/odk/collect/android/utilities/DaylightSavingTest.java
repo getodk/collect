@@ -16,6 +16,10 @@
 
 package org.odk.collect.android.utilities;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
@@ -39,10 +43,6 @@ import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import java.util.TimeZone;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 /** https://github.com/getodk/collect/issues/356

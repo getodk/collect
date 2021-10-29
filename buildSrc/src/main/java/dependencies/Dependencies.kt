@@ -85,7 +85,7 @@ object Dependencies {
     const val mockito_kotlin = "org.mockito.kotlin:mockito-kotlin:4.0.0"
     const val androidx_fragment_testing = "androidx.fragment:fragment-testing:${Versions.androidx_fragment}"
     const val androidx_arch_core_testing = "androidx.arch.core:core-testing:2.1.0"
-    const val androidx_work_testing = "androidx.work:work-testing:2.7.0"
+    const val androidx_work_testing = "androidx.work:work-testing:2.5.0" // Upgrading will require compileSdk 31
     const val androidx_test_core_ktx = "androidx.test:core-ktx:1.4.0"
     const val androidx_test_rules = "androidx.test:rules:1.4.0"
     const val androidx_test_espresso_contrib = "androidx.test.espresso:espresso-contrib:3.4.0"
