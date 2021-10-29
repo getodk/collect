@@ -16,14 +16,18 @@
 
 package org.odk.collect.android.feature.formentry;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.ClipData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 
 import androidx.core.content.FileProvider;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,6 +80,7 @@ public class IntentGroupTest {
             .outerRule(new ResetStateRule())
             .around(new CopyFormRule(INTENT_GROUP_FORM, true))
             .around(new RecordedIntentsRule())
+            .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)) // Needed to write temp file
             .around(activityTestRule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
@@ -244,9 +249,13 @@ public class IntentGroupTest {
         onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
     }
 
-    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     private Uri createTempFile(String name, String extension) throws IOException {
-        File file = File.createTempFile(name, extension, new File("/sdcard"));
+        // Use the phones downloads dir for temp files
+        File downloadsDir = ApplicationProvider
+                .getApplicationContext()
+                .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+
+        File file = File.createTempFile(name, extension, downloadsDir);
         copyFileFromAssets("media" + File.separator + name + "." + extension, file.getPath());
         return getUriForFile(file);
     }
