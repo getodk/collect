@@ -303,9 +303,9 @@ class StringRequesterImplTest {
         var launchForResultCallCounter = 0
         var errorCounter = 0
 
-        override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
+        override fun launch(context: Context, intent: Intent?, onError: () -> Unit) {
             launchCallCounter++
-            if (intent.hasExtra("fail")) {
+            if (intent!!.hasExtra("fail")) {
                 errorCounter++
                 onError()
             }
@@ -313,12 +313,12 @@ class StringRequesterImplTest {
 
         override fun launchForResult(
             activity: Activity,
-            intent: Intent,
+            intent: Intent?,
             requestCode: Int,
             onError: () -> Unit
         ) {
             launchForResultCallCounter++
-            if (intent.hasExtra("fail")) {
+            if (intent!!.hasExtra("fail")) {
                 errorCounter++
                 onError()
             }
@@ -326,7 +326,7 @@ class StringRequesterImplTest {
 
         override fun launchForResult(
             resultLauncher: ActivityResultLauncher<Intent>,
-            intent: Intent,
+            intent: Intent?,
             onError: () -> Unit
         ) {
         }

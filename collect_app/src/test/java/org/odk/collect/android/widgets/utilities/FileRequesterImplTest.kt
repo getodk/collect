@@ -196,17 +196,17 @@ class FileRequesterImplTest {
         var callCounter = 0
         var errorCounter = 0
 
-        override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
+        override fun launch(context: Context, intent: Intent?, onError: () -> Unit) {
         }
 
         override fun launchForResult(
             activity: Activity,
-            intent: Intent,
+            intent: Intent?,
             requestCode: Int,
             onError: () -> Unit
         ) {
             callCounter++
-            if (intent.hasExtra("fail")) {
+            if (intent!!.hasExtra("fail")) {
                 errorCounter++
                 onError()
             }
@@ -214,7 +214,7 @@ class FileRequesterImplTest {
 
         override fun launchForResult(
             resultLauncher: ActivityResultLauncher<Intent>,
-            intent: Intent,
+            intent: Intent?,
             onError: () -> Unit
         ) {
         }

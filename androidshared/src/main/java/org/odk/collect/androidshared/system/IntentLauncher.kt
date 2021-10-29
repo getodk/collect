@@ -6,7 +6,7 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 
 object IntentLauncherImpl : IntentLauncher {
-    override fun launch(context: Context, intent: Intent, onError: () -> Unit) {
+    override fun launch(context: Context, intent: Intent?, onError: () -> Unit) {
         try {
             context.startActivity(intent)
         } catch (e: Exception) {
@@ -18,7 +18,7 @@ object IntentLauncherImpl : IntentLauncher {
 
     override fun launchForResult(
         activity: Activity,
-        intent: Intent,
+        intent: Intent?,
         requestCode: Int,
         onError: () -> Unit
     ) {
@@ -33,7 +33,7 @@ object IntentLauncherImpl : IntentLauncher {
 
     override fun launchForResult(
         resultLauncher: ActivityResultLauncher<Intent>,
-        intent: Intent,
+        intent: Intent?,
         onError: () -> Unit
     ) {
         try {
@@ -47,13 +47,13 @@ object IntentLauncherImpl : IntentLauncher {
 }
 
 interface IntentLauncher {
-    fun launch(context: Context, intent: Intent, onError: () -> Unit)
+    fun launch(context: Context, intent: Intent?, onError: () -> Unit)
 
-    fun launchForResult(activity: Activity, intent: Intent, requestCode: Int, onError: () -> Unit)
+    fun launchForResult(activity: Activity, intent: Intent?, requestCode: Int, onError: () -> Unit)
 
     fun launchForResult(
         resultLauncher: ActivityResultLauncher<Intent>,
-        intent: Intent,
+        intent: Intent?,
         onError: () -> Unit
     )
 }
