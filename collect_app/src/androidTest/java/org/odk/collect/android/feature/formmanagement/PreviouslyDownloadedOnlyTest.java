@@ -45,12 +45,13 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertAndDismissNotification("ODK Collect", "Form updates available");
+                .assertNotification("ODK Collect", "Form updates available")
+                .clearAll();
 
         testDependencies.server.addForm("Two Question Updated", "two_question", "1", "two-question-updated.xml");
         testDependencies.scheduler.runDeferredTasks();
         notificationDrawer.open()
-                .assertAndDismissNotification("ODK Collect", "Form updates available");
+                .assertNotification("ODK Collect", "Form updates available");
     }
 
     @Test
@@ -63,7 +64,7 @@ public class PreviouslyDownloadedOnlyTest {
         testDependencies.scheduler.runDeferredTasks();
 
         notificationDrawer.open()
-                .clickNotification("Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage())
+                .clickNotification("ODK Collect", "Form updates available", "Get Blank Form", new GetBlankFormPage())
                 .assertText(R.string.newer_version_of_a_form_info)
                 .assertOnPage();
     }

@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 
+import org.hamcrest.core.StringContains;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -18,15 +20,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.AllOf.allOf;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
     @Override
     public MainMenuPage assertOnPage() {
-        return waitFor(() -> {
-            onView(withText(containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
+        return WaitFor.waitFor(() -> {
+            onView(withText(StringContains.containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });
     }
@@ -35,7 +36,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         assertOnPage(); // Make sure we've waited for the application load correctly
 
         onView(withId(R.id.projects)).perform(click());
-        return waitFor(() -> {
+        // It seems there is some lag here sometimes
+        return WaitFor.waitFor(() -> {
             // It seems there is some lag here sometimes
             return new ProjectSettingsDialogPage().assertOnPage();
         });

@@ -24,6 +24,7 @@ import androidx.test.espresso.Espresso;
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.utilities.FlingRegister;
 
 import java.util.concurrent.Callable;
@@ -39,7 +40,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     @Override
     public FormEntryPage assertOnPage() {
         // Make sure we wait for loading to finish
-        waitFor((Callable<Void>) () -> {
+        WaitFor.waitFor((Callable<Void>) () -> {
             assertTextDoesNotExist(R.string.loading_form);
             return null;
         });
@@ -93,7 +94,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEndPage swipeToEndScreen() {
         flingLeft();
-        return waitFor(() -> new FormEndPage(formName).assertOnPage());
+        return WaitFor.waitFor(() -> new FormEndPage(formName).assertOnPage());
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
@@ -269,7 +270,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
         flingLeft();
-        return waitFor(() -> new AddNewRepeatDialog(repeatName).assertOnPage());
+        return WaitFor.waitFor(() -> new AddNewRepeatDialog(repeatName).assertOnPage());
     }
 
     public FormEntryPage answerQuestion(String question, String answer) {
@@ -294,7 +295,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
             FlingRegister.attemptingFling();
             onView(withId(R.id.questionholder)).perform(swipeLeft());
 
-            waitFor(() -> {
+            WaitFor.waitFor(() -> {
                 if (FlingRegister.isFlingDetected()) {
                     return true;
                 } else {

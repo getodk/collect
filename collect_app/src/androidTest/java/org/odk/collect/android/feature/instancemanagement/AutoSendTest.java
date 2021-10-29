@@ -43,7 +43,7 @@ public class AutoSendTest {
                 .assertText("One Question");
 
         notificationDrawerRule.open()
-                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
+                .assertNotification("ODK Collect", "ODK auto-send results", "Success");
     }
 
     @Test
@@ -63,6 +63,6 @@ public class AutoSendTest {
                 .assertText("One Question Autosend");
 
         notificationDrawerRule.open()
-                .assertAndDismissNotification("ODK Collect", "ODK auto-send results", "Success");
+                .assertNotification("ODK Collect", "ODK auto-send results", "Success");
     }
 }

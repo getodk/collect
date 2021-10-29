@@ -46,11 +46,10 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
-import junit.framework.AssertionFailedError;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.matchers.ToastMatcher;
@@ -59,7 +58,6 @@ import org.odk.collect.android.utilities.TranslationHandler;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import timber.log.Timber;
 
@@ -378,7 +376,7 @@ public abstract class Page<T extends Page<T>> {
                 return;
             } catch (Exception e) {
                 failure = e;
-                wait250ms();
+                WaitFor.wait250ms();
             }
         }
 
@@ -386,37 +384,7 @@ public abstract class Page<T extends Page<T>> {
     }
 
     protected void waitForText(String text) {
-        waitFor(() -> assertText(text));
-    }
-
-    protected <T> T waitFor(Callable<T> callable) {
-        int counter = 0;
-        Throwable failure = null;
-
-        // Try 20 times/for 5 seconds
-        while (counter < 20) {
-            try {
-                return callable.call();
-            } catch (Exception | AssertionFailedError throwable) {
-                failure = throwable;
-            }
-
-            wait250ms();
-
-            counter++;
-        }
-
-        throw new RuntimeException("waitFor failed", failure);
-    }
-
-    public T wait250ms() {
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ignored) {
-            // ignored
-        }
-
-        return (T) this;
+        WaitFor.waitFor(() -> assertText(text));
     }
 
     public T assertTextNotDisplayed(int string) {

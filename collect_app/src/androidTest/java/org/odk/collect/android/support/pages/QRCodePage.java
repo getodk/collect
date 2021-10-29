@@ -6,6 +6,7 @@ import androidx.test.espresso.Espresso;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.support.matchers.DrawableMatcher;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -30,7 +31,7 @@ public class QRCodePage extends Page<QRCodePage> {
 
     public QRCodePage clickView() {
         // Switching tabs doesn't seem to work sometimes
-        waitFor(() -> {
+        WaitFor.waitFor(() -> {
             onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
             onView(withText(R.string.barcode_scanner_prompt)).check(doesNotExist());
             return null;
