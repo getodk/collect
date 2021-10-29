@@ -17,9 +17,7 @@ package org.odk.collect.android.widgets;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
@@ -28,6 +26,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+
+import java.io.Serializable;
 
 /**
  * Launch an external app to supply an integer value. If the app
@@ -44,8 +44,8 @@ public class ExIntegerWidget extends ExStringWidget {
     }
 
     @Override
-    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
+    protected Serializable getAnswerForIntent()  {
+        return StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
     }
 
     @Override

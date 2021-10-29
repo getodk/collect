@@ -55,6 +55,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -75,6 +76,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -90,6 +92,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -110,6 +113,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -126,6 +130,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -144,6 +149,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -168,6 +174,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -192,6 +199,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -216,6 +224,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -242,6 +251,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -269,6 +279,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 
@@ -292,6 +303,7 @@ class StringRequesterImplTest {
             activity,
             requestCode,
             formEntryPrompt,
+            null,
             onError
         )
 

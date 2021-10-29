@@ -6,6 +6,7 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
 import org.odk.collect.androidshared.system.IntentLauncher
+import java.io.Serializable
 import java.lang.Error
 import java.lang.Exception
 
@@ -18,18 +19,23 @@ class StringRequesterImpl(
         activity: Activity,
         requestCode: Int,
         formEntryPrompt: FormEntryPrompt,
+        value: Serializable?,
         onError: (String) -> Unit
     ) {
         try {
-            val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+            val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)?.apply {
+                putExtra("value", value)
+            }
             val intentWithoutDefaultCategory =
                 externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
                     formEntryPrompt,
                     activity.packageManager
-                )
+                )?.apply {
+                    putExtra("value", value)
+                }
 
             // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (Intent.ACTION_SENDTO == intent.action) {
+            if (intent != null && Intent.ACTION_SENDTO == intent.action) {
                 intentLauncher.launch(activity, intent) {
                     intentLauncher.launch(
                         activity, intentWithoutDefaultCategory
@@ -64,6 +70,7 @@ interface StringRequester {
         activity: Activity,
         requestCode: Int,
         formEntryPrompt: FormEntryPrompt,
+        value: Serializable?,
         onError: (String) -> Unit
     )
 }

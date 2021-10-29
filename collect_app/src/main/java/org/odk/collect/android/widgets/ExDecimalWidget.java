@@ -15,9 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -28,6 +26,8 @@ import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
+import java.io.Serializable;
 
 /**
  * Launch an external app to supply a decimal value. If the app
@@ -44,8 +44,8 @@ public class ExDecimalWidget extends ExStringWidget {
     }
 
     @Override
-    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
+    protected Serializable getAnswerForIntent() {
+        return StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
     }
 
     @Override

@@ -20,9 +20,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -40,6 +38,8 @@ import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+
+import java.io.Serializable;
 
 import timber.log.Timber;
 
@@ -84,7 +84,6 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends StringWidget implements WidgetDataReceiver, ButtonClickListener {
-    protected static final String DATA_NAME = "value";
     private final WaitingForDataRegistry waitingForDataRegistry;
 
     private boolean hasExApp = true;
@@ -115,8 +114,8 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         return v != null ? v : getContext().getString(R.string.launch_app);
     }
 
-    protected void addAnswerToIntent(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, getFormEntryPrompt().getAnswerText());
+    protected Serializable getAnswerForIntent() {
+        return getFormEntryPrompt().getAnswerText();
     }
 
     protected int getRequestCode() {
@@ -171,7 +170,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        stringRequester.launch((Activity) getContext(), getRequestCode(), getFormEntryPrompt(), (String errorMsg) -> {
+        stringRequester.launch((Activity) getContext(), getRequestCode(), getFormEntryPrompt(), getAnswerForIntent(), (String errorMsg) -> {
             onException(errorMsg);
             return null;
         });
