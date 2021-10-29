@@ -9,14 +9,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,19 +21,17 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 /**
  * @author Shobhit Agarwal
  */
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({GoogleAccountCredential.class, ThemeUtils.class, PermissionsProvider.class})
+@RunWith(AndroidJUnit4.class)
 public class GoogleAccountsManagerTest {
 
     private static final String EXPECTED_ACCOUNT = "abcd@xyz.com";
@@ -62,11 +57,11 @@ public class GoogleAccountsManagerTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, settingsProvider, mockIntent, mockThemeUtils));
         when(settingsProvider.getGeneralSettings()).thenReturn(generalSettings);
         stubCredential();
         stubPreferences();
-        mockPermissionsProvider();
     }
 
     /**
@@ -85,20 +80,12 @@ public class GoogleAccountsManagerTest {
     }
 
     private void stubAccount(String name) {
-        Account account = mock(Account.class);
-        Whitebox.setInternalState(account, "name", name);
+        Account account = new Account(name, "com.google");
         doReturn(new Account[]{account}).when(mockedCredential).getAllAccounts();
     }
 
     private void removeAccounts() {
         doReturn(null).when(mockedCredential).getAllAccounts();
-    }
-
-    private void mockPermissionsProvider() {
-        mockStatic(PermissionsProvider.class, invocation -> {
-            Whitebox.invokeMethod(googleAccountsManager, "chooseAccount");
-            return null;
-        });
     }
 
     private void stubPreferences() {

@@ -18,7 +18,7 @@ package org.odk.collect.android.utilities;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Mockito.when;
 
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;

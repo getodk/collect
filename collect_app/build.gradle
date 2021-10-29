@@ -382,10 +382,6 @@ dependencies {
     testImplementation Dependencies.okhttp3_mockwebserver
     testImplementation Dependencies.squareup_okhttp_tls
 
-    // power mock (for mocking final methods which is not handled by mockito)
-    testImplementation Dependencies.powermock_module_junit4
-    testImplementation Dependencies.powermock_api_mockito2
-
     testImplementation Dependencies.hamcrest
 
     testImplementation Dependencies.json

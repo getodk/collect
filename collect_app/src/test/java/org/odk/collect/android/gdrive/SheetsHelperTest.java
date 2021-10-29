@@ -10,9 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.gdrive.sheets.SheetsHelper;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -29,12 +28,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 /**
  * @author Shobhit Agarwal
  */
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Spreadsheet.class, SpreadsheetProperties.class})
+@RunWith(AndroidJUnit4.class)
 public class SheetsHelperTest {
 
     @Mock
@@ -44,6 +43,7 @@ public class SheetsHelperTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         sheetsHelper = spy(new SheetsHelper(googleSheetsAPI));
     }
 
