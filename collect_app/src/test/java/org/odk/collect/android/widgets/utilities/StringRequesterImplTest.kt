@@ -310,6 +310,31 @@ class StringRequesterImplTest {
         verify(onError).invoke("Custom message")
     }
 
+    @Test
+    fun `Value should be added to intent`() {
+        whenever(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom message")
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+            unAvailableIntent
+        )
+        whenever(
+            externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formEntryPrompt,
+                activity.packageManager
+            )
+        ).thenReturn(availableIntent)
+
+        stringRequester.launch(
+            activity,
+            requestCode,
+            formEntryPrompt,
+            "123",
+            onError
+        )
+
+        assertThat(unAvailableIntent.getSerializableExtra("value"), `is`("123"))
+        assertThat(availableIntent.getSerializableExtra("value"), `is`("123"))
+    }
+
     class FakeIntentLauncher : IntentLauncher {
         var launchCallCounter = 0
         var launchForResultCallCounter = 0
