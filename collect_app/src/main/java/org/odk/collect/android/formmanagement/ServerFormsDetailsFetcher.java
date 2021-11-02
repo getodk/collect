@@ -31,6 +31,7 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nullable;
 
@@ -163,10 +164,7 @@ public class ServerFormsDetailsFetcher {
 
     private Form getFormByVersion(List<Form> forms, @Nullable String expectedVersion) {
         for (Form form : forms) {
-            if (expectedVersion == null && form.getVersion() == null) {
-                return form;
-            }
-            if (expectedVersion != null && form.getVersion() != null && expectedVersion.equals(form.getVersion())) {
+            if (Objects.equals(form.getVersion(), expectedVersion)) {
                 return form;
             }
         }

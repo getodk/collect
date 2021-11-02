@@ -36,7 +36,8 @@ public class ServerFormsDetailsFetcherTest {
             new FormListItem("http://example.com/form-2", "form-2", "2", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
     );
 
-    private final MediaFile mediaFile = new MediaFile("blah.txt", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("blah".getBytes())), "http://example.com/media-file");
+    private static final String FILE_CONTENT = "blah";
+    private final MediaFile mediaFile = new MediaFile("blah.txt", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream(FILE_CONTENT.getBytes())), "http://example.com/media-file");
 
     private ServerFormsDetailsFetcher fetcher;
     private FormsRepository formsRepository;
@@ -143,7 +144,7 @@ public class ServerFormsDetailsFetcherTest {
                 .formMediaPath(mediaDir1.getAbsolutePath())
                 .build());
 
-        File oldMediaFile1 = TempFiles.createTempFile(mediaDir1, "blah", ".txt");
+        File oldMediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.getFilename());
         writeToFile(oldMediaFile1, "old blah");
 
         File mediaDir2 = TempFiles.createTempDir();
@@ -156,8 +157,8 @@ public class ServerFormsDetailsFetcherTest {
                 .formMediaPath(mediaDir2.getAbsolutePath())
                 .build());
 
-        File oldMediaFile2 = TempFiles.createTempFile(mediaDir2, "blah", ".txt");
-        writeToFile(oldMediaFile2, "blah");
+        File oldMediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.getFilename());
+        writeToFile(oldMediaFile2, FILE_CONTENT);
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         ServerFormDetails form = getForm(serverFormDetails, "form-2");
@@ -195,7 +196,7 @@ public class ServerFormsDetailsFetcherTest {
                 .build());
 
         File mediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv");
-        writeToFile(mediaFile, "blah");
+        writeToFile(mediaFile, FILE_CONTENT);
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         ServerFormDetails form = getForm(serverFormDetails, "form-2");
@@ -216,7 +217,7 @@ public class ServerFormsDetailsFetcherTest {
                 .build());
 
         File localMediaFile = TempFiles.createTempFile(mediaDir, "blah", ".csv");
-        writeToFile(localMediaFile, "blah");
+        writeToFile(localMediaFile, FILE_CONTENT);
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         assertThat(getForm(serverFormDetails, "form-2").isUpdated(), is(true));

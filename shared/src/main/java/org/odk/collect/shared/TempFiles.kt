@@ -13,6 +13,14 @@ object TempFiles {
     }
 
     @JvmStatic
+    fun createTempFile(parent: File, name: String): File {
+        return File(parent, name).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
+    }
+
+    @JvmStatic
     fun createTempFile(parent: File, name: String, extension: String): File {
         return File(parent, name + extension).also {
             it.createNewFile()
