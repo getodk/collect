@@ -9,8 +9,10 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -200,6 +202,15 @@ public abstract class Page<T extends Page<T>> {
         closeSoftKeyboard(); // Make sure to avoid issues with keyboard being up
         clickOnId(android.R.id.button1);
         return destination.assertOnPage();
+    }
+
+    public <D extends Page<D>> D clickOnButtonInDialog(int buttonText, D destination) {
+        tryAgainOnFail(() -> {
+            clickOnString(buttonText);
+            destination.assertOnPage();
+        });
+
+        return destination;
     }
 
     String getTranslatedString(Integer id) {
