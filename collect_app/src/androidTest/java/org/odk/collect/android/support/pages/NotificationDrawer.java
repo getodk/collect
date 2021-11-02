@@ -13,7 +13,6 @@ import androidx.test.uiautomator.Until;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.support.WaitFor;
 
-@SuppressWarnings("PMD.NonThreadSafeSingleton")
 public class NotificationDrawer {
 
     private boolean isOpen;
