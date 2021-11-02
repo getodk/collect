@@ -45,9 +45,9 @@ public class ExternalAppIntentProvider {
         if (intent != null) {
             // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
             intent.setFlags(0);
+            ExternalAppsUtils.populateParameters(intent, exParams, formEntryPrompt.getIndex().getReference());
         }
 
-        ExternalAppsUtils.populateParameters(intent, exParams, formEntryPrompt.getIndex().getReference());
         return intent;
     }
 }
