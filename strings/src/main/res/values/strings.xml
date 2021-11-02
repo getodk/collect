@@ -1015,7 +1015,7 @@
     <string name="generate">Generate</string>
     <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
-    <string name="corrupt_imported_preferences_error">Current settings are corrupt. From the admin settings, reset settings or import working ones.</string>
+    <string name="corrupt_imported_preferences_error">Current settings are corrupt. From project management settings, reset settings or import working ones.</string>
 
     <!--
      ##############################################
@@ -1098,7 +1098,7 @@
     <string name="configure_with_qr_code">Configure with QR code</string>
     <!-- Text for the button that allows for manually entering project details. Should be short -->
     <string name="configure_manually">Manually enter project details</string>
-    <string name="project_config_tip">After you add your project, you can configure it in General and Admin Settings</string>
+    <string name="project_config_tip">After you add your project, you can configure it in Settings</string>
     <!-- Immediately followed by "Configure" which is a link to configure a Google Drive project -->
     <string name="gdrive_project">My project uses Google Drive.</string>
     <!-- Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project -->
