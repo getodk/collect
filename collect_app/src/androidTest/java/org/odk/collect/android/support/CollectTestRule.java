@@ -9,7 +9,6 @@ import androidx.test.core.app.ActivityScenario;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.support.pages.FirstLaunchPage;
@@ -19,20 +18,16 @@ import org.odk.collect.android.support.pages.ShortcutsPage;
 
 import java.util.function.Consumer;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 public class CollectTestRule implements TestRule {
 
-    private final boolean skipLaunchScreen;
+    private final boolean useDemoProject;
 
     public CollectTestRule() {
         this(true);
     }
 
     public CollectTestRule(boolean skipLaunchScreen) {
-        this.skipLaunchScreen = skipLaunchScreen;
+        this.useDemoProject = skipLaunchScreen;
     }
 
     @Override
@@ -40,10 +35,16 @@ public class CollectTestRule implements TestRule {
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
-                restart();
+                ActivityScenario.launch(SplashScreenActivity.class);
 
-                if (!CopyFormRule.projectCreated && skipLaunchScreen) {
-                    onView(withText(R.string.try_demo)).perform(click());
+                if (CopyFormRule.projectCreated) {
+                    new MainMenuPage().assertOnPage();
+                } else {
+                    FirstLaunchPage firstLaunchPage = new FirstLaunchPage().assertOnPage();
+
+                    if (useDemoProject) {
+                        firstLaunchPage.clickTryCollect();
+                    }
                 }
 
                 base.evaluate();
@@ -51,21 +52,16 @@ public class CollectTestRule implements TestRule {
         };
     }
 
-    public CollectTestRule restart() {
-        ActivityScenario.launch(SplashScreenActivity.class);
-        return this;
-    }
-
     public MainMenuPage startAtMainMenu() {
-        return new MainMenuPage().assertOnPage();
+        return new MainMenuPage();
     }
 
     public FirstLaunchPage startAtFirstLaunch() {
-        return new FirstLaunchPage().assertOnPage();
+        return new FirstLaunchPage();
     }
 
     public MainMenuPage withProject(String serverUrl) {
-        return new FirstLaunchPage().assertOnPage()
+        return startAtFirstLaunch()
                 .clickManuallyEnterProjectDetails()
                 .inputUrl(serverUrl)
                 .addProject();
