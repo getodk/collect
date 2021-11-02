@@ -31,7 +31,6 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     }
 
     fun addDuplicateProject(): MainMenuPage {
-        clickOnString(R.string.add_duplicate_project)
-        return MainMenuPage().assertOnPage()
+        return clickOnButtonInDialog(R.string.add_duplicate_project, MainMenuPage())
     }
 }
