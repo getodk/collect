@@ -20,14 +20,14 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
 
     fun assertDuplicateDialogShown(): QrCodeProjectCreatorDialogPage {
         onView(withText(getTranslatedString(R.string.duplicate_project_details)))
-            .inRoot(isDialog()).
-            check(matches(isDisplayed()))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
 
         return this
     }
 
     fun switchToExistingProject(): MainMenuPage {
-        return clickOnButtonInDialog(R.string.switch_to_existing, MainMenuPage());
+        return clickOnButtonInDialog(R.string.switch_to_existing, MainMenuPage())
     }
 
     fun addDuplicateProject(): MainMenuPage {
