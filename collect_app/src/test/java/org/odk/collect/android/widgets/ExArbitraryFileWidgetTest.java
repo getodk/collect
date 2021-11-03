@@ -1,40 +1,34 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
-import static org.robolectric.Shadows.shadowOf;
 
 public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWidget> {
     @Mock
     MediaUtils mediaUtils;
 
     @Mock
-    ExternalAppIntentProvider externalAppIntentProvider;
+    FileRequester fileRequester;
 
     @Override
     public StringData getInitialAnswer() {
@@ -51,7 +45,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @Override
     public ExArbitraryFileWidget createWidget() {
         return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), externalAppIntentProvider, new ActivityAvailability(activity));
+                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), fileRequester);
     }
 
     @Test
@@ -83,11 +77,9 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     }
 
     @Test
-    public void whenClickingOnButton_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
-        Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
+    public void whenClickingOnButton_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.exArbitraryFileButton.performClick();
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
+        verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, formEntryPrompt);
     }
 
     @Test

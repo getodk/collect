@@ -1,13 +1,11 @@
 package org.odk.collect.android.utilities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
-import org.odk.collect.android.R;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 
@@ -17,13 +15,10 @@ public class ExternalAppIntentProvider {
     // If an extra with this key is specified, it will be parsed as a URI and used as intent data
     private static final String URI_KEY = "uri_data";
 
-    public Intent getIntentToRunExternalApp(Context context, FormEntryPrompt formEntryPrompt, ActivityAvailability activityAvailability, PackageManager packageManager) throws ExternalParamsException, XPathSyntaxException {
+    public Intent getIntentToRunExternalApp(FormEntryPrompt formEntryPrompt) throws ExternalParamsException, XPathSyntaxException {
         String exSpec = formEntryPrompt.getAppearanceHint().replaceFirst("^ex[:]", "");
         final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
         final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
-        final String errorString;
-        String v = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_app);
 
         Intent intent = new Intent(intentName);
 
@@ -36,21 +31,23 @@ public class ExternalAppIntentProvider {
             exParams.remove(URI_KEY);
         }
 
-        if (!activityAvailability.isActivityAvailable(intent)) {
-            Intent launchIntent = packageManager.getLaunchIntentForPackage(intentName);
+        ExternalAppsUtils.populateParameters(intent, exParams, formEntryPrompt.getIndex().getReference());
+        return intent;
+    }
 
-            if (launchIntent != null) {
-                // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
-                launchIntent.setFlags(0);
-                intent = launchIntent;
-            }
-        }
+    // https://github.com/getodk/collect/issues/4194
+    public Intent getIntentToRunExternalAppWithoutDefaultCategory(FormEntryPrompt formEntryPrompt, PackageManager packageManager) throws ExternalParamsException {
+        String exSpec = formEntryPrompt.getAppearanceHint().replaceFirst("^ex[:]", "");
+        final String intentName = ExternalAppsUtils.extractIntentName(exSpec);
+        final Map<String, String> exParams = ExternalAppsUtils.extractParameters(exSpec);
 
-        if (activityAvailability.isActivityAvailable(intent)) {
+        Intent intent = packageManager.getLaunchIntentForPackage(intentName);
+        if (intent != null) {
+            // Make sure FLAG_ACTIVITY_NEW_TASK is not set because it doesn't work with startActivityForResult
+            intent.setFlags(0);
             ExternalAppsUtils.populateParameters(intent, exParams, formEntryPrompt.getIndex().getReference());
-            return intent;
-        } else {
-            throw new RuntimeException(errorString);
         }
+
+        return intent;
     }
 }

@@ -21,10 +21,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.OsmWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     public static final String OSM_EDIT_FILE_NAME = "OSM_EDIT_FILE_NAME";
 
     private final WaitingForDataRegistry waitingForDataRegistry;
-    private final ActivityAvailability activityAvailability;
+    private final IntentLauncher intentLauncher;
 
     private final List<OSMTag> osmRequiredTags;
     private final String instanceId;
@@ -55,10 +55,10 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     private final int formId;
 
     public OSMWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
-                     ActivityAvailability activityAvailability, FormController formController) {
+                     IntentLauncher intentLauncher, FormController formController) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.activityAvailability = activityAvailability;
+        this.intentLauncher = intentLauncher;
 
         formFileName = FileUtils.getFormBasenameFromMediaFolder(formController.getMediaFolder());
 
@@ -121,14 +121,12 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
             //send encode tag data structure to intent
             writeOsmRequiredTagsToExtras(launchIntent);
 
-            if (activityAvailability.isActivityAvailable(launchIntent)) {
-                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-                ((Activity) getContext()).startActivityForResult(launchIntent, RequestCodes.OSM_CAPTURE);
-            } else {
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+            intentLauncher.launchForResult((Activity) getContext(), launchIntent, RequestCodes.OSM_CAPTURE, () -> {
                 waitingForDataRegistry.cancelWaitingForData();
                 binding.errorText.setVisibility(View.VISIBLE);
-            }
-
+                return null;
+            });
         } catch (Exception ex) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle(R.string.alert);

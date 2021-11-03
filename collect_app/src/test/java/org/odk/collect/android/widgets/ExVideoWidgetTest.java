@@ -1,23 +1,20 @@
 package org.odk.collect.android.widgets;
 
-import android.content.Intent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.StringData;
-import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -27,19 +24,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
 import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
-import static org.robolectric.Shadows.shadowOf;
 
 public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Mock
     MediaUtils mediaUtils;
 
     @Mock
-    ExternalAppIntentProvider externalAppIntentProvider;
+    FileRequester fileRequester;
 
     @Before
     public void setup() {
@@ -61,7 +56,7 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     @Override
     public ExVideoWidget createWidget() {
         return new ExVideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, fileRequester);
     }
 
     @Test
@@ -115,11 +110,9 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     }
 
     @Test
-    public void whenClickingOnChooseButton_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
-        Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
+    public void whenCaptureVideoButtonClicked_exWidgetIntentLauncherShouldBeStarted() {
         getWidget().binding.captureVideoButton.performClick();
-        assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
+        verify(fileRequester).launch(activity, ApplicationConstants.RequestCodes.EX_VIDEO_CHOOSER, formEntryPrompt);
     }
 
     @Test

@@ -14,16 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
-import static android.content.Intent.ACTION_SENDTO;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -34,18 +31,15 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ActivityAvailability;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.ui.ToastUtils;
 
-import javax.inject.Inject;
+import java.io.Serializable;
 
 import timber.log.Timber;
 
@@ -90,18 +84,16 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class ExStringWidget extends StringWidget implements WidgetDataReceiver, ButtonClickListener {
-    protected static final String DATA_NAME = "value";
     private final WaitingForDataRegistry waitingForDataRegistry;
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
+    private final StringRequester stringRequester;
 
-    @Inject
-    public ActivityAvailability activityAvailability;
-
-    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
+    public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails);
         this.waitingForDataRegistry = waitingForDataRegistry;
+        this.stringRequester = stringRequester;
         getComponent(context).inject(this);
     }
 
@@ -122,14 +114,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         return v != null ? v : getContext().getString(R.string.launch_app);
     }
 
-    protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, getFormEntryPrompt().getAnswerText());
-        try {
-            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_STRING_CAPTURE);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+    protected Serializable getAnswerForIntent() {
+        return getFormEntryPrompt().getAnswerText();
+    }
+
+    protected int getRequestCode() {
+        return RequestCodes.EX_STRING_CAPTURE;
     }
 
     @Override
@@ -180,17 +170,10 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        try {
-            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
-            // ACTION_SENDTO used for sending text messages or emails doesn't require any results
-            if (ACTION_SENDTO.equals(intent.getAction())) {
-                getContext().startActivity(intent);
-            } else {
-                fireActivity(intent);
-            }
-        } catch (Exception | Error e) {
-            onException(e.getMessage());
-        }
+        stringRequester.launch((Activity) getContext(), getRequestCode(), getFormEntryPrompt(), getAnswerForIntent(), (String errorMsg) -> {
+            onException(errorMsg);
+            return null;
+        });
     }
 
     private void focusAnswer() {

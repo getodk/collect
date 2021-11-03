@@ -70,7 +70,6 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -83,8 +82,10 @@ import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.PlaybackFailedException;
@@ -122,13 +123,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public AudioHelperFactory audioHelperFactory;
 
     @Inject
-    ActivityAvailability activityAvailability;
-
-    @Inject
     PermissionsProvider permissionsProvider;
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    FileRequester fileRequester;
+
+    @Inject
+    StringRequester stringRequester;
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
@@ -174,14 +178,15 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 waitingForDataRegistry,
                 questionMediaManager,
                 audioPlayer,
-                activityAvailability,
                 new RecordingRequesterProvider(
                         internalRecordingRequester,
                         externalAppRecordingRequester
                 ),
                 formEntryViewModel,
                 audioRecorder,
-                viewLifecycle
+                viewLifecycle,
+                fileRequester,
+                stringRequester
         );
 
         widgets = new ArrayList<>();

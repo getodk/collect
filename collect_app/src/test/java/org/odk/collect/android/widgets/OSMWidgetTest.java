@@ -16,15 +16,16 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.testshared.ErrorIntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowActivity;
 
 import java.io.File;
@@ -55,7 +56,7 @@ public class OSMWidgetTest {
 
     private WidgetTestActivity widgetActivity;
     private ShadowActivity shadowActivity;
-    private ActivityAvailability activityAvailability;
+    private IntentLauncher intentLauncher;
     private FormController formController;
     private QuestionDef questionDef;
 
@@ -64,12 +65,11 @@ public class OSMWidgetTest {
         widgetActivity = widgetTestActivity();
         shadowActivity = shadowOf(widgetActivity);
 
-        activityAvailability = mock(ActivityAvailability.class);
+        intentLauncher = IntentLauncherImpl.INSTANCE;
         formController = mock(FormController.class);
         FormDef formDef = mock(FormDef.class);
         questionDef = mock(QuestionDef.class);
 
-        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(true);
         when(formController.getInstanceFile()).thenReturn(instancePath);
         when(formController.getMediaFolder()).thenReturn(mediaFolder);
         when(formController.getSubmissionMetadata()).thenReturn(
@@ -189,7 +189,8 @@ public class OSMWidgetTest {
 
     @Test
     public void clickingButton_whenActivityIsNotAvailable_showsErrorTextView() {
-        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
+        intentLauncher = new ErrorIntentLauncher();
+
         OSMWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.launchOpenMapKitButton.performClick();
 
@@ -197,12 +198,12 @@ public class OSMWidgetTest {
     }
 
     @Test
-    public void clickingButton_whenActivityIsNotAvailable_DoesNotLAunchAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(ArgumentMatchers.any())).thenReturn(false);
+    public void clickingButton_whenActivityIsNotAvailable_CancelsWaitingForData() {
+        intentLauncher = new ErrorIntentLauncher();
+
         OSMWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.launchOpenMapKitButton.performClick();
 
-        assertThat(shadowActivity.getNextStartedActivity(), nullValue());
         assertThat(fakeWaitingForDataRegistry.waiting.isEmpty(), is(true));
     }
 
@@ -237,7 +238,7 @@ public class OSMWidgetTest {
         when(questionDef.getOsmTags()).thenReturn(ImmutableList.<OSMTag>of());
 
         return new OSMWidget(widgetActivity, new QuestionDetails(prompt),
-                fakeWaitingForDataRegistry, activityAvailability, formController);
+                fakeWaitingForDataRegistry, intentLauncher, formController);
     }
 
     private void assertIntentExtrasEquals(String fileName) {

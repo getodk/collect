@@ -15,23 +15,19 @@
 package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
-import timber.log.Timber;
-
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
+import java.io.Serializable;
 
 /**
  * Launch an external app to supply a decimal value. If the app
@@ -42,20 +38,19 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 @SuppressLint("ViewConstructor")
 public class ExDecimalWidget extends ExStringWidget {
 
-    public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, waitingForDataRegistry);
+    public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
+        super(context, questionDetails, waitingForDataRegistry, stringRequester);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 
     @Override
-    protected void fireActivity(Intent i) throws ActivityNotFoundException {
-        i.putExtra(DATA_NAME, StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue()));
-        try {
-            ((Activity) getContext()).startActivityForResult(i, RequestCodes.EX_DECIMAL_CAPTURE);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+    protected Serializable getAnswerForIntent() {
+        return StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(getFormEntryPrompt().getAnswerValue());
+    }
+
+    @Override
+    protected int getRequestCode() {
+        return RequestCodes.EX_DECIMAL_CAPTURE;
     }
 
     @Override

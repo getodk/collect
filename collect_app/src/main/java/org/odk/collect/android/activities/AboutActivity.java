@@ -16,13 +16,9 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -31,13 +27,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
-import java.util.List;
-
-import timber.log.Timber;
+import javax.inject.Inject;
 
 public class AboutActivity extends CollectAbstractActivity implements
         AboutListAdapter.AboutItemClickListener {
@@ -50,10 +45,15 @@ public class AboutActivity extends CollectAbstractActivity implements
     private Uri websiteUri;
     private Uri forumUri;
 
+    @Inject
+    IntentLauncher intentLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_layout);
+        DaggerUtils.getComponent(this).inject(this);
+
         initToolbar();
 
         int[][] items = {
@@ -103,37 +103,16 @@ public class AboutActivity extends CollectAbstractActivity implements
                             getString(R.string.tell_your_friends)));
                     break;
                 case 3:
-                    boolean intentStarted = false;
-                    try {
-                        // Open the google play store app if present
-                        Intent intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=" + getPackageName()));
-                        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-                        for (ResolveInfo info : list) {
-                            ActivityInfo activity = info.activityInfo;
-                            if (activity.name.contains("com.google.android")) {
-                                ComponentName name = new ComponentName(
-                                        activity.applicationInfo.packageName,
-                                        activity.name);
-                                intent.setComponent(name);
-                                startActivity(intent);
-                                intentStarted = true;
-                            }
-                        }
-                    } catch (android.content.ActivityNotFoundException anfe) {
-                        Toast.makeText(Collect.getInstance(),
-                                getString(R.string.activity_not_found, "market view"),
-                                Toast.LENGTH_SHORT).show();
-                        Timber.d(anfe);
-                    }
-                    if (!intentStarted) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=" + getPackageName()));
+                    intentLauncher.launch(this, intent, () -> {
                         // Show a list of all available browsers if user doesn't have a default browser
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
-                    }
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GOOGLE_PLAY_URL + getPackageName())));
+                        return null;
+                    });
                     break;
                 case 4:
-                    Intent intent = new Intent(this, WebViewActivity.class);
+                    intent = new Intent(this, WebViewActivity.class);
                     intent.putExtra(ExternalWebPageHelper.OPEN_URL, LICENSES_HTML_PATH);
                     startActivity(intent);
                     break;

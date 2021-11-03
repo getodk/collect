@@ -12,8 +12,10 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.FileProvider;
+import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.testshared.ErrorIntentLauncher;
 import org.odk.collect.testshared.FakeScheduler;
 import org.robolectric.Robolectric;
 import org.robolectric.fakes.RoboMenuItem;
@@ -33,7 +35,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(AndroidJUnit4.class)
 public class QRCodeMenuDelegateTest {
 
-    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
+    private IntentLauncher intentLauncher;
     private final QRCodeGenerator qrCodeGenerator = mock(QRCodeGenerator.class);
     private final AppConfigurationGenerator appConfigurationGenerator = mock(AppConfigurationGenerator.class);
     private final FileProvider fileProvider = mock(FileProvider.class);
@@ -45,13 +47,17 @@ public class QRCodeMenuDelegateTest {
     @Before
     public void setup() {
         activity = Robolectric.setupActivity(FragmentActivity.class);
-        menuDelegate = new QRCodeMenuDelegate(activity, activityAvailability, qrCodeGenerator,
+        intentLauncher = IntentLauncherImpl.INSTANCE;
+        setupMenuDelegate();
+    }
+
+    private void setupMenuDelegate() {
+        menuDelegate = new QRCodeMenuDelegate(activity, intentLauncher, qrCodeGenerator,
                 appConfigurationGenerator, fileProvider, TestSettingsProvider.getSettingsProvider(), fakeScheduler);
     }
 
     @Test
     public void clickingOnImportQRCode_startsExternalImagePickerIntent() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_scan_sd_card));
 
         ShadowActivity.IntentForResult intentForResult = shadowOf(activity).getNextStartedActivityForResult();
@@ -63,7 +69,8 @@ public class QRCodeMenuDelegateTest {
 
     @Test
     public void clickingOnImportQRCode_whenPickerActivityNotAvailable_showsToast() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
+        intentLauncher = new ErrorIntentLauncher();
+        setupMenuDelegate();
         menuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_item_scan_sd_card));
 
         assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));

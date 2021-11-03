@@ -36,6 +36,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation project(path: ':async')
     implementation project(path: ':shared')
+    implementation project(path: ':androidshared')
     implementation Dependencies.androidx_recyclerview
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx

@@ -86,6 +86,11 @@ import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
+import org.odk.collect.android.widgets.utilities.StringRequester;
+import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
@@ -103,7 +108,6 @@ import org.odk.collect.android.projects.ProjectDetailsCreator;
 import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.ChangeLockProvider;
@@ -116,7 +120,6 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.LaunchState;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -124,6 +127,8 @@ import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -221,15 +226,11 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ActivityAvailability providesActivityAvailability(Context context) {
-        return new ActivityAvailability(context);
-    }
-
-    @Provides
     @Singleton
     public SettingsProvider providesSettingsProvider(Context context) {
         return new SharedPreferencesSettingsProvider(context);
     }
+
 
     @Provides
     InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
@@ -609,5 +610,20 @@ public class AppDependencyModule {
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.LAYERS),
                 storagePathProvider.getOdkDirPath(StorageSubdirectory.SHARED_LAYERS)
         );
+    }
+
+    @Provides
+    public IntentLauncher providesIntentLauncher() {
+        return IntentLauncherImpl.INSTANCE;
+    }
+
+    @Provides
+    public FileRequester providesFileRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
+        return new FileRequesterImpl(intentLauncher, externalAppIntentProvider);
+    }
+
+    @Provides
+    public StringRequester providesStringRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
+        return new StringRequesterImpl(intentLauncher, externalAppIntentProvider);
     }
 }

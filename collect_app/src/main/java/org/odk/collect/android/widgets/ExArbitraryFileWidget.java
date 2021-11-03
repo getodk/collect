@@ -3,40 +3,31 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.TypedValue;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.ui.ToastUtils;
-
-import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
 
-    private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ActivityAvailability activityAvailability;
+    private final FileRequester fileRequester;
 
     public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
-                                 ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
+                                 FileRequester fileRequester) {
         super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
-        this.externalAppIntentProvider = externalAppIntentProvider;
-        this.activityAvailability = activityAvailability;
+        this.fileRequester = fileRequester;
     }
 
     @Override
@@ -88,20 +79,6 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
-            fireActivityForResult(intent);
-        } catch (Exception | Error e) {
-            ToastUtils.showLongToast(getContext(), e.getMessage());
-        }
-    }
-
-    private void fireActivityForResult(Intent intent) {
-        try {
-            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+        fileRequester.launch((Activity) getContext(), ApplicationConstants.RequestCodes.EX_ARBITRARY_FILE_CHOOSER, getFormEntryPrompt());
     }
 }

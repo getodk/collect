@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -13,17 +12,15 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExImageWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
@@ -38,21 +35,19 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
     private final MediaUtils mediaUtils;
-    private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ActivityAvailability activityAvailability;
+    private final FileRequester fileRequester;
 
     File answerFile;
 
     public ExImageWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
+                         FileRequester fileRequester) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.mediaUtils = mediaUtils;
-        this.externalAppIntentProvider = externalAppIntentProvider;
-        this.activityAvailability = activityAvailability;
+        this.fileRequester = fileRequester;
     }
 
     @Override
@@ -133,21 +128,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void launchExternalApp() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-        try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
-            fireActivityForResult(intent);
-        } catch (Exception | Error e) {
-            ToastUtils.showLongToast(getContext(), e.getMessage());
-        }
-    }
-
-    private void fireActivityForResult(Intent intent) {
-        try {
-            ((Activity) getContext()).startActivityForResult(intent, ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER);
-        } catch (SecurityException e) {
-            Timber.i(e);
-            ToastUtils.showLongToast(getContext(), R.string.not_granted_permission);
-        }
+        fileRequester.launch((Activity) getContext(), ApplicationConstants.RequestCodes.EX_IMAGE_CHOOSER, getFormEntryPrompt());
     }
 
     private void setupAnswerFile(String fileName) {

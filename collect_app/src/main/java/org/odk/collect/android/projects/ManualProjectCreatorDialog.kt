@@ -26,8 +26,8 @@ import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
-import org.odk.collect.android.utilities.ActivityAvailability
 import org.odk.collect.android.utilities.SoftKeyboardController
+import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
@@ -64,7 +64,7 @@ class ManualProjectCreatorDialog :
     lateinit var settingsProvider: SettingsProvider
 
     @Inject
-    lateinit var activityAvailability: ActivityAvailability
+    lateinit var intentLauncher: IntentLauncher
 
     lateinit var settingsConnectionMatcher: SettingsConnectionMatcher
 
@@ -188,9 +188,7 @@ class ManualProjectCreatorDialog :
             object : PermissionListener {
                 override fun granted() {
                     val intent: Intent = googleAccountsManager.accountChooserIntent
-                    if (activityAvailability.isActivityAvailable(intent)) {
-                        googleAccountResultLauncher.launch(intent)
-                    } else {
+                    intentLauncher.launchForResult(googleAccountResultLauncher, intent) {
                         ToastUtils.showShortToast(
                             requireContext(),
                             getString(
