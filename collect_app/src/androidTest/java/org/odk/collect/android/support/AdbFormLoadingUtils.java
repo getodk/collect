@@ -84,10 +84,6 @@ public final class AdbFormLoadingUtils {
         copyFileFromAssets("instances/" + instanceFileName, instanceDirPath + "/" + instanceFileName);
     }
 
-    public static FormActivityTestRule getFormActivityTestRuleFor(String formFilename) {
-        return new FormActivityTestRule(formFilename);
-    }
-
     private static String copyForm(String formFilename, String copyTo, String projectName) throws IOException {
         String pathname = getFormsDirPath(projectName) + copyTo;
         copyFileFromAssets("forms/" + formFilename, pathname);

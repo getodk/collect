@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
@@ -20,7 +19,7 @@ public class DynamicPreLoadedDataSelects {
 
     private static final String EXTERNAL_CSV_SEARCH_FORM = "external-csv-search.xml";
 
-    public FormActivityTestRule rule = AdbFormLoadingUtils.getFormActivityTestRuleFor(EXTERNAL_CSV_SEARCH_FORM);
+    public FormActivityTestRule rule = new FormActivityTestRule(EXTERNAL_CSV_SEARCH_FORM, "external-csv-search");
 
     @Rule
     public RuleChain copyFormChain = RuleChain

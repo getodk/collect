@@ -43,7 +43,6 @@ import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
@@ -84,7 +83,7 @@ public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
 
     @Rule
-    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(FIELD_LIST_TEST_FORM);
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule(FIELD_LIST_TEST_FORM, "fieldlist-updates");
 
     @Rule
     public RuleChain copyFormChain = RuleChain

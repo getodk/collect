@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.TestRuleChain;
@@ -14,7 +13,7 @@ public class ContextMenuTest {
     private static final String STRING_WIDGETS_TEST_FORM = "string_widgets_in_field_list.xml";
 
     @Rule
-    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(STRING_WIDGETS_TEST_FORM);
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule(STRING_WIDGETS_TEST_FORM, "fl");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
