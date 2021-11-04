@@ -17,10 +17,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -29,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.ShowQrcodeFragmentBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
@@ -39,28 +36,16 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PASSWORD;
 
 public class ShowQRCodeFragment extends Fragment {
+    ShowQrcodeFragmentBinding binding;
 
     private final boolean[] checkedItems = {true, true};
     private final boolean[] passwordsSet = {true, true};
-
-    @BindView(R.id.ivQRcode)
-    ImageView ivQRCode;
-    @BindView(R.id.circularProgressBar)
-    ProgressBar progressBar;
-    @BindView(R.id.tvPasswordWarning)
-    TextView tvPasswordWarning;
-    @BindView(R.id.status)
-    LinearLayout passwordStatus;
 
     private AlertDialog dialog;
 
@@ -81,33 +66,34 @@ public class ShowQRCodeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.show_qrcode_fragment, container, false);
-        ButterKnife.bind(this, view);
+        binding = ShowQrcodeFragmentBinding.inflate(inflater);
+        binding.tvPasswordWarning.setOnClickListener(v -> passwordWarningClicked());
+
         setHasOptionsMenu(true);
         passwordsSet[0] = !settingsProvider.getAdminSettings().getString(KEY_ADMIN_PW).isEmpty();
         passwordsSet[1] = !settingsProvider.getGeneralSettings().getString(KEY_PASSWORD).isEmpty();
 
         qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
             if (bitmap != null) {
-                progressBar.setVisibility(GONE);
-                ivQRCode.setVisibility(VISIBLE);
-                ivQRCode.setImageBitmap(bitmap);
+                binding.circularProgressBar.setVisibility(GONE);
+                binding.ivQRcode.setVisibility(VISIBLE);
+                binding.ivQRcode.setImageBitmap(bitmap);
             } else {
-                progressBar.setVisibility(VISIBLE);
-                ivQRCode.setVisibility(GONE);
+                binding.circularProgressBar.setVisibility(VISIBLE);
+                binding.ivQRcode.setVisibility(GONE);
             }
         });
 
         qrCodeViewModel.getWarning().observe(this.getViewLifecycleOwner(), warning -> {
             if (warning != null) {
-                tvPasswordWarning.setText(warning);
-                passwordStatus.setVisibility(VISIBLE);
+                binding.tvPasswordWarning.setText(warning);
+                binding.status.setVisibility(VISIBLE);
             } else {
-                passwordStatus.setVisibility(GONE);
+                binding.status.setVisibility(GONE);
             }
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -120,8 +106,7 @@ public class ShowQRCodeFragment extends Fragment {
         ).get(QRCodeViewModel.class);
     }
 
-    @OnClick(R.id.tvPasswordWarning)
-    void passwordWarningClicked() {
+    private void passwordWarningClicked() {
         if (dialog == null) {
             final String[] items = {
                     getString(R.string.admin_password),
