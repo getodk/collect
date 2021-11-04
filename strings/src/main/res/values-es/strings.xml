@@ -477,6 +477,8 @@
   <string name="location_tracking_notification_channel_name">Seguimiento de ubicación</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Monitoreando ubicación…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Obtenga ayuda con las capas de referencia</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -514,23 +516,32 @@
   <string name="form_update_error">Error al actualizar formulario</string>
   <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
+  <string name="all_downloads_succeeded">¡Todas las descargas se realizaron correctamente!</string>
+  <string name="some_downloads_failed">%1$s de %2$s descargas fallidas!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="show_details">Mostrar detalles</string>
+  <string name="form_details">ID: %1$s Version: %2$s</string>
   <string name="failure">Falla</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Si sigue teniendo este problema, infórmelo a la persona que le pidió que recopile los datos.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">La aplicación no se ha podido conectar al servidor %s. ¿Ingresó la URL correctamente?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">La aplicación no se puede conectar de forma segura al servidor en %s. ¿Ingresaste la URL correctamente?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">El servidor %1$s devolvió código de estado %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">El servidor %s proporcionó una respuesta no válida.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">El servidor no proporcionó un hash para este formulario.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Este formulario no se puede procesar.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">Se produjo un error de disco en el dispositivo al descargar este formulario.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">Este formulario tiene una URL de envío inválida.</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -831,7 +842,7 @@
   <string name="generate">Generar</string>
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
-  <string name="corrupt_imported_preferences_error">Los ajustes actuales están corruptos. Desde la configuración de administrador, restablecer la configuración o importar.</string>
+  <string name="corrupt_imported_preferences_error">La configuración actual está dañada. Desde la configuración de gestión de proyectos, restablezca la configuración o importe las que funcionan.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -899,7 +910,7 @@
   <string name="configure_with_qr_code">Configure mediante código QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ingrese manualmente los detalles del proyecto</string>
-  <string name="project_config_tip">Después de agregar su proyecto, puede configurarlo en Configuración general y de administrador</string>
+  <string name="project_config_tip">Después de agregar su proyecto, puede configurarlo en Configuración</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Mi proyecto usa Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -914,4 +925,5 @@
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="errors">Errores</string>
 </resources>

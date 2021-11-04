@@ -127,7 +127,7 @@
   <string name="save_form_as">Nommer le formulaire :</string>
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="mark_finished">Marquer le formulaire comme finalisé</string>
-  <string name="quit_entry">Enregistrer formulaire et sortir</string>
+  <string name="quit_entry">Enregistrer le formulaire et sortir</string>
   <string name="data_saved_error">Désolé, l\'enregistrement du formulaire a échoué.</string>
   <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
   <string name="save_point_error">Erreur lors de l\'enregistrement du point de récupération: %s</string>
@@ -477,6 +477,8 @@
   <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Enregistrement de la localisation…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Obtenir de l\'aide au sujet des couches de référence</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -516,6 +518,7 @@
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
   <string name="all_downloads_succeeded">Succès de tous les téléchargements!</string>
   <string name="some_downloads_failed">%1$s de %2$s téléchargements ont échoués.</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="show_details">Montrer détails</string>
   <string name="form_details">ID: %1$s Version: %2$s</string>
   <string name="failure">Échec</string>
@@ -523,21 +526,21 @@
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Si vous continuez à avoir ce problème, avertissez la personne qui vous a demandé de collecter les données.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">Collect n\'arrive pas à joindre le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">Collect n\'arrive pas à établir une connexion sécurisée avec le serveur à %s. Avez-vous entré l\'URL correctement ?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Le serveur %1$s a retourné le code de réponse %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Le serveur %s a fourni une réponse invalide.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Le serveur n\'a pas fourni d\'identifiant hash pour le formulaire à télécharger.</string>
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_parsing_error">Ce formulaire ne peut pas être traité.</string>
-  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Une erreur de disque s\'est produite en cours du téléchargement de ce formulaire.</string>
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_invalid_submission_error">L\'URL de soumission de ce formulaire n\'est pas valide.</string>
   <!--##############################################
     # DELETE SAVED FORM
@@ -839,7 +842,7 @@
   <string name="generate">Générer</string>
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
-  <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres d’administrateur, réinitialisez les paramètres ou importez ceux qui fonctionnent.</string>
+  <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres de gestion de projet, réinitialisez les paramètres ou importez-en d\'autres qui fonctionnent.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -906,7 +909,7 @@
   <string name="configure_with_qr_code">Configurer par QR code</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Saisir les détails du projet</string>
-  <string name="project_config_tip">Après avoir ajouté un projet, vous pouvez le configurer dans les Paramètres généraux et d\'administration</string>
+  <string name="project_config_tip">Après avoir ajouté un projet, vous pouvez le configurer dans les Paramètres</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Mon projet utilise Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->

@@ -474,6 +474,8 @@
   <string name="location_tracking_notification_channel_name">Melacak lokasi</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Lokasi pelacakan</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Minta bantuan untuk Lapisan Referensi</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -511,23 +513,32 @@
   <string name="form_update_error">Pembaruan formulir tidak berhasil</string>
   <string name="form_update_succeeded">Pembaruan formulir berhasil</string>
   <string name="load_remote_form_error">Unduhan daftar formulir tidak berhasil</string>
+  <string name="all_downloads_succeeded">Seluruh unduhan telah berhasil!</string>
+  <string name="some_downloads_failed">%1$s dari %2$s unduhan tidak berhasil!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="show_details">Tampilkan rincian</string>
+  <string name="form_details">ID: %1$s Versi: %2$s</string>
   <string name="failure">Tidak Berhasil</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Jika anda terus mengalami masalah ini, laporkan ke orang yang meminta anda untuk mengumpulkan data.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">ODK Collect tidak dapat menghubung server di %s. Apakah anda sudah memasukkan URL dengan benar?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Peladen %1$s rmengembalikan kode status %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Peladen %s mengembalikan respon tidak valid.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">Server tidak menyediakan hash untuk formulir ini.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Formulir ini tidak dapat diproses.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">Terjadi kesalahan penyimpanan pada perangkat saat mengunduh formulir ini. </string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">Formulir ini memiliki URL pengiriman yang tidak valid.</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -576,6 +587,7 @@
   <string name="experimental">Eksperimental</string>
   <string name="protected_settings">Terlindung</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">Buka kunci pengaturan yang dilindungi </string>
   <!--Subtext of a settings section-->
   <string name="unlock_protected_settings_section_subtext">Ubah kata sandi, atur kontrol akses</string>
   <string name="set_admin_password">Atur kata sandi admin</string>
@@ -609,6 +621,7 @@
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema terang</string>
   <string name="theme_dark">Tema gelap</string>
+  <string name="theme_system">Gunakan tema perangkat</string>
   <string name="language">Bahasa</string>
   <string name="use_device_language">Gunakan bahasa perangkat</string>
   <string name="font_size">Ukuran teks font</string>
@@ -696,6 +709,7 @@
   <string name="instance_sync_summary">Formulir yang rusak akan langsung ditambahkan ke berkas instance</string>
   <string name="analytics_preferences">Penggunaan data</string>
   <string name="analytics">Kumpulkan data pengguna anonim</string>
+  <string name="analytics_summary">Data penggunaan anonim membantu tim ODK untuk memprioritaskan perbaikan dan fitur.</string>
   <string name="form_metadata_title">Metadata Formulir</string>
   <string name="form_metadata">Metadata formulir</string>
   <string name="form_metadata_summary">Semua nilai ini akan ditambahkan ke formulir yang menyediakan field nama pengguna, email dan/atau telepon untuk mengidentifikasi orang yang mengirimkan data.</string>
@@ -710,6 +724,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <string name="unlock_settings">Buka kunci pengaturan</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">Pengaturan tidak terkunci</string>
   <!--##############################################
      # ADMIN SETTINGS
      ##############################################-->
@@ -824,7 +839,6 @@
   <string name="generate">Generate</string>
   <string name="invalid_qrcode">QR code tidak mengandung pengaturan yang benar</string>
   <string name="qr_code_not_found">Kode QR tidak ditemukan pada gambar terpilih</string>
-  <string name="corrupt_imported_preferences_error">Pengaturan yang sekarang bermasalah. Dari pengaturan admin, set ulang pengaturan atau impor pengaturan.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -867,14 +881,20 @@
   <string name="project_icon">Simbol Proyek</string>
   <string name="project_color">Warna Proyek</string>
   <!--Toast text shown when the current project is changed-->
+  <string name="switched_project">Telah beralih ke %s</string>
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <string name="using_project">Menggunakan %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <string name="switch_to_project">Beralih ke %s</string>
   <string name="delete_project_confirm_message">Seluruh formulir kosong, kiriman dan pengaturan akan dihapus secara permanen</string>
   <string name="delete_project_yes">Ya</string>
   <string name="delete_project_no">Tidak</string>
   <string name="cannot_delete_project_title">Proyek tidak bisa dihapus</string>
   <string name="cannot_delete_project_message_one">Anda memiliki kiriman yang belum terkirim. Untuk menghapus proyek tersebut, Anda harus mengirim atau menghapus kiriman tersebut terlebih dahulu.</string>
   <string name="cannot_delete_project_message_two">Tugas latar belakang sedang berjalan. Silakan coba lagi nanti</string>
+  <string name="or">ATAU</string>
+  <string name="hex_color">Warna heksagonal</string>
+  <string name="invalid_hex_code">Kode heksa tidak valid</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
@@ -885,7 +905,6 @@
   <string name="configure_with_qr_code">Konfigurasi dengan QR kode</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Masukkan rincian proyek secara manual</string>
-  <string name="project_config_tip">Setelah Anda menambahkan proyek Anda, Anda dapat mengkonfigurasinya pada pengaturan umum dan Admin.</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Proyek saya menggunakan Google Drive</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -900,4 +919,5 @@
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="errors">Kesalahan</string>
 </resources>

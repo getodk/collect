@@ -477,6 +477,8 @@
   <string name="location_tracking_notification_channel_name">Tracciamento della posizione</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Monitoraggio della posizione…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Ottieni aiuto con i livelli di riferimento</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -514,23 +516,32 @@
   <string name="form_update_error">Aggiornamento Formulario fallito</string>
   <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
   <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
+  <string name="all_downloads_succeeded">Tutti i download sono riusciti!</string>
+  <string name="some_downloads_failed">%1$s di %2$s downloads falliti!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="show_details">Mostra dettagli</string>
+  <string name="form_details">ID: %1$s Versione: %2$s</string>
   <string name="failure">Errore</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Se continui ad avere questo problema, segnalalo alla persona che ti ha chiesto di raccogliere i dati.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">Collect non può raggiungere il server %s. Hai inserito correttamente l\'URL?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">Collect non può connettersi in modo sicuro al server %s. Hai inserito correttamente l\'URL?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Il server %1$s ha restituito il codice di stato %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Il server %s ha fornito una risposta non valida.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">Il server non ha fornito un hash per questo modulo.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Questo formulario non può essere elaborato.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">Si è verificato un errore del disco sul dispositivo durante il download di questo modulo.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">Questo formulario ha un URL di invio non valido.</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -831,7 +842,6 @@
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
-  <string name="corrupt_imported_preferences_error">Le impostazioni attuali sono danneggiate. Dalle impostazioni di amministrazione, ripristinare le impostazioni o importare quelle funzionanti.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -898,7 +908,7 @@
   <string name="configure_with_qr_code">Configurare attraverso codice QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Inserisci manualmente i dettagli del progetto</string>
-  <string name="project_config_tip">Dopo aver aggiunto il progetto, puoi configurarlo in Impostazioni generali e Impostazioni amministratore</string>
+  <string name="project_config_tip">Dopo aver aggiunto il progetto, puoi configurarlo in Impostazioni</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Il mio progetto utilizza Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -913,4 +923,5 @@
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="errors">Errori</string>
 </resources>

@@ -483,6 +483,8 @@
   <string name="location_tracking_notification_channel_name">Sledování polohy</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Sledování polohy…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Získejte nápovědu k referenčním vrstvám</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -520,23 +522,32 @@
   <string name="form_update_error">Aktualizace formuláře se nezdařila</string>
   <string name="form_update_succeeded">Aktualizace formuláře byla úspěšná</string>
   <string name="load_remote_form_error">Stažení seznamu formulářů se nezdařilo</string>
+  <string name="all_downloads_succeeded">Všechna stažení se podařila!</string>
+  <string name="some_downloads_failed">%1$sz %2$s stažení se nepodařilo!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="show_details">Zobrazit detaily</string>
+  <string name="form_details">ID: %1$s Verze: %2$s</string>
   <string name="failure">Selhání</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Pokud problém přetrvává, nahlaste jej osobě, která vás požádala o sběr dat.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">Collect nemůže kontaktovat server na %s. Zadali jste adresu URL správně?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">Collect se nemůže bezpečně připojit k serveru na %s. Zadali jste URL správně?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Server %1$s vrátil stavový kód %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Server %s poskytl neplatnou odpověď.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">Server neposkytl hash pro tento formulář.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Tento formulář nelze zpracovat.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">Při stahování tohoto formuláře došlo na zařízení k chybě disku.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">Tento formulář má neplatnou adresu URL pro odeslání.</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -837,7 +848,6 @@
   <string name="generate">Vytvořit</string>
   <string name="invalid_qrcode">Kód QR neobsahuje platná nastavení</string>
   <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
-  <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozeno. Z nastavení administrátora obnovte nastavení nebo importujte pracovní nastavení.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -904,7 +914,7 @@
   <string name="configure_with_qr_code">Nakonfigurujte pomocí QR kódu</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ručně zadejte podrobnosti projektu</string>
-  <string name="project_config_tip">Po přidání projektu jej můžete nakonfigurovat v části Obecná nastavení a Nastavení správce.</string>
+  <string name="project_config_tip">Po přidání projektu jej můžete nakonfigurovat v části Nastavení</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Můj projekt používá Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
@@ -919,4 +929,5 @@
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="errors">Chyby</string>
 </resources>

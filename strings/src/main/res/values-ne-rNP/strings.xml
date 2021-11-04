@@ -265,6 +265,7 @@
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -293,17 +294,18 @@
   <string name="fetching_file">%1$s.\n\nफारम प्राप्त गरिदै | %3$s फारम(हरू) मध्येको %2$s </string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
   <string name="version">संस्करण:</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
-  <!--Error message displayed when Collect can't connect to a server-->
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
-  <!--Error message displayed when a server returns an error status code-->
-  <!--Error message displayed when a server returns an invalid response body-->
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->

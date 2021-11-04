@@ -474,6 +474,7 @@ Hashize: %2$s</string>
   <string name="view_data">Reba Form Wabitse </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <!--Text of button user can press to get help when setting up Reference Layers-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -511,23 +512,24 @@ Hashize: %2$s</string>
   <string name="form_update_error">Gushyira ifishi ku gihe ntibyakunze</string>
   <string name="form_update_succeeded">Gushyira ku gihe ifishi byagenze neza</string>
   <string name="load_remote_form_error">Kubika amakuru ari mu ifishi kuri tabuleti ntibyakunze</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="failure">Ntibyakunze</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Mu gihe ukomeje guhura niki kibazo, baza uwagusabye gutanga aya makuru</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">Collect ntibasha kugera kuri seriveri kuri %s. Ese winjijemo linki neza</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">Collect ntibasha guhura na seriveri kuri %s. Ese winjijemo linki neza</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Seriveri %1$s irerekana kode %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Server 1%s yatanze amakuru atariyo </string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
-  <!--Error message displayed when a disk error occurs during form download-->
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -808,7 +810,6 @@ Hashize: %2$s</string>
   <string name="generate">Kubyaza </string>
   <string name="invalid_qrcode">Kode za QR ntabwo zirimo settings zuzuye</string>
   <string name="qr_code_not_found">QR code y\'ishusho wakanzeho ntiyabonetse </string>
-  <string name="corrupt_imported_preferences_error">Igenamiterere zagize ikibazo. Uhereye ku igenamiterere rya Muyobozi, Hindura cg tangiza igenamiterere cg uzanemo inshya zikora. </string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -871,7 +872,6 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="configure_with_qr_code">Byihuze hifashishijwe kode ya QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ukoresheje amaboko injiza amakuru kuri project</string>
-  <string name="project_config_tip">Niba wamaze gushyiramo umushinga wawe, wakongera gutangiza igenamiterere rusange ni rya Muyobozi.</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Poroje yanjye ikoresha Google Drive</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
