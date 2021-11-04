@@ -110,8 +110,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOptionsIcon() {
-        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        assertText(R.string.project_settings);
+        tryAgainOnFail(() -> {
+            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+            assertText(R.string.project_settings);
+        });
+
         return this;
     }
 
