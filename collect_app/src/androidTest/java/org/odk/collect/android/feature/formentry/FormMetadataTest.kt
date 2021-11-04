@@ -25,10 +25,12 @@ class FormMetadataTest {
     fun startGeopoint_withCachedFormDefinition_doesNotCauseError() {
         rule.startAtMainMenu()
             .copyForm("start-geopoint.xml")
+
             // Open form once to cache definition
             .clickFillBlankForm()
             .clickOnEmptyForm("start-geopoint")
             .clickSaveAndExit()
+
             // Load with cached definition
             .clickFillBlankForm()
             .clickOnEmptyForm("start-geopoint")

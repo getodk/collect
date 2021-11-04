@@ -26,14 +26,17 @@ class DeleteProjectTest {
             .inputUrl("https://my-server.com")
             .inputUsername("John")
             .addProject()
+
             // Delete Turtle nesting project
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
             .deleteProject()
+
             // Assert switching to Turtle nesting
             .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
             .assertProjectIcon("D")
+
             // Delete Demo project
             .openProjectSettingsDialog()
             .clickSettings()
