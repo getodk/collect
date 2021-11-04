@@ -40,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
@@ -177,7 +178,15 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public T clickOnText(String text) {
-        onView(withText(text)).perform(click());
+        try {
+            onView(withText(text)).perform(click());
+        } catch (PerformException e) {
+            Timber.e(e);
+
+            // Create a standard view match error so the view hierarchy is visible in the failure
+            onView(withText("PerformException thrown clicking on \"" + text + "\"")).check(matches(isDisplayed()));
+        }
+
         return (T) this;
     }
 
