@@ -11,25 +11,23 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.allOf
 import org.odk.collect.android.R
 
-internal class ProjectSettingsDialogPage() : Page<ProjectSettingsDialogPage>() {
+internal class ProjectSettingsDialogPage : Page<ProjectSettingsDialogPage>() {
+
     override fun assertOnPage(): ProjectSettingsDialogPage {
         assertText(R.string.projects)
         return this
     }
 
     fun clickSettings(): ProjectSettingsPage {
-        clickOnString(R.string.settings)
-        return ProjectSettingsPage().assertOnPage()
+        return clickOnButtonInDialog(R.string.settings, ProjectSettingsPage())
     }
 
     fun clickAbout(): AboutPage {
-        clickOnString(R.string.about_preferences)
-        return AboutPage().assertOnPage()
+        return clickOnButtonInDialog(R.string.about_preferences, AboutPage())
     }
 
     fun clickAddProject(): QrCodeProjectCreatorDialogPage {
-        clickOnString(R.string.add_project)
-        return QrCodeProjectCreatorDialogPage().assertOnPage()
+        return clickOnButtonInDialog(R.string.add_project, QrCodeProjectCreatorDialogPage())
     }
 
     fun assertCurrentProject(projectName: String, subtext: String): ProjectSettingsDialogPage {

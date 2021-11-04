@@ -9,6 +9,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -205,7 +206,8 @@ public abstract class Page<T extends Page<T>> {
     public <D extends Page<D>> D clickOnButtonInDialog(int buttonText, D destination) {
         // Clicks seem to happen too early here sometimes
         tryAgainOnFail(() -> {
-            clickOnString(buttonText);
+            // It seems like clicks sometimes land "under" the dialog so specify the root
+            onView(withText(getTranslatedString(buttonText))).inRoot(isDialog()).perform(click());
             destination.assertOnPage();
         });
 
