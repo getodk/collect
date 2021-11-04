@@ -54,8 +54,8 @@ import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
-import org.odk.collect.android.support.matchers.ToastMatcher;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -153,13 +153,10 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
-        try {
-            onView(withText(message)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
-        } catch (RuntimeException e) {
-            // The exception we get out of this is really misleading so cleaning it up here
+        Espresso.onIdle();
+        if (!ToastUtils.popRecordedToasts().stream().anyMatch(s -> s.equals(message))) {
             throw new RuntimeException("No Toast with text \"" + message + "\" shown on screen!");
         }
-
 
         return (T) this;
     }

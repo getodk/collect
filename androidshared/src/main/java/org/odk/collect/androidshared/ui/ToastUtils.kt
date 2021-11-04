@@ -17,6 +17,10 @@ import org.odk.collect.strings.localization.getLocalizedString
  */
 object ToastUtils {
 
+    @JvmStatic
+    var recordToasts = false
+    private var recordedToasts = mutableListOf<String>()
+
     private lateinit var lastToast: Toast
 
     @JvmStatic
@@ -52,6 +56,14 @@ object ToastUtils {
         showToastInMiddle(activity, message)
     }
 
+    @JvmStatic
+    fun popRecordedToasts(): List<String> {
+        val copy = recordedToasts.toList()
+        recordedToasts.clear()
+
+        return copy
+    }
+
     private fun showToast(
         context: Application,
         message: String,
@@ -60,6 +72,10 @@ object ToastUtils {
         hideLastToast()
         lastToast = Toast.makeText(context, message, duration)
         lastToast.show()
+
+        if (recordToasts) {
+            recordedToasts.add(message)
+        }
     }
 
     private fun showToastInMiddle(
@@ -80,6 +96,10 @@ object ToastUtils {
             }
             lastToast.setGravity(Gravity.CENTER, 0, 0)
             lastToast.show()
+
+            if (recordToasts) {
+                recordedToasts.add(message)
+            }
         } else {
             MaterialAlertDialogBuilder(activity)
                 .setMessage(message)
