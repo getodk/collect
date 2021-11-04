@@ -72,15 +72,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
-        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context));
-        addView(binding.getRoot());
+        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context));
-        addView(binding.getRoot());
+        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
 

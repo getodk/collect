@@ -18,8 +18,7 @@ public class NoButtonsItem extends FrameLayout {
 
     public NoButtonsItem(Context context, boolean enabled) {
         super(context);
-        binding = NoButtonsItemLayoutBinding.inflate(LayoutInflater.from(context));
-        addView(binding.getRoot());
+        binding = NoButtonsItemLayoutBinding.inflate(LayoutInflater.from(context), this, true);
 
         setLongClickable(true);
         setEnabled(enabled);
