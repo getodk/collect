@@ -22,13 +22,11 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
     }
 
     public <D extends Page<D>> D clickOnAdd(D destination) {
-        clickOnString(R.string.add_repeat);
-        return destination;
+        return clickOnButtonInDialog(R.string.add_repeat, destination);
     }
 
     public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
-        clickOnString(R.string.dont_add_repeat);
-        return destination;
+        return clickOnButtonInDialog(R.string.dont_add_repeat, destination);
     }
 
 }
