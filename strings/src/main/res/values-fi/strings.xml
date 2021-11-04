@@ -50,7 +50,7 @@
   <string name="filter_the_list">Suodata listaa</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Etsi</string>
-  <string name="no_items_display">Ei mitään näytettävää.</string>
+  <string name="no_items_display">Ei näytettävää.</string>
   <string name="no_items_display_forms">Ei näytettävää.\n\nKokeile tyhjän lomakkeen hakemista ja täyttämistä.</string>
   <string name="no_items_display_sent_forms">Ei näytettävää.\n\nKokeile viimeistellyn lomakkeen lähettämistä ennen tarkastelua.</string>
   <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile tallennetun lomakkeen viimeistelyä ennen lähettämistä.</string>
@@ -477,6 +477,8 @@
   <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Sijaintia seurataan…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Viitekerrosten ohje</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -516,6 +518,7 @@
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
   <string name="all_downloads_succeeded">Kaikki lataukset onnistuivat!</string>
   <string name="some_downloads_failed">%1$s latausta epäonnistui (yhteensä %2$s)!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="show_details">Yksityiskohdat</string>
   <string name="form_details">ID: %1$s Versio: %2$s</string>
   <string name="failure">Epäonnistui</string>
@@ -523,21 +526,21 @@
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
   <string name="report_to_project_lead">Jos ongelma jatkuu, ilmoita siitä tiedonkeruusta vastaavalle.</string>
-  <!--Error message displayed when Collect can't connect to a server-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="unreachable_error">Collect ei tavoita palvelinta osoitteessa %s. Syötitkö URL:in oikein?</string>
-  <!--Error message displayed when Collect can't connect to a server because of a security issue-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="security_error">Collect ei saa turvattua yhteyttä palvelimeen %s. Syötitkö URL:in oikein?</string>
-  <!--Error message displayed when a server returns an error status code-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="server_error">Palvelin %1$s vastasi statuskoodilla %2$s.</string>
-  <!--Error message displayed when a server returns an invalid response body-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="invalid_response">Palvelin %s antoi epäkelvon vastauksen.</string>
-  <!--Error message displayed when the server has not provided a hash identifier for the form being downloaded-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_no_hash_error">Palvelin ei antanut tiivistettä tälle lomakkeelle.</string>
-  <!--Error message displayed when a form being downloaded cannot be parsed-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_parsing_error">Lomaketta ei voitu prosessoida.</string>
-  <!--Error message displayed when a disk error occurs during form download-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_save_disk_error">Levyvirhe laitteella ladatessa tätä lomaketta.</string>
-  <!--Error message displayed when a form being downloaded specifies an invalid submission URL-->
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <string name="form_with_invalid_submission_error">Tällä lomakkeella on epäkelpo lähetys-URL.</string>
   <!--##############################################
     # DELETE SAVED FORM
@@ -839,7 +842,7 @@
   <string name="generate">Luo</string>
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
   <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
-  <string name="corrupt_imported_preferences_error">Tämänhetkiset asetukset ovat vialliset. Pääkäyttäjän asetuksissa voit palauttaa oletusasetukset tai touda toimivat.</string>
+  <string name="corrupt_imported_preferences_error">Nykyiset asetukset ovat viallisia. Nollaa asetukset tai tuo toimivat Projektihallinta-asetuksissa.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -906,7 +909,7 @@
   <string name="configure_with_qr_code">Asetusten määrittely QR-koodilla</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Syötä projektin yksityiskohdat manuaalisesti</string>
-  <string name="project_config_tip">Kun olet lisännyt projektin, voit konfiguroida sen Yleisissä tai Pääkäyttäjän asetuksissa</string>
+  <string name="project_config_tip">Lisättyäsi projektin voit konfiguroida sen Asetuksissa.</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
   <string name="gdrive_project">Projektini käyttää Google Drive -palvelua.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
