@@ -333,10 +333,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                         Timber.i("Failed to getlocations :%s", e.getMessage());
                     }
                 }
-                // Send device time and device id with request
+                // Send device time, device id and fieldTask version with request
                 headers.put("devicetime", String.valueOf(System.currentTimeMillis()));
                 headers.put("deviceid", new PropertyManager(Collect.getInstance().getApplicationContext())
                         .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+                headers.put("appversion", Collect.getInstance().getString(R.string.app_version));
 
                 URI uri = URI.create(taskURL);
                 String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
