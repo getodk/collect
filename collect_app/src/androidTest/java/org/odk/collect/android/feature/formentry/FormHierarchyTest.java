@@ -141,7 +141,6 @@ public class FormHierarchyTest {
                 .clickOnAdd(new FormEntryPage("formHierarchy3"))
                 .assertQuestion("Date")
                 .swipeToNextQuestionWithRepeatGroup("Repeat Group 1_1")
-                .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat Group 1_1"))
                 .clickOnDoNotAdd(new FormEntryPage("formHierarchy3"))
                 .clickGoToArrow()
                 .clickOnText("Repeat Group 1")

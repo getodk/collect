@@ -66,7 +66,7 @@ public class AddRepeatTest {
                 .assertText("What is their age?")
                 .assertText("What is their name?")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat"))
+                .clickOnAdd(new FormEntryPage("Field-List Repeat"))
                 .assertText("Person > 2")
                 .assertText("What is their age?")
                 .assertText("What is their name?");

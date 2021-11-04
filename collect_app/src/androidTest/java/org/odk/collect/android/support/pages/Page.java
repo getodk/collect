@@ -203,6 +203,7 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public <D extends Page<D>> D clickOnButtonInDialog(int buttonText, D destination) {
+        // Clicks seem to happen too early here sometimes
         tryAgainOnFail(() -> {
             clickOnString(buttonText);
             destination.assertOnPage();
