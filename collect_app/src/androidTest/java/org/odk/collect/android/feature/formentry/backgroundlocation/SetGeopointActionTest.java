@@ -32,7 +32,6 @@ public class SetGeopointActionTest {
 
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {
-        new FormEntryPage("setgeopoint-action-instance-load").assertOnPage();
         onView(withId(com.google.android.material.R.id.snackbar_text))
                 .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(R.string.background_location_enabled), "⋮"))));
     }
@@ -42,7 +41,7 @@ public class SetGeopointActionTest {
      */
     @Test
     public void locationCollectionToggle_ShouldBeAvailable() {
-        new FormEntryPage("setgeopoint-action-instance-load").assertOnPage()
+        rule.startInFormEntry()
                 .clickOptionsIcon()
                 .assertText(R.string.track_location);
     }

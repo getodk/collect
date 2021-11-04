@@ -20,6 +20,7 @@ public class FormActivityTestRule implements TestRule {
 
     private final String formFilename;
     private final String formName;
+    private FormEntryPage formEntryPage;
 
     public FormActivityTestRule(String formFilename, String formName) {
         this.formFilename = formFilename;
@@ -32,11 +33,16 @@ public class FormActivityTestRule implements TestRule {
             @Override
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(getActivityIntent());
-                new FormEntryPage(formName).assertOnPage();
+                formEntryPage = new FormEntryPage(formName);
+                formEntryPage.assertOnPage();
 
                 base.evaluate();
             }
         };
+    }
+
+    public FormEntryPage startInFormEntry() {
+        return formEntryPage;
     }
 
     private Intent getActivityIntent() {

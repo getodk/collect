@@ -111,6 +111,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickOptionsIcon() {
         Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+        assertText(R.string.project_settings);
         return this;
     }
 
@@ -175,7 +176,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage deleteGroup(String questionText) {
         onView(withText(questionText)).perform(longClick());
         onView(withText(R.string.delete_repeat)).perform(click());
-        onView(withText(R.string.discard_group)).perform(click());
+        clickOnButtonInDialog(R.string.discard_group, this);
         return this;
     }
 

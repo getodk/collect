@@ -14,6 +14,7 @@ import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.pages.FormEntryPage;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -41,7 +42,8 @@ public class LocationAuditTest {
 
     @Test
     public void locationCollectionToggle_ShouldBeAvailable() {
-        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-        onView(withText(R.string.track_location)).check(matches(isDisplayed()));
+        rule.startInFormEntry()
+                .clickOptionsIcon()
+                .assertText(R.string.track_location);
     }
 }
