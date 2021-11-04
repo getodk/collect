@@ -66,8 +66,6 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:2.8.8"
     const val firebase_analytics = "com.google.firebase:firebase-analytics:19.0.2"
     const val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:18.2.3"
-    const val findbugs_annotations = "com.google.code.findbugs:annotations:3.0.1"
-    const val findbugs_jsr305 = "com.google.code.findbugs:jsr305:3.0.2"
     const val fastlane_screengrab = "tools.fastlane:screengrab:2.1.1"
     const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.7"
     const val timber = "com.jakewharton.timber:timber:5.0.1"

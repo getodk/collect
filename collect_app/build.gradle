@@ -227,7 +227,6 @@ configurations.all {
         cacheDynamicVersionsFor(0, 'seconds')
         cacheChangingModulesFor(0, 'seconds')
 
-        force('com.google.code.findbugs:jsr305:1.3.9')
         force 'org.objenesis:objenesis:2.6'
     }
     transitive = true
@@ -354,10 +353,6 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
-    // Annotations understood by FindBugs
-    compileOnly Dependencies.findbugs_annotations
-    compileOnly Dependencies.findbugs_jsr305
-
     testImplementation project(':formstest')
 
     // Testing-only dependencies
@@ -395,7 +390,6 @@ dependencies {
     androidTestImplementation Dependencies.androidx_test_espresso_contrib
     androidTestImplementation(Dependencies.androidx_test_espresso_intents) {
         exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.google.code.findbugs', module: 'jsr305'
     }
 
     androidTestImplementation Dependencies.okhttp3_mockwebserver

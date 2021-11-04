@@ -17,14 +17,11 @@ import org.odk.collect.android.utilities.Appearances;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public final class StringWidgetUtils {
 
     private StringWidgetUtils() {
     }
 
-    @SuppressFBWarnings("BX_UNBOXING_IMMEDIATELY_REBOXED")
     public static Integer getIntegerAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
@@ -43,7 +40,6 @@ public final class StringWidgetUtils {
         return null;
     }
 
-    @SuppressFBWarnings({"BX_UNBOXING_IMMEDIATELY_REBOXED", "BX_UNBOXED_AND_COERCED_FOR_TERNARY_OPERATOR"})
     public static Double getDoubleAnswerValueFromIAnswerData(IAnswerData dataHolder) {
         if (dataHolder != null) {
             Object dataValue = dataHolder.getValue();
