@@ -117,9 +117,18 @@ abstract class AppListActivity extends CollectAbstractActivity {
     }
 
     @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        init();
+    }
+
+    @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
+        init();
+    }
 
+    private void init() {
         listView = findViewById(android.R.id.list);
         listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
         listView.setEmptyView(findViewById(android.R.id.empty));
