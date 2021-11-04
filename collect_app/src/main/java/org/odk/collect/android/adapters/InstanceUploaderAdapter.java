@@ -14,7 +14,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.views.InstanceUploaderProgressBar;
 
 import java.util.Date;
 
@@ -78,8 +77,6 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         TextView formSubtitle;
         @BindView(R.id.checkbox)
         CheckBox checkbox;
-        @BindView(R.id.progress_bar)
-        InstanceUploaderProgressBar progressBar;
         @BindView(R.id.image)
         ImageView statusIcon;
         @BindView(R.id.close_box)

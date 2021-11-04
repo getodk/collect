@@ -42,13 +42,4 @@
         android:textColor="?attr/colorSecondary"
         android:visibility="gone"
         tools:visibility="visible" />
-
-    <org.odk.collect.android.views.InstanceUploaderProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
 </LinearLayout>
