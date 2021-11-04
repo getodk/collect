@@ -40,17 +40,6 @@
         </Not>
     </Match>
 
-    <!-- Ignore ButterKnife auto-generated classes -->
-    <Match>
-        <Class name="~.*\$\$ViewBinder*" />
-    </Match>
-    <Match>
-        <Class name="~.*\$\$ViewBinder\$InnerUnbinder*" />
-    </Match>
-    <Match>
-        <Class name="~.*ViewBinding\$.*" />
-    </Match>
-
     <!-- Internationalization -->
     <Match>
         <Bug pattern="DM_DEFAULT_ENCODING" />

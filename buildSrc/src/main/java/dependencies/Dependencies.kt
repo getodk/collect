@@ -60,8 +60,6 @@ object Dependencies {
     const val armen101_audio_recorder_view = "com.github.Armen101:AudioRecordView:1.0.5"
     const val glide = "com.github.bumptech.glide:glide:4.12.0"
     const val mp4parser_muxer = "org.mp4parser:muxer:1.9.41"
-    const val butterknife = "com.jakewharton:butterknife:10.2.3"
-    const val butterknife_compiler = "com.jakewharton:butterknife-compiler:10.2.3"
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
     const val kotlin_stdlib_jdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
     const val json = "org.json:json:20210307"

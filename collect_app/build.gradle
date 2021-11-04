@@ -354,10 +354,6 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
-    // Makes binding to Views easy:
-    implementation Dependencies.butterknife
-    annotationProcessor Dependencies.butterknife_compiler
-
     // Annotations understood by FindBugs
     compileOnly Dependencies.findbugs_annotations
     compileOnly Dependencies.findbugs_jsr305
