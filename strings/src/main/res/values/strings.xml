@@ -482,14 +482,12 @@
     <string name="view_change_location">View or Change Location</string>
     <string name="change_location">Change Location</string>
     <string name="record_geopoint">Record a point</string>
-    <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_accuracy_cm">Accuracy: %.0f cm</string>
     <string name="location_accuracy_m">Accuracy: %.1f m</string>
     <string name="location_provider">Location provider: %s</string>
     <string name="getting_location">Loading Location</string>
     <string name="get_location">Record Location</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
-    <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
     <string name="gps_result_m">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$.1f m</string>
     <string name="gps_result_cm">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$.0f cm</string>
     <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>
@@ -552,13 +550,10 @@
         <item quantity="other">%d meters</item>
     </plurals>
     <string name="location_status_searching">Searching for location, please wait&#8230;</string>
-    <string name="location_status_accuracy">Location accuracy: %.2f m</string>
     <string name="location_status_accuracy_m">Location accuracy: %.1f m</string>
     <string name="location_status_accuracy_cm">Location accuracy: %.0f cm</string>
-    <string name="location_status_acceptable">Location accuracy: %.2f m (acceptable)</string>
     <string name="location_status_acceptable_m">Location accuracy: %.1f m (acceptable)</string>
     <string name="location_status_acceptable_cm">Location accuracy: %.0f cm (acceptable)</string>
-    <string name="location_status_unacceptable">Location accuracy: %.2f m (unacceptable)</string>
     <string name="location_status_unacceptable_m">Location accuracy: %.1f m (unacceptable)</string>
     <string name="location_status_unacceptable_cm">Location accuracy: %.0f cm (unacceptable)</string>
     <string name="collection_status_paused">Points entered: %d</string>
