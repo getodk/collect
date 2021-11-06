@@ -21,6 +21,7 @@ import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.location.client.FakeLocationClient;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.MapPoint;
 import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.Robolectric;
@@ -29,6 +30,11 @@ import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
+
+    //For 4198
+    static {
+        GeoUtils.simulateAccuracy = false;
+    }
 
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
