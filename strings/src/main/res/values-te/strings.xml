@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <!--Text for an action button on the main screen.-->
@@ -370,12 +370,10 @@
   <string name="view_change_location">లొకేషన్ చూడండి లేదా మార్చండి</string>
   <string name="change_location">లొకేషన్ మార్చండి</string>
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
-  <string name="location_accuracy">%1$s ఖచ్చితత్వం</string>
   <string name="location_provider">%s ప్రదేశ అనుమతులు</string>
   <string name="getting_location">లొకేషన్ లోడ్ అవుతోంది</string>
   <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
   <string name="provider_disabled_error">క్షమించండి, లొకేషన్ ప్రొవైడర్లు డిసేబుల్ చెయ్యబడ్డాయి!</string>
-  <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
   <string name="location_metadata">అందుబాటులో ఉన్న ఉపగ్రహాలు: %1$d/ 24 \n\n ముగిసిన సమయం:%2$s</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
   <string name="location_providers_disabled_dialog_message">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని స్థాన ప్రొవైడర్లు నిలిపివేయబడ్డారు. దయచేసి Android సెట్టింగ్‌లలో ప్రారంభించండి.</string>

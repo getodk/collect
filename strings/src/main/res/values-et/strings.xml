@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Täida vorm</string>
   <!--Text for an action button on the main screen.-->
@@ -234,7 +234,6 @@
   <string name="getting_location">Asukoha laadimine</string>
   <string name="get_location">Salvesta asukoht</string>
   <string name="provider_disabled_error">Kahjuks on asukoha küsimine maha keeratud!</string>
-  <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="save_point">Salvesta asukohapunkt</string>

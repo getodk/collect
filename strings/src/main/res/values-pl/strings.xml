@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Wypełnij Pusty Formularz</string>
   <!--Text for an action button on the main screen.-->
@@ -373,7 +373,6 @@
   <string name="getting_location">Wczytywanie Lokalizacji</string>
   <string name="get_location">Zapisz Lokalizację</string>
   <string name="provider_disabled_error">Przykro mi, dostawcy usługi Lokalizacji są niedostępni.</string>
-  <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
   <string name="location_metadata">Dostępne satelity: %1$d/24\n\nUpłynęło: %2$s</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>

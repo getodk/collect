@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Llenar Nuevo Formulario</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Ver o cambiar de localización</string>
   <string name="change_location">Cambiar Ubicación</string>
   <string name="record_geopoint">Registrando un punto</string>
-  <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="location_provider">Proveedor de Ubicación: %s</string>
   <string name="getting_location">Cargando la Ubicación</string>
   <string name="get_location">Obtener localización</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
-  <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="location_metadata">Satélites disponibles: %1$d/24\n\nTiempo transcurrido: %2$s</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
@@ -457,9 +455,6 @@
     <item quantity="other">%d metros</item>
   </plurals>
   <string name="location_status_searching">Buscando ubicación, espere …</string>
-  <string name="location_status_accuracy">Precisión de ubicación: %.2f m</string>
-  <string name="location_status_acceptable">Precisión de ubicación: %.2f m (aceptable)</string>
-  <string name="location_status_unacceptable">Precisión de ubicación: %.2f m (inaceptable)</string>
   <string name="collection_status_paused">Puntos ingresados: %d</string>
   <string name="collection_status_placement">Puntos ingresados: %d (toque para ublicar puntos)</string>
   <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Vyplnit dotazník</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Prohlédnout nebo změnit polohu</string>
   <string name="change_location">Změnit lokaci</string>
   <string name="record_geopoint">Zaznamenat bod</string>
-  <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="location_provider">Poskytovatel polohy: %s</string>
   <string name="getting_location">Načítám pozici</string>
   <string name="get_location">Uložit pozici</string>
   <string name="provider_disabled_error">Nástroje pro získání polohy jsou zakázané!</string>
-  <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
   <string name="location_metadata">Dostupné satelity: %1$d /24\n\nUplynulý čas: %2$s</string>
   <string name="google_play_services_not_available">Tento formulář chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
@@ -463,9 +461,6 @@
     <item quantity="other">%d metrů</item>
   </plurals>
   <string name="location_status_searching">Hledám polohu, počkejte prosím…</string>
-  <string name="location_status_accuracy">Přesnost polohy: %.2f m</string>
-  <string name="location_status_acceptable">Přesnost umístění:  %.2f m (přijatelná)</string>
-  <string name="location_status_unacceptable">Přesnost umístění: %.2f m (nepřijatelná)</string>
   <string name="collection_status_paused">Zadané body: %d</string>
   <string name="collection_status_placement">Zadané body: %d (klepnutím umístíte body)</string>
   <string name="collection_status_manual">Zadané body: %d (ruční nahrávání)</string>

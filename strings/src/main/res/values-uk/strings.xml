@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Заповнити анкету</string>
   <!--Text for an action button on the main screen.-->
@@ -335,7 +335,6 @@
   <string name="getting_location">Завантаження місцезнаходження</string>
   <string name="get_location">Записати місцезнаходження</string>
   <string name="provider_disabled_error">Вибачте! Джерела місцезнаходження не доступні!</string>
-  <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="location_metadata">Доступні супутники: %1$d/24\n\nПриблизний час: %2$s</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
   <string name="location_providers_disabled_dialog_message">Ця анкета хоче відслідковувати ваше розташування але розташування вимкнене. Будь ласка, увімкніть його в налаштуваннях Android.</string>

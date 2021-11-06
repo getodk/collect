@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">空のフォームに入力してください</string>
   <!--Text for an action button on the main screen.-->
@@ -391,12 +391,10 @@
   <string name="view_change_location">場所の表示または変更</string>
   <string name="change_location">場所の変更</string>
   <string name="record_geopoint">位置を記録</string>
-  <string name="location_accuracy">精度: %1$s m</string>
   <string name="location_provider">ロケーションプロバイダー: %s</string>
   <string name="getting_location">ロケーションをロード中</string>
   <string name="get_location">記録場所</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
-  <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
   <string name="location_metadata">利用可能なサテライト: %1$d/24\n\n経過した時間: %2$s</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
@@ -451,9 +449,6 @@
     <item quantity="other">%d メートル</item>
   </plurals>
   <string name="location_status_searching">位置を検索しています、しばらくお待ちください…</string>
-  <string name="location_status_accuracy">位置精度: %.2f m</string>
-  <string name="location_status_acceptable">位置精度: %.2f m (許容)</string>
-  <string name="location_status_unacceptable">位置精度: %.2f m (許容不可)</string>
   <string name="collection_status_paused">入力された位置: %d</string>
   <string name="collection_status_placement">入力された位置: %d (タップして位置を配置)</string>
   <string name="collection_status_manual">入力された位置: %d (手動記録)</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Remplir un formulaire</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Voir ou changer la position</string>
   <string name="change_location">Modifier la localisation</string>
   <string name="record_geopoint">Enregistrer un point</string>
-  <string name="location_accuracy">Précision: %1$s m</string>
   <string name="location_provider">Fournisseur de la localisation: 1%s</string>
   <string name="getting_location">Chargement de la localisation</string>
   <string name="get_location">Enregistrement du lieu</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
-  <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="location_metadata">Satellites disponibles: %1$d/24\n\nTemps écoulé: %2$s</string>
   <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
   <string name="location_providers_disabled_dialog_message">Ce formulaire souhaite suivre votre localisation, mais les fournisseurs d\'emplacements sont désactivés. Merci de vérifier les paramétres Android</string>
@@ -457,9 +455,6 @@
     <item quantity="other">%d mètres</item>
   </plurals>
   <string name="location_status_searching">Recherche de la localisation, veuillez patienter…</string>
-  <string name="location_status_accuracy">Précision de la localisation: %.2f m</string>
-  <string name="location_status_acceptable">Précision de la localisation: %.2f m (acceptable)</string>
-  <string name="location_status_unacceptable">Précision de la localisation: %.2f m (inacceptable)</string>
   <string name="collection_status_paused">Points entrés: %d</string>
   <string name="collection_status_placement">Points entrés: %d (appuyez pour placer des points)</string>
   <string name="collection_status_manual">Points entrés: %d (enregistrement manuel)</string>

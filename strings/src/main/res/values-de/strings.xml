@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Leeres Formular ausfüllen</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Standort anzeigen oder ändern</string>
   <string name="change_location">Standort ändern</string>
   <string name="record_geopoint">Punkt erfassen</string>
-  <string name="location_accuracy">Genauigkeit: %1$s m</string>
   <string name="location_provider">Standortdienst: %s</string>
   <string name="getting_location">Lade Standort</string>
   <string name="get_location">Standort erfassen</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
-  <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="location_metadata">verfügbare Satelliten: %1$d/24\n\nabgelaufene Zeit: %2$s</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
   <string name="location_providers_disabled_dialog_message">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Standortdienste sind deaktiviert. Bitte den Standortzugriff in den Android-Einstellungen aktivieren.</string>
@@ -457,9 +455,6 @@
     <item quantity="other">%d Meter</item>
   </plurals>
   <string name="location_status_searching">Suche nach Standort, bitte warten…</string>
-  <string name="location_status_accuracy">Ortungsgenauigkeit: %.2f m</string>
-  <string name="location_status_acceptable">Ortungsgenauigkeit: %.2f m (akzeptabel)</string>
-  <string name="location_status_unacceptable">Ortungsgenauigkeit: %.2f m (inakzeptabel)</string>
   <string name="collection_status_paused">erfasste Punkte: %d</string>
   <string name="collection_status_placement">erfasste Punkte: %d (tippen zum Platzieren von Punkten)</string>
   <string name="collection_status_manual">erfasste Punkte: %d (manuelle Standorterfassung)</string>

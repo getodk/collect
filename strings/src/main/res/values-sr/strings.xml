@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Popuni prazan formular</string>
   <!--Text for an action button on the main screen.-->
@@ -338,7 +338,6 @@
   <string name="getting_location">Učitavam lokaciju</string>
   <string name="get_location">Zabilježi lokaciju</string>
   <string name="provider_disabled_error">Pronalaženje lokacije je isključeno!</string>
-  <string name="gps_result">Geografska širina:%1$s\nGeografska dužina: %2$s\nVisina: %3$sm\nPreciznost: %4$sm</string>
   <string name="location_metadata">Sateliti dostupni: %1$d/24\n\n proteklo vrijeme: %2$s</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
   <string name="location_providers_disabled_dialog_message">Ovaj formular želi da prati vašu lokaciju ali provajderi lokacije su isključeni. Molim uključite ih u podešavanjima Androida.</string>

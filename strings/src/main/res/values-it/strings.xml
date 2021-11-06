@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Compila Modulo Vuoto</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Vedi o Cambia Posizione</string>
   <string name="change_location">Cambiare Localizzazione</string>
   <string name="record_geopoint">Memorizza un punto</string>
-  <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="location_provider">Fornitore di posizione: %s</string>
   <string name="getting_location">Posizionamento in corso</string>
   <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
-  <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
   <string name="location_providers_disabled_dialog_message">Questo formulario vuole monitorare la tua posizione ma i fornitori di servizi di localizzazione sono disabilitati. Si prega di abilitare nelle impostazioni di Android.</string>
@@ -457,9 +455,6 @@
     <item quantity="other">%d metri</item>
   </plurals>
   <string name="location_status_searching">Sto ricercando la posizione, prego attendere…</string>
-  <string name="location_status_accuracy">Precisione della posizione GPS%.2f m</string>
-  <string name="location_status_acceptable">Precisione posizione: %.2fm (accettabile)</string>
-  <string name="location_status_unacceptable">Precisione posizione: %.2fm (inaccettabile)</string>
   <string name="collection_status_paused">Punti inseriti: %d</string>
   <string name="collection_status_placement">Punti inseriti: %d (tocca per inserire punti)</string>
   <string name="collection_status_manual">Punti inseriti: %d (salvataggio manuale)</string>

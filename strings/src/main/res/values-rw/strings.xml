@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho</string>
   <!--Text for an action button on the main screen.-->
@@ -392,12 +392,10 @@
   <string name="view_change_location">Kora igenzura cyangwa uhindure ujye ahandi</string>
   <string name="change_location">Hindura ujye ahandi</string>
   <string name="record_geopoint">Irabika amakuru</string>
-  <string name="location_accuracy">Birizewe: %1$s m</string>
   <string name="location_provider">Igitanga aho uri ubu: %s</string>
   <string name="getting_location">Iri gushakicyisha icyerekezo</string>
   <string name="get_location">Fata amakuru y\'ahantu</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
-  <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
   <string name="location_metadata">Saterite iraboneka: %1$d /24\n\nIgihe
 Hashize: %2$s</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
@@ -456,9 +454,6 @@ Hashize: %2$s</string>
     <item quantity="other">%d meters</item>
   </plurals>
   <string name="location_status_searching">Mwihangane Iracyashakisha location/icyerekezo</string>
-  <string name="location_status_accuracy">Indangahantu nyayo: %.2f m.</string>
-  <string name="location_status_acceptable">Indangahantu nyayo: %.2f m (yemewe)</string>
-  <string name="location_status_unacceptable">Indangahantu nyayo: %.2f m (itemewe)</string>
   <string name="collection_status_paused">Ikimenyetso ndangahantu kinjiye:%d .</string>
   <string name="collection_status_placement">Ikimenyetso ndangahantu kinjiye: %d (kanda mumwanya w\'ikimenyetso ndangahantu)</string>
   <string name="collection_status_manual">Ikimenyetso ndangahantu kinjiye: %d (mu buryo busanzwe)</string>

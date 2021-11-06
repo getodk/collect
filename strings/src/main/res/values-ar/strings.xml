@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ملء استمارة فارغة</string>
   <!--Text for an action button on the main screen.-->
@@ -391,12 +391,10 @@
   <string name="view_change_location">الاطلاع على الموقع أو تغيير الموقع</string>
   <string name="change_location">تغيير الموقع</string>
   <string name="record_geopoint">سجل نقطة</string>
-  <string name="location_accuracy">الدقة: %1$s متر </string>
   <string name="location_provider">مزود خدمة تحديد الموقع: %s</string>
   <string name="getting_location">تحميل الموقع</string>
   <string name="get_location">تسجيل الموقع</string>
   <string name="provider_disabled_error">عذراً، مزود خدمة الموقع معطّل.</string>
-  <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
   <string name="location_metadata">الأقمار الصناعية المتاحة: %1$d\24 \n\nالوقت المنقضي: %2$s</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
   <string name="location_providers_disabled_dialog_message">تريد هذه الاستمارة تتبع موقعك ولكن موفري الموقع معطلين. يرجى التمكين في إعدادات أندرويد.</string>
@@ -466,9 +464,6 @@
     <item quantity="other">%dمتر </item>
   </plurals>
   <string name="location_status_searching">يتم البحث عن الموقع، يرجى الإنتظار…</string>
-  <string name="location_status_accuracy">دقة الموقع: %.2f متر</string>
-  <string name="location_status_acceptable">دقة الموقع: %.2f متر (مقبول)</string>
-  <string name="location_status_unacceptable">دقة الموقع: %.2f متر (غير مقبول)</string>
   <string name="collection_status_paused">النقاط التي تم إدخالها: %d</string>
   <string name="collection_status_placement">النقاط التي تم إدخالها: %d (انقر لوضع نقاط)</string>
   <string name="collection_status_manual">النقاط التي تم إدخالها: %d (التسجيل اليدوي)</string>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Formulário em Branco</string>
   <!--Text for an action button on the main screen.-->
@@ -385,12 +385,10 @@ Escolher Imagem</string>
   <string name="view_change_location">Ver ou modificar localização</string>
   <string name="change_location">Mudar Localização</string>
   <string name="record_geopoint">Registre um ponto</string>
-  <string name="location_accuracy">Precisão: %1$s m</string>
   <string name="location_provider">Provedor de localização: %s</string>
   <string name="getting_location">Carregando Localização</string>
   <string name="get_location">Gravar Localização</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
-  <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
   <string name="location_metadata">Satélites disponíveis: %1$d/24\n\nTempo decorrido: %2$s</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização</string>
   <string name="location_providers_disabled_dialog_message">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu dispositivo. Favor habilitar nas configurações do celular.</string>
@@ -448,9 +446,6 @@ Escolher Imagem</string>
     <item quantity="other">%d metros</item>
   </plurals>
   <string name="location_status_searching">Buscando a localização, por favor, aguarde…</string>
-  <string name="location_status_accuracy">Precisão da localização: %.2f m</string>
-  <string name="location_status_acceptable">Precisão da localização: %.2f m (aceitável)</string>
-  <string name="location_status_unacceptable">Precisão da localização: %.2f m (inaceitável)</string>
   <string name="collection_status_paused">Pontos inseridos: %d</string>
   <string name="collection_status_placement">Pontos inseridos: %d (toque na tela para inserir pontos)</string>
   <string name="collection_status_manual">Pontos inseridos: %d (registro manual)</string>

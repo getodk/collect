@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Udfyld tom formular</string>
   <!--Text for an action button on the main screen.-->
@@ -247,7 +247,6 @@
   <string name="reference_layer">Referencelag</string>
   <string name="view_change_location">Se eller skift lokalitet</string>
   <string name="change_location">Skift position</string>
-  <string name="location_accuracy">Præcision: 1%1$s m</string>
   <string name="location_provider">Lokalitetsudbyder: 1%s</string>
   <string name="getting_location">Finder lokation</string>
   <string name="get_location">Gem lokation</string>
@@ -302,9 +301,6 @@
     <item quantity="other">%d meter</item>
   </plurals>
   <string name="location_status_searching">Søger efter lokation, vent venligst…</string>
-  <string name="location_status_accuracy">Lokations nøjagtighed: %.2f m</string>
-  <string name="location_status_acceptable">Lokations nøjagtighed: %.2f m (acceptabel)</string>
-  <string name="location_status_unacceptable">Lokations nøjagtighed: %.2f m (uacceptabel)</string>
   <string name="collection_status_paused">Punkter indtastet: %d</string>
   <string name="collection_status_placement">Punkter indtastet: %d(Tryk for at placere punkter)</string>
   <string name="collection_status_manual">Punkter indtastet: %d(manuel optagelse)</string>

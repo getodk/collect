@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <!--Text for an action button on the main screen.-->
@@ -330,7 +330,6 @@
   <string name="getting_location">កំពុងផ្ទុកទីតាំង</string>
   <string name="get_location">ចាប់​យក​ទីតាំង</string>
   <string name="provider_disabled_error">សុំទោស, សេវាចាប់យកទីតាំងត្រូវបានបិទ</string>
-  <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
   <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">ទៅកាន់ការកំណត់</string>

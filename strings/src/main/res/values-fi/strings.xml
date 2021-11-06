@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Täytä tyhjä lomake</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Tarkastele tai vaihda sijaintia</string>
   <string name="change_location">Vaihda sijaintia</string>
   <string name="record_geopoint">Tallenna piste</string>
-  <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
   <string name="getting_location">Lataussijainti</string>
   <string name="get_location">Tallenna sijainti</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
-  <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
@@ -457,9 +455,6 @@
     <item quantity="other">%d metriä</item>
   </plurals>
   <string name="location_status_searching">Etsitään sijaintia, odota hetki…</string>
-  <string name="location_status_accuracy">Sijaintitarkkuus: %.2f m</string>
-  <string name="location_status_acceptable">Sijaintitarkkuus: %.2f m (riittävä)</string>
-  <string name="location_status_unacceptable">Sijaintitarkkuus: %.2f m (riittämätön)</string>
   <string name="collection_status_paused">Syötettyjä pisteitä: %d</string>
   <string name="collection_status_placement">Syötettyjä pisteitä: %d (napsauta sijoittaaksesi pisteitä)</string>
   <string name="collection_status_manual">Syötettyjä pisteitä: %d (manuaalinen tallennus)</string>

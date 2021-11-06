@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">रिक्त फॉर्म भरा</string>
   <!--Text for an action button on the main screen.-->
@@ -245,7 +245,6 @@
   <string name="getting_location">स्थान लोड करत आहे</string>
   <string name="get_location">स्थान रेकॉर्ड</string>
   <string name="provider_disabled_error">क्षमस्व, स्थान प्रदाता अक्षम केले आहेत!</string>
-  <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="save_point">जिओ पॉईंट जतन करा</string>

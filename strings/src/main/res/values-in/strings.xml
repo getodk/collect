@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Isi Formulir Kosong</string>
   <!--Text for an action button on the main screen.-->
@@ -394,12 +394,10 @@
   <string name="view_change_location">Lihat atau Ubah Lokasi</string>
   <string name="change_location">Ubah Lokasi</string>
   <string name="record_geopoint">Rekam titik</string>
-  <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="location_provider">Lokasi penyedia jasa: %s</string>
   <string name="getting_location">Memuat Lokasi</string>
   <string name="get_location">Rekam Lokasi</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
-  <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
   <string name="location_metadata">Satelit tersedia: %1$d /24\n\nWaktu berlalu: %2$s</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
   <string name="location_providers_disabled_dialog_message">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi layanan lokasi tidak aktif. Mohon aktifkan terlebih dahulu di pengaturan Android.</string>
@@ -454,9 +452,6 @@
     <item quantity="other">%d meter</item>
   </plurals>
   <string name="location_status_searching">Sedang mencari lokasi, mohon menunggu…</string>
-  <string name="location_status_accuracy">Akurasi GPS: %.2f m</string>
-  <string name="location_status_acceptable">Akurasi GPS: %.2f m (GPS Sesuai)</string>
-  <string name="location_status_unacceptable">Akurasi GPS: %.2f m (GPS tidak sesuai)</string>
   <string name="collection_status_paused">Titik yang dimasukkan: %d</string>
   <string name="collection_status_placement">Titik yang dimasukkan: %d (sentuh untuk menempatkan poin)</string>
   <string name="collection_status_manual">Titik yang dimasukkan: %d (rekaman manual)</string>

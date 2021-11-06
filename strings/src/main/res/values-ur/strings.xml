@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">خالی فارم پر کریں</string>
   <!--Text for an action button on the main screen.-->
@@ -338,7 +338,6 @@
   <string name="getting_location">لوکیشن لوڈ کی جارہی ہے</string>
   <string name="get_location">لوکیشن ریکارڈ کریں</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
-  <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <string name="location_metadata">سیٹیلائٹ موجود: %1$d 24\n\n گزرا ہوا وقت:%2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
