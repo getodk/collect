@@ -1329,7 +1329,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean moveScreen(Direction direction) {
-        currentView.cancelPendingInputEvents();
+        if (currentView != null) {
+            currentView.cancelPendingInputEvents();
+        }
+
         closeContextMenu();
         FormController formController = getFormController();
         if (formController == null) {
