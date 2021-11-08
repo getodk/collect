@@ -18,6 +18,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
+import android.os.Build;
+
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.test.espresso.Espresso;
 
@@ -104,7 +106,15 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
         flingLeft();
-        checkIsToastWithMessageDisplayed(constraintText);
+
+        // Constraints warnings show as dialogs in Android 11+
+        if (Build.VERSION.SDK_INT < 30) {
+            checkIsToastWithMessageDisplayed(constraintText);
+        } else {
+            new OkDialog().assertOnPage()
+                    .assertText(constraintText)
+                    .clickOK(this);
+        }
 
         return this;
     }
