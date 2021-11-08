@@ -123,7 +123,8 @@ public class ServerFormsDetailsFetcher {
         }
 
         String hash = getMd5HashWithoutPrefix(formListItem.getHashWithPrefix());
-        return formsRepository.getOneByMd5Hash(hash) == null;
+        Form form = formsRepository.getOneByMd5Hash(hash);
+        return form == null || form.isDeleted();
     }
 
     private boolean areNewerMediaFilesAvailable(Form existingForm, List<MediaFile> newMediaFiles) {
