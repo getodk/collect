@@ -1,26 +1,22 @@
 package org.odk.collect.android.feature.formentry.backgroundlocation;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
 import android.Manifest;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.FormEntryPage;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class LocationAuditTest {
     private static final String LOCATION_AUDIT_FORM = "location-audit.xml";

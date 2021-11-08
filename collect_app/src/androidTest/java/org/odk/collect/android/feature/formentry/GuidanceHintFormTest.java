@@ -1,5 +1,14 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.not;
+
 import android.text.TextUtils;
 
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -20,15 +29,6 @@ import org.odk.collect.android.support.ResetStateRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertFalse;
-import static org.hamcrest.CoreMatchers.not;
 
 public class GuidanceHintFormTest {
     private static final String GUIDANCE_SAMPLE_FORM = "guidance_hint_form.xml";

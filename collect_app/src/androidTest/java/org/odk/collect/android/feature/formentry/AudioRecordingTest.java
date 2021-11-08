@@ -1,5 +1,7 @@
 package org.odk.collect.android.feature.formentry;
 
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+
 import android.Manifest;
 import android.app.Application;
 
@@ -21,8 +23,6 @@ import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
 public class AudioRecordingTest {

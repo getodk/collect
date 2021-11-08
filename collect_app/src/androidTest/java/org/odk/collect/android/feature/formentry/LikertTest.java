@@ -1,19 +1,5 @@
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
-
-import java.util.Collections;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -27,6 +13,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
+
+import android.Manifest;
+
+import androidx.test.rule.GrantPermissionRule;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.ResetStateRule;
+
+import java.util.Collections;
 
 public class LikertTest {
     private static final String LIKERT_TEST_FORM = "likert_test.xml";

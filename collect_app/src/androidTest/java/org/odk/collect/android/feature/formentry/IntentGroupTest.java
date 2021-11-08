@@ -16,6 +16,27 @@
 
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.StringEndsWith.endsWith;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.support.CustomMatchers.withIndex;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -36,36 +57,12 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.TestRuleChain;
 
 import java.io.File;
 import java.io.IOException;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.StringEndsWith.endsWith;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.CustomMatchers.withIndex;
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
-import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 
 /**
  * Tests that intent groups work as documented at https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields

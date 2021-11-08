@@ -1,5 +1,9 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -26,10 +30,6 @@ import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.io.File;
 import java.io.IOException;
-
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
 public class ExternalAudioRecordingTest {
