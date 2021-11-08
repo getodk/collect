@@ -13,7 +13,7 @@ import org.odk.collect.projects.Project
 class ExistingSettingsMigratorTest {
 
     @Test
-    fun `migrates general and admin settings for each project`() {
+    fun `migrates unprotected and protected settings for each project`() {
         val projectsRepository = InMemProjectsRepository()
         val project1 = projectsRepository.save(Project.New("1", "1", "#ffffff"))
         val project2 = projectsRepository.save(Project.New("2", "2", "#ffffff"))

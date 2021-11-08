@@ -30,54 +30,54 @@ class SharedPreferencesSettingsProviderTest {
     }
 
     @Test
-    fun `The same general settings should always be returned for current project`() {
+    fun `The same unprotected settings should always be returned for current project`() {
         assertThat(settingsProvider.getUnprotectedSettings(), `is`(settingsProvider.getUnprotectedSettings()))
     }
 
     @Test
-    fun `The same general settings should always be returned for given projectId`() {
+    fun `The same unprotected settings should always be returned for given projectId`() {
         assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(settingsProvider.getUnprotectedSettings("1234")))
     }
 
     @Test
-    fun `The same general settings should be returned for given projectId and current project if the those are the same`() {
+    fun `The same unprotected settings should be returned for given projectId and current project if the those are the same`() {
         settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
         assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(settingsProvider.getUnprotectedSettings()))
     }
 
     @Test
-    fun `Different general settings should be returned for different projectIds`() {
+    fun `Different unprotected settings should be returned for different projectIds`() {
         assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(not(settingsProvider.getUnprotectedSettings("4321"))))
     }
 
     @Test
-    fun `Different general settings should be returned for given projectId and current project if those are not the same`() {
+    fun `Different unprotected settings should be returned for given projectId and current project if those are not the same`() {
         assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(not(settingsProvider.getUnprotectedSettings())))
     }
 
     @Test
-    fun `The same admin settings should always be returned for current project`() {
+    fun `The same protected settings should always be returned for current project`() {
         assertThat(settingsProvider.getProtectedSettings(), `is`(settingsProvider.getProtectedSettings()))
     }
 
     @Test
-    fun `The same admin settings should always be returned for given projectId`() {
+    fun `The same protected settings should always be returned for given projectId`() {
         assertThat(settingsProvider.getProtectedSettings("1234"), `is`(settingsProvider.getProtectedSettings("1234")))
     }
 
     @Test
-    fun `The same admin settings should be returned for given projectId and current project if those are the same`() {
+    fun `The same protected settings should be returned for given projectId and current project if those are the same`() {
         settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
         assertThat(settingsProvider.getProtectedSettings("1234"), `is`(settingsProvider.getProtectedSettings()))
     }
 
     @Test
-    fun `Different admin settings should be returned for different projectIds`() {
+    fun `Different protected settings should be returned for different projectIds`() {
         assertThat(settingsProvider.getProtectedSettings("1234"), `is`(not(settingsProvider.getProtectedSettings("4321"))))
     }
 
     @Test
-    fun `Different admin settings should be returned for given projectId and current project if those are not the same`() {
+    fun `Different protected settings should be returned for given projectId and current project if those are not the same`() {
         assertThat(settingsProvider.getProtectedSettings("1234"), `is`(not(settingsProvider.getProtectedSettings())))
     }
 }

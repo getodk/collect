@@ -213,7 +213,7 @@ class FormManagementPreferencesFragmentTest {
     }
 
     @Test
-    fun `Changing Form Update Mode should not cause any crash if related preferences are disabled in Admin Settings`() {
+    fun `Changing Form Update Mode should not cause any crash if related preferences are disabled in Protected Settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         val scenario = FragmentScenario.launch(

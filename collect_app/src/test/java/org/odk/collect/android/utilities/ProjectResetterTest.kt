@@ -68,7 +68,7 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings clears general settings for current project`() {
+    fun `Reset settings clears unprotected settings for current project`() {
         setupTestGeneralSettings(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
@@ -88,7 +88,7 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings does not clear general settings for another projects`() {
+    fun `Reset settings does not clear unprotected settings for another projects`() {
         setupTestGeneralSettings(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
@@ -108,7 +108,7 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings clears admin settings for current project`() {
+    fun `Reset settings clears protected settings for current project`() {
         setupTestAdminSettings(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
@@ -122,7 +122,7 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings does not clear admin settings for another projects`() {
+    fun `Reset settings does not clear protected settings for another projects`() {
         setupTestAdminSettings(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
