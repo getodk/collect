@@ -4,6 +4,7 @@ import org.odk.collect.android.R;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -17,7 +18,9 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     @Override
     public AddNewRepeatDialog assertOnPage() {
-        onView(withText(getTranslatedString(R.string.add_repeat_question, repeatName))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(R.string.add_repeat_question, repeatName)))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()));
         return this;
     }
 

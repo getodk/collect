@@ -210,14 +210,12 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public <D extends Page<D>> D clickOnButtonInDialog(int buttonText, D destination) {
-        // Clicks seem to happen too early here sometimes
-        tryAgainOnFail(() -> {
-            // It seems like clicks sometimes land "under" the dialog so specify the root
-            onView(withText(getTranslatedString(buttonText))).inRoot(isDialog()).perform(click());
-            destination.assertOnPage();
-        });
+        WaitFor.wait250ms(); // https://github.com/android/android-test/issues/444
+        onView(withText(getTranslatedString(buttonText)))
+                .inRoot(isDialog())
+                .perform(click());
 
-        return destination;
+        return destination.assertOnPage();
     }
 
     String getTranslatedString(Integer id) {
