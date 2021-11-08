@@ -324,7 +324,7 @@
   <string name="file_deleted_ok">%s vorm(id) edukalt kustutatud!</string>
   <string name="file_delete_in_progress">Kahjuks kustutamise tegevus on juba töös!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

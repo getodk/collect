@@ -512,7 +512,7 @@
   <string name="file_deleted_ok">%s formularz/y zostało skasowanych!</string>
   <string name="file_delete_in_progress">Przykro mi, trwa kasowanie formularzy!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Serwer</string>

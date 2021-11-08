@@ -133,7 +133,7 @@
   <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
   <string name="delete_no">kolongola te</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

@@ -440,7 +440,7 @@
   <string name="file_deleted_ok">%s‏فارم (ز )‎‏ کامیابی سےڈیلیٹ کر دیے گئے</string>
   <string name="file_delete_in_progress">معافی، فارم مٹانے کا عمل پہلے سے جاری ہے</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور </string>

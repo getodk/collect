@@ -375,7 +375,7 @@
   <string name="file_deleted_ok">1%s formular slettet </string>
   <string name="file_delete_in_progress">Der er allerede en sletning af formular i gang</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

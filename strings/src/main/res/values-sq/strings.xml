@@ -359,7 +359,7 @@
   <string name="file_deleted_ok">%s formë(a) u fshinë me sukses!</string>
   <string name="file_delete_in_progress">Një komandë për të fshirë formularin është duke u ekzekutuar!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>

@@ -537,7 +537,7 @@ Escolher Imagem</string>
   <string name="file_deleted_ok">%s formulário(s) apagados com sucesso!</string>
   <string name="file_delete_in_progress">Desculpe, a ação de apagar está em andamento!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Servidor</string>

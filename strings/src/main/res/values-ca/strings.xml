@@ -313,7 +313,7 @@
   <string name="file_deleted_ok">%s formularis(s) eliminats correctament!</string>
   <string name="file_delete_in_progress">Ho sentim, s\'está eliminant el formulari!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

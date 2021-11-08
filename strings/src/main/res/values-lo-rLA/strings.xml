@@ -262,7 +262,7 @@
   <string name="file_deleted_ok">ລຶບແບບຟອມ%s ສຳເລັດແລ້ວ!</string>
   <string name="file_delete_in_progress">ຄຳສັ່ງລຶບແບບຟອມກຳລັງດຳເນີນງານ</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

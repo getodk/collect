@@ -558,7 +558,7 @@
   <string name="file_deleted_ok">%s Formular(e) erfolgreich gelöscht!</string>
   <string name="file_delete_in_progress">Ein Formularlöschvorgang ist bereits aktiv!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Projekt-Einstellungen</string>
   <!--Title of a settings section-->

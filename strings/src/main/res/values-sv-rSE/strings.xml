@@ -444,7 +444,7 @@
   <string name="file_deleted_ok">%s formulär har raderats!</string>
   <string name="file_delete_in_progress">Tyvärr, radering av formulär pågår redan!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>

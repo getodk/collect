@@ -474,7 +474,7 @@
   <string name="file_deleted_ok">%s formular(i) su uspješno obrisani!</string>
   <string name="file_delete_in_progress">Brisanje formulara je već u toku!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>

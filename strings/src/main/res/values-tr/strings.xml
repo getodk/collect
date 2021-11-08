@@ -200,7 +200,7 @@
   <string name="delete_yes">Formlari Sil</string>
   <string name="file_deleted_ok">%s Form başarıyla silindi.</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

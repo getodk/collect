@@ -36,7 +36,7 @@ class SettingsImporter(
         try {
             val jsonObject = JSONObject(json)
 
-            // Import general settings
+            // Import unprotected settings
             val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 

@@ -310,7 +310,7 @@
   <string name="file_deleted_ok">ลบแบบสำรวจ %s เรียบร้อยแล้ว</string>
   <string name="file_delete_in_progress">ขออภัย กำลังทำการลบแบบสำรวจ</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

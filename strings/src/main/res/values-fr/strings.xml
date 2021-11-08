@@ -559,7 +559,7 @@
   <string name="file_deleted_ok">%s formulaire(s) supprimé(s) avec succès.</string>
   <string name="file_delete_in_progress">Désolé, une action de suppression d\'un formulaire est en cours.</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Paramètres de projet</string>
   <!--Title of a settings section-->

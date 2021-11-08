@@ -429,7 +429,7 @@
   <string name="file_deleted_ok">Бланк опросника успешно удалён: %s шт.</string>
   <string name="file_delete_in_progress">Удаление бланка опросника уже выполняется</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Сервер</string>

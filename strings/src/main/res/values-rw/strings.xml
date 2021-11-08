@@ -547,7 +547,7 @@ Hashize: %2$s</string>
   <string name="file_deleted_ok">Ifishi %s zamaze gusibwa</string>
   <string name="file_delete_in_progress">Ihangane, Igikorwa cyo gusiba ifishi kiracyari gukorwa</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Settings za project</string>
   <!--Title of a settings section-->

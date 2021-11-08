@@ -312,7 +312,7 @@
   <string name="file_deleted_ok">%s obrazcev uspešno zbrisanih!</string>
   <string name="file_delete_in_progress">Brisanje obrazca že poteka!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

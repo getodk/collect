@@ -557,7 +557,7 @@
   <string name="file_deleted_ok">%s تم حذف الاستمارة /ت!</string>
   <string name="file_delete_in_progress">عذراً، يوجد حاليا استمارة يتم حذفها!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">الخادم</string>

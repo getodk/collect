@@ -691,7 +691,7 @@
 
     <!--
     ##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################
     -->
     <string name="project_settings">Project settings</string>

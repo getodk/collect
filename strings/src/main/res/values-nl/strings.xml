@@ -318,7 +318,7 @@
   <string name="file_deleted_ok">%s formulier(en) verwijderd!</string>
   <string name="file_delete_in_progress">Sorry, er is nog een verwijder opdracht actief!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>

@@ -283,7 +283,7 @@
   <string name="file_deleted_ok">1 %s ቅጽ (ዎች) በተሳካ ሁኔታ ተሰርዘዋል!</string>
   <string name="file_delete_in_progress">ይቅርታ፣ ቅጽ የመሰረዝ እርምጃ አስቀድሞ በሂደት ላይ ነው!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

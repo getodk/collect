@@ -346,7 +346,7 @@
   <string name="file_deleted_ok">%s फॉर्म(s) सफलतापूर्वक मिटाये!</string>
   <string name="file_delete_in_progress">क्षमा करें, फॉर्म मिटाने की कार्रवाई पहले से ही प्रगति में है!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">सर्वर</string>

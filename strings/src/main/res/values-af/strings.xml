@@ -264,7 +264,7 @@
   <string name="file_deleted_ok">%s vorm(s) suksesvol verwyder!</string>
   <string name="file_delete_in_progress">Jammer, daar is klaar \'n aksie aan die gang om \'n vorm te verwyder!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

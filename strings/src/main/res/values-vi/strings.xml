@@ -227,7 +227,7 @@
   <string name="file_deleted_ok">Biểu mẫu %s đã bị xoá!</string>
   <string name="file_delete_in_progress">Xin lỗi, file này đang được xoá!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

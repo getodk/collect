@@ -246,7 +246,7 @@
   <string name="file_deleted_ok">%s 表格被成功删除!</string>
   <string name="file_delete_in_progress">正在删除表格!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

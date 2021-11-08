@@ -565,7 +565,7 @@
   <string name="file_deleted_ok">%s dotazníků úspěšně smazáno!</string>
   <string name="file_delete_in_progress">Mazání dotazníku už probíhá!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Nastavení projektu</string>
   <!--Title of a settings section-->

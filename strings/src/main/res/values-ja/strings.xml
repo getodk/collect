@@ -542,7 +542,7 @@
   <string name="file_deleted_ok">%s フォームを削除しました!</string>
   <string name="file_delete_in_progress">申し訳ありません、フォームの削除を実行中です!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">サーバー</string>

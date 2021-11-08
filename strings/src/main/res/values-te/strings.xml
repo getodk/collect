@@ -512,7 +512,7 @@
   <string name="file_deleted_ok">%sఫారం(లు) విజయవంతంగా తొలగించబడ్డాయి!</string>
   <string name="file_delete_in_progress">క్షమించండి, ఫారం తొలగింపు చర్య ఇప్పటికే పురోగతిలో ఉంది!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">సర్వర్</string>

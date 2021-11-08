@@ -556,7 +556,7 @@
   <string name="file_deleted_ok">%s formulir telah berhasil dihapus.</string>
   <string name="file_delete_in_progress">Maaf, proses penghapusan formulir sedang berlangsung.</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Pengaturan proyek</string>
   <!--Title of a settings section-->

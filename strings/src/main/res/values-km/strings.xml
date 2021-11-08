@@ -433,7 +433,7 @@
   <string name="file_deleted_ok">%s សំណុំបែបបទបានលុបដោយជោគជ័យ ! </string>
   <string name="file_delete_in_progress">សុំទោស, សកម្មភាពនៃការលុបសំណុំបែបបទគឺបានដំណើរការ!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">ម៉ាស៊ីនមេ</string>

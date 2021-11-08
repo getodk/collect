@@ -559,7 +559,7 @@
   <string name="file_deleted_ok">%s lomakkeen poistaminen onnistui!</string>
   <string name="file_delete_in_progress">Pahoittelut, lomakkeiden poistaminen jo käynnissä!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Projektin asetukset</string>
   <!--Title of a settings section-->

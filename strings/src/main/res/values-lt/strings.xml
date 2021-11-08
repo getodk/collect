@@ -223,7 +223,7 @@
   <string name="file_deleted_ok">%s forma(-os) sėkmingai ištrintos!</string>
   <string name="file_delete_in_progress">Deja, šiuo metu vyksta formos trynimo procesas!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->

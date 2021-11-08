@@ -265,7 +265,7 @@
   <string name="file_deleted_ok">%s skjema(er) er slettet!</string>
   <string name="file_delete_in_progress">Beklager, sletting pågår!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
