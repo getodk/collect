@@ -449,7 +449,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">नवीन संकेतशब्द प्रविष्ट करा</string>
   <string name="admin_password">प्रशासन संकेतशब्द</string>
@@ -484,7 +484,7 @@
   <string name="user_settings">वापरकर्ता सेटिंग्ज</string>
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">फॉर्म जतन करा</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

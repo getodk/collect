@@ -729,7 +729,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Paramètres déverrouillés</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Saisissez un nouveau mot de passe</string>
   <string name="admin_password">Mot de passe de l\'administrateur</string>
@@ -776,7 +776,7 @@
   <string name="no">Non</string>
   <string name="moving_backwards_enabled_title">Le recul est activé</string>
   <string name="moving_backwards_enabled_message">Vous souhaiterez peut-être reviser les paramètres suivants :\n\n\u2022 Éditer formulaire enregistré\n\u2022 Enregistré le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraintes</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Enregistrer le formulaire</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

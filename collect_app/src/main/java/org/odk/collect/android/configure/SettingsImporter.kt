@@ -40,7 +40,7 @@ class SettingsImporter(
             val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 
-            // Import admin settings
+            // Import protected settings
             val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
             importToPrefs(admin, adminSettings)
 

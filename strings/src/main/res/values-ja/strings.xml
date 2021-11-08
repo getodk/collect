@@ -692,7 +692,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">新しいパスワードを入力してください</string>
   <string name="admin_password">管理者パスワード</string>
@@ -735,7 +735,7 @@
   <string name="no">いいえ</string>
   <string name="moving_backwards_enabled_title">後ろへの移動は有効です</string>
   <string name="moving_backwards_enabled_message">次の設定を確認することができます:\n\n\u2022 保存したフォームの編集\n\u2022 フォームの保存\n\u2022 プロンプトに移動\n\u2022 制約処理</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">フォームを保存する</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

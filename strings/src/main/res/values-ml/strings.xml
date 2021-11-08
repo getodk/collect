@@ -262,12 +262,12 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="show_password">പാസ്സ്‌വേർഡ് കാണിക്കുക</string>
   <string name="delete_project">ഡിലീറ്റ് </string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">ഫോം സേവ് ചെയ്യുക </string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

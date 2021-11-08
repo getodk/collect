@@ -32,7 +32,7 @@ class PreferenceVisibilityHandler(
         updateCategories(preferenceScreen)
     }
 
-    // Hides preferences that are excluded by the admin settings
+    // Hides preferences that are excluded by the protected settings
     private fun updatePreferences(preferenceGroup: PreferenceGroup, state: ProjectPreferencesViewModel.State) {
         for (i in 0 until preferenceGroup.preferenceCount) {
             val preference = preferenceGroup.getPreference(i)

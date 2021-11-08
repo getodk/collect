@@ -432,7 +432,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Nieuw wachtwoord</string>
   <string name="admin_password">Admin wachtwoord</string>
@@ -455,7 +455,7 @@
   <string name="user_settings">Gebruikersinstellingen</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="no">Nee</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Formulier opslaan</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

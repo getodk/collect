@@ -687,7 +687,7 @@ Escolher Imagem</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Digite a nova senha</string>
   <string name="admin_password">Senha Administrativa</string>
@@ -730,7 +730,7 @@ Escolher Imagem</string>
   <string name="no">Não</string>
   <string name="moving_backwards_enabled_title">Movimento para trás habilitado</string>
   <string name="moving_backwards_enabled_message">Talvez você queira revisar as configurações seguintes:\n\n\u2022 Editar formulário salvo\n\u2022 Salvar formulário\n\u2022 botão Ir Para\n\u2022 Processamento de condições em questões</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Mid-form saving</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

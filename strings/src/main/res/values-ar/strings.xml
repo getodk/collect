@@ -707,7 +707,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">أدخل كلمة مرور جديدة</string>
   <string name="admin_password">كلمة مرور المدير</string>
@@ -750,7 +750,7 @@
   <string name="no">لا</string>
   <string name="moving_backwards_enabled_title">تم تمكين التحرك إلى الوراء</string>
   <string name="moving_backwards_enabled_message">قد ترغب في مراجعة الإعدادات التالية:\n\n\u2022 تحرير الاستمارة المحفوظة \n\u2022 الذهاب إلى الموجه\n\u2022 معالجة القيد</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">حفظ الاستمارة</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

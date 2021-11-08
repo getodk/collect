@@ -573,7 +573,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">សូមបំពេញពាក្យសម្ងាត់ថ្មី</string>
   <string name="admin_password">ពាក្យសម្ងាត់ Admin</string>
@@ -615,7 +615,7 @@
   <string name="no">ទេ</string>
   <string name="moving_backwards_enabled_title">អាច​ដំណើរការ​ត្រឡប់​ថយ​ក្រោយ​បាន</string>
   <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

@@ -90,7 +90,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
     private void updateDisabledPrefs() {
         Settings generalSettings = settingsProvider.getUnprotectedSettings();
 
-        // Might be null if disabled in Admin settings
+        // Might be null if disabled in Protected settings
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 

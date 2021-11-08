@@ -729,7 +729,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Ajustes desbloqueados</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Entrar nueva contraseña</string>
   <string name="admin_password">Contraseña de Administrador</string>
@@ -776,7 +776,7 @@
   <string name="no">No</string>
   <string name="moving_backwards_enabled_title">Retroceder en Preguntas Activado</string>
   <string name="moving_backwards_enabled_message">Se recomienda revisar la siguiente configuración:\n\n\u2022 Editar Formulario Guardado\n\u2022 Guardar Formularios\n\u2022 Ir a la Pregunta\n\u2022 Manejo de Restricciones</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Guardar sin completar el formulario</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

@@ -615,7 +615,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Введіть новий пароль</string>
   <string name="admin_password">Пароль адміністратора</string>
@@ -657,7 +657,7 @@
   <string name="no">Ні</string>
   <string name="moving_backwards_enabled_title">Переміщення назад включене</string>
   <string name="moving_backwards_enabled_message">Можливи Ви захочете переглянути наступні налаштування:\n\n\u2022 Виправити Збережену Анкету\n\u2022 Зберегти Анкету\n\u2022 Швидкий Перехід\n\u2022 Обробка обмежень</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Зберегти анкету</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

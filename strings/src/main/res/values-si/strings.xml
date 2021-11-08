@@ -169,11 +169,11 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="show_password">මුර පදය පෙන්වන්න</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->

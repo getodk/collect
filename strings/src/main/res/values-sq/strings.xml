@@ -489,7 +489,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Vendos fjalëkalim të ri</string>
   <string name="admin_password">Fjalëkalimi i Administratorit</string>
@@ -529,7 +529,7 @@
   <string name="yes">Po</string>
   <string name="no">Jo</string>
   <string name="moving_backwards_enabled_title">Të shkuarit mbrapsht është aktivizuar</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Ruaj formularin</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

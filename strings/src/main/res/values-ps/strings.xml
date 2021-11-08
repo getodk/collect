@@ -269,7 +269,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="show_password">پټنوم ښودل</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
@@ -278,7 +278,7 @@
   <string name="yes">هو</string>
   <string name="no">نه</string>
   <string name="moving_backwards_enabled_title">د بيرته راګرځولو توانول فعال دي</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">فورمه ثبت کړي</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
