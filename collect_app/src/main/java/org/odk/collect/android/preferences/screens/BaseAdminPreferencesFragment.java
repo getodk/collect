@@ -32,17 +32,17 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
     @Override
     public void onResume() {
         super.onResume();
-        settingsProvider.getAdminSettings().registerOnSettingChangeListener(this);
+        settingsProvider.getProtectedSettings().registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        settingsProvider.getAdminSettings().unregisterOnSettingChangeListener(this);
+        settingsProvider.getProtectedSettings().unregisterOnSettingChangeListener(this);
     }
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getAdminSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getProtectedSettings().getAll().get(key), key);
     }
 }

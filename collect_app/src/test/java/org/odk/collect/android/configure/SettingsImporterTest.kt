@@ -31,7 +31,7 @@ class SettingsImporterTest {
 
     private val settingsProvider = InMemSettingsProvider()
     private val generalSettings = settingsProvider.getUnprotectedSettings(currentProject.uuid)
-    private val adminSettings = settingsProvider.getAdminSettings(currentProject.uuid)
+    private val adminSettings = settingsProvider.getProtectedSettings(currentProject.uuid)
 
     private val projectsRepository = mock<ProjectsRepository> {}
     private var settingsValidator = mock<SettingsValidator> {

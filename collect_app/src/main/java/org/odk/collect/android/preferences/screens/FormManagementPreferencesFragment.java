@@ -145,7 +145,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled(settingsProvider.getProtectedSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }

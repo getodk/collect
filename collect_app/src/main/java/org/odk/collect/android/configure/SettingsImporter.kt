@@ -28,7 +28,7 @@ class SettingsImporter(
         }
 
         val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
-        val adminSettings = settingsProvider.getAdminSettings(project.uuid)
+        val adminSettings = settingsProvider.getProtectedSettings(project.uuid)
 
         generalSettings.clear()
         adminSettings.clear()

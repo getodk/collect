@@ -42,8 +42,8 @@ public abstract class WidgetTest {
     public void setUp() throws Exception {
         settingsProvider.getUnprotectedSettings().clear();
         settingsProvider.getUnprotectedSettings().setDefaultForAllSettingsWithoutValues();
-        settingsProvider.getAdminSettings().clear();
-        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
+        settingsProvider.getProtectedSettings().clear();
+        settingsProvider.getProtectedSettings().setDefaultForAllSettingsWithoutValues();
 
         when(formEntryPrompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(formEntryPrompt.getIndex().toString()).thenReturn("0, 0");

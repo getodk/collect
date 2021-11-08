@@ -214,10 +214,10 @@ class ProjectDeleterTest {
         settingsProvider.getMetaSettings().save(MetaKeys.KEY_INSTALL_ID, "1234")
 
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
-        settingsProvider.getAdminSettings("1").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        settingsProvider.getProtectedSettings("1").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
         settingsProvider.getUnprotectedSettings("2").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
-        settingsProvider.getAdminSettings("2").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
+        settingsProvider.getProtectedSettings("2").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
         val deleter = ProjectDeleter(
             mock(),
@@ -238,12 +238,12 @@ class ProjectDeleterTest {
             assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
-        settingsProvider.getAdminSettings("1").getAll().forEach { (key, value) ->
+        settingsProvider.getProtectedSettings("1").getAll().forEach { (key, value) ->
             assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
         assertThat(settingsProvider.getUnprotectedSettings("2").getString(ProjectKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
-        assertThat(settingsProvider.getAdminSettings("2").getBoolean(ProtectedProjectKeys.KEY_AUTOSEND), `is`(false))
+        assertThat(settingsProvider.getProtectedSettings("2").getBoolean(ProtectedProjectKeys.KEY_AUTOSEND), `is`(false))
     }
 
     @Test

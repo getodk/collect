@@ -114,7 +114,7 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
+            getProtectedSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
                 ProtectedProjectKeys.defaults[ProtectedProjectKeys.KEY_VIEW_SENT]
             )
@@ -128,7 +128,7 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(anotherProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
+            getProtectedSettings(anotherProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
                 false
             )
@@ -255,7 +255,7 @@ class ProjectResetterTest {
     }
 
     private fun setupTestAdminSettings(uuid: String) {
-        getAdminSettings(uuid).save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
+        getProtectedSettings(uuid).save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
     }
 
     private fun setupTestSettingsFolder(uuid: String) {
@@ -361,7 +361,7 @@ class ProjectResetterTest {
         return settingsProvider.getUnprotectedSettings(uuid)
     }
 
-    fun getAdminSettings(uuid: String): Settings {
-        return settingsProvider.getAdminSettings(uuid)
+    fun getProtectedSettings(uuid: String): Settings {
+        return settingsProvider.getProtectedSettings(uuid)
     }
 }

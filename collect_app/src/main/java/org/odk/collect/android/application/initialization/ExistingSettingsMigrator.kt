@@ -18,7 +18,7 @@ class ExistingSettingsMigrator(
         projectsRepository.getAll().forEach {
             settingsMigrator.migrate(
                 settingsProvider.getUnprotectedSettings(it.uuid),
-                settingsProvider.getAdminSettings(it.uuid)
+                settingsProvider.getProtectedSettings(it.uuid)
             )
         }
     }

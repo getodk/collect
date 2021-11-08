@@ -239,7 +239,7 @@ public class FormMapActivityTest {
 
     @Test
     public void openingEditableInstance_whenEditingSettingisOff_launchesViewActivity() {
-        TestSettingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false);
+        TestSettingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false);
 
         MapPoint editableAndFinalized = new MapPoint(10.1, 125.6);
         MapPoint unfinalized = new MapPoint(10.1, 126.6);

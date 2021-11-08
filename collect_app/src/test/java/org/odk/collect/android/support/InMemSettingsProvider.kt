@@ -17,7 +17,7 @@ class InMemSettingsProvider : SettingsProvider {
         return settings.getOrPut("general:$projectId") { InMemSettings() }
     }
 
-    override fun getAdminSettings(projectId: String?): Settings {
+    override fun getProtectedSettings(projectId: String?): Settings {
         return settings.getOrPut("admin:$projectId") { InMemSettings() }
     }
 

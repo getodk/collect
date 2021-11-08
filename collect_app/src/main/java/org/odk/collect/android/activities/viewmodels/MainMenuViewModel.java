@@ -36,7 +36,7 @@ public class MainMenuViewModel extends ViewModel {
         this.version = versionInformation;
         this.settingsProvider = settingsProvider;
         this.generalSettings = settingsProvider.getUnprotectedSettings();
-        this.adminSettings = settingsProvider.getAdminSettings();
+        this.adminSettings = settingsProvider.getProtectedSettings();
         this.instancesAppState = instancesAppState;
         this.scheduler = scheduler;
     }

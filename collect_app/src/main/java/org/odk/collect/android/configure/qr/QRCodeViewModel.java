@@ -125,7 +125,7 @@ class QRCodeViewModel extends ViewModel {
                     qrCodeGenerator,
                     appConfigurationGenerator,
                     settingsProvider.getUnprotectedSettings(),
-                    settingsProvider.getAdminSettings(),
+                    settingsProvider.getProtectedSettings(),
                     scheduler
             );
         }

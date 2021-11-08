@@ -159,7 +159,7 @@ class ExistingProjectMigratorTest {
             generalSettings.getString("generalKey"),
             `is`("generalValue")
         )
-        val adminSettings = settingsProvider.getAdminSettings(existingProject.uuid)
+        val adminSettings = settingsProvider.getProtectedSettings(existingProject.uuid)
         assertThat(adminSettings.getString("adminKey"), `is`("adminValue"))
     }
 

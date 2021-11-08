@@ -50,8 +50,8 @@ class ProjectResetter(
 
         settingsProvider.getUnprotectedSettings().clear()
         settingsProvider.getUnprotectedSettings().setDefaultForAllSettingsWithoutValues()
-        settingsProvider.getAdminSettings().clear()
-        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues()
+        settingsProvider.getProtectedSettings().clear()
+        settingsProvider.getProtectedSettings().setDefaultForAllSettingsWithoutValues()
 
         if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS))) {
             failedResetActions.add(ResetAction.RESET_PREFERENCES)

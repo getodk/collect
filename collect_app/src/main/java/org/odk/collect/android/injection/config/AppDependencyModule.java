@@ -255,7 +255,7 @@ public class AppDependencyModule {
 
     @Provides
     public AdminPasswordProvider providesAdminPasswordProvider(SettingsProvider settingsProvider) {
-        return new AdminPasswordProvider(settingsProvider.getAdminSettings());
+        return new AdminPasswordProvider(settingsProvider.getProtectedSettings());
     }
 
     @Provides
@@ -445,7 +445,7 @@ public class AppDependencyModule {
     @Provides
     @Named("ADMIN_SETTINGS_STORE")
     public SettingsStore providesAdminSettingsStore(SettingsProvider settingsProvider) {
-        return new SettingsStore(settingsProvider.getAdminSettings());
+        return new SettingsStore(settingsProvider.getProtectedSettings());
     }
 
     @Provides

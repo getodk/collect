@@ -22,8 +22,8 @@ object TestSettingsProvider {
     }
 
     @JvmStatic
-    fun getAdminSettings(): Settings {
-        return getSettingsProvider().getAdminSettings()
+    fun getProtectedSettings(): Settings {
+        return getSettingsProvider().getProtectedSettings()
     }
 
     @JvmStatic

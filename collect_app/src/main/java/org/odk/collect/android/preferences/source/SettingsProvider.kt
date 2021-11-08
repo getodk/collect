@@ -10,9 +10,9 @@ interface SettingsProvider {
 
     fun getUnprotectedSettings(): Settings = getUnprotectedSettings(null)
 
-    fun getAdminSettings(projectId: String?): Settings
+    fun getProtectedSettings(projectId: String?): Settings
 
-    fun getAdminSettings(): Settings = getAdminSettings(null)
+    fun getProtectedSettings(): Settings = getProtectedSettings(null)
 
     fun clearAll()
 }

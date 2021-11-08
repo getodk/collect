@@ -15,7 +15,7 @@ class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
         setPreferencesFromResource(R.xml.main_menu_access_preferences, rootKey)
 
         findPreference<Preference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isEnabled =
-            settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
 
         val formUpdateMode = SettingsUtils.getFormUpdateMode(requireContext(), settingsProvider.getUnprotectedSettings())
         if (formUpdateMode == FormUpdateMode.MATCH_EXACTLY) {

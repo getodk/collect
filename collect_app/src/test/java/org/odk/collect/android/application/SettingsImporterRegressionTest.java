@@ -87,6 +87,6 @@ public class SettingsImporterRegressionTest {
     @Test
     public void adminPW() {
         settingsImporter.fromJSON("{\"general\":{\"periodic_form_updates_check\":\"every_fifteen_minutes\"},\"admin\":{\"admin_pw\":\"blah\"}}", currentProject);
-        assertThat(settingsProvider.getAdminSettings().getString(KEY_ADMIN_PW), is("blah"));
+        assertThat(settingsProvider.getProtectedSettings().getString(KEY_ADMIN_PW), is("blah"));
     }
 }

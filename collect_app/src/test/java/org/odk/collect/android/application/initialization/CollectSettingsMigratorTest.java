@@ -22,7 +22,7 @@ import static org.odk.collect.android.application.initialization.migration.Share
 public class CollectSettingsMigratorTest {
 
     private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
-    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private final Settings adminSettings = TestSettingsProvider.getProtectedSettings();
     private final Settings metaSettings = TestSettingsProvider.getMetaSettings();
 
     @Before

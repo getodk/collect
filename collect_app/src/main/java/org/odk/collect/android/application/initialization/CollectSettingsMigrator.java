@@ -45,7 +45,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
             migration.apply(generalSettings);
         }
 
-        for (Migration migration : getAdminMigrations()) {
+        for (Migration migration : getProtectedMigrations()) {
             migration.apply(adminSettings);
         }
 
@@ -139,7 +139,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
         );
     }
 
-    public List<KeyTranslator> getAdminMigrations() {
+    public List<KeyTranslator> getProtectedMigrations() {
         return asList(
                 // When either the map SDK or the basemap selection were previously
                 // hidden, we want to hide the entire Maps preference screen.

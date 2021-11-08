@@ -24,7 +24,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         }
     }
 
-    override fun getAdminSettings(projectId: String?): Settings {
+    override fun getProtectedSettings(projectId: String?): Settings {
         val settingsId = getSettingsId(ADMIN_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {

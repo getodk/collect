@@ -68,7 +68,7 @@ class FormManagementPreferencesFragmentTest {
         projectID = CollectHelpers.setupDemoProject()
         context = ApplicationProvider.getApplicationContext()
         generalSettings = TestSettingsProvider.getUnprotectedSettings()
-        adminSettings = TestSettingsProvider.getAdminSettings()
+        adminSettings = TestSettingsProvider.getProtectedSettings()
     }
 
     @Test

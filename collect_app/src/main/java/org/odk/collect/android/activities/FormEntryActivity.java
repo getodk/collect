@@ -565,7 +565,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void loadForm() {
         propertyManager.reload();
-        allowMovingBackwards = settingsProvider.getAdminSettings().getBoolean(KEY_MOVING_BACKWARDS);
+        allowMovingBackwards = settingsProvider.getProtectedSettings().getBoolean(KEY_MOVING_BACKWARDS);
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
@@ -1278,7 +1278,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        if (!settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED)) {
+        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED)) {
             endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
         }
 
@@ -1292,7 +1292,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         // override the visibility settings based upon admin preferences
-        if (!settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS)) {
+        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS)) {
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setVisibility(View.GONE);
         }
