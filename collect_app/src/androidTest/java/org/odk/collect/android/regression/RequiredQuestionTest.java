@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 
@@ -19,33 +20,15 @@ public class RequiredQuestionTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule("requiredJR275.xml"))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Test
-    public void requiredQuestions_ShouldDisplayAsterisk() {
-
-        //TestCase1
-        new MainMenuPage()
+    public void requiredQuestions_ShouldDisplayAsterisk_andCustomMessageIfSkipped() {
+        rule.startAtMainMenu()
+                .copyForm("requiredJR275.xml")
                 .startBlankForm("required")
-                .assertText("* Foo")
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage()))
-                .clickIgnoreChanges();
-    }
-
-    @Test
-    public void requiredQuestions_ShouldDisplayCustomMessage() {
-
-        //TestCase2
-        new MainMenuPage()
-                .startBlankForm("required")
-                .swipeToNextQuestion()
-                .checkIsToastWithMessageDisplayed("Custom required message")
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("required", new MainMenuPage()))
-                .clickIgnoreChanges();
+                .assertText("* Foo") //TestCase1
+                .swipeToNextQuestionWithConstraintViolation("Custom required message");  //TestCase2
     }
 }
