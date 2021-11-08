@@ -11,6 +11,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -22,16 +23,13 @@ public class ResetApplicationTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-            .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Test
     public void when_rotateScreen_should_resetDialogNotDisappear() {
         //TestCase1
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickProjectManagement()
@@ -49,7 +47,8 @@ public class ResetApplicationTest {
     @Test
     public void savedAndBlankForms_shouldBeReset() {
         //TestCase1,4
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("All_widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
@@ -77,7 +76,7 @@ public class ResetApplicationTest {
     @Test
     public void adminSettings_shouldBeReset() {
         //TestCase2
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickAccessControl()
@@ -106,7 +105,7 @@ public class ResetApplicationTest {
     @Test
     public void userInterfaceSettings_shouldBeReset() {
         //TestCase3
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
@@ -147,7 +146,7 @@ public class ResetApplicationTest {
     @Test
     public void formManagementSettings_shouldBeReset() {
         //TestCase3
-        new MainMenuPage()
+        rule.startAtMainMenu()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()
@@ -157,6 +156,7 @@ public class ResetApplicationTest {
                 .clickOnDefaultToFinalized()
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
+                .copyForm("All_widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
@@ -182,5 +182,4 @@ public class ResetApplicationTest {
                 .assertMarkFinishedIsSelected()
                 .clickSaveAndExit();
     }
-
 }
