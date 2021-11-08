@@ -357,7 +357,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new CancelRecordingDialog(formName);
     }
 
-    private void assertConstraintDisplayed(String constraintText) {
+    public void assertConstraintDisplayed(String constraintText) {
         // Constraints warnings show as dialogs in Android 11+
         if (Build.VERSION.SDK_INT < 30) {
             checkIsToastWithMessageDisplayed(constraintText);

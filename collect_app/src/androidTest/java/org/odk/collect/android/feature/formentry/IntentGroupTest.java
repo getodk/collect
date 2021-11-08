@@ -40,6 +40,7 @@ import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,15 +73,14 @@ import static org.odk.collect.android.support.actions.NestedScrollToAction.neste
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(INTENT_GROUP_FORM, "intent-group");
+    public FormActivityTestRule rule = new FormActivityTestRule(INTENT_GROUP_FORM, "intent-group");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RecordedIntentsRule())
             .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)) // Needed to write temp file
-            .around(activityTestRule);
+            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+            .around(rule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
     @Test
@@ -93,8 +93,9 @@ public class IntentGroupTest {
     // text if no app is found.
     @Test
     public void appMissingErrorText_ShouldComeFromSpecialFormText() {
-        onView(withText("This is buttonText")).perform(click());
-        onView(withText("This is noAppErrorString")).inRoot(withDecorView(not(ActivityHelpers.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+        rule.startInFormEntry()
+                .clickOnText("This is buttonText")
+                .checkIsToastWithMessageDisplayed("This is noAppErrorString");
     }
 
     @Test
