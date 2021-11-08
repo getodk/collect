@@ -74,13 +74,13 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
+            getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
                 ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
-            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
+            getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
                 ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
             )
@@ -94,13 +94,13 @@ class ProjectResetterTest {
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_USERNAME),
+            getUnprotectedSettings(anotherProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
                 "usernameTest"
             )
         )
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_PASSWORD),
+            getUnprotectedSettings(anotherProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
                 "passwordTest"
             )
@@ -250,8 +250,8 @@ class ProjectResetterTest {
     }
 
     private fun setupTestGeneralSettings(uuid: String) {
-        getGeneralSettings(uuid).save(ProjectKeys.KEY_USERNAME, "usernameTest")
-        getGeneralSettings(uuid).save(ProjectKeys.KEY_PASSWORD, "passwordTest")
+        getUnprotectedSettings(uuid).save(ProjectKeys.KEY_USERNAME, "usernameTest")
+        getUnprotectedSettings(uuid).save(ProjectKeys.KEY_PASSWORD, "passwordTest")
     }
 
     private fun setupTestAdminSettings(uuid: String) {
@@ -357,8 +357,8 @@ class ProjectResetterTest {
         assertTrue(File(folder).list().isEmpty())
     }
 
-    fun getGeneralSettings(uuid: String): Settings {
-        return settingsProvider.getGeneralSettings(uuid)
+    fun getUnprotectedSettings(uuid: String): Settings {
+        return settingsProvider.getUnprotectedSettings(uuid)
     }
 
     fun getAdminSettings(uuid: String): Settings {

@@ -104,7 +104,7 @@ public class AutoSendTaskSpec implements TaskSpec {
             return false;
         }
 
-        String autosend = settingsProvider.getGeneralSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND);
+        String autosend = settingsProvider.getUnprotectedSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND);
         boolean sendwifi = autosend.equals("wifi_only");
         boolean sendnetwork = autosend.equals("cellular_only");
         if (autosend.equals("wifi_and_cellular")) {

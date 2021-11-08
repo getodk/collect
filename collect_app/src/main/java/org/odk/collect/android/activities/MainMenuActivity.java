@@ -147,7 +147,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         getFormsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                String protocol = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_PROTOCOL);
+                String protocol = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL);
                 Intent i;
                 if (protocol.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
                     if (new PlayServicesChecker().isGooglePlayServicesAvailable(MainMenuActivity.this)) {

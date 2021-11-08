@@ -102,7 +102,7 @@ public class CollectSetGeopointAction extends SetGeopointAction implements Locat
         return DaggerUtils
                 .getComponent(Collect.getInstance())
                 .settingsProvider()
-                .getGeneralSettings()
+                .getUnprotectedSettings()
                 .getBoolean(KEY_BACKGROUND_LOCATION);
     }
 }

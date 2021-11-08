@@ -15,7 +15,7 @@ class FormSourceProvider(
 
     @JvmOverloads
     fun get(projectId: String? = null): FormSource {
-        val generalSettings = settingsProvider.getGeneralSettings(projectId)
+        val generalSettings = settingsProvider.getUnprotectedSettings(projectId)
 
         val serverURL = generalSettings.getString(ProjectKeys.KEY_SERVER_URL)
 

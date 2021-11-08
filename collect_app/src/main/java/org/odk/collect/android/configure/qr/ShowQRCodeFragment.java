@@ -85,7 +85,7 @@ public class ShowQRCodeFragment extends Fragment {
         ButterKnife.bind(this, view);
         setHasOptionsMenu(true);
         passwordsSet[0] = !settingsProvider.getAdminSettings().getString(KEY_ADMIN_PW).isEmpty();
-        passwordsSet[1] = !settingsProvider.getGeneralSettings().getString(KEY_PASSWORD).isEmpty();
+        passwordsSet[1] = !settingsProvider.getUnprotectedSettings().getString(KEY_PASSWORD).isEmpty();
 
         qrCodeViewModel.getBitmap().observe(this.getViewLifecycleOwner(), bitmap -> {
             if (bitmap != null) {

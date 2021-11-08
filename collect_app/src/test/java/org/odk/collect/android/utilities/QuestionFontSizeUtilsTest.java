@@ -21,7 +21,7 @@ public class QuestionFontSizeUtilsTest {
 
     @Test
     public void whenFontSizeSpecified_shouldReturnSelectedValue() {
-        TestSettingsProvider.getGeneralSettings().save(KEY_FONT_SIZE, "30");
+        TestSettingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
         assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(30));
     }
 }

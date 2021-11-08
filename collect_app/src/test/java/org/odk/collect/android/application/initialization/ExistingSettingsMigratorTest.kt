@@ -25,11 +25,11 @@ class ExistingSettingsMigratorTest {
 
         existingSettingsMigrator.run()
         verify(settingsMigrator).migrate(
-            settingsProvider.getGeneralSettings(project1.uuid),
+            settingsProvider.getUnprotectedSettings(project1.uuid),
             settingsProvider.getAdminSettings(project1.uuid)
         )
         verify(settingsMigrator).migrate(
-            settingsProvider.getGeneralSettings(project2.uuid),
+            settingsProvider.getUnprotectedSettings(project2.uuid),
             settingsProvider.getAdminSettings(project2.uuid)
         )
     }

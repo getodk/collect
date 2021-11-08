@@ -48,8 +48,8 @@ class ProjectResetter(
     private fun resetPreferences() {
         WebCredentialsUtils.clearAllCredentials()
 
-        settingsProvider.getGeneralSettings().clear()
-        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues()
+        settingsProvider.getUnprotectedSettings().clear()
+        settingsProvider.getUnprotectedSettings().setDefaultForAllSettingsWithoutValues()
         settingsProvider.getAdminSettings().clear()
         settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues()
 

@@ -99,7 +99,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 && new PlayServicesChecker().isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(settingsProvider.getGeneralSettings().getBoolean(KEY_BACKGROUND_LOCATION));
+            backgroundLocation.setChecked(settingsProvider.getUnprotectedSettings().getBoolean(KEY_BACKGROUND_LOCATION));
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
@@ -129,7 +129,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.track_location) {
-            backgroundLocationViewModel.backgroundLocationPreferenceToggled(settingsProvider.getGeneralSettings());
+            backgroundLocationViewModel.backgroundLocationPreferenceToggled(settingsProvider.getUnprotectedSettings());
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {

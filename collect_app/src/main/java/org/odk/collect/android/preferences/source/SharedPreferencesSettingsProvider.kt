@@ -16,7 +16,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         SharedPreferencesSettings(getSharedPrefs(META_SETTINGS_NAME))
     }
 
-    override fun getGeneralSettings(projectId: String?): Settings {
+    override fun getUnprotectedSettings(projectId: String?): Settings {
         val settingsId = getSettingsId(GENERAL_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {

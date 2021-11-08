@@ -32,7 +32,7 @@ class UserPropertiesInitializer(
     }
 
     private fun isNotUsingMatchExactly(project: Project.Saved, context: Context): Boolean {
-        val settings = settingsProvider.getGeneralSettings(project.uuid)
+        val settings = settingsProvider.getUnprotectedSettings(project.uuid)
         val serverUrl = settings.getString(ProjectKeys.KEY_SERVER_URL)
         val formUpdateMode = settings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
 
@@ -43,7 +43,7 @@ class UserPropertiesInitializer(
     }
 
     private fun isNotUsingDefaultTheme(project: Project.Saved): Boolean {
-        val settings = settingsProvider.getGeneralSettings(project.uuid)
+        val settings = settingsProvider.getUnprotectedSettings(project.uuid)
         val theme = settings.getString(ProjectKeys.KEY_APP_THEME)
         return theme != ProjectKeys.defaults[ProjectKeys.KEY_APP_THEME]
     }

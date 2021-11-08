@@ -49,7 +49,7 @@ class SplashScreenActivityTest {
                 projectsRepository: ProjectsRepository
             ): SplashScreenViewModel.Factory? {
                 return object : SplashScreenViewModel.Factory(
-                    settingsProvider.getGeneralSettings(),
+                    settingsProvider.getUnprotectedSettings(),
                     projectsRepository
                 ) {
                     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

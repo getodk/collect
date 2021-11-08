@@ -94,14 +94,14 @@ public class PropertyManager implements IPropertyManager {
         }
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
-        Settings generalSettings = settingsProvider.getGeneralSettings();
+        Settings generalSettings = settingsProvider.getUnprotectedSettings();
         initUserDefined(generalSettings, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
         initUserDefined(generalSettings, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
         initUserDefined(generalSettings, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
-            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, settingsProvider.getGeneralSettings().getString(KEY_USERNAME));
+            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, settingsProvider.getUnprotectedSettings().getString(KEY_USERNAME));
         }
 
         return this;

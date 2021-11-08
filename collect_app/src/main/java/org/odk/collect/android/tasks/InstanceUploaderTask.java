@@ -63,7 +63,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                     if (deleteInstanceAfterSubmission != null) {
                         isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
                     } else {
-                        isFormAutoDeleteOptionEnabled = settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
+                        isFormAutoDeleteOptionEnabled = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND);
                     }
 
                     Stream<Instance> instancesToDelete = instanceIds.stream()

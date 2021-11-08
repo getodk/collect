@@ -29,7 +29,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     @Override
     public void scheduleUpdates(String projectId) {
-        Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
+        Settings generalSettings = settingsProvider.getUnprotectedSettings(projectId);
 
         String protocol = generalSettings.getString(KEY_PROTOCOL);
         if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {

@@ -40,8 +40,8 @@ public abstract class WidgetTest {
     @Before
     @OverridingMethodsMustInvokeSuper
     public void setUp() throws Exception {
-        settingsProvider.getGeneralSettings().clear();
-        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues();
+        settingsProvider.getUnprotectedSettings().clear();
+        settingsProvider.getUnprotectedSettings().setDefaultForAllSettingsWithoutValues();
         settingsProvider.getAdminSettings().clear();
         settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues();
 

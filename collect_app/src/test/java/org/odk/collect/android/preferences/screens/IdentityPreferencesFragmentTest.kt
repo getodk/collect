@@ -54,7 +54,7 @@ class IdentityPreferencesFragmentTest {
             }
         })
 
-        generalSettings = TestSettingsProvider.getGeneralSettings()
+        generalSettings = TestSettingsProvider.getUnprotectedSettings()
         adminSettings = TestSettingsProvider.getAdminSettings()
     }
 

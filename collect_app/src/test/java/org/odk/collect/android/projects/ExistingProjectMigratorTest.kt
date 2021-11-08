@@ -154,7 +154,7 @@ class ExistingProjectMigratorTest {
         existingProjectMigrator.run()
         val existingProject = currentProjectProvider.getCurrentProject()
 
-        val generalSettings = settingsProvider.getGeneralSettings(existingProject.uuid)
+        val generalSettings = settingsProvider.getUnprotectedSettings(existingProject.uuid)
         assertThat(
             generalSettings.getString("generalKey"),
             `is`("generalValue")

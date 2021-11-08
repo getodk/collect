@@ -63,7 +63,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.select_odk_shortcut)
                 .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
-                    AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getGeneralSettings());
+                    AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getUnprotectedSettings());
 
                     Intent intent = getShortcutIntent(forms, item);
                     setResult(RESULT_OK, intent);

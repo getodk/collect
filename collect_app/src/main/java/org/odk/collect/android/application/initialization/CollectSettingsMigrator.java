@@ -41,7 +41,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
 
     @Override
     public void migrate(Settings generalSettings, Settings adminSettings) {
-        for (Migration migration : getGeneralMigrations()) {
+        for (Migration migration : getUnprotectedMigrations()) {
             migration.apply(generalSettings);
         }
 
@@ -54,7 +54,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
         }
     }
 
-    private List<Migration> getGeneralMigrations() {
+    private List<Migration> getUnprotectedMigrations() {
         return asList(
                 translateKey("map_sdk_behavior").toKey(KEY_BASEMAP_SOURCE)
                         .fromValue("google_maps").toValue("google")

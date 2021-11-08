@@ -13,7 +13,7 @@ class InMemSettingsProvider : SettingsProvider {
         return metaSettings
     }
 
-    override fun getGeneralSettings(projectId: String?): Settings {
+    override fun getUnprotectedSettings(projectId: String?): Settings {
         return settings.getOrPut("general:$projectId") { InMemSettings() }
     }
 

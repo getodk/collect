@@ -31,28 +31,28 @@ class SharedPreferencesSettingsProviderTest {
 
     @Test
     fun `The same general settings should always be returned for current project`() {
-        assertThat(settingsProvider.getGeneralSettings(), `is`(settingsProvider.getGeneralSettings()))
+        assertThat(settingsProvider.getUnprotectedSettings(), `is`(settingsProvider.getUnprotectedSettings()))
     }
 
     @Test
     fun `The same general settings should always be returned for given projectId`() {
-        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(settingsProvider.getGeneralSettings("1234")))
+        assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(settingsProvider.getUnprotectedSettings("1234")))
     }
 
     @Test
     fun `The same general settings should be returned for given projectId and current project if the those are the same`() {
         settingsProvider.getMetaSettings().save(CURRENT_PROJECT_ID, "1234")
-        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(settingsProvider.getGeneralSettings()))
+        assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(settingsProvider.getUnprotectedSettings()))
     }
 
     @Test
     fun `Different general settings should be returned for different projectIds`() {
-        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(not(settingsProvider.getGeneralSettings("4321"))))
+        assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(not(settingsProvider.getUnprotectedSettings("4321"))))
     }
 
     @Test
     fun `Different general settings should be returned for given projectId and current project if those are not the same`() {
-        assertThat(settingsProvider.getGeneralSettings("1234"), `is`(not(settingsProvider.getGeneralSettings())))
+        assertThat(settingsProvider.getUnprotectedSettings("1234"), `is`(not(settingsProvider.getUnprotectedSettings())))
     }
 
     @Test

@@ -63,7 +63,7 @@ public class GoogleAccountsManagerTest {
     @Before
     public void setup() {
         googleAccountsManager = spy(new GoogleAccountsManager(mockedCredential, settingsProvider, mockIntent, mockThemeUtils));
-        when(settingsProvider.getGeneralSettings()).thenReturn(generalSettings);
+        when(settingsProvider.getUnprotectedSettings()).thenReturn(generalSettings);
         stubCredential();
         stubPreferences();
         mockPermissionsProvider();

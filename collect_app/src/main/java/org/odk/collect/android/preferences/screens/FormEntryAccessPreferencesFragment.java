@@ -43,7 +43,7 @@ public class FormEntryAccessPreferencesFragment extends BaseAdminPreferencesFrag
         settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
         settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
         settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
-        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
         findPreference(KEY_JUMP_TO).setEnabled(false);
         findPreference(KEY_SAVE_MID).setEnabled(false);

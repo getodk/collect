@@ -213,10 +213,10 @@ class ProjectDeleterTest {
     fun `Deleting project clears its settings`() {
         settingsProvider.getMetaSettings().save(MetaKeys.KEY_INSTALL_ID, "1234")
 
-        settingsProvider.getGeneralSettings("1").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
         settingsProvider.getAdminSettings("1").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
-        settingsProvider.getGeneralSettings("2").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
+        settingsProvider.getUnprotectedSettings("2").save(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
         settingsProvider.getAdminSettings("2").save(ProtectedProjectKeys.KEY_AUTOSEND, false)
 
         val deleter = ProjectDeleter(
@@ -234,7 +234,7 @@ class ProjectDeleterTest {
 
         assertThat(settingsProvider.getMetaSettings().getString(MetaKeys.KEY_INSTALL_ID), `is`("1234"))
 
-        settingsProvider.getGeneralSettings("1").getAll().forEach { (key, value) ->
+        settingsProvider.getUnprotectedSettings("1").getAll().forEach { (key, value) ->
             assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
@@ -242,7 +242,7 @@ class ProjectDeleterTest {
             assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
         }
 
-        assertThat(settingsProvider.getGeneralSettings("2").getString(ProjectKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
+        assertThat(settingsProvider.getUnprotectedSettings("2").getString(ProjectKeys.KEY_SERVER_URL), `is`("https://my-server.com"))
         assertThat(settingsProvider.getAdminSettings("2").getBoolean(ProtectedProjectKeys.KEY_AUTOSEND), `is`(false))
     }
 

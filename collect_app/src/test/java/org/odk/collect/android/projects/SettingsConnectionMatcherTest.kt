@@ -115,7 +115,7 @@ class SettingsConnectionMatcherTest {
     private fun createServerProject(projectId: String, url: String, username: String) {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
-        val generalSettings = inMemSettingsProvider.getGeneralSettings(projectId)
+        val generalSettings = inMemSettingsProvider.getUnprotectedSettings(projectId)
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, url)
         generalSettings.save(ProjectKeys.KEY_USERNAME, username)
@@ -124,7 +124,7 @@ class SettingsConnectionMatcherTest {
     private fun createGoogleDriveProject(projectId: String, account: String) {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
-        val generalSettings = inMemSettingsProvider.getGeneralSettings(projectId)
+        val generalSettings = inMemSettingsProvider.getUnprotectedSettings(projectId)
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         generalSettings.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, account)
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "")

@@ -63,7 +63,7 @@ class AppConfigurationGeneratorTest {
     fun `When user password included, should be present in json`() {
         val generalPrefs = mapOf<String, Any> (ProjectKeys.KEY_PASSWORD to "123456")
 
-        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
+        settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(ProjectKeys.KEY_PASSWORD))
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), projectDetails)
@@ -73,7 +73,7 @@ class AppConfigurationGeneratorTest {
     fun `When user password excluded, should not be present in json`() {
         val generalPrefs = mapOf<String, Any> (ProjectKeys.KEY_PASSWORD to "123456")
 
-        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
+        settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
@@ -91,7 +91,7 @@ class AppConfigurationGeneratorTest {
             ProtectedProjectKeys.KEY_DELETE_SAVED to false
         )
 
-        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
+        settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
@@ -109,7 +109,7 @@ class AppConfigurationGeneratorTest {
             it.key == ProtectedProjectKeys.KEY_GET_BLANK || it.key == ProtectedProjectKeys.KEY_DELETE_SAVED
         }
 
-        settingsProvider.getGeneralSettings().saveAll(generalPrefs)
+        settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
         settingsProvider.getAdminSettings().saveAll(adminPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()

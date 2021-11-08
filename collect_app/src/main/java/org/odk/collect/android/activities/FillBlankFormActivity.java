@@ -286,6 +286,6 @@ public class FillBlankFormActivity extends FormListActivity implements
     }
 
     private boolean hideOldFormVersions() {
-        return settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS);
+        return settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS);
     }
 }

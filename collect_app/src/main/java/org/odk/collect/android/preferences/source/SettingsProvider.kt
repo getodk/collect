@@ -6,9 +6,9 @@ interface SettingsProvider {
 
     fun getMetaSettings(): Settings
 
-    fun getGeneralSettings(projectId: String?): Settings
+    fun getUnprotectedSettings(projectId: String?): Settings
 
-    fun getGeneralSettings(): Settings = getGeneralSettings(null)
+    fun getUnprotectedSettings(): Settings = getUnprotectedSettings(null)
 
     fun getAdminSettings(projectId: String?): Settings
 

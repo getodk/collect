@@ -38,7 +38,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         }
 
         if (changedKey.equals(KEY_EXTERNAL_APP_RECORDING) && !((Boolean) newValue)) {
-            AnalyticsUtils.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, settingsProvider.getGeneralSettings(projectId));
+            AnalyticsUtils.logServerEvent(AnalyticsEvents.INTERNAL_RECORDING_OPT_IN, settingsProvider.getUnprotectedSettings(projectId));
         }
 
         if (changedKey.equals(KEY_SERVER_URL)) {

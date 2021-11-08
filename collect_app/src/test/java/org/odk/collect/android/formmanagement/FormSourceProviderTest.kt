@@ -13,7 +13,7 @@ class FormSourceProviderTest {
     @Test
     fun `returned source uses project's server when passed`() {
         val settingsProvider = InMemSettingsProvider()
-        val settings = settingsProvider.getGeneralSettings("projectId")
+        val settings = settingsProvider.getUnprotectedSettings("projectId")
 
         val formSourceProvider = FormSourceProvider(settingsProvider, mock())
 

@@ -14,7 +14,7 @@ public final class QuestionFontSizeUtils {
 
     public static int getQuestionFontSize() {
         try {
-            return Integer.parseInt(DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getGeneralSettings().getString(KEY_FONT_SIZE));
+            return Integer.parseInt(DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getUnprotectedSettings().getString(KEY_FONT_SIZE));
         } catch (Exception | Error e) {
             return DEFAULT_FONT_SIZE;
         }

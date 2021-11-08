@@ -174,7 +174,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
-                settingsProvider.getGeneralSettings().getBoolean(KEY_EXTERNAL_APP_RECORDING),
+                settingsProvider.getUnprotectedSettings().getBoolean(KEY_EXTERNAL_APP_RECORDING),
                 waitingForDataRegistry,
                 questionMediaManager,
                 audioPlayer,
@@ -344,7 +344,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
-            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper(settingsProvider.getGeneralSettings());
+            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper(settingsProvider.getUnprotectedSettings());
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSizeHelper.getSubtitle1());
 
             tv.setVisibility(VISIBLE);

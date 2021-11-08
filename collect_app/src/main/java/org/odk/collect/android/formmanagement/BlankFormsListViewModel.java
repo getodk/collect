@@ -50,7 +50,7 @@ public class BlankFormsListViewModel extends ViewModel {
         this.application = application;
         this.scheduler = scheduler;
         this.syncRepository = syncRepository;
-        this.generalSettings = settingsProvider.getGeneralSettings();
+        this.generalSettings = settingsProvider.getUnprotectedSettings();
         this.analytics = analytics;
         this.formsUpdater = formsUpdater;
         this.currentProjectProvider = currentProjectProvider;

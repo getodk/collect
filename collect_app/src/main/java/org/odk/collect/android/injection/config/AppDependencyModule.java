@@ -191,7 +191,7 @@ public class AppDependencyModule {
 
     @Provides
     WebCredentialsUtils provideWebCredentials(SettingsProvider settingsProvider) {
-        return new WebCredentialsUtils(settingsProvider.getGeneralSettings());
+        return new WebCredentialsUtils(settingsProvider.getUnprotectedSettings());
     }
 
     @Provides
@@ -433,13 +433,13 @@ public class AppDependencyModule {
 
     @Provides
     public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getGeneralSettings(), permissionsChecker, clock);
+        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, clock);
     }
 
     @Provides
     @Named("GENERAL_SETTINGS_STORE")
     public SettingsStore providesGeneralSettingsStore(SettingsProvider settingsProvider) {
-        return new SettingsStore(settingsProvider.getGeneralSettings());
+        return new SettingsStore(settingsProvider.getUnprotectedSettings());
     }
 
     @Provides
@@ -505,7 +505,7 @@ public class AppDependencyModule {
 
     @Provides
     public SplashScreenViewModel.Factory providesSplashScreenViewModel(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
-        return new SplashScreenViewModel.Factory(settingsProvider.getGeneralSettings(), projectsRepository);
+        return new SplashScreenViewModel.Factory(settingsProvider.getUnprotectedSettings(), projectsRepository);
     }
 
     @Provides

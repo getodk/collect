@@ -35,7 +35,7 @@ class AnalyticsInitializerTest {
     @Test
     fun whenBetaVersion_andAnalyticsDisabledInSettings_enablesAnalytics() {
         whenever(versionInformation.isBeta).thenReturn(true)
-        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, false)
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_ANALYTICS, false)
 
         val analyticsInitializer = AnalyticsInitializer(
             analytics,
@@ -48,7 +48,7 @@ class AnalyticsInitializerTest {
 
     @Test
     fun whenAnalyticsDisabledInSettings_disablesAnalytics() {
-        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, false)
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_ANALYTICS, false)
 
         val analyticsInitializer =
             AnalyticsInitializer(analytics, versionInformation, settingsProvider)
@@ -58,7 +58,7 @@ class AnalyticsInitializerTest {
 
     @Test
     fun whenAnalyticsEnabledInSettings_enablesAnalytics() {
-        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_ANALYTICS, true)
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_ANALYTICS, true)
 
         val analyticsInitializer =
             AnalyticsInitializer(analytics, versionInformation, settingsProvider)

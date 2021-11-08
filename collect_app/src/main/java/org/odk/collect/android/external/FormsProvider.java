@@ -319,7 +319,7 @@ public class FormsProvider extends ContentProvider {
     }
 
     private void logServerEvent(String projectId, String event) {
-        AnalyticsUtils.logServerEvent(event, settingsProvider.getGeneralSettings(projectId));
+        AnalyticsUtils.logServerEvent(event, settingsProvider.getUnprotectedSettings(projectId));
     }
 
     static {

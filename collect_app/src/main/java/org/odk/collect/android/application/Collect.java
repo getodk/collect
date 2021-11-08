@@ -250,7 +250,7 @@ public class Collect extends Application implements
     @NotNull
     @Override
     public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getGeneralSettings()));
+        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getUnprotectedSettings()));
     }
 
     @NotNull

@@ -142,7 +142,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
                 String entry = (String) ((ListPreference) preference).getEntries()[index];
                 preference.setSummary(entry);
 
-                settingsProvider.getGeneralSettings().save(KEY_APP_LANGUAGE, newValue.toString());
+                settingsProvider.getUnprotectedSettings().save(KEY_APP_LANGUAGE, newValue.toString());
 
                 startActivityAndCloseAllOthers(getActivity(), MainMenuActivity.class);
                 return true;
@@ -155,7 +155,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
 
         if (pref != null) {
             pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary(settingsProvider.getGeneralSettings().getString(KEY_SPLASH_PATH));
+            pref.setSummary(settingsProvider.getUnprotectedSettings().getString(KEY_SPLASH_PATH));
         }
     }
 
@@ -177,7 +177,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
     }
 
     public void setSplashPath(String path) {
-        settingsProvider.getGeneralSettings().save(KEY_SPLASH_PATH, path);
+        settingsProvider.getUnprotectedSettings().save(KEY_SPLASH_PATH, path);
         Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
         splashPathPreference.setSummary(path);
     }

@@ -54,7 +54,7 @@ class ProjectSettingsDialog : DialogFragment() {
         binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
         currentProjectViewModel.currentProject.observe(this) { project ->
-            binding.currentProject.setupView(project, settingsProvider.getGeneralSettings())
+            binding.currentProject.setupView(project, settingsProvider.getUnprotectedSettings())
             binding.currentProject.contentDescription =
                 getString(R.string.using_project, project.name)
             inflateListOfInActiveProjects(requireContext(), project)
@@ -103,7 +103,7 @@ class ProjectSettingsDialog : DialogFragment() {
                 switchProject(project)
             }
 
-            projectView.setupView(project, settingsProvider.getGeneralSettings(project.uuid))
+            projectView.setupView(project, settingsProvider.getUnprotectedSettings(project.uuid))
             projectView.contentDescription = getString(R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }

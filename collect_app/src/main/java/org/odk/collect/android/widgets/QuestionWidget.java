@@ -110,7 +110,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
-        questionTextSizeHelper = new QuestionTextSizeHelper(settingsProvider.getGeneralSettings());
+        questionTextSizeHelper = new QuestionTextSizeHelper(settingsProvider.getUnprotectedSettings());
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
@@ -193,7 +193,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {
         TextView guidance;
-        GuidanceHint setting = GuidanceHint.get(settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_GUIDANCE_HINT));
+        GuidanceHint setting = GuidanceHint.get(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_GUIDANCE_HINT));
 
         if (setting.equals(GuidanceHint.NO)) {
             return null;

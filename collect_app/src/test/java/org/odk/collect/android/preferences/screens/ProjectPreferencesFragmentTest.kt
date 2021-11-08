@@ -42,7 +42,7 @@ class ProjectPreferencesFragmentTest {
         })
 
         CollectHelpers.setupDemoProject()
-        generalSettings = TestSettingsProvider.getGeneralSettings()
+        generalSettings = TestSettingsProvider.getUnprotectedSettings()
         adminSettings = TestSettingsProvider.getAdminSettings()
     }
 
