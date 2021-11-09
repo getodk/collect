@@ -237,7 +237,12 @@ public final class AnalyticsEvents {
     public static final String ALLOW_MOCK_ACCURACY = "AllowMockAccuracy";
 
     /**
-     * Tracks how many forms include an accuracy threshold for `geopoint` questions
+     * Tracks how many forms include an accuracy threshold for the default `geopoint` question
      */
     public static final String ACCURACY_THRESHOLD = "AccuracyThreshold";
+
+    /**
+     * Tracks how many forms use default accuracy thresholds for the default `geopoint` question
+     */
+    public static final String ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault";
 }

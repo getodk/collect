@@ -28,6 +28,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
@@ -71,9 +72,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         }
 
         GeoWidgetUtils.logAllowMockAccuracy(prompt);
-        if (prompt.getQuestion().getAdditionalAttribute(null, "accuracyThreshold") != null) {
-            AnalyticsUtils.logFormEvent(AnalyticsEvents.ACCURACY_THRESHOLD);
-        }
+        logAccuracyThresholdUse(prompt);
 
         return binding.getRoot();
     }
@@ -112,5 +111,16 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
         binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.change_location);
         widgetValueChanged();
+    }
+
+    private void logAccuracyThresholdUse(FormEntryPrompt prompt) {
+        // Only default geopoint supports accuracy threshold
+        if (Appearances.getSanitizedAppearanceHint(prompt).isEmpty()) {
+            if (prompt.getQuestion().getAdditionalAttribute(null, "accuracyThreshold") != null) {
+                AnalyticsUtils.logFormEvent(AnalyticsEvents.ACCURACY_THRESHOLD);
+            } else {
+                AnalyticsUtils.logFormEvent(AnalyticsEvents.ACCURACY_THRESHOLD_DEFAULT);
+            }
+        }
     }
 }
