@@ -144,8 +144,8 @@ public class ServerFormsDetailsFetcherTest {
                 .formMediaPath(mediaDir1.getAbsolutePath())
                 .build());
 
-        File oldMediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.getFilename());
-        writeToFile(oldMediaFile1, "old blah");
+        File mediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.getFilename());
+        writeToFile(mediaFile1, "old blah");
 
         File mediaDir2 = TempFiles.createTempDir();
 
@@ -157,13 +157,73 @@ public class ServerFormsDetailsFetcherTest {
                 .formMediaPath(mediaDir2.getAbsolutePath())
                 .build());
 
-        File oldMediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.getFilename());
-        writeToFile(oldMediaFile2, FILE_CONTENT);
+        File mediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.getFilename());
+        writeToFile(mediaFile2, FILE_CONTENT);
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         ServerFormDetails form = getForm(serverFormDetails, "form-2");
 
         assertThat(form.isUpdated(), is(false));
+        assertThat(form.isNotOnDevice(), is(false));
+    }
+
+    @Test
+    public void whenAFormExists_andItsNewerVersionHasBeenAlreadyDownloadedButThenSoftDeleted_isUpdated() throws Exception {
+        formsRepository.save(new Form.Builder()
+                .formId("form-1")
+                .version("0")
+                .md5Hash("form-1-hash0")
+                .formFilePath(FormUtils.createXFormFile("form-1", "0").getAbsolutePath())
+                .build());
+
+        formsRepository.save(new Form.Builder()
+                .formId("form-1")
+                .version("1")
+                .md5Hash("form-1-hash")
+                .formFilePath(FormUtils.createXFormFile("form-1", "1").getAbsolutePath())
+                .deleted(true)
+                .build());
+
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        ServerFormDetails form = getForm(serverFormDetails, "form-1");
+
+        assertThat(form.isUpdated(), is(true));
+        assertThat(form.isNotOnDevice(), is(false));
+    }
+
+    @Test
+    public void whenAFormExists_andItsNewerVersionWithMediaFilesHasBeenAlreadyDownloadedButThenSoftDeleted_isUpdated() throws Exception {
+        File mediaDir1 = TempFiles.createTempDir();
+
+        formsRepository.save(new Form.Builder()
+                .formId("form-2")
+                .version("1")
+                .md5Hash("form-2_v1-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "1").getAbsolutePath())
+                .formMediaPath(mediaDir1.getAbsolutePath())
+                .build());
+
+        File mediaFile1 = TempFiles.createTempFile(mediaDir1, mediaFile.getFilename());
+        writeToFile(mediaFile1, FILE_CONTENT);
+
+        File mediaDir2 = TempFiles.createTempDir();
+
+        formsRepository.save(new Form.Builder()
+                .formId("form-2")
+                .version("2")
+                .md5Hash("form-2-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "2").getAbsolutePath())
+                .formMediaPath(mediaDir2.getAbsolutePath())
+                .deleted(true)
+                .build());
+
+        File mediaFile2 = TempFiles.createTempFile(mediaDir2, mediaFile.getFilename());
+        writeToFile(mediaFile2, FILE_CONTENT);
+
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        ServerFormDetails form = getForm(serverFormDetails, "form-2");
+
+        assertThat(form.isUpdated(), is(true));
         assertThat(form.isNotOnDevice(), is(false));
     }
 
