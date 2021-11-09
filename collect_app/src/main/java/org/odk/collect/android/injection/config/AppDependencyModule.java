@@ -250,7 +250,13 @@ public class AppDependencyModule {
 
     @Provides
     public StoragePathProvider providesStoragePathProvider(Context context, CurrentProjectProvider currentProjectProvider, ProjectsRepository projectsRepository) {
-        return new StoragePathProvider(currentProjectProvider, projectsRepository, context.getExternalFilesDir(null).getAbsolutePath());
+        File externalFilesDir = context.getExternalFilesDir(null);
+
+        if (externalFilesDir != null) {
+            return new StoragePathProvider(currentProjectProvider, projectsRepository, externalFilesDir.getAbsolutePath());
+        } else {
+            throw new IllegalStateException("Storage is not available!");
+        }
     }
 
     @Provides
