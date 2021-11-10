@@ -5,9 +5,10 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.DexterBuilder;
@@ -20,8 +21,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.androidshared.system.PermissionsChecker;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.List;
 
@@ -224,15 +225,14 @@ public class PermissionsProvider {
     }
 
     protected void showAdditionalExplanation(Activity activity, int title, int message, int drawable, @NonNull PermissionListener action) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, (dialogInterface, i) -> action.denied())
-                .setCancelable(false)
-                .setIcon(drawable)
-                .create();
+        action.denied();
 
-        DialogUtils.showDialog(alertDialog, activity);
+        Bundle args = new Bundle();
+        args.putInt(PermissionDeniedDialog.TITLE, title);
+        args.putInt(PermissionDeniedDialog.MESSAGE, message);
+        args.putInt(PermissionDeniedDialog.ICON, drawable);
+
+        DialogFragmentUtils.showIfNotShowing(PermissionDeniedDialog.class, args, ((AppCompatActivity) activity).getSupportFragmentManager());
     }
 
     public void requestReadUriPermission(Activity activity, Uri uri, ContentResolver contentResolver, PermissionListener listener) {
