@@ -77,13 +77,14 @@ public class ServerFormsDetailsFetcher {
             if (!isHashValid(listItem.getHashWithPrefix())) {
                 // TODO maybe log this in analytics?
             } else if (thisFormAlreadyDownloaded) {
-                if (isNewerFormVersionAvailable(listItem.getHashWithPrefix())) {
+                Form form = getFormByHash(listItem.getHashWithPrefix());
+                if (form == null || form.isDeleted()) {
                     isNewerFormVersionAvailable = true;
                 } else if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
                     if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(getFormByHash(listItem.getHashWithPrefix()), newMediaFiles);
+                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(form, newMediaFiles);
                     }
                 }
             }
@@ -115,11 +116,6 @@ public class ServerFormsDetailsFetcher {
             Timber.w(formSourceException);
             return null;
         }
-    }
-
-    private boolean isNewerFormVersionAvailable(String hashWithPrefix) {
-        Form form = getFormByHash(hashWithPrefix);
-        return form == null || form.isDeleted();
     }
 
     private boolean areNewerMediaFilesAvailable(Form existingForm, List<MediaFile> newMediaFiles) {
