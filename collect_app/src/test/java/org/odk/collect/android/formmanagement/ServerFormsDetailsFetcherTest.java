@@ -33,7 +33,8 @@ public class ServerFormsDetailsFetcherTest {
 
     private final List<FormListItem> formList = asList(
             new FormListItem("http://example.com/form-1", "form-1", "1", "md5:form-1-hash", "Form 1", null),
-            new FormListItem("http://example.com/form-2", "form-2", "2", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest")
+            new FormListItem("http://example.com/form-2", "form-2", "2", "md5:form-2-hash", "Form 2", "http://example.com/form-2-manifest"),
+            new FormListItem("http://example.com/form-3", "form-3", "1", null, "Form 1", "http://example.com/form-3-manifest")
     );
 
     private static final String FILE_CONTENT = "blah";
@@ -50,6 +51,10 @@ public class ServerFormsDetailsFetcherTest {
         when(formSource.fetchFormList()).thenReturn(formList);
 
         when(formSource.fetchManifest(formList.get(1).getManifestURL())).thenReturn(new ManifestFile("manifest-2-hash", asList(
+                mediaFile))
+        );
+
+        when(formSource.fetchManifest(formList.get(2).getManifestURL())).thenReturn(new ManifestFile("manifest-3-hash", asList(
                 mediaFile))
         );
 
@@ -162,6 +167,22 @@ public class ServerFormsDetailsFetcherTest {
 
         List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
         ServerFormDetails form = getForm(serverFormDetails, "form-2");
+
+        assertThat(form.isUpdated(), is(false));
+        assertThat(form.isNotOnDevice(), is(false));
+    }
+
+    @Test
+    public void whenAFormExists_andItsNewerVersionIsAvailableButHasNullHash_isNotNewOrUpdated() throws Exception {
+        formsRepository.save(new Form.Builder()
+                .formId("form-3")
+                .version("0")
+                .md5Hash("form-3-hash")
+                .formFilePath(FormUtils.createXFormFile("form-3", "1").getAbsolutePath())
+                .build());
+
+        List<ServerFormDetails> serverFormDetails = fetcher.fetchFormDetails();
+        ServerFormDetails form = getForm(serverFormDetails, "form-3");
 
         assertThat(form.isUpdated(), is(false));
         assertThat(form.isNotOnDevice(), is(false));
