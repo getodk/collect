@@ -83,7 +83,7 @@ public class ServerFormsDetailsFetcher {
                 } else if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
-                    if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
+                    if (!newMediaFiles.isEmpty()) {
                         isNewerFormVersionAvailable = areNewerMediaFilesAvailable(form, newMediaFiles);
                     }
                 }
@@ -121,14 +121,10 @@ public class ServerFormsDetailsFetcher {
     private boolean areNewerMediaFilesAvailable(Form existingForm, List<MediaFile> newMediaFiles) {
         List<File> localMediaFiles = FormUtils.getMediaFiles(existingForm);
 
-        if (localMediaFiles != null) {
-            for (MediaFile newMediaFile : newMediaFiles) {
-                if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
-                    return true;
-                }
+        for (MediaFile newMediaFile : newMediaFiles) {
+            if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
+                return true;
             }
-        } else if (!newMediaFiles.isEmpty()) {
-            return true;
         }
 
         return false;
