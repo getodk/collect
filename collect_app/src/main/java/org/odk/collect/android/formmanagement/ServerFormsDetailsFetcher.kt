@@ -29,7 +29,6 @@ import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 
 class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
@@ -47,31 +46,40 @@ class ServerFormsDetailsFetcher(
     @Throws(FormSourceException::class)
     fun fetchFormDetails(): List<ServerFormDetails> {
         diskFormsSynchronizer.synchronize()
-        val formListItems = formSource.fetchFormList()
-        val serverFormDetailsList: MutableList<ServerFormDetails> = ArrayList()
-        for (listItem in formListItems) {
-            var manifestFile: ManifestFile? = null
-            if (listItem.manifestURL != null) {
-                manifestFile = getManifestFile(formSource, listItem.manifestURL)
+
+        val formList = formSource.fetchFormList()
+        return formList.map { listItem ->
+            val manifestFile = if (listItem.manifestURL != null) {
+                getManifestFile(formSource, listItem.manifestURL)
+            } else {
+                null
             }
+
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
-            val thisFormAlreadyDownloaded = !forms.isEmpty()
-            var isNewerFormVersionAvailable = false
-            if (!isHashValid(listItem.hashWithPrefix)) {
+            val thisFormAlreadyDownloaded = forms.isNotEmpty()
+
+            val isNewerFormVersionAvailable = if (!isHashValid(listItem.hashWithPrefix)) {
                 log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
+                false
             } else if (thisFormAlreadyDownloaded) {
-                val form = getFormByHash(listItem.hashWithPrefix)
-                if (form == null || form.isDeleted) {
-                    isNewerFormVersionAvailable = true
+                val existingForm = getFormByHash(listItem.hashWithPrefix)
+                if (existingForm == null || existingForm.isDeleted) {
+                    true
                 } else if (manifestFile != null) {
                     val newMediaFiles = manifestFile.mediaFiles
-                    if (!newMediaFiles.isEmpty()) {
-                        isNewerFormVersionAvailable =
-                            areNewerMediaFilesAvailable(form, newMediaFiles)
+                    if (newMediaFiles.isNotEmpty()) {
+                        areNewerMediaFilesAvailable(existingForm, newMediaFiles)
+                    } else {
+                        false
                     }
+                } else {
+                    false
                 }
+            } else {
+                false
             }
-            val serverFormDetails = ServerFormDetails(
+
+            ServerFormDetails(
                 listItem.name,
                 listItem.downloadURL,
                 listItem.formID,
@@ -81,9 +89,7 @@ class ServerFormsDetailsFetcher(
                 isNewerFormVersionAvailable,
                 manifestFile
             )
-            serverFormDetailsList.add(serverFormDetails)
         }
-        return serverFormDetailsList
     }
 
     private fun getManifestFile(formSource: FormSource, manifestUrl: String?): ManifestFile? {
@@ -107,6 +113,7 @@ class ServerFormsDetailsFetcher(
                 return true
             }
         }
+
         return false
     }
 
@@ -119,23 +126,21 @@ class ServerFormsDetailsFetcher(
         return hash != null && hash.startsWith("md5:")
     }
 
-    companion object {
-        private fun isMediaFileAlreadyDownloaded(
-            localMediaFiles: List<File>,
-            newMediaFile: MediaFile?
-        ): Boolean {
-            // TODO Zip files are ignored we should find a way to take them into account too
-            if (newMediaFile!!.filename!!.endsWith(".zip")) {
+    private fun isMediaFileAlreadyDownloaded(
+        localMediaFiles: List<File>,
+        newMediaFile: MediaFile?
+    ): Boolean {
+        // TODO Zip files are ignored we should find a way to take them into account too
+        if (newMediaFile!!.filename!!.endsWith(".zip")) {
+            return true
+        }
+        var mediaFileHash = newMediaFile.hash
+        mediaFileHash = mediaFileHash!!.substring(4, mediaFileHash.length)
+        for (localMediaFile in localMediaFiles) {
+            if (mediaFileHash == getMd5Hash(localMediaFile)) {
                 return true
             }
-            var mediaFileHash = newMediaFile.hash
-            mediaFileHash = mediaFileHash!!.substring(4, mediaFileHash.length)
-            for (localMediaFile in localMediaFiles) {
-                if (mediaFileHash == getMd5Hash(localMediaFile)) {
-                    return true
-                }
-            }
-            return false
         }
+        return false
     }
 }
