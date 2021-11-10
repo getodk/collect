@@ -35,11 +35,11 @@ class ServerFormsDetailsFetcher(
     private val formSource: FormSource,
     private val diskFormsSynchronizer: DiskFormsSynchronizer
 ) {
-    fun updateUrl(url: String?) {
+    fun updateUrl(url: String) {
         (formSource as OpenRosaFormSource).updateUrl(url)
     }
 
-    fun updateCredentials(webCredentialsUtils: WebCredentialsUtils?) {
+    fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
         (formSource as OpenRosaFormSource).updateWebCredentialsUtils(webCredentialsUtils)
     }
 
@@ -92,10 +92,8 @@ class ServerFormsDetailsFetcher(
         }
     }
 
-    private fun getManifestFile(formSource: FormSource, manifestUrl: String?): ManifestFile? {
-        return if (manifestUrl == null) {
-            null
-        } else try {
+    private fun getManifestFile(formSource: FormSource, manifestUrl: String): ManifestFile? {
+        return try {
             formSource.fetchManifest(manifestUrl)
         } catch (formSourceException: FormSourceException) {
             Timber.w(formSourceException)
@@ -105,16 +103,12 @@ class ServerFormsDetailsFetcher(
 
     private fun areNewerMediaFilesAvailable(
         existingForm: Form,
-        newMediaFiles: List<MediaFile?>
+        newMediaFiles: List<MediaFile>
     ): Boolean {
         val localMediaFiles = FormUtils.getMediaFiles(existingForm)
-        for (newMediaFile in newMediaFiles) {
-            if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
-                return true
-            }
+        return newMediaFiles.any {
+            !isMediaFileAlreadyDownloaded(localMediaFiles, it)
         }
-
-        return false
     }
 
     private fun getFormByHash(hashWithPrefix: String): Form? {
@@ -128,19 +122,16 @@ class ServerFormsDetailsFetcher(
 
     private fun isMediaFileAlreadyDownloaded(
         localMediaFiles: List<File>,
-        newMediaFile: MediaFile?
+        newMediaFile: MediaFile
     ): Boolean {
         // TODO Zip files are ignored we should find a way to take them into account too
-        if (newMediaFile!!.filename!!.endsWith(".zip")) {
+        if (newMediaFile.filename.endsWith(".zip")) {
             return true
         }
-        var mediaFileHash = newMediaFile.hash
-        mediaFileHash = mediaFileHash!!.substring(4, mediaFileHash.length)
-        for (localMediaFile in localMediaFiles) {
-            if (mediaFileHash == getMd5Hash(localMediaFile)) {
-                return true
-            }
+
+        val mediaFileHash = newMediaFile.hash.let { it.substring(4, it.length) }
+        return localMediaFiles.any {
+            mediaFileHash == getMd5Hash(it)
         }
-        return false
     }
 }
