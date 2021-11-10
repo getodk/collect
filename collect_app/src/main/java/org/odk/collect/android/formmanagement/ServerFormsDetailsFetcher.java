@@ -31,9 +31,6 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -86,7 +83,7 @@ public class ServerFormsDetailsFetcher {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
                     if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(getFormByVersion(forms, listItem.getVersion()), newMediaFiles);
+                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(getFormByHash(listItem.getHashWithPrefix()), newMediaFiles);
                     }
                 }
             }
@@ -158,13 +155,9 @@ public class ServerFormsDetailsFetcher {
         return false;
     }
 
-    private Form getFormByVersion(List<Form> forms, @Nullable String expectedVersion) {
-        for (Form form : forms) {
-            if (Objects.equals(form.getVersion(), expectedVersion)) {
-                return form;
-            }
-        }
-        return null;
+    private Form getFormByHash(String hashWithPrefix) {
+        String hash = hashWithPrefix.substring("md5:".length());
+        return formsRepository.getOneByMd5Hash(hash);
     }
 
     private boolean isHashValid(String hash) {
