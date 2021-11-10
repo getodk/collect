@@ -19,7 +19,7 @@ public final class FormUtils {
     }
 
     @NonNull
-    public static List<File> getMediaFiles(Form form) {
+    public static List<File> getMediaFiles(@NonNull Form form) {
         String formMediaPath = form.getFormMediaPath();
         return formMediaPath == null
                 ? new ArrayList<>()
