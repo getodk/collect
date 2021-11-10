@@ -121,7 +121,7 @@ public class ServerFormsDetailsFetcher {
     }
 
     private boolean isNewerFormVersionAvailable(String hashWithPrefix) {
-        String hash = getMd5HashWithoutPrefix(hashWithPrefix);
+        String hash = hashWithPrefix.substring("md5:".length());
         Form form = formsRepository.getOneByMd5Hash(hash);
         return form == null || form.isDeleted();
     }
@@ -156,10 +156,6 @@ public class ServerFormsDetailsFetcher {
             }
         }
         return false;
-    }
-
-    private String getMd5HashWithoutPrefix(String hash) {
-        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
     }
 
     private Form getFormByVersion(List<Form> forms, @Nullable String expectedVersion) {
