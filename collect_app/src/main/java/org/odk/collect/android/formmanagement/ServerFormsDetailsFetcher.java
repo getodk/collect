@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
@@ -75,7 +77,7 @@ public class ServerFormsDetailsFetcher {
             boolean isNewerFormVersionAvailable = false;
 
             if (!isHashValid(listItem.getHashWithPrefix())) {
-                // TODO maybe log this in analytics?
+                Analytics.log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH);
             } else if (thisFormAlreadyDownloaded) {
                 Form form = getFormByHash(listItem.getHashWithPrefix());
                 if (form == null || form.isDeleted()) {

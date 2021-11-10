@@ -245,4 +245,9 @@ public final class AnalyticsEvents {
      * Tracks how many forms use default accuracy thresholds for the default `geopoint` question
      */
     public static final String ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault";
+
+    /**
+     * Tracks how often form details with null or empty hashes are provided by a server
+     */
+    public static final String NULL_OR_EMPTY_FORM_HASH = "NullOrEmptyFormHash";
 }
