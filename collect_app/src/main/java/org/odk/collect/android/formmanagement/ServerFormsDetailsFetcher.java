@@ -80,7 +80,7 @@ public class ServerFormsDetailsFetcher {
             if (!isHashValid(listItem.getHashWithPrefix())) {
                 // TODO maybe log this in analytics?
             } else if (thisFormAlreadyDownloaded) {
-                if (isNewerFormVersionAvailable(listItem)) {
+                if (isNewerFormVersionAvailable(listItem.getHashWithPrefix())) {
                     isNewerFormVersionAvailable = true;
                 } else if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
@@ -120,12 +120,8 @@ public class ServerFormsDetailsFetcher {
         }
     }
 
-    private boolean isNewerFormVersionAvailable(FormListItem formListItem) {
-        if (formListItem.getHashWithPrefix() == null) {
-            return false;
-        }
-
-        String hash = getMd5HashWithoutPrefix(formListItem.getHashWithPrefix());
+    private boolean isNewerFormVersionAvailable(String hashWithPrefix) {
+        String hash = getMd5HashWithoutPrefix(hashWithPrefix);
         Form form = formsRepository.getOneByMd5Hash(hash);
         return form == null || form.isDeleted();
     }
