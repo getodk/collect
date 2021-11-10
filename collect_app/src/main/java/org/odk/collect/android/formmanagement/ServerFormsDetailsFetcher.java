@@ -76,7 +76,10 @@ public class ServerFormsDetailsFetcher {
             boolean thisFormAlreadyDownloaded = !forms.isEmpty();
 
             boolean isNewerFormVersionAvailable = false;
-            if (thisFormAlreadyDownloaded) {
+
+            if (!isHashValid(listItem.getHashWithPrefix())) {
+                // TODO maybe log this in analytics?
+            } else if (thisFormAlreadyDownloaded) {
                 if (isNewerFormVersionAvailable(listItem)) {
                     isNewerFormVersionAvailable = true;
                 } else if (manifestFile != null) {
@@ -170,5 +173,9 @@ public class ServerFormsDetailsFetcher {
             }
         }
         return null;
+    }
+
+    private boolean isHashValid(String hash) {
+        return hash != null && hash.startsWith("md5:");
     }
 }
