@@ -118,8 +118,7 @@ public class ServerFormsDetailsFetcher {
     }
 
     private boolean isNewerFormVersionAvailable(String hashWithPrefix) {
-        String hash = hashWithPrefix.substring("md5:".length());
-        Form form = formsRepository.getOneByMd5Hash(hash);
+        Form form = getFormByHash(hashWithPrefix);
         return form == null || form.isDeleted();
     }
 
