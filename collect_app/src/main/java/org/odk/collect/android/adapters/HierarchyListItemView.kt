@@ -9,7 +9,7 @@ import org.odk.collect.android.utilities.HtmlUtils
 
 class HierarchyListItemView(context: Context) : FrameLayout(context) {
 
-    private val binding = HierarchyElementBinding.inflate(LayoutInflater.from(context), this, true)
+    val binding = HierarchyElementBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun setElement(element: HierarchyElement) {
         val icon = element.icon
@@ -25,11 +25,7 @@ class HierarchyListItemView(context: Context) : FrameLayout(context) {
         val secondaryText = element.secondaryText
         if (secondaryText != null && secondaryText.isNotEmpty()) {
             binding.secondaryText.visibility = VISIBLE
-            binding.secondaryText.text = if (element.type == HierarchyElement.Type.QUESTION) {
-                secondaryText
-            } else HtmlUtils.textToHtml(
-                secondaryText
-            )
+            binding.secondaryText.text = secondaryText
         } else {
             binding.secondaryText.visibility = GONE
         }
