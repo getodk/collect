@@ -168,44 +168,6 @@ class ServerFormsDetailsFetcherTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionIsAvailableButHasHashWithoutPrefix_isNotNewOrUpdated() {
-        whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_INVALID_HASH))
-
-        formsRepository.save(
-            Form.Builder()
-                .formId("form-4")
-                .version("0")
-                .md5Hash("form-4-hash_v0")
-                .formFilePath(FormUtils.createXFormFile("form-4", "1").absolutePath)
-                .build()
-        )
-
-        val serverFormDetails = fetcher.fetchFormDetails()
-        val form = getFormFromList(serverFormDetails, "form-4")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
-    }
-
-    @Test
-    fun whenAFormExists_andItsNewerVersionWithManiefestIsAvailableButHasNullHash_isNotNewOrUpdated() {
-        whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITH_NULL_HASH_AND_MANIFEST))
-
-        formsRepository.save(
-            Form.Builder()
-                .formId("form-3")
-                .version("0")
-                .md5Hash("form-3-hash")
-                .formFilePath(FormUtils.createXFormFile("form-3", "1").absolutePath)
-                .build()
-        )
-
-        val serverFormDetails = fetcher.fetchFormDetails()
-        val form = getFormFromList(serverFormDetails, "form-3")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
-    }
-
-    @Test
     fun whenAFormExists_andItsNewerVersionHasBeenAlreadyDownloadedButThenSoftDeleted_isUpdated() {
         whenever(formSource.fetchFormList()).thenReturn(listOf(FORM_WITHOUT_MANIFEST))
 
@@ -332,6 +294,48 @@ class ServerFormsDetailsFetcherTest {
         assertThat(getFormFromList(serverFormDetails, "form-2").isUpdated, `is`(true))
     }
 
+    @Test
+    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasHashWithoutPrefix_isNotNewOrUpdated() {
+        whenever(formSource.fetchFormList()).thenReturn(
+            listOf(FORM_WITH_MANIFEST.copy(hashWithPrefix = "no-prefix"))
+        )
+
+        formsRepository.save(
+            Form.Builder()
+                .formId("form-2")
+                .version("0")
+                .md5Hash("form-2-hash_v0")
+                .formFilePath(FormUtils.createXFormFile("form-2", "1").absolutePath)
+                .build()
+        )
+
+        val serverFormDetails = fetcher.fetchFormDetails()
+        val form = getFormFromList(serverFormDetails, "form-2")
+        assertThat(form.isUpdated, `is`(false))
+        assertThat(form.isNotOnDevice, `is`(false))
+    }
+
+    @Test
+    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isNotNewOrUpdated() {
+        whenever(formSource.fetchFormList()).thenReturn(
+            listOf(FORM_WITH_MANIFEST.copy(hashWithPrefix = null))
+        )
+
+        formsRepository.save(
+            Form.Builder()
+                .formId("form-2")
+                .version("0")
+                .md5Hash("form-2-hash")
+                .formFilePath(FormUtils.createXFormFile("form-2", "1").absolutePath)
+                .build()
+        )
+
+        val serverFormDetails = fetcher.fetchFormDetails()
+        val form = getFormFromList(serverFormDetails, "form-2")
+        assertThat(form.isUpdated, `is`(false))
+        assertThat(form.isNotOnDevice, `is`(false))
+    }
+
     private fun writeToFile(mediaFile: File, blah: String) {
         val bw = BufferedWriter(FileWriter(mediaFile))
         bw.write(blah)
@@ -369,15 +373,3 @@ private val FORM_WITH_MANIFEST = FormListItem(
     "Form 2",
     MANIFEST_URL
 )
-
-private val FORM_WITH_NULL_HASH_AND_MANIFEST = FormListItem(
-    "http://example.com/form-3",
-    "form-3",
-    "1",
-    null,
-    "Form 1",
-    MANIFEST_URL
-)
-
-private val FORM_WITH_INVALID_HASH =
-    FormListItem("http://example.com/form-4", "form-4", "1", "form-4-hash", "Form 4", null)
