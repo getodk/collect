@@ -49,34 +49,32 @@ class ServerFormsDetailsFetcher(
 
         val formList = formSource.fetchFormList()
         return formList.map { listItem ->
-            val manifestFile = if (listItem.manifestURL != null) {
-                getManifestFile(formSource, listItem.manifestURL)
-            } else {
-                null
+            val manifestFile = listItem.manifestURL.let {
+                if (it != null) {
+                    getManifestFile(formSource, it)
+                } else {
+                    null
+                }
             }
 
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
             val thisFormAlreadyDownloaded = forms.isNotEmpty()
-
-            val isNewerFormVersionAvailable = if (!isHashValid(listItem.hashWithPrefix)) {
-                log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
-                false
-            } else if (thisFormAlreadyDownloaded) {
-                val existingForm = getFormByHash(listItem.hashWithPrefix)
-                if (existingForm == null || existingForm.isDeleted) {
-                    true
-                } else if (manifestFile != null) {
-                    val newMediaFiles = manifestFile.mediaFiles
-                    if (newMediaFiles.isNotEmpty()) {
-                        areNewerMediaFilesAvailable(existingForm, newMediaFiles)
+            val isNewerFormVersionAvailable = listItem.hashWithPrefix.let {
+                if (it == null || !it.startsWith("md5:")) {
+                    log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
+                    false
+                } else if (thisFormAlreadyDownloaded) {
+                    val existingForm = getFormByHash(it)
+                    if (existingForm == null || existingForm.isDeleted) {
+                        true
+                    } else if (manifestFile != null) {
+                        hasUpdatedMediaFiles(manifestFile, existingForm)
                     } else {
                         false
                     }
                 } else {
                     false
                 }
-            } else {
-                false
             }
 
             ServerFormDetails(
@@ -89,6 +87,18 @@ class ServerFormsDetailsFetcher(
                 isNewerFormVersionAvailable,
                 manifestFile
             )
+        }
+    }
+
+    private fun hasUpdatedMediaFiles(
+        manifestFile: ManifestFile,
+        existingForm: Form
+    ): Boolean {
+        val newMediaFiles = manifestFile.mediaFiles
+        return if (newMediaFiles.isNotEmpty()) {
+            areNewerMediaFilesAvailable(existingForm, newMediaFiles)
+        } else {
+            false
         }
     }
 
@@ -114,10 +124,6 @@ class ServerFormsDetailsFetcher(
     private fun getFormByHash(hashWithPrefix: String): Form? {
         val hash = hashWithPrefix.substring("md5:".length)
         return formsRepository.getOneByMd5Hash(hash)
-    }
-
-    private fun isHashValid(hash: String?): Boolean {
-        return hash != null && hash.startsWith("md5:")
     }
 
     private fun isMediaFileAlreadyDownloaded(
