@@ -30,21 +30,24 @@ import org.odk.collect.shared.strings.Md5.getMd5Hash
 import timber.log.Timber
 import java.io.File
 
-class ServerFormsDetailsFetcher(
+/**
+ * Open to allow mocking (used in existing Java tests)
+ */
+open class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
     private val formSource: FormSource,
     private val diskFormsSynchronizer: DiskFormsSynchronizer
 ) {
-    fun updateUrl(url: String) {
+    open fun updateUrl(url: String) {
         (formSource as OpenRosaFormSource).updateUrl(url)
     }
 
-    fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
+    open fun updateCredentials(webCredentialsUtils: WebCredentialsUtils) {
         (formSource as OpenRosaFormSource).updateWebCredentialsUtils(webCredentialsUtils)
     }
 
     @Throws(FormSourceException::class)
-    fun fetchFormDetails(): List<ServerFormDetails> {
+    open fun fetchFormDetails(): List<ServerFormDetails> {
         diskFormsSynchronizer.synchronize()
 
         val formList = formSource.fetchFormList()
