@@ -184,7 +184,7 @@ class ManualProjectCreatorDialog :
 
     private fun configureGoogleAccount() {
         permissionsProvider.requestGetAccountsPermission(
-            activity,
+            requireActivity(),
             object : PermissionListener {
                 override fun granted() {
                     val intent: Intent = googleAccountsManager.accountChooserIntent
