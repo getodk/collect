@@ -1,4 +1,4 @@
-package org.odk.collect.android.permissions
+package org.odk.collect.permissions
 
 import android.app.Application
 import android.net.Uri
@@ -19,7 +19,6 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 

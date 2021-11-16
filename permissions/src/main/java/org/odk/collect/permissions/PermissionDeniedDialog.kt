@@ -1,4 +1,4 @@
-package org.odk.collect.android.permissions
+package org.odk.collect.permissions
 
 import android.app.Dialog
 import android.content.Intent
@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.android.R
 
 class PermissionDeniedDialog : DialogFragment() {
 
