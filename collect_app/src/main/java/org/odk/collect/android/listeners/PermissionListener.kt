@@ -1,4 +1,4 @@
-package org.odk.collect.android.listeners;
+package org.odk.collect.android.listeners
 
 /**
  * This listener serves the purpose of telling the calling activity if a
@@ -7,8 +7,7 @@ package org.odk.collect.android.listeners;
  * and other conditions so that that Activities can be cleaner and just know about the result
  * of a grant request.
  */
-public interface PermissionListener {
-    void granted();
-
-    void denied();
+interface PermissionListener {
+    fun granted()
+    fun denied()
 }
