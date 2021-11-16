@@ -16,8 +16,8 @@ fieldTask4.iml
 *.swp
 collect_app/collect_app.iml
 
-collect_app/src/kontrolid_gplay
-collect_app/kontrolid_gplay/
+collect_app/src/kontrolid_corporate
+collect_app/kontrolid_corporate/
 collect_app/src/kontrolid
 collect_app/kontrolid/
 collect_app/plan/
