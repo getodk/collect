@@ -1,4 +1,4 @@
-package org.odk.collect.android.permissions
+package org.odk.collect.permissions
 
 import android.Manifest
 import android.app.Activity
@@ -15,11 +15,7 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import org.odk.collect.android.R
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
-import org.odk.collect.permissions.PermissionDeniedDialog
-import org.odk.collect.permissions.PermissionListener
-import org.odk.collect.permissions.PermissionsChecker
 import timber.log.Timber
 
 /**

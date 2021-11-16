@@ -16,9 +16,9 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.permissions.PermissionsProvider;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

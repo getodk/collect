@@ -11,7 +11,6 @@ import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -24,6 +23,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;

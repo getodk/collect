@@ -2,9 +2,9 @@ package org.odk.collect.android.fakes
 
 import android.app.Activity
 import androidx.test.platform.app.InstrumentationRegistry
-import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.permissions.PermissionsProvider
 
 /**
  * Mocked implementation of [PermissionsProvider].

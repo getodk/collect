@@ -19,7 +19,7 @@ import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;

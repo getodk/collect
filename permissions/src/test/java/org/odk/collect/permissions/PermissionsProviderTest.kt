@@ -1,4 +1,4 @@
-package org.odk.collect.android.permissions
+package org.odk.collect.permissions
 
 import android.Manifest
 import android.app.Activity
@@ -13,8 +13,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.permissions.PermissionListener
-import org.odk.collect.permissions.PermissionsChecker
 
 class PermissionsProviderTest {
     private var permissionsChecker = mock<PermissionsChecker>()
@@ -145,6 +143,7 @@ class PermissionsProviderTest {
         whenever(contentResolver.query(uri, null, null, null, null)).thenThrow(
             SecurityException::class.java
         )
+
         permissionsProvider.requestReadUriPermission(
             activity,
             uri,

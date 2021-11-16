@@ -10,7 +10,6 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
@@ -19,6 +18,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 
 import java.util.ArrayList;

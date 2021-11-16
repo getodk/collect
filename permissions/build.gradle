@@ -43,10 +43,13 @@ android {
 
 dependencies {
     implementation project(':strings')
+    implementation project(':androidshared')
 
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_fragment
     implementation Dependencies.android_material
+    implementation Dependencies.karumi_dexter
+    implementation Dependencies.timber
 
     testImplementation project(':testshared')
     testImplementation project(':fragmentstest')
@@ -54,4 +57,5 @@ dependencies {
     testImplementation Dependencies.androidx_test_ext_junit
     testImplementation Dependencies.androidx_test_espresso_core
     testImplementation Dependencies.androidx_test_espresso_intents
+    testImplementation Dependencies.mockito_kotlin
 }

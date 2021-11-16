@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;

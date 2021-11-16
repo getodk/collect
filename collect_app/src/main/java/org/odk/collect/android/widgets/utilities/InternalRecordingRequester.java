@@ -5,11 +5,11 @@ import androidx.activity.ComponentActivity;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.permissions.PermissionsProvider;
 
 public class InternalRecordingRequester implements RecordingRequester {
 

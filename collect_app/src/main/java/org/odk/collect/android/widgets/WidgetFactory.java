@@ -30,7 +30,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -60,6 +59,7 @@ import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.permissions.PermissionsProvider;
 
 /**
  * Convenience class that handles creation of widgets.
