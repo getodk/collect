@@ -1,5 +1,7 @@
 package org.odk.collect.android.utilities;
 
+import androidx.annotation.NonNull;
+
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.core.reference.RootTranslator;
 import org.odk.collect.android.logic.FileReferenceFactory;
@@ -16,7 +18,8 @@ public final class FormUtils {
 
     }
 
-    public static List<File> getMediaFiles(Form form) {
+    @NonNull
+    public static List<File> getMediaFiles(@NonNull Form form) {
         String formMediaPath = form.getFormMediaPath();
         return formMediaPath == null
                 ? new ArrayList<>()

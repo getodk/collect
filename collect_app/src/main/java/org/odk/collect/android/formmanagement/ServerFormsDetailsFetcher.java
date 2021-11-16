@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.formmanagement;
 
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.openrosa.OpenRosaFormSource;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
@@ -31,9 +33,6 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
-import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -76,14 +75,18 @@ public class ServerFormsDetailsFetcher {
             boolean thisFormAlreadyDownloaded = !forms.isEmpty();
 
             boolean isNewerFormVersionAvailable = false;
-            if (thisFormAlreadyDownloaded) {
-                if (isNewerFormVersionAvailable(listItem)) {
+
+            if (!isHashValid(listItem.getHashWithPrefix())) {
+                Analytics.log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH);
+            } else if (thisFormAlreadyDownloaded) {
+                Form form = getFormByHash(listItem.getHashWithPrefix());
+                if (form == null || form.isDeleted()) {
                     isNewerFormVersionAvailable = true;
                 } else if (manifestFile != null) {
                     List<MediaFile> newMediaFiles = manifestFile.getMediaFiles();
 
-                    if (newMediaFiles != null && !newMediaFiles.isEmpty()) {
-                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(getFormByVersion(forms, listItem.getVersion()), newMediaFiles);
+                    if (!newMediaFiles.isEmpty()) {
+                        isNewerFormVersionAvailable = areNewerMediaFilesAvailable(form, newMediaFiles);
                     }
                 }
             }
@@ -117,27 +120,13 @@ public class ServerFormsDetailsFetcher {
         }
     }
 
-    private boolean isNewerFormVersionAvailable(FormListItem formListItem) {
-        if (formListItem.getHashWithPrefix() == null) {
-            return false;
-        }
-
-        String hash = getMd5HashWithoutPrefix(formListItem.getHashWithPrefix());
-        Form form = formsRepository.getOneByMd5Hash(hash);
-        return form == null || form.isDeleted();
-    }
-
     private boolean areNewerMediaFilesAvailable(Form existingForm, List<MediaFile> newMediaFiles) {
         List<File> localMediaFiles = FormUtils.getMediaFiles(existingForm);
 
-        if (localMediaFiles != null) {
-            for (MediaFile newMediaFile : newMediaFiles) {
-                if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
-                    return true;
-                }
+        for (MediaFile newMediaFile : newMediaFiles) {
+            if (!isMediaFileAlreadyDownloaded(localMediaFiles, newMediaFile)) {
+                return true;
             }
-        } else if (!newMediaFiles.isEmpty()) {
-            return true;
         }
 
         return false;
@@ -159,16 +148,12 @@ public class ServerFormsDetailsFetcher {
         return false;
     }
 
-    private String getMd5HashWithoutPrefix(String hash) {
-        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
+    private Form getFormByHash(String hashWithPrefix) {
+        String hash = hashWithPrefix.substring("md5:".length());
+        return formsRepository.getOneByMd5Hash(hash);
     }
 
-    private Form getFormByVersion(List<Form> forms, @Nullable String expectedVersion) {
-        for (Form form : forms) {
-            if (Objects.equals(form.getVersion(), expectedVersion)) {
-                return form;
-            }
-        }
-        return null;
+    private boolean isHashValid(String hash) {
+        return hash != null && hash.startsWith("md5:");
     }
 }
