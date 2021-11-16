@@ -143,7 +143,6 @@ import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -182,6 +181,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.permissions.PermissionsChecker;
 
 import java.io.File;
 import java.util.ArrayList;

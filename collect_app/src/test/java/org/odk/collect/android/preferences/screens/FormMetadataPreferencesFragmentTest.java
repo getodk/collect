@@ -15,10 +15,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.metadata.InstallIDProvider;
-import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsChecker;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

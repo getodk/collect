@@ -34,6 +34,7 @@ import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
+import org.odk.collect.permissions.PermissionsChecker;
 
 import java.io.File;
 import java.io.IOException;

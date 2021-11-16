@@ -14,7 +14,7 @@ import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.listeners.PermissionListener
-import org.odk.collect.androidshared.system.PermissionsChecker
+import org.odk.collect.permissions.PermissionsChecker
 
 class PermissionsProviderTest {
     private var permissionsChecker = mock<PermissionsChecker>()

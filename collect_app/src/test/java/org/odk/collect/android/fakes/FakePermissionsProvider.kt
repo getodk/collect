@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.test.platform.app.InstrumentationRegistry
 import org.odk.collect.android.listeners.PermissionListener
 import org.odk.collect.android.permissions.PermissionsProvider
-import org.odk.collect.androidshared.system.PermissionsChecker
+import org.odk.collect.permissions.PermissionsChecker
 
 /**
  * Mocked implementation of [PermissionsProvider].
