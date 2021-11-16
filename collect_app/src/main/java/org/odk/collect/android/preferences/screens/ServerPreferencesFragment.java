@@ -35,7 +35,6 @@ import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.OnBackPressedListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
@@ -45,6 +44,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
+import org.odk.collect.permissions.PermissionListener;
 
 import java.io.ByteArrayInputStream;
 

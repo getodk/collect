@@ -31,12 +31,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.permissions.PermissionListener;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.

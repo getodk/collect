@@ -137,7 +137,6 @@ import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -181,6 +180,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 
 import java.io.File;

@@ -13,7 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.listeners.PermissionListener
+import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsChecker
 
 class PermissionsProviderTest {

@@ -1,4 +1,4 @@
-package org.odk.collect.android.listeners
+package org.odk.collect.permissions
 
 /**
  * This listener serves the purpose of telling the calling activity if a
