@@ -68,9 +68,7 @@
     </style>
 
     <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
-    <style name="Theme.Collect.Dialog.Alert" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorSecondary">@color/colorPrimary</item>
+    <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
