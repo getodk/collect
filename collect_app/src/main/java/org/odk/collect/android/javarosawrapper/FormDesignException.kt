@@ -11,15 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+package org.odk.collect.android.javarosawrapper
 
-package org.odk.collect.android.javarosawrapper;
+import java.lang.Exception
 
 /**
  * Thrown when there is an issue in form design. This type of error requires the form designer to
  * modify the form.
  */
-public class FormDesignException extends Exception {
-    public FormDesignException(String message) {
-        super(message);
-    }
-}
+class FormDesignException(message: String) : Exception(message)
