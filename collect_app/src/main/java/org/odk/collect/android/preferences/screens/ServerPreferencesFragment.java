@@ -56,6 +56,8 @@ import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -276,7 +278,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
 
         if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
 
-            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+            AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
                     .setIcon(android.R.drawable.ic_dialog_info)
                     .setTitle(R.string.missing_google_account_dialog_title)
                     .setMessage(R.string.missing_google_account_dialog_desc)

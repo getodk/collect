@@ -10,12 +10,14 @@ import org.odk.collect.android.R;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class AddRepeatDialog {
 
     private AddRepeatDialog() {}
 
     public static void show(Context context, String groupLabel, Listener listener) {
-        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(context).create();
         DialogInterface.OnClickListener repeatListener = (dialog, i) -> {
             switch (i) {
                 case BUTTON_POSITIVE:

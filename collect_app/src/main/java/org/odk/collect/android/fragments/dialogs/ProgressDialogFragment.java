@@ -17,6 +17,8 @@ import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class ProgressDialogFragment extends DialogFragment {
 
     public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
@@ -80,7 +82,7 @@ public class ProgressDialogFragment extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         dialogView = requireActivity().getLayoutInflater().inflate(R.layout.progress_dialog, null, false);
-        AlertDialog dialog = new AlertDialog.Builder(requireContext())
+        AlertDialog dialog = new MaterialAlertDialogBuilder(requireContext())
                 .setView(dialogView)
                 .create();
 

@@ -36,6 +36,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.services.drive.Drive;
 
@@ -384,7 +385,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case GOOGLE_USER_DIALOG:
-                AlertDialog.Builder gudBuilder = new AlertDialog.Builder(this);
+                MaterialAlertDialogBuilder gudBuilder = new MaterialAlertDialogBuilder(this);
 
                 gudBuilder.setTitle(getString(R.string.no_google_account));
                 gudBuilder.setMessage(getString(R.string.google_set_account));
@@ -396,7 +397,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     }
 
     private void createAlertDialog(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
         alertDialog.setTitle(getString(R.string.download_forms_result));
         alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {

@@ -18,9 +18,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
@@ -60,7 +61,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
     }
 
     private void showFormListDialog(List<BlankForm> forms) {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.select_odk_shortcut)
                 .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
                     AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getUnprotectedSettings());

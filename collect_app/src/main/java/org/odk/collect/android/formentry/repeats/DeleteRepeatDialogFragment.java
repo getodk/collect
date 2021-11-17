@@ -18,6 +18,8 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
     private DeleteRepeatDialogCallback callback;
@@ -43,7 +45,7 @@ public class DeleteRepeatDialogFragment extends DialogFragment {
             name += " (" + (repeatCount + 1) + ")";
         }
 
-        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity()).create();
         alertDialog.setTitle(getActivity().getString(R.string.delete_repeat_ask));
         alertDialog.setMessage(getActivity().getString(R.string.delete_repeat_confirm, name));
         DialogInterface.OnClickListener quitListener = (dialog, i) -> {

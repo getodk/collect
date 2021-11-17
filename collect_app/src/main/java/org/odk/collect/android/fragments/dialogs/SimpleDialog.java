@@ -16,12 +16,13 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import timber.log.Timber;
 
@@ -73,7 +74,7 @@ public class SimpleDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         setCancelable(false);
 
-        return new AlertDialog.Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(getArguments().getString(DIALOG_TITLE))
                 .setIcon(getArguments().getInt(ICON_ID))
                 .setMessage(getArguments().getString(MESSAGE))

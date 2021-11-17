@@ -21,6 +21,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
@@ -309,7 +311,7 @@ public class DrawActivity extends CollectAbstractActivity {
                 alertDialog.dismiss();
             }
         });
-        alertDialog = new AlertDialog.Builder(this)
+        alertDialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(alertTitleString)
                 .setPositiveButton(getString(R.string.do_not_exit), null)
                 .setView(listView).create();
@@ -339,7 +341,7 @@ public class DrawActivity extends CollectAbstractActivity {
             picker.showAlpha(false);
             picker.showHex(false);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
             builder
                     .setView(picker)
                     .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))

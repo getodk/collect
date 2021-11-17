@@ -11,8 +11,9 @@ import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class GeoPolySettingsDialogFragment extends DialogFragment {
 
@@ -98,7 +99,7 @@ public class GeoPolySettingsDialogFragment extends DialogFragment {
             accuracyThreshold.setSelection(accuracyThresholdIndex);
         }
 
-        return new AlertDialog.Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(getString(R.string.input_method))
                 .setView(settingsView)
                 .setPositiveButton(getString(R.string.start), (dialog, id) -> {

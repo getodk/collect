@@ -16,12 +16,13 @@
 
 package org.odk.collect.android.fragments.dialogs;
 
-import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 
@@ -59,7 +60,7 @@ public class ResetSettingsResultDialog extends DialogFragment {
 
         String message = getArguments() != null ? getArguments().getString(MESSAGE) : "";
 
-        return new AlertDialog.Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.reset_app_state_result)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setMessage(message)

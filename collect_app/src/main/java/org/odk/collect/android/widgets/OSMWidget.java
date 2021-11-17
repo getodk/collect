@@ -12,6 +12,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.osm.OSMTag;
@@ -128,7 +130,7 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
                 return null;
             });
         } catch (Exception ex) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
             builder.setTitle(R.string.alert);
             builder.setMessage(R.string.install_openmapkit);
             DialogInterface.OnClickListener okClickListener = (dialog, id) -> {

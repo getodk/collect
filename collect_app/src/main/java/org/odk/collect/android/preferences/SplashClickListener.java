@@ -6,6 +6,8 @@ import androidx.preference.Preference;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
 
@@ -33,7 +35,7 @@ public class SplashClickListener implements Preference.OnPreferenceClickListener
             final CharSequence[] items = {preferencesFragment.getString(R.string.select_another_image),
                     preferencesFragment.getString(R.string.use_odk_default)};
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(preferencesFragment.getActivity());
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(preferencesFragment.getActivity());
             builder.setTitle(preferencesFragment.getString(R.string.change_splash_path));
             builder.setNeutralButton(preferencesFragment.getString(R.string.cancel),
                     new DialogInterface.OnClickListener() {

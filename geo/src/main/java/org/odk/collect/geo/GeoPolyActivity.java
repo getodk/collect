@@ -28,7 +28,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -515,7 +516,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void showClearDialog() {
         if (!map.getPolyPoints(featureId).isEmpty()) {
-            new AlertDialog.Builder(this)
+            new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())
                 .setNegativeButton(R.string.cancel, null)
@@ -524,7 +525,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void showBackDialog() {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
             .setMessage(getString(R.string.geo_exit_warning))
             .setPositiveButton(R.string.discard, (dialog, id) -> finish())
             .setNegativeButton(R.string.cancel, null)

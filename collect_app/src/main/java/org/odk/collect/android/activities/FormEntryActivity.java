@@ -70,6 +70,8 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -1672,7 +1674,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             errorMsg = errorMessage + "\n\n" + errorMsg;
             errorMessage = errorMsg;
         } else {
-            alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog = new MaterialAlertDialogBuilder(this).create();
             errorMessage = errorMsg;
         }
 
@@ -1815,7 +1817,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Confirm clear answer dialog
      */
     private void createClearDialog(final QuestionWidget qw) {
-        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog = new MaterialAlertDialogBuilder(this).create();
         alertDialog.setTitle(getString(R.string.clear_answer_ask));
 
         String question = qw.getFormEntryPrompt().getLongText();
@@ -1865,7 +1867,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             }
         }
-        alertDialog = new AlertDialog.Builder(this)
+        alertDialog = new MaterialAlertDialogBuilder(this)
                 .setSingleChoiceItems(languages, selected,
                         (dialog, whichButton) -> {
                             Form form = formsRepository.getOneByPath(formPath);

@@ -7,8 +7,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
@@ -42,7 +43,7 @@ public class ServerAuthDialogFragment extends DialogFragment {
         binding.usernameEdit.setText(generalSettings.getString(ProjectKeys.KEY_USERNAME));
         binding.passwordEdit.setText(generalSettings.getString(ProjectKeys.KEY_PASSWORD));
 
-        return new AlertDialog.Builder(requireContext())
+        return new MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.server_requires_auth)
                 .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSettings.getString(ProjectKeys.KEY_SERVER_URL)))
                 .setView(dialogView)

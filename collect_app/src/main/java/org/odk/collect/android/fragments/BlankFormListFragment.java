@@ -25,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.loader.content.CursorLoader;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
@@ -157,7 +159,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
      * Create the form delete dialog
      */
     private void createDeleteFormsDialog() {
-        alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog = new MaterialAlertDialogBuilder(getContext()).create();
         alertDialog.setTitle(getString(R.string.delete_file));
         alertDialog.setMessage(getString(R.string.delete_confirm,
                 String.valueOf(getCheckedCount())));
