@@ -250,4 +250,9 @@ public final class AnalyticsEvents {
      * Tracks how often form details with null or empty hashes are provided by a server
      */
     public static final String NULL_OR_EMPTY_FORM_HASH = "NullOrEmptyFormHash";
+
+    /**
+     * Tracks how often repeat groups are used in field-list groups
+     */
+    public static final String REPEATS_IN_FILED_LIST = "RepeatsInFieldListException";
 }
