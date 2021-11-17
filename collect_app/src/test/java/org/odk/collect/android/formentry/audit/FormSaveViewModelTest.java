@@ -18,7 +18,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.javarosawrapper.FormDesignException;
+import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -152,7 +152,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
         when(formController.getEvent()).thenReturn(EVENT_QUESTION);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")
@@ -181,7 +181,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
         when(formController.getEvent()).thenReturn(EVENT_GROUP);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")
@@ -210,7 +210,7 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() throws FormDesignException {
+    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
         when(formController.getEvent()).thenReturn(EVENT_REPEAT);
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
                 .withIndex("index1")

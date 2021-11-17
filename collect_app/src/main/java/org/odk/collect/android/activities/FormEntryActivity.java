@@ -134,7 +134,7 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
-import org.odk.collect.android.javarosawrapper.FormDesignException;
+import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -997,7 +997,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                     return false;
                 }
-            } catch (JavaRosaException | FormDesignException e) {
+            } catch (JavaRosaException | RepeatsInFieldListException e) {
                 Timber.e(e);
                 createErrorDialog(e.getMessage(), false);
                 return false;
@@ -1144,7 +1144,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.i("Created view for group %s %s",
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
                             prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
-                } catch (RuntimeException | FormDesignException e) {
+                } catch (RuntimeException | RepeatsInFieldListException e) {
                     Timber.e(e);
                     // this is badness to avoid a crash.
                     try {
@@ -1557,7 +1557,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         }
                     }
                 }
-            } catch (FormDesignException e) {
+            } catch (RepeatsInFieldListException e) {
                 Timber.e(e);
                 createErrorDialog(e.getMessage(), false);
             }
@@ -2539,7 +2539,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 odkView.removeOnLayoutChangeListener(this);
                             }
                         });
-                    } catch (FormDesignException e) {
+                    } catch (RepeatsInFieldListException e) {
                         Timber.e(e);
                         createErrorDialog(e.getMessage(), false);
                     } catch (Exception | Error e) {
@@ -2560,7 +2560,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * <p>
      * The widget corresponding to the {@param lastChangedIndex} is never changed.
      */
-    private void updateFieldListQuestions(FormIndex lastChangedIndex) throws FormDesignException {
+    private void updateFieldListQuestions(FormIndex lastChangedIndex) throws RepeatsInFieldListException {
         // Save the user-visible state for all questions in this field-list
         FormEntryPrompt[] questionsBeforeSave = getFormController().getQuestionPrompts();
         List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave = new ArrayList<>();

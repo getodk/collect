@@ -19,4 +19,6 @@ import java.lang.Exception
  * Thrown when there is an issue in form design. This type of error requires the form designer to
  * modify the form.
  */
-class FormDesignException(message: String) : Exception(message)
+open class FormDesignException(message: String) : Exception(message)
+
+class RepeatsInFieldListException(message: String) : FormDesignException(message)
