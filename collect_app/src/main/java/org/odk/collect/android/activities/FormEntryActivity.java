@@ -998,7 +998,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     return false;
                 }
             } catch (JavaRosaException | RepeatsInFieldListException e) {
-                Timber.e(e);
+                if (e instanceof JavaRosaException) {
+                    Timber.e(e);
+                }
                 createErrorDialog(e.getMessage(), false);
                 return false;
             }
@@ -1145,7 +1147,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             groups.length > 0 ? groups[groups.length - 1].getLongText() : "[top]",
                             prompts.length > 0 ? prompts[0].getQuestionText() : "[no question]");
                 } catch (RuntimeException | RepeatsInFieldListException e) {
-                    Timber.e(e);
+                    if (e instanceof RuntimeException) {
+                        Timber.e(e);
+                    }
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
@@ -1558,7 +1562,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
                 }
             } catch (RepeatsInFieldListException e) {
-                Timber.e(e);
                 createErrorDialog(e.getMessage(), false);
             }
         }
@@ -2540,7 +2543,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
                         });
                     } catch (RepeatsInFieldListException e) {
-                        Timber.e(e);
                         createErrorDialog(e.getMessage(), false);
                     } catch (Exception | Error e) {
                         Timber.e(e);
