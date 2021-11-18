@@ -558,7 +558,7 @@
   <string name="file_deleted_ok">%s Formular(e) erfolgreich gelöscht!</string>
   <string name="file_delete_in_progress">Ein Formularlöschvorgang ist bereits aktiv!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Projekt-Einstellungen</string>
   <!--Title of a settings section-->
@@ -728,7 +728,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Einstellungen freigegeben</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Neues Passwort eingeben</string>
   <string name="admin_password">Admin-Passwort</string>
@@ -775,7 +775,7 @@
   <string name="no">Nein</string>
   <string name="moving_backwards_enabled_title">Rückwärts bewegen aktiviert</string>
   <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Gespeichertes Formular bearbeiten\n\u2022 Formular speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Formular speichern</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

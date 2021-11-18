@@ -512,7 +512,7 @@
   <string name="file_deleted_ok">%sఫారం(లు) విజయవంతంగా తొలగించబడ్డాయి!</string>
   <string name="file_delete_in_progress">క్షమించండి, ఫారం తొలగింపు చర్య ఇప్పటికే పురోగతిలో ఉంది!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">సర్వర్</string>
@@ -659,7 +659,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">క్రొత్త పాస్‌వర్డ్‌ను నమోదు చేయండి</string>
   <string name="admin_password">అడ్మిన్ పాస్‌వర్డ్‌</string>
@@ -701,7 +701,7 @@
   <string name="no">లేదు</string>
   <string name="moving_backwards_enabled_title">వెనుకకు వెళ్ళటం ఆప్షన్ ప్రారంభించబడింది</string>
   <string name="moving_backwards_enabled_message">మీరు ఈ క్రింది సెట్టింగులను సమీక్షించాలనుకోవచ్చు: \n\n\u2022 సేవ్ చేసిన ఫారమ్‌ను సవరించండి \n\u2022 ఫారమ్‌ను సేవ్ చేయండి \n\u2022 ప్రాంప్ట్‌కు వెళ్లండి \n\u2022 పరిమితి ప్రాసెసింగ్</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">ఫారమ్ ను సేవ్ చెయ్యి </string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

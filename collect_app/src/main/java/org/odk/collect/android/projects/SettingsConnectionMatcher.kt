@@ -24,7 +24,7 @@ class SettingsConnectionMatcher(
             val jsonGoogleAccount = try { jsonSettings.get(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } catch (e: JSONException) { "" }
 
             projectsRepository.getAll().forEach {
-                val projectSettings = settingsProvider.getGeneralSettings(it.uuid)
+                val projectSettings = settingsProvider.getUnprotectedSettings(it.uuid)
                 val projectProtocol = projectSettings.getString(ProjectKeys.KEY_PROTOCOL)
                 val projectUrl = projectSettings.getString(ProjectKeys.KEY_SERVER_URL)
                 val projectUsername = projectSettings.getString(ProjectKeys.KEY_USERNAME)

@@ -120,7 +120,7 @@ public final class ThemeUtils {
     }
 
     private String getPrefsTheme() {
-        return settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_APP_THEME);
+        return settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_APP_THEME);
     }
 
     /**

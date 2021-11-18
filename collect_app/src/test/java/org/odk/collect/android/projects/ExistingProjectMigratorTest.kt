@@ -145,7 +145,7 @@ class ExistingProjectMigratorTest {
     }
 
     @Test
-    fun `migrates general and admin settings`() {
+    fun `migrates unprotected and protected settings`() {
         val oldGeneralSettings = PreferenceManager.getDefaultSharedPreferences(context)
         oldGeneralSettings.edit().putString("generalKey", "generalValue").apply()
         val oldAdminSettings = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
@@ -154,12 +154,12 @@ class ExistingProjectMigratorTest {
         existingProjectMigrator.run()
         val existingProject = currentProjectProvider.getCurrentProject()
 
-        val generalSettings = settingsProvider.getGeneralSettings(existingProject.uuid)
+        val generalSettings = settingsProvider.getUnprotectedSettings(existingProject.uuid)
         assertThat(
             generalSettings.getString("generalKey"),
             `is`("generalValue")
         )
-        val adminSettings = settingsProvider.getAdminSettings(existingProject.uuid)
+        val adminSettings = settingsProvider.getProtectedSettings(existingProject.uuid)
         assertThat(adminSettings.getString("adminKey"), `is`("adminValue"))
     }
 

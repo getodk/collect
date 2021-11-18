@@ -82,15 +82,15 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
             updateDisabledPrefs();
         }
 
-        if (key.equals(KEY_AUTOSEND) && !settingsProvider.getGeneralSettings().getString(KEY_AUTOSEND).equals("off")) {
+        if (key.equals(KEY_AUTOSEND) && !settingsProvider.getUnprotectedSettings().getString(KEY_AUTOSEND).equals("off")) {
             instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
         }
     }
 
     private void updateDisabledPrefs() {
-        Settings generalSettings = settingsProvider.getGeneralSettings();
+        Settings generalSettings = settingsProvider.getUnprotectedSettings();
 
-        // Might be null if disabled in Admin settings
+        // Might be null if disabled in Protected settings
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
@@ -145,7 +145,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
                 return true;
             });
             if (key.equals(KEY_CONSTRAINT_BEHAVIOR)) {
-                pref.setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+                pref.setEnabled(settingsProvider.getProtectedSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
             }
         }
     }
@@ -155,7 +155,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
 
         if (pref != null) {
             if (key.equals(KEY_AUTOMATIC_UPDATE)) {
-                String formUpdateCheckPeriod = settingsProvider.getGeneralSettings().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
+                String formUpdateCheckPeriod = settingsProvider.getUnprotectedSettings().getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
 
                 // Only enable automatic form updates if periodic updates are set
                 pref.setEnabled(!formUpdateCheckPeriod.equals(getString(R.string.never_value)));

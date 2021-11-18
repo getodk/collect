@@ -67,8 +67,8 @@ class ExistingProjectMigrator(
         }
 
         val adminSharedPrefs = context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE)
-        settingsProvider.getGeneralSettings(project.uuid).saveAll(generalSharedPrefs.all)
-        settingsProvider.getAdminSettings(project.uuid).saveAll(adminSharedPrefs.all)
+        settingsProvider.getUnprotectedSettings(project.uuid).saveAll(generalSharedPrefs.all)
+        settingsProvider.getProtectedSettings(project.uuid).saveAll(adminSharedPrefs.all)
 
         currentProjectProvider.setCurrentProject(project.uuid)
     }

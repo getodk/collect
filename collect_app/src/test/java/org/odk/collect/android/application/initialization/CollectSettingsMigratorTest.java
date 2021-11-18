@@ -21,8 +21,8 @@ import static org.odk.collect.android.application.initialization.migration.Share
 @RunWith(AndroidJUnit4.class)
 public class CollectSettingsMigratorTest {
 
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
-    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
+    private final Settings adminSettings = TestSettingsProvider.getProtectedSettings();
     private final Settings metaSettings = TestSettingsProvider.getMetaSettings();
 
     @Before

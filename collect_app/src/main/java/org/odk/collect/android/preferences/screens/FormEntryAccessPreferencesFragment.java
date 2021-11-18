@@ -34,16 +34,16 @@ public class FormEntryAccessPreferencesFragment extends BaseAdminPreferencesFrag
             }
             return true;
         });
-        findPreference(KEY_JUMP_TO).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
-        findPreference(KEY_SAVE_MID).setEnabled(settingsProvider.getAdminSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+        findPreference(KEY_JUMP_TO).setEnabled(settingsProvider.getProtectedSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
+        findPreference(KEY_SAVE_MID).setEnabled(settingsProvider.getProtectedSettings().getBoolean(ALLOW_OTHER_WAYS_OF_EDITING_FORM));
     }
 
     public void preventOtherWaysOfEditingForm() {
-        settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
-        settingsProvider.getAdminSettings().save(KEY_EDIT_SAVED, false);
-        settingsProvider.getAdminSettings().save(KEY_SAVE_MID, false);
-        settingsProvider.getAdminSettings().save(KEY_JUMP_TO, false);
-        settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
+        settingsProvider.getProtectedSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, false);
+        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, false);
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false);
+        settingsProvider.getProtectedSettings().save(KEY_JUMP_TO, false);
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, CONSTRAINT_BEHAVIOR_ON_SWIPE);
 
         findPreference(KEY_JUMP_TO).setEnabled(false);
         findPreference(KEY_SAVE_MID).setEnabled(false);
@@ -53,7 +53,7 @@ public class FormEntryAccessPreferencesFragment extends BaseAdminPreferencesFrag
     }
 
     private void onMovingBackwardsEnabled() {
-        settingsProvider.getAdminSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
+        settingsProvider.getProtectedSettings().save(ALLOW_OTHER_WAYS_OF_EDITING_FORM, true);
         findPreference(KEY_JUMP_TO).setEnabled(true);
         findPreference(KEY_SAVE_MID).setEnabled(true);
     }

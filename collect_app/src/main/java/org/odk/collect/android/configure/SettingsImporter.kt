@@ -27,8 +27,8 @@ class SettingsImporter(
             return false
         }
 
-        val generalSettings = settingsProvider.getGeneralSettings(project.uuid)
-        val adminSettings = settingsProvider.getAdminSettings(project.uuid)
+        val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
+        val adminSettings = settingsProvider.getProtectedSettings(project.uuid)
 
         generalSettings.clear()
         adminSettings.clear()
@@ -36,11 +36,11 @@ class SettingsImporter(
         try {
             val jsonObject = JSONObject(json)
 
-            // Import general settings
+            // Import unprotected settings
             val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
             importToPrefs(general, generalSettings)
 
-            // Import admin settings
+            // Import protected settings
             val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
             importToPrefs(admin, adminSettings)
 

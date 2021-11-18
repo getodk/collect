@@ -213,7 +213,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     private void uploadSelectedFiles() {
         long[] instanceIds = listView.getCheckedItemIds();
 
-        String server = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
+        String server = settingsProvider.getUnprotectedSettings().getString(KEY_PROTOCOL);
 
         if (server.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
             // if it's Sheets, start the Sheets uploader

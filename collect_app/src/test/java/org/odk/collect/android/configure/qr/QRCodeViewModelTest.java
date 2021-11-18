@@ -26,8 +26,8 @@ public class QRCodeViewModelTest {
     private final AppConfigurationGenerator appConfigurationGenerator = mock(AppConfigurationGenerator.class);
     private final FakeScheduler fakeScheduler = new FakeScheduler();
 
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
-    private final Settings adminSettings = TestSettingsProvider.getAdminSettings();
+    private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
+    private final Settings adminSettings = TestSettingsProvider.getProtectedSettings();
 
     @Test
     public void setIncludedKeys_generatesQRCodeWithKeys() throws Exception {

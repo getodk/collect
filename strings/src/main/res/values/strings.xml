@@ -458,7 +458,7 @@
 
     <string name="basemap">Basemap</string>
     <string name="basemap_source">Source</string>
-    <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device.  Please choose another basemap in General Settings &gt; Maps.</string>
+    <string name="basemap_source_unavailable">Sorry, %s basemaps are not available on this device. Please choose another basemap in Settings &gt; Maps.</string>
     <string name="map_style_label">%s map style</string>
 
     <string name="streets">Streets</string>
@@ -691,7 +691,7 @@
 
     <!--
     ##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################
     -->
     <string name="project_settings">Project settings</string>
@@ -888,7 +888,7 @@
 
     <!--
      ##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################
      -->
     <string name="enter_new_password">Enter new password</string>
@@ -900,7 +900,7 @@
     <string name="change_admin_password">Change Admin Password</string>
     <string name="show_password">Show password</string>
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
-    <string name="found_in_settings">Uncheck to hide from General Settings</string>
+    <string name="found_in_settings">Uncheck to hide from Unprotected Settings</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
 
     <string name="reset_project_settings_title">Reset</string>
@@ -940,7 +940,7 @@
     <string name="moving_backwards_enabled_title">Moving backwards enabled</string>
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Saved Form\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
 
-    <!-- Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
+    <!-- Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
     <string name="save_mid">Save Form</string>
 
     <!--
@@ -959,7 +959,7 @@
     <string name="reading_files">Reading files</string>
     <string name="drive_get_file">Getting %1$s and media files.</string>
     <string name="no_google_account">No Google Account Selected!</string>
-    <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in the General Settings before continuing</string>
+    <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in Settings before continuing</string>
     <string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
     <string name="missing_submission_url">Missing submission URL</string>

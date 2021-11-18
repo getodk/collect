@@ -104,7 +104,7 @@ public class InstanceDiskSynchronizer {
                     }
                 }
 
-                final boolean instanceSyncFlag = settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_INSTANCE_SYNC);
+                final boolean instanceSyncFlag = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_INSTANCE_SYNC);
 
                 int counter = 0;
                 for (String instancePath : instancePaths) {

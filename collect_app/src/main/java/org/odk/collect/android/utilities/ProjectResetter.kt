@@ -48,10 +48,10 @@ class ProjectResetter(
     private fun resetPreferences() {
         WebCredentialsUtils.clearAllCredentials()
 
-        settingsProvider.getGeneralSettings().clear()
-        settingsProvider.getGeneralSettings().setDefaultForAllSettingsWithoutValues()
-        settingsProvider.getAdminSettings().clear()
-        settingsProvider.getAdminSettings().setDefaultForAllSettingsWithoutValues()
+        settingsProvider.getUnprotectedSettings().clear()
+        settingsProvider.getUnprotectedSettings().setDefaultForAllSettingsWithoutValues()
+        settingsProvider.getProtectedSettings().clear()
+        settingsProvider.getProtectedSettings().setDefaultForAllSettingsWithoutValues()
 
         if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.SETTINGS))) {
             failedResetActions.add(ResetAction.RESET_PREFERENCES)

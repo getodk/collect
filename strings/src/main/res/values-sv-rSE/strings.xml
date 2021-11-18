@@ -444,7 +444,7 @@
   <string name="file_deleted_ok">%s formulär har raderats!</string>
   <string name="file_delete_in_progress">Tyvärr, radering av formulär pågår redan!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
@@ -585,7 +585,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Ange nytt lösenord</string>
   <string name="admin_password">Administratörslösenord</string>
@@ -627,7 +627,7 @@
   <string name="no">Nej</string>
   <string name="moving_backwards_enabled_title">Bakåtnavigering aktiverad</string>
   <string name="moving_backwards_enabled_message">Du vill kanske se över dessa inställningar:\n\n\u2022 Redigera sparat formulär\n\u2022 Spara formulär\n\u2022 Gå till post\n\u2022 Hantering av restriktioner</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Spara formulär</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

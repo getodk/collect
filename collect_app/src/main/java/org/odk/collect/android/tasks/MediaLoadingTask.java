@@ -56,7 +56,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
                 // apply image conversion if the widget is an image widget
                 if (questionWidget instanceof BaseImageWidget) {
-                    String imageSizeMode = settingsProvider.getGeneralSettings().getString(KEY_IMAGE_SIZE);
+                    String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
                     ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
                 }
                 return newFile;

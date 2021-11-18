@@ -219,7 +219,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         };
 
         driveHelper = new DriveHelper(googleApiProvider.getDriveApi(settingsProvider
-                .getGeneralSettings()
+                .getUnprotectedSettings()
                 .getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT)));
         getResultsFromApi();
     }

@@ -232,7 +232,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         }
 
         // request high resolution if configured for that...
-        boolean highResolution = settingsProvider.getGeneralSettings().getBoolean(ProjectKeys.KEY_HIGH_RESOLUTION);
+        boolean highResolution = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
             AnalyticsUtils.logFormEvent(REQUEST_HIGH_RES_VIDEO);

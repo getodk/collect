@@ -559,7 +559,7 @@
   <string name="file_deleted_ok">%s lomakkeen poistaminen onnistui!</string>
   <string name="file_delete_in_progress">Pahoittelut, lomakkeiden poistaminen jo käynnissä!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Projektin asetukset</string>
   <!--Title of a settings section-->
@@ -729,7 +729,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Asetusten lukitus avattu</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Syötä uusi salasana</string>
   <string name="admin_password">Pääkäyttäjän salasana</string>
@@ -776,7 +776,7 @@
   <string name="no">Ei</string>
   <string name="moving_backwards_enabled_title">Siirtyminen taaksepäin päällä</string>
   <string name="moving_backwards_enabled_message">Haluat ehkä tarkastella seuraavia asetuksia:\n\n\u2022 Muokkaa tallennettua lomaketta\n\u2022 Tallenna lomake\n\u2022 Siirry kehotteeseen\n\u2022 Rajoiteprosessointi</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Tallenna lomake</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

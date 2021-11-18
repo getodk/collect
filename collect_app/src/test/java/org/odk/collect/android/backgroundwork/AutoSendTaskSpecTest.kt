@@ -54,7 +54,7 @@ class AutoSendTaskSpecTest {
 
         RobolectricHelpers.mountExternalStorage()
         projectId = CollectHelpers.setupDemoProject()
-        TestSettingsProvider.getGeneralSettings(projectId)
+        TestSettingsProvider.getUnprotectedSettings(projectId)
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
     }
 

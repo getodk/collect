@@ -28,7 +28,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `scheduleUpdates passes project id when scheduling previously downloaded only`() {
-        val generalSettings = settingsProvider.getGeneralSettings("myProject")
+        val generalSettings = settingsProvider.getUnprotectedSettings("myProject")
 
         generalSettings.save(KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(application))
@@ -66,7 +66,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
 
     @Test
     fun `scheduleUpdates passes project id when scheduling match exactly`() {
-        val generalSettings = settingsProvider.getGeneralSettings("myProject")
+        val generalSettings = settingsProvider.getUnprotectedSettings("myProject")
 
         generalSettings.save(KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(application))

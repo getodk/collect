@@ -271,8 +271,8 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
     }
 
     private void runGoogleAccountValidation() {
-        String account = settingsProvider.getGeneralSettings().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
-        String protocol = settingsProvider.getGeneralSettings().getString(KEY_PROTOCOL);
+        String account = settingsProvider.getUnprotectedSettings().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
+        String protocol = settingsProvider.getUnprotectedSettings().getString(KEY_PROTOCOL);
 
         if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
 

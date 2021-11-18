@@ -565,7 +565,7 @@
   <string name="file_deleted_ok">%s dotazníků úspěšně smazáno!</string>
   <string name="file_delete_in_progress">Mazání dotazníku už probíhá!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Nastavení projektu</string>
   <!--Title of a settings section-->
@@ -735,7 +735,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Odemčené nastavení</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Zadejte nové heslo</string>
   <string name="admin_password">Heslo správce</string>
@@ -782,7 +782,7 @@
   <string name="no">Ne</string>
   <string name="moving_backwards_enabled_title">Posun zpět povolen</string>
   <string name="moving_backwards_enabled_message">Můžete si přečíst následující nastavení: \n\n\u2022 Upravit uložený formulář \n\u2022 Uložit formulář\n\u2022 Jít na výzvu \n\u2022 Omezení zpracování</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Uložit dotazník</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

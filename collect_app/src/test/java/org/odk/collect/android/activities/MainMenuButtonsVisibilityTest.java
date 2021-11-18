@@ -32,7 +32,7 @@ public class MainMenuButtonsVisibilityTest {
     public void setup() {
         CollectHelpers.setupDemoProject();
 
-        adminSettings = TestSettingsProvider.getAdminSettings();
+        adminSettings = TestSettingsProvider.getProtectedSettings();
         adminSettings.clear();
         adminSettings.setDefaultForAllSettingsWithoutValues();
     }

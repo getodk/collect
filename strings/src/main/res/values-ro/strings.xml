@@ -286,7 +286,7 @@
   <string name="file_deleted_ok">%s formular(e) șters(e) cu succes!</string>
   <string name="file_delete_in_progress">Ne pare rău, formularul este deja în proces de ștergere!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
@@ -370,7 +370,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Introduceți noua parolă</string>
   <string name="admin_password">Parola administratorului</string>
@@ -385,7 +385,7 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="yes">Da</string>
   <string name="no">Nu</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salvați formularul</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

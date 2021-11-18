@@ -98,7 +98,7 @@ class FormsUpdaterTest {
         val updatedXForm = FormUtils.createXFormBody("formId", "2")
         addFormToServer(updatedXForm, "formId", "2")
 
-        settingsProvider.getGeneralSettings(project.uuid)
+        settingsProvider.getUnprotectedSettings(project.uuid)
             .save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
 
         updateManager.downloadUpdates(project.uuid)

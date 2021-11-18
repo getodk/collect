@@ -17,13 +17,13 @@ object TestSettingsProvider {
 
     @JvmStatic
     @JvmOverloads
-    fun getGeneralSettings(uuid: String? = null): Settings {
-        return getSettingsProvider().getGeneralSettings(uuid)
+    fun getUnprotectedSettings(uuid: String? = null): Settings {
+        return getSettingsProvider().getUnprotectedSettings(uuid)
     }
 
     @JvmStatic
-    fun getAdminSettings(): Settings {
-        return getSettingsProvider().getAdminSettings()
+    fun getProtectedSettings(): Settings {
+        return getSettingsProvider().getProtectedSettings()
     }
 
     @JvmStatic

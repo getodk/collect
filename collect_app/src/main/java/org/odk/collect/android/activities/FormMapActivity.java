@@ -373,7 +373,7 @@ public class FormMapActivity extends CollectAbstractActivity {
                 setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
                 break;
             case OPEN_EDIT:
-                boolean canEditSaved = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
+                boolean canEditSaved = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
                 setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
                 break;
         }

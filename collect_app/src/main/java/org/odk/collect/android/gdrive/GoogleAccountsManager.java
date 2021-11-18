@@ -69,7 +69,7 @@ public class GoogleAccountsManager {
     @NonNull
     public String getLastSelectedAccountIfValid() {
         Account[] googleAccounts = accountPicker.getAllAccounts();
-        String account = settingsProvider.getGeneralSettings().getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+        String account = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
 
         if (googleAccounts != null && googleAccounts.length > 0) {
             for (Account googleAccount : googleAccounts) {
@@ -78,7 +78,7 @@ public class GoogleAccountsManager {
                 }
             }
 
-            settingsProvider.getGeneralSettings().reset(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
+            settingsProvider.getUnprotectedSettings().reset(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT);
         }
 
         return "";
@@ -86,7 +86,7 @@ public class GoogleAccountsManager {
 
     public void selectAccount(String accountName) {
         if (accountName != null) {
-            settingsProvider.getGeneralSettings().save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
+            settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName);
             accountPicker.setSelectedAccountName(accountName);
         }
     }

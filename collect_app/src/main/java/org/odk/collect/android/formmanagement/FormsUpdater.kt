@@ -139,7 +139,7 @@ private class ProjectSandbox(
     private val formSourceProvider: FormSourceProvider
 ) {
 
-    val generalSettings by lazy { settingsProvider.getGeneralSettings(projectId) }
+    val generalSettings by lazy { settingsProvider.getUnprotectedSettings(projectId) }
     val formsRepository by lazy { formsRepositoryProvider.get(projectId) }
     val instancesRepository by lazy { instancesRepositoryProvider.get(projectId) }
     val formSource by lazy { formSourceProvider.get(projectId) }

@@ -512,7 +512,7 @@
   <string name="file_deleted_ok">%s formularz/y zostało skasowanych!</string>
   <string name="file_delete_in_progress">Przykro mi, trwa kasowanie formularzy!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Serwer</string>
@@ -654,7 +654,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Wprowadź nowe hasło</string>
   <string name="admin_password">Hasło Administratora</string>
@@ -696,7 +696,7 @@
   <string name="no">Nie</string>
   <string name="moving_backwards_enabled_title">Cofanie się jest możliwe</string>
   <string name="moving_backwards_enabled_message">Możesz chcieć sprawdzić następujące ustawienia:\n\n\u2022 Edytuj Zapisany Formularz\n\u2022 Zapisz Formularz\n\u2022 Podpowiedź Przejdź Do\n\u2022 Przetwarzanie ograniczeń</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Zapisz Formularz</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

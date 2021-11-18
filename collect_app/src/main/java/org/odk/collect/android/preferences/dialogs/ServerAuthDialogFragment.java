@@ -38,7 +38,7 @@ public class ServerAuthDialogFragment extends DialogFragment {
         ServerAuthDialogBinding binding = ServerAuthDialogBinding.inflate(requireActivity().getLayoutInflater());
         dialogView = binding.getRoot();
 
-        Settings generalSettings = settingsProvider.getGeneralSettings();
+        Settings generalSettings = settingsProvider.getUnprotectedSettings();
         binding.usernameEdit.setText(generalSettings.getString(ProjectKeys.KEY_USERNAME));
         binding.passwordEdit.setText(generalSettings.getString(ProjectKeys.KEY_PASSWORD));
 

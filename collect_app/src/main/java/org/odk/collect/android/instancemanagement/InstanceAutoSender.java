@@ -57,7 +57,7 @@ public class InstanceAutoSender {
     public boolean autoSendInstances(String projectId) {
         FormsRepository formsRepository = formsRepositoryProvider.get(projectId);
         InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
-        Settings generalSettings = settingsProvider.getGeneralSettings(projectId);
+        Settings generalSettings = settingsProvider.getUnprotectedSettings(projectId);
         InstanceSubmitter instanceSubmitter = new InstanceSubmitter(analytics, formsRepository, instancesRepository, googleAccountsManager, googleApiProvider, permissionsProvider, generalSettings);
 
         return changeLockProvider.getInstanceLock(projectId).withLock(acquiredLock -> {

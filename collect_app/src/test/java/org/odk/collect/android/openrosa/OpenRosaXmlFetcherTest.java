@@ -29,7 +29,7 @@ public class OpenRosaXmlFetcherTest {
     @Before
     public void setup() {
         httpInterface = mock(OpenRosaHttpInterface.class);
-        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils(TestSettingsProvider.getGeneralSettings()));
+        openRosaXMLFetcher = new OpenRosaXmlFetcher(httpInterface, new WebCredentialsUtils(TestSettingsProvider.getUnprotectedSettings()));
     }
 
     @Test

@@ -41,16 +41,16 @@ class AppConfigurationGenerator(
 
     fun getAppConfigurationAsJson(includedPasswordKeys: Collection<String> = emptyList()): String {
         return JSONObject().apply {
-            put(AppConfigurationKeys.GENERAL, getGeneralPrefsAsJson(includedPasswordKeys))
-            put(AppConfigurationKeys.ADMIN, getAdminPrefsAsJson(includedPasswordKeys))
+            put(AppConfigurationKeys.GENERAL, getUnprotectedPrefsAsJson(includedPasswordKeys))
+            put(AppConfigurationKeys.ADMIN, getProtectedPrefsAsJson(includedPasswordKeys))
             put(AppConfigurationKeys.PROJECT, getProjectDetailsAsJson())
         }.toString()
     }
 
-    private fun getGeneralPrefsAsJson(includedPasswordKeys: Collection<String>): JSONObject {
+    private fun getUnprotectedPrefsAsJson(includedPasswordKeys: Collection<String>): JSONObject {
         val generalPrefs = JSONObject()
 
-        val generalSettings = settingsProvider.getGeneralSettings().getAll()
+        val generalSettings = settingsProvider.getUnprotectedSettings().getAll()
         val defaultGeneralSettings: Map<String, *> = ProjectKeys.defaults
 
         for (key in defaultGeneralSettings.keys) {
@@ -65,10 +65,10 @@ class AppConfigurationGenerator(
         return generalPrefs
     }
 
-    private fun getAdminPrefsAsJson(includedPasswordKeys: Collection<String>): JSONObject {
+    private fun getProtectedPrefsAsJson(includedPasswordKeys: Collection<String>): JSONObject {
         val adminPrefs = JSONObject()
 
-        val adminSettings = settingsProvider.getAdminSettings().getAll()
+        val adminSettings = settingsProvider.getProtectedSettings().getAll()
         val defaultAdminSettings = ProtectedProjectKeys.defaults
 
         for (key in ProtectedProjectKeys.allKeys()) {

@@ -27,8 +27,8 @@ class MainMenuAccessPreferencesTest {
     fun setup() {
         CollectHelpers.setupDemoProject()
         context = ApplicationProvider.getApplicationContext()
-        generalSettings = TestSettingsProvider.getGeneralSettings()
-        adminSettings = TestSettingsProvider.getAdminSettings()
+        generalSettings = TestSettingsProvider.getUnprotectedSettings()
+        adminSettings = TestSettingsProvider.getProtectedSettings()
     }
 
     @Test

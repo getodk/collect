@@ -20,7 +20,7 @@ public class SettingsUtilsTest {
 
     @Test
     public void getFormUpdateMode_whenProtocolIsGoogleDrive_andModeNotManual_returnsManual() {
-        Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+        Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
         Context context = getApplicationContext();
 
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS);

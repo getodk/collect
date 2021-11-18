@@ -56,17 +56,17 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
     @Override
     public void onResume() {
         super.onResume();
-        settingsProvider.getGeneralSettings().registerOnSettingChangeListener(this);
+        settingsProvider.getUnprotectedSettings().registerOnSettingChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        settingsProvider.getGeneralSettings().unregisterOnSettingChangeListener(this);
+        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(this);
     }
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getGeneralSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getUnprotectedSettings().getAll().get(key), key);
     }
 }

@@ -73,16 +73,16 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     public void onPrepareOptionsMenu(Menu menu) {
         boolean useability;
 
-        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID);
+        useability = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID);
 
         menu.findItem(R.id.menu_save).setVisible(useability).setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_JUMP_TO);
+        useability = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_JUMP_TO);
 
         menu.findItem(R.id.menu_goto).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_LANGUAGE)
+        useability = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_CHANGE_LANGUAGE)
                 && (formController != null)
                 && formController.getLanguages() != null
                 && formController.getLanguages().length > 1;
@@ -90,7 +90,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         menu.findItem(R.id.menu_languages).setVisible(useability)
                 .setEnabled(useability);
 
-        useability = settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_ACCESS_SETTINGS);
+        useability = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_ACCESS_SETTINGS);
 
         menu.findItem(R.id.menu_preferences).setVisible(useability)
                 .setEnabled(useability);
@@ -99,7 +99,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 && new PlayServicesChecker().isGooglePlayServicesAvailable(activity)) {
             MenuItem backgroundLocation = menu.findItem(R.id.track_location);
             backgroundLocation.setVisible(true);
-            backgroundLocation.setChecked(settingsProvider.getGeneralSettings().getBoolean(KEY_BACKGROUND_LOCATION));
+            backgroundLocation.setChecked(settingsProvider.getUnprotectedSettings().getBoolean(KEY_BACKGROUND_LOCATION));
         }
 
         menu.findItem(R.id.menu_add_repeat).setVisible(formEntryViewModel.canAddRepeat());
@@ -129,7 +129,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
             return true;
         } else if (item.getItemId() == R.id.track_location) {
-            backgroundLocationViewModel.backgroundLocationPreferenceToggled(settingsProvider.getGeneralSettings());
+            backgroundLocationViewModel.backgroundLocationPreferenceToggled(settingsProvider.getUnprotectedSettings());
             return true;
         } else if (item.getItemId() == R.id.menu_goto) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {

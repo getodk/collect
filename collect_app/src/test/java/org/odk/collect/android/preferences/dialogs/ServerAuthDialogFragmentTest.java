@@ -21,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class ServerAuthDialogFragmentTest {
 
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
 
     @Test
     public void prefillsUsernameAndPassword() {

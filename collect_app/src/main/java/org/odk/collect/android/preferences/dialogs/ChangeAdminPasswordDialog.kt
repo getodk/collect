@@ -61,7 +61,7 @@ class ChangeAdminPasswordDialog : DialogFragment() {
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
                 val password = binding.pwdField.text.toString()
 
-                settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, password)
+                settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, password)
 
                 if (password.isEmpty()) {
                     projectPreferencesViewModel.setStateNotProtected()

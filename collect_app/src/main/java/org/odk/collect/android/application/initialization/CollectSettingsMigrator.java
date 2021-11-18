@@ -41,11 +41,11 @@ public class CollectSettingsMigrator implements SettingsMigrator {
 
     @Override
     public void migrate(Settings generalSettings, Settings adminSettings) {
-        for (Migration migration : getGeneralMigrations()) {
+        for (Migration migration : getUnprotectedMigrations()) {
             migration.apply(generalSettings);
         }
 
-        for (Migration migration : getAdminMigrations()) {
+        for (Migration migration : getProtectedMigrations()) {
             migration.apply(adminSettings);
         }
 
@@ -54,7 +54,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
         }
     }
 
-    private List<Migration> getGeneralMigrations() {
+    private List<Migration> getUnprotectedMigrations() {
         return asList(
                 translateKey("map_sdk_behavior").toKey(KEY_BASEMAP_SOURCE)
                         .fromValue("google_maps").toValue("google")
@@ -139,7 +139,7 @@ public class CollectSettingsMigrator implements SettingsMigrator {
         );
     }
 
-    public List<KeyTranslator> getAdminMigrations() {
+    public List<KeyTranslator> getProtectedMigrations() {
         return asList(
                 // When either the map SDK or the basemap selection were previously
                 // hidden, we want to hide the entire Maps preference screen.

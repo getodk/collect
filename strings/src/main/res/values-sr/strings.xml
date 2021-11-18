@@ -474,7 +474,7 @@
   <string name="file_deleted_ok">%s formular(i) su uspješno obrisani!</string>
   <string name="file_delete_in_progress">Brisanje formulara je već u toku!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
@@ -615,7 +615,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Ukucaj novu lozinku</string>
   <string name="admin_password">Administratorska lozinka</string>
@@ -657,7 +657,7 @@
   <string name="no">Ne</string>
   <string name="moving_backwards_enabled_title">Kretanje unazad je omogućeno</string>
   <string name="moving_backwards_enabled_message">Možda biste željeli da pogledate sljedeća podešavanja: :\n\n\u2022 Uredi sačuvani fprmular\n\u2022 Sačuvaj fomular\n\u2022 Idi na Prompt\n\u2022 Ograničenje procesuiranja</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Sačuvaj formular</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

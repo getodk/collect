@@ -77,7 +77,7 @@ public class QuitFormDialogFragment extends DialogFragment {
         String title = formSaveViewModel.getFormName() == null ? getActivity().getString(R.string.no_form_loaded) : formSaveViewModel.getFormName();
 
         List<IconMenuItem> items;
-        if (settingsProvider.getAdminSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)) {
+        if (settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)) {
             items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
                     new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
         } else {

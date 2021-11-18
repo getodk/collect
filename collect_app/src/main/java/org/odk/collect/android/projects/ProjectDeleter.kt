@@ -53,8 +53,8 @@ class ProjectDeleter(
         formUpdateScheduler.cancelUpdates(currentProject.uuid)
         instanceSubmitScheduler.cancelSubmit(currentProject.uuid)
 
-        settingsProvider.getGeneralSettings(currentProject.uuid).clear()
-        settingsProvider.getAdminSettings(currentProject.uuid).clear()
+        settingsProvider.getUnprotectedSettings(currentProject.uuid).clear()
+        settingsProvider.getProtectedSettings(currentProject.uuid).clear()
 
         projectsRepository.delete(currentProject.uuid)
 

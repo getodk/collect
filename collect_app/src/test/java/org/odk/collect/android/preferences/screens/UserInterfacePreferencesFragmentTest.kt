@@ -43,8 +43,8 @@ class UserInterfacePreferencesFragmentTest {
         })
 
         CollectHelpers.setupDemoProject()
-        generalSettings = TestSettingsProvider.getGeneralSettings()
-        adminSettings = TestSettingsProvider.getAdminSettings()
+        generalSettings = TestSettingsProvider.getUnprotectedSettings()
+        adminSettings = TestSettingsProvider.getProtectedSettings()
     }
 
     @Test

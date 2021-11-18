@@ -68,19 +68,19 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings clears general settings for current project`() {
+    fun `Reset settings clears unprotected settings for current project`() {
         setupTestGeneralSettings(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
+            getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
                 ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
-            getGeneralSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
+            getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
                 ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
             )
@@ -88,19 +88,19 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings does not clear general settings for another projects`() {
+    fun `Reset settings does not clear unprotected settings for another projects`() {
         setupTestGeneralSettings(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_USERNAME),
+            getUnprotectedSettings(anotherProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
                 "usernameTest"
             )
         )
         assertThat(
-            getGeneralSettings(anotherProjectId).getString(ProjectKeys.KEY_PASSWORD),
+            getUnprotectedSettings(anotherProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
                 "passwordTest"
             )
@@ -108,13 +108,13 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings clears admin settings for current project`() {
+    fun `Reset settings clears protected settings for current project`() {
         setupTestAdminSettings(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
+            getProtectedSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
                 ProtectedProjectKeys.defaults[ProtectedProjectKeys.KEY_VIEW_SENT]
             )
@@ -122,13 +122,13 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset settings does not clear admin settings for another projects`() {
+    fun `Reset settings does not clear protected settings for another projects`() {
         setupTestAdminSettings(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_PREFERENCES))
 
         assertThat(
-            getAdminSettings(anotherProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
+            getProtectedSettings(anotherProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
                 false
             )
@@ -250,12 +250,12 @@ class ProjectResetterTest {
     }
 
     private fun setupTestGeneralSettings(uuid: String) {
-        getGeneralSettings(uuid).save(ProjectKeys.KEY_USERNAME, "usernameTest")
-        getGeneralSettings(uuid).save(ProjectKeys.KEY_PASSWORD, "passwordTest")
+        getUnprotectedSettings(uuid).save(ProjectKeys.KEY_USERNAME, "usernameTest")
+        getUnprotectedSettings(uuid).save(ProjectKeys.KEY_PASSWORD, "passwordTest")
     }
 
     private fun setupTestAdminSettings(uuid: String) {
-        getAdminSettings(uuid).save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
+        getProtectedSettings(uuid).save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
     }
 
     private fun setupTestSettingsFolder(uuid: String) {
@@ -357,11 +357,11 @@ class ProjectResetterTest {
         assertTrue(File(folder).list().isEmpty())
     }
 
-    fun getGeneralSettings(uuid: String): Settings {
-        return settingsProvider.getGeneralSettings(uuid)
+    fun getUnprotectedSettings(uuid: String): Settings {
+        return settingsProvider.getUnprotectedSettings(uuid)
     }
 
-    fun getAdminSettings(uuid: String): Settings {
-        return settingsProvider.getAdminSettings(uuid)
+    fun getProtectedSettings(uuid: String): Settings {
+        return settingsProvider.getProtectedSettings(uuid)
     }
 }

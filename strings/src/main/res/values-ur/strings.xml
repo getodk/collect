@@ -440,7 +440,7 @@
   <string name="file_deleted_ok">%s‏فارم (ز )‎‏ کامیابی سےڈیلیٹ کر دیے گئے</string>
   <string name="file_delete_in_progress">معافی، فارم مٹانے کا عمل پہلے سے جاری ہے</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور </string>
@@ -582,7 +582,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">نیا پاس ورڈ درج کریں</string>
   <string name="admin_password">ایڈمن پاس ورڈ </string>
@@ -624,7 +624,7 @@
   <string name="no">نہیں </string>
   <string name="moving_backwards_enabled_title">پیچھے کی طرف حرکت  فعال</string>
   <string name="moving_backwards_enabled_message">آپ دی گئی سیٹنگز کو دوبارہ دیکھ سکتے ہیں: \n\n\u2022 محفوظ فارم میں ترمیم n\u2022 فارم سیو کریںn\u2022 پرامپٹ پر جائیں n\u2022 کنسٹریٹ پراسیسنگ</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">فارم کو محفوظ کریں</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

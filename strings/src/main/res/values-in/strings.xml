@@ -556,7 +556,7 @@
   <string name="file_deleted_ok">%s formulir telah berhasil dihapus.</string>
   <string name="file_delete_in_progress">Maaf, proses penghapusan formulir sedang berlangsung.</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <string name="project_settings">Pengaturan proyek</string>
   <!--Title of a settings section-->
@@ -726,7 +726,7 @@
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <string name="settings_unlocked">Pengaturan tidak terkunci</string>
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Masukan Kata Sandi Baru</string>
   <string name="admin_password">Kata Sandi Admin</string>
@@ -773,7 +773,7 @@
   <string name="no">Tidak</string>
   <string name="moving_backwards_enabled_title">Kembali ke halaman sebelumnya diaktifkan</string>
   <string name="moving_backwards_enabled_message">Anda mungkin ingin meninjau pengaturan berikut:\n\n\u2022 Ubah Formulir Tersimpan\n\u2022 Simpan Formulir\n\u2022 Risalah\n\u2022 Pemrosesan konstrain</string>
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Simpan Formulir</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS

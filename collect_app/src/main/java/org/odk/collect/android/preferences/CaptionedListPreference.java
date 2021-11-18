@@ -87,7 +87,7 @@ public class CaptionedListPreference extends ListPreference {
         button.setOnClickListener(view -> onItemClicked(i));
         item.setOnClickListener(view -> onItemClicked(i));
         parent.addView(item);
-        if (Objects.equals(value, settingsProvider.getGeneralSettings().getString(getKey()))) {
+        if (Objects.equals(value, settingsProvider.getUnprotectedSettings().getString(getKey()))) {
             button.setChecked(true);
             item.post(() -> item.requestRectangleOnScreen(new Rect(0, 0, item.getWidth(), item.getHeight())));
         }

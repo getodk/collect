@@ -72,7 +72,7 @@ public class ImageConverterTest {
     private static final String IMAGE_SIZE_VERY_SMALL = "very_small";
 
     private String testImagePath;
-    private final Settings generalSettings = TestSettingsProvider.getGeneralSettings();
+    private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
 
     @Rule
     public RuleChain copyFormChain = RuleChain

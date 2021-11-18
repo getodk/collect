@@ -28,7 +28,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 public final class TestUtils {
-    private static final Settings GENERAL_PREFS = TestSettingsProvider.getGeneralSettings();
+    private static final Settings GENERAL_PREFS = TestSettingsProvider.getUnprotectedSettings();
 
     private TestUtils() {
 

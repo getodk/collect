@@ -90,11 +90,11 @@ class ChangeAdminPasswordDialogTest {
     fun `Setting password and accepting updates the password in settings`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
-            settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
+            settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
             RobolectricHelpers.runLooper()
-            assertThat(settingsProvider.getAdminSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`("password"))
+            assertThat(settingsProvider.getProtectedSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`("password"))
         }
     }
 
@@ -102,11 +102,11 @@ class ChangeAdminPasswordDialogTest {
     fun `Setting password and canceling does not update the password in settings`() {
         val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
-            settingsProvider.getAdminSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
+            settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
             RobolectricHelpers.runLooper()
-            assertThat(settingsProvider.getAdminSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`(""))
+            assertThat(settingsProvider.getProtectedSettings().getString(ProtectedProjectKeys.KEY_ADMIN_PW), `is`(""))
         }
     }
 

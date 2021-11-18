@@ -260,7 +260,7 @@
   <string name="file_deleted_ok">Fomu() %s zimefutwa vilivyo!</string>
   <string name="file_delete_in_progress">samahani, kuna fomu tayari inafutwa!</string>
   <!--##############################################
-    # GENERAL SETTINGS
+    # UNPROTECTED SETTINGS
     ##############################################-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
@@ -339,7 +339,7 @@
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
   <!--##############################################
-     # ADMIN SETTINGS
+     # PROTECTED SETTINGS
      ##############################################-->
   <string name="enter_new_password">Weka password mpya</string>
   <string name="admin_password_changed">Password ya msimamizi imebadilishwa vyema</string>
@@ -349,7 +349,7 @@
   <string name="found_in_settings">Chagua kuficha usanidi wa jumla</string>
   <string name="reset_project_settings_title">fanya upya</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
-  <!--Admin setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Hifadhi Fomu</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
