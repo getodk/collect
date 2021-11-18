@@ -6,6 +6,9 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.startup.AppInitializer;
 
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+
 import net.danlew.android.joda.JodaTimeInitializer;
 
 import org.javarosa.core.model.CoreModelModule;
@@ -111,6 +114,17 @@ public class ApplicationInitializer {
 
     private void initializeMapFrameworks() {
         try {
+            MapsInitializer.initialize(context, Renderer.LATEST, renderer -> {
+                switch (renderer) {
+                    case LATEST:
+                        Timber.d("The latest version of Google Maps renderer is used.");
+                        break;
+                    case LEGACY:
+                        Timber.d("The legacy version of Google Maps renderer is used.");
+                        break;
+                }
+            });
+
             Handler handler = new Handler(context.getMainLooper());
             handler.post(() -> {
                 // This has to happen on the main thread but we might call `initialize` from tests

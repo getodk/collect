@@ -26,7 +26,7 @@ object Dependencies {
     const val google_api_services_drive = "com.google.apis:google-api-services-drive:v3-rev20210725-1.32.1"
     const val google_api_services_sheets = "com.google.apis:google-api-services-sheets:v4-rev20210629-1.32.1"
     const val play_services_auth = "com.google.android.gms:play-services-auth:19.2.0"
-    const val play_services_maps = "com.google.android.gms:play-services-maps:17.0.1"
+    const val play_services_maps = "com.google.android.gms:play-services-maps:18.0.0"
     const val play_services_location = "com.google.android.gms:play-services-location:18.0.0"
     const val mapbox_android_sdk = "com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1"
     const val mapbox_android_telemetry = "com.mapbox.mapboxsdk:mapbox-android-telemetry:6.1.0" // We need this to fix https://github.com/mapbox/mapbox-gl-native-android/issues/425. Once we update Mapbox Android SDK we can get rid of it.
