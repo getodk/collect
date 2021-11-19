@@ -73,6 +73,17 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When there are no projects then display alert dialog`() {
+        projectsRepository.deleteAll()
+
+        val scenario = ActivityScenario.launch(FormUriActivity::class.java)
+        onView(withText(R.string.no_projects_detected)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    @Test
     fun `When there is project id specified in uri and it does not match current project id then display alert dialog`() {
         val scenario = ActivityScenario.launch<FormUriActivity>(getIntent(secondProject.uuid))
 
