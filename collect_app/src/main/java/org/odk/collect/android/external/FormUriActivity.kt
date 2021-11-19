@@ -26,26 +26,37 @@ class FormUriActivity : Activity() {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
 
-        val firstProject = projectsRepository.getAll().first()
-        val uri = intent.data
-        val uriProjectId = uri?.getQueryParameter("projectId")
-        val projectId = uriProjectId ?: firstProject.uuid
-
-        logAnalytics(uriProjectId)
-
-        if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-            startActivity(
-                Intent(this, FormEntryActivity::class.java).also {
-                    it.data = uri
-                    intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                }
-            )
-        } else {
+        val projects = projectsRepository.getAll()
+        if (projects.isEmpty()) {
             AlertDialog.Builder(this)
-                .setMessage(R.string.wrong_project_selected_for_form)
+                .setMessage(R.string.no_projects_detected)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
+        } else {
+            val firstProject = projects.first()
+            val uri = intent.data
+            val uriProjectId = uri?.getQueryParameter("projectId")
+            val projectId = uriProjectId ?: firstProject.uuid
+
+            logAnalytics(uriProjectId)
+
+            if (projectId == currentProjectProvider.getCurrentProject().uuid) {
+                startActivity(
+                    Intent(this, FormEntryActivity::class.java).also {
+                        it.data = uri
+                        intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
+                    }
+                )
+            } else {
+                AlertDialog.Builder(this)
+                    .setMessage(R.string.wrong_project_selected_for_form)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        finish()
+                    }
+                    .create()
+                    .show()
+            }
         }
     }
 
