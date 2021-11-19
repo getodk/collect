@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -10,6 +8,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import android.os.Build;
+
+import org.odk.collect.android.R;
 
 public class FormEndPage extends Page<FormEndPage> {
 
@@ -35,8 +37,9 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormMapPage().assertOnPage();
     }
 
-    public FormEntryPage clickSaveAndExitWithError() {
+    public FormEntryPage clickSaveAndExitWithError(String errorText) {
         onView(withId(R.id.save_exit_button)).perform(click());
+        assertConstraintDisplayed(errorText);
         return new FormEntryPage(formName).assertOnPage();
     }
 
@@ -81,5 +84,16 @@ public class FormEndPage extends Page<FormEndPage> {
     public FormEndPage fillInFormName(String formName) {
         inputText(formName);
         return this;
+    }
+
+    private void assertConstraintDisplayed(String constraintText) {
+        // Constraints warnings show as dialogs in Android 11+
+        if (Build.VERSION.SDK_INT < 30) {
+            checkIsToastWithMessageDisplayed(constraintText);
+        } else {
+            new OkDialog().assertOnPage()
+                    .assertText(constraintText)
+                    .clickOK(new FormEntryPage(formName));
+        }
     }
 }

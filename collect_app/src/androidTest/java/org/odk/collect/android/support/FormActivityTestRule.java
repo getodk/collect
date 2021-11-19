@@ -13,14 +13,18 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.forms.Form;
 
 public class FormActivityTestRule implements TestRule {
 
     private final String formFilename;
+    private final String formName;
+    private FormEntryPage formEntryPage;
 
-    public FormActivityTestRule(String formFilename) {
+    public FormActivityTestRule(String formFilename, String formName) {
         this.formFilename = formFilename;
+        this.formName = formName;
     }
 
     @Override
@@ -29,9 +33,16 @@ public class FormActivityTestRule implements TestRule {
             @Override
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(getActivityIntent());
+                formEntryPage = new FormEntryPage(formName);
+                formEntryPage.assertOnPage();
+
                 base.evaluate();
             }
         };
+    }
+
+    public FormEntryPage startInFormEntry() {
+        return formEntryPage;
     }
 
     private Intent getActivityIntent() {

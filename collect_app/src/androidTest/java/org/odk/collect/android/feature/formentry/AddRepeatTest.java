@@ -1,5 +1,9 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
 import android.Manifest;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -16,10 +20,6 @@ import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.EndOfFormPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
 public class AddRepeatTest {
@@ -66,7 +66,7 @@ public class AddRepeatTest {
                 .assertText("What is their age?")
                 .assertText("What is their name?")
                 .swipeToNextQuestionWithRepeatGroup("Person")
-                .clickOnAdd(new FormEntryPage("One Question Repeat"))
+                .clickOnAdd(new FormEntryPage("Field-List Repeat"))
                 .assertText("Person > 2")
                 .assertText("What is their age?")
                 .assertText("What is their name?");

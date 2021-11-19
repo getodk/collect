@@ -33,7 +33,7 @@ public class AllWidgetsFormTest {
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule("all-widgets.xml");
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule("all-widgets.xml", "All widgets");
 
     @Rule
     public RuleChain copyFormChain = RuleChain

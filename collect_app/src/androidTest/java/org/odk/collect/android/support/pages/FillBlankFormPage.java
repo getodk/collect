@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.CursorMatchers;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.support.WaitFor;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -109,7 +110,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public FillBlankFormPage assertFormExists(String formName) {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
-        return waitFor(() -> {
+        return WaitFor.waitFor(() -> {
             assertTextNotDisplayed(R.string.no_items_display_forms);
             onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).check(matches(isDisplayed()));
             return this;

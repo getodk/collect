@@ -1,5 +1,7 @@
 package org.odk.collect.android.support;
 
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+
 import android.content.Context;
 
 import androidx.preference.PreferenceManager;
@@ -17,11 +19,10 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.DecoratedBarcodeView;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 public class ResetStateRule implements TestRule {
 
@@ -70,6 +71,7 @@ public class ResetStateRule implements TestRule {
         MultiClickGuard.test = true;
         DecoratedBarcodeView.test = true;
         CopyFormRule.projectCreated = false;
+        ToastUtils.setRecordToasts(true);
     }
 
     private void clearDisk() {

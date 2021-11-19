@@ -2,8 +2,8 @@ package org.odk.collect.android.regression;
 
 import android.Manifest;
 
-import androidx.test.rule.GrantPermissionRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,8 +14,8 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 
 //Issue NODK-237
 @RunWith(AndroidJUnit4.class)
@@ -38,8 +38,7 @@ public class FormManagementTest {
         new MainMenuPage()
                 .startBlankForm("OnePageFormValid")
                 .inputText("Bla")
-                .swipeToNextQuestion()
-                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
+                .swipeToNextQuestionWithConstraintViolation("Response length must be between 5 and 15")
                 .clickOptionsIcon()
                 .clickGeneralSettings()
                 .openFormManagement()
@@ -49,8 +48,7 @@ public class FormManagementTest {
                 .pressBack(new FormEntryPage("OnePageFormValid"))
                 .swipeToNextQuestion()
                 .swipeToEndScreen()
-                .clickSaveAndExitWithError()
-                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15");
+                .clickSaveAndExitWithError("Response length must be between 5 and 15");
     }
 
     @Test

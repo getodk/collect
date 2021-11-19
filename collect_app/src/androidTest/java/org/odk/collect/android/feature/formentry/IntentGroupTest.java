@@ -16,38 +16,12 @@
 
 package org.odk.collect.android.feature.formentry;
 
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.ClipData;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-
-import androidx.core.content.FileProvider;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.RuleChain;
-import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.R;
-import org.odk.collect.android.RecordedIntentsRule;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.support.ActivityHelpers;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
-import org.odk.collect.android.support.ResetStateRule;
-
-import java.io.File;
-import java.io.IOException;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -63,20 +37,47 @@ import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.ClipData;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+
+import androidx.core.content.FileProvider;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.rule.GrantPermissionRule;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.RuleChain;
+import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
+import org.odk.collect.android.RecordedIntentsRule;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.TestRuleChain;
+
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Tests that intent groups work as documented at https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields
  */
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(INTENT_GROUP_FORM);
+    public FormActivityTestRule rule = new FormActivityTestRule(INTENT_GROUP_FORM, "intent-group");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RecordedIntentsRule())
-            .around(activityTestRule);
+            .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)) // Needed to write temp file
+            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
+            .around(rule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.
     @Test
@@ -89,8 +90,9 @@ public class IntentGroupTest {
     // text if no app is found.
     @Test
     public void appMissingErrorText_ShouldComeFromSpecialFormText() {
-        onView(withText("This is buttonText")).perform(click());
-        onView(withText("This is noAppErrorString")).inRoot(withDecorView(not(ActivityHelpers.getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
+        rule.startInFormEntry()
+                .clickOnText("This is buttonText")
+                .checkIsToastWithMessageDisplayed("This is noAppErrorString");
     }
 
     @Test
@@ -244,9 +246,13 @@ public class IntentGroupTest {
         onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
     }
 
-    @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     private Uri createTempFile(String name, String extension) throws IOException {
-        File file = File.createTempFile(name, extension, new File("/sdcard"));
+        // Use the phones downloads dir for temp files
+        File downloadsDir = ApplicationProvider
+                .getApplicationContext()
+                .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+
+        File file = File.createTempFile(name, extension, downloadsDir);
         copyFileFromAssets("media" + File.separator + name + "." + extension, file.getPath());
         return getUriForFile(file);
     }

@@ -7,8 +7,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.IdentifyUserPromptPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
@@ -21,15 +20,13 @@ public class IdentifyUserTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FORM))
-            .around(new CopyFormRule(IDENTIFY_USER_AUDIT_FALSE_FORM))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Test
     public void openingForm_andThenEnteringIdentity_proceedsToForm() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
@@ -40,7 +37,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openingSavedForm_promptsForIdentity() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
@@ -53,7 +51,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andEnteringBlankIdentity_remainsOnIdentityPrompt() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("  ")
@@ -62,7 +61,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andPressingBack_returnsToMainMenu() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .closeSoftKeyboard()
@@ -71,7 +71,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andRotating_remainsOnIdentityPrompt() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Blah")
@@ -81,7 +82,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openingForm_andPressingCloseCross_returnsToMainMenu() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .pressClose();
@@ -89,7 +91,8 @@ public class IdentifyUserTest {
 
     @Test
     public void openFormWithIdentifyUserFalse_proceedsToForm() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FALSE_FORM)
                 .clickFillBlankForm()
                 .clickOnForm("Identify User False")
                 .swipeToEndScreen()

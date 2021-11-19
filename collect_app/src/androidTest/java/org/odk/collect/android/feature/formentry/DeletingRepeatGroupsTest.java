@@ -1,10 +1,13 @@
 package org.odk.collect.android.feature.formentry;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
@@ -13,14 +16,10 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-
 public class DeletingRepeatGroupsTest {
     private static final String TEST_FORM = "repeat_groups.xml";
 
-    private final FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    private final FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "repeatGroups");
 
     @Rule
     public RuleChain copyFormChain = RuleChain

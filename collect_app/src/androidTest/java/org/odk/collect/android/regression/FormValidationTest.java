@@ -31,14 +31,12 @@ public class FormValidationTest {
 
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
-
         new MainMenuPage()
                 .startBlankForm("OnePageFormShort")
                 .answerQuestion(0, "A")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExitWithError()
-                .checkIsToastWithMessageDisplayed("Response length must be between 5 and 15")
+                .clickSaveAndExitWithError("Response length must be between 5 and 15")
                 .assertText("Integer")
                 .answerQuestion(0, "Aaaaa")
                 .clickGoToArrow()
@@ -48,7 +46,6 @@ public class FormValidationTest {
 
     @Test
     public void openHierarchyView_ShouldSeeShortForms() {
-
         //TestCase3
         new MainMenuPage()
                 .startBlankForm("OnePageFormShort")

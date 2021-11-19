@@ -18,12 +18,15 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 
+import android.os.Build;
+
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.test.espresso.Espresso;
 
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.utilities.FlingRegister;
 
 import java.util.concurrent.Callable;
@@ -39,7 +42,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     @Override
     public FormEntryPage assertOnPage() {
         // Make sure we wait for loading to finish
-        waitFor((Callable<Void>) () -> {
+        WaitFor.waitFor((Callable<Void>) () -> {
             assertTextDoesNotExist(R.string.loading_form);
             return null;
         });
@@ -93,7 +96,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEndPage swipeToEndScreen() {
         flingLeft();
-        return waitFor(() -> new FormEndPage(formName).assertOnPage());
+        return WaitFor.waitFor(() -> new FormEndPage(formName).assertOnPage());
     }
 
     public ErrorDialog swipeToNextQuestionWithError() {
@@ -103,13 +106,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
         flingLeft();
-        checkIsToastWithMessageDisplayed(constraintText);
+        assertConstraintDisplayed(constraintText);
 
         return this;
     }
 
     public FormEntryPage clickOptionsIcon() {
-        Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+        tryAgainOnFail(() -> {
+            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+            assertText(R.string.project_settings);
+        });
+
         return this;
     }
 
@@ -174,7 +181,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage deleteGroup(String questionText) {
         onView(withText(questionText)).perform(longClick());
         onView(withText(R.string.delete_repeat)).perform(click());
-        onView(withText(R.string.discard_group)).perform(click());
+        clickOnButtonInDialog(R.string.discard_group, this);
         return this;
     }
 
@@ -269,7 +276,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
         flingLeft();
-        return waitFor(() -> new AddNewRepeatDialog(repeatName).assertOnPage());
+        return WaitFor.waitFor(() -> new AddNewRepeatDialog(repeatName).assertOnPage());
     }
 
     public FormEntryPage answerQuestion(String question, String answer) {
@@ -294,7 +301,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
             FlingRegister.attemptingFling();
             onView(withId(R.id.questionholder)).perform(swipeLeft());
 
-            waitFor(() -> {
+            WaitFor.waitFor(() -> {
                 if (FlingRegister.isFlingDetected()) {
                     return true;
                 } else {
@@ -348,5 +355,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public CancelRecordingDialog clickRecordAudio() {
         clickOnString(R.string.record_audio);
         return new CancelRecordingDialog(formName);
+    }
+
+    public void assertConstraintDisplayed(String constraintText) {
+        // Constraints warnings show as dialogs in Android 11+
+        if (Build.VERSION.SDK_INT < 30) {
+            checkIsToastWithMessageDisplayed(constraintText);
+        } else {
+            new OkDialog().assertOnPage()
+                    .assertText(constraintText)
+                    .clickOK(this);
+        }
     }
 }

@@ -1,5 +1,11 @@
 package org.odk.collect.android.feature.formentry;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
@@ -16,7 +22,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectTestRule;
@@ -26,6 +31,7 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.androidshared.system.PermissionsChecker;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
@@ -33,12 +39,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioRecordingTest {

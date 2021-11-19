@@ -18,6 +18,6 @@ public class CancelRecordingDialog extends Page<CancelRecordingDialog> {
 
     public FormEntryPage clickOk() {
         clickOKOnDialog();
-        return new FormEntryPage(formName);
+        return new FormEntryPage(formName).assertOnPage();
     }
 }

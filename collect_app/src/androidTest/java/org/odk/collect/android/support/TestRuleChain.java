@@ -19,6 +19,7 @@ public final class TestRuleChain {
     public static RuleChain chain(TestDependencies testDependencies) {
         return RuleChain
                 .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
+                .around(new DisableDeviceAnimationsRule())
                 .around(new ResetStateRule(testDependencies))
                 .around(new IdlingResourceRule(testDependencies.idlingResources));
     }

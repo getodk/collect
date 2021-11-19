@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
@@ -15,7 +14,7 @@ public class RankingWidgetWithCSVTest {
 
     private static final String TEST_FORM = "ranking_widget.xml";
 
-    public FormActivityTestRule activityTestRule = AdbFormLoadingUtils.getFormActivityTestRuleFor(TEST_FORM);
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "ranking_widget");
 
     @Rule
     public RuleChain copyFormChain = RuleChain

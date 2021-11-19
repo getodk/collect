@@ -1,11 +1,19 @@
 package org.odk.collect.android.regression;
 
-import android.Manifest;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.TestCase.assertNotSame;
+import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
+import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,26 +26,17 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.BlankFormSearchPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static junit.framework.TestCase.assertNotSame;
-import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
-import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
 //Issue NODK-244
 @RunWith(AndroidJUnit4.class)
@@ -46,8 +45,7 @@ public class FillBlankFormTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new ResetStateRule())
             .around(rule);
 

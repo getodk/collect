@@ -9,6 +9,7 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -39,6 +40,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.NoMatchingViewException;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables;
@@ -46,20 +48,18 @@ import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 
-import junit.framework.AssertionFailedError;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.support.actions.RotateAction;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
-import org.odk.collect.android.support.matchers.ToastMatcher;
 import org.odk.collect.android.utilities.TranslationHandler;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import timber.log.Timber;
 
@@ -153,13 +153,10 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public T checkIsToastWithMessageDisplayed(String message) {
-        try {
-            onView(withText(message)).inRoot(new ToastMatcher()).check(matches(isDisplayed()));
-        } catch (RuntimeException e) {
-            // The exception we get out of this is really misleading so cleaning it up here
+        Espresso.onIdle();
+        if (!ToastUtils.popRecordedToasts().stream().anyMatch(s -> s.equals(message))) {
             throw new RuntimeException("No Toast with text \"" + message + "\" shown on screen!");
         }
-
 
         return (T) this;
     }
@@ -178,7 +175,15 @@ public abstract class Page<T extends Page<T>> {
     }
 
     public T clickOnText(String text) {
-        onView(withText(text)).perform(click());
+        try {
+            onView(withText(text)).perform(click());
+        } catch (PerformException e) {
+            Timber.e(e);
+
+            // Create a standard view match error so the view hierarchy is visible in the failure
+            onView(withText("PerformException thrown clicking on \"" + text + "\"")).check(matches(isDisplayed()));
+        }
+
         return (T) this;
     }
 
@@ -201,6 +206,15 @@ public abstract class Page<T extends Page<T>> {
     public <D extends Page<D>> D clickOKOnDialog(D destination) {
         closeSoftKeyboard(); // Make sure to avoid issues with keyboard being up
         clickOnId(android.R.id.button1);
+        return destination.assertOnPage();
+    }
+
+    public <D extends Page<D>> D clickOnButtonInDialog(int buttonText, D destination) {
+        WaitFor.wait250ms(); // https://github.com/android/android-test/issues/444
+        onView(withText(getTranslatedString(buttonText)))
+                .inRoot(isDialog())
+                .perform(click());
+
         return destination.assertOnPage();
     }
 
@@ -378,7 +392,7 @@ public abstract class Page<T extends Page<T>> {
                 return;
             } catch (Exception e) {
                 failure = e;
-                wait250ms();
+                WaitFor.wait250ms();
             }
         }
 
@@ -386,37 +400,7 @@ public abstract class Page<T extends Page<T>> {
     }
 
     protected void waitForText(String text) {
-        waitFor(() -> assertText(text));
-    }
-
-    protected <T> T waitFor(Callable<T> callable) {
-        int counter = 0;
-        Throwable failure = null;
-
-        // Try 20 times/for 5 seconds
-        while (counter < 20) {
-            try {
-                return callable.call();
-            } catch (Exception | AssertionFailedError throwable) {
-                failure = throwable;
-            }
-
-            wait250ms();
-
-            counter++;
-        }
-
-        throw new RuntimeException("waitFor failed", failure);
-    }
-
-    public T wait250ms() {
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException ignored) {
-            // ignored
-        }
-
-        return (T) this;
+        WaitFor.waitFor(() -> assertText(text));
     }
 
     public T assertTextNotDisplayed(int string) {
