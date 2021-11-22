@@ -49,7 +49,7 @@ public final class ThemeUtils {
 
     @StyleRes
     public int getSettingsTheme() {
-        return R.style.Theme_Collect_Settings_Magenta;
+        return R.style.Theme_Collect_Settings;
     }
 
     @DrawableRes
