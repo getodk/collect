@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences.screens
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.preference.DialogPreference
 import androidx.preference.Preference
@@ -45,9 +44,7 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireActivity().let {
-            if (it is AppCompatActivity) {
-                AppBarUtils.setupAppBarLayout(it, preferenceScreen.title)
-            }
+            AppBarUtils.setupAppBarLayout(it, preferenceScreen.title)
         }
 
         super.onViewCreated(view, savedInstanceState)
