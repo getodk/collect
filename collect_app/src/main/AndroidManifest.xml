@@ -132,7 +132,9 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".configure.qr.QRCodeTabsActivity" />
-        <activity android:name=".preferences.screens.ProjectPreferencesActivity" />
+        <activity
+            android:name=".preferences.screens.ProjectPreferencesActivity"
+            android:theme="@style/Theme.Collect.Settings" />
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity

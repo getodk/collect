@@ -47,11 +47,6 @@ public final class ThemeUtils {
         this.context = context;
     }
 
-    @StyleRes
-    public int getSettingsTheme() {
-        return R.style.Theme_Collect_Settings;
-    }
-
     @DrawableRes
     public int getDivider() {
         return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;

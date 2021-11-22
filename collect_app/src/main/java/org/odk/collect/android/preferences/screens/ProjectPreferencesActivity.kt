@@ -42,7 +42,6 @@ class ProjectPreferencesActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences_layout)
         DaggerUtils.getComponent(this).inject(this)
-        setTheme(ThemeUtils(this).settingsTheme)
     }
 
     override fun onPause() {
