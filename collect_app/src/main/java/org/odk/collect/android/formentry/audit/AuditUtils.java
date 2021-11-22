@@ -1,8 +1,8 @@
 package org.odk.collect.android.formentry.audit;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.javarosawrapper.FormDesignException;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 
 import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
 import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
@@ -24,7 +24,7 @@ public final class AuditUtils {
                     String answer = question.getAnswerValue() != null ? question.getAnswerValue().getDisplayText() : null;
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, currentTime, null);
                 }
-            } catch (FormDesignException e) {
+            } catch (RepeatsInFieldListException e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
         }

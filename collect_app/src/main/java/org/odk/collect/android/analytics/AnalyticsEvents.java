@@ -226,12 +226,6 @@ public final class AnalyticsEvents {
     public static final String FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra";
 
     /**
-     * Tracks how often the app needs to recreate the directory for the current project
-     * when returning to or launching the app.
-     */
-    public static final String RECREATE_PROJECT_DIR = "RecreateProjectDir";
-
-    /**
      * Tracks how many forms include the `allow-mock-accuracy` parameter in `geo` questions
      */
     public static final String ALLOW_MOCK_ACCURACY = "AllowMockAccuracy";

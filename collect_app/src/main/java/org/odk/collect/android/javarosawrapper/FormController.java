@@ -602,7 +602,7 @@ public class FormController {
                                 if (indexIsInFieldList() && getQuestionPrompts().length != 0) {
                                     break group_skip;
                                 }
-                            } catch (FormDesignException e) {
+                            } catch (RepeatsInFieldListException e) {
                                 break group_skip;
                             }
                             // otherwise it's not a field-list group, so just skip it
@@ -885,10 +885,10 @@ public class FormController {
      * The array has a single element if there is a question at this {@link FormIndex} or multiple
      * elements if there is a group.
      *
-     * @throws FormDesignException if there is a group at this {@link FormIndex} and it contains
+     * @throws RepeatsInFieldListException if there is a group at this {@link FormIndex} and it contains
      *                          elements that are not questions or regular (non-repeat) groups.
      */
-    public FormEntryPrompt[] getQuestionPrompts() throws FormDesignException {
+    public FormEntryPrompt[] getQuestionPrompts() throws RepeatsInFieldListException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
         FormEntryPrompt[] questions = new FormEntryPrompt[0];
@@ -900,10 +900,9 @@ public class FormController {
             List<FormEntryPrompt> questionList = new ArrayList<>();
             for (FormIndex index : getIndicesForGroup(gd)) {
                 if (getEvent(index) != FormEntryController.EVENT_QUESTION) {
-                    FormDesignException e = new FormDesignException("Repeats in 'field-list' groups " +
+                    throw new RepeatsInFieldListException("Repeats in 'field-list' groups " +
                             "are not supported. Please update the form design to remove the " +
                             "following repeat from a field list: " + index.getReference().toString(false));
-                    throw e;
                 }
 
                 // we only display relevant questions
