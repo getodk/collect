@@ -48,16 +48,6 @@ public final class ThemeUtils {
     }
 
     @StyleRes
-    public int getAppTheme() {
-        return R.style.Theme_Collect;
-    }
-
-    @StyleRes
-    public int getFormEntryActivityTheme() {
-        return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
-    }
-
-    @StyleRes
     public int getSettingsTheme() {
         return R.style.Theme_Collect_Settings_Magenta;
     }

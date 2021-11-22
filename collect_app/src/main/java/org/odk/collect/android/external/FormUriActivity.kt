@@ -26,7 +26,6 @@ class FormUriActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setTheme(ThemeUtils(this).appTheme)
 
         val firstProject = projectsRepository.getAll().first()
         val uri = intent.data

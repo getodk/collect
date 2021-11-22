@@ -31,8 +31,6 @@ class FirstLaunchActivity : CollectAbstractActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(ThemeUtils(this).appTheme)
-
         binding = FirstLaunchLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         DaggerUtils.getComponent(this).inject(this)
