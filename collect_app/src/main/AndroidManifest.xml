@@ -78,7 +78,8 @@ the specific language governing permissions and limitations under the License.
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.Collect">
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -99,6 +100,7 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.FormEntryActivity"
+            android:theme="@style/Theme.Collect.Activity.FormEntryActivity.Magenta"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
@@ -119,8 +121,7 @@ the specific language governing permissions and limitations under the License.
             android:launchMode="singleTop" />
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
-            android:name="org.odk.collect.errors.ErrorActivity"
-            android:theme="@style/Theme.Collect" />
+            android:name="org.odk.collect.errors.ErrorActivity" />
         <activity
             android:name=".activities.DeleteSavedFormActivity"
             android:configChanges="orientation|screenSize" />

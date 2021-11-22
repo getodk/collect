@@ -45,7 +45,6 @@ public abstract class CollectAbstractActivity extends LocalizedActivity {
         DaggerUtils.getComponent(this).inject(this);
 
         themeUtils = new ThemeUtils(this);
-        setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
     }
 
     @Override
