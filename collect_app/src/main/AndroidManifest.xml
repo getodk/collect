@@ -121,8 +121,6 @@ the specific language governing permissions and limitations under the License.
             android:launchMode="singleTop" />
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity
-            android:name="org.odk.collect.errors.ErrorActivity" />
-        <activity
             android:name=".activities.DeleteSavedFormActivity"
             android:configChanges="orientation|screenSize" />
         <activity
