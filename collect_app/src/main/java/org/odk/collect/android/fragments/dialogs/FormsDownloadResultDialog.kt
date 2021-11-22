@@ -36,8 +36,8 @@ class FormsDownloadResultDialog : DialogFragment() {
 
         if (failures.isNotEmpty()) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
-                val intent = Intent(context, org.odk.collect.errors.ErrorActivity::class.java).apply {
-                    putExtra(org.odk.collect.errors.ErrorActivity.EXTRA_ERRORS, failures)
+                val intent = Intent(context, ErrorActivity::class.java).apply {
+                    putExtra(ErrorActivity.EXTRA_ERRORS, failures)
                 }
                 startActivity(intent)
                 listener?.onCloseDownloadingResult()
