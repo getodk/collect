@@ -8,10 +8,11 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.errors.ErrorActivity
+import org.odk.collect.errors.ErrorItem
 import java.util.ArrayList
 
 class FormsDownloadResultDialog : DialogFragment() {
-    private lateinit var failures: ArrayList<org.odk.collect.errors.ErrorItem>
+    private lateinit var failures: ArrayList<ErrorItem>
     private var numberOfAllForms = 0
 
     var listener: FormDownloadResultDialogListener? = null
@@ -24,7 +25,7 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<org.odk.collect.errors.ErrorItem>
+        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<ErrorItem>
         numberOfAllForms = arguments?.getInt(ARG_NUMBER_OF_ALL_FORMS)!!
 
         val builder = MaterialAlertDialogBuilder(requireContext())
