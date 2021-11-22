@@ -100,7 +100,7 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activities.FormEntryActivity"
-            android:theme="@style/Theme.Collect.Activity.FormEntryActivity.Magenta"
+            android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.NotificationActivity"
