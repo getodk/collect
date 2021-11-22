@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         tools:title="Title" />
 
 </com.google.android.material.appbar.AppBarLayout>
