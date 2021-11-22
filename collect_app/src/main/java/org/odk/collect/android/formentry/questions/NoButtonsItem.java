@@ -2,34 +2,23 @@ package org.odk.collect.android.formentry.questions;
 
 import android.content.Context;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.odk.collect.android.R;
+import org.odk.collect.android.databinding.NoButtonsItemLayoutBinding;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
 import java.io.File;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class NoButtonsItem extends FrameLayout {
-
-    @BindView(R.id.imageView)
-    ImageView imageView;
-
-    @BindView(R.id.label)
-    TextView label;
+    NoButtonsItemLayoutBinding binding;
 
     public NoButtonsItem(Context context, boolean enabled) {
         super(context);
-
-        View.inflate(context, R.layout.no_buttons_item_layout, this);
-        ButterKnife.bind(this);
+        binding = NoButtonsItemLayoutBinding.inflate(LayoutInflater.from(context), this, true);
 
         setLongClickable(true);
         setEnabled(enabled);
@@ -37,22 +26,22 @@ public class NoButtonsItem extends FrameLayout {
 
     public void setUpNoButtonsItem(File imageFile, String choiceText, String errorMsg, boolean isInGridView) {
         if (imageFile != null && imageFile.exists()) {
-            imageView.setVisibility(View.VISIBLE);
+            binding.imageView.setVisibility(View.VISIBLE);
             if (isInGridView) {
                 Glide.with(this)
                         .load(imageFile)
                         .fitCenter()
-                        .into(imageView);
+                        .into(binding.imageView);
             } else {
                 Glide.with(this)
                         .load(imageFile)
                         .centerInside()
-                        .into(imageView);
+                        .into(binding.imageView);
             }
         } else {
-            label.setVisibility(View.VISIBLE);
-            label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
-            label.setText(choiceText == null || choiceText.isEmpty() ? errorMsg : choiceText);
+            binding.label.setVisibility(View.VISIBLE);
+            binding.label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
+            binding.label.setText(choiceText == null || choiceText.isEmpty() ? errorMsg : choiceText);
         }
     }
 }

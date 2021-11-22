@@ -22,12 +22,11 @@ import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,13 +35,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.button.MaterialButton;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
@@ -55,8 +53,6 @@ import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
@@ -64,28 +60,9 @@ import timber.log.Timber;
  * attached to it as well as text (such as audio, video or an image).
  */
 public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
+    AudioVideoImageTextLabelBinding binding;
 
-    @BindView(R.id.audioButton)
-    AudioButton audioButton;
-
-    @BindView(R.id.videoButton)
-    MaterialButton videoButton;
-
-    @BindView(R.id.imageView)
-    ImageView imageView;
-
-    @BindView(R.id.missingImage)
-    TextView missingImage;
-
-    @BindView(R.id.text_container)
-    FrameLayout textContainer;
-
-    @BindView(R.id.text_label)
-    TextView labelTextView;
-
-    @BindView(R.id.media_buttons)
-    LinearLayout mediaButtonsContainer;
-
+    private TextView textLabel;
     private int originalTextColor;
     private int playTextColor = Color.BLUE;
     private CharSequence questionText;
@@ -95,45 +72,43 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
-
-        View.inflate(context, R.layout.audio_video_image_text_label, this);
-        ButterKnife.bind(this);
+        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
+        textLabel = binding.textLabel;
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        View.inflate(context, R.layout.audio_video_image_text_label, this);
-        ButterKnife.bind(this);
+        binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
+        textLabel = binding.textLabel;
     }
 
     public void setTextView(TextView questionText) {
         this.questionText = questionText.getText();
 
-        labelTextView = questionText;
-        labelTextView.setId(R.id.text_label);
-        labelTextView.setOnClickListener(v -> {
+        textLabel = questionText;
+        textLabel.setId(R.id.text_label);
+        textLabel.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClicked();
             }
         });
 
-        textContainer.removeAllViews();
-        textContainer.addView(labelTextView);
+        binding.textContainer.removeAllViews();
+        binding.textContainer.addView(textLabel);
     }
 
     public void setText(String questionText, boolean isRequiredQuestion, float fontSize) {
         this.questionText = questionText;
 
         if (questionText != null && !questionText.isEmpty()) {
-            labelTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
-            labelTextView.setText(HtmlUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(questionText, isRequiredQuestion)));
-            labelTextView.setMovementMethod(LinkMovementMethod.getInstance());
+            textLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
+            textLabel.setText(HtmlUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(questionText, isRequiredQuestion)));
+            textLabel.setMovementMethod(LinkMovementMethod.getInstance());
 
             // Wrap to the size of the parent view
-            labelTextView.setHorizontallyScrolling(false);
+            textLabel.setHorizontallyScrolling(false);
         } else {
-            labelTextView.setVisibility(View.GONE);
+            textLabel.setVisibility(View.GONE);
         }
     }
 
@@ -143,18 +118,18 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setImage(@NonNull File imageFile) {
         if (imageFile.exists()) {
-            imageView.layout(0, 0, 0, 0);
+            binding.imageView.layout(0, 0, 0, 0);
 
             Glide.with(this)
                     .load(imageFile)
                     .centerInside()
-                    .into(imageView);
+                    .into(binding.imageView);
 
-            imageView.setVisibility(VISIBLE);
-            imageView.setOnClickListener(this);
+            binding.imageView.setVisibility(VISIBLE);
+            binding.imageView.setOnClickListener(this);
         } else {
-            missingImage.setVisibility(VISIBLE);
-            missingImage.setText(getContext().getString(R.string.file_missing, imageFile));
+            binding.missingImage.setVisibility(VISIBLE);
+            binding.missingImage.setText(getContext().getString(R.string.file_missing, imageFile));
         }
     }
 
@@ -169,7 +144,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-        audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
+        binding.audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
     }
 
     public void playVideo() {
@@ -194,23 +169,23 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public TextView getLabelTextView() {
-        return labelTextView;
+        return textLabel;
     }
 
     public ImageView getImageView() {
-        return imageView;
+        return binding.imageView;
     }
 
     public TextView getMissingImage() {
-        return missingImage;
+        return binding.missingImage;
     }
 
     public Button getVideoButton() {
-        return videoButton;
+        return binding.videoButton;
     }
 
     public Button getAudioButton() {
-        return audioButton;
+        return binding.audioButton;
     }
 
     @Override
@@ -227,13 +202,13 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     @Override
     public void setEnabled(boolean enabled) {
-        labelTextView.setEnabled(enabled);
-        imageView.setEnabled(enabled);
+        textLabel.setEnabled(enabled);
+        binding.imageView.setEnabled(enabled);
     }
 
     @Override
     public boolean isEnabled() {
-        return labelTextView.isEnabled() && imageView.isEnabled();
+        return textLabel.isEnabled() && binding.imageView.isEnabled();
     }
 
     private void onImageClick() {
@@ -260,10 +235,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     private void selectItem() {
-        if (labelTextView instanceof RadioButton) {
-            ((RadioButton) labelTextView).setChecked(true);
-        } else if (labelTextView instanceof CheckBox) {
-            CheckBox checkbox = (CheckBox) labelTextView;
+        if (textLabel instanceof RadioButton) {
+            ((RadioButton) textLabel).setChecked(true);
+        } else if (textLabel instanceof CheckBox) {
+            CheckBox checkbox = (CheckBox) textLabel;
             checkbox.setChecked(!checkbox.isChecked());
         }
         if (listener != null) {
@@ -272,27 +247,27 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     private void setupVideoButton() {
-        videoButton.setVisibility(VISIBLE);
-        mediaButtonsContainer.setVisibility(VISIBLE);
-        videoButton.setOnClickListener(this);
+        binding.videoButton.setVisibility(VISIBLE);
+        binding.mediaButtons.setVisibility(VISIBLE);
+        binding.videoButton.setOnClickListener(this);
     }
 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
-        audioButton.setVisibility(VISIBLE);
-        mediaButtonsContainer.setVisibility(VISIBLE);
+        binding.audioButton.setVisibility(VISIBLE);
+        binding.mediaButtons.setVisibility(VISIBLE);
 
         ScreenContext activity = getScreenContext();
         String clipID = getTag() != null ? getTag().toString() : "";
-        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(audioButton, new Clip(clipID, audioURI));
+        LiveData<Boolean> isPlayingLiveData = audioHelper.setAudio(binding.audioButton, new Clip(clipID, audioURI));
 
-        originalTextColor = labelTextView.getTextColors().getDefaultColor();
+        originalTextColor = textLabel.getTextColors().getDefaultColor();
         isPlayingLiveData.observe(activity.getViewLifecycle(), isPlaying -> {
             if (isPlaying) {
-                labelTextView.setTextColor(playTextColor);
+                textLabel.setTextColor(playTextColor);
             } else {
-                labelTextView.setTextColor(originalTextColor);
+                textLabel.setTextColor(originalTextColor);
                 // then set the text to our original (brings back any html formatting)
-                labelTextView.setText(questionText);
+                textLabel.setText(questionText);
             }
         });
     }

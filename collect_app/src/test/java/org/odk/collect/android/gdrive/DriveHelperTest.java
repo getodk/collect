@@ -9,9 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 
@@ -26,16 +25,17 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 /**
  * @author Shobhit Agarwal
  */
-
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(File.class)
+@RunWith(AndroidJUnit4.class)
 public class DriveHelperTest {
 
     @Mock
     private GoogleDriveApi mockedGoogleDriveApi;
+
     @Mock
     private Drive.Files.List mockedRequest;
 
@@ -43,6 +43,7 @@ public class DriveHelperTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.openMocks(this);
         driveHelper = spy(new DriveHelper(mockedGoogleDriveApi));
     }
 

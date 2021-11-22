@@ -14,12 +14,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.views.InstanceUploaderProgressBar;
 
 import java.util.Date;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
 
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
@@ -72,21 +69,18 @@ public class InstanceUploaderAdapter extends CursorAdapter {
     }
 
     static class ViewHolder {
-        @BindView(R.id.form_title)
         TextView formTitle;
-        @BindView(R.id.form_subtitle)
         TextView formSubtitle;
-        @BindView(R.id.checkbox)
         CheckBox checkbox;
-        @BindView(R.id.progress_bar)
-        InstanceUploaderProgressBar progressBar;
-        @BindView(R.id.image)
         ImageView statusIcon;
-        @BindView(R.id.close_box)
         ImageView closeButton;
 
         ViewHolder(View view) {
-            ButterKnife.bind(this, view);
+            formTitle = view.findViewById(R.id.form_title);
+            formSubtitle = view.findViewById(R.id.form_subtitle);
+            checkbox = view.findViewById(R.id.checkbox);
+            statusIcon = view.findViewById(R.id.image);
+            closeButton = view.findViewById(R.id.close_box);
         }
     }
 }

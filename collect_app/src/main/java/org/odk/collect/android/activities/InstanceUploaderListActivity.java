@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,6 +40,7 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.databinding.InstanceUploaderListBinding;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -53,9 +55,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
@@ -75,11 +74,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     private static final int INSTANCE_UPLOADER = 0;
 
-    @BindView(R.id.upload_button)
-    Button uploadButton;
-
-    @BindView(R.id.toggle_button)
-    Button toggleSelsButton;
+    InstanceUploaderListBinding binding;
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
@@ -108,10 +103,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         // set title
         setTitle(getString(R.string.send_data));
-        setContentView(R.layout.instance_uploader_list);
-
-        ButterKnife.bind(this);
-
+        binding = InstanceUploaderListBinding.inflate(LayoutInflater.from(this));
+        setContentView(binding.getRoot());
+        binding.uploadButton.setOnClickListener(v -> onUploadButtonsClicked());
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
@@ -119,8 +113,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         init();
     }
 
-    @OnClick({R.id.upload_button})
-    public void onUploadButtonsClicked(Button button) {
+    public void onUploadButtonsClicked() {
         if (!connectivityProvider.isDeviceOnline()) {
             ToastUtils.showShortToast(this, R.string.no_connection);
             return;
@@ -138,7 +131,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             uploadSelectedFiles();
             setAllToCheckedState(listView, false);
             toggleButtonLabel(findViewById(R.id.toggle_button), listView);
-            uploadButton.setEnabled(false);
+            binding.uploadButton.setEnabled(false);
         } else {
             // no items selected
             ToastUtils.showLongToast(this, R.string.noselect_error);
@@ -146,14 +139,14 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     }
 
     void init() {
-        uploadButton.setText(R.string.send_selected_data);
+        binding.uploadButton.setText(R.string.send_selected_data);
 
-        toggleSelsButton.setLongClickable(true);
-        toggleSelsButton.setOnClickListener(v -> {
+        binding.toggleButton.setLongClickable(true);
+        binding.toggleButton.setOnClickListener(v -> {
             ListView lv = listView;
             boolean allChecked = toggleChecked(lv);
-            toggleButtonLabel(toggleSelsButton, lv);
-            uploadButton.setEnabled(allChecked);
+            toggleButtonLabel(binding.toggleButton, lv);
+            binding.uploadButton.setEnabled(allChecked);
             if (allChecked) {
                 for (int i = 0; i < lv.getCount(); i++) {
                     selectedInstances.add(lv.getItemIdAtPosition(i));
@@ -162,14 +155,14 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 selectedInstances.clear();
             }
         });
-        toggleSelsButton.setOnLongClickListener(this);
+        binding.toggleButton.setOnLongClickListener(this);
 
         setupAdapter();
 
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
         listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            uploadButton.setEnabled(areCheckedItems());
+            binding.uploadButton.setEnabled(areCheckedItems());
         });
 
         sortingOptions = new int[]{
@@ -207,7 +200,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        uploadButton.setText(R.string.send_selected_data);
+        binding.uploadButton.setText(R.string.send_selected_data);
     }
 
     private void uploadSelectedFiles() {
@@ -269,7 +262,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             selectedInstances.remove(listView.getItemIdAtPosition(position));
         }
 
-        uploadButton.setEnabled(areCheckedItems());
+        binding.uploadButton.setEnabled(areCheckedItems());
         Button toggleSelectionsButton = findViewById(R.id.toggle_button);
         toggleButtonLabel(toggleSelectionsButton, listView);
     }
