@@ -11,7 +11,6 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
-import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
