@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
@@ -31,7 +30,6 @@ import javax.inject.Inject;
 public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     private boolean isInstanceStateSaved;
-    protected ThemeUtils themeUtils;
 
     @Inject
     protected PermissionsProvider permissionsProvider;
@@ -43,8 +41,6 @@ public abstract class CollectAbstractActivity extends LocalizedActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-
-        themeUtils = new ThemeUtils(this);
     }
 
     @Override
