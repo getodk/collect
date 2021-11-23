@@ -26,11 +26,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/center"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:paddingHorizontal="@dimen/margin_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5">
@@ -48,7 +49,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/configuration_buttons"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +59,7 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/configure_via_qr_button"
                     style="@style/Widget.Collect.Button.OutlinedButton"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="?colorPrimary"
                     android:text="@string/configure_with_qr_code"
@@ -67,13 +68,13 @@
                     app:icon="@drawable/ic_baseline_qr_code_scanner_24"
                     app:iconTint="@android:color/white"
                     app:layout_constraintBottom_toTopOf="@+id/configure_manually_button"
-                    app:layout_constraintEnd_toEndOf="@+id/configure_manually_button"
-                    app:layout_constraintStart_toStartOf="@+id/configure_manually_button" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/configure_manually_button"
                     style="@style/Widget.Collect.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/configure_manually"
