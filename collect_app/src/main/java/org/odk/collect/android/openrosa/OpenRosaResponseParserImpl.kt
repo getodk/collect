@@ -100,7 +100,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        if (hash != null && hash.length == 0) {
+                        if (hash != null && (hash.length == 0 || !hash.startsWith("md5:"))) {
                             hash = null
                         }
                     }

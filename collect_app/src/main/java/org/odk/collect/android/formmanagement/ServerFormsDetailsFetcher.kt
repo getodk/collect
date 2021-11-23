@@ -59,7 +59,7 @@ open class ServerFormsDetailsFetcher(
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
             val thisFormAlreadyDownloaded = forms.isNotEmpty()
             val isNewerFormVersionAvailable = listItem.hashWithPrefix.let {
-                if (it == null || !it.startsWith("md5:")) {
+                if (it == null) {
                     log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
                     false
                 } else if (thisFormAlreadyDownloaded) {

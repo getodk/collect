@@ -295,27 +295,6 @@ class ServerFormsDetailsFetcherTest {
     }
 
     @Test
-    fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasHashWithoutPrefix_isNotNewOrUpdated() {
-        whenever(formSource.fetchFormList()).thenReturn(
-            listOf(FORM_WITH_MANIFEST.copy(hashWithPrefix = "no-prefix"))
-        )
-
-        formsRepository.save(
-            Form.Builder()
-                .formId("form-2")
-                .version("0")
-                .md5Hash("form-2-hash_v0")
-                .formFilePath(FormUtils.createXFormFile("form-2", "1").absolutePath)
-                .build()
-        )
-
-        val serverFormDetails = fetcher.fetchFormDetails()
-        val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isUpdated, `is`(false))
-        assertThat(form.isNotOnDevice, `is`(false))
-    }
-
-    @Test
     fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isNotNewOrUpdated() {
         whenever(formSource.fetchFormList()).thenReturn(
             listOf(FORM_WITH_MANIFEST.copy(hashWithPrefix = null))
