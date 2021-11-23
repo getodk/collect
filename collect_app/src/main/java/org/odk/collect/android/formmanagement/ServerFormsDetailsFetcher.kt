@@ -52,12 +52,8 @@ open class ServerFormsDetailsFetcher(
 
         val formList = formSource.fetchFormList()
         return formList.map { listItem ->
-            val manifestFile = listItem.manifestURL.let {
-                if (it != null) {
-                    getManifestFile(formSource, it)
-                } else {
-                    null
-                }
+            val manifestFile = listItem.manifestURL?.let {
+                getManifestFile(formSource, it)
             }
 
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
