@@ -270,8 +270,8 @@ class ServerFormsDetailsFetcherTest {
 
         val serverFormDetails = fetcher.fetchFormDetails()
         val form = getFormFromList(serverFormDetails, "form-2")
-        assertThat(form.isUpdated, `is`(false))
         assertThat(form.isNotOnDevice, `is`(false))
+        assertThat(form.isUpdated, `is`(false))
     }
 
     @Test
@@ -333,11 +333,11 @@ private const val MANIFEST_URL = "http://example.com/form-3-manifest"
 private const val FILE_CONTENT = "blah"
 private val MEDIA_FILE = MediaFile(
     "blah.txt",
-    "md5:" + getMd5Hash(
+    getMd5Hash(
         ByteArrayInputStream(
             FILE_CONTENT.toByteArray()
         )
-    ),
+    )!!,
     "http://example.com/media-file"
 )
 

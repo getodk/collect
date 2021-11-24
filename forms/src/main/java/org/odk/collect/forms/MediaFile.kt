@@ -17,9 +17,6 @@ package org.odk.collect.forms
 
 data class MediaFile(
     val filename: String,
-    private val hashWithPrefix: String,
+    val hash: String,
     val downloadUrl: String
-) {
-
-    val hash = hashWithPrefix.substring("md5:".length)
-}
+)

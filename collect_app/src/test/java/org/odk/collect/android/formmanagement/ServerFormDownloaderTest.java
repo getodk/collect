@@ -567,7 +567,7 @@ public class ServerFormDownloaderTest {
                 true,
                 false,
                 new ManifestFile("", asList(
-                        new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
                 )));
 
         FormSource formSource = mock(FormSource.class);
@@ -588,7 +588,7 @@ public class ServerFormDownloaderTest {
                 false,
                 false,
                 new ManifestFile("", asList(
-                        new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1")
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1")
                 )));
 
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
@@ -623,7 +623,7 @@ public class ServerFormDownloaderTest {
                 true,
                 false,
                 new ManifestFile("", asList(
-                        new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
+                        new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents".getBytes())), "http://file1")
                 )));
 
         FormSource formSource = mock(FormSource.class);
@@ -645,7 +645,7 @@ public class ServerFormDownloaderTest {
                     false,
                     false,
                     new ManifestFile("", asList(
-                            new MediaFile("file1", "md5:" + Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1")
+                            new MediaFile("file1", Md5.getMd5Hash(new ByteArrayInputStream("contents-updated".getBytes())), "http://file1")
                     )));
 
             when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));

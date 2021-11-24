@@ -177,6 +177,8 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                             hash = XFormParser.getXMLText(child, true)
                             if (hash != null && hash.length == 0) {
                                 hash = null
+                            } else {
+                                hash = hash.substring("md5:".length)
                             }
                         }
                         "downloadUrl" -> {
