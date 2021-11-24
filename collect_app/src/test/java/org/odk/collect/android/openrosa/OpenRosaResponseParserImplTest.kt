@@ -34,6 +34,6 @@ class OpenRosaResponseParserImplTest {
         }
 
         val formList = OpenRosaResponseParserImpl().parseFormList(doc)
-        assertThat(formList!![0].hashWithPrefix, equalTo(null))
+        assertThat(formList!![0].hash, equalTo(null))
     }
 }

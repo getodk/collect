@@ -21,11 +21,13 @@ data class ServerFormDetails(
     val downloadUrl: String?,
     val formId: String?,
     val formVersion: String?,
-    val hashWithPrefix: String?,
+    private val hashWithPrefix: String?,
     val isNotOnDevice: Boolean,
     val isUpdated: Boolean,
     val manifest: ManifestFile?
 ) : Serializable {
+
+    val hash = hashWithPrefix?.substring("md5:".length)
 
     companion object {
         private const val serialVersionUID = 1L
