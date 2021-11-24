@@ -22,11 +22,13 @@ import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.RecordedIntentsRule
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -40,19 +42,17 @@ import org.odk.collect.shared.strings.UUIDGenerator
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
     private lateinit var projectsRepository: ProjectsRepository
-    private lateinit var currentProjectProvider: CurrentProjectProvider
+    private val currentProjectProvider = mock<CurrentProjectProvider>()
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val firstProject = Project.DEMO_PROJECT
     private val secondProject = Project.Saved("123", "Second project", "S", "#cccccc")
 
+    @get:Rule
+    val activityRule = RecordedIntentsRule()
+
     @Before
     fun setup() {
         projectsRepository = InMemProjectsRepository()
-        currentProjectProvider = mock()
-
-        projectsRepository.save(firstProject)
-        projectsRepository.save(secondProject)
-        whenever(currentProjectProvider.getCurrentProject()).thenReturn(firstProject)
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectsRepository(
@@ -74,10 +74,9 @@ class FormUriActivityTest {
 
     @Test
     fun `When there are no projects then display alert dialog`() {
-        projectsRepository.deleteAll()
-
         val scenario = ActivityScenario.launch(FormUriActivity::class.java)
-        onView(withText(R.string.no_projects_detected)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(R.string.no_projects_detected)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 
         assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
@@ -85,9 +84,12 @@ class FormUriActivityTest {
 
     @Test
     fun `When there is project id specified in uri and it does not match current project id then display alert dialog`() {
+        saveTestProjects()
+
         val scenario = ActivityScenario.launch<FormUriActivity>(getIntent(secondProject.uuid))
 
-        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 
         assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
@@ -95,22 +97,25 @@ class FormUriActivityTest {
 
     @Test
     fun `When there is project id specified in uri and it matches current project id then start form filling`() {
-        Intents.init()
+        saveTestProjects()
 
         ActivityScenario.launch<FormUriActivity>(getIntent(firstProject.uuid))
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-
-        Intents.release()
+        Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
+        Intents.intended(hasExtra("KEY_1", "Text"))
     }
 
     @Test
     fun `When there is no project id specified in uri and first available project id does not match current project id then display alert dialog`() {
+        saveTestProjects()
+
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(secondProject)
 
         val scenario = ActivityScenario.launch<FormUriActivity>(getIntent())
 
-        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 
         assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
@@ -118,41 +123,46 @@ class FormUriActivityTest {
 
     @Test
     fun `When there is no project id specified in uri and first available project id matches current project id then start form filling`() {
-        Intents.init()
+        saveTestProjects()
 
         ActivityScenario.launch<FormUriActivity>(getIntent())
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-
-        Intents.release()
-    }
-
-    @Test
-    fun `When everything is fine form filling is started with given data`() {
-        Intents.init()
-
-        ActivityScenario.launch<FormUriActivity>(getIntent(firstProject.uuid))
-
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-        Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
+        val uri = FormsContract.getUri("", 1)
+        Intents.intended(
+            hasData(
+                Uri.Builder()
+                    .scheme(uri.scheme)
+                    .authority(uri.authority)
+                    .path(uri.path)
+                    .query(null)
+                    .build()
+            )
+        )
         Intents.intended(hasExtra("KEY_1", "Text"))
-
-        Intents.release()
     }
 
     // TODO: Replace the explicit FormUriActivity intent with an implicit one Intent.ACTION_EDIT once it's possible https://github.com/android/android-test/issues/496
-    private fun getIntent(projectId: String? = null) = Intent(context, FormUriActivity::class.java).apply {
-        data = if (projectId == null) {
-            val uri = FormsContract.getUri("", 1)
-            Uri.Builder()
-                .scheme(uri.scheme)
-                .authority(uri.authority)
-                .path(uri.path)
-                .query(null)
-                .build()
-        } else {
-            FormsContract.getUri(projectId, 1)
+    private fun getIntent(projectId: String? = null) =
+        Intent(context, FormUriActivity::class.java).apply {
+            data = if (projectId == null) {
+                val uri = FormsContract.getUri("", 1)
+                Uri.Builder()
+                    .scheme(uri.scheme)
+                    .authority(uri.authority)
+                    .path(uri.path)
+                    .query(null)
+                    .build()
+            } else {
+                FormsContract.getUri(projectId, 1)
+            }
+            putExtra("KEY_1", "Text")
         }
-        putExtra("KEY_1", "Text")
+
+    private fun saveTestProjects() {
+        projectsRepository.save(firstProject)
+        projectsRepository.save(secondProject)
+
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(firstProject)
     }
 }
