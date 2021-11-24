@@ -133,7 +133,7 @@ open class ServerFormsDetailsFetcher(
             return true
         }
 
-        val mediaFileHash = newMediaFile.hash.let { it.substring(4, it.length) }
+        val mediaFileHash = newMediaFile.hashWithPrefix.let { it.substring(4, it.length) }
         return localMediaFiles.any {
             mediaFileHash == getMd5Hash(it)
         }
