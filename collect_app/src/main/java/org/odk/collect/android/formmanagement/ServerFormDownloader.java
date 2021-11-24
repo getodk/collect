@@ -377,7 +377,7 @@ public class ServerFormDownloader implements FormDownloader {
                 writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
             } else {
                 String currentFileHash = Md5.getMd5Hash(finalMediaFile);
-                String downloadFileHash = validateHash(toDownload.getHashWithPrefix());
+                String downloadFileHash = validateHash(toDownload.getHash());
 
                 if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
                     // if the hashes match, it's the same file otherwise replace it with the new one
