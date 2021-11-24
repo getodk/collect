@@ -58,7 +58,7 @@ open class ServerFormsDetailsFetcher(
 
             val forms = formsRepository.getAllNotDeletedByFormId(listItem.formID)
             val thisFormAlreadyDownloaded = forms.isNotEmpty()
-            val isNewerFormVersionAvailable = listItem.hashWithPrefix.let {
+            val isNewerFormVersionAvailable = listItem.hash.let {
                 if (it == null) {
                     log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
                     false
@@ -120,8 +120,7 @@ open class ServerFormsDetailsFetcher(
         }
     }
 
-    private fun getFormByHash(hashWithPrefix: String): Form? {
-        val hash = hashWithPrefix.substring("md5:".length)
+    private fun getFormByHash(hash: String): Form? {
         return formsRepository.getOneByMd5Hash(hash)
     }
 

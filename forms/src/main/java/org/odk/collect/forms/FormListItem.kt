@@ -7,4 +7,7 @@ data class FormListItem(
     val hashWithPrefix: String?,
     val name: String,
     val manifestURL: String?
-)
+) {
+
+    val hash = hashWithPrefix?.substring("md5:".length)
+}

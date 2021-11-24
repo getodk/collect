@@ -21,7 +21,7 @@ data class ServerFormDetails(
     val downloadUrl: String?,
     val formId: String?,
     val formVersion: String?,
-    val hash: String?,
+    val hashWithPrefix: String?,
     val isNotOnDevice: Boolean,
     val isUpdated: Boolean,
     val manifest: ManifestFile?

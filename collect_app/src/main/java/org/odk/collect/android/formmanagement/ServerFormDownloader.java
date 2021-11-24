@@ -57,7 +57,7 @@ public class ServerFormDownloader implements FormDownloader {
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
         Form formOnDevice;
         try {
-            formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
+            formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHashWithPrefix()));
         } catch (IllegalArgumentException e) {
             throw new FormDownloadException.FormWithNoHash();
         }
