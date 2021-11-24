@@ -81,7 +81,7 @@ open class ServerFormsDetailsFetcher(
                 listItem.downloadURL,
                 listItem.formID,
                 listItem.version,
-                listItem.hashWithPrefix,
+                listItem.hash,
                 !thisFormAlreadyDownloaded,
                 isNewerFormVersionAvailable,
                 manifestFile
