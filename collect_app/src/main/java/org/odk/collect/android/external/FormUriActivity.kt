@@ -3,7 +3,7 @@ package org.odk.collect.android.external
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
@@ -28,7 +28,7 @@ class FormUriActivity : Activity() {
 
         val projects = projectsRepository.getAll()
         if (projects.isEmpty()) {
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.no_projects_detected)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
@@ -49,7 +49,7 @@ class FormUriActivity : Activity() {
                     }
                 )
             } else {
-                AlertDialog.Builder(this)
+                MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.wrong_project_selected_for_form)
                     .setPositiveButton(R.string.ok) { _, _ ->
                         finish()
