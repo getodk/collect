@@ -163,7 +163,7 @@ class FormsUpdaterTest {
                     "http://$formId",
                     formId,
                     formVersion,
-                    "md5:${getMd5Hash(updatedXForm)}",
+                    getMd5Hash(updatedXForm),
                     "blah",
                     null
                 )

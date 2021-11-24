@@ -102,6 +102,8 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                         hash = XFormParser.getXMLText(child, true)
                         if (hash != null && (hash.length == 0 || !hash.startsWith("md5:"))) {
                             hash = null
+                        } else {
+                            hash = hash.substring("md5:".length)
                         }
                     }
                 }

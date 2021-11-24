@@ -297,7 +297,7 @@ class ServerFormsDetailsFetcherTest {
     @Test
     fun whenAFormExists_andItsNewerVersionWithManifestIsAvailableButHasNullHash_isNotNewOrUpdated() {
         whenever(formSource.fetchFormList()).thenReturn(
-            listOf(FORM_WITH_MANIFEST.copy(hashWithPrefix = null))
+            listOf(FORM_WITH_MANIFEST.copy(hash = null))
         )
 
         formsRepository.save(
@@ -342,13 +342,13 @@ private val MEDIA_FILE = MediaFile(
 )
 
 private val FORM_WITHOUT_MANIFEST =
-    FormListItem("http://example.com/form-1", "form-1", "1", "md5:form-1-hash", "Form 1", null)
+    FormListItem("http://example.com/form-1", "form-1", "1", "form-1-hash", "Form 1", null)
 
 private val FORM_WITH_MANIFEST = FormListItem(
     "http://example.com/form-2",
     "form-2",
     "2",
-    "md5:form-2-hash",
+    "form-2-hash",
     "Form 2",
     MANIFEST_URL
 )
