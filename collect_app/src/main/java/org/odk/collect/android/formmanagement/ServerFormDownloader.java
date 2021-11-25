@@ -57,7 +57,7 @@ public class ServerFormDownloader implements FormDownloader {
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
         Form formOnDevice;
         try {
-            formOnDevice = formsRepository.getOneByMd5Hash(getMd5HashWithoutPrefix(form.getHash()));
+            formOnDevice = formsRepository.getOneByMd5Hash(validateHash(form.getHash()));
         } catch (IllegalArgumentException e) {
             throw new FormDownloadException.FormWithNoHash();
         }
@@ -377,7 +377,7 @@ public class ServerFormDownloader implements FormDownloader {
                 writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
             } else {
                 String currentFileHash = Md5.getMd5Hash(finalMediaFile);
-                String downloadFileHash = getMd5HashWithoutPrefix(toDownload.getHash());
+                String downloadFileHash = validateHash(toDownload.getHash());
 
                 if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
                     // if the hashes match, it's the same file otherwise replace it with the new one
@@ -404,8 +404,8 @@ public class ServerFormDownloader implements FormDownloader {
         return fileName;
     }
 
-    private static String getMd5HashWithoutPrefix(String hash) {
-        return hash == null || hash.isEmpty() ? null : hash.substring("md5:".length());
+    private static String validateHash(String hash) {
+        return hash == null || hash.isEmpty() ? null : hash;
     }
 
     private static void moveMediaFiles(String tempMediaPath, File formMediaPath) throws IOException {

@@ -17,5 +17,5 @@ package org.odk.collect.forms
 
 data class ManifestFile(
     val hash: String?,
-    val mediaFiles: List<MediaFile?>
+    val mediaFiles: List<MediaFile>
 )

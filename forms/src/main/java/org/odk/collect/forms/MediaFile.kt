@@ -16,7 +16,7 @@
 package org.odk.collect.forms
 
 data class MediaFile(
-    val filename: String?,
-    val hash: String?,
-    val downloadUrl: String?
+    val filename: String,
+    val hash: String,
+    val downloadUrl: String
 )

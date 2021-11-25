@@ -49,7 +49,7 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdatesHaveBeenSeenBefore_doesNotNotifyASecondTime() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         );
 
         notifier.onUpdatesAvailable(updates);
@@ -63,14 +63,14 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdateForFormHasBeenHasNewHash_notifies() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         );
 
         notifier.onUpdatesAvailable(updates);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash-changed", false, true, null)
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash-changed", false, true, null)
         );
 
         notificationManager.cancelAll();
@@ -81,14 +81,14 @@ public class NotificationManagerNotifierTest {
     @Test
     public void onUpdatesAvailable_whenUpdateForFormHasBeenHasNewManifestHash_notifies() {
         List<ServerFormDetails> updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, new ManifestFile("manifest-hash", emptyList()))
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, new ManifestFile("manifest-hash", emptyList()))
         );
 
         notifier.onUpdatesAvailable(updates);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
-                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "md5:form-1-hash", false, true, new ManifestFile("manifest-hash-changed", emptyList()))
+                new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, new ManifestFile("manifest-hash-changed", emptyList()))
         );
 
         notificationManager.cancelAll();
