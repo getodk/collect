@@ -5,6 +5,7 @@ import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
+import org.odk.collect.shared.strings.Md5
 import org.odk.collect.shared.strings.StringUtils.isBlank
 import java.util.ArrayList
 
@@ -100,10 +101,10 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        if (hash != null && (hash.isEmpty() || !hash.startsWith("md5:"))) {
+                        if (hash != null && (hash.isEmpty() || !hash.startsWith(Md5.STRING_PREFIX))) {
                             hash = null
                         } else {
-                            hash = hash.substring("md5:".length)
+                            hash = hash.substring(Md5.STRING_PREFIX.length)
                         }
                     }
                 }
@@ -178,7 +179,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                             if (hash != null && hash.isEmpty()) {
                                 hash = null
                             } else {
-                                hash = hash.substring("md5:".length)
+                                hash = hash.substring(Md5.STRING_PREFIX.length)
                             }
                         }
                         "downloadUrl" -> {
