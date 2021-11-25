@@ -5,7 +5,6 @@ import org.kxml2.kdom.Document
 import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
-import org.odk.collect.shared.strings.Md5
 import org.odk.collect.shared.strings.StringUtils.isBlank
 import java.util.ArrayList
 
@@ -101,10 +100,10 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        if (hash != null && (hash.isEmpty() || !hash.startsWith(Md5.STRING_PREFIX))) {
+                        if (hash != null && (hash.isEmpty() || !hash.startsWith(MD5_STRING_PREFIX))) {
                             hash = null
                         } else {
-                            hash = hash.substring(Md5.STRING_PREFIX.length)
+                            hash = hash.substring(MD5_STRING_PREFIX.length)
                         }
                     }
                 }
@@ -177,7 +176,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                             if (hash != null && hash.isEmpty()) {
                                 hash = null
                             } else {
-                                hash = hash.substring(Md5.STRING_PREFIX.length)
+                                hash = hash.substring(MD5_STRING_PREFIX.length)
                             }
                         }
                         "downloadUrl" -> {
@@ -200,6 +199,9 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
     }
 
     companion object {
+
+        private const val MD5_STRING_PREFIX = "md5:"
+
         private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_LIST =
             "http://openrosa.org/xforms/xformsList"
         private const val NAMESPACE_OPENROSA_ORG_XFORMS_XFORMS_MANIFEST =

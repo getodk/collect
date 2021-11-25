@@ -11,8 +11,6 @@ import java.security.NoSuchAlgorithmException
 
 object Md5 {
 
-    const val STRING_PREFIX = "md5:"
-
     @JvmStatic
     @JvmOverloads
     fun getMd5Hash(string: String, bufSize: Int = 16 * 1024): String? {
