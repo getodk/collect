@@ -9,6 +9,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
@@ -143,6 +144,7 @@ class PermissionsProviderTest {
         whenever(contentResolver.query(uri, null, null, null, null)).thenThrow(
             SecurityException::class.java
         )
+        doNothing().whenever(permissionsProvider).requestReadStoragePermission(any(), any())
 
         permissionsProvider.requestReadUriPermission(
             activity,

@@ -47,7 +47,7 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
     open val isReadPhoneStatePermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
 
-    fun requestReadStoragePermission(activity: Activity, action: PermissionListener) {
+    open fun requestReadStoragePermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
             object : PermissionListener {
