@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.Collect.Settings.Magenta" parent="Theme.Collect">
+    <style name="Theme.Collect.Settings" parent="Theme.Collect">
         <item name="android:textColor">?colorOnSurface</item>
         <item name="android:textAppearance">@style/TextAppearance.Collect.Subtitle1</item>
         <item name="android:textDirection" tools:targetApi="17">locale</item>

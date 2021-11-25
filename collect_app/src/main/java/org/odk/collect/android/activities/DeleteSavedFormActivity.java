@@ -28,6 +28,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.DeleteFormsTabsAdapter;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.androidshared.utils.AppBarUtils;
 
 import javax.inject.Inject;
 
@@ -44,7 +45,7 @@ public class DeleteSavedFormActivity extends CollectAbstractActivity {
         viewModel = new ViewModelProvider(this, viewModelFactory).get(BlankFormsListViewModel.class);
 
         setContentView(R.layout.tabs_layout);
-        initToolbar(getString(R.string.manage_files));
+        AppBarUtils.setupAppBarLayout(this, getString(R.string.manage_files));
         setUpViewPager();
     }
 

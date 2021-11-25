@@ -47,21 +47,6 @@ public final class ThemeUtils {
         this.context = context;
     }
 
-    @StyleRes
-    public int getAppTheme() {
-        return R.style.Theme_Collect;
-    }
-
-    @StyleRes
-    public int getFormEntryActivityTheme() {
-        return R.style.Theme_Collect_Activity_FormEntryActivity_Magenta;
-    }
-
-    @StyleRes
-    public int getSettingsTheme() {
-        return R.style.Theme_Collect_Settings_Magenta;
-    }
-
     @DrawableRes
     public int getDivider() {
         return isDarkTheme() ? android.R.drawable.divider_horizontal_dark : android.R.drawable.divider_horizontal_bright;

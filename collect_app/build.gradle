@@ -252,6 +252,7 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
+    implementation project(':errors')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support

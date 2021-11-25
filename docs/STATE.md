@@ -39,7 +39,7 @@ and update this document as the code evolves.
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
 * Slowly moving responsibilities out of FormEntryActivity
 * Writing pretty much all new code in Kotlin
-* Writing new code using a multi-module approach (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
+* Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`
 * Replacing Rx (and other async work such as `AsyncTask`) with `LiveData` + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)

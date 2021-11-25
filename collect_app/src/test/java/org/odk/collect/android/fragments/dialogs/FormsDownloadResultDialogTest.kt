@@ -17,7 +17,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.errors.ErrorItem
+import org.odk.collect.errors.ErrorItem
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows

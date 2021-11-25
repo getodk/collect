@@ -1,4 +1,4 @@
-package org.odk.collect.android.errors
+package org.odk.collect.errors
 
 import java.io.Serializable
 

@@ -1,31 +1,32 @@
 # Code style guidelines
 
+## Kotlin style guidelines
+
+Follow the [Kotlin code conventions](https://kotlinlang.org/docs/coding-conventions.html).
+
 ## Java style guidelines
 Follow the [Android style rules](http://source.android.com/source/code-style.html) and the [Google Java style guide](https://google.github.io/styleguide/javaguide.html).
 
-## Java testing style guidelines
+## Testing style guidelines
 Favor [Hamcrest](http://hamcrest.org/JavaHamcrest/) asserts over JUnit asserts for readability.
 
 Old JUnit style:
-```
+```java
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 ...
 assertEquals("expected", ClassToTest.methodToTest("input"));
 assertNull(ClassToTest.methodReturnsNull());
-
 ```
 
 Preferred style using Hamcrest:
-```
+```java
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 ...
 assertThat(ClassToTest.methodToTest("input"), is("expected"));
 assertThat(ClassToTest.methodReturnsNull(), is(nullValue()));
-
 ```
-
 
 ## XML style guidelines
 
@@ -138,3 +139,22 @@ public void setup() {
 ODK Collect is released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0). Please make sure that any code you include is an OSI-approved [permissive license](https://opensource.org/faq#permissive). **Please note that if no license is specified for a piece of code or if it has an incompatible license such as GPL, using it puts the project at legal risk**.
 
 Sites with compatible licenses (including [StackOverflow](http://stackoverflow.com/)) will sometimes provide exactly the code snippet needed to solve a problem. You are encouraged to use such snippets in ODK Collect as long as you attribute them by including a direct link to the source. In addition to complying with the content license, this provides useful context for anyone reading the code.
+
+## Gradle sub modules
+
+Collect is a multi module Gradle project. Modules should have a focused feature or utility (like "location" or "analytics") rather than represent an architectural "layer" (like "ui" or "backend"). Collect has an `androidshared` and `shared` module for simple utilities that might be useful in any Android or Java application respectively.
+
+### Adding a new module
+
+There's no easy way to define exactly when a new module should be pulled out of an existing one or when new code calls for a new module - it's best to discuss that with the team before making any decisions. Once a structure has been agreed on, to add a new module:
+
+1. Click `File > New > New module...` in Android Studio
+1. Decide whether the new module should be an "Android Library" or "Java or Kotlin Library" - ideally as much code as possible could avoid relying on Android but a lot of features will require at least one Android Library module
+1. Review the generated `build.gradle` and remove any unnecessary dependencies or setup
+1. Add quality checks to the module's `build.gradle`:
+
+  ```
+  apply from: '../config/quality.gradle'
+  ```
+
+1. If the module will have tests, make sure they get run on CI by adding a line to `test_modules.txt` with `<module-name>:test` for a Java Library or `<module-name>:testDebug` for an Android library

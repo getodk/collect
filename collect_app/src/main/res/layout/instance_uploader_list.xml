@@ -14,7 +14,7 @@ the License.
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar_layout" />
+    <include layout="@layout/app_bar_with_progress_bar_layout" />
 
     <LinearLayout
         android:id="@+id/llParent"

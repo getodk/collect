@@ -19,13 +19,10 @@ package org.odk.collect.android.activities;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
@@ -33,7 +30,6 @@ import javax.inject.Inject;
 public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     private boolean isInstanceStateSaved;
-    protected ThemeUtils themeUtils;
 
     @Inject
     protected PermissionsProvider permissionsProvider;
@@ -45,9 +41,6 @@ public abstract class CollectAbstractActivity extends LocalizedActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-
-        themeUtils = new ThemeUtils(this);
-        setTheme(this instanceof FormEntryActivity ? themeUtils.getFormEntryActivityTheme() : themeUtils.getAppTheme());
     }
 
     @Override
@@ -64,13 +57,5 @@ public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     public boolean isInstanceStateSaved() {
         return isInstanceStateSaved;
-    }
-
-    public void initToolbar(CharSequence title) {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setTitle(title);
-            setSupportActionBar(toolbar);
-        }
     }
 }

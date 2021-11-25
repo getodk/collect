@@ -25,7 +25,6 @@ import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.Reset
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.OnBackPressedListener
 import org.odk.collect.android.logic.PropertyManager
-import org.odk.collect.android.utilities.ThemeUtils
 import javax.inject.Inject
 
 class ProjectPreferencesActivity :
@@ -42,7 +41,6 @@ class ProjectPreferencesActivity :
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_preferences_layout)
         DaggerUtils.getComponent(this).inject(this)
-        setTheme(ThemeUtils(this).settingsTheme)
     }
 
     override fun onPause() {
