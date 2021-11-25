@@ -121,7 +121,6 @@ You can customize the heap size that is used for compiling and running tests. In
 
 ```
 org.gradle.jvmargs=-Xmx4096 -Dkotlin.daemon.jvm.options\="-Xmx4096"
-robolectricHeapSize=4096
 ```
 
 ## Testing a form without a server
