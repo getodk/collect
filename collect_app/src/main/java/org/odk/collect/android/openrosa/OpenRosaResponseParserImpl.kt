@@ -66,13 +66,13 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                 when (child.name) {
                     "formID" -> {
                         formId = XFormParser.getXMLText(child, true)
-                        if (formId != null && formId.length == 0) {
+                        if (formId != null && formId.isEmpty()) {
                             formId = null
                         }
                     }
                     "name" -> {
                         formName = XFormParser.getXMLText(child, true)
-                        if (formName != null && formName.length == 0) {
+                        if (formName != null && formName.isEmpty()) {
                             formName = null
                         }
                     }
@@ -88,19 +88,19 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "downloadUrl" -> {
                         downloadUrl = XFormParser.getXMLText(child, true)
-                        if (downloadUrl != null && downloadUrl.length == 0) {
+                        if (downloadUrl != null && downloadUrl.isEmpty()) {
                             downloadUrl = null
                         }
                     }
                     "manifestUrl" -> {
                         manifestUrl = XFormParser.getXMLText(child, true)
-                        if (manifestUrl != null && manifestUrl.length == 0) {
+                        if (manifestUrl != null && manifestUrl.isEmpty()) {
                             manifestUrl = null
                         }
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        if (hash != null && (hash.length == 0 || !hash.startsWith("md5:"))) {
+                        if (hash != null && (hash.isEmpty() || !hash.startsWith("md5:"))) {
                             hash = null
                         } else {
                             hash = hash.substring("md5:".length)
@@ -169,13 +169,13 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     when (child.name) {
                         "filename" -> {
                             filename = XFormParser.getXMLText(child, true)
-                            if (filename != null && filename.length == 0) {
+                            if (filename != null && filename.isEmpty()) {
                                 filename = null
                             }
                         }
                         "hash" -> {
                             hash = XFormParser.getXMLText(child, true)
-                            if (hash != null && hash.length == 0) {
+                            if (hash != null && hash.isEmpty()) {
                                 hash = null
                             } else {
                                 hash = hash.substring("md5:".length)
@@ -183,7 +183,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                         }
                         "downloadUrl" -> {
                             downloadUrl = XFormParser.getXMLText(child, true)
-                            if (downloadUrl != null && downloadUrl.length == 0) {
+                            if (downloadUrl != null && downloadUrl.isEmpty()) {
                                 downloadUrl = null
                             }
                         }
