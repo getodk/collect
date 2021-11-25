@@ -115,9 +115,7 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                 return null
             }
 
-            val formListItem =
-                FormListItem(downloadUrl, formId, version, hash, formName, manifestUrl)
-            formList.add(formListItem)
+            formList.add(FormListItem(downloadUrl, formId, version, hash, formName, manifestUrl))
         }
 
         return formList
