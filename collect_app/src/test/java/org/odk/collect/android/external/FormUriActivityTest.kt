@@ -75,7 +75,7 @@ class FormUriActivityTest {
     @Test
     fun `When there are no projects then display alert dialog`() {
         val scenario = ActivityScenario.launch(FormUriActivity::class.java)
-        onView(withText(R.string.no_projects_detected)).inRoot(isDialog())
+        onView(withText(R.string.app_not_configured)).inRoot(isDialog())
             .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 

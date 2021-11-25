@@ -29,7 +29,7 @@ class FormUriActivity : Activity() {
         val projects = projectsRepository.getAll()
         if (projects.isEmpty()) {
             MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.no_projects_detected)
+                .setMessage(R.string.app_not_configured)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
