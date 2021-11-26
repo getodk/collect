@@ -1,5 +1,6 @@
 package org.odk.collect.android.analytics;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 import static org.odk.collect.forms.FormSourceException.AuthRequired;
@@ -49,6 +50,17 @@ public final class AnalyticsUtils {
         String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
         String scheme = upperCaseURL.split(":")[0];
 
+        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
+        analytics.logEvent(SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash);
+    }
+
+    public static void logInvalidFormHash(String url) {
+        Analytics.log(NULL_OR_EMPTY_FORM_HASH, "host", getHostFromUrl(url));
+    }
+
+    private static String getHostFromUrl(String url) {
+        String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
+
         String host = "Other";
         if (upperCaseURL.contains("APPSPOT")) {
             host = "Appspot";
@@ -60,9 +72,7 @@ public final class AnalyticsUtils {
         } else if (upperCaseURL.contains("GETODK.CLOUD")) {
             host = "ODK Cloud";
         }
-
-        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
-        analytics.logEvent(SET_SERVER, scheme + " " + host, urlHash);
+        return host;
     }
 
     public static String getFormHash(String formId, String formTitle) {

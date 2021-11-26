@@ -1,8 +1,7 @@
 package org.odk.collect.android.openrosa;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormListItem;
@@ -68,7 +67,7 @@ public class OpenRosaFormSource implements FormSource {
     private void checkForInvalidFormHash(List<FormListItem> formList) {
         for (FormListItem item : formList) {
             if (item.getHash() == null) {
-                Analytics.log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH);
+                AnalyticsUtils.logInvalidFormHash(serverURL);
                 break;
             }
         }
