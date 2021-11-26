@@ -15,8 +15,6 @@
  */
 package org.odk.collect.android.formmanagement
 
-import org.odk.collect.analytics.Analytics.Companion.log
-import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.openrosa.OpenRosaFormSource
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -60,7 +58,6 @@ open class ServerFormsDetailsFetcher(
             val thisFormAlreadyDownloaded = forms.isNotEmpty()
             val isNewerFormVersionAvailable = listItem.hash.let {
                 if (it == null) {
-                    log(AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH)
                     false
                 } else if (thisFormAlreadyDownloaded) {
                     val existingForm = getFormByHash(it)
