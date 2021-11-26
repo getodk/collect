@@ -1,6 +1,6 @@
 package org.odk.collect.android.analytics;
 
-import static org.odk.collect.android.analytics.AnalyticsEvents.NULL_OR_EMPTY_FORM_HASH;
+import static org.odk.collect.android.analytics.AnalyticsEvents.INVALID_FORM_HASH;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
 import static org.odk.collect.forms.FormSourceException.AuthRequired;
@@ -55,7 +55,7 @@ public final class AnalyticsUtils {
     }
 
     public static void logInvalidFormHash(String url) {
-        Analytics.log(NULL_OR_EMPTY_FORM_HASH, "host", getHostFromUrl(url));
+        Analytics.log(INVALID_FORM_HASH, "host", getHostFromUrl(url));
     }
 
     private static String getHostFromUrl(String url) {
