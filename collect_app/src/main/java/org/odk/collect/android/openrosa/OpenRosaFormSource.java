@@ -54,7 +54,7 @@ public class OpenRosaFormSource implements FormSource {
             List<FormListItem> formList = openRosaResponseParser.parseFormList(result.doc);
 
             if (formList != null) {
-                checkForInvalidFormHash(formList);
+                checkForInvalidFormHashes(formList);
                 return formList;
             } else {
                 throw new FormSourceException.ParseError(serverURL);
@@ -64,7 +64,7 @@ public class OpenRosaFormSource implements FormSource {
         }
     }
 
-    private void checkForInvalidFormHash(List<FormListItem> formList) {
+    private void checkForInvalidFormHashes(List<FormListItem> formList) {
         for (FormListItem item : formList) {
             if (item.getHash() == null) {
                 AnalyticsUtils.logInvalidFormHash(serverURL);
