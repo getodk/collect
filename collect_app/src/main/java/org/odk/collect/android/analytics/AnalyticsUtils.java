@@ -59,6 +59,10 @@ public final class AnalyticsUtils {
     }
 
     private static String getHostFromUrl(String url) {
+        if (url == null || url.isEmpty()) {
+            return "";
+        }
+
         String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
 
         String host = "Other";
