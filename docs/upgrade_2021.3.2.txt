@@ -23,7 +23,7 @@
 	modified:   audiorecorder/src/main/java/org/odk/collect/audiorecorder/recording/internal/RecordingForegroundServiceNotification.kt
 	modified:   build.gradle
 	modified:   buildSrc/src/main/java/dependencies/Dependencies.kt
-	modified:   buildSrc/src/main/java/dependencies/Versions.kt
+extracted	modified:   buildSrc/src/main/java/dependencies/Versions.kt
 	modified:   collect_app/build.gradle
 	new file:   collect_app/src/androidTest/assets/forms/Empty First Repeat.xml
 	modified:   collect_app/src/androidTest/assets/forms/form_design_error.xml
@@ -125,7 +125,7 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/activities/MainMenuActivity.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/activities/viewmodels/MainMenuViewModel.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/adapters/InstanceUploaderAdapter.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/analytics/AnalyticsEvents.java
+ignore	modified:   collect_app/src/main/java/org/odk/collect/android/analytics/AnalyticsEvents.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/analytics/AnalyticsUtils.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/application/Collect.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/application/CollectSettingsChangeHandler.java
@@ -272,12 +272,12 @@
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/WidgetFactory.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/items/SelectMultiMinimalWidget.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/items/SelectOneMinimalWidget.java
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/ActivityGeoDataRequester.java
+merged	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/ActivityGeoDataRequester.java
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/DateTimeWidgetUtils.java
 	deleted:    collect_app/src/main/java/org/odk/collect/android/widgets/utilities/ExternalAppRecordingRequester.java
 	new file:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/ExternalAppRecordingRequester.kt
 	new file:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/FileRequester.kt
-	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GeoWidgetUtils.java
+    modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GeoWidgetUtils.java
 	deleted:    collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GetContentAudioFileRequester.java
 	new file:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/GetContentAudioFileRequester.kt
 	modified:   collect_app/src/main/java/org/odk/collect/android/widgets/utilities/RangeWidgetUtils.java

@@ -13,6 +13,7 @@ import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
@@ -96,6 +97,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
             public void denied() {
             }
         });
+    }
+
+    private boolean getAllowMockAccuracy(FormEntryPrompt prompt) {
+        return Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy"));
     }
 
     private boolean isMapsAppearance(FormEntryPrompt prompt) {
