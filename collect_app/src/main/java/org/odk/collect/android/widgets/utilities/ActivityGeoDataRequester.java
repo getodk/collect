@@ -21,6 +21,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
+    public static final String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
 
     private final PermissionsProvider permissionsProvider;
 
