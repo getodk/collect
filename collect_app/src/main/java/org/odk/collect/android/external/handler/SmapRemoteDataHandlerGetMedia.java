@@ -84,8 +84,8 @@ public class SmapRemoteDataHandlerGetMedia implements IFunctionHandler {
             }
 
             FormController formController = app.getFormController();
-            if (formController == null) {
-                return null;
+            if (formController == null || formController.getInstanceFile() == null) {
+                return "";
             }
             File f = new File(formController.getInstanceFile().getParent() + File.separator + mediaName);
 

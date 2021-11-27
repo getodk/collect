@@ -13,10 +13,22 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 public class LocationRegister {
+
+    public boolean locationEnabled() {
+        return false;
+    }
+
+    public boolean taskLocationEnabled() {
+        return false;
+    }
+
     public void register(Context context, Location location) {
        // Do nothing
     }
 
+    /*
+     * Disable permissions concerned with background location
+     */
     public void set(SharedPreferences.Editor editor, String sendLocation) {
         editor.putBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false);
         editor.putBoolean(GeneralKeys.KEY_SMAP_OVERRIDE_LOCATION, true);

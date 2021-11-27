@@ -57,6 +57,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.FormsProviderAPI;
+import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -213,18 +214,12 @@ public class SmapFormListFragment extends ListFragment {
         }
 
         // Notify the user if tracking is turned on
-        if(PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)
-                || PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, false)) {
+        if(new LocationRegister().locationEnabled()
+                && (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)
+                || PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_ENABLE_GEOFENCE, false))) {
             SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
         }
 
-        //SmapMain main = (SmapMain) getActivity(); // loader
-        // if(main != null) {                       // loader
-        //    MapEntry data = main.getData();
-        //    if (data != null) {
-        //        setData(data);
-        //    }
-        //}
     }
 
     private void setupBottomSheet() {

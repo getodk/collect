@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
- * Background task for changing the current organisation
+ * Task to send location to the server
  */
 public class SubmitLocationTask extends AsyncTask<String, Void, String> {
 

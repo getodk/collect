@@ -264,6 +264,7 @@ public class SmapTaskMapFragment extends Fragment
         permissionsProvider.requestLocationPermissions((Activity) getContext(), new PermissionListener() {
             @Override
             public void granted() {
+                ((SmapMain) getActivity()).startLocationService();
                 mapReadyPermissionGranted();
             }
 

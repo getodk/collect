@@ -318,22 +318,26 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 Uri u = Uri.parse(taskURL);
 
                 HashMap<String, String> headers = new HashMap<String, String> ();
-                // Send location with request (if available)  TODO check a parameter to see if this is turned on otherwise don't do it
-                try {
-                    Location locn = Collect.getInstance().getLocation();
-                    if (locn != null) {
-                        String lat = String.valueOf(locn.getLatitude());
-                        String lon = String.valueOf(locn.getLongitude());
-                        headers.put("lat", lat);
-                        headers.put("lon", lon);
+                // Send location with request (if available and permitted)
+                LocationRegister lr = new LocationRegister();
+                if(lr.taskLocationEnabled()) {
+                    try {
+                        Location locn = Collect.getInstance().getLocation();
+                        if (locn != null) {
+                            String lat = String.valueOf(locn.getLatitude());
+                            String lon = String.valueOf(locn.getLongitude());
+                            headers.put("lat", lat);
+                            headers.put("lon", lon);
+                        }
+                    } catch (Exception e) {
+                        Timber.i("Failed to getlocations :%s", e.getMessage());
                     }
-                } catch (Exception e) {
-
                 }
-                // Send device time and device id with request
+                // Send device time, device id and fieldTask version with request
                 headers.put("devicetime", String.valueOf(System.currentTimeMillis()));
                 headers.put("deviceid", new PropertyManager(Collect.getInstance().getApplicationContext())
                         .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID));
+                headers.put("appversion", Collect.getInstance().getString(R.string.app_version));
 
                 URI uri = URI.create(taskURL);
                 String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);

@@ -25,16 +25,18 @@ import org.odk.collect.android.javarosawrapper.FormController;
 
 public class SurveyNotesActivity extends CollectAbstractActivity {
 
+    private static final String COMMENT_TEXT = "commentText";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.survey_note);
 
-        final Button sb = (Button) findViewById(R.id.save_button);
+        final Button sb = findViewById(R.id.save_button);
         sb.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FormController formController = Collect.getInstance().getFormController();
-                EditText editText = (EditText) findViewById(R.id.survey_notes);
+                EditText editText = findViewById(R.id.survey_notes);
                 formController.setSurveyNotes(editText.getText().toString());
                 finish();
             }
@@ -46,9 +48,13 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
         super.onStart();
 
         FormController formController = Collect.getInstance().getFormController();
-        EditText editText = (EditText) findViewById(R.id.survey_notes);
+        EditText editText = findViewById(R.id.survey_notes);
 
-        if (formController != null) {
+        String savedText = editText.getText().toString();
+
+        if( savedText != null && savedText.length() > 0) {  // // restore
+            editText.setText(savedText, TextView.BufferType.EDITABLE);
+        } else if (formController != null) {
             String notes = formController.getSurveyNotes();
             String xpath = formController.getXPath(formController.getFormIndex());
             String qname = "";
@@ -82,5 +88,21 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
             editText.setSelection(cursorLocn);
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        EditText editText = findViewById(R.id.survey_notes);
+        outState.putString(COMMENT_TEXT, editText.getText().toString());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        EditText editText = findViewById(R.id.survey_notes);
+        editText.setText(state.getString(COMMENT_TEXT), TextView.BufferType.EDITABLE);
+    }
+
 
 }
