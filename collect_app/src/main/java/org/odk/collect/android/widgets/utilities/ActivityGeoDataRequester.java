@@ -43,6 +43,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 }
 
                 bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
