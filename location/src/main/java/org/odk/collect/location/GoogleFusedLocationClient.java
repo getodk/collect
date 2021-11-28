@@ -151,7 +151,7 @@ public class GoogleFusedLocationClient
             googleApiClient.blockingConnect();
         }
 
-        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient));
+        return LocationUtils.sanitizeAccuracy(fusedLocationProviderApi.getLastLocation(googleApiClient), retainMockAccuracy);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class GoogleFusedLocationClient
         Timber.i("Location changed: %s", location.toString());
 
         if (locationListener != null) {
-            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location));
+            locationListener.onLocationChanged(LocationUtils.sanitizeAccuracy(location, retainMockAccuracy));
         }
     }
 
