@@ -332,6 +332,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
     @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
         if (lastLocationFix != null) {
             listener.onReady(this);

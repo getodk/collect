@@ -61,6 +61,7 @@ public class GoogleFusedLocationClient
 
     private long updateInterval = DEFAULT_UPDATE_INTERVAL;
     private long fastestUpdateInterval = DEFAULT_FASTEST_UPDATE_INTERVAL;
+    private boolean retainMockAccuracy;
 
     /**
      * Constructs a new GoogleFusedLocationClient with the provided Context.
@@ -136,6 +137,11 @@ public class GoogleFusedLocationClient
             fusedLocationProviderApi.removeLocationUpdates(googleApiClient, locationListener);
         }
         locationListener = null;
+    }
+
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        this.retainMockAccuracy = retainMockAccuracy;
     }
 
     @Override

@@ -381,6 +381,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
+    @Override
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
     @Override public @Nullable MapPoint getGpsLocation() {
         return fromLocation(myLocationOverlay);
     }
