@@ -8,6 +8,7 @@ import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineResult;
 
 import org.odk.collect.android.geo.MapboxMapFragment;
+import org.odk.collect.location.LocationUtils;
 
 import java.lang.ref.WeakReference;
 
@@ -16,6 +17,7 @@ import java.lang.ref.WeakReference;
 public class MapboxLocationCallback implements LocationEngineCallback<LocationEngineResult> {
 
     private final WeakReference<MapboxMapFragment> mapRef;
+    private boolean retainMockAccuracy;
 
     public MapboxLocationCallback(MapboxMapFragment map) {
         mapRef = new WeakReference<>(map);
@@ -26,13 +28,14 @@ public class MapboxLocationCallback implements LocationEngineCallback<LocationEn
         MapboxMapFragment map = mapRef.get();
         Location location = result.getLastLocation();
         if (map != null && location != null) {
-            if (location.isFromMockProvider() || location.getAccuracy() < 0) {
-                location.setAccuracy(0);
-            }
-            map.onLocationChanged(location);
+            map.onLocationChanged(LocationUtils.sanitizeAccuracy(location, retainMockAccuracy));
         }
     }
 
     @Override
     public void onFailure(@NonNull Exception exception) { }
+
+    public void setRetainMockAccuracy(boolean retainMockAccuracy) {
+        this.retainMockAccuracy = retainMockAccuracy;
+    }
 }
