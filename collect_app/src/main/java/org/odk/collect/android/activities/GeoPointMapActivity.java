@@ -34,6 +34,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.GeoUtils;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester;
 
 import java.text.DecimalFormat;
 
@@ -257,6 +258,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
             }
         }
 
+        map.setRetainMockAccuracy(intent.getBooleanExtra(ActivityGeoDataRequester.EXTRA_RETAIN_MOCK_ACCURACY, false));
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 
