@@ -4,11 +4,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
-import org.odk.collect.android.RecordedIntentsRule
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.testshared.RecordedIntentsRule
 
 class AddNewProjectTest {
 

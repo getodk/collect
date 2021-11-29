@@ -395,6 +395,7 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
+    debugImplementation project(':testshared')
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
     debugImplementation Dependencies.leakcanary

@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.RecordedIntentsRule;
 import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
@@ -18,6 +17,7 @@ import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
+import org.odk.collect.testshared.RecordedIntentsRule;
 
 @RunWith(AndroidJUnit4.class)
 public class SendFinalizedFormTest {

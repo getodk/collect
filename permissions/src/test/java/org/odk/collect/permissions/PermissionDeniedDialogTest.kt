@@ -17,13 +17,18 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.testshared.RecordedIntentsRule
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class PermissionDeniedDialogTest {
+    @get:Rule
+    val activityRule = RecordedIntentsRule()
+
     private val args = Bundle().apply {
         putInt(PermissionDeniedDialog.TITLE, R.string.camera_runtime_permission_denied_title)
         putInt(PermissionDeniedDialog.MESSAGE, R.string.camera_runtime_permission_denied_desc)
@@ -79,15 +84,11 @@ class PermissionDeniedDialogTest {
     fun `System settings should be opened after clicking on the NEUTRAL button`() {
         val scenario = DialogFragmentTest.launchDialogFragment(PermissionDeniedDialog::class.java, args)
         scenario.onFragment {
-            Intents.init()
-
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_NEUTRAL)).performClick()
 
             Intents.intended(IntentMatchers.hasAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS))
             Intents.intended(IntentMatchers.hasData(Uri.fromParts("package", ApplicationProvider.getApplicationContext<Application>().packageName, null)))
-
-            Intents.release()
         }
     }
 }

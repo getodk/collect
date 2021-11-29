@@ -42,6 +42,8 @@ dependencies {
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.robolectric
+    implementation Dependencies.junit
+    implementation Dependencies.androidx_test_espresso_intents
     implementation Dependencies.android_material
     implementation(Dependencies.androidx_fragment_testing) {
         exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
