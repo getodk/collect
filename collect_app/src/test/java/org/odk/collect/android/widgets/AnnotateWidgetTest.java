@@ -33,6 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.overrideReferenceManager;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
@@ -101,7 +102,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_image));
+        assertNull(getIntentLaunchedByClick(R.id.capture_image));
     }
 
     @Test

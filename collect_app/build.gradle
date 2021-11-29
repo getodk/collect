@@ -296,7 +296,6 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
     }
-    implementation Dependencies.karumi_dexter
     implementation Dependencies.osmdroid
     implementation(Dependencies.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'

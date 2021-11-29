@@ -4,8 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 
-import com.karumi.dexter.DexterActivity;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.junit.Test;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
@@ -16,7 +14,6 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -60,13 +57,6 @@ public abstract class BinaryWidgetTest<W extends Widget, A extends IAnswerData>
 
     protected void assertExtraEquals(String key, Object value, Intent intent) {
         assertEquals(intent.getExtras().get(key), value);
-    }
-
-    // After upgrading gradle and some dependencies if an intent can't be started because of not granted
-    // permissions the null value or DexterActivity is returned. It works randomly and depends on the
-    // order of tests but both results are ok.
-    protected void assertIntentNotStarted(Context context, Intent intent) {
-        assertTrue(intent == null || new ComponentName(context, DexterActivity.class).equals(intent.getComponent()));
     }
 
     public abstract Object createBinaryData(A answerData);

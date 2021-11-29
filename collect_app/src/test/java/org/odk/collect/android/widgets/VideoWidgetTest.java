@@ -22,6 +22,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -72,7 +73,7 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
     public void buttonsShouldNotLaunchIntentsWhenPermissionsDenied() {
         stubAllRuntimePermissionsGranted(false);
 
-        assertIntentNotStarted(activity, getIntentLaunchedByClick(R.id.capture_video));
+        assertNull(getIntentLaunchedByClick(R.id.capture_video));
     }
 
     @Test
