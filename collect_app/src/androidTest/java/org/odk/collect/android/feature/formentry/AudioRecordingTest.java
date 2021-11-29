@@ -17,6 +17,7 @@ import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
@@ -54,6 +55,18 @@ public class AudioRecordingTest {
     public final RuleChain chain = TestRuleChain.chain(testDependencies)
             .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(rule);
+
+    @Test
+    public void onAudioQuestion_withoutAudioQuality_canRecordInApp() {
+        new MainMenuPage()
+                .copyForm("audio-question.xml")
+                .startBlankForm("Audio Question")
+                .clickOnString(R.string.capture_audio)
+                .clickOnContentDescription(R.string.stop_recording)
+                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
+                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertContentDescriptionDisplayed(R.string.play_audio);
+    }
 
     @Test
     public void onAudioQuestion_withQualitySpecified_canRecordAudioInApp() {

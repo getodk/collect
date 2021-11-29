@@ -128,7 +128,7 @@ object ProjectKeys {
             hashMap[KEY_NAVIGATION] = NAVIGATION_BOTH
             hashMap[KEY_SHOW_SPLASH] = false
             hashMap[KEY_SPLASH_PATH] = Collect.getInstance().getString(R.string.default_splash_path)
-            hashMap[KEY_EXTERNAL_APP_RECORDING] = true
+            hashMap[KEY_EXTERNAL_APP_RECORDING] = false
             // map_preferences.xml
             hashMap[KEY_BASEMAP_SOURCE] = BASEMAP_SOURCE_GOOGLE
             hashMap[KEY_CARTO_MAP_STYLE] = "positron"
