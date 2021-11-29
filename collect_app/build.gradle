@@ -395,7 +395,9 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
-    debugImplementation project(':testshared')
+    debugImplementation(project(':testshared')) {
+        exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
+    }
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
     debugImplementation Dependencies.leakcanary
