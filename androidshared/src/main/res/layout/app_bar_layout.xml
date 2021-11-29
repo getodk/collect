@@ -2,6 +2,7 @@
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appBarLayout"
+    style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="4dp">
