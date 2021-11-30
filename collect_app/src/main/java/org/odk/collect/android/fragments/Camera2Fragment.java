@@ -229,7 +229,7 @@ public class Camera2Fragment extends Fragment
         @Override
         public void onImageAvailable(ImageReader reader) {
             try {
-                backgroundHandler.post(new ImageSaver(reader.acquireNextImage()));
+                backgroundHandler.post(new ImageSaver(reader.acquireLatestImage()));
             } catch (IllegalStateException e) {
                 Timber.e(e);
             }
@@ -852,11 +852,14 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void run() {
-            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-
-            CameraUtils.savePhoto(new StoragePathProvider().getTmpImageFilePath(), bytes);
+            try {
+                ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                byte[] bytes = new byte[buffer.remaining()];
+                buffer.get(bytes);
+                CameraUtils.savePhoto(new StoragePathProvider().getTmpImageFilePath(), bytes);
+            } finally {
+                image.close();
+            }
         }
     }
 
