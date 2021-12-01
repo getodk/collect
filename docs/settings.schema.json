@@ -327,7 +327,117 @@
       }
     },
     "admin": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "admin_pw": {
+          "type": "string"
+        },
+        "edit_saved": {
+          "type": "boolean"
+        },
+        "send_finalized": {
+          "type": "boolean"
+        },
+        "view_sent": {
+          "type": "boolean"
+        },
+        "get_blank": {
+          "type": "boolean"
+        },
+        "delete_saved": {
+          "type": "boolean"
+        },
+        "change_server": {
+          "type": "boolean"
+        },
+        "change_project_display": {
+          "type": "boolean"
+        },
+        "change_app_theme": {
+          "type": "boolean"
+        },
+        "change_app_language": {
+          "type": "boolean"
+        },
+        "change_font_size": {
+          "type": "boolean"
+        },
+        "change_navigation": {
+          "type": "boolean"
+        },
+        "show_splash_screen": {
+          "type": "boolean"
+        },
+        "maps": {
+          "type": "boolean"
+        },
+        "form_update_mode": {
+          "type": "boolean"
+        },
+        "periodic_form_updates_check": {
+          "type": "boolean"
+        },
+        "automatic_update": {
+          "type": "boolean"
+        },
+        "hide_old_form_version": {
+          "type": "boolean"
+        },
+        "change_autosend": {
+          "type": "boolean"
+        },
+        "delete_after_send": {
+          "type": "boolean"
+        },
+        "default_to_finalized": {
+          "type": "boolean"
+        },
+        "change_constraint_behaviour": {
+          "type": "boolean"
+        },
+        "high_resolution": {
+          "type": "boolean"
+        },
+        "image_size": {
+          "type": "boolean"
+        },
+        "guidance_hint": {
+          "type": "boolean"
+        },
+        "external_app_recording": {
+          "type": "boolean"
+        },
+        "instance_form_sync": {
+          "type": "boolean"
+        },
+        "change_form_metadata": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        },
+        "moving_backwards": {
+          "type": "boolean"
+        },
+        "access_settings": {
+          "type": "boolean"
+        },
+        "change_language": {
+          "type": "boolean"
+        },
+        "jump_to": {
+          "type": "boolean"
+        },
+        "save_mid": {
+          "type": "boolean"
+        },
+        "save_as": {
+          "type": "boolean"
+        },
+        "mark_as_finalized": {
+          "type": "boolean"
+        }
+      }
     }
   },
   "required": [
