@@ -1,0 +1,337 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getodk.com/settings.schema.json",
+  "title": "Settings",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "general": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "odk_default"
+            },
+            {
+              "const": "google_sheets"
+            }
+          ]
+        },
+        "server_url": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "selected_google_account": {
+          "type": "string"
+        },
+        "google_sheets_url": {
+          "type": "string"
+        },
+        "appTheme": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "system"
+            },
+            {
+              "const": "light_theme"
+            },
+            {
+              "const": "dark_theme"
+            }
+          ]
+        },
+        "app_language": {
+          "type": "string"
+        },
+        "font_size": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "13"
+            },
+            {
+              "const": "17"
+            },
+            {
+              "const": "21"
+            },
+            {
+              "const": "25"
+            },
+            {
+              "const": "29"
+            }
+          ]
+        },
+        "navigation": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "swipe"
+            },
+            {
+              "const": "buttons"
+            },
+            {
+              "const": "swipe_buttons"
+            }
+          ]
+        },
+        "showSplash": {
+          "type": "boolean"
+        },
+        "splashPath": {
+          "type": "string"
+        },
+        "basemap_source": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "google"
+            },
+            {
+              "const": "mapbox"
+            },
+            {
+              "const": "osm"
+            },
+            {
+              "const": "usgs"
+            },
+            {
+              "const": "stamen"
+            },
+            {
+              "const": "carto"
+            }
+          ]
+        },
+        "google_map_style": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "1"
+            },
+            {
+              "const": "2"
+            },
+            {
+              "const": "3"
+            },
+            {
+              "const": "4"
+            }
+          ]
+        },
+        "mapbox_map_style": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "mapbox://styles/mapbox/light-v10"
+            },
+            {
+              "const": "mapbox://styles/mapbox/dark-v10"
+            },
+            {
+              "const": "mapbox://styles/mapbox/satellite-v9"
+            },
+            {
+              "const": "mapbox://styles/mapbox/satellite-streets-v11"
+            },
+            {
+              "const": "mapbox://styles/mapbox/outdoors-v11"
+            }
+          ]
+        },
+        "usgs_map_style": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "topographic"
+            },
+            {
+              "const": "hybrid"
+            },
+            {
+              "const": "satellite"
+            }
+          ]
+        },
+        "carto_map_style": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "positron"
+            },
+            {
+              "const": "dark_matter"
+            }
+          ]
+        },
+        "reference_layer": {
+          "type": "string"
+        },
+        "form_update_mode": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "manual"
+            },
+            {
+              "const": "previously_downloaded"
+            },
+            {
+              "const": "match_exactly"
+            }
+          ]
+        },
+        "periodic_form_updates_check": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "every_fifteen_minutes"
+            },
+            {
+              "const": "every_one_hour"
+            },
+            {
+              "const": "every_six_hours"
+            },
+            {
+              "const": "every_24_hours"
+            }
+          ]
+        },
+        "automatic_update": {
+          "type": "boolean"
+        },
+        "hide_old_form_versions": {
+          "type": "boolean"
+        },
+        "autosend": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "off"
+            },
+            {
+              "const": "wifi_only"
+            },
+            {
+              "const": "cellular_only"
+            },
+            {
+              "const": "wifi_and_cellular"
+            }
+          ]
+        },
+        "delete_send": {
+          "type": "boolean"
+        },
+        "default_complete": {
+          "type": "boolean"
+        },
+        "constraint_behaviour": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "on_swipe"
+            },
+            {
+              "const": "on_finalize"
+            }
+          ]
+        },
+        "high_resolution": {
+          "type": "boolean"
+        },
+        "image_size": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "original"
+            },
+            {
+              "const": "small"
+            },
+            {
+              "const": "very_small"
+            },
+            {
+              "const": "medium"
+            },
+            {
+              "const": "large"
+            }
+          ]
+        },
+        "guidance_hint": {
+          "type": "string",
+          "oneOf": [
+            {
+              "const": "no"
+            },
+            {
+              "const": "yes"
+            },
+            {
+              "const": "yes_collapsed"
+            }
+          ]
+        },
+        "external_app_recording": {
+          "type": "boolean"
+        },
+        "instance_sync": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        },
+        "metadata_username": {
+          "type": "string"
+        },
+        "metadata_phonenumber": {
+          "type": "string"
+        },
+        "metadata_email": {
+          "type": "string"
+        },
+        "background_location": {
+          "type": "boolean"
+        },
+        "background_recording": {
+          "type": "boolean"
+        }
+      }
+    },
+    "admin": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "general",
+    "admin"
+  ]
+}
