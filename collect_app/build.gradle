@@ -36,7 +36,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion rootProject.androidMinSdk
         targetSdkVersion rootProject.androidTargetSdk
-        versionCode(6515)
+        versionCode(6600)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -68,59 +68,59 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.515"
+            versionName "6.600"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.515-plan"
+            versionName "6.600-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.515-kontrolid"
+            versionName "6.600-kontrolid"
         }
         kontrolid_corporate {
             applicationId "org.smap.smapTask.android.kontrolid_corporate"
-            versionName "6.515-kontrolid"
+            versionName "6.600-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.515-supply"
+            versionName "6.600-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.515-seracis"
+            versionName "6.600-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.515-meqa"
+            versionName "6.600-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.515-atempi"
+            versionName "6.600-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.515-pop"
+            versionName "6.600-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.515-tdh"
+            versionName "6.600-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.515-assignfield"
+            versionName "6.600-assignfield"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.515-informEd"
+            versionName "6.600-informEd"
         }
         stl {
             applicationId "org.smap.smapTask.android.stl"
-            versionName "6.515-stl"
+            versionName "6.600-stl"
         }
         ljs {
             applicationId "org.smap.smapTask.android.ljs"
-            versionName "6.515-ljs"
+            versionName "6.600-ljs"
         }
     }
 
@@ -228,10 +228,11 @@ android {
     }
 
     lintOptions {
-        abortOnError true
+        abortOnError false
         xmlReport true
         htmlReport true
         checkGeneratedSources true
+        checkReleaseBuilds false
         lintConfig file("${project.rootDir}/config/lint.xml")
     }
 }
