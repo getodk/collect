@@ -19,9 +19,6 @@ object ProjectKeys {
     const val KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account"
     const val KEY_GOOGLE_SHEETS_URL = "google_sheets_url"
 
-    // project_display.xml
-    const val KEY_PROJECT_DISPLAY = "project_display"
-
     // user_interface_preferences.xml
     const val KEY_APP_THEME = "appTheme"
     const val KEY_APP_LANGUAGE = "app_language"
