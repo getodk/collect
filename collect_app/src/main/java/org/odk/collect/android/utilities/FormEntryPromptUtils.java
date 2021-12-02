@@ -132,14 +132,15 @@ public class FormEntryPromptUtils {
 
     @Nullable
     public static String getAttributeValue(FormEntryPrompt prompt, String attributeName) {
-        return(prompt.getQuestion().getAdditionalAttribute(null, attributeName));    // smap
-        /* smap
-        List<TreeElement> attributes = prompt.getBindAttributes();
-        Optional<TreeElement> attribute = attributes.stream().filter(attr ->
-                attr.getName().equals(attributeName)
-        ).findAny();
+        String a = prompt.getQuestion().getAdditionalAttribute(null, attributeName);    // smap
 
-        return attribute.map(TreeElement::getAttributeValue).orElse(null);
-        */
+        if(a == null) {  // smap
+            List<TreeElement> attributes = prompt.getBindAttributes();
+            Optional<TreeElement> attribute = attributes.stream().filter(attr ->
+                    attr.getName().equals(attributeName)
+            ).findAny();
+            a = attribute.map(TreeElement::getAttributeValue).orElse(null);
+        }
+        return a;
     }
 }
