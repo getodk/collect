@@ -25,6 +25,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel;
@@ -40,10 +41,10 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.configure.JsonSchemaSettingsValidator;
 import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.SettingsValidator;
-import org.odk.collect.android.configure.StructureAndTypeSettingsValidator;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
@@ -336,8 +337,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsValidator providesSettingsValidator() {
-        return new StructureAndTypeSettingsValidator(ProjectKeys.getDefaults(), ProtectedProjectKeys.getDefaults());
+    public SettingsValidator providesSettingsValidator(Context context) {
+        return new JsonSchemaSettingsValidator(() -> context.getResources().openRawResource(R.raw.settings_schema));
     }
 
     @Provides

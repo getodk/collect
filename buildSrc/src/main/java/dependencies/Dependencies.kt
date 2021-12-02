@@ -73,6 +73,7 @@ object Dependencies {
     const val slf4j_api = "org.slf4j:slf4j-api:2.0.0-alpha0"
     const val slf4j_timber = "com.arcao:slf4j-timber:3.1@aar"
     const val emoji_java = "com.vdurmont:emoji-java:5.1.1"
+    const val json_schema_validator = "com.github.java-json-tools:json-schema-validator:2.2.14"
 
     // Test dependencies
     const val junit = "junit:junit:4.13.2"
