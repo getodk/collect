@@ -23,13 +23,9 @@
       "properties": {
         "protocol": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "odk_default"
-            },
-            {
-              "const": "google_sheets"
-            }
+          "enum": [
+            "odk_default",
+            "google_sheets"
           ]
         },
         "server_url": {
@@ -49,16 +45,10 @@
         },
         "appTheme": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "system"
-            },
-            {
-              "const": "light_theme"
-            },
-            {
-              "const": "dark_theme"
-            }
+          "enum": [
+            "system",
+            "light_theme",
+            "dark_theme"
           ]
         },
         "app_language": {
@@ -66,36 +56,20 @@
         },
         "font_size": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "13"
-            },
-            {
-              "const": "17"
-            },
-            {
-              "const": "21"
-            },
-            {
-              "const": "25"
-            },
-            {
-              "const": "29"
-            }
+          "enum": [
+            "13",
+            "17",
+            "21",
+            "25",
+            "29"
           ]
         },
         "navigation": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "swipe"
-            },
-            {
-              "const": "buttons"
-            },
-            {
-              "const": "swipe_buttons"
-            }
+          "enum": [
+            "swipe",
+            "buttons",
+            "swipe_buttons"
           ]
         },
         "showSplash": {
@@ -106,87 +80,47 @@
         },
         "basemap_source": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "google"
-            },
-            {
-              "const": "mapbox"
-            },
-            {
-              "const": "osm"
-            },
-            {
-              "const": "usgs"
-            },
-            {
-              "const": "stamen"
-            },
-            {
-              "const": "carto"
-            }
+          "enum": [
+            "google",
+            "mapbox",
+            "osm",
+            "usgs",
+            "stamen",
+            "carto"
           ]
         },
         "google_map_style": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "1"
-            },
-            {
-              "const": "2"
-            },
-            {
-              "const": "3"
-            },
-            {
-              "const": "4"
-            }
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4"
           ]
         },
         "mapbox_map_style": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "mapbox://styles/mapbox/light-v10"
-            },
-            {
-              "const": "mapbox://styles/mapbox/dark-v10"
-            },
-            {
-              "const": "mapbox://styles/mapbox/satellite-v9"
-            },
-            {
-              "const": "mapbox://styles/mapbox/satellite-streets-v11"
-            },
-            {
-              "const": "mapbox://styles/mapbox/outdoors-v11"
-            }
+          "enum": [
+            "mapbox://styles/mapbox/light-v10",
+            "mapbox://styles/mapbox/dark-v10",
+            "mapbox://styles/mapbox/satellite-v9",
+            "mapbox://styles/mapbox/satellite-streets-v11",
+            "mapbox://styles/mapbox/outdoors-v11"
           ]
         },
         "usgs_map_style": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "topographic"
-            },
-            {
-              "const": "hybrid"
-            },
-            {
-              "const": "satellite"
-            }
+          "enum": [
+            "topographic",
+            "hybrid",
+            "satellite"
           ]
         },
         "carto_map_style": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "positron"
-            },
-            {
-              "const": "dark_matter"
-            }
+          "enum": [
+            "positron",
+            "dark_matter"
           ]
         },
         "reference_layer": {
@@ -194,33 +128,19 @@
         },
         "form_update_mode": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "manual"
-            },
-            {
-              "const": "previously_downloaded"
-            },
-            {
-              "const": "match_exactly"
-            }
+          "enum": [
+            "manual",
+            "previously_downloaded",
+            "match_exactly"
           ]
         },
         "periodic_form_updates_check": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "every_fifteen_minutes"
-            },
-            {
-              "const": "every_one_hour"
-            },
-            {
-              "const": "every_six_hours"
-            },
-            {
-              "const": "every_24_hours"
-            }
+          "enum": [
+            "every_fifteen_minutes",
+            "every_one_hour",
+            "every_six_hours",
+            "every_24_hours"
           ]
         },
         "automatic_update": {
@@ -231,19 +151,11 @@
         },
         "autosend": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "off"
-            },
-            {
-              "const": "wifi_only"
-            },
-            {
-              "const": "cellular_only"
-            },
-            {
-              "const": "wifi_and_cellular"
-            }
+          "enum": [
+            "off",
+            "wifi_only",
+            "cellular_only",
+            "wifi_and_cellular"
           ]
         },
         "delete_send": {
@@ -254,13 +166,9 @@
         },
         "constraint_behaviour": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "on_swipe"
-            },
-            {
-              "const": "on_finalize"
-            }
+          "enum": [
+            "on_swipe",
+            "on_finalize"
           ]
         },
         "high_resolution": {
@@ -268,36 +176,20 @@
         },
         "image_size": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "original"
-            },
-            {
-              "const": "small"
-            },
-            {
-              "const": "very_small"
-            },
-            {
-              "const": "medium"
-            },
-            {
-              "const": "large"
-            }
+          "enum": [
+            "original",
+            "small",
+            "very_small",
+            "medium",
+            "large"
           ]
         },
         "guidance_hint": {
           "type": "string",
-          "oneOf": [
-            {
-              "const": "no"
-            },
-            {
-              "const": "yes"
-            },
-            {
-              "const": "yes_collapsed"
-            }
+          "enum": [
+            "no",
+            "yes",
+            "yes_collapsed"
           ]
         },
         "external_app_recording": {
