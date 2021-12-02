@@ -44,7 +44,6 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
-import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -292,7 +291,8 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
     }
 
     public String getAccuracyMessage(@NonNull Location location) {
-        return getString(R.string.location_accuracy, truncateDouble(location.getAccuracy()));
+        //Cm accuracy #4198
+        return GeoUtils.getAccuracyUnitString(this, location.getAccuracy());
     }
 
     public String getProviderMessage(@NonNull Location location) {
@@ -301,11 +301,6 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     public String getResultStringForLocation(@NonNull Location location) {
         return GeoUtils.formatLocationResultString(location);
-    }
-
-    private String truncateDouble(float number) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(number);
     }
 
     public String getDialogMessage() {

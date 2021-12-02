@@ -485,11 +485,18 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         int seconds = INTERVAL_OPTIONS[intervalIndex];
         int minutes = seconds / 60;
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        //Cm accuracy #4198
+        boolean useCm = location != null && location.sd < 1;
+        double accuracy = location != null ? location.sd * (useCm ? 100 : 1) : Double.NaN;
         locationStatus.setText(
-            location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
-                : getString(R.string.location_status_unacceptable, location.sd)
+                location == null ? getString(R.string.location_status_searching)
+                        : !usingThreshold ? getString(useCm ?
+                        R.string.location_status_accuracy_cm
+                        : R.string.location_status_accuracy, accuracy)
+                        : acceptable ? getString(useCm ?
+                        R.string.location_status_acceptable_cm
+                        : R.string.location_status_acceptable, accuracy)
+                        : getString(R.string.location_status_unacceptable, accuracy)
         );
         locationStatus.setBackgroundColor(
                 location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)

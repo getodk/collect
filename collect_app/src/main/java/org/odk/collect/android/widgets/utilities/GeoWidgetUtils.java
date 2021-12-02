@@ -23,16 +23,22 @@ public final class GeoWidgetUtils {
 
     }
 
+    //Cm accuracy #4198
     public static String getGeoPointAnswerToDisplay(Context context, String answer) {
         try {
             if (answer != null && !answer.isEmpty()) {
                 String[] parts = answer.split(" ");
-                return context.getString(
-                        R.string.gps_result,
+                //Guard against bad answer
+                if (parts.length < 4) {
+                    return "";
+                }
+                double accuracy = Double.parseDouble(parts[3]);
+                boolean useCm = accuracy < 1;
+                return context.getString(useCm ? R.string.gps_result_cm : R.string.gps_result,
                         convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[0]), "lat"),
                         convertCoordinatesIntoDegreeFormat(context, Double.parseDouble(parts[1]), "lon"),
                         truncateDouble(parts[2]),
-                        truncateDouble(parts[3])
+                        useCm ? accuracy * 100 : truncateDouble(parts[3])
                 );
             }
         } catch (NumberFormatException e) {

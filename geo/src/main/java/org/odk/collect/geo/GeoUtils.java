@@ -1,10 +1,12 @@
 package org.odk.collect.geo;
 
+import android.content.Context;
 import android.location.Location;
 
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.shared.strings.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,5 +50,21 @@ public final class GeoUtils {
      */
     public static String capitalizeGps(String locationProvider) {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
+    }
+
+    //Cm accuracy #4198
+    public static String getAccuracyUnitString(Context context, double accuracy) {
+        if (accuracy != accuracy) {
+            return "";
+        }
+        boolean useCm = accuracy < 1;
+        return context.getString(useCm ? R.string.location_accuracy_cm
+                        : R.string.location_accuracy,
+                useCm ? accuracy * 100 : truncateDoubleValue(accuracy));
+    }
+
+    public static String truncateDoubleValue(double number) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(number);
     }
 }

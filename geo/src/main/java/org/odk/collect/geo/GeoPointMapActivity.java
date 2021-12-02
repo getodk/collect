@@ -38,8 +38,6 @@ import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
-import java.text.DecimalFormat;
-
 import javax.inject.Inject;
 
 import timber.log.Timber;
@@ -354,7 +352,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
     }
 
     public String formatLocationStatus(String provider, double accuracyRadius) {
-        return getString(R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
+        //Cm accuracy #4198
+        return GeoUtils.getAccuracyUnitString(this, accuracyRadius)
                 + " " + getString(R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 
