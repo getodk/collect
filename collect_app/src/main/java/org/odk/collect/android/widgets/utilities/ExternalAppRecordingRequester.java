@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.utilities;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.provider.MediaStore;
 import android.widget.Toast;
@@ -18,14 +19,14 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final PermissionsProvider permissionsProvider;
-    private final IntentLauncher intentLauncher;
+    private final ActivityAvailability activityAvailability;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final FormEntryViewModel formEntryViewModel;
 
-    public ExternalAppRecordingRequester(Activity activity, IntentLauncher aintentLauncher, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
+    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.permissionsProvider = permissionsProvider;
-        this.intentLauncher = intentLauncher;
+        this.activityAvailability = activityAvailability;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.formEntryViewModel = formEntryViewModel;
     }
@@ -39,12 +40,15 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,
                         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI.toString());
 
-                if (activityAvailability.isActivityAvailable(intent)) {
+                try {
                     waitingForDataRegistry.waitForData(prompt.getIndex());
                     activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.AUDIO_CAPTURE);
-                } else {
+                } catch (ActivityNotFoundException e) {
                     Toast.makeText(activity, activity.getString(R.string.activity_not_found,
                             activity.getString(R.string.capture_audio)), Toast.LENGTH_SHORT).show();
+                    waitingForDataRegistry.cancelWaitingForData();
+                } catch (Exception e) {
+                    Toast.makeText(activity, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     waitingForDataRegistry.cancelWaitingForData();
                 }
             }
