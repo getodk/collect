@@ -18,14 +18,14 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final PermissionsProvider permissionsProvider;
-    private final ActivityAvailability activityAvailability;
+    private final IntentLauncher intentLauncher;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final FormEntryViewModel formEntryViewModel;
 
-    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
+    public ExternalAppRecordingRequester(Activity activity, IntentLauncher aintentLauncher, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.permissionsProvider = permissionsProvider;
-        this.activityAvailability = activityAvailability;
+        this.intentLauncher = intentLauncher;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.formEntryViewModel = formEntryViewModel;
     }
