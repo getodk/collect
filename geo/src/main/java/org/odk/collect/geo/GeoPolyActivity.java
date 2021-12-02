@@ -17,6 +17,7 @@ package org.odk.collect.geo;
 import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
+import static org.odk.collect.geo.GeoUtils.simulateAccuracy;
 
 import android.content.Context;
 import android.content.Intent;
@@ -438,7 +439,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private boolean isAccuracyThresholdActive() {
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
-        return recordingEnabled && recordingAutomatic && meters > 0;
+        return simulateAccuracy || recordingEnabled && recordingAutomatic && meters > 0;
     }
 
     private void removeLastPoint() {
