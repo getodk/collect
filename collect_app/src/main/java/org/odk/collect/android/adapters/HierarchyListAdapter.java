@@ -16,17 +16,12 @@
 
 package org.odk.collect.android.adapters;
 
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.utilities.HtmlUtils;
 
 import java.util.List;
 
@@ -43,25 +38,13 @@ public class HierarchyListAdapter extends RecyclerView.Adapter<HierarchyListAdap
 
     @Override
     public HierarchyListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.hierarchy_element, parent, false));
+        return new ViewHolder(new HierarchyListItemView(parent.getContext()));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(hierarchyElements.get(position), listener);
-        if (hierarchyElements.get(position).getIcon() != null) {
-            holder.icon.setVisibility(View.VISIBLE);
-            holder.icon.setImageDrawable(hierarchyElements.get(position).getIcon());
-        } else {
-            holder.icon.setVisibility(View.GONE);
-        }
-        holder.primaryText.setText(HtmlUtils.textToHtml(hierarchyElements.get(position).getPrimaryText()));
-        if (hierarchyElements.get(position).getSecondaryText() != null && !hierarchyElements.get(position).getSecondaryText().isEmpty()) {
-            holder.secondaryText.setVisibility(View.VISIBLE);
-            holder.secondaryText.setText(HtmlUtils.textToHtml(hierarchyElements.get(position).getSecondaryText()));
-        } else {
-            holder.secondaryText.setVisibility(View.GONE);
-        }
+        HierarchyElement element = hierarchyElements.get(position);
+        holder.bind(element, listener);
     }
 
     @Override
@@ -70,19 +53,17 @@ public class HierarchyListAdapter extends RecyclerView.Adapter<HierarchyListAdap
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView primaryText;
-        TextView secondaryText;
 
-        ViewHolder(View v) {
+        private final HierarchyListItemView view;
+
+        ViewHolder(HierarchyListItemView v) {
             super(v);
-            icon = v.findViewById(R.id.icon);
-            primaryText = v.findViewById(R.id.primary_text);
-            secondaryText = v.findViewById(R.id.secondary_text);
+            this.view = v;
         }
 
-        void bind(final HierarchyElement element, final OnElementClickListener listener) {
-            itemView.setOnClickListener(v -> listener.onElementClick(element));
+        public void bind(final HierarchyElement element, final OnElementClickListener listener) {
+            view.setElement(element);
+            view.setOnClickListener(v -> listener.onElementClick(element));
         }
     }
 
