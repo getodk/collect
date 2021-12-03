@@ -31,25 +31,26 @@ import javax.annotation.Nullable;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static java.util.stream.Collectors.toSet;
 import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 
 public class NotificationManagerNotifier implements Notifier {
 
-    private static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
+    public static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
     private final Application application;
     private final NotificationManager notificationManager;
     private final SettingsProvider settingsProvider;
+    private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder;
 
-    private static final int FORM_UPDATE_NOTIFICATION_ID = 0;
+    public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     private static final int FORM_SYNC_NOTIFICATION_ID = 1;
     private static final int AUTO_SEND_RESULT_NOTIFICATION_ID = 1328974928;
 
-    public NotificationManagerNotifier(Application application, SettingsProvider settingsProvider) {
+    public NotificationManagerNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.settingsProvider = settingsProvider;
+        this.formUpdatesDownloadedNotificationBuilder = formUpdatesDownloadedNotificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager != null) {
@@ -88,23 +89,7 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onUpdatesDownloaded(Map<ServerFormDetails, String> result) {
-        Intent intent = new Intent(application, NotificationActivity.class);
-        intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.download_forms_result));
-        intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String content = TranslationHandler.getString(application, allFormsDownloadedSuccessfully(result) ?
-                R.string.success :
-                R.string.failures);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
-                .setContentIntent(contentIntent)
-                .setContentTitle(TranslationHandler.getString(application, R.string.odk_auto_download_notification_title))
-                .setContentText(content)
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setAutoCancel(true);
-
-        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, builder.build());
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesDownloadedNotificationBuilder.build(result));
     }
 
     @Override
@@ -148,14 +133,5 @@ public class NotificationManagerNotifier implements Notifier {
                 .setAutoCancel(true);
 
         notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
-    }
-
-    private boolean allFormsDownloadedSuccessfully(Map<ServerFormDetails, String> result) {
-        for (Map.Entry<ServerFormDetails, String> item : result.entrySet()) {
-            if (!item.getValue().equals(TranslationHandler.getString(application, R.string.success))) {
-                return false;
-            }
-        }
-        return true;
     }
 }
