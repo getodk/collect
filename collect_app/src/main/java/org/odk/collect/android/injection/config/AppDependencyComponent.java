@@ -57,6 +57,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
@@ -322,4 +323,6 @@ public interface AppDependencyComponent {
     ProjectResetter projectResetter();
 
     MapProvider mapProvider();
+
+    Notifier notifier();
 }
