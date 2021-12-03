@@ -2,9 +2,15 @@ package org.odk.collect.geo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.odk.collect.geo.GeoUtils.TEST_ACCURACIES;
+import static org.odk.collect.geo.GeoUtils.capitalizeGps;
+import static org.odk.collect.geo.GeoUtils.getAccuracyUnitString;
+import static org.odk.collect.geo.GeoUtils.truncateDoubleValue;
 
+import android.content.Context;
 import android.location.Location;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
@@ -19,6 +25,11 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoUtilsTest {
+
+    static {
+        GeoUtils.simulateAccuracy = false;
+    }
+
     private final List<MapPoint> points = new ArrayList<>(Arrays.asList(
             new MapPoint(11, 12, 13, 14),
             new MapPoint(21, 22, 23, 24),
@@ -52,12 +63,27 @@ public class GeoUtilsTest {
     @Test
     public void capitalizesGps() {
         String input = "gps";
-        assertEquals("GPS", GeoUtils.capitalizeGps(input));
+        assertEquals("GPS", capitalizeGps(input));
 
         String locationProvider = "network";
-        assertEquals("network", GeoUtils.capitalizeGps(locationProvider));
+        assertEquals("network", capitalizeGps(locationProvider));
 
         String nullLocationProvider = null;
-        assertNull(GeoUtils.capitalizeGps(nullLocationProvider));
+        assertNull(capitalizeGps(nullLocationProvider));
+    }
+
+    @Test
+    //Cm accuracy #4198
+    public void locationAccuracyIsFormattedInAppropriateUnit() {
+        final Context context = ApplicationProvider.getApplicationContext();
+        for (double accuracy : TEST_ACCURACIES) {
+            boolean useCm = accuracy < 1;
+            String expected = context.getString(useCm ? R.string.location_accuracy_cm
+                            : R.string.location_accuracy,
+                    useCm ? accuracy * 100 : truncateDoubleValue(accuracy)
+            );
+            String actual = getAccuracyUnitString(context, accuracy);
+            assertEquals(expected, actual);
+        }
     }
 }
