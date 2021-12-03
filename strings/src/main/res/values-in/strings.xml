@@ -496,7 +496,6 @@
   <string name="send_in_progress">Pengiriman sedang berlangsung, mohon coba beberapa saat lagi.</string>
   <string name="odk_permissions_fail">Izin pengiriman otomatis tidak berhasil, mohon pastikan semua izin yang dibutuhkan telah diberikan.</string>
   <string name="odk_auto_note">Hasil pengiriman otomatis ODK</string>
-  <string name="odk_auto_download_notification_title">Hasil unduh otomatis ODK</string>
   <string name="notification_error">Kesalahan menampilkan teks notifikasi.</string>
   <!--##############################################
     # GET BLANK FORM

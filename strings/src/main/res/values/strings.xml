@@ -620,7 +620,6 @@
 
     <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
     <string name="odk_auto_note">ODK auto-send results</string>
-    <string name="odk_auto_download_notification_title">ODK auto-download results</string>
     <string name="notification_error">Error displaying notification text</string>
 
     <!--

@@ -431,7 +431,6 @@
   <string name="send_in_progress">Otpremanje u pozadini je u toku, molim pokušajte za koji trenutak</string>
   <string name="odk_permissions_fail">ODK automatsko otpremanje nije uspjelo, molim da se uvjerite da ste odobrili sve neophodne pristupe</string>
   <string name="odk_auto_note">Rezultati ODK auto-otpreme</string>
-  <string name="odk_auto_download_notification_title">Rezultati ODK auto-preuzimanja</string>
   <string name="notification_error">Greška u prikazu teksta obavještenja</string>
   <!--##############################################
     # GET BLANK FORM

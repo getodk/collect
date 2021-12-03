@@ -279,7 +279,6 @@
   <string name="show_sent_and_unsent_forms">Verzonden en niet-verzonden formulieren</string>
   <string name="show_unsent_forms">Alleen niet-verzonden formulieren</string>
   <string name="odk_auto_note">ODK automatische verzendresultaten</string>
-  <string name="odk_auto_download_notification_title">ODK automatische downloadresultaten</string>
   <string name="notification_error">Fout in de weergave van melding</string>
   <!--##############################################
     # GET BLANK FORM

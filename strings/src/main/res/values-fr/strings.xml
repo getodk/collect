@@ -499,7 +499,6 @@
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
   <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
-  <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
   <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <!--##############################################
     # GET BLANK FORM

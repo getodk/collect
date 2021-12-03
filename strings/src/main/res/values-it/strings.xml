@@ -499,7 +499,6 @@
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="odk_permissions_fail">Errore auto invio ODK, perpiacere assicurati di avere tutti i permessi necessari</string>
   <string name="odk_auto_note">Invio automatico dei risultati ODK</string>
-  <string name="odk_auto_download_notification_title">Download automatico dei risultati ODK</string>
   <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <!--##############################################
     # GET BLANK FORM
