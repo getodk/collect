@@ -113,7 +113,7 @@ public class FormManagementSettingsTest {
                 .assertText("One Question Updated");
 
         notificationDrawer.open()
-                .assertNotification("ODK Collect", "ODK auto-download results", "Success");
+                .assertNotification("ODK Collect", "Forms download succeeded", "All downloads succeeded!");
     }
 
     @Test
