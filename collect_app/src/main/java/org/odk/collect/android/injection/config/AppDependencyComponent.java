@@ -48,6 +48,7 @@ import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
+import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
@@ -284,6 +285,8 @@ public interface AppDependencyComponent {
     void inject(FormUriActivity formUriActivity);
 
     void inject(MapsPreferencesFragment mapsPreferencesFragment);
+
+    void inject(FormsDownloadResultDialog formsDownloadResultDialog);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
