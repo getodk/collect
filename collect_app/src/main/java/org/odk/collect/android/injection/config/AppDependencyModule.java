@@ -87,6 +87,7 @@ import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.utilities.FormsDownloadResultInterpreter;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
@@ -363,8 +364,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application) {
-        return new FormUpdatesDownloadedNotificationBuilder(application);
+    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter) {
+        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter);
     }
 
     @Provides
@@ -637,5 +638,10 @@ public class AppDependencyModule {
     @Provides
     public StringRequester providesStringRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
         return new StringRequesterImpl(intentLauncher, externalAppIntentProvider);
+    }
+
+    @Provides
+    public FormsDownloadResultInterpreter providesFormsDownloadResultInterpreter(Context context) {
+        return new FormsDownloadResultInterpreter(context);
     }
 }

@@ -30,7 +30,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -42,7 +42,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -54,7 +54,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -70,7 +70,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `onCloseDownloadingResult() should be called after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -85,7 +85,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `onCloseDownloadingResult() should be called after clicking on the 'NEGATIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf(downloadErrorItem))
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf(downloadErrorItem))
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -100,7 +100,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -115,7 +115,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors 'SHOW DETAILS' button should be hidden`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf<ErrorItem>())
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf<ErrorItem>())
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 1)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -127,7 +127,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf(downloadErrorItem))
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf(downloadErrorItem))
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 2)
 
         DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -144,7 +144,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are errors 'SHOW DETAILS' button should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf(downloadErrorItem))
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf(downloadErrorItem))
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -157,7 +157,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking on the 'NEGATIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf(downloadErrorItem))
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf(downloadErrorItem))
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
@@ -173,7 +173,7 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `Recreation should not change the state of dialog`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, arrayListOf(downloadErrorItem))
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, arrayListOf(downloadErrorItem))
         args.putInt(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, 2)
 
         val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
