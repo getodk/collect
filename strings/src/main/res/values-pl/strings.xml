@@ -469,7 +469,6 @@
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania ODK. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
   <string name="odk_auto_note">Wyniki automatycznego wysyłania ODK</string>
-  <string name="odk_auto_download_notification_title">Wyniki automatycznego pobierania ODK</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <!--##############################################
     # GET BLANK FORM

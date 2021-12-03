@@ -465,7 +465,6 @@
   <string name="send_in_progress">బ్యాక్ గ్రౌండ్ లో సెండ్ జరుగుతోంది , దయచేసి కాసేపట్లో మళ్ళీ ప్రయత్నించండి</string>
   <string name="odk_permissions_fail">ODK ఆటోమాటిక్ గా పంపే అనుమతి లేదు, దయచేసి మీరు అవసరమైన అన్ని అనుమతులను మంజూరు చేశారని నిర్ధారించుకోండి</string>
   <string name="odk_auto_note">ODK ఫలితాలను ఆటోమాటిక్ గా పంపండి</string>
-  <string name="odk_auto_download_notification_title">ODK ఆటోమాటిక్ డౌన్‌లోడ్ ఫలితాలు</string>
   <string name="notification_error">నోటిఫికేషన్ ను ప్రదర్శించడంలో ఎర్రర్ ఏర్పడింది</string>
   <!--##############################################
     # GET BLANK FORM

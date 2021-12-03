@@ -255,7 +255,6 @@
   <string name="change_view">تغییر چشم انداز</string>
   <string name="show_sent_and_unsent_forms">نمایش فورم های ارسال شده و ارسال ناشده</string>
   <string name="odk_auto_note">نتایج ارسال خودکار ODK</string>
-  <string name="odk_auto_download_notification_title">نتیاج دانلود خودکار ODK</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

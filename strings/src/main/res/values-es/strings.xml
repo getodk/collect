@@ -499,7 +499,6 @@
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
   <string name="odk_auto_note">ODK resultados de auto-envío</string>
-  <string name="odk_auto_download_notification_title">ODK resultados de auto-descarga</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <!--##############################################
     # GET BLANK FORM

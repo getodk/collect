@@ -505,7 +505,6 @@
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="odk_permissions_fail">فشل إذن ODK للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
   <string name="odk_auto_note">ODK يرسل النتائج تلقائيا</string>
-  <string name="odk_auto_download_notification_title">ODK ينزل النتائج تلقائيا</string>
   <string name="notification_error">خطأ في عرض اشعار النص</string>
   <!--##############################################
     # GET BLANK FORM

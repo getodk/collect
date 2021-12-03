@@ -505,7 +505,6 @@
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
   <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="odk_auto_note">Výsledky automatického odesílání ODK</string>
-  <string name="odk_auto_download_notification_title">Výsledky automatického stahování ODK</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <!--##############################################
     # GET BLANK FORM

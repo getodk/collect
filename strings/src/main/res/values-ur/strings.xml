@@ -396,7 +396,6 @@
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
   <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
   <string name="odk_auto_note">او ڈی کے آٹو سینڈ کے نتائج</string>
-  <string name="odk_auto_download_notification_title">او ڈی کے آٹو ڈاؤن لوڈ کے نتائج</string>
   <string name="notification_error">نوٹیفیکیشن ٹیکسٹ دکھاتے وقت خرابی </string>
   <!--##############################################
     # GET BLANK FORM

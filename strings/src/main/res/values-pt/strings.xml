@@ -487,7 +487,6 @@ Escolher Imagem</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor, tente novamente em alguns instantes</string>
   <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se de que concedeu todas as permissões requisitadas.</string>
   <string name="odk_auto_note">Resultados de envio automático do ODK</string>
-  <string name="odk_auto_download_notification_title">Resultados de download automático do ODK</string>
   <string name="notification_error">Erro ao exibir texto de notificação.</string>
   <!--##############################################
     # GET BLANK FORM

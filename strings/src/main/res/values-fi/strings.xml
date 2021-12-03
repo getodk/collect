@@ -499,7 +499,6 @@
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
   <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
-  <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <!--##############################################
     # GET BLANK FORM

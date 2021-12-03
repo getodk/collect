@@ -498,7 +498,6 @@
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
   <string name="odk_auto_note">ODK Auto-Send-Ergebnisse</string>
-  <string name="odk_auto_download_notification_title">ODK Auto-Download-Ergebnisse</string>
   <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
   <!--##############################################
     # GET BLANK FORM

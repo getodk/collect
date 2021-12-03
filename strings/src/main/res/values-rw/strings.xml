@@ -495,7 +495,6 @@ Hashize: %2$s</string>
   <string name="send_in_progress">Ohereza ibyagaragajwe bitaremezwa, hita wongera ugerageze.</string>
   <string name="odk_permissions_fail">ODK ihita yohereza ibitemejwe, izere neza niba wemeje ibisabwa byose.</string>
   <string name="odk_auto_note">ODK yohereje ibisubizo</string>
-  <string name="odk_auto_download_notification_title">ODK yadawunirodinze ibisubizo</string>
   <string name="notification_error">Birerekanako habayeho ikosa</string>
   <!--##############################################
     # GET BLANK FORM
