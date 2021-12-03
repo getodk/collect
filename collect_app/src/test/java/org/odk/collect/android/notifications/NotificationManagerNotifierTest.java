@@ -22,6 +22,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -29,12 +30,13 @@ public class NotificationManagerNotifierTest {
 
     private NotificationManagerNotifier notifier;
     private NotificationManager notificationManager;
+    private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder = mock(FormUpdatesDownloadedNotificationBuilder.class);
 
     @Before
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider());
+        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider(), formUpdatesDownloadedNotificationBuilder);
     }
 
     @Test
