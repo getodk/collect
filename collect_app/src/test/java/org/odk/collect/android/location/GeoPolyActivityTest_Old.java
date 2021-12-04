@@ -65,7 +65,7 @@ public class GeoPolyActivityTest_Old {
     }
 
     @Test
-    //Cm accuracy #4198
+    //Cm accuracy #4198 +
     public void locationAccuracyIsFormattedInAppropriateUnit() {
         GeoPolyActivity activity = controller.create().start().resume().visible().get();
         TextView locationStatus = activity.findViewById(R.id.location_status);
