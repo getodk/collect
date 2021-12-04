@@ -40,7 +40,7 @@ import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
-public class GeoPolyActivityTest_Old {
+public class GeoPolyActivityTestOld {
 
     static {
         GeoUtils.simulateAccuracy = false;
