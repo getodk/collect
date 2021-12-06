@@ -92,7 +92,7 @@ public final class CollectHelpers {
     }
 
     public static String createProject(Project project) {
-        Project.Saved savedProject = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectImporter().importNewProject(project);
+        Project.Saved savedProject = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext()).projectsRepository().save(project);
         return savedProject.getUuid();
     }
 }

@@ -109,12 +109,11 @@ class QrCodeProjectCreatorDialogTest {
                 }
             }
             override fun providesProjectCreator(
-                projectImporter: ProjectImporter?,
-                projectsRepository: ProjectsRepository?,
-                currentProjectProvider: CurrentProjectProvider?,
-                settingsImporter: SettingsImporter?,
+                projectsRepository: ProjectsRepository,
+                currentProjectProvider: CurrentProjectProvider,
+                settingsImporter: SettingsImporter,
                 context: Context
-            ): ProjectCreator {
+            ): ProjectCreator? {
                 return mock {
                     `when`(it.createNewProject("foo")).thenReturn(true)
                 }
@@ -145,12 +144,11 @@ class QrCodeProjectCreatorDialogTest {
                 }
             }
             override fun providesProjectCreator(
-                projectImporter: ProjectImporter?,
-                projectsRepository: ProjectsRepository?,
-                currentProjectProvider: CurrentProjectProvider?,
-                settingsImporter: SettingsImporter?,
+                projectsRepository: ProjectsRepository,
+                currentProjectProvider: CurrentProjectProvider,
+                settingsImporter: SettingsImporter,
                 context: Context
-            ): ProjectCreator {
+            ): ProjectCreator? {
                 return projectCreator
             }
         })

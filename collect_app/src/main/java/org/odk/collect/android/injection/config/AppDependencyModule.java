@@ -105,7 +105,6 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
 import org.odk.collect.android.projects.ProjectDetailsCreator;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -466,10 +465,10 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectCreator providesProjectCreator(ProjectImporter projectImporter, ProjectsRepository projectsRepository,
+    public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository,
                                                  CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter,
                                                  Context context) {
-        return new ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter);
+        return new ProjectCreator(projectsRepository, currentProjectProvider, settingsImporter);
     }
 
     @Provides
@@ -517,11 +516,6 @@ public class AppDependencyModule {
     @Provides
     public ProjectPreferencesViewModel.Factory providesProjectPreferencesViewModel(AdminPasswordProvider adminPasswordProvider) {
         return new ProjectPreferencesViewModel.Factory(adminPasswordProvider);
-    }
-
-    @Provides
-    public ProjectImporter providesProjectImporter(ProjectsRepository projectsRepository, StoragePathProvider storagePathProvider) {
-        return new ProjectImporter(projectsRepository);
     }
 
     @Provides

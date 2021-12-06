@@ -181,7 +181,7 @@ class FormsUpdaterTest {
     }
 
     private fun setupProject(): Project.Saved {
-        val projectImporter = component.projectImporter()
-        return projectImporter.importNewProject(Project.New("blah", "B", "#ffffff"))
+        val projectsRepository = component.projectsRepository()
+        return projectsRepository.save(Project.New("blah", "B", "#ffffff"))
     }
 }

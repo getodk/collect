@@ -8,17 +8,17 @@ import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.projects.Project
+import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
 class FirstLaunchActivity : CollectAbstractActivity() {
 
     @Inject
-    lateinit var projectImporter: ProjectImporter
+    lateinit var projectsRepository: ProjectsRepository
 
     @Inject
     lateinit var versionInformation: VersionInformation
@@ -57,7 +57,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
         binding.configureLater.setOnClickListener {
             Analytics.log(AnalyticsEvents.TRY_DEMO)
 
-            projectImporter.importNewProject(Project.DEMO_PROJECT)
+            projectsRepository.save(Project.DEMO_PROJECT)
             currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
