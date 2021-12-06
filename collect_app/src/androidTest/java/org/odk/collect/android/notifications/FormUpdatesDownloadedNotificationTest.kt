@@ -62,7 +62,7 @@ class FormUpdatesDownloadedNotificationTest {
 
         notificationDrawer
             .open()
-            .assertNotification(expectedAppName, expectedTitle, expectedText)
+            .assertNotification(expectedAppName, expectedTitle, expectedText, Project.DEMO_PROJECT_NAME)
             .clickNotification(expectedAppName, expectedTitle, expectedTitle, FillBlankFormPage())
     }
 
@@ -78,7 +78,7 @@ class FormUpdatesDownloadedNotificationTest {
 
         notificationDrawer
             .open()
-            .assertNotification(expectedAppName, expectedTitle, expectedText)
+            .assertNotification(expectedAppName, expectedTitle, expectedText, Project.DEMO_PROJECT_NAME)
             .clickNotification(expectedAppName, expectedTitle, expectedTitle, FormsDownloadErrorPage())
     }
 

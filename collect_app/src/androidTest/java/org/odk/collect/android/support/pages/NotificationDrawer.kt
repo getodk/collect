@@ -31,12 +31,20 @@ class NotificationDrawer {
         return this
     }
 
-    fun assertNotification(appName: String, title: String, body: String): NotificationDrawer {
+    @JvmOverloads
+    fun assertNotification(appName: String, title: String, body: String, subtext: String? = null): NotificationDrawer {
         val device = waitForNotification(appName)
+
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement.text, `is`(title))
+
         val bodyElement = device.findObject(By.text(body))
         assertThat(bodyElement.text, `is`(body))
+
+        subtext?.let {
+            val subtextElement = device.findObject(By.text(subtext))
+            assertThat(subtextElement.text, `is`(subtext))
+        }
         return this
     }
 
