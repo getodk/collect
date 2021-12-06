@@ -100,10 +100,10 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                     }
                     "hash" -> {
                         hash = XFormParser.getXMLText(child, true)
-                        if (hash != null && (hash.isEmpty() || !hash.startsWith(MD5_STRING_PREFIX))) {
-                            hash = null
+                        hash = if (hash != null && (hash.isEmpty() || !hash.startsWith(MD5_STRING_PREFIX))) {
+                            null
                         } else {
-                            hash = hash.substring(MD5_STRING_PREFIX.length)
+                            hash.substring(MD5_STRING_PREFIX.length)
                         }
                     }
                 }
@@ -173,10 +173,10 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
                         }
                         "hash" -> {
                             hash = XFormParser.getXMLText(child, true)
-                            if (hash != null && hash.isEmpty()) {
-                                hash = null
+                            hash = if (hash != null && hash.isEmpty()) {
+                                null
                             } else {
-                                hash = hash.substring(MD5_STRING_PREFIX.length)
+                                hash.substring(MD5_STRING_PREFIX.length)
                             }
                         }
                         "downloadUrl" -> {
