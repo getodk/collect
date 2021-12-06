@@ -24,22 +24,22 @@ class NotificationDrawer {
         }
     }
 
-    fun assertNotification(appName: String, title: String): NotificationDrawer {
-        val device = waitForNotification(appName)
-        val titleElement = device.findObject(By.text(title))
-        assertThat(titleElement.text, `is`(title))
-        return this
-    }
-
     @JvmOverloads
-    fun assertNotification(appName: String, title: String, body: String, subtext: String? = null): NotificationDrawer {
+    fun assertNotification(
+        appName: String,
+        title: String,
+        body: String? = null,
+        subtext: String? = null
+    ): NotificationDrawer {
         val device = waitForNotification(appName)
 
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement.text, `is`(title))
 
-        val bodyElement = device.findObject(By.text(body))
-        assertThat(bodyElement.text, `is`(body))
+        body?.let {
+            val bodyElement = device.findObject(By.text(body))
+            assertThat(bodyElement.text, `is`(body))
+        }
 
         subtext?.let {
             val subtextElement = device.findObject(By.text(subtext))
