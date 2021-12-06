@@ -88,8 +88,8 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onUpdatesDownloaded(Map<ServerFormDetails, String> result) {
-        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesDownloadedNotificationBuilder.build(result));
+    public void onUpdatesDownloaded(Map<ServerFormDetails, String> result, String projectId) {
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesDownloadedNotificationBuilder.build(result, projectId));
     }
 
     @Override

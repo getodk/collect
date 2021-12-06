@@ -12,15 +12,17 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.errors.ErrorActivity
+import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.Serializable
 
 class FormUpdatesDownloadedNotificationBuilder(
     private val application: Application,
-    private val formsDownloadResultInterpreter: FormsDownloadResultInterpreter
+    private val formsDownloadResultInterpreter: FormsDownloadResultInterpreter,
+    private val projectsRepository: ProjectsRepository
 ) {
 
-    fun build(result: Map<ServerFormDetails, String>): Notification {
+    fun build(result: Map<ServerFormDetails, String>, projectId: String): Notification {
         val allFormsDownloadedSuccessfully = formsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
 
         val intent = if (allFormsDownloadedSuccessfully) {
@@ -57,6 +59,7 @@ class FormUpdatesDownloadedNotificationBuilder(
             setContentIntent(contentIntent)
             setContentTitle(title)
             setContentText(message)
+            setSubText(projectsRepository.get(projectId)?.name)
             setSmallIcon(IconUtils.getNotificationAppIcon())
             setAutoCancel(true)
         }.build()
