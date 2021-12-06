@@ -10,7 +10,7 @@ public interface Notifier {
 
     void onUpdatesAvailable(List<ServerFormDetails> updates);
 
-    void onUpdatesDownloaded(Map<ServerFormDetails, String> result);
+    void onUpdatesDownloaded(Map<ServerFormDetails, String> result, String projectId);
 
     void onSync(FormSourceException exception);
 

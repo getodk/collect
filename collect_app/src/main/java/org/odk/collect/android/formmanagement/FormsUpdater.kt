@@ -61,7 +61,7 @@ class FormsUpdater(
                         TranslationHandler.getString(context, R.string.failure)
                     )
 
-                    notifier.onUpdatesDownloaded(results)
+                    notifier.onUpdatesDownloaded(results, projectId)
                 } else {
                     notifier.onUpdatesAvailable(updatedForms)
                 }

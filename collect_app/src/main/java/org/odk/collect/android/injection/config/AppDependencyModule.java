@@ -365,8 +365,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter) {
-        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter);
+    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter, ProjectsRepository projectsRepository) {
+        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter, projectsRepository);
     }
 
     @Provides
