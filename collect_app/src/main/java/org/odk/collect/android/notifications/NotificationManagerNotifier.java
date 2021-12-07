@@ -18,6 +18,7 @@ import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class NotificationManagerNotifier implements Notifier {
     private final Application application;
     private final NotificationManager notificationManager;
     private final SettingsProvider settingsProvider;
+    private final ProjectsRepository projectsRepository;
     private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder;
     private final FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder;
 
@@ -47,11 +49,13 @@ public class NotificationManagerNotifier implements Notifier {
 
     public NotificationManagerNotifier(Application application,
                                        SettingsProvider settingsProvider,
+                                       ProjectsRepository projectsRepository,
                                        FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder,
                                        FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.settingsProvider = settingsProvider;
+        this.projectsRepository = projectsRepository;
         this.formUpdatesDownloadedNotificationBuilder = formUpdatesDownloadedNotificationBuilder;
         this.formsSyncFailedNotificationBuilder = formsSyncFailedNotificationBuilder;
 
@@ -92,13 +96,13 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onUpdatesDownloaded(Map<ServerFormDetails, String> result, String projectId) {
-        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesDownloadedNotificationBuilder.build(result, projectId));
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesDownloadedNotificationBuilder.build(result, projectsRepository.get(projectId).getName()));
     }
 
     @Override
     public void onSync(@Nullable FormSourceException exception, String projectId) {
         if (exception != null) {
-            notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, formsSyncFailedNotificationBuilder.build(exception, projectId));
+            notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, formsSyncFailedNotificationBuilder.build(exception, projectsRepository.get(projectId).getName()));
         } else {
             notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
         }

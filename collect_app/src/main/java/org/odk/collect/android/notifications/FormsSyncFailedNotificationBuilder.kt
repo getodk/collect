@@ -10,15 +10,11 @@ import org.odk.collect.android.activities.FillBlankFormActivity
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.strings.localization.getLocalizedString
 
-class FormsSyncFailedNotificationBuilder(
-    private val application: Application,
-    private val projectsRepository: ProjectsRepository
-) {
+class FormsSyncFailedNotificationBuilder(private val application: Application) {
 
-    fun build(exception: FormSourceException, projectId: String): Notification {
+    fun build(exception: FormSourceException, projectName: String): Notification {
         val contentIntent = PendingIntent.getActivity(
             application,
             NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
@@ -32,7 +28,7 @@ class FormsSyncFailedNotificationBuilder(
         ).apply {
             setContentIntent(contentIntent)
             setContentTitle(application.getLocalizedString(R.string.form_update_error))
-            setSubText(projectsRepository.get(projectId)?.name)
+            setSubText(projectName)
             setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(FormSourceExceptionMapper(application).getMessage(exception))

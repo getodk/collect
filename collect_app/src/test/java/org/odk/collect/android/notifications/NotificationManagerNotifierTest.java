@@ -15,7 +15,9 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
+import org.odk.collect.projects.InMemProjectsRepository;
 import org.odk.collect.projects.Project;
+import org.odk.collect.projects.ProjectsRepository;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class NotificationManagerNotifierTest {
 
     private NotificationManagerNotifier notifier;
     private NotificationManager notificationManager;
+    private final ProjectsRepository projectsRepository = new InMemProjectsRepository();
     private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder = mock(FormUpdatesDownloadedNotificationBuilder.class);
     private final FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder = mock(FormsSyncFailedNotificationBuilder.class);
 
@@ -38,7 +41,7 @@ public class NotificationManagerNotifierTest {
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider(), formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
+        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider(), projectsRepository, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
     }
 
     @Test

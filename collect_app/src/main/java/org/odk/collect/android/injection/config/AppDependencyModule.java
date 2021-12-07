@@ -366,18 +366,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter, ProjectsRepository projectsRepository) {
-        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter, projectsRepository);
+    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter) {
+        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter);
     }
 
     @Provides
-    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application, ProjectsRepository projectsRepository) {
-        return new FormsSyncFailedNotificationBuilder(application, projectsRepository);
+    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application) {
+        return new FormsSyncFailedNotificationBuilder(application);
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder) {
-        return new NotificationManagerNotifier(application, settingsProvider, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder, ProjectsRepository projectsRepository) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
     }
 
     @Provides
