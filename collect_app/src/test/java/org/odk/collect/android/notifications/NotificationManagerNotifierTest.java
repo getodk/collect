@@ -15,6 +15,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.ManifestFile;
+import org.odk.collect.projects.Project;
 
 import java.util.List;
 
@@ -42,10 +43,10 @@ public class NotificationManagerNotifierTest {
 
     @Test
     public void onSync_whenExceptionNull_clearsNotification() {
-        notifier.onSync(new FormSourceException.FetchError());
+        notifier.onSync(new FormSourceException.FetchError(), Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
-        notifier.onSync(null);
+        notifier.onSync(null, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(0));
     }
 

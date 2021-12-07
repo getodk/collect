@@ -12,7 +12,7 @@ public interface Notifier {
 
     void onUpdatesDownloaded(Map<ServerFormDetails, String> result, String projectId);
 
-    void onSync(FormSourceException exception);
+    void onSync(FormSourceException exception, String projectId);
 
     void onSubmission(boolean failure, String message);
 }

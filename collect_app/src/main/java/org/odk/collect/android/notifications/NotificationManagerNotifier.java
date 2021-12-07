@@ -96,9 +96,9 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onSync(@Nullable FormSourceException exception) {
+    public void onSync(@Nullable FormSourceException exception, String projectId) {
         if (exception != null) {
-            notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, formsSyncFailedNotificationBuilder.build(exception));
+            notificationManager.notify(FORM_SYNC_NOTIFICATION_ID, formsSyncFailedNotificationBuilder.build(exception, projectId));
         } else {
             notificationManager.cancel(FORM_SYNC_NOTIFICATION_ID);
         }

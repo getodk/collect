@@ -98,11 +98,11 @@ class FormsUpdater(
                 val exception = try {
                     serverFormsSynchronizer.synchronize()
                     syncStatusAppState.finishSync(projectId, null)
-                    notifier.onSync(null)
+                    notifier.onSync(null, projectId)
                     null
                 } catch (e: FormSourceException) {
                     syncStatusAppState.finishSync(projectId, e)
-                    notifier.onSync(e)
+                    notifier.onSync(e, projectId)
                     e
                 }
 

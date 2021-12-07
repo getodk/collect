@@ -371,8 +371,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application) {
-        return new FormsSyncFailedNotificationBuilder(application);
+    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application, ProjectsRepository projectsRepository) {
+        return new FormsSyncFailedNotificationBuilder(application, projectsRepository);
     }
 
     @Provides
