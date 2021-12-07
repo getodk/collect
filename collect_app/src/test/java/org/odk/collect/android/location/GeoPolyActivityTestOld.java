@@ -42,10 +42,6 @@ import org.robolectric.shadows.ShadowApplication;
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTestOld {
 
-    static {
-        GeoUtils.simulateAccuracy = false;
-    }
-
     @Rule
     public MockitoRule rule = MockitoJUnit.rule();
     private ActivityController<GeoPolyActivity> controller;

@@ -18,10 +18,6 @@ import org.odk.collect.geo.GeoUtils;
 @RunWith(AndroidJUnit4.class)
 public class GeoWidgetUtilsTest {
 
-    static {
-        GeoUtils.simulateAccuracy = false;
-    }
-
     private final Context context = ApplicationProvider.getApplicationContext();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 

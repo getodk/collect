@@ -26,10 +26,6 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class GeoUtilsTest {
 
-    static {
-        GeoUtils.simulateAccuracy = false;
-    }
-
     private final List<MapPoint> points = new ArrayList<>(Arrays.asList(
             new MapPoint(11, 12, 13, 14),
             new MapPoint(21, 22, 23, 24),

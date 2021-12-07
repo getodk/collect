@@ -292,8 +292,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     public String getAccuracyMessage(@NonNull Location location) {
         //Cm accuracy #4198
-        return GeoUtils.getAccuracyUnitString(this,
-                GeoUtils.simulateAccuracy ? GeoUtils.SIMULATED_ACCURACY : location.getAccuracy());
+        return GeoUtils.getAccuracyUnitString(this, location.getAccuracy());
     }
 
     public String getProviderMessage(@NonNull Location location) {

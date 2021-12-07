@@ -1,7 +1,5 @@
 package org.odk.collect.android.widgets.utilities;
 
-import static org.odk.collect.geo.GeoUtils.SIMULATED_ACCURACY;
-import static org.odk.collect.geo.GeoUtils.simulateAccuracy;
 import static org.odk.collect.shared.strings.StringUtils.removeEnd;
 
 import android.content.Context;
@@ -29,10 +27,6 @@ public final class GeoWidgetUtils {
     public static String getGeoPointAnswerToDisplay(Context context, String answer) {
         try {
             if (answer != null && !answer.isEmpty()) {
-                if (simulateAccuracy) {
-                    answer = answer.replaceAll("\\b\\d+\\.\\d$",
-                            String.valueOf(SIMULATED_ACCURACY));
-                }
                 String[] parts = answer.split(" ");
                 //Guard against bad answer
                 if (parts.length < 4) {

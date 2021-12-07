@@ -27,11 +27,6 @@ import org.robolectric.shadows.ShadowApplication;
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
 
-    //For 4198
-    static {
-        GeoUtils.simulateAccuracy = false;
-    }
-
     private final FakeMapFragment mapFragment = new FakeMapFragment();
 
     @Before
