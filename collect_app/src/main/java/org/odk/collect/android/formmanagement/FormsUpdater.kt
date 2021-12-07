@@ -63,7 +63,7 @@ class FormsUpdater(
 
                     notifier.onUpdatesDownloaded(results, projectId)
                 } else {
-                    notifier.onUpdatesAvailable(updatedForms)
+                    notifier.onUpdatesAvailable(updatedForms, projectId)
                 }
             }
 

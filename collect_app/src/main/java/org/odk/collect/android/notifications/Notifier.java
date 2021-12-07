@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface Notifier {
 
-    void onUpdatesAvailable(List<ServerFormDetails> updates);
+    void onUpdatesAvailable(List<ServerFormDetails> updates, String projectId);
 
     void onUpdatesDownloaded(Map<ServerFormDetails, String> result, String projectId);
 

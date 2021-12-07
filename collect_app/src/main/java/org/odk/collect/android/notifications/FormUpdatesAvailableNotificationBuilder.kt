@@ -13,7 +13,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 
 class FormUpdatesAvailableNotificationBuilder(private val application: Application) {
 
-    fun build(): Notification {
+    fun build(projectName: String): Notification {
         val intent = Intent(application, FormDownloadListActivity::class.java).apply {
             putExtra(FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS, true)
         }
@@ -32,6 +32,7 @@ class FormUpdatesAvailableNotificationBuilder(private val application: Applicati
             setContentIntent(contentIntent)
             setContentTitle(application.getLocalizedString(R.string.form_updates_available))
             setContentText(null)
+            setSubText(projectName)
             setSmallIcon(IconUtils.getNotificationAppIcon())
             setAutoCancel(true)
         }.build()

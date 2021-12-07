@@ -60,11 +60,11 @@ public class NotificationManagerNotifierTest {
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         );
 
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         notificationManager.cancelAll();
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(0));
     }
 
@@ -74,7 +74,7 @@ public class NotificationManagerNotifierTest {
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, null)
         );
 
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
@@ -82,7 +82,7 @@ public class NotificationManagerNotifierTest {
         );
 
         notificationManager.cancelAll();
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
     }
 
@@ -92,7 +92,7 @@ public class NotificationManagerNotifierTest {
                 new ServerFormDetails("form-1", "http://example.com/form-1", "form-1", "server", "form-1-hash", false, true, new ManifestFile("manifest-hash", emptyList()))
         );
 
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
 
         updates = asList(
@@ -100,7 +100,7 @@ public class NotificationManagerNotifierTest {
         );
 
         notificationManager.cancelAll();
-        notifier.onUpdatesAvailable(updates);
+        notifier.onUpdatesAvailable(updates, Project.DEMO_PROJECT_ID);
         assertThat(shadowOf(notificationManager).getAllNotifications().size(), is(1));
     }
 }

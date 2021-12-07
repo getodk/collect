@@ -71,14 +71,14 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     @Override
-    public void onUpdatesAvailable(List<ServerFormDetails> updates) {
+    public void onUpdatesAvailable(List<ServerFormDetails> updates, String projectId) {
         Settings metaPrefs = settingsProvider.getMetaSettings();
         Set<String> updateId = updates.stream().map(f -> f.getFormId() + f.getHash() + (f.getManifest() != null ? f.getManifest().getHash() : null)).collect(toSet());
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION).equals(updateId)) {
             return;
         }
 
-        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesAvailableNotificationBuilder.build());
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesAvailableNotificationBuilder.build(projectsRepository.get(projectId).getName()));
 
         metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId);
     }
