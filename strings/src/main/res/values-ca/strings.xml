@@ -276,7 +276,6 @@
   <string name="show_sent_and_unsent_forms">Formularis enviats i pendents</string>
   <string name="show_unsent_forms">Nomes Formularis pendents d\'enviar</string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
-  <string name="notification_error">Error mostrant notificació</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

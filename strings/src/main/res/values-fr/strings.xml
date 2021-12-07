@@ -498,7 +498,6 @@
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
-  <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

@@ -286,7 +286,6 @@
   <string name="show_sent_and_unsent_forms">Näita saadetud ja saatmata vorme</string>
   <string name="show_unsent_forms">Näita </string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
-  <string name="notification_error">Viga teate näitamisel </string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

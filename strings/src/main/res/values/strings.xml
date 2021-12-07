@@ -619,7 +619,6 @@
     <string name="send_in_progress">Background send running, please try again shortly</string>
 
     <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
-    <string name="notification_error">Error displaying notification text</string>
 
     <string name="forms_upload_succeeded">Forms upload succeeded</string>
     <string name="forms_upload_failed">Forms upload failed</string>

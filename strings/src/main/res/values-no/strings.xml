@@ -228,7 +228,6 @@
   <string name="show_sent_and_unsent_forms">Sendte og usendte skjemaer</string>
   <string name="show_unsent_forms">Usendte skjemaer</string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
-  <string name="notification_error">Feil ved visning av kvitteringstekst</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

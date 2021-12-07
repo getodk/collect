@@ -319,7 +319,6 @@
   <string name="show_sent_and_unsent_forms">Trego formularët e dërguar dhe të padërguar</string>
   <string name="show_unsent_forms">Trego formularët e padërguar</string>
   <string name="send_in_progress">Një dërgim po ekzekutohet në background, lutemi provoni sërish pas pak.</string>
-  <string name="notification_error">Gabim në shfaqjen e tekstit të njoftimit</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

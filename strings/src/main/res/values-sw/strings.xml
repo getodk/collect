@@ -414,7 +414,6 @@
   <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
   <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
-  <string name="notification_error">Kosa linaonesha ujumbe wa maandishi</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

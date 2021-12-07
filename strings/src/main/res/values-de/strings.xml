@@ -497,7 +497,6 @@
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
-  <string name="notification_error">Fehler beim Anzeigen des Benachrichtigungstextes</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

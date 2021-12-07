@@ -235,7 +235,6 @@
   <string name="change_view">ხედის შეცვლა</string>
   <string name="show_sent_and_unsent_forms">გაგზავნილი და გაუგზავნელი ფორმები</string>
   <string name="show_unsent_forms">მხოლოდ გაუგზავნელი ფორმები</string>
-  <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

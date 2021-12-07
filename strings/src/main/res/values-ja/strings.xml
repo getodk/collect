@@ -489,7 +489,6 @@
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
-  <string name="notification_error">通知テキストの表示中にエラー</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

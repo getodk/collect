@@ -308,7 +308,6 @@
   <string name="show_sent_and_unsent_forms">भेजे गए और न भेजे गए फॉर्म दिखाएं</string>
   <string name="show_unsent_forms">नहीं भेजे हुए फॉर्म दिखाएं</string>
   <string name="send_in_progress">पृष्ठभूमि में भेजना जारी, कृपया शीघ्र पुनः प्रयास करें</string>
-  <string name="notification_error">सूचना वाकया प्रदर्शित करने में त्रुटि</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

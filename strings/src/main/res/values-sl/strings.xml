@@ -271,7 +271,6 @@
   <string name="show_unsent_forms">Pokaži neposlane obrazce</string>
   <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
   <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
-  <string name="notification_error">Napaka pri prikazu obvestila</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

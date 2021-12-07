@@ -227,7 +227,6 @@
   <string name="change_view">Verander Vertoning</string>
   <string name="show_sent_and_unsent_forms">Wys Gestuurde en Ongestuurde Vorms</string>
   <string name="show_unsent_forms">Wys Ongestuurde Vorms</string>
-  <string name="notification_error">Fout met vertoon van kennisgewing teks</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

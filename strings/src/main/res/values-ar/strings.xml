@@ -504,7 +504,6 @@
   <string name="media_upload_error">فشل في تحميل ملف الوسائط المتعددة الغير موجود: %1$s</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="odk_permissions_fail">فشل إذن ODK للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
-  <string name="notification_error">خطأ في عرض اشعار النص</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
