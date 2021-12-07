@@ -622,6 +622,10 @@
     <string name="odk_auto_note">ODK auto-send results</string>
     <string name="notification_error">Error displaying notification text</string>
 
+    <string name="forms_upload_succeeded">Forms upload succeeded</string>
+    <string name="forms_upload_failed">Forms upload failed</string>
+    <string name="all_uploads_succeeded">All uploads succeeded!</string>
+
     <!--
     ##############################################
     # GET BLANK FORM
