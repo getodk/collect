@@ -10,7 +10,6 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.preferences.keys.MetaKeys;
@@ -29,9 +28,7 @@ import javax.annotation.Nullable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static java.util.stream.Collectors.toSet;
-import static org.odk.collect.android.activities.FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION;
 
 public class NotificationManagerNotifier implements Notifier {
 
@@ -42,6 +39,7 @@ public class NotificationManagerNotifier implements Notifier {
     private final ProjectsRepository projectsRepository;
     private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder;
     private final FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder;
+    private final FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder;
 
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     public static final int FORM_SYNC_NOTIFICATION_ID = 1;
@@ -51,13 +49,15 @@ public class NotificationManagerNotifier implements Notifier {
                                        SettingsProvider settingsProvider,
                                        ProjectsRepository projectsRepository,
                                        FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder,
-                                       FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder) {
+                                       FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder,
+                                       FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder) {
         this.application = application;
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.settingsProvider = settingsProvider;
         this.projectsRepository = projectsRepository;
         this.formUpdatesDownloadedNotificationBuilder = formUpdatesDownloadedNotificationBuilder;
         this.formsSyncFailedNotificationBuilder = formsSyncFailedNotificationBuilder;
+        this.formUpdatesAvailableNotificationBuilder = formUpdatesAvailableNotificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager != null) {
@@ -78,18 +78,7 @@ public class NotificationManagerNotifier implements Notifier {
             return;
         }
 
-        Intent intent = new Intent(application, FormDownloadListActivity.class);
-        intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
-                .setContentIntent(contentIntent)
-                .setContentTitle(TranslationHandler.getString(application, R.string.form_updates_available))
-                .setContentText(null)
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setAutoCancel(true);
-
-        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, builder.build());
+        notificationManager.notify(FORM_UPDATE_NOTIFICATION_ID, formUpdatesAvailableNotificationBuilder.build());
 
         metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId);
     }
