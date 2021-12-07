@@ -13,6 +13,10 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
+import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
+import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
+import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.projects.InMemProjectsRepository

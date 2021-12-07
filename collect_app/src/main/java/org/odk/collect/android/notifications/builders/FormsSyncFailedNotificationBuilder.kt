@@ -1,4 +1,4 @@
-package org.odk.collect.android.notifications
+package org.odk.collect.android.notifications.builders
 
 import android.app.Application
 import android.app.Notification
@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FillBlankFormActivity
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
+import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.strings.localization.getLocalizedString

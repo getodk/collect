@@ -1,4 +1,4 @@
-package org.odk.collect.android.notifications
+package org.odk.collect.android.notifications.builders
 
 import android.app.Application
 import android.app.Notification
@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormDownloadListActivity
+import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.strings.localization.getLocalizedString
