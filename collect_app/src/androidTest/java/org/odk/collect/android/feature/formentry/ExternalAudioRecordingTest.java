@@ -54,22 +54,12 @@ public class ExternalAudioRecordingTest {
                 }
             }))
             .around(rule);
+
     @Test
     public void onAudioQuestion_whenAudioQualityIsExternal_usesExternalRecorder() throws Exception {
         new MainMenuPage()
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
-    }
-
-    @Test
-    public void onAudioQuestion_withoutAudioQuality_usesExternalRecorder() {
-        new MainMenuPage()
-                .copyForm("audio-question.xml")
-                .startBlankForm("Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
                 .assertTextNotDisplayed(R.string.capture_audio)
