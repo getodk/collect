@@ -15,7 +15,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 
 class FormsSubmissionNotificationBuilder(private val application: Application) {
 
-    fun build(submissionFailed: Boolean, message: String): Notification {
+    fun build(submissionFailed: Boolean, message: String, projectName: String): Notification {
         val notifyIntent = Intent(application, NotificationActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
             putExtra(
@@ -41,6 +41,7 @@ class FormsSubmissionNotificationBuilder(private val application: Application) {
             setContentIntent(pendingNotify)
             setContentTitle(TranslationHandler.getString(application, R.string.odk_auto_note))
             setContentText(content)
+            setSubText(projectName)
             setSmallIcon(IconUtils.getNotificationAppIcon())
             setAutoCancel(true)
         }.build()

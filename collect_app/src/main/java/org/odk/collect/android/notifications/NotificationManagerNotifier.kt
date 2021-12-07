@@ -71,10 +71,10 @@ class NotificationManagerNotifier(
         }
     }
 
-    override fun onSubmission(failure: Boolean, message: String) {
+    override fun onSubmission(failure: Boolean, message: String, projectId: String) {
         notificationManager.notify(
             AUTO_SEND_RESULT_NOTIFICATION_ID,
-            formsSubmissionNotificationBuilder.build(failure, message)
+            formsSubmissionNotificationBuilder.build(failure, message, getProjectName(projectId))
         )
     }
 
