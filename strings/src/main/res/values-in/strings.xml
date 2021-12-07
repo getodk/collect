@@ -495,7 +495,6 @@
   <string name="media_upload_error">Tidak berhasil mengunggah berkas media yang tidak ditemukan: %1$s</string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, mohon coba beberapa saat lagi.</string>
   <string name="odk_permissions_fail">Izin pengiriman otomatis tidak berhasil, mohon pastikan semua izin yang dibutuhkan telah diberikan.</string>
-  <string name="odk_auto_note">Hasil pengiriman otomatis ODK</string>
   <string name="notification_error">Kesalahan menampilkan teks notifikasi.</string>
   <!--##############################################
     # GET BLANK FORM
@@ -851,7 +850,6 @@
   <string name="canceling">Membatalkan</string>
   <string name="notification_channel_name">Pemberitahuan umum</string>
   <string name="success">Berhasil</string>
-  <string name="failures">Tidak Berhasil</string>
   <string name="error_occured">Terjadi Kesalahan</string>
   <string name="please_wait">Mohon tunggu sebentar…</string>
   <string name="please_wait_long">Mohon tunggu. Proses ini membutuhkan waktu beberapa menit.</string>

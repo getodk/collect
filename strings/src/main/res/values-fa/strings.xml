@@ -254,7 +254,6 @@
   <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
   <string name="change_view">تغییر چشم انداز</string>
   <string name="show_sent_and_unsent_forms">نمایش فورم های ارسال شده و ارسال ناشده</string>
-  <string name="odk_auto_note">نتایج ارسال خودکار ODK</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -452,7 +451,6 @@
   <string name="do_not_exit">انصراف</string>
   <string name="canceling">لغو کردن</string>
   <string name="success">موفقیت </string>
-  <string name="failures">ناکامی</string>
   <string name="error_occured">خطا اتفاق افتاده است</string>
   <string name="please_wait">لطفاً برای چند لحظه منتظر باشید</string>
   <string name="please_wait_long">لطفاً منتظر باشید: این میتواند چند دقیقه را در بر بگیرد.</string>

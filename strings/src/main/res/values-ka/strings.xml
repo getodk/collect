@@ -400,7 +400,6 @@
   <string name="do_not_exit">გაუქმება</string>
   <string name="canceling">მიმდინარეობს გაუქმება</string>
   <string name="success">წარმატება</string>
-  <string name="failures">წარუმატებლობები</string>
   <string name="error_occured">მოხდა შეცდომა</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
   <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>

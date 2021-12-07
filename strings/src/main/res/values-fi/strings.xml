@@ -498,7 +498,6 @@
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
-  <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
   <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <!--##############################################
     # GET BLANK FORM
@@ -855,7 +854,6 @@
   <string name="canceling">Perutaan</string>
   <string name="notification_channel_name">Yleiset ilmoitukset</string>
   <string name="success">Onnistui</string>
-  <string name="failures">Epäonnistuneet</string>
   <string name="error_occured">Virhe</string>
   <string name="please_wait">Odota hetki.</string>
   <string name="please_wait_long">Ole hyvä ja odota. Tämä voi kestää muutaman minuutin.</string>

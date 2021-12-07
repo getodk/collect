@@ -464,7 +464,6 @@
   <string name="media_upload_error">ఉనికిలో లేని మీడియా ఫైల్‌ను అప్‌లోడ్ చేయడంలో విఫలమైంది:%1$s</string>
   <string name="send_in_progress">బ్యాక్ గ్రౌండ్ లో సెండ్ జరుగుతోంది , దయచేసి కాసేపట్లో మళ్ళీ ప్రయత్నించండి</string>
   <string name="odk_permissions_fail">ODK ఆటోమాటిక్ గా పంపే అనుమతి లేదు, దయచేసి మీరు అవసరమైన అన్ని అనుమతులను మంజూరు చేశారని నిర్ధారించుకోండి</string>
-  <string name="odk_auto_note">ODK ఫలితాలను ఆటోమాటిక్ గా పంపండి</string>
   <string name="notification_error">నోటిఫికేషన్ ను ప్రదర్శించడంలో ఎర్రర్ ఏర్పడింది</string>
   <!--##############################################
     # GET BLANK FORM
@@ -772,7 +771,6 @@
   <string name="canceling">రద్దు చేయబడుతుంది </string>
   <string name="notification_channel_name">సాధారణ నోటిఫికేషన్‌లు</string>
   <string name="success">సక్సెస్ </string>
-  <string name="failures">వైఫల్యాలు</string>
   <string name="error_occured">ఎర్రర్ వచ్చింది</string>
   <string name="please_wait">దయచేసి కొన్ని క్షణాలు వేచి ఉండండి.</string>
   <string name="please_wait_long">దయచేసి వేచి ఉండండి. దీనికి కొన్ని నిమిషాలు పట్టవచ్చు.</string>

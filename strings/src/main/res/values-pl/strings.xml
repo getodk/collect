@@ -468,7 +468,6 @@
   <string name="media_upload_error">Nie można załadować multimediów, plik nie istnieje: %1$s</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania ODK. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
-  <string name="odk_auto_note">Wyniki automatycznego wysyłania ODK</string>
   <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <!--##############################################
     # GET BLANK FORM
@@ -764,7 +763,6 @@
   <string name="canceling">Anulowanie</string>
   <string name="notification_channel_name">Ogólne powiadomienia</string>
   <string name="success">Sukces</string>
-  <string name="failures">Niepowodzenia</string>
   <string name="error_occured">Wystąpił Błąd</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>

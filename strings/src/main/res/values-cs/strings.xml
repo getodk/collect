@@ -504,7 +504,6 @@
   <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
   <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
-  <string name="odk_auto_note">Výsledky automatického odesílání ODK</string>
   <string name="notification_error">Chyba při zobrazení oznámení</string>
   <!--##############################################
     # GET BLANK FORM
@@ -860,7 +859,6 @@
   <string name="canceling">Zrušení</string>
   <string name="notification_channel_name">Obecná upozornění</string>
   <string name="success">Úspěch</string>
-  <string name="failures">Selhání</string>
   <string name="error_occured">Vyskytla se chyba</string>
   <string name="please_wait">Prosím chvilku počkejte.</string>
   <string name="please_wait_long">Prosím čekejte. Může to trvat několik minut.</string>

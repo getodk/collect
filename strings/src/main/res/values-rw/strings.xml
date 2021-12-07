@@ -494,7 +494,6 @@ Hashize: %2$s</string>
   <string name="media_upload_error">Mugukurura amajwi ntaboneke mu bubiko, ntabwo abarimo ku: %1$s</string>
   <string name="send_in_progress">Ohereza ibyagaragajwe bitaremezwa, hita wongera ugerageze.</string>
   <string name="odk_permissions_fail">ODK ihita yohereza ibitemejwe, izere neza niba wemeje ibisabwa byose.</string>
-  <string name="odk_auto_note">ODK yohereje ibisubizo</string>
   <string name="notification_error">Birerekanako habayeho ikosa</string>
   <!--##############################################
     # GET BLANK FORM
@@ -822,7 +821,6 @@ Hashize: %2$s</string>
   <string name="canceling">Birikuvamo</string>
   <string name="notification_channel_name">Ubutumwa bukwibutsa</string>
   <string name="success">Byakunze</string>
-  <string name="failures">Ntabwo byakunze</string>
   <string name="error_occured">Hari ikosa ribaye</string>
   <string name="please_wait">Rindira igihe gito</string>
   <string name="please_wait_long">Rindira. Bishobora gufata igihe gito.</string>

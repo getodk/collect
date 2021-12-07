@@ -395,7 +395,6 @@
   <string name="media_upload_error"> میڈیا فائل کو اپ لوڈ کرنے میں ناکام جو کہ موجود نہیں:%1$s</string>
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
   <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
-  <string name="odk_auto_note">او ڈی کے آٹو سینڈ کے نتائج</string>
   <string name="notification_error">نوٹیفیکیشن ٹیکسٹ دکھاتے وقت خرابی </string>
   <!--##############################################
     # GET BLANK FORM
@@ -687,7 +686,6 @@
   <string name="do_not_exit">منسوخ</string>
   <string name="canceling">مسنوخ کیا جا رہا ہے </string>
   <string name="success">کامیابی</string>
-  <string name="failures">ناکامی </string>
   <string name="error_occured">غلطی ہوگئ</string>
   <string name="please_wait">براہ مہربانی چند منٹ انتظار کرلیں</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>

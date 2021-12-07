@@ -334,7 +334,6 @@
   <string name="show_unsent_forms">Vis ikke-afsendte formularer</string>
   <string name="media_upload_error">Felde ved upload af mediefiler der ikke eksisterer: %1$s</string>
   <string name="odk_permissions_fail">ODK auto-afsending fejlede. Tjek om du har givet alle nødvendige tilladelser.</string>
-  <string name="odk_auto_note">ODK resultater, autoafsendelse</string>
   <string name="notification_error">Fejl ved visning af af notifikationstekst.</string>
   <!--##############################################
     # GET BLANK FORM
@@ -549,7 +548,6 @@
   <string name="do_not_exit">Afbryd</string>
   <string name="canceling">Afbryder</string>
   <string name="success">Voila!</string>
-  <string name="failures">Fejl</string>
   <string name="error_occured">Der opstod en fejl</string>
   <string name="please_wait">Vent et øjeblik</string>
   <string name="please_wait_long">Vent et øjeblik. Det kan vare et par minutter.</string>

@@ -498,7 +498,6 @@
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
-  <string name="odk_auto_note">ODK resultados de auto-envío</string>
   <string name="notification_error">Error al mostrar texto de la notificación</string>
   <!--##############################################
     # GET BLANK FORM
@@ -855,7 +854,6 @@
   <string name="canceling">Cancelando</string>
   <string name="notification_channel_name">Notificaciones generales</string>
   <string name="success">Correcto</string>
-  <string name="failures">Fallas</string>
   <string name="error_occured">Se ha producido un error</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>
