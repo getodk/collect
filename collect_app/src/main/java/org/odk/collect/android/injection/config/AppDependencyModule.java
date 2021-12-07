@@ -81,6 +81,7 @@ import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.FormUpdatesDownloadedNotificationBuilder;
+import org.odk.collect.android.notifications.FormsSyncFailedNotificationBuilder;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -370,8 +371,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder) {
-        return new NotificationManagerNotifier(application, settingsProvider, formUpdatesDownloadedNotificationBuilder);
+    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application) {
+        return new FormsSyncFailedNotificationBuilder(application);
+    }
+
+    @Provides
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder) {
+        return new NotificationManagerNotifier(application, settingsProvider, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
     }
 
     @Provides

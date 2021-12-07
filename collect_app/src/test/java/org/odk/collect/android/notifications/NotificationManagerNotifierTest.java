@@ -31,12 +31,13 @@ public class NotificationManagerNotifierTest {
     private NotificationManagerNotifier notifier;
     private NotificationManager notificationManager;
     private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder = mock(FormUpdatesDownloadedNotificationBuilder.class);
+    private final FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder = mock(FormsSyncFailedNotificationBuilder.class);
 
     @Before
     public void setup() {
         Application context = ApplicationProvider.getApplicationContext();
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider(), formUpdatesDownloadedNotificationBuilder);
+        notifier = new NotificationManagerNotifier(context, TestSettingsProvider.getSettingsProvider(), formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder);
     }
 
     @Test
