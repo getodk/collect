@@ -3,18 +3,12 @@ package org.odk.collect.android.notifications;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Build;
 
-import androidx.core.app.NotificationCompat;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.preferences.keys.MetaKeys;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.projects.ProjectsRepository;
@@ -28,18 +22,17 @@ import javax.annotation.Nullable;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static java.util.stream.Collectors.toSet;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION;
 
 public class NotificationManagerNotifier implements Notifier {
 
     public static final String COLLECT_NOTIFICATION_CHANNEL = "collect_notification_channel";
-    private final Application application;
     private final NotificationManager notificationManager;
     private final SettingsProvider settingsProvider;
     private final ProjectsRepository projectsRepository;
     private final FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder;
     private final FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder;
     private final FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder;
+    private final FormsSubmissionNotificationBuilder formsSubmissionNotificationBuilder;
 
     public static final int FORM_UPDATE_NOTIFICATION_ID = 0;
     public static final int FORM_SYNC_NOTIFICATION_ID = 1;
@@ -50,14 +43,15 @@ public class NotificationManagerNotifier implements Notifier {
                                        ProjectsRepository projectsRepository,
                                        FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder,
                                        FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder,
-                                       FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder) {
-        this.application = application;
+                                       FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder,
+                                       FormsSubmissionNotificationBuilder formsSubmissionNotificationBuilder) {
         notificationManager = (NotificationManager) application.getSystemService(NOTIFICATION_SERVICE);
         this.settingsProvider = settingsProvider;
         this.projectsRepository = projectsRepository;
         this.formUpdatesDownloadedNotificationBuilder = formUpdatesDownloadedNotificationBuilder;
         this.formsSyncFailedNotificationBuilder = formsSyncFailedNotificationBuilder;
         this.formUpdatesAvailableNotificationBuilder = formUpdatesAvailableNotificationBuilder;
+        this.formsSubmissionNotificationBuilder = formsSubmissionNotificationBuilder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager != null) {
@@ -99,25 +93,6 @@ public class NotificationManagerNotifier implements Notifier {
 
     @Override
     public void onSubmission(boolean failure, String message) {
-        Intent notifyIntent = new Intent(application, NotificationActivity.class);
-        notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.upload_results));
-        notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
-
-        PendingIntent pendingNotify = PendingIntent.getActivity(application, FORMS_UPLOADED_NOTIFICATION,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        String content = failure
-                ? TranslationHandler.getString(application, R.string.failures)
-                : TranslationHandler.getString(application, R.string.success);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
-                .setContentIntent(pendingNotify)
-                .setContentTitle(TranslationHandler.getString(application, R.string.odk_auto_note))
-                .setContentText(content)
-                .setSmallIcon(IconUtils.getNotificationAppIcon())
-                .setAutoCancel(true);
-
-        notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, builder.build());
+        notificationManager.notify(AUTO_SEND_RESULT_NOTIFICATION_ID, formsSubmissionNotificationBuilder.build(failure, message));
     }
 }

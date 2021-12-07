@@ -82,6 +82,7 @@ import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.FormUpdatesAvailableNotificationBuilder;
 import org.odk.collect.android.notifications.FormUpdatesDownloadedNotificationBuilder;
+import org.odk.collect.android.notifications.FormsSubmissionNotificationBuilder;
 import org.odk.collect.android.notifications.FormsSyncFailedNotificationBuilder;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
@@ -382,8 +383,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder, ProjectsRepository projectsRepository, FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder) {
-        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder, formUpdatesAvailableNotificationBuilder);
+    public FormsSubmissionNotificationBuilder providesFormsSubmissionNotificationBuilder(Application application) {
+        return new FormsSubmissionNotificationBuilder(application);
+    }
+
+    @Provides
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder, ProjectsRepository projectsRepository, FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder, FormsSubmissionNotificationBuilder formsSubmissionNotificationBuilder) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder, formUpdatesAvailableNotificationBuilder, formsSubmissionNotificationBuilder);
     }
 
     @Provides

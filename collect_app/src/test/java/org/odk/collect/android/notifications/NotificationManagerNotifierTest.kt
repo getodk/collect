@@ -30,6 +30,7 @@ class NotificationManagerNotifierTest {
     private val formUpdatesDownloadedNotificationBuilder = mock<FormUpdatesDownloadedNotificationBuilder>()
     private val formsSyncFailedNotificationBuilder = mock<FormsSyncFailedNotificationBuilder>()
     private val formUpdatesAvailableNotificationBuilder = mock<FormUpdatesAvailableNotificationBuilder>()
+    private val formsSubmissionNotificationBuilder = mock<FormsSubmissionNotificationBuilder>()
 
     @Before
     fun setup() {
@@ -42,7 +43,8 @@ class NotificationManagerNotifierTest {
             projectsRepository,
             formUpdatesDownloadedNotificationBuilder,
             formsSyncFailedNotificationBuilder,
-            formUpdatesAvailableNotificationBuilder
+            formUpdatesAvailableNotificationBuilder,
+            formsSubmissionNotificationBuilder
         )
     }
 
