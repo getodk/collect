@@ -37,6 +37,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
@@ -205,6 +206,16 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
                 (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
+                            if (System.currentTimeMillis() - startTime < 2000) {
+                                Analytics.log("SavePointManualImmediate");
+                            } else if (location.getAccuracy() > 100) {
+                                Analytics.log("SavePointManualUnacceptable");
+                            } else if (location.getAccuracy() > 10) {
+                                Analytics.log("SavePointManualPoor");
+                            } else {
+                                Analytics.log("SavePointManualAcceptable");
+                            }
+
                             returnLocation();
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -259,6 +270,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
             if (locationCount > 1) {
                 if (location.getAccuracy() <= targetAccuracy) {
+                    Analytics.log("SavePointAuto");
                     returnLocation();
                 }
             }
