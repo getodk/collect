@@ -207,16 +207,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
                 (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
-                            if (System.currentTimeMillis() - startTime < 2000) {
-                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_IMMEDIATE);
-                            } else if (location.getAccuracy() > 100) {
-                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_UNACCEPTABLE);
-                            } else if (location.getAccuracy() > 10) {
-                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_POOR);
-                            } else {
-                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_ACCEPTABLE);
-                            }
-
+                            logSavePointManual();
                             returnLocation();
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -230,6 +221,23 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
                 geoPointButtonListener);
+    }
+
+    private void logSavePointManual() {
+        String event;
+        if (System.currentTimeMillis() - startTime < 2000) {
+            event = AnalyticsEvents.SAVE_POINT_IMMEDIATE;
+        } else {
+            event = AnalyticsEvents.SAVE_POINT_MANUAL;
+        }
+
+        if (location.getAccuracy() > 100) {
+            Analytics.log(event, "accuracy", "unacceptable");
+        } else if (location.getAccuracy() > 10) {
+            Analytics.log(event, "accuracy", "poor");
+        } else {
+            Analytics.log(event, "accuracy", "acceptable");
+        }
     }
 
     private void logLastLocation() {
