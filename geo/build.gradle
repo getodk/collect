@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':externalapp')
     coreLibraryDesugaring Dependencies.desugar
 
     implementation Dependencies.kotlin_stdlib
@@ -58,6 +57,8 @@ dependencies {
     implementation project(path: ':strings')
     implementation project(path: ':location')
     implementation project(path: ':androidshared')
+    implementation project(path: ':externalapp')
+    implementation project(path: ':analytics')
 
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit
