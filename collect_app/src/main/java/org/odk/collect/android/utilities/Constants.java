@@ -17,7 +17,7 @@ public final class Constants {
     // Stores the connect / disconnect data in a text file
     public static final String LOG_FILE = "sdcard/log.txt";
     // Settings for GPS
-    public static final float GPS_ACCURACY = (float) 20.0;
+    public static final float GPS_ACCURACY = (float) 10.0;
     public static final float GPS_DISTANCE = (float) 40.0;
     public static final int GPS_INTERVAL = 10000;       // Milli seconds
 
