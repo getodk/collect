@@ -43,7 +43,7 @@ public class ExternalAppRecordingRequesterTest {
     @Before
     public void setup() {
         activity = Robolectric.buildActivity(Activity.class).get();
-        requester = new ExternalAppRecordingRequester(activity, activityAvailability, waitingForDataRegistry, permissionsProvider, mock(FormEntryViewModel.class));
+        requester = new ExternalAppRecordingRequester(activity,  waitingForDataRegistry, permissionsProvider, mock(FormEntryViewModel.class));
     }
 
     @Test

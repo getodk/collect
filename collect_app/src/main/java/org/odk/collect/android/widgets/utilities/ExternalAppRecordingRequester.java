@@ -19,14 +19,13 @@ public class ExternalAppRecordingRequester implements RecordingRequester {
 
     private final Activity activity;
     private final PermissionsProvider permissionsProvider;
-    private final ActivityAvailability activityAvailability;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final FormEntryViewModel formEntryViewModel;
 
-    public ExternalAppRecordingRequester(Activity activity, ActivityAvailability activityAvailability, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
+    // smap removed availability check - not compatible with android 30
+    public ExternalAppRecordingRequester(Activity activity, WaitingForDataRegistry waitingForDataRegistry, PermissionsProvider permissionsProvider, FormEntryViewModel formEntryViewModel) {
         this.activity = activity;
         this.permissionsProvider = permissionsProvider;
-        this.activityAvailability = activityAvailability;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.formEntryViewModel = formEntryViewModel;
     }

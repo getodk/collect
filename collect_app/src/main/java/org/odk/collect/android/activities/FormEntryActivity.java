@@ -150,7 +150,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
-import org.odk.collect.android.utilities.ActivityAvailability;
+//import org.odk.collect.android.utilities.ActivityAvailability;  // smap commented
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -368,9 +368,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     PermissionsChecker permissionsChecker;
 
     @Inject
-    ActivityAvailability activityAvailability;
-
-    @Inject
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Inject
@@ -540,7 +537,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider, formEntryViewModel);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
-        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, activityAvailability, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
+        externalAppRecordingRequester = new ExternalAppRecordingRequester(this, waitingForDataRegistry, permissionsProvider, formEntryViewModel);
 
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
         audioRecorder.getCurrentSession().observe(this, session -> {
