@@ -34,6 +34,11 @@ class ExistingProjectMigrator(
     }
 
     override fun run() {
+        if (settingsProvider.getMetaSettings().contains(MetaKeys.LAST_LAUNCHED)) {
+            // We're upgrading from a version with Projects so shouldn't be running this
+            return
+        }
+
         val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         val newProject = projectDetailsCreator.createProjectFromDetails(
