@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.os.AsyncTask;
 
 import org.odk.collect.android.R;
@@ -62,7 +64,7 @@ public class DownloadFormsTask extends
                 publishProgress(serverFormDetails.getFormName(), currentFormNumber, totalForms);
 
                 formDownloader.downloadForm(serverFormDetails, count -> {
-                    String message = Collect.getInstance().getString(R.string.form_download_progress,
+                    String message = getLocalizedString(Collect.getInstance(), R.string.form_download_progress,
                             serverFormDetails.getFormName(),
                             String.valueOf(count),
                             String.valueOf(serverFormDetails.getManifest().getMediaFiles().size())
@@ -71,7 +73,7 @@ public class DownloadFormsTask extends
                     publishProgress(message, currentFormNumber, totalForms);
                 }, this::isCancelled);
 
-                results.put(serverFormDetails, Collect.getInstance().getString(R.string.success));
+                results.put(serverFormDetails, getLocalizedString(Collect.getInstance(), R.string.success));
             } catch (FormDownloadException.DownloadingInterrupted e) {
                 return emptyMap();
             } catch (FormDownloadException e) {
