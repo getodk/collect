@@ -40,6 +40,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.analytics.AnalyticsEvents;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -207,13 +208,13 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
                             if (System.currentTimeMillis() - startTime < 2000) {
-                                Analytics.log("SavePointManualImmediate");
+                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_IMMEDIATE);
                             } else if (location.getAccuracy() > 100) {
-                                Analytics.log("SavePointManualUnacceptable");
+                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_UNACCEPTABLE);
                             } else if (location.getAccuracy() > 10) {
-                                Analytics.log("SavePointManualPoor");
+                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_POOR);
                             } else {
-                                Analytics.log("SavePointManualAcceptable");
+                                Analytics.log(AnalyticsEvents.SAVE_POINT_MANUAL_ACCEPTABLE);
                             }
 
                             returnLocation();
@@ -270,7 +271,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
             if (locationCount > 1) {
                 if (location.getAccuracy() <= targetAccuracy) {
-                    Analytics.log("SavePointAuto");
+                    Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO);
                     returnLocation();
                 }
             }
