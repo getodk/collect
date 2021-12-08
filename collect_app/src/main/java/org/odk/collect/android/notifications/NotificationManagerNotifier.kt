@@ -16,7 +16,6 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.strings.localization.getLocalizedString
-import java.util.stream.Collectors
 
 class NotificationManagerNotifier(
     private val application: Application,
@@ -32,19 +31,17 @@ class NotificationManagerNotifier(
 
     override fun onUpdatesAvailable(updates: List<ServerFormDetails>, projectId: String) {
         val metaPrefs = settingsProvider.getMetaSettings()
-        val updateId = updates.stream()
-            .map { (_, _, formId, _, hash, _, _, manifest) -> formId + hash + manifest?.hash }
-            .collect(Collectors.toSet())
-        if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) == updateId) {
-            return
-        }
-        notificationManager.notify(
-            FORM_UPDATE_NOTIFICATION_ID,
-            formUpdatesAvailableNotificationBuilder.build(
-                getProjectName(projectId)
+        val updateId = updates
+            .mapTo(HashSet()) { (_, _, formId, _, hash, _, _, manifest) -> formId + hash + manifest?.hash }
+        if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) != updateId) {
+            notificationManager.notify(
+                FORM_UPDATE_NOTIFICATION_ID,
+                formUpdatesAvailableNotificationBuilder.build(
+                    getProjectName(projectId)
+                )
             )
-        )
-        metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
+            metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
+        }
     }
 
     override fun onUpdatesDownloaded(result: Map<ServerFormDetails, String>, projectId: String) {
