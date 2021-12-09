@@ -37,8 +37,10 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.analytics.AnalyticsEvents;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -205,6 +207,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
                 (dialog, which) -> {
                     switch (which) {
                         case DialogInterface.BUTTON_POSITIVE:
+                            logSavePointManual();
                             returnLocation();
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -218,6 +221,23 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
                 geoPointButtonListener);
+    }
+
+    private void logSavePointManual() {
+        String event;
+        if (System.currentTimeMillis() - startTime < 2000) {
+            event = AnalyticsEvents.SAVE_POINT_IMMEDIATE;
+        } else {
+            event = AnalyticsEvents.SAVE_POINT_MANUAL;
+        }
+
+        if (location.getAccuracy() > 100) {
+            Analytics.log(event, "accuracy", "unacceptable");
+        } else if (location.getAccuracy() > 10) {
+            Analytics.log(event, "accuracy", "poor");
+        } else {
+            Analytics.log(event, "accuracy", "acceptable");
+        }
     }
 
     private void logLastLocation() {
@@ -259,6 +279,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
             if (locationCount > 1) {
                 if (location.getAccuracy() <= targetAccuracy) {
+                    Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO);
                     returnLocation();
                 }
             }
