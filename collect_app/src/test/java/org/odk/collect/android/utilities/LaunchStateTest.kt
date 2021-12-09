@@ -1,26 +1,18 @@
 package org.odk.collect.android.utilities
 
-import android.app.Application
-import android.content.Context
-import androidx.preference.PreferenceManager
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.testshared.InMemSettings
-import java.io.File
 
-@RunWith(AndroidJUnit4::class)
 class LaunchStateTest {
-
-    private val context = ApplicationProvider.getApplicationContext<Application>()
 
     @Test
     fun `isUpgradedFirstLaunch() returns false for empty meta settings`() {
-        val appStateProvider = LaunchState(context, InMemSettings(), 1)
+        val appStateProvider = LaunchState(InMemSettings(), 1)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -29,7 +21,7 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(context, inMemSettings, 1)
+        val appStateProvider = LaunchState(inMemSettings, 1)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -38,7 +30,7 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(context, inMemSettings, 2)
+        val appStateProvider = LaunchState(inMemSettings, 2)
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
@@ -47,49 +39,30 @@ class LaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save(MetaKeys.LAST_LAUNCHED, 1)
 
-        val appStateProvider = LaunchState(context, inMemSettings, 2)
+        val appStateProvider = LaunchState(inMemSettings, 2)
         appStateProvider.appLaunched()
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
-    /**
-     * Account for installs of versions before `LAST_LAUNCHED` was added
-     */
     @Test
-    fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy metadata dir is not empty`() {
-        val metadataDir = File(context.getExternalFilesDir(null), "metadata").also { it.mkdir() }
-        File(metadataDir, "something").createNewFile()
-
-        val appStateProvider = LaunchState(context, InMemSettings(), 1)
+    fun `isUpgradedFirstLaunch() returns true for empty meta settings when legacy install detected`() {
+        val appStateProvider = LaunchState(
+            InMemSettings(),
+            1,
+            mock { on { installDetected() } doReturn true }
+        )
 
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
-    /**
-     * Account for installs of versions before `LAST_LAUNCHED` was added
-     */
     @Test
-    fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy general prefs is not empty`() {
-        PreferenceManager.getDefaultSharedPreferences(context).edit()
-            .putString("anything", "anything")
-            .apply()
+    fun `isUpgradedFirstLaunch() returns false for empty meta settings when legacy install not detected`() {
+        val appStateProvider = LaunchState(
+            InMemSettings(),
+            1,
+            mock { on { installDetected() } doReturn false }
+        )
 
-        val appStateProvider = LaunchState(context, InMemSettings(), 1)
-
-        assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
-    }
-
-    /**
-     * Account for installs of versions before `LAST_LAUNCHED` was added
-     */
-    @Test
-    fun `isUpgradedFirstLaunch() returns true for empty meta settings if legacy admin prefs is not empty`() {
-        context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE).edit()
-            .putString("anything", "anything")
-            .apply()
-
-        val appStateProvider = LaunchState(context, InMemSettings(), 1)
-
-        assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
+        assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 }

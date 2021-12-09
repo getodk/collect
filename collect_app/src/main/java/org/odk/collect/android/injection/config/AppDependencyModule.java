@@ -38,6 +38,7 @@ import org.odk.collect.android.application.initialization.ExistingSettingsMigrat
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsMigrator;
 import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
+import org.odk.collect.android.application.initialization.upgrade.BeforeProjectsInstallDetector;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
@@ -522,7 +523,7 @@ public class AppDependencyModule {
 
     @Provides
     public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new LaunchState(context, settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE);
+        return new LaunchState(settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE, new BeforeProjectsInstallDetector(context));
     }
 
     @Provides
