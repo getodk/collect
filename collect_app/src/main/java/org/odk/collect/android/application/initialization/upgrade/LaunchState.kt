@@ -1,6 +1,5 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.android.application.initialization.upgrade
 
-import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.Settings
 
 interface LaunchState {
@@ -9,21 +8,22 @@ interface LaunchState {
 }
 
 class VersionCodeLaunchState(
-    private val metaSettings: Settings,
+    private val key: String,
+    private val settings: Settings,
     private val currentVersion: Int,
     private val installDetector: InstallDetector? = null
 ) : LaunchState {
 
     override fun isUpgradedFirstLaunch(): Boolean {
-        return if (metaSettings.contains(MetaKeys.LAST_LAUNCHED)) {
-            metaSettings.getInt(MetaKeys.LAST_LAUNCHED) < currentVersion
+        return if (settings.contains(key)) {
+            settings.getInt(key) < currentVersion
         } else {
             return installDetector?.installDetected() ?: false
         }
     }
 
     override fun appLaunched() {
-        metaSettings.save(MetaKeys.LAST_LAUNCHED, currentVersion)
+        settings.save(key, currentVersion)
     }
 }
 

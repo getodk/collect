@@ -575,6 +575,7 @@ public class AppDependencyModule {
     @Provides
     public AppUpgrader providesAppUpgrader(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
         return new AppUpgrader(
+                MetaKeys.LAST_LAUNCHED,
                 settingsProvider.getMetaSettings(),
                 new BeforeProjectsInstallDetector(context),
                 asList(
