@@ -1,14 +1,20 @@
 package org.odk.collect.upgrade
 
-import org.odk.collect.shared.Settings
 import android.app.Application
+import org.odk.collect.shared.Settings
 
 class AppUpgrader(
     private val settings: Settings,
     private val launchState: LaunchState,
     private val upgrades: List<Upgrade>
 ) {
-    constructor(key: String, settings: Settings, versionCode: Int, installDetector: InstallDetector, upgrades: List<Upgrade>) : this(
+    constructor(
+        key: String,
+        settings: Settings,
+        versionCode: Int,
+        installDetector: InstallDetector,
+        upgrades: List<Upgrade>
+    ) : this(
         settings,
         VersionCodeLaunchState(key, settings, versionCode, installDetector),
         upgrades
@@ -42,4 +48,3 @@ class AppUpgrader(
         launchState.appLaunched()
     }
 }
-
