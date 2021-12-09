@@ -1,6 +1,5 @@
-package org.odk.collect.android.application.initialization.upgrade
+package org.odk.collect.upgrade
 
-import org.odk.collect.android.BuildConfig
 import org.odk.collect.shared.Settings
 
 class AppUpgrader(
@@ -8,10 +7,9 @@ class AppUpgrader(
     private val launchState: LaunchState,
     private val upgrades: List<Upgrade>
 ) {
-
-    constructor(key: String, settings: Settings, installDetector: InstallDetector, upgrades: List<Upgrade>) : this(
+    constructor(key: String, settings: Settings, versionCode: Int, installDetector: InstallDetector, upgrades: List<Upgrade>) : this(
         settings,
-        VersionCodeLaunchState(key, settings, BuildConfig.VERSION_CODE, installDetector),
+        VersionCodeLaunchState(key, settings, versionCode, installDetector),
         upgrades
     )
 

@@ -250,6 +250,7 @@ dependencies {
     implementation project(':location')
     implementation project(':geo')
     implementation project(':errors')
+    implementation project(':upgrade')
     implementation project(':permissions')
 
     implementation Dependencies.androidx_startup

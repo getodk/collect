@@ -37,7 +37,6 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsMigrator;
-import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
 import org.odk.collect.android.application.initialization.upgrade.BeforeProjectsInstallDetector;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -138,6 +137,7 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.shared.strings.UUIDGenerator;
+import org.odk.collect.upgrade.AppUpgrader;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -577,6 +577,7 @@ public class AppDependencyModule {
         return new AppUpgrader(
                 MetaKeys.LAST_LAUNCHED,
                 settingsProvider.getMetaSettings(),
+                BuildConfig.VERSION_CODE,
                 new BeforeProjectsInstallDetector(context),
                 asList(
                 existingProjectMigrator,

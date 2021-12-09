@@ -1,9 +1,9 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.application.initialization.upgrade.Upgrade
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.upgrade.Upgrade
 
 class FormUpdatesUpgrade(
     private val scheduler: Scheduler,

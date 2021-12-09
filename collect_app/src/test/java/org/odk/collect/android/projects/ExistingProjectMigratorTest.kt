@@ -10,8 +10,6 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.application.initialization.upgrade.AppUpgrader
-import org.odk.collect.android.application.initialization.upgrade.Upgrade
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.keys.ProjectKeys

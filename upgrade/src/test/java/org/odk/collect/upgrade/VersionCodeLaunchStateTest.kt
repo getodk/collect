@@ -1,4 +1,4 @@
-package org.odk.collect.android.application.initialization.upgrade
+package org.odk.collect.upgrade
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

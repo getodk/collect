@@ -1,4 +1,4 @@
-package org.odk.collect.android.application.initialization.upgrade
+package org.odk.collect.upgrade
 
 import org.junit.Test
 import org.mockito.kotlin.doReturn
@@ -17,7 +17,7 @@ class AppUpgraderTest {
 
         val appUpgrader = AppUpgrader(
             InMemSettings(),
-            mock<LaunchState> { on { isUpgradedFirstLaunch() } doReturn true },
+            mock { on { isUpgradedFirstLaunch() } doReturn true },
             listOf(upgrade1, upgrade2)
         )
 
@@ -39,7 +39,7 @@ class AppUpgraderTest {
 
         val appUpgrader = AppUpgrader(
             InMemSettings(),
-            mock<LaunchState> { on { isUpgradedFirstLaunch() } doReturn true },
+            mock { on { isUpgradedFirstLaunch() } doReturn true },
             listOf(upgrade1, upgrade2)
         )
 
