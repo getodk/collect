@@ -43,7 +43,7 @@ class ApplicationInitializer(
     }
 
     private fun performUpgradeIfNeeded() {
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
     }
 
     private fun initializeFrameworks() {

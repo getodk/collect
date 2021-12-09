@@ -12,7 +12,7 @@ import org.odk.collect.testshared.InMemSettings
 class AppUpgraderTest {
 
     @Test
-    fun `upgrade() runs all upgrades`() {
+    fun `upgradeIfNeeded() runs all upgrades`() {
         val upgrade1 = mock<Upgrade>()
         val upgrade2 = mock<Upgrade>()
 
@@ -22,14 +22,14 @@ class AppUpgraderTest {
             listOf(upgrade1, upgrade2)
         )
 
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
 
         verify(upgrade1).run()
         verify(upgrade2).run()
     }
 
     @Test
-    fun `upgrade() skips upgrades with a key the second time`() {
+    fun `upgradeIfNeeded() skips upgrades with a key the second time`() {
         val upgrade1 = mock<Upgrade> {
             on { key() } doReturn "blah"
         }
@@ -44,15 +44,15 @@ class AppUpgraderTest {
             listOf(upgrade1, upgrade2)
         )
 
-        appUpgrader.upgrade()
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
+        appUpgrader.upgradeIfNeeded()
 
         verify(upgrade1, times(1)).run()
         verify(upgrade2, times(2)).run()
     }
 
     @Test
-    fun `upgrade() just marks upgrades with a key as run if not upgrading`() {
+    fun `upgradeIfNeeded() just marks upgrades with a key as run if not upgrading`() {
         val upgrade1 = mock<Upgrade> {
             on { key() } doReturn "blah"
         }
@@ -68,18 +68,18 @@ class AppUpgraderTest {
             listOf(upgrade1, upgrade2)
         )
 
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
         verify(upgrade1, times(0)).run()
         verify(upgrade2, times(0)).run()
 
         whenever(launchState.isUpgradedFirstLaunch()).thenReturn(true)
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
         verify(upgrade1, times(0)).run()
         verify(upgrade2, times(1)).run()
     }
 
     @Test
-    fun `upgrade() calls appLaunched()`() {
+    fun `upgradeIfNeeded() calls appLaunched()`() {
         val launchState = mock<LaunchState> { on { isUpgradedFirstLaunch() } doReturn true }
         val appUpgrader = AppUpgrader(
             InMemSettings(),
@@ -87,7 +87,7 @@ class AppUpgraderTest {
             emptyList()
         )
 
-        appUpgrader.upgrade()
+        appUpgrader.upgradeIfNeeded()
         verify(launchState).appLaunched()
     }
 }

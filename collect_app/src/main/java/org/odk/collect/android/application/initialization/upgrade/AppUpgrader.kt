@@ -18,7 +18,7 @@ class AppUpgrader(
         upgrades
     )
 
-    fun upgrade() {
+    fun upgradeIfNeeded() {
         if (launchState.isUpgradedFirstLaunch()) {
             upgrades.forEach {
                 val key = it.key()
