@@ -20,7 +20,6 @@ import org.odk.collect.android.geo.MapboxUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.utilities.LaunchState
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.utilities.UserAgentProvider
 import org.osmdroid.config.Configuration
@@ -32,7 +31,6 @@ class ApplicationInitializer(
     private val userAgentProvider: UserAgentProvider,
     private val propertyManager: PropertyManager,
     private val analytics: Analytics,
-    private val launchState: LaunchState,
     private val appUpgrader: AppUpgrader,
     private val analyticsInitializer: AnalyticsInitializer,
     private val projectsRepository: ProjectsRepository,
@@ -42,13 +40,10 @@ class ApplicationInitializer(
         performUpgradeIfNeeded()
         initializeFrameworks()
         initializeLocale()
-        launchState.appLaunched()
     }
 
     private fun performUpgradeIfNeeded() {
-        if (launchState.isUpgradedFirstLaunch()) {
-            appUpgrader.upgrade()
-        }
+        appUpgrader.upgrade()
     }
 
     private fun initializeFrameworks() {

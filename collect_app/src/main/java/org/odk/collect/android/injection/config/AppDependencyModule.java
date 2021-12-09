@@ -112,7 +112,6 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -522,11 +521,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new LaunchState(settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE, new BeforeProjectsInstallDetector(context));
-    }
-
-    @Provides
     public MainMenuViewModel.Factory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
                                                                       SettingsProvider settingsProvider, InstancesAppState instancesAppState,
                                                                       Scheduler scheduler) {
@@ -579,8 +573,11 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
-        return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
+    public AppUpgrader providesAppUpgrader(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
+        return new AppUpgrader(
+                settingsProvider.getMetaSettings(),
+                new BeforeProjectsInstallDetector(context),
+                asList(
                 existingProjectMigrator,
                 existingSettingsMigrator,
                 formUpdatesUpgrade
@@ -588,8 +585,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, LaunchState launchState, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, launchState, appUpgrader, analyticsInitializer, projectsRepository, settingsProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, appUpgrader, analyticsInitializer, projectsRepository, settingsProvider);
     }
 
     @Provides

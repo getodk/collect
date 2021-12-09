@@ -48,7 +48,6 @@ class BeforeProjectsInstallDetectorTest {
         assertThat(detector.installDetected(), equalTo(true))
     }
 
-
     /**
      * Account for installs of versions before `LAST_LAUNCHED` was added
      */
