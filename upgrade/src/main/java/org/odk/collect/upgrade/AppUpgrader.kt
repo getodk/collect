@@ -1,6 +1,7 @@
 package org.odk.collect.upgrade
 
 import org.odk.collect.shared.Settings
+import android.app.Application
 
 class AppUpgrader(
     private val settings: Settings,
@@ -13,6 +14,11 @@ class AppUpgrader(
         upgrades
     )
 
+    /**
+     * Runs the list of passed [Upgrade] implementations in order if this is the first launch of a
+     * new version of the app (an "app upgrade"). This should be called in (or from somewhere called
+     * from) [Application.onCreate].
+     */
     fun upgradeIfNeeded() {
         if (launchState.isUpgradedFirstLaunch()) {
             upgrades.forEach {
@@ -37,9 +43,3 @@ class AppUpgrader(
     }
 }
 
-interface Upgrade {
-
-    fun key(): String?
-
-    fun run()
-}
