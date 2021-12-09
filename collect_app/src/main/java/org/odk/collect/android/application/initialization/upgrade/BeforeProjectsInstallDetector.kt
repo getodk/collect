@@ -3,10 +3,10 @@ package org.odk.collect.android.application.initialization.upgrade
 import android.content.Context
 import androidx.preference.PreferenceManager
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.LaunchState
+import org.odk.collect.android.utilities.InstallDetector
 import java.io.File
 
-class BeforeProjectsInstallDetector(private val context: Context) : LaunchState.InstallDetector {
+class BeforeProjectsInstallDetector(private val context: Context) : InstallDetector {
 
     override fun installDetected(): Boolean {
         val legacyMetadataDir = File(context.getExternalFilesDir(null), "metadata")

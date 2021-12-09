@@ -3,13 +3,18 @@ package org.odk.collect.android.utilities
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.shared.Settings
 
-class LaunchState(
+interface LaunchState {
+    fun isUpgradedFirstLaunch(): Boolean
+    fun appLaunched()
+}
+
+class VersionCodeLaunchState(
     private val metaSettings: Settings,
     private val currentVersion: Int,
     private val installDetector: InstallDetector? = null
-) {
+) : LaunchState {
 
-    fun isUpgradedFirstLaunch(): Boolean {
+    override fun isUpgradedFirstLaunch(): Boolean {
         return if (metaSettings.contains(MetaKeys.LAST_LAUNCHED)) {
             metaSettings.getInt(MetaKeys.LAST_LAUNCHED) < currentVersion
         } else {
@@ -17,11 +22,11 @@ class LaunchState(
         }
     }
 
-    fun appLaunched() {
+    override fun appLaunched() {
         metaSettings.save(MetaKeys.LAST_LAUNCHED, currentVersion)
     }
+}
 
-    interface InstallDetector {
-        fun installDetected(): Boolean
-    }
+interface InstallDetector {
+    fun installDetected(): Boolean
 }
