@@ -15,7 +15,7 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 @RunWith(AndroidJUnit4.class)
 public class GetAndSubmitFormTest {
 
-    private final CollectTestRule rule = new CollectTestRule();
+    private final CollectTestRule rule = new CollectTestRule(false);
     private final TestDependencies testDependencies = new TestDependencies();
 
     @Rule
@@ -25,9 +25,8 @@ public class GetAndSubmitFormTest {
     public void canGetBlankForm_fillItIn_andSubmit() {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.startAtMainMenu()
+        rule.withProject(testDependencies.server.getURL())
                 // Fetch form
-                .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("All downloads succeeded!")
