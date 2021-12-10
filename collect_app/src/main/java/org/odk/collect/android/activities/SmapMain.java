@@ -238,6 +238,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             }
         }
 
+        // Restore the preference to record a user trail in case the user had previously selected "exit"
+        GeneralSharedPreferences.getInstance().save(GeneralKeys.KEY_SMAP_USER_LOCATION,
+                GeneralSharedPreferences.getInstance().getBoolean(GeneralKeys.KEY_SMAP_USER_SAVE_LOCATION, false));
+
         // Initiate a refresh if requested in start parameters
         String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
         if(refresh != null && refresh.equals("yes")) {
@@ -956,7 +960,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Timber.i("Intent received: " + intent.getAction());
+            Timber.i("Intent received: %s", intent.getAction());
 
             if (intent.getAction().equals("startTask")) {
 
@@ -1066,7 +1070,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Timber.i("Intent received: " + intent.getAction());
+            Timber.i("Intent received: %s", intent.getAction());
 
             model.loadData();
 

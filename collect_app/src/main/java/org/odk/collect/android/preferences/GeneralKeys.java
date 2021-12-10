@@ -96,6 +96,7 @@ public final class GeneralKeys {
     // start smap
     public static final String KEY_SMAP_REVIEW_FINAL = "review_final";    // Allow review of Form after finalising
     public static final String KEY_SMAP_USER_LOCATION = "smap_gps_trail";    // Record a user trail
+    public static final String KEY_SMAP_USER_SAVE_LOCATION = "smap_gps_trail";    // Backup of decision to record the user trail
     public static final String KEY_SMAP_LOCATION_TRIGGER = "location_trigger";  // Enable triggering of forms by location
     public static final String KEY_SMAP_ODK_STYLE_MENUS = "odk_style_menus";  // Show ODK style menus as well as refresh
     public static final String KEY_SMAP_ODK_INSTANCENAME = "odk_instancename";  // Allow user to change instance name
