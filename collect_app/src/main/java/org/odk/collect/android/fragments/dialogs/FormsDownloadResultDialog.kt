@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
+import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
@@ -14,7 +15,7 @@ import org.odk.collect.errors.ErrorActivity
 import java.io.Serializable
 
 class FormsDownloadResultDialog : DialogFragment() {
-    private lateinit var result: Map<ServerFormDetails, String>
+    private lateinit var result: Map<ServerFormDetails, FormDownloadException?>
 
     var listener: FormDownloadResultDialogListener? = null
 
@@ -27,7 +28,7 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        result = arguments?.getSerializable(ARG_RESULT) as Map<ServerFormDetails, String>
+        result = arguments?.getSerializable(ARG_RESULT) as Map<ServerFormDetails, FormDownloadException?>
 
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())

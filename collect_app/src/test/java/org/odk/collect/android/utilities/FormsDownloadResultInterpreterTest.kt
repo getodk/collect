@@ -8,6 +8,8 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.formmanagement.FormDownloadException
+import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper
 import org.odk.collect.android.formmanagement.ServerFormDetails
 
 @RunWith(AndroidJUnit4::class)
@@ -17,14 +19,14 @@ class FormsDownloadResultInterpreterTest {
     private val formDetails1 = ServerFormDetails("Form 1", "", "1", "1", "", false, true, null)
     private val formDetails2 = ServerFormDetails("Form 2", "", "5", "4", "", false, true, null)
 
-    private var resultWithoutErrors = mapOf(
-        formDetails1 to context.getString(R.string.success),
-        formDetails2 to context.getString(R.string.success)
+    private var resultWithoutErrors = mapOf<ServerFormDetails, FormDownloadException?>(
+        formDetails1 to null,
+        formDetails2 to null
     )
 
-    private var resultWithOneError = mapOf(
-        formDetails1 to context.getString(R.string.success),
-        formDetails2 to "Exception"
+    private var resultWithOneError = mapOf<ServerFormDetails, FormDownloadException?>(
+        formDetails1 to null,
+        formDetails2 to FormDownloadException.FormParsingError()
     )
 
     @Test
@@ -37,7 +39,7 @@ class FormsDownloadResultInterpreterTest {
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context).size, `is`(1))
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].title, `is`("Form 2"))
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].secondaryText, `is`(context.getString(R.string.form_details, "5", "4")))
-        assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].supportingText, `is`("Exception"))
+        assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].supportingText, `is`(FormDownloadExceptionMapper(context).getMessage(resultWithOneError[formDetails2])))
     }
 
     @Test

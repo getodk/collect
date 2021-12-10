@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FillBlankFormActivity
+import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -18,7 +19,7 @@ import java.io.Serializable
 
 object FormUpdatesDownloadedNotificationBuilder {
 
-    fun build(application: Application, result: Map<ServerFormDetails, String>, projectName: String): Notification {
+    fun build(application: Application, result: Map<ServerFormDetails, FormDownloadException?>, projectName: String): Notification {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, application)
 
         val intent = if (allFormsDownloadedSuccessfully) {

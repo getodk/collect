@@ -15,13 +15,13 @@
 package org.odk.collect.android.tasks;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+import static java.util.Collections.emptyMap;
 
 import android.os.AsyncTask;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormDownloadException;
-import org.odk.collect.android.formmanagement.FormDownloadExceptionMapper;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
@@ -29,8 +29,6 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Collections.emptyMap;
 
 /**
  * Background task for downloading a given list of forms. We assume right now that the forms are
@@ -41,7 +39,7 @@ import static java.util.Collections.emptyMap;
  * @author carlhartung
  */
 public class DownloadFormsTask extends
-        AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, String>> {
+        AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, FormDownloadException>> {
 
     private final FormDownloader formDownloader;
     private DownloadFormsTaskListener stateListener;
@@ -51,10 +49,8 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected Map<ServerFormDetails, String> doInBackground(ArrayList<ServerFormDetails>... values) {
-        HashMap<ServerFormDetails, String> results = new HashMap<>();
-
-        FormDownloadExceptionMapper exceptionMapper = new FormDownloadExceptionMapper(Collect.getInstance());
+    protected Map<ServerFormDetails, FormDownloadException> doInBackground(ArrayList<ServerFormDetails>... values) {
+        HashMap<ServerFormDetails, FormDownloadException> results = new HashMap<>();
 
         int index = 1;
         for (ServerFormDetails serverFormDetails : values[0]) {
@@ -73,11 +69,11 @@ public class DownloadFormsTask extends
                     publishProgress(message, currentFormNumber, totalForms);
                 }, this::isCancelled);
 
-                results.put(serverFormDetails, getLocalizedString(Collect.getInstance(), R.string.success));
+                results.put(serverFormDetails, null);
             } catch (FormDownloadException.DownloadingInterrupted e) {
                 return emptyMap();
             } catch (FormDownloadException e) {
-                results.put(serverFormDetails, exceptionMapper.getMessage(e));
+                results.put(serverFormDetails, e);
             }
 
             index++;
@@ -87,7 +83,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected void onCancelled(Map<ServerFormDetails, String> formDetailsStringHashMap) {
+    protected void onCancelled(Map<ServerFormDetails, FormDownloadException> formDetailsStringHashMap) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingCancelled();
@@ -96,7 +92,7 @@ public class DownloadFormsTask extends
     }
 
     @Override
-    protected void onPostExecute(Map<ServerFormDetails, String> value) {
+    protected void onPostExecute(Map<ServerFormDetails, FormDownloadException> value) {
         synchronized (this) {
             if (stateListener != null) {
                 stateListener.formsDownloadingComplete(value);

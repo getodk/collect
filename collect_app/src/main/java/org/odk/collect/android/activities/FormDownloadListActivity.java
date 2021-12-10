@@ -40,6 +40,7 @@ import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
+import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -651,7 +652,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     @Override
-    public void formsDownloadingComplete(Map<ServerFormDetails, String> result) {
+    public void formsDownloadingComplete(Map<ServerFormDetails, FormDownloadException> result) {
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -667,8 +668,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         // Set result to true for forms which were downloaded
         if (viewModel.isDownloadOnlyMode()) {
             for (ServerFormDetails serverFormDetails : result.keySet()) {
-                String successKey = result.get(serverFormDetails);
-                if (getString(R.string.success).equals(successKey)) {
+                if (result.get(serverFormDetails) == null) {
                     if (viewModel.getFormResults().containsKey(serverFormDetails.getFormId())) {
                         viewModel.putFormResult(serverFormDetails.getFormId(), true);
                     }
