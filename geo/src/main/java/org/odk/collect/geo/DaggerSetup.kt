@@ -1,11 +1,13 @@
 package org.odk.collect.geo
 
+import android.app.Application
+import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
 import dagger.Provides
 import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.location.LocationClient
 import org.odk.collect.location.tracker.LocationTracker
-import java.lang.UnsupportedOperationException
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -15,6 +17,19 @@ interface GeoDependencyComponentProvider {
 @Component(modules = [GeoDependencyModule::class])
 @Singleton
 interface GeoDependencyComponent {
+
+    @Component.Builder
+    interface Builder {
+
+        @BindsInstance
+        fun application(application: Application): Builder
+
+        fun geoDependencyModule(geoDependencyModule: GeoDependencyModule): Builder
+
+        fun build(): GeoDependencyComponent
+    }
+
+    fun inject(geoPointActivity: GeoPointActivity)
     fun inject(geoPointMapActivity: GeoPointMapActivity)
     fun inject(geoPolyActivity: GeoPolyActivity)
 }
@@ -34,6 +49,11 @@ open class GeoDependencyModule {
 
     @Provides
     open fun providesLocationTracker(): LocationTracker {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesLocationClient(application: Application): LocationClient {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }

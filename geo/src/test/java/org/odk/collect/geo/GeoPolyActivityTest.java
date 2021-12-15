@@ -53,6 +53,7 @@ public class GeoPolyActivityTest {
 
         RobolectricApplication application = ApplicationProvider.getApplicationContext();
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+                .application(application)
                 .geoDependencyModule(new GeoDependencyModule() {
                     @NonNull
                     @Override

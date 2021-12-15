@@ -25,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -50,6 +52,9 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
@@ -264,6 +269,7 @@ public class Collect extends Application implements
     public GeoDependencyComponent getGeoDependencyComponent() {
         if (geoDependencyComponent == null) {
             geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+                    .application(this)
                     .geoDependencyModule(new GeoDependencyModule() {
                         @NonNull
                         @Provides
@@ -283,6 +289,16 @@ public class Collect extends Application implements
                         @Override
                         public LocationTracker providesLocationTracker() {
                             return new ForegroundServiceLocationTracker(Collect.this);
+                        }
+
+                        @NonNull
+                        @Override
+                        public LocationClient providesLocationClient(@NonNull Application application) {
+                            return LocationClientProvider.getClient(
+                                    application,
+                                    () -> new GoogleFusedLocationClient(application),
+                                    GoogleApiAvailability.getInstance()
+                            );
                         }
                     })
                     .build();

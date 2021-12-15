@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Intent;
 import android.location.Location;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -27,7 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
@@ -41,7 +41,17 @@ public class GeoPointActivityTest {
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
 
-        LocationClientProvider.setTestClient(locationClient);
+        RobolectricApplication application = ApplicationProvider.getApplicationContext();
+        application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
+                .application(application)
+                .geoDependencyModule(new GeoDependencyModule() {
+                    @NonNull
+                    @Override
+                    public LocationClient providesLocationClient(@NonNull Application application) {
+                        return locationClient;
+                    }
+                })
+                .build();
     }
 
     @Test
