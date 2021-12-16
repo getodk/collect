@@ -37,6 +37,7 @@ interface GeoDependencyComponent {
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivityNew: GeoPointActivityNew)
 
+    val scheduler: Scheduler
     val locationTracker: LocationTracker
 }
 
@@ -75,7 +76,7 @@ open class GeoDependencyModule {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
-                return GeoPointViewModelImpl(component.locationTracker) as T
+                return GeoPointViewModelImpl(component.locationTracker, component.scheduler) as T
             }
         }
     }

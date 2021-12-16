@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.externalapp.ExternalAppUtils
-import org.odk.collect.location.Location
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -26,14 +25,16 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
                 Double.MAX_VALUE
             )
 
+        viewModel.location.observe(this) {
+            if (it != null) {
+                ExternalAppUtils.returnSingleValue(this, GeoUtils.formatLocationResultString(it))
+            }
+        }
+
         DialogFragmentUtils.showIfNotShowing(
             GeoPointDialogFragment::class.java,
             supportFragmentManager
         )
-    }
-
-    override fun onLocationAvailable(location: Location) {
-        ExternalAppUtils.returnSingleValue(this, GeoUtils.formatLocationResultString(location))
     }
 
     override fun onCancel() {

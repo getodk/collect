@@ -3,6 +3,7 @@ package org.odk.collect.geo
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -22,7 +23,11 @@ import org.odk.collect.testshared.FakeScheduler
 @RunWith(AndroidJUnit4::class)
 class GeoPointActivityNewTest {
 
-    private val viewModel = mock<GeoPointViewModel>()
+    private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
+    private val viewModel = mock<GeoPointViewModel> {
+        on { location } doReturn locationLiveData
+        on { currency } doReturn MutableLiveData(null)
+    }
     private val scheduler = FakeScheduler()
 
     @Before
@@ -64,9 +69,7 @@ class GeoPointActivityNewTest {
         val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
 
         val location = Location(0.0, 0.0, 0.0, 0.0f)
-        scenario.onActivity {
-            it.onLocationAvailable(location)
-        }
+        locationLiveData.value = location
 
         assertThat(scenario.isFinishing, equalTo(true))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
