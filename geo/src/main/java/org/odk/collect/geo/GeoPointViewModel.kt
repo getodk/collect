@@ -19,7 +19,7 @@ internal abstract class GeoPointViewModel : ViewModel() {
 
 internal class GeoPointViewModelImpl(
     private val locationTracker: LocationTracker,
-    private val scheduler: Scheduler
+    scheduler: Scheduler
 ) : GeoPointViewModel() {
 
     private val repeat = scheduler.repeat(
