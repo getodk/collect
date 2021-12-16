@@ -3,7 +3,6 @@ package org.odk.collect.geo
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,7 +14,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.location.Location
 import org.odk.collect.testshared.Extensions.isFinishing
@@ -24,8 +22,8 @@ import org.odk.collect.testshared.FakeScheduler
 @RunWith(AndroidJUnit4::class)
 class GeoPointActivityNewTest {
 
-    private val scheduler = FakeScheduler()
     private val viewModel = mock<GeoPointViewModel>()
+    private val scheduler = FakeScheduler()
 
     @Before
     fun setup() {
@@ -53,29 +51,30 @@ class GeoPointActivityNewTest {
     }
 
     @Test
-    fun `finishes when location is available`() {
+    fun `shows dialog`() {
         val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
-        scheduler.runForeground(1000L)
-        assertThat(scenario.isFinishing, equalTo(false))
+        scenario.onActivity {
+            val fragments = it.supportFragmentManager.fragments
+            assertThat(fragments[0].javaClass, equalTo(GeoPointDialogFragment::class.java))
+        }
+    }
 
-        val location = Location(0.0, 0.0, 0.0, 0f)
-        whenever(viewModel.location).doReturn(location)
-        scheduler.runForeground(2000L)
+    @Test
+    fun `finishes with location when available`() {
+        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
+
+        val location = Location(0.0, 0.0, 0.0, 0.0f)
+        scenario.onActivity {
+            it.onLocationAvailable(location)
+        }
 
         assertThat(scenario.isFinishing, equalTo(true))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
         val resultIntent = scenario.result.resultData
         val returnedValue = ExternalAppUtils.getReturnedSingleValue(resultIntent)
-        assertThat(returnedValue, equalTo(GeoUtils.formatLocationResultString(location)))
-    }
-
-    @Test
-    fun `cancels repeat when paused and restarts when resumed`() {
-        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
-        scenario.moveToState(Lifecycle.State.STARTED)
-        assertThat(scheduler.isRepeatRunning(), equalTo(false))
-
-        scenario.moveToState(Lifecycle.State.RESUMED)
-        assertThat(scheduler.isRepeatRunning(), equalTo(true))
+        assertThat(
+            returnedValue,
+            equalTo(GeoUtils.formatLocationResultString(location))
+        )
     }
 }

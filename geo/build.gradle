@@ -62,6 +62,7 @@ dependencies {
     implementation project(path: ':analytics')
     implementation project(path: ':permissions')
 
+    debugImplementation project(path: ':fragmentstest')
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest

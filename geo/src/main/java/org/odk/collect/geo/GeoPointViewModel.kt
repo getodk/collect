@@ -23,7 +23,7 @@ internal class GeoPointViewModelImpl(
     override val location: Location?
         get() {
             return locationTracker.getCurrentLocation()?.let {
-                if (it.accuracy <= accuracyThreshold)  {
+                if (it.accuracy <= accuracyThreshold) {
                     it
                 } else {
                     null

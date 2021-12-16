@@ -34,6 +34,7 @@ interface GeoDependencyComponent {
     fun inject(geoPointActivity: GeoPointActivity)
     fun inject(geoPointMapActivity: GeoPointMapActivity)
     fun inject(geoPolyActivity: GeoPolyActivity)
+    fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivityNew: GeoPointActivityNew)
 
     val locationTracker: LocationTracker
