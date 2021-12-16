@@ -76,4 +76,11 @@ class GeoPointDialogFragmentTest {
         onViewInDialog(withText(R.string.cancel)).perform(click())
         verify(listener).onCancel()
     }
+
+    @Test
+    fun `clicking save calls forceLocation() on view model`() {
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        onViewInDialog(withText(R.string.save)).perform(click())
+        verify(viewModel).forceLocation()
+    }
 }

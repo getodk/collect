@@ -105,4 +105,19 @@ class GeoPointViewModelImplTest {
         viewModel.onCleared()
         assertThat(scheduler.isRepeatRunning(), equalTo(false))
     }
+
+    @Test
+    fun `forceLocation() sets location to location tracker location regardless of threshold`() {
+        val viewModel = GeoPointViewModelImpl(locationTracker, scheduler)
+        viewModel.accuracyThreshold = 1.0
+
+        val location = liveDataTester.activate(viewModel.location)
+        val locationTrackerLocation = Location(0.0, 0.0, 0.0, 2.5f)
+        whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
+        scheduler.runForeground()
+        assertThat(location.value, equalTo(null))
+
+        viewModel.forceLocation()
+        assertThat(location.value, equalTo(locationTrackerLocation))
+    }
 }

@@ -13,6 +13,8 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract var accuracyThreshold: Double
     abstract val location: LiveData<Location?>
     abstract val currency: LiveData<Float?>
+
+    abstract fun forceLocation()
 }
 
 internal class GeoPointViewModelImpl(
@@ -33,11 +35,16 @@ internal class GeoPointViewModelImpl(
 
     override var accuracyThreshold: Double = Double.MAX_VALUE
 
+    private var forceLocation = false
     private val _location = MutableLiveData<Location?>(null)
     override val location: LiveData<Location?>
         get() = Transformations.map(_location) {
-            if (it != null && it.accuracy <= accuracyThreshold) {
-                it
+            if (it != null) {
+                if (forceLocation || it.accuracy <= accuracyThreshold) {
+                    it
+                } else {
+                    null
+                }
             } else {
                 null
             }
@@ -47,6 +54,11 @@ internal class GeoPointViewModelImpl(
         get() = Transformations.map(_location) {
             it?.accuracy
         }
+
+    override fun forceLocation() {
+        forceLocation = true
+        _location.value = _location.value
+    }
 
     public override fun onCleared() {
         repeat.cancel()
