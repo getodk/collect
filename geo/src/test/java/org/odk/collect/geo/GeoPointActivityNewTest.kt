@@ -77,4 +77,15 @@ class GeoPointActivityNewTest {
             equalTo(GeoUtils.formatLocationResultString(location))
         )
     }
+
+    @Test
+    fun `finishes when dialog is cancelled`() {
+        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
+        scenario.onActivity {
+            it.onCancel()
+        }
+
+        assertThat(scenario.isFinishing, equalTo(true))
+        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_CANCELED))
+    }
 }

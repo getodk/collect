@@ -36,6 +36,10 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
         ExternalAppUtils.returnSingleValue(this, GeoUtils.formatLocationResultString(location))
     }
 
+    override fun onCancel() {
+        finish()
+    }
+
     companion object {
         const val EXTRA_ACCURACY_THRESHOLD = "extra_accuracy_threshold"
     }

@@ -48,6 +48,8 @@ class GeoPointDialogFragment : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
+            .setCancelable(false)
+            .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
             .create()
     }
 
@@ -82,5 +84,6 @@ class GeoPointDialogFragment : DialogFragment() {
 
     interface Listener {
         fun onLocationAvailable(location: Location)
+        fun onCancel()
     }
 }

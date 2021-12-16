@@ -3,6 +3,7 @@ package org.odk.collect.geo
 import android.app.Application
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -88,5 +89,18 @@ class GeoPointDialogFragmentTest {
 
         scenario.moveToState(Lifecycle.State.RESUMED)
         assertThat(scheduler.isRepeatRunning(), equalTo(true))
+    }
+
+    @Test
+    fun `clicking cancel calls listener`() {
+        val scenario = DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        val listener = mock<GeoPointDialogFragment.Listener>()
+        scenario.onFragment {
+            it.listener = listener
+        }
+
+        onViewInDialog(withText(R.string.cancel)).perform(click())
+        verify(listener).onCancel()
     }
 }
