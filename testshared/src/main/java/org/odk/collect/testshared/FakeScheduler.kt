@@ -32,8 +32,6 @@ class FakeScheduler : Scheduler {
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        foregroundTasks.add(foreground)
-
         val task = RepeatTask(repeatPeriod, foreground, 0)
         repeatTasks.add(task)
 

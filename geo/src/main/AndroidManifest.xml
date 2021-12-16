@@ -14,5 +14,9 @@
         <activity
             android:name=".GeoPolyActivity"
             android:theme="@style/Theme.MaterialComponents" />
+
+        <activity
+            android:name=".GeoPointActivityNew"
+            android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>

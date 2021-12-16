@@ -42,6 +42,7 @@ import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -299,6 +300,12 @@ public class Collect extends Application implements
                                     () -> new GoogleFusedLocationClient(application),
                                     GoogleApiAvailability.getInstance()
                             );
+                        }
+
+                        @NonNull
+                        @Override
+                        public Scheduler providesScheduler() {
+                            return applicationComponent.scheduler();
                         }
                     })
                     .build();
