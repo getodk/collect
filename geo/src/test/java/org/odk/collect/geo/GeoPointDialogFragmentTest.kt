@@ -3,6 +3,9 @@ package org.odk.collect.geo
 import android.app.Application
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -16,6 +19,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.location.Location
 import org.odk.collect.testshared.FakeScheduler
 
@@ -42,6 +46,23 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
+    fun `shows and updates current accuracy`() {
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        whenever(viewModel.currentAccuracy).doReturn(null)
+        scheduler.runForeground()
+        onViewInDialog(withText("--")).check(matches(isDisplayed()))
+
+        whenever(viewModel.currentAccuracy).doReturn(50.2f)
+        scheduler.runForeground()
+        onViewInDialog(withText("50.2m")).check(matches(isDisplayed()))
+
+        whenever(viewModel.currentAccuracy).doReturn(15.65f)
+        scheduler.runForeground()
+        onViewInDialog(withText("15.65m")).check(matches(isDisplayed()))
+    }
+
+    @Test
     fun `calls listener when location is available`() {
         val scenario = DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
 
@@ -50,12 +71,12 @@ class GeoPointDialogFragmentTest {
             it.listener = listener
         }
 
-        scheduler.runForeground(1000L)
+        scheduler.runForeground()
         verify(listener, never()).onLocationAvailable(any())
 
         val location = Location(0.0, 0.0, 0.0, 0f)
         whenever(viewModel.location).doReturn(location)
-        scheduler.runForeground(2000L)
+        scheduler.runForeground()
         verify(listener).onLocationAvailable(location)
     }
 

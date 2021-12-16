@@ -48,6 +48,25 @@ class GeoPointViewModelImplTest {
     }
 
     @Test
+    fun `currentAccuracy returns null when no location`() {
+        val viewModel = GeoPointViewModelImpl(locationTracker)
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(null)
+        assertThat(viewModel.currentAccuracy, equalTo(null))
+    }
+
+    @Test
+    fun `currentAccuracy updates with location accuracy`() {
+        val viewModel = GeoPointViewModelImpl(locationTracker)
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 1.1f))
+        assertThat(viewModel.currentAccuracy, equalTo(1.1f))
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 2.5f))
+        assertThat(viewModel.currentAccuracy, equalTo(2.5f))
+    }
+
+    @Test
     fun `onCleared() stops LocationTracker`() {
         val viewModel = GeoPointViewModelImpl(locationTracker)
         viewModel.onCleared()

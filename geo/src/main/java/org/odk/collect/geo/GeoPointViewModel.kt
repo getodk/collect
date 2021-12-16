@@ -8,6 +8,7 @@ import org.odk.collect.location.tracker.LocationTracker
 internal abstract class GeoPointViewModel : ViewModel() {
     abstract var accuracyThreshold: Double
     abstract val location: Location?
+    abstract val currentAccuracy: Float?
 }
 
 internal class GeoPointViewModelImpl(
@@ -30,6 +31,9 @@ internal class GeoPointViewModelImpl(
                 }
             }
         }
+
+    override val currentAccuracy: Float?
+        get() = locationTracker.getCurrentLocation()?.accuracy
 
     public override fun onCleared() {
         locationTracker.stop()

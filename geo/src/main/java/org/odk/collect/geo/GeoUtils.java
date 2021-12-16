@@ -40,7 +40,7 @@ public final class GeoUtils {
 
     public static String formatLocationResultString(Location location) {
         return formatLocationResultString(new org.odk.collect.location.Location(
-                location.getAltitude(),
+                location.getLatitude(),
                 location.getLongitude(),
                 location.getAltitude(),
                 location.getAccuracy()
