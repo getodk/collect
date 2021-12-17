@@ -73,7 +73,7 @@ class GeoPointViewModelImplTest {
     fun `currentAccuracy is null when no location`() {
         val viewModel = GeoPointViewModelImpl(locationTracker, scheduler)
 
-        val currentAccuracy = liveDataTester.activate(viewModel.currency)
+        val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
         whenever(locationTracker.getCurrentLocation()).thenReturn(null)
         scheduler.runForeground()
         assertThat(currentAccuracy.value, equalTo(null))
@@ -82,7 +82,7 @@ class GeoPointViewModelImplTest {
     @Test
     fun `currentAccuracy updates with location accuracy`() {
         val viewModel = GeoPointViewModelImpl(locationTracker, scheduler)
-        val currentAccuracy = liveDataTester.activate(viewModel.currency)
+        val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
 
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 1.1f))
         scheduler.runForeground()

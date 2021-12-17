@@ -12,7 +12,7 @@ import org.odk.collect.location.tracker.LocationTracker
 internal abstract class GeoPointViewModel : ViewModel() {
     abstract var accuracyThreshold: Double
     abstract val location: LiveData<Location?>
-    abstract val currency: LiveData<Float?>
+    abstract val currentAccuracy: LiveData<Float?>
 
     abstract fun forceLocation()
 }
@@ -50,7 +50,7 @@ internal class GeoPointViewModelImpl(
             }
         }
 
-    override val currency: LiveData<Float?>
+    override val currentAccuracy: LiveData<Float?>
         get() = Transformations.map(_location) {
             it?.accuracy
         }

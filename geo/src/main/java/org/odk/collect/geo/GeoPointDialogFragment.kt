@@ -39,7 +39,7 @@ class GeoPointDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = GeopointDialogNewBinding.inflate(LayoutInflater.from(context))
 
-        viewModel.currency.observe(this) {
+        viewModel.currentAccuracy.observe(this) {
             binding.currentAccuracy.text = if (it == null) {
                 "--"
             } else {

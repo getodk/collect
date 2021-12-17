@@ -28,7 +28,7 @@ class GeoPointDialogFragmentTest {
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
     private val viewModel = mock<GeoPointViewModel> {
         on { location } doReturn locationLiveData
-        on { currency } doReturn currentAccuracyLiveData
+        on { currentAccuracy } doReturn currentAccuracyLiveData
     }
 
     @Before
