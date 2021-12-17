@@ -105,6 +105,7 @@
             "mapbox://styles/mapbox/dark-v10",
             "mapbox://styles/mapbox/satellite-v9",
             "mapbox://styles/mapbox/satellite-streets-v11",
+            "mapbox://styles/mapbox/streets-v11",
             "mapbox://styles/mapbox/outdoors-v11"
           ]
         },
@@ -161,10 +162,10 @@
         "delete_send": {
           "type": "boolean"
         },
-        "default_complete": {
+        "default_completed": {
           "type": "boolean"
         },
-        "constraint_behaviour": {
+        "constraint_behavior": {
           "type": "string",
           "enum": [
             "on_swipe",
@@ -177,7 +178,7 @@
         "image_size": {
           "type": "string",
           "enum": [
-            "original",
+            "original_image_size",
             "small",
             "very_small",
             "medium",
@@ -272,7 +273,7 @@
         "automatic_update": {
           "type": "boolean"
         },
-        "hide_old_form_version": {
+        "hide_old_form_versions": {
           "type": "boolean"
         },
         "change_autosend": {
@@ -284,7 +285,7 @@
         "default_to_finalized": {
           "type": "boolean"
         },
-        "change_constraint_behaviour": {
+        "change_constraint_behavior": {
           "type": "boolean"
         },
         "high_resolution": {
