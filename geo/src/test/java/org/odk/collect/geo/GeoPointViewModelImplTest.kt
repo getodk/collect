@@ -120,4 +120,24 @@ class GeoPointViewModelImplTest {
         viewModel.forceLocation()
         assertThat(location.value, equalTo(locationTrackerLocation))
     }
+
+    /**
+     * We want to avoid timing issues where an update happens right after a click and the user
+     * ends up with a location fix that was never on screen.
+     */
+    @Test
+    fun `forceLocation() locks location to current one`() {
+        val viewModel = GeoPointViewModelImpl(locationTracker, scheduler)
+
+        val location = liveDataTester.activate(viewModel.location)
+        val locationTrackerLocation = Location(0.0, 0.0, 0.0, 2.5f)
+        whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
+        scheduler.runForeground()
+        viewModel.forceLocation()
+        assertThat(location.value, equalTo(locationTrackerLocation))
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 5.5f))
+        scheduler.runForeground()
+        assertThat(location.value, equalTo(locationTrackerLocation))
+    }
 }

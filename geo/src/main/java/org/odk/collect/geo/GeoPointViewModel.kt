@@ -35,12 +35,14 @@ internal class GeoPointViewModelImpl(
 
     override var accuracyThreshold: Double = Double.MAX_VALUE
 
-    private var forceLocation = false
+    private var forcedLocation: Location? = null
     private val _location = MutableLiveData<Location?>(null)
     override val location: LiveData<Location?>
         get() = Transformations.map(_location) {
             if (it != null) {
-                if (forceLocation || it.accuracy <= accuracyThreshold) {
+                if (forcedLocation != null) {
+                    forcedLocation
+                } else if (it.accuracy <= accuracyThreshold) {
                     it
                 } else {
                     null
@@ -56,7 +58,7 @@ internal class GeoPointViewModelImpl(
         }
 
     override fun forceLocation() {
-        forceLocation = true
+        forcedLocation = _location.value
         _location.value = _location.value
     }
 
