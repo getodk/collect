@@ -32,14 +32,6 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -47,6 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -58,7 +51,6 @@ import java.io.File;
 
 import timber.log.Timber;
 
-import static org.apache.commons.io.FileUtils.getFile;
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
 
 public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
@@ -154,30 +146,19 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
             File f = getFile();
             if (f != null && f.exists()) {
-                imageView = createAnswerImageView(getContext());
-                answerLayout.addView(imageView);
-                Glide.with(getContext())
-                        .asBitmap()
-                        .load(f)
-                        .apply(new RequestOptions().override(screenWidth, screenHeight).downsample(DownsampleStrategy.AT_MOST))
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                                answerLayout.removeView(imageView);
-                                imageView = null;
-                                errorTextView.setVisibility(View.VISIBLE);
-                                return false;
-                            }
-                            @Override
-                            public boolean onResourceReady(Bitmap bitmap, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                                imageView.setOnClickListener(v -> {
-                                    if (imageClickHandler != null) {
-                                        imageClickHandler.clickImage("viewImage");
-                                    }
-                                });
-                                return false;
-                            }
-                        }).into(imageView);
+                Bitmap bmp = FileUtils.getBitmapScaledToDisplay(f, screenHeight, screenWidth);
+                if (bmp == null) {
+                    errorTextView.setVisibility(View.VISIBLE);
+                } else {
+                    imageView = createAnswerImageView(getContext(), bmp);
+                    imageView.setOnClickListener(v -> {
+                        if (imageClickHandler != null) {
+                            imageClickHandler.clickImage("viewImage");
+                        }
+                    });
+
+                    answerLayout.addView(imageView);
+                }
             }
         }
     }
