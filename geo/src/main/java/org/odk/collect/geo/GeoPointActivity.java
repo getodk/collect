@@ -53,7 +53,7 @@ import java.util.TimerTask;
 import timber.log.Timber;
 
 public class GeoPointActivity extends LocalizedActivity implements LocationListener,
-        LocationClient.LocationClientListener, GpsStatus.Listener {
+        LocationClient.LocationClientListener, GpsStatus.Listener, DialogInterface.OnClickListener {
 
     public static final String EXTRA_ACCURACY_THRESHOLD = "accuracyThreshold";
 
@@ -202,28 +202,32 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
                 .create();
 
         dialogMessage = getString(R.string.please_wait_long);
-
-        DialogInterface.OnClickListener geoPointButtonListener =
-                (dialog, which) -> {
-                    switch (which) {
-                        case DialogInterface.BUTTON_POSITIVE:
-                            logSavePointManual();
-                            returnLocation();
-                            break;
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            location = null;
-                            finish();
-                            break;
-                    }
-                };
         locationDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.save_point),
-                geoPointButtonListener);
+                this);
         locationDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
                 getString(R.string.cancel_location),
-                geoPointButtonListener);
+                this);
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+                logSavePointManual();
+                returnLocation();
+                break;
+            case DialogInterface.BUTTON_NEGATIVE:
+                location = null;
+                finish();
+                break;
+        }
     }
 
     private void logSavePointManual() {
+        if (location == null) {
+            return;
+        }
+
         String event;
         if (System.currentTimeMillis() - startTime < 2000) {
             event = AnalyticsEvents.SAVE_POINT_IMMEDIATE;
