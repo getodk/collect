@@ -13,6 +13,7 @@ import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.projects.Project
 import javax.inject.Inject
 
@@ -57,7 +58,7 @@ class FirstLaunchActivity : CollectAbstractActivity() {
             versionInformation.versionToDisplay
         )
 
-        binding.configureLater.setOnClickListener {
+        binding.configureLater.addOnClickListener {
             Analytics.log(AnalyticsEvents.TRY_DEMO)
 
             projectImporter.importNewProject(Project.DEMO_PROJECT)
