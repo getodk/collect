@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -14,6 +15,7 @@ import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Application;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 
@@ -169,5 +171,14 @@ public class GeoPointActivityTest {
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
         ActivityScenario.launch(intent);
         verify(locationClient).setRetainMockAccuracy(false);
+    }
+
+    @Test
+    public void clickingSaveGeoPoint_beforeLocationFound_finishesActivity() {
+        ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(GeoPointActivity.class);
+        scenario.onActivity(activity -> {
+            activity.onClick(null, DialogInterface.BUTTON_POSITIVE);
+            assertThat(activity.isFinishing(), equalTo(true));
+        });
     }
 }
