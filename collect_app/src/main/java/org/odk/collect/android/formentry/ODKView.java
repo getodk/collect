@@ -84,6 +84,7 @@ import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.AudioWidget;
 import org.odk.collect.android.widgets.BarcodeWidget;
 import org.odk.collect.android.widgets.ExStringWidget;
+import org.odk.collect.android.widgets.GeoPointMapWidget;
 import org.odk.collect.android.widgets.GeoPointWidget;
 import org.odk.collect.android.widgets.ImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -300,9 +301,16 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                             formWidget.launching.setVisibility(VISIBLE);
                         }
                     } else if (geopointPrompt != null) {    // Smap - launch gps collection
-                        GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
-                        if (geopointWidget != null) {
-                            geopointWidget.binding.simpleButton.performClick();
+                        if(widgets.get(0).getClass() == GeoPointWidget.class) {
+                            GeoPointWidget geopointWidget = (GeoPointWidget) widgets.get(0);
+                            if (geopointWidget != null) {
+                                geopointWidget.binding.simpleButton.performClick();
+                            }
+                        } else if(widgets.get(0).getClass() == GeoPointMapWidget.class) {
+                            GeoPointMapWidget geopointWidget = (GeoPointMapWidget) widgets.get(0);
+                            if (geopointWidget != null) {
+                                geopointWidget.binding.simpleButton.performClick();
+                            }
                         }
                     } else if (imagePrompt != null) {    // Smap - launch image collection
                         ImageWidget imageWidget = (ImageWidget) widgets.get(0);

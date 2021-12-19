@@ -34,7 +34,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
 public class GeoPointMapWidget extends QuestionWidget implements WidgetDataReceiver {
-    GeoWidgetAnswerBinding binding;
+    public GeoWidgetAnswerBinding binding;   // smap make public
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final GeoDataRequester geoDataRequester;
