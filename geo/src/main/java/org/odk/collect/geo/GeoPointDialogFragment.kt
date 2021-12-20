@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.GeopointDialogNewBinding
-import java.text.DecimalFormat
 import javax.inject.Inject
 
 class GeoPointDialogFragment : DialogFragment() {
@@ -63,9 +63,6 @@ class GeoPointDialogFragment : DialogFragment() {
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
             .create()
     }
-
-    private fun formatAccuracy(accuracy: Float) =
-        "${DecimalFormat("#.##").format(accuracy)}m"
 
     interface Listener {
         fun onCancel()

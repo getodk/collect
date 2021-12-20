@@ -6,8 +6,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.AccuracyStatusBinding
-import java.text.DecimalFormat
 
 class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
@@ -44,7 +44,4 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
             )
         }
     }
-
-    private fun formatAccuracy(accuracy: Float) =
-        "${DecimalFormat("#.##").format(accuracy)}m"
 }

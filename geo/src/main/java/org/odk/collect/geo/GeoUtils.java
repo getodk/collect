@@ -5,6 +5,7 @@ import android.location.Location;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.shared.strings.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,5 +58,9 @@ public final class GeoUtils {
      */
     public static String capitalizeGps(String locationProvider) {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
+    }
+
+    public static String formatAccuracy(float accuracy) {
+        return new DecimalFormat("#.##").format(accuracy) + "m";
     }
 }
