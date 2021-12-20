@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.analytics.Analytics.Companion.log
 import org.odk.collect.async.Scheduler
+import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 
@@ -22,6 +25,7 @@ internal class GeoPointViewModelImpl(
     scheduler: Scheduler
 ) : GeoPointViewModel() {
 
+    private val startTime = System.currentTimeMillis()
     private val repeat = scheduler.repeat(
         {
             _location.value = locationTracker.getCurrentLocation()
@@ -60,11 +64,28 @@ internal class GeoPointViewModelImpl(
     override fun forceLocation() {
         forcedLocation = _location.value
         _location.value = _location.value
+
+        logSavePointManual(forcedLocation!!)
     }
 
     public override fun onCleared() {
         repeat.cancel()
         locationTracker.stop()
+    }
+
+    private fun logSavePointManual(location: Location) {
+        val event = if (System.currentTimeMillis() - startTime < 2000) {
+            AnalyticsEvents.SAVE_POINT_IMMEDIATE
+        } else {
+            AnalyticsEvents.SAVE_POINT_MANUAL
+        }
+        if (location.accuracy > 100) {
+            log(event, "accuracy", "unacceptable")
+        } else if (location.accuracy > 10) {
+            log(event, "accuracy", "poor")
+        } else {
+            log(event, "accuracy", "acceptable")
+        }
     }
 }
 
