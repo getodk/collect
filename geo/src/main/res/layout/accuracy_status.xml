@@ -32,5 +32,4 @@
         android:text="@string/please_wait_for_improved_accuracy"
         android:textAppearance="?textAppearanceSubtitle1" />
 
-
 </androidx.appcompat.widget.LinearLayoutCompat>
