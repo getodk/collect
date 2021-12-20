@@ -29,9 +29,11 @@ class GeoPointDialogFragmentTest {
 
     private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
+    private val timeElapsedLiveData: MutableLiveData<Long> = MutableLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
         on { location } doReturn locationLiveData
         on { currentAccuracy } doReturn currentAccuracyLiveData
+        on { timeElapsed } doReturn timeElapsedLiveData
     }
 
     @Before
@@ -94,6 +96,23 @@ class GeoPointDialogFragmentTest {
                 )
             )
         ).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `shows and updates time elapsed`() {
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        timeElapsedLiveData.value = 0
+        scheduler.runForeground()
+        onViewInDialog(withText(application.getString(R.string.time_elapsed, "00:00"))).check(
+            matches(isDisplayed())
+        )
+
+        timeElapsedLiveData.value = 62000
+        scheduler.runForeground()
+        onViewInDialog(withText(application.getString(R.string.time_elapsed, "01:02"))).check(
+            matches(isDisplayed())
+        )
     }
 
     @Test

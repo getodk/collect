@@ -506,6 +506,7 @@
 
     <string name="distance_from_accuracy_goal">%1$s from goal of %2$s</string>
     <string name="please_wait_for_improved_accuracy">Please wait for improved accuracy</string>
+    <string name="time_elapsed">Time elapsed: %1$s</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>

@@ -3,6 +3,7 @@ package org.odk.collect.geo
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -55,6 +56,11 @@ class GeoPointDialogFragment : DialogFragment() {
             } else {
                 ""
             }
+        }
+
+        viewModel.timeElapsed.observe(this) {
+            binding.time.text =
+                getString(R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
         }
 
         return MaterialAlertDialogBuilder(requireContext())

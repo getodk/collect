@@ -81,38 +81,15 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <TextView
-            android:id="@+id/target_accuracy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_extra_small"
-            android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toTopOf="@id/time"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/top_section"
-            app:layout_constraintVertical_bias="1"
-            tools:text="Geopoint will be auto-saved at 1m" />
-
-        <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_extra_small"
+            android:layout_marginTop="@dimen/margin_standard"
             android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toTopOf="@id/satellites"
+            app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/top_section"
             tools:text="Time elapsed: 03:52" />
-
-        <TextView
-            android:id="@+id/satellites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_extra_small"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            tools:text="Satellites: 4/33" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

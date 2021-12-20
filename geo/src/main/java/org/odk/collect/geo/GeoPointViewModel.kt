@@ -15,12 +15,14 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract var accuracyThreshold: Double
     abstract val location: LiveData<Location?>
     abstract val currentAccuracy: LiveData<Float?>
+    abstract val timeElapsed: LiveData<Long>
 
     abstract fun forceLocation()
 }
 
 internal class GeoPointViewModelImpl(
     private val locationTracker: LocationTracker,
+    private val clock: () -> Long,
     scheduler: Scheduler
 ) : GeoPointViewModel() {
 
@@ -28,7 +30,7 @@ internal class GeoPointViewModelImpl(
         locationTracker.start()
     }
 
-    private val startTime = System.currentTimeMillis()
+    private val startTime = clock()
     private val repeat = scheduler.repeat(
         {
             locationTracker.getCurrentLocation().let {
@@ -38,6 +40,8 @@ internal class GeoPointViewModelImpl(
                     acceptLocation(it, false)
                 }
             }
+
+            _timeElapsed.value = clock() - startTime
         },
         1000
     )
@@ -50,6 +54,9 @@ internal class GeoPointViewModelImpl(
     override val currentAccuracy = Transformations.map(trackerLocation) {
         it?.accuracy
     }
+
+    private val _timeElapsed = MutableLiveData<Long>(0)
+    override val timeElapsed = _timeElapsed
 
     override fun forceLocation() {
         acceptLocation(trackerLocation.value!!, true)
