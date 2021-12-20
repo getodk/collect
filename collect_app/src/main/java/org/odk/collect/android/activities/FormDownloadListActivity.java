@@ -55,7 +55,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FormsDownloadResultInterpreter;
 import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
@@ -138,9 +137,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Inject
     FormDownloader formDownloader;
-
-    @Inject
-    FormsDownloadResultInterpreter formsDownloadResultInterpreter;
 
     @SuppressWarnings("unchecked")
     @Override

@@ -16,19 +16,16 @@ import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.Serializable
 
-class FormUpdatesDownloadedNotificationBuilder(
-    private val application: Application,
-    private val formsDownloadResultInterpreter: FormsDownloadResultInterpreter
-) {
+class FormUpdatesDownloadedNotificationBuilder(private val application: Application) {
 
     fun build(result: Map<ServerFormDetails, String>, projectName: String): Notification {
-        val allFormsDownloadedSuccessfully = formsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
+        val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, application)
 
         val intent = if (allFormsDownloadedSuccessfully) {
             Intent(application, FillBlankFormActivity::class.java)
         } else {
             Intent(application, ErrorActivity::class.java).apply {
-                putExtra(ErrorActivity.EXTRA_ERRORS, formsDownloadResultInterpreter.getFailures(result) as Serializable)
+                putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, application) as Serializable)
             }
         }
 
@@ -47,7 +44,7 @@ class FormUpdatesDownloadedNotificationBuilder(
             if (allFormsDownloadedSuccessfully) application.getLocalizedString(R.string.all_downloads_succeeded)
             else application.getLocalizedString(
                 R.string.some_downloads_failed,
-                formsDownloadResultInterpreter.getNumberOfFailures(result),
+                FormsDownloadResultInterpreter.getNumberOfFailures(result, application),
                 result.size
             )
 

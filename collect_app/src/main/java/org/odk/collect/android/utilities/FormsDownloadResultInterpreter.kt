@@ -6,8 +6,8 @@ import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.strings.localization.getLocalizedString
 
-class FormsDownloadResultInterpreter(private val context: Context) {
-    fun getFailures(result: Map<ServerFormDetails, String>) = result.filter {
+object FormsDownloadResultInterpreter {
+    fun getFailures(result: Map<ServerFormDetails, String>, context: Context) = result.filter {
         it.value != context.getLocalizedString(R.string.success)
     }.map {
         ErrorItem(
@@ -17,11 +17,11 @@ class FormsDownloadResultInterpreter(private val context: Context) {
         )
     }
 
-    fun getNumberOfFailures(result: Map<ServerFormDetails, String>) = result.count {
+    fun getNumberOfFailures(result: Map<ServerFormDetails, String>, context: Context) = result.count {
         it.value != context.getLocalizedString(R.string.success)
     }
 
-    fun allFormsDownloadedSuccessfully(result: Map<ServerFormDetails, String>) = result.values.all {
+    fun allFormsDownloadedSuccessfully(result: Map<ServerFormDetails, String>, context: Context) = result.values.all {
         it == context.getLocalizedString(R.string.success)
     }
 }

@@ -12,15 +12,11 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
 import org.odk.collect.errors.ErrorActivity
 import java.io.Serializable
-import javax.inject.Inject
 
 class FormsDownloadResultDialog : DialogFragment() {
     private lateinit var result: Map<ServerFormDetails, String>
 
     var listener: FormDownloadResultDialogListener? = null
-
-    @Inject
-    lateinit var formsDownloadResultInterpreter: FormsDownloadResultInterpreter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,10 +35,10 @@ class FormsDownloadResultDialog : DialogFragment() {
                 listener?.onCloseDownloadingResult()
             }
 
-        if (!formsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
+        if (!FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
                 val intent = Intent(context, ErrorActivity::class.java).apply {
-                    putExtra(ErrorActivity.EXTRA_ERRORS, formsDownloadResultInterpreter.getFailures(result) as Serializable)
+                    putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, requireContext()) as Serializable)
                 }
                 startActivity(intent)
                 listener?.onCloseDownloadingResult()
@@ -53,10 +49,10 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     private fun getMessage(): String {
-        return if (formsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
+        return if (FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
             getString(R.string.all_downloads_succeeded)
         } else {
-            getString(R.string.some_downloads_failed, formsDownloadResultInterpreter.getNumberOfFailures(result).toString(), result.size.toString())
+            getString(R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result, requireContext()).toString(), result.size.toString())
         }
     }
 

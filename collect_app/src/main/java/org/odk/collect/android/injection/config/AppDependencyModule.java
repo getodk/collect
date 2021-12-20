@@ -113,7 +113,6 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
-import org.odk.collect.android.utilities.FormsDownloadResultInterpreter;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.LaunchState;
@@ -368,8 +367,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application, FormsDownloadResultInterpreter formsDownloadResultInterpreter) {
-        return new FormUpdatesDownloadedNotificationBuilder(application, formsDownloadResultInterpreter);
+    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application) {
+        return new FormUpdatesDownloadedNotificationBuilder(application);
     }
 
     @Provides
@@ -657,10 +656,5 @@ public class AppDependencyModule {
     @Provides
     public LocationClient providesLocationClient(Application application) {
         return LocationClientProvider.getClient(application);
-    }
-
-    @Provides
-    public FormsDownloadResultInterpreter providesFormsDownloadResultInterpreter(Context context) {
-        return new FormsDownloadResultInterpreter(context);
     }
 }
