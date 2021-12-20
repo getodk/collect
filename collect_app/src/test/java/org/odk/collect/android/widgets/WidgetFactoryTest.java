@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.android.support.InMemSettingsProvider;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -34,8 +35,7 @@ public class WidgetFactoryTest {
     @Before
     public void setup() {
         Activity activity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
-
-        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null, null);
+        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null, null, new InMemSettingsProvider());
     }
 
     @Test

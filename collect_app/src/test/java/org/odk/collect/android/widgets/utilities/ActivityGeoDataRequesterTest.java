@@ -31,6 +31,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.support.InMemSettingsProvider;
 import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.support.WidgetTestActivity;
@@ -42,8 +43,9 @@ import org.robolectric.shadows.ShadowActivity;
 
 @RunWith(AndroidJUnit4.class)
 public class ActivityGeoDataRequesterTest {
+
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
-    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider);
+    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider, new InMemSettingsProvider());
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 

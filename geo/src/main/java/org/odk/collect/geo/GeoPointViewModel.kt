@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.analytics.Analytics.Companion.log
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.analytics.AnalyticsEvents
