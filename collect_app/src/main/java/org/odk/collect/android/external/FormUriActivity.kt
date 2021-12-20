@@ -3,7 +3,7 @@ package org.odk.collect.android.external
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
@@ -26,26 +26,37 @@ class FormUriActivity : Activity() {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
 
-        val firstProject = projectsRepository.getAll().first()
-        val uri = intent.data
-        val uriProjectId = uri?.getQueryParameter("projectId")
-        val projectId = uriProjectId ?: firstProject.uuid
-
-        logAnalytics(uriProjectId)
-
-        if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-            startActivity(
-                Intent(this, FormEntryActivity::class.java).also {
-                    it.data = uri
-                    intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                }
-            )
-        } else {
-            AlertDialog.Builder(this)
-                .setMessage(R.string.wrong_project_selected_for_form)
+        val projects = projectsRepository.getAll()
+        if (projects.isEmpty()) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage(R.string.app_not_configured)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
+        } else {
+            val firstProject = projects.first()
+            val uri = intent.data
+            val uriProjectId = uri?.getQueryParameter("projectId")
+            val projectId = uriProjectId ?: firstProject.uuid
+
+            logAnalytics(uriProjectId)
+
+            if (projectId == currentProjectProvider.getCurrentProject().uuid) {
+                startActivity(
+                    Intent(this, FormEntryActivity::class.java).also {
+                        it.data = uri
+                        intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
+                    }
+                )
+            } else {
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(R.string.wrong_project_selected_for_form)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        finish()
+                    }
+                    .create()
+                    .show()
+            }
         }
     }
 
