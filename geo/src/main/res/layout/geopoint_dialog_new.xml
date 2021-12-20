@@ -73,9 +73,9 @@
                 android:layout_marginBottom="@dimen/margin_large"
                 android:gravity="center"
                 android:maxWidth="240dp"
+                android:text="@string/please_wait_for_improved_accuracy"
                 android:textAppearance="?textAppearanceSubtitle1"
-                android:textColor="?colorOnPrimary"
-                tools:text="Please wait for improved accuracy" />
+                android:textColor="?colorOnPrimary" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

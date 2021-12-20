@@ -43,7 +43,17 @@ class GeoPointDialogFragment : DialogFragment() {
             binding.currentAccuracy.text = if (it == null) {
                 "--"
             } else {
-                "${DecimalFormat("#.##").format(it)}m"
+                formatAccuracy(it)
+            }
+
+            binding.qualitative.text = if (it != null) {
+                getString(
+                    R.string.distance_from_accuracy_goal,
+                    formatAccuracy(it - viewModel.accuracyThreshold.toFloat()),
+                    formatAccuracy(viewModel.accuracyThreshold.toFloat())
+                )
+            } else {
+                ""
             }
         }
 
@@ -54,6 +64,9 @@ class GeoPointDialogFragment : DialogFragment() {
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
             .create()
     }
+
+    private fun formatAccuracy(accuracy: Float) =
+        "${DecimalFormat("#.##").format(accuracy)}m"
 
     interface Listener {
         fun onCancel()

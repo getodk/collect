@@ -14,14 +14,17 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.location.Location
+import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointDialogFragmentTest {
 
+    private val application = getApplicationContext<RobolectricApplication>()
     private val scheduler = FakeScheduler()
 
     private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
@@ -33,7 +36,6 @@ class GeoPointDialogFragmentTest {
 
     @Before
     fun setup() {
-        val application = getApplicationContext<RobolectricApplication>()
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
             .application(application)
             .geoDependencyModule(object : GeoDependencyModule() {
@@ -62,6 +64,36 @@ class GeoPointDialogFragmentTest {
         currentAccuracyLiveData.value = 15.65f
         scheduler.runForeground()
         onViewInDialog(withText("15.65m")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `shows and updates qualitative feedback`() {
+        whenever(viewModel.accuracyThreshold).thenReturn(5.0)
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        currentAccuracyLiveData.value = 9.2f
+        scheduler.runForeground()
+        onViewInDialog(
+            withText(
+                application.getLocalizedString(
+                    R.string.distance_from_accuracy_goal,
+                    "4.2m",
+                    "5m"
+                )
+            )
+        ).check(matches(isDisplayed()))
+
+        currentAccuracyLiveData.value = 7.52f
+        scheduler.runForeground()
+        onViewInDialog(
+            withText(
+                application.getLocalizedString(
+                    R.string.distance_from_accuracy_goal,
+                    "2.52m",
+                    "5m"
+                )
+            )
+        ).check(matches(isDisplayed()))
     }
 
     @Test
