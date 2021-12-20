@@ -72,10 +72,6 @@ class GeoPointDialogFragmentTest {
     fun `shows and updates current accuracy`() {
         DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
 
-        currentAccuracyLiveData.value = null
-        scheduler.runForeground()
-        onViewInDialog(withText("--")).check(matches(isDisplayed()))
-
         currentAccuracyLiveData.value = 50.2f
         scheduler.runForeground()
         onViewInDialog(withText("50.2m")).check(matches(isDisplayed()))

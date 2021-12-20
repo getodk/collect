@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/current_accuracy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_large"
+        android:textAppearance="?textAppearanceHeadline2"
+        tools:text="3.25m" />
+
+    <TextView
+        android:id="@+id/qualitative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceSubtitle2"
+        tools:text="2.25m from goal of 1m" />
+
+    <TextView
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:gravity="center"
+        android:maxWidth="240dp"
+        android:text="@string/please_wait_for_improved_accuracy"
+        android:textAppearance="?textAppearanceSubtitle1" />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>
