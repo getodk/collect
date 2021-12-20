@@ -30,6 +30,7 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.currentAccuracy.setTextColor(textColor)
 
         binding.currentAccuracy.text = formatAccuracy(accuracy)
+
         binding.qualitative.text = if (accuracy < 10) {
             context.getString(
                 R.string.distance_from_accuracy_goal,
@@ -40,6 +41,12 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
             context.getString(R.string.unacceptable_accuracy)
         } else {
             context.getString(R.string.poor_accuracy)
+        }
+
+        binding.action.text = if (accuracy >= 100) {
+            context.getString(R.string.unacceptable_accuracy_tip)
+        } else {
+            context.getString(R.string.please_wait_for_improved_accuracy)
         }
     }
 

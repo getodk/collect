@@ -506,10 +506,11 @@
 
     <string name="distance_from_accuracy_goal">%1$s from goal of %2$s</string>
     <string name="please_wait_for_improved_accuracy">Please wait for improved accuracy</string>
+    <string name="unacceptable_accuracy_tip">Please make sure you can see the sky if outside</string>
     <string name="time_elapsed">Time elapsed: %1$s</string>
     <string name="point_will_be_saved">Point will be saved at %1$s</string>
     <string name="poor_accuracy">Poor accuracy</string>
-    <string name="unacceptable_accuracy">Unacceptable_accuracy accuracy</string>
+    <string name="unacceptable_accuracy">Unacceptable accuracy</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
