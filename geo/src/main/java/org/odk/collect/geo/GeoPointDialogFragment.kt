@@ -40,6 +40,10 @@ class GeoPointDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = GeopointDialogNewBinding.inflate(LayoutInflater.from(context))
 
+        val accuracyThreshold = viewModel.accuracyThreshold.toFloat()
+        binding.threshold.text =
+            getString(R.string.point_will_be_saved, formatAccuracy(accuracyThreshold))
+
         viewModel.currentAccuracy.observe(this) {
             binding.currentAccuracy.text = if (it == null) {
                 "--"
@@ -50,8 +54,8 @@ class GeoPointDialogFragment : DialogFragment() {
             binding.qualitative.text = if (it != null) {
                 getString(
                     R.string.distance_from_accuracy_goal,
-                    formatAccuracy(it - viewModel.accuracyThreshold.toFloat()),
-                    formatAccuracy(viewModel.accuracyThreshold.toFloat())
+                    formatAccuracy(it - accuracyThreshold),
+                    formatAccuracy(accuracyThreshold)
                 )
             } else {
                 ""

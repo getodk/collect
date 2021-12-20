@@ -85,6 +85,7 @@ internal class GeoPointViewModelImpl(
         } else {
             AnalyticsEvents.SAVE_POINT_MANUAL
         }
+
         if (location.accuracy > 100) {
             log(event, "accuracy", "unacceptable")
         } else if (location.accuracy > 10) {

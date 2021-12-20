@@ -52,6 +52,23 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
+    fun `shows accuracy threshold`() {
+        whenever(viewModel.accuracyThreshold).thenReturn(5.0)
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        onViewInDialog(
+            withText(
+                application.getLocalizedString(
+                    R.string.point_will_be_saved,
+                    "5m"
+                )
+            )
+        ).check(
+            matches(isDisplayed())
+        )
+    }
+
+    @Test
     fun `shows and updates current accuracy`() {
         DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
 
@@ -104,13 +121,27 @@ class GeoPointDialogFragmentTest {
 
         timeElapsedLiveData.value = 0
         scheduler.runForeground()
-        onViewInDialog(withText(application.getString(R.string.time_elapsed, "00:00"))).check(
+        onViewInDialog(
+            withText(
+                application.getLocalizedString(
+                    R.string.time_elapsed,
+                    "00:00"
+                )
+            )
+        ).check(
             matches(isDisplayed())
         )
 
         timeElapsedLiveData.value = 62000
         scheduler.runForeground()
-        onViewInDialog(withText(application.getString(R.string.time_elapsed, "01:02"))).check(
+        onViewInDialog(
+            withText(
+                application.getLocalizedString(
+                    R.string.time_elapsed,
+                    "01:02"
+                )
+            )
+        ).check(
             matches(isDisplayed())
         )
     }
