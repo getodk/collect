@@ -24,11 +24,17 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.currentAccuracy.setTextColor(textColor)
 
         binding.currentAccuracy.text = formatAccuracy(accuracy)
-        binding.qualitative.text = context.getString(
-            R.string.distance_from_accuracy_goal,
-            formatAccuracy(accuracy - accuracyThreshold),
-            formatAccuracy(accuracyThreshold)
-        )
+        binding.qualitative.text = if (accuracy < 10) {
+            context.getString(
+                R.string.distance_from_accuracy_goal,
+                formatAccuracy(accuracy - accuracyThreshold),
+                formatAccuracy(accuracyThreshold)
+            )
+        } else if (accuracy >= 100) {
+            context.getString(R.string.unacceptable_accuracy)
+        } else {
+            context.getString(R.string.poor_accuracy)
+        }
     }
 
     private fun getBackgroundAndTextColor(accuracy: Float): Pair<Int, Int> {

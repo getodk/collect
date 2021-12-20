@@ -82,36 +82,6 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
-    fun `shows and updates qualitative feedback`() {
-        whenever(viewModel.accuracyThreshold).thenReturn(5.0)
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
-
-        currentAccuracyLiveData.value = 9.2f
-        scheduler.runForeground()
-        onViewInDialog(
-            withText(
-                application.getLocalizedString(
-                    R.string.distance_from_accuracy_goal,
-                    "4.2m",
-                    "5m"
-                )
-            )
-        ).check(matches(isDisplayed()))
-
-        currentAccuracyLiveData.value = 7.52f
-        scheduler.runForeground()
-        onViewInDialog(
-            withText(
-                application.getLocalizedString(
-                    R.string.distance_from_accuracy_goal,
-                    "2.52m",
-                    "5m"
-                )
-            )
-        ).check(matches(isDisplayed()))
-    }
-
-    @Test
     fun `shows and updates time elapsed`() {
         DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
 

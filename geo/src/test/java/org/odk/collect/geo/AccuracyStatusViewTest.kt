@@ -41,6 +41,17 @@ class AccuracyStatusViewTest {
     }
 
     @Test
+    fun `shows distance from threshold when accuracy is less than 10m`() {
+        val view = AccuracyStatusView(context)
+        view.setAccuracy(9.0f, 5.0f)
+
+        assertThat(
+            view.binding.qualitative.text,
+            equalTo(context.getString(R.string.distance_from_accuracy_goal, "4m", "5m"))
+        )
+    }
+
+    @Test
     fun `has primary background when accuracy is less than 100m`() {
         val view = AccuracyStatusView(context)
         view.setAccuracy(99.0f, 5.0f)
@@ -59,6 +70,17 @@ class AccuracyStatusViewTest {
     }
 
     @Test
+    fun `shows accuracy as poor when accuracy is less than 100m`() {
+        val view = AccuracyStatusView(context)
+        view.setAccuracy(99.0f, 5.0f)
+
+        assertThat(
+            view.binding.qualitative.text,
+            equalTo(context.getString(R.string.poor_accuracy))
+        )
+    }
+
+    @Test
     fun `has error background when accuracy is 100m or greater`() {
         val view = AccuracyStatusView(context)
         view.setAccuracy(100.0f, 5.0f)
@@ -74,5 +96,16 @@ class AccuracyStatusViewTest {
 
         val actionColor = view.binding.action.currentTextColor
         assertThat(actionColor, equalTo(colorOnError))
+    }
+
+    @Test
+    fun `shows accuracy as unnaceptable when accuracy is 100m or greater`() {
+        val view = AccuracyStatusView(context)
+        view.setAccuracy(100.0f, 5.0f)
+
+        assertThat(
+            view.binding.qualitative.text,
+            equalTo(context.getString(R.string.unacceptable_accuracy))
+        )
     }
 }
