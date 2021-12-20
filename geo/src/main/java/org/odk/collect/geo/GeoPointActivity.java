@@ -279,7 +279,6 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
             if (locationCount > 1) {
                 if (location.getAccuracy() <= targetAccuracy) {
-                    Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO);
                     returnLocation();
                 }
             }
