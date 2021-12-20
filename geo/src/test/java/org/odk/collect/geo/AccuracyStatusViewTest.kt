@@ -2,6 +2,7 @@ package org.odk.collect.geo
 
 import android.app.Application
 import android.graphics.drawable.ColorDrawable
+import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,6 +22,27 @@ class AccuracyStatusViewTest {
     private val colorOnPrimary = getThemeAttributeValue(context, R.attr.colorOnPrimary)
     private val colorError = getThemeAttributeValue(context, R.attr.colorError)
     private val colorOnError = getThemeAttributeValue(context, R.attr.colorOnError)
+
+    @Test
+    fun `initially hides info and shows progress bar`() {
+        val view = AccuracyStatusView(context)
+
+        assertThat(view.binding.progressBar.visibility, equalTo(View.VISIBLE))
+        assertThat(view.binding.currentAccuracy.visibility, equalTo(View.GONE))
+        assertThat(view.binding.qualitative.visibility, equalTo(View.GONE))
+        assertThat(view.binding.action.visibility, equalTo(View.GONE))
+    }
+
+    @Test
+    fun `hides progress bar and shows info when setAccuracy is called`() {
+        val view = AccuracyStatusView(context)
+        view.setAccuracy(9.0f, 5.0f)
+
+        assertThat(view.binding.progressBar.visibility, equalTo(View.GONE))
+        assertThat(view.binding.currentAccuracy.visibility, equalTo(View.VISIBLE))
+        assertThat(view.binding.qualitative.visibility, equalTo(View.VISIBLE))
+        assertThat(view.binding.action.visibility, equalTo(View.VISIBLE))
+    }
 
     @Test
     fun `has primary background when accuracy is less than 10m`() {

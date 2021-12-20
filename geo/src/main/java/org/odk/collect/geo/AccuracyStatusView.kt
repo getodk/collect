@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.GeoUtils.formatAccuracy
@@ -17,6 +18,11 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         private set
 
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
+        binding.progressBar.visibility = View.GONE
+        binding.currentAccuracy.visibility = View.VISIBLE
+        binding.qualitative.visibility = View.VISIBLE
+        binding.action.visibility = View.VISIBLE
+
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.qualitative.setTextColor(textColor)

@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:visibility="visible"
+        tools:visibility="gone">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_large"
+            android:indeterminate="true"
+            app:indicatorColor="?colorOnPrimary" />
+
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/current_accuracy"
@@ -12,14 +32,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_large"
         android:textAppearance="?textAppearanceHeadline2"
-        tools:text="3.25m" />
+        android:visibility="gone"
+        tools:text="3.25m"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/qualitative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceSubtitle2"
-        tools:text="2.25m from goal of 1m" />
+        android:visibility="gone"
+        tools:text="2.25m from goal of 1m"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/action"
@@ -30,6 +54,8 @@
         android:gravity="center"
         android:maxWidth="240dp"
         android:text="@string/please_wait_for_improved_accuracy"
-        android:textAppearance="?textAppearanceSubtitle1" />
+        android:textAppearance="?textAppearanceSubtitle1"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
