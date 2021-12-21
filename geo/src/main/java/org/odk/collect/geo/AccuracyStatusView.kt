@@ -1,5 +1,8 @@
 package org.odk.collect.geo
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
@@ -18,6 +21,11 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         private set
 
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
+        // If we're about to hide progress and show accuracy then start animating
+        if (binding.progressBar.visibility == View.VISIBLE) {
+            animateCurrentAccuracy()
+        }
+
         binding.progressBar.visibility = View.GONE
         binding.currentAccuracy.visibility = View.VISIBLE
         binding.qualitative.visibility = View.VISIBLE
@@ -62,6 +70,42 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
                 getThemeAttributeValue(context, R.attr.colorPrimary),
                 getThemeAttributeValue(context, R.attr.colorOnPrimary)
             )
+        }
+    }
+
+    private fun animateCurrentAccuracy() {
+        val outAnimation = ValueAnimator.ofFloat(1.0f, 0.3f).apply {
+            duration = 2000
+            addUpdateListener {
+                binding.currentAccuracy.alpha = it.animatedValue as Float
+            }
+        }
+
+        val inAnimation = ValueAnimator.ofFloat(0.3f, 1.0f).apply {
+            duration = 2000
+            addUpdateListener {
+                binding.currentAccuracy.alpha = it.animatedValue as Float
+            }
+        }
+
+        AnimatorSet().apply {
+            playSequentially(outAnimation, inAnimation)
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    animation?.start()
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+            })
+
+            start()
         }
     }
 }
