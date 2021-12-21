@@ -25,6 +25,7 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
 
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
+        binding.title.setTextColor(textColor)
         binding.qualitative.setTextColor(textColor)
         binding.action.setTextColor(textColor)
         binding.currentAccuracy.setTextColor(textColor)

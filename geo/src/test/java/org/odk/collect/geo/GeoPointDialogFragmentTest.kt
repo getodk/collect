@@ -19,7 +19,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
-import org.odk.collect.location.Location
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
 

@@ -4,14 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?colorPrimary"
     android:gravity="center_horizontal"
     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:text="@string/accuracy_status_title"
+        android:textAppearance="?textAppearanceOverline"
+        android:textColor="?colorOnPrimary" />
 
     <RelativeLayout
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorPrimary"
         android:visibility="visible"
         tools:visibility="gone">
 
@@ -30,8 +41,9 @@
         android:id="@+id/current_accuracy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_large"
-        android:textAppearance="?textAppearanceHeadline2"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:textAppearance="?textAppearanceHeadline3"
+        android:textColor="?colorOnPrimary"
         android:visibility="gone"
         tools:text="3.25m"
         tools:visibility="visible" />
@@ -40,7 +52,8 @@
         android:id="@+id/qualitative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceSubtitle2"
+        android:textAppearance="?textAppearanceSubtitle1"
+        android:textColor="?colorOnPrimary"
         android:visibility="gone"
         tools:text="2.25m from goal of 1m"
         tools:visibility="visible" />
@@ -52,9 +65,10 @@
         android:layout_marginTop="@dimen/margin_extra_small"
         android:layout_marginBottom="@dimen/margin_large"
         android:gravity="center"
-        android:maxWidth="240dp"
+        android:maxWidth="160dp"
         android:text="@string/please_wait_for_improved_accuracy"
-        android:textAppearance="?textAppearanceSubtitle1"
+        android:textAppearance="?textAppearanceSubtitle2"
+        android:textColor="?colorOnPrimary"
         android:visibility="gone"
         tools:visibility="visible" />
 

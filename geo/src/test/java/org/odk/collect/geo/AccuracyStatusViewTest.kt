@@ -45,24 +45,6 @@ class AccuracyStatusViewTest {
     }
 
     @Test
-    fun `has primary background when accuracy is less than 10m`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(9.0f, 5.0f)
-
-        val backgroundColor = (view.binding.root.background as ColorDrawable).color
-        assertThat(backgroundColor, equalTo(colorPrimary))
-
-        val currentAccuracyColor = view.binding.currentAccuracy.currentTextColor
-        assertThat(currentAccuracyColor, equalTo(colorOnPrimary))
-
-        val qualitativeColor = view.binding.qualitative.currentTextColor
-        assertThat(qualitativeColor, equalTo(colorOnPrimary))
-
-        val actionColor = view.binding.action.currentTextColor
-        assertThat(actionColor, equalTo(colorOnPrimary))
-    }
-
-    @Test
     fun `shows distance from threshold when accuracy is less than 10m`() {
         val view = AccuracyStatusView(context)
         view.setAccuracy(9.0f, 5.0f)
@@ -80,6 +62,9 @@ class AccuracyStatusViewTest {
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorPrimary))
+
+        val titleColor = view.binding.title.currentTextColor
+        assertThat(titleColor, equalTo(colorOnPrimary))
 
         val currentAccuracyColor = view.binding.currentAccuracy.currentTextColor
         assertThat(currentAccuracyColor, equalTo(colorOnPrimary))
@@ -120,6 +105,9 @@ class AccuracyStatusViewTest {
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorError))
+
+        val titleColor = view.binding.title.currentTextColor
+        assertThat(titleColor, equalTo(colorOnError))
 
         val currentAccuracyColor = view.binding.currentAccuracy.currentTextColor
         assertThat(currentAccuracyColor, equalTo(colorOnError))
