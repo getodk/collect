@@ -6,8 +6,10 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,11 +29,9 @@ class GeoPointDialogFragmentTest {
     private val application = getApplicationContext<RobolectricApplication>()
     private val scheduler = FakeScheduler()
 
-    private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
     private val timeElapsedLiveData: MutableLiveData<Long> = MutableLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
-        on { location } doReturn locationLiveData
         on { currentAccuracy } doReturn currentAccuracyLiveData
         on { timeElapsed } doReturn timeElapsedLiveData
     }
@@ -49,6 +49,15 @@ class GeoPointDialogFragmentTest {
                     }
             })
             .build()
+    }
+
+    @Test
+    fun `disables save until location is available`() {
+        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        onViewInDialog(withText(R.string.save)).check(matches(not(isEnabled())))
+
+        currentAccuracyLiveData.value = 5.0f
+        onViewInDialog(withText(R.string.save)).check(matches(isEnabled()))
     }
 
     @Test
@@ -128,6 +137,8 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `clicking save calls forceLocation() on view model`() {
         DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        currentAccuracyLiveData.value = 5.0f
+
         onViewInDialog(withText(R.string.save)).perform(click())
         verify(viewModel).forceLocation()
     }

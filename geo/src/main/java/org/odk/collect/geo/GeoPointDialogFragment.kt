@@ -2,6 +2,7 @@ package org.odk.collect.geo
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -56,12 +57,20 @@ class GeoPointDialogFragment : DialogFragment() {
                 getString(R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
         }
 
-        return MaterialAlertDialogBuilder(requireContext())
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setCancelable(false)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
             .create()
+
+        dialog.setOnShowListener {
+            viewModel.currentAccuracy.observe(this) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).isEnabled = it != null
+            }
+        }
+
+        return dialog
     }
 
     interface Listener {
