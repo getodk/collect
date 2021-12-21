@@ -16,6 +16,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.externalapp.ExternalAppUtils
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.location.Location
 import org.odk.collect.testshared.Extensions.isFinishing
 import org.odk.collect.testshared.FakeScheduler
@@ -48,12 +49,11 @@ class GeoPointActivityNewTest {
     }
 
     @Test
-    fun `sets threshold`() {
+    fun `starts view model`() {
         val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
-        intent.putExtra(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, 5.0)
 
         ActivityScenario.launch<GeoPointActivityNew>(intent)
-        verify(viewModel).accuracyThreshold = 5.0
+        verify(viewModel).start(retainMockAccuracy = false)
     }
 
     @Test
@@ -91,5 +91,23 @@ class GeoPointActivityNewTest {
 
         assertThat(scenario.isFinishing, equalTo(true))
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_CANCELED))
+    }
+
+    @Test
+    fun `passes retain mock accuracy extra to view model`() {
+        val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
+
+        intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
+        ActivityScenario.launch<GeoPointActivityNew>(intent)
+        verify(viewModel).start(retainMockAccuracy = true)
+    }
+
+    @Test
+    fun `passes threshold extra to view model`() {
+        val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
+        intent.putExtra(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, 5.0)
+
+        ActivityScenario.launch<GeoPointActivityNew>(intent)
+        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0)
     }
 }

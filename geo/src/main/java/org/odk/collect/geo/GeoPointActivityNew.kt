@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.externalapp.ExternalAppUtils
+import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -21,12 +22,6 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
         val viewModel =
             ViewModelProvider(this, geoPointViewModelFactory).get(GeoPointViewModel::class.java)
 
-        viewModel.accuracyThreshold =
-            this.intent.getDoubleExtra(
-                EXTRA_ACCURACY_THRESHOLD,
-                Double.MAX_VALUE
-            )
-
         viewModel.location.observe(this) {
             if (it != null) {
                 Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO)
@@ -37,6 +32,14 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
         DialogFragmentUtils.showIfNotShowing(
             GeoPointDialogFragment::class.java,
             supportFragmentManager
+        )
+
+        viewModel.start(
+            retainMockAccuracy = this.intent.getBooleanExtra(
+                EXTRA_RETAIN_MOCK_ACCURACY,
+                false
+            ),
+            accuracyThreshold = this.intent.extras?.get(EXTRA_ACCURACY_THRESHOLD) as? Double
         )
     }
 

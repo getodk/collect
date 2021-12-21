@@ -12,11 +12,13 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 
 internal abstract class GeoPointViewModel : ViewModel() {
-    abstract var accuracyThreshold: Double
+    abstract val accuracyThreshold: Double
+
     abstract val location: LiveData<Location?>
     abstract val currentAccuracy: LiveData<Float?>
     abstract val timeElapsed: LiveData<Long>
 
+    abstract fun start(retainMockAccuracy: Boolean = false, accuracyThreshold: Double? = null)
     abstract fun forceLocation()
 }
 
@@ -25,10 +27,6 @@ internal class GeoPointViewModelImpl(
     private val clock: () -> Long,
     scheduler: Scheduler
 ) : GeoPointViewModel() {
-
-    init {
-        locationTracker.start()
-    }
 
     private val startTime = clock()
     private val repeat = scheduler.repeat(
@@ -50,6 +48,8 @@ internal class GeoPointViewModelImpl(
     private val acceptedLocation = MutableLiveData<Location?>(null)
 
     override var accuracyThreshold: Double = Double.MAX_VALUE
+        private set
+
     override val location = acceptedLocation
     override val currentAccuracy = Transformations.map(trackerLocation) {
         it?.accuracy
@@ -57,6 +57,14 @@ internal class GeoPointViewModelImpl(
 
     private val _timeElapsed = MutableLiveData<Long>(0)
     override val timeElapsed = _timeElapsed
+
+    override fun start(retainMockAccuracy: Boolean, accuracyThreshold: Double?) {
+        if (accuracyThreshold != null) {
+            this.accuracyThreshold = accuracyThreshold
+        }
+
+        locationTracker.start(retainMockAccuracy)
+    }
 
     override fun forceLocation() {
         acceptLocation(trackerLocation.value!!, true)
