@@ -46,14 +46,14 @@ public class ExternalAppIntentProviderTest {
     public void whenExternalActivityNotAvailable_shouldExceptionBeThrown() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider()");
 
-        assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager));
+        assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt));
     }
 
     @Test
     public void whenNoCustomErrorMessageSpecified_shouldDefaultOneBeReturned() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider()");
 
-        Exception exception = assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager));
+        Exception exception = assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt));
         assertThat(exception.getMessage(), is("The requested application is missing. Please manually enter the reading."));
     }
 
@@ -62,7 +62,7 @@ public class ExternalAppIntentProviderTest {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider()");
         when(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom error message");
 
-        Exception exception = assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager));
+        Exception exception = assertThrows(RuntimeException.class, () -> externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt));
         assertThat(exception.getMessage(), is("Custom error message"));
     }
 
@@ -71,7 +71,7 @@ public class ExternalAppIntentProviderTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider()");
 
-        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager);
+        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt);
         assertThat(resultIntent.getAction(), is("com.example.collectanswersprovider"));
     }
 
@@ -80,7 +80,7 @@ public class ExternalAppIntentProviderTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider()");
 
-        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager);
+        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt);
         assertThat(resultIntent.getExtras(), nullValue());
     }
 
@@ -89,7 +89,7 @@ public class ExternalAppIntentProviderTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider(param1='value1', param2='value2')");
 
-        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager);
+        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt);
         assertThat(resultIntent.getExtras().keySet().size(), is(2));
         assertThat(resultIntent.getExtras().getString("param1"), is("value1"));
         assertThat(resultIntent.getExtras().getString("param2"), is("value2"));
@@ -100,7 +100,7 @@ public class ExternalAppIntentProviderTest {
         when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         when(formEntryPrompt.getAppearanceHint()).thenReturn("ex:com.example.collectanswersprovider(param1='value1', uri_data='file:///tmp/android.txt')");
 
-        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager);
+        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt);
         assertThat(resultIntent.getData().toString(), is("file:///tmp/android.txt"));
         assertThat(resultIntent.getExtras().keySet().size(), is(1));
         assertThat(resultIntent.getExtras().getString("param1"), is("value1"));
@@ -113,7 +113,7 @@ public class ExternalAppIntentProviderTest {
         when(packageManager.getLaunchIntentForPackage("com.example.collectanswersprovider")).thenReturn(intent);
         when(activityAvailability.isActivityAvailable(intent)).thenReturn(true);
 
-        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(context, formEntryPrompt, activityAvailability, packageManager);
+        Intent resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt);
         assertThat(resultIntent, is(intent));
         assertThat(resultIntent.getFlags(), is(0));
 

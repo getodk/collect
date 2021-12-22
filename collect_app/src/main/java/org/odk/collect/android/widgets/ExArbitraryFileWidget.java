@@ -14,7 +14,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -29,14 +28,12 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     ExArbitraryFileWidgetAnswerBinding binding;
 
     private final ExternalAppIntentProvider externalAppIntentProvider;
-    private final ActivityAvailability activityAvailability;
 
     public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
-                                 ExternalAppIntentProvider externalAppIntentProvider, ActivityAvailability activityAvailability) {
+                                 ExternalAppIntentProvider externalAppIntentProvider) {
         super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
         this.externalAppIntentProvider = externalAppIntentProvider;
-        this.activityAvailability = activityAvailability;
     }
 
     @Override
@@ -89,7 +86,7 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
     private void onButtonClick() {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
+            Intent intent = externalAppIntentProvider.getIntentToRunExternalApp(getFormEntryPrompt());
             fireActivityForResult(intent);
         } catch (Exception | Error e) {
             ToastUtils.showLongToast(e.getMessage());

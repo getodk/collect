@@ -22,7 +22,6 @@ import org.odk.collect.android.support.RunnableRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.utilities.ActivityAvailability;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,22 +33,10 @@ import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 @RunWith(AndroidJUnit4.class)
 public class ExternalAudioRecordingTest {
 
-    public final TestDependencies testDependencies = new TestDependencies() {
-        @Override
-        public ActivityAvailability providesActivityAvailability(Context context) {
-            return new ActivityAvailability(context) {
-                @Override
-                public boolean isActivityAvailable(Intent intent) {
-                    return true;
-                }
-            };
-        }
-    };
-
     public final IntentsTestRule<MainMenuActivity> rule = new IntentsTestRule<>(MainMenuActivity.class);
 
     @Rule
-    public final RuleChain chain = TestRuleChain.chain(testDependencies)
+    public final RuleChain chain = TestRuleChain.chain()
             .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(rule)
             .around(new RunnableRule(() -> {

@@ -14,7 +14,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.utilities.ActivityAvailability;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
@@ -40,8 +39,6 @@ import static org.odk.collect.android.support.FormLoadingUtils.ALL_WIDGETS_FORM;
  */
 public class AllWidgetsFormTest {
 
-    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
-
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
@@ -54,10 +51,7 @@ public class AllWidgetsFormTest {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)
             )
             .around(new ResetStateRule(new AppDependencyModule() {
-                @Override
-                public ActivityAvailability providesActivityAvailability(Context context) {
-                    return activityAvailability;
-                }
+
             }))
             .around(new CopyFormRule(ALL_WIDGETS_FORM))
             .around(activityTestRule);

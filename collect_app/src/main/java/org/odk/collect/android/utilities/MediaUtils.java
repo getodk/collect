@@ -55,9 +55,9 @@ public class MediaUtils {
         intent.setDataAndType(contentUri, mimeType);
         FileUtils.grantFileReadPermissions(intent, contentUri, context);
 
-        if (new ActivityAvailability(context).isActivityAvailable(intent)) {
+        try {
             context.startActivity(intent);
-        } else {
+        } catch(Exception e) {
             String message = context.getString(R.string.activity_not_found, context.getString(R.string.open_file));
             ToastUtils.showLongToast(message);
             Timber.w(message);

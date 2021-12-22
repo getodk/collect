@@ -42,7 +42,7 @@ public class CollectSettingsChangeHandler implements SettingsChangeHandler {
         if(changedKey == null) {  // smap
             return;
         }
-        
+
         if (changedKey.equals(KEY_FORM_UPDATE_MODE) || changedKey.equals(KEY_PERIODIC_FORM_UPDATES_CHECK) || changedKey.equals(KEY_PROTOCOL)) {
             formUpdateManager.scheduleUpdates();
         }

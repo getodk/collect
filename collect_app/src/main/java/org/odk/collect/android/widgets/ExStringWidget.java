@@ -33,7 +33,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
@@ -95,9 +94,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private boolean hasExApp = true;
     public Button launchIntentButton;
-
-    @Inject
-    public ActivityAvailability activityAvailability;
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
@@ -181,7 +177,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void onButtonClick(int buttonId) {
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         try {
-            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getContext(), getFormEntryPrompt(), activityAvailability, Collect.getInstance().getPackageManager());
+            Intent intent = new ExternalAppIntentProvider().getIntentToRunExternalApp(getFormEntryPrompt());
             // ACTION_SENDTO used for sending text messages or emails doesn't require any results
             if (ACTION_SENDTO.equals(intent.getAction())) {
                 getContext().startActivity(intent);

@@ -13,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.Robolectric;
@@ -33,7 +32,6 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(AndroidJUnit4.class)
 public class ExternalAppRecordingRequesterTest {
 
-    private final ActivityAvailability activityAvailability = mock(ActivityAvailability.class);
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
 
@@ -48,7 +46,6 @@ public class ExternalAppRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenIntentIsNotAvailable_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(false);
         permissionsProvider.setPermissionGranted(true);
 
         requester.requestRecording(promptWithAnswer(null));
@@ -62,7 +59,6 @@ public class ExternalAppRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenPermissionIsNotGranted_doesNotStartAnyIntentAndCancelsWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         permissionsProvider.setPermissionGranted(false);
 
         requester.requestRecording(promptWithAnswer(null));
@@ -74,7 +70,6 @@ public class ExternalAppRecordingRequesterTest {
 
     @Test
     public void requestRecording_whenPermissionIsGranted_startsRecordSoundIntentAndSetsWidgetWaitingForData() {
-        when(activityAvailability.isActivityAvailable(any())).thenReturn(true);
         permissionsProvider.setPermissionGranted(true);
 
         FormEntryPrompt prompt = promptWithAnswer(null);

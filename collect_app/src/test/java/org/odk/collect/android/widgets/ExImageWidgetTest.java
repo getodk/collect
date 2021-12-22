@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
@@ -62,7 +61,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     @Override
     public ExImageWidget createWidget() {
         return new ExImageWidget(activity, new QuestionDetails(formEntryPrompt, "formAnalyticsID", readOnlyOverride),
-                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider, new ActivityAvailability(activity));
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), mediaUtils, externalAppIntentProvider);
     }
 
     @Test
@@ -111,7 +110,7 @@ public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     @Test
     public void whenLaunchButtonClicked_externalAppShouldBeLaunchedByIntent() throws ExternalParamsException, XPathSyntaxException {
         Intent intent = mock(Intent.class);
-        when(externalAppIntentProvider.getIntentToRunExternalApp(any(), any(), any(), any())).thenReturn(intent);
+        when(externalAppIntentProvider.getIntentToRunExternalApp(any())).thenReturn(intent);
         getWidget().binding.launchExternalAppButton.performClick();
         assertThat(shadowOf(activity).getNextStartedActivity(), is(intent));
     }

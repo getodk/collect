@@ -97,7 +97,6 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.storage.migration.StorageEraser;
 import org.odk.collect.android.storage.migration.StorageMigrationRepository;
 import org.odk.collect.android.storage.migration.StorageMigrator;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
@@ -226,11 +225,6 @@ public class AppDependencyModule {
     @Provides
     public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
         return new ScreenContextAudioHelperFactory(scheduler, MediaPlayer::new);
-    }
-
-    @Provides
-    public ActivityAvailability providesActivityAvailability(Context context) {
-        return new ActivityAvailability(context);
     }
 
     @Provides

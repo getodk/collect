@@ -41,7 +41,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.taskModel.FormLaunchDetail;
-import org.odk.collect.android.utilities.ActivityAvailability;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -75,8 +74,6 @@ public class SmapFormWidget extends QuestionWidget implements WidgetDataReceiver
     private String initialData;
     private ManageForm.ManageFormDetails mfd;
     private FormEntryActivity mFormEntryActivity;
-
-    private ActivityAvailability activityAvailability;
 
     private long formId;
 
