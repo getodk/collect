@@ -1,8 +1,5 @@
 package org.odk.collect.geo
 
-import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
@@ -10,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.androidshared.ui.Animations
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.AccuracyStatusBinding
 
@@ -23,7 +21,12 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
         // If we're about to hide progress and show accuracy then start animating
         if (binding.progressBar.visibility == View.VISIBLE) {
-            animateCurrentAccuracy()
+            Animations.fadeInAndOut(
+                view = binding.currentAccuracy,
+                duration = 4000,
+                minAlpha = 0.3f,
+                maxAlpha = 1.0f
+            )
         }
 
         binding.progressBar.visibility = View.GONE
@@ -70,44 +73,6 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
                 getThemeAttributeValue(context, R.attr.colorPrimary),
                 getThemeAttributeValue(context, R.attr.colorOnPrimary)
             )
-        }
-    }
-
-    private fun animateCurrentAccuracy() {
-        val outAnimation = ValueAnimator.ofFloat(1.0f, 0.3f).also {
-            it.duration = 2000
-            it.addUpdateListener {
-                binding.currentAccuracy.alpha = it.animatedValue as Float
-            }
-        }
-
-        val inAnimation = ValueAnimator.ofFloat(0.3f, 1.0f).also {
-            it.duration = 2000
-            it.addUpdateListener {
-                binding.currentAccuracy.alpha = it.animatedValue as Float
-            }
-        }
-
-        val animationLoop = AnimatorSet().also {
-            it.playSequentially(outAnimation, inAnimation)
-            it.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) {
-                }
-
-                override fun onAnimationEnd(animation: Animator?) {
-                    animation?.start()
-                }
-
-                override fun onAnimationCancel(animation: Animator?) {
-                }
-
-                override fun onAnimationRepeat(animation: Animator?) {
-                }
-            })
-        }
-
-        if (Constants.ANIMATED) {
-            animationLoop.start()
         }
     }
 }
