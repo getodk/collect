@@ -74,23 +74,23 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
     }
 
     private fun animateCurrentAccuracy() {
-        val outAnimation = ValueAnimator.ofFloat(1.0f, 0.3f).apply {
-            duration = 2000
-            addUpdateListener {
+        val outAnimation = ValueAnimator.ofFloat(1.0f, 0.3f).also {
+            it.duration = 2000
+            it.addUpdateListener {
                 binding.currentAccuracy.alpha = it.animatedValue as Float
             }
         }
 
-        val inAnimation = ValueAnimator.ofFloat(0.3f, 1.0f).apply {
-            duration = 2000
-            addUpdateListener {
+        val inAnimation = ValueAnimator.ofFloat(0.3f, 1.0f).also {
+            it.duration = 2000
+            it.addUpdateListener {
                 binding.currentAccuracy.alpha = it.animatedValue as Float
             }
         }
 
-        AnimatorSet().apply {
-            playSequentially(outAnimation, inAnimation)
-            addListener(object : Animator.AnimatorListener {
+        val animationLoop = AnimatorSet().also {
+            it.playSequentially(outAnimation, inAnimation)
+            it.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
                 }
 
@@ -104,8 +104,10 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
                 override fun onAnimationRepeat(animation: Animator?) {
                 }
             })
+        }
 
-            start()
+        if (Constants.ANIMATED) {
+            animationLoop.start()
         }
     }
 }

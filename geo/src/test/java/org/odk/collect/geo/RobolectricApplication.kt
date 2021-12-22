@@ -10,4 +10,9 @@ class RobolectricApplication : Application(), LocalizedApplication, GeoDependenc
         get() = this.resources.configuration.locales[0]
 
     override lateinit var geoDependencyComponent: GeoDependencyComponent
+
+    override fun onCreate() {
+        super.onCreate()
+        Constants.ANIMATED = false
+    }
 }
