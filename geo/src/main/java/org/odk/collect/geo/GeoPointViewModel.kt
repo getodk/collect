@@ -63,7 +63,7 @@ internal class GeoPointViewModelImpl(
             this.accuracyThreshold = accuracyThreshold
         }
 
-        locationTracker.start(retainMockAccuracy)
+        locationTracker.start(retainMockAccuracy, 1000L)
     }
 
     override fun forceLocation() {

@@ -30,19 +30,19 @@ class GeoPointViewModelImplTest {
     }
 
     @Test
-    fun `start() starts LocationTracker with false retain mock accuracy`() {
+    fun `start() starts LocationTracker with false retain mock accuracy and 1s update interval`() {
         val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
-        viewModel.start(false,)
+        viewModel.start()
 
-        verify(locationTracker).start(false)
+        verify(locationTracker).start(retainMockAccuracy = false, updateInterval = 1000L)
     }
 
     @Test
     fun `start() starts LocationTracker with with retain mock accuracy value when set`() {
         val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
-        viewModel.start(retainMockAccuracy = true,)
+        viewModel.start(retainMockAccuracy = true)
 
-        verify(locationTracker).start(true)
+        verify(locationTracker).start(true, 1000L)
     }
 
     @Test
