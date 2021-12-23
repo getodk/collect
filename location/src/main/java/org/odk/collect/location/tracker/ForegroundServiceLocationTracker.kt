@@ -29,9 +29,12 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
         return application.getState().get(LOCATION_KEY)
     }
 
-    override fun start(retainMockAccuracy: Boolean) {
-        val intent = Intent(application, LocationTrackerService::class.java).also {
-            it.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+    override fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
+        val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
+            intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+            updateInterval?.let {
+                intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
+            }
         }
 
         application.startService(intent)
@@ -69,6 +72,21 @@ class LocationTrackerService : Service() {
             createNotification()
         )
 
+        locationClient.setRetainMockAccuracy(
+            intent?.getBooleanExtra(
+                EXTRA_RETAIN_MOCK_ACCURACY,
+                false
+            ) ?: false
+        )
+
+        if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
+            val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
+            locationClient.setUpdateIntervals(
+                interval,
+                interval / 2
+            )
+        }
+
         locationClient.setListener(object : LocationClient.LocationClientListener {
             override fun onClientStart() {
                 locationClient.requestLocationUpdates {
@@ -87,13 +105,6 @@ class LocationTrackerService : Service() {
                 // Ignored
             }
         })
-
-        locationClient.setRetainMockAccuracy(
-            intent?.getBooleanExtra(
-                EXTRA_RETAIN_MOCK_ACCURACY,
-                false
-            ) ?: false
-        )
 
         locationClient.start()
         return START_NOT_STICKY
@@ -134,6 +145,7 @@ class LocationTrackerService : Service() {
 
     companion object {
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
+        const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
         private const val NOTIFICATION_ID = 1
         private const val NOTIFICATION_CHANNEL = "location_tracking"
