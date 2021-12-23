@@ -1,5 +1,6 @@
 package org.odk.collect.geo;
 
+import android.content.Context;
 import android.location.Location;
 
 import org.odk.collect.geo.maps.MapPoint;
@@ -60,7 +61,8 @@ public final class GeoUtils {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
     }
 
-    public static String formatAccuracy(float accuracy) {
-        return new DecimalFormat("#.##").format(accuracy) + "m";
+    public static String formatAccuracy(Context context, float accuracy) {
+        String formattedValue = new DecimalFormat("#.##").format(accuracy);
+        return context.getString(R.string.accuracy_m, formattedValue);
     }
 }

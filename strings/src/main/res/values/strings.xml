@@ -512,6 +512,7 @@
     <string name="poor_accuracy">Poor accuracy</string>
     <string name="unacceptable_accuracy">Unacceptable accuracy</string>
     <string name="accuracy_status_title">Finding Location</string>
+    <string name="accuracy_m">%1$sm</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
