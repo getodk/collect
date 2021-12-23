@@ -7,7 +7,7 @@ import android.view.View
 import org.odk.collect.androidshared.ui.Animations.DISABLE_ANIMATIONS
 
 /**
- * Helpers for running common animations. These are "test safe" in that animations can be disabled
+ * Helpers/extensions for running animations. These are "test safe" in that animations can be disabled
  * using [DISABLE_ANIMATIONS] - this should be set to `true` in Robolectric tests to avoid
  * infinite loops.
  */
@@ -15,59 +15,68 @@ object Animations {
 
     var DISABLE_ANIMATIONS = false
 
-    fun fadeInAndOut(view: View, duration: Int, minAlpha: Float, maxAlpha: Float) {
-        loopSequentially(
-            createAlphaAnimation(
-                view = view,
-                startValue = maxAlpha,
-                endValue = minAlpha,
-                duration = duration
-            ),
-            createAlphaAnimation(
-                view = view,
-                startValue = minAlpha,
-                endValue = maxAlpha,
-                duration = duration
-            )
-        )
-    }
-
-    private fun createAlphaAnimation(
+    fun createAlphaAnimation(
         view: View,
         startValue: Float,
         endValue: Float,
-        duration: Int
-    ): ValueAnimator {
-        val outAnimation = ValueAnimator.ofFloat(startValue, endValue)
-        outAnimation.duration = duration / 2L
-        outAnimation.addUpdateListener {
+        duration: Long
+    ): DisableableAnimatorWrapper {
+        val animation = ValueAnimator.ofFloat(startValue, endValue)
+        animation.duration = duration
+        animation.addUpdateListener {
             view.alpha = it.animatedValue as Float
         }
 
-        return outAnimation
+        return DisableableAnimatorWrapper(animation)
+    }
+}
+
+class DisableableAnimatorWrapper(private val wrapped: Animator) {
+
+    fun onEnd(onEnd: () -> Unit): DisableableAnimatorWrapper {
+        wrapped.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                onEnd()
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+        })
+
+        return this
     }
 
-    private fun loopSequentially(vararg animators: Animator) {
-        val animationLoop = AnimatorSet().also {
-            it.playSequentially(*animators)
-            it.addListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) {
-                }
+    fun then(other: DisableableAnimatorWrapper): DisableableAnimatorWrapper {
+        val set = AnimatorSet()
+        set.playSequentially(this.wrapped, other.wrapped)
 
-                override fun onAnimationEnd(animation: Animator?) {
-                    animation?.start()
-                }
+        return DisableableAnimatorWrapper(set)
+    }
 
-                override fun onAnimationCancel(animation: Animator?) {
-                }
-
-                override fun onAnimationRepeat(animation: Animator?) {
-                }
-            })
-        }
-
+    fun start() {
         if (!DISABLE_ANIMATIONS) {
-            animationLoop.start()
+            wrapped.start()
+        } else {
+            // Just run listeners immediately if we're not running the actual animations
+            if (wrapped is AnimatorSet) {
+                (wrapped.childAnimations + wrapped).forEach { anim ->
+                    anim.listeners?.forEach {
+                        it.onAnimationStart(wrapped)
+                        it.onAnimationEnd(wrapped)
+                    }
+                }
+            } else {
+                wrapped.listeners?.forEach {
+                    it.onAnimationStart(wrapped)
+                    it.onAnimationEnd(wrapped)
+                }
+            }
         }
     }
 }

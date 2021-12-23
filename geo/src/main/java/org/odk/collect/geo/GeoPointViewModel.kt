@@ -29,7 +29,7 @@ internal class GeoPointViewModelImpl(
 ) : GeoPointViewModel() {
 
     private val startTime = clock()
-    private val repeat = scheduler.repeat(
+    private val locationRepeat = scheduler.repeat(
         {
             locationTracker.getCurrentLocation().let {
                 trackerLocation.value = it
@@ -38,10 +38,15 @@ internal class GeoPointViewModelImpl(
                     acceptLocation(it, false)
                 }
             }
+        },
+        5000L
+    )
 
+    private val timeRepeat = scheduler.repeat(
+        {
             _timeElapsed.value = clock() - startTime
         },
-        1000
+        1000L
     )
 
     private val trackerLocation = MutableLiveData<Location?>(null)
@@ -71,7 +76,8 @@ internal class GeoPointViewModelImpl(
     }
 
     public override fun onCleared() {
-        repeat.cancel()
+        locationRepeat.cancel()
+        timeRepeat.cancel()
         locationTracker.stop()
     }
 
