@@ -99,9 +99,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
         setTitle(getString(R.string.get_location));
 
-        if (locationClient.canSetUpdateIntervals()) {
-            locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
-        }
+        locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
 
         Intent intent = getIntent();
         targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);

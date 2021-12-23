@@ -129,14 +129,8 @@ public class AndroidLocationClient
     }
 
     @Override
-    public boolean canSetUpdateIntervals() {
-        return false;
-    }
-
-    @Override
     public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) {
         // Do nothing.
-        Timber.e("Can't set updateInterval on AndroidLocationClient. You should check canSetUpdateIntervals before calling this method.");
     }
 
     // LocationListener:

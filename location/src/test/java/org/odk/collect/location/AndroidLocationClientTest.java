@@ -358,11 +358,6 @@ public class AndroidLocationClientTest {
     }
 
     @Test
-    public void canSetUpdateIntervalsShouldReturnFalse() {
-        assertFalse(androidLocationClient.canSetUpdateIntervals());
-    }
-
-    @Test
     public void whenNewlyReceivedLocationAccuracyIsNegative_shouldBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 

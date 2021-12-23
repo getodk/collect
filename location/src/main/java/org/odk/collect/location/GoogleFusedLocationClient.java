@@ -160,11 +160,6 @@ public class GoogleFusedLocationClient
     }
 
     @Override
-    public boolean canSetUpdateIntervals() {
-        return true;
-    }
-
-    @Override
     public void setUpdateIntervals(long updateInterval, long fastestUpdateInterval) {
         Timber.i("GoogleFusedLocationClient setting update intervals: %d, %d", updateInterval, fastestUpdateInterval);
 

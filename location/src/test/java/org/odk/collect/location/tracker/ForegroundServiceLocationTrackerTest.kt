@@ -135,10 +135,6 @@ private class FakeLocationClient : LocationClient {
         TODO("Not yet implemented")
     }
 
-    override fun canSetUpdateIntervals(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun setUpdateIntervals(updateInterval: Long, fastestUpdateInterval: Long) {
         updateIntervals = Pair(updateInterval, fastestUpdateInterval)
     }
