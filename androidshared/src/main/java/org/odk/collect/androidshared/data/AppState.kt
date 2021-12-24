@@ -42,6 +42,10 @@ class AppState {
         map[key] = value
     }
 
+    fun clear() {
+        map.clear()
+    }
+
     fun clear(key: String) {
         map.remove(key)
     }
