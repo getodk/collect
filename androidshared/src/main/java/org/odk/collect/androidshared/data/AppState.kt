@@ -41,6 +41,10 @@ class AppState {
     fun set(key: String, value: Any?) {
         map[key] = value
     }
+
+    fun clear(key: String) {
+        map.remove(key)
+    }
 }
 
 interface StateStore {

@@ -39,4 +39,16 @@ abstract class LocationTrackerTest {
         setDeviceLocation(Location(1.0, 2.0, 3.0, 4.0f))
         assertThat(locationTracker.getCurrentLocation(), equalTo(null))
     }
+
+    @Test
+    fun stopping_clearsLocation() {
+        locationTracker.start()
+        runBackground()
+
+        setDeviceLocation(Location(1.0, 2.0, 3.0, 4.0f))
+
+        locationTracker.stop()
+        runBackground()
+        assertThat(locationTracker.getCurrentLocation(), equalTo(null))
+    }
 }

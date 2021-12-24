@@ -112,6 +112,7 @@ class LocationTrackerService : Service() {
 
     override fun onDestroy() {
         locationClient.stop()
+        application.getState().clear(LOCATION_KEY)
     }
 
     private fun createNotification(): Notification {
