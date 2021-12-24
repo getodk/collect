@@ -105,9 +105,9 @@ class GeoPointActivityNewTest {
     @Test
     fun `passes threshold extra to view model`() {
         val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
-        intent.putExtra(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, 5.0)
+        intent.putExtra(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, 5.0f)
 
         ActivityScenario.launch<GeoPointActivityNew>(intent)
-        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0)
+        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f)
     }
 }

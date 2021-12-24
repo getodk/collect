@@ -68,7 +68,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     private Location location;
 
-    private double targetAccuracy = Double.MAX_VALUE;
+    private float targetAccuracy = Float.MAX_VALUE;
 
     private int locationCount;
     private int numberOfAvailableSatellites;
@@ -102,7 +102,7 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
         locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
 
         Intent intent = getIntent();
-        targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);
+        targetAccuracy = intent.getFloatExtra(EXTRA_ACCURACY_THRESHOLD, Float.MAX_VALUE);
         locationClient.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         locationClient.setListener(this);

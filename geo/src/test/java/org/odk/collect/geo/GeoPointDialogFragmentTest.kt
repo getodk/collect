@@ -63,7 +63,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows accuracy threshold`() {
-        whenever(viewModel.accuracyThreshold).thenReturn(5.0)
+        whenever(viewModel.accuracyThreshold).thenReturn(5.0f)
         launchDialogFragment(GeoPointDialogFragment::class.java)
 
         onViewInDialog(

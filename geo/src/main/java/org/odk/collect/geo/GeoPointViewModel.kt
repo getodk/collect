@@ -12,13 +12,13 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.tracker.LocationTracker
 
 internal abstract class GeoPointViewModel : ViewModel() {
-    abstract val accuracyThreshold: Double
+    abstract val accuracyThreshold: Float
 
     abstract val location: LiveData<Location?>
     abstract val currentAccuracy: LiveData<Float?>
     abstract val timeElapsed: LiveData<Long>
 
-    abstract fun start(retainMockAccuracy: Boolean = false, accuracyThreshold: Double? = null)
+    abstract fun start(retainMockAccuracy: Boolean = false, accuracyThreshold: Float? = null)
     abstract fun forceLocation()
 }
 
@@ -52,7 +52,7 @@ internal class GeoPointViewModelImpl(
     private val trackerLocation = MutableLiveData<Location?>(null)
     private val acceptedLocation = MutableLiveData<Location?>(null)
 
-    override var accuracyThreshold: Double = Double.MAX_VALUE
+    override var accuracyThreshold: Float = Float.MAX_VALUE
         private set
 
     override val location = acceptedLocation
@@ -63,7 +63,7 @@ internal class GeoPointViewModelImpl(
     private val _timeElapsed = MutableLiveData<Long>(0)
     override val timeElapsed = _timeElapsed
 
-    override fun start(retainMockAccuracy: Boolean, accuracyThreshold: Double?) {
+    override fun start(retainMockAccuracy: Boolean, accuracyThreshold: Float?) {
         if (accuracyThreshold != null) {
             this.accuracyThreshold = accuracyThreshold
         }

@@ -39,7 +39,7 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
                 EXTRA_RETAIN_MOCK_ACCURACY,
                 false
             ),
-            accuracyThreshold = this.intent.extras?.get(EXTRA_ACCURACY_THRESHOLD) as? Double
+            accuracyThreshold = (this.intent.extras?.get(EXTRA_ACCURACY_THRESHOLD) as? Float)
         )
     }
 

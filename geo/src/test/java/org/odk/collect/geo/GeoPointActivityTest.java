@@ -57,7 +57,7 @@ public class GeoPointActivityTest {
     @Test
     public void testLocationClientLifecycle() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointActivity.class);
-        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0);
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0f);
         ActivityScenario<GeoPointActivity> scenario = ActivityScenario.launch(intent);
 
         // Activity.onResume() should call LocationClient.start().
