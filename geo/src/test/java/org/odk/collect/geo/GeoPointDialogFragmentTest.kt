@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +19,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.launchDialogFragment
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
@@ -52,7 +54,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `disables save until location is available`() {
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launchDialogFragment(GeoPointDialogFragment::class.java)
         onViewInDialog(withText(R.string.save)).check(matches(not(isEnabled())))
 
         currentAccuracyLiveData.value = 5.0f
@@ -62,7 +64,7 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `shows accuracy threshold`() {
         whenever(viewModel.accuracyThreshold).thenReturn(5.0)
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launchDialogFragment(GeoPointDialogFragment::class.java)
 
         onViewInDialog(
             withText(
@@ -78,7 +80,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates current accuracy`() {
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launchDialogFragment(GeoPointDialogFragment::class.java)
 
         currentAccuracyLiveData.value = 50.2f
         scheduler.runForeground()
@@ -91,7 +93,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates time elapsed`() {
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launchDialogFragment(GeoPointDialogFragment::class.java)
 
         timeElapsedLiveData.value = 0
         scheduler.runForeground()
@@ -122,7 +124,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `clicking cancel calls listener`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launchDialogFragment(GeoPointDialogFragment::class.java)
 
         val listener = mock<GeoPointDialogFragment.Listener>()
         scenario.onFragment {
@@ -135,10 +137,17 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `clicking save calls forceLocation() on view model`() {
-        DialogFragmentTest.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launchDialogFragment(GeoPointDialogFragment::class.java)
         currentAccuracyLiveData.value = 5.0f
 
         onViewInDialog(withText(R.string.save)).perform(click())
         verify(viewModel).forceLocation()
+    }
+
+    @Test
+    fun `dialog is cancellable`() {
+        launchDialogFragment(GeoPointDialogFragment::class.java).onFragment {
+            assertThat(it.isCancelable, equalTo(false))
+        }
     }
 }

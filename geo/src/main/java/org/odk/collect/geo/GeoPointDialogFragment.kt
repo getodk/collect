@@ -59,7 +59,6 @@ class GeoPointDialogFragment : DialogFragment() {
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            .setCancelable(false)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
             .create()
@@ -70,6 +69,7 @@ class GeoPointDialogFragment : DialogFragment() {
             }
         }
 
+        isCancelable = false
         return dialog
     }
 
