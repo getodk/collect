@@ -86,11 +86,6 @@ import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
-import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
-import org.odk.collect.android.widgets.utilities.StringRequester;
-import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.keys.MetaKeys;
@@ -118,6 +113,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.LaunchState;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
@@ -125,6 +121,10 @@ import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
+import org.odk.collect.android.widgets.utilities.StringRequester;
+import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
@@ -132,6 +132,8 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
@@ -631,5 +633,10 @@ public class AppDependencyModule {
     @Provides
     public StringRequester providesStringRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
         return new StringRequesterImpl(intentLauncher, externalAppIntentProvider);
+    }
+
+    @Provides
+    public LocationClient providesLocationClient(Application application) {
+        return LocationClientProvider.getClient(application);
     }
 }

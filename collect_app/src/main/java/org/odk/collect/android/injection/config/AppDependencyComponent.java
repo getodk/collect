@@ -94,6 +94,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.projects.ProjectsRepository;
 
 import javax.inject.Singleton;
@@ -322,4 +323,6 @@ public interface AppDependencyComponent {
     MapProvider mapProvider();
 
     Scheduler scheduler();
+
+    LocationClient locationClient();
 }

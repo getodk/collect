@@ -10,10 +10,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.google.android.gms.common.GoogleApiAvailability
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
-import org.odk.collect.location.GoogleFusedLocationClient
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
@@ -54,11 +52,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 class LocationTrackerService : Service() {
 
     private val locationClient: LocationClient by lazy {
-        LocationClientProvider.getClient(
-            this,
-            { GoogleFusedLocationClient(application) },
-            GoogleApiAvailability.getInstance()
-        )
+        LocationClientProvider.getClient(application)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
