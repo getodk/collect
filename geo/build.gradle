@@ -59,6 +59,7 @@ dependencies {
     implementation project(path: ':androidshared')
     implementation project(path: ':externalapp')
     implementation project(path: ':analytics')
+    implementation project(path: ':permissions')
 
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit

@@ -23,8 +23,6 @@ import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.qr.QRCodeDecoder
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.listeners.PermissionListener
-import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
@@ -34,6 +32,8 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
 import timber.log.Timber
 import javax.inject.Inject

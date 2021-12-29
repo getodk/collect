@@ -15,13 +15,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.utils.AppBarUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.permissions.PermissionListener;
 
 import javax.inject.Inject;
 

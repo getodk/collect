@@ -2,8 +2,8 @@ package org.odk.collect.geo
 
 import android.Manifest
 import android.app.Activity
-import org.odk.collect.androidshared.system.PermissionsChecker
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.permissions.PermissionsChecker
 
 internal object GeoActivityUtils {
 

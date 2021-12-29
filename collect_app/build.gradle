@@ -250,6 +250,7 @@ dependencies {
     implementation project(':location')
     implementation project(':geo')
     implementation project(':errors')
+    implementation project(':permissions')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support
@@ -295,7 +296,6 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
     }
-    implementation Dependencies.karumi_dexter
     implementation Dependencies.osmdroid
     implementation(Dependencies.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'
@@ -395,6 +395,9 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
+    debugImplementation(project(':testshared')) {
+        exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
+    }
 
     // Real LeakCanary for debug builds only: notifications, analysis, etc
     debugImplementation Dependencies.leakcanary

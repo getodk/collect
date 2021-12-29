@@ -38,7 +38,6 @@ import org.odk.collect.android.formmanagement.BlankFormListMenuDelegate;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
-import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
@@ -48,6 +47,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.permissions.PermissionListener;
 
 import javax.inject.Inject;
 

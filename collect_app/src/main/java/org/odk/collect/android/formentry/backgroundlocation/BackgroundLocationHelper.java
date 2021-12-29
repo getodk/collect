@@ -6,7 +6,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 

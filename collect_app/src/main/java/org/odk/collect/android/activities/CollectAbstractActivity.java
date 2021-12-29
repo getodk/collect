@@ -21,7 +21,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 

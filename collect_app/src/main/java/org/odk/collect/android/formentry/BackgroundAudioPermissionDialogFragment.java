@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionListener;
 
 import javax.inject.Inject;
 

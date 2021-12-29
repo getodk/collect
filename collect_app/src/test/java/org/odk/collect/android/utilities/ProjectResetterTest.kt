@@ -18,7 +18,6 @@ import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
-import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -27,6 +26,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.Settings
 import java.io.File

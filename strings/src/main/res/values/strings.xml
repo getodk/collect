@@ -1120,4 +1120,12 @@
     ##############################################
     -->
     <string name="errors">Errors</string>
+
+    <!--
+    ##############################################
+    # Permissions
+    ##############################################
+    -->
+    <string name="open_settings">Open Settings</string>
+
 </resources>

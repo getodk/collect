@@ -8,3 +8,4 @@ audiorecorder:testDebug
 projects:testDebug
 location:testDebug
 geo:testDebug
+permissions:testDebug

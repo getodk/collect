@@ -8,10 +8,10 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.listeners.PermissionListener
-import org.odk.collect.android.permissions.PermissionsProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsProvider
 
 class ExternalAppRecordingRequester(
     private val activity: Activity,

@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
@@ -19,6 +17,8 @@ import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.geo.GeoPointMapActivity;
 import org.odk.collect.geo.GeoPolyActivity;
+import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.permissions.PermissionsProvider;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
 
