@@ -8,6 +8,7 @@ references:
     working_directory: ~/work
     docker:
       - image: circleci/android:api-30
+    resource_class: medium+
 
 jobs:
   compile:
