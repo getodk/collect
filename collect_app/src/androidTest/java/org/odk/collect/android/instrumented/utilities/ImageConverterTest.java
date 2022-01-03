@@ -17,6 +17,7 @@
 package org.odk.collect.android.instrumented.utilities;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
@@ -32,7 +33,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.support.RunnableRule;
@@ -73,6 +73,7 @@ public class ImageConverterTest {
 
     private String testImagePath;
     private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
+    private final Context context = ApplicationProvider.getApplicationContext();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -94,7 +95,7 @@ public class ImageConverterTest {
     public void executeConversionWithoutAnySettings() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -105,7 +106,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly1() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(4000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(2000, image.getWidth());
@@ -116,7 +117,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly2() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 4000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(1500, image.getWidth());
@@ -127,7 +128,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly3() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(2000, image.getWidth());
@@ -138,7 +139,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly4() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "3000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "3000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -149,7 +150,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly5() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "4000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "4000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -160,7 +161,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly6() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2998"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2998"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(2998, image.getWidth());
@@ -171,7 +172,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly7() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", ""), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", ""), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -182,7 +183,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly8() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget("", "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget("", "max-pixels", "2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -193,7 +194,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly9() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixel", "2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixel", "2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -204,7 +205,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly10() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000.5"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000.5"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -215,7 +216,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly11() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "0"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "0"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -226,7 +227,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormLevelOnly12() {
         generalSettings.save("image_size", "original_image_size");
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "-2000"), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "-2000"), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -237,7 +238,7 @@ public class ImageConverterTest {
     public void scaleImageDownSettingsLevelOnly1() {
         generalSettings.save("image_size", IMAGE_SIZE_VERY_SMALL);
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_VERY_SMALL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_VERY_SMALL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(640, image.getWidth());
@@ -248,7 +249,7 @@ public class ImageConverterTest {
     public void scaleImageDownSettingsLevelOnly2() {
         generalSettings.save("image_size", IMAGE_SIZE_SMALL);
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_SMALL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_SMALL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(1024, image.getWidth());
@@ -259,7 +260,7 @@ public class ImageConverterTest {
     public void scaleImageDownSettingsLevelOnly3() {
         generalSettings.save("image_size", IMAGE_SIZE_MEDIUM);
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_MEDIUM);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_MEDIUM);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(2048, image.getWidth());
@@ -270,7 +271,7 @@ public class ImageConverterTest {
     public void scaleImageDownSettingsLevelOnly4() {
         generalSettings.save("image_size", IMAGE_SIZE_LARGE);
         saveTestBitmap(3000, 3000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_LARGE);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_LARGE);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
@@ -281,7 +282,7 @@ public class ImageConverterTest {
     public void scaleImageDownSettingsLevelOnly5() {
         generalSettings.save("image_size", IMAGE_SIZE_LARGE);
         saveTestBitmap(4000, 4000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_LARGE);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_LARGE);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3072, image.getWidth());
@@ -292,7 +293,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormAndSettingsLevel1() {
         generalSettings.save("image_size", IMAGE_SIZE_SMALL);
         saveTestBitmap(4000, 4000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), Collect.getInstance(), IMAGE_SIZE_SMALL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "2000"), context, IMAGE_SIZE_SMALL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(2000, image.getWidth());
@@ -303,7 +304,7 @@ public class ImageConverterTest {
     public void scaleImageDownFormAndSettingsLevel2() {
         generalSettings.save("image_size", "small");
         saveTestBitmap(4000, 4000);
-        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "650"), Collect.getInstance(), IMAGE_SIZE_SMALL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(XML_OPENROSA_NAMESPACE, "max-pixels", "650"), context, IMAGE_SIZE_SMALL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(650, image.getWidth());
@@ -358,7 +359,7 @@ public class ImageConverterTest {
 
         saveTestBitmap(3000, 4000, attributes);
 
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL);
         ExifInterface exifData = getTestImageExif();
         assertNotNull(exifData);
 
@@ -385,7 +386,7 @@ public class ImageConverterTest {
         Map<String, String> attributes = new HashMap<>();
         attributes.put(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
         saveTestBitmap(3000, 4000, attributes);
-        ImageConverter.execute(testImagePath, getTestImageWidget(), Collect.getInstance(), IMAGE_SIZE_ORIGINAL);
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL);
 
         Bitmap image = FileUtils.getBitmap(testImagePath, new BitmapFactory.Options());
         assertEquals(3000, image.getWidth());
