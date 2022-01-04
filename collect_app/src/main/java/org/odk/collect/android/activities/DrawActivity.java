@@ -41,7 +41,7 @@ import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.views.DrawView;
 
 import java.io.File;
@@ -180,13 +180,13 @@ public class DrawActivity extends CollectAbstractActivity {
                 savepointImage = new File(savepoint);
                 if (!savepointImage.exists() && refImage != null
                         && refImage.exists()) {
-                    FileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
+                    ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
                 }
             } else {
                 savepointImage = new File(storagePathProvider.getTmpImageFilePath());
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
-                    FileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
+                    ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
                 }
             }
             uri = (Uri) extras.get(EXTRA_OUTPUT);
@@ -256,7 +256,7 @@ public class DrawActivity extends CollectAbstractActivity {
         savepointImage.delete();
         if (!OPTION_SIGNATURE.equals(loadOption) && refImage != null
                 && refImage.exists()) {
-            FileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
+            ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
         }
         drawView.reset();
         drawView.invalidate();

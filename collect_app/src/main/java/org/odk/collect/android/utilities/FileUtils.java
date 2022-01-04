@@ -18,13 +18,8 @@ import static java.util.Arrays.asList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
-
-import androidx.exifinterface.media.ExifInterface;
 
 import com.google.common.base.CharMatcher;
 
@@ -55,7 +50,6 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -91,9 +85,6 @@ public final class FileUtils {
     /** Valid XML stub that can be parsed without error. */
     public static final String STUB_XML = "<?xml version='1.0' ?><stub />";
 
-    private static final Integer[] EXIF_ORIENTATION_ROTATIONS =
-            {ExifInterface.ORIENTATION_ROTATE_90, ExifInterface.ORIENTATION_ROTATE_180, ExifInterface.ORIENTATION_ROTATE_270};
-
     static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
@@ -119,111 +110,6 @@ public final class FileUtils {
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();
-    }
-
-    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
-        return getBitmapScaledToDisplay(file, screenHeight, screenWidth, false);
-    }
-
-    /**
-     * Scales image according to the given display
-     *
-     * @param file           containing the image
-     * @param screenHeight   height of the display
-     * @param screenWidth    width of the display
-     * @param upscaleEnabled determines whether the image should be up-scaled or not
-     *                       if the window size is greater than the image size
-     * @return scaled bitmap
-     */
-    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
-        // Determine image size of file
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        getBitmap(file.getAbsolutePath(), options);
-
-        Bitmap bitmap;
-        double scale;
-        if (upscaleEnabled) {
-            // Load full size bitmap image
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
-
-            double heightScale = ((double) (options.outHeight)) / screenHeight;
-            double widthScale = ((double) options.outWidth) / screenWidth;
-            scale = Math.max(widthScale, heightScale);
-
-            double newHeight = Math.ceil(options.outHeight / scale);
-            double newWidth = Math.ceil(options.outWidth / scale);
-
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
-        } else {
-            int heightScale = options.outHeight / screenHeight;
-            int widthScale = options.outWidth / screenWidth;
-
-            // Powers of 2 work faster, sometimes, according to the doc.
-            // We're just doing closest size that still fills the screen.
-            scale = Math.max(widthScale, heightScale);
-
-            // get bitmap with scale ( < 1 is the same as 1)
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            options.inSampleSize = (int) scale;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
-        }
-
-        if (bitmap != null) {
-            Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
-                    screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
-        }
-        return bitmap;
-    }
-
-
-    /**
-     * While copying the file, apply the exif rotation of sourceFile to destinationFile
-     * so that sourceFile with EXIF has same orientation as destinationFile without EXIF
-     */
-    public static void copyImageAndApplyExifRotation(File sourceFile, File destFile) {
-        ExifInterface sourceFileExif = null;
-        try {
-            sourceFileExif = new ExifInterface(sourceFile);
-        } catch (IOException e) {
-            Timber.w(e);
-        }
-        if (sourceFileExif == null ||
-                !Arrays.asList(EXIF_ORIENTATION_ROTATIONS)
-                        .contains(sourceFileExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED))) {
-            // Source Image doesn't have any EXIF Rotations, so a normal file copy will suffice
-             copyFile(sourceFile, destFile);
-        } else {
-            Bitmap sourceImage = getBitmap(sourceFile.getAbsolutePath(), new BitmapFactory.Options());
-            int orientation = sourceFileExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotateBitmapAndSaveToFile(sourceImage, 90, destFile.getAbsolutePath());
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotateBitmapAndSaveToFile(sourceImage, 180, destFile.getAbsolutePath());
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotateBitmapAndSaveToFile(sourceImage, 270, destFile.getAbsolutePath());
-                    break;
-            }
-        }
-    }
-
-    private static void rotateBitmapAndSaveToFile(Bitmap image, int degrees, String filePath) {
-        try {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(degrees);
-            image = Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
-        } catch (OutOfMemoryError e) {
-            Timber.w(e);
-        }
-        saveBitmapToFile(image, filePath);
     }
 
     public static String copyFile(File sourceFile, File destFile) {
@@ -494,40 +380,6 @@ public final class FileUtils {
         }
 
         deleteAndReport(tempMediaFolder);
-    }
-
-    public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
-                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
-
-        try (FileOutputStream out = new FileOutputStream(path)) {
-            bitmap.compress(compressFormat, 100, out);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    /*
-    This method is used to avoid OutOfMemoryError exception during loading an image.
-    If the exception occurs we catch it and try to load a smaller image.
-     */
-    public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
-        BitmapFactory.Options newOptions = new BitmapFactory.Options();
-        newOptions.inSampleSize = originalOptions.inSampleSize;
-        if (newOptions.inSampleSize <= 0) {
-            newOptions.inSampleSize = 1;
-        }
-
-        Bitmap bitmap;
-        try {
-            bitmap = BitmapFactory.decodeFile(path, originalOptions);
-        } catch (OutOfMemoryError e) {
-            Timber.i(e);
-            newOptions.inSampleSize++;
-            return getBitmap(path, newOptions);
-        }
-
-        return bitmap;
     }
 
     public static byte[] read(File file) {

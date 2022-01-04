@@ -111,7 +111,7 @@ public final class ImageConverter {
      * maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
      */
     private static void scaleDownImage(String imagePath, int maxPixels) {
-        Bitmap image = FileUtils.getBitmap(imagePath, new BitmapFactory.Options());
+        Bitmap image = ImageFileUtils.getBitmap(imagePath, new BitmapFactory.Options());
 
         if (image != null) {
             double originalWidth = image.getWidth();
@@ -121,12 +121,12 @@ public final class ImageConverter {
                 int newHeight = (int) (originalHeight / (originalWidth / maxPixels));
 
                 image = Bitmap.createScaledBitmap(image, maxPixels, newHeight, false);
-                FileUtils.saveBitmapToFile(image, imagePath);
+                ImageFileUtils.saveBitmapToFile(image, imagePath);
             } else if (originalHeight > maxPixels) {
                 int newWidth = (int) (originalWidth / (originalHeight / maxPixels));
 
                 image = Bitmap.createScaledBitmap(image, newWidth, maxPixels, false);
-                FileUtils.saveBitmapToFile(image, imagePath);
+                ImageFileUtils.saveBitmapToFile(image, imagePath);
             }
         }
     }

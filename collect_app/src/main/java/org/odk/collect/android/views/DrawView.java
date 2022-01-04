@@ -27,7 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageFileUtils;
 
 import java.io.File;
 
@@ -87,7 +87,7 @@ public class DrawView extends View {
 
     public void resetImage(int w, int h) {
         if (backgroundBitmapFile.exists()) {
-            bitmap = FileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)
+            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)
                     .copy(Bitmap.Config.ARGB_8888, true);
             canvas = new Canvas(bitmap);
         } else {

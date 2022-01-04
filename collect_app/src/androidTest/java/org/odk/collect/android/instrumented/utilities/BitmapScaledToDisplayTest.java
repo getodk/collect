@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageFileUtils;
 
 import java.io.File;
 
@@ -63,12 +63,12 @@ public class BitmapScaledToDisplayTest {
 
         ScaleImageTest createBitmap(int imageHeight, int imageWidth) {
             Bitmap bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
-            FileUtils.saveBitmapToFile(bitmap, imageFile.getAbsolutePath());
+            ImageFileUtils.saveBitmapToFile(bitmap, imageFile.getAbsolutePath());
             return this;
         }
 
         ScaleImageTest scaleBitmapToDisplay(int windowHeight, int windowWidth, boolean shouldScaleAccurately) {
-            scaledBitmap = FileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, shouldScaleAccurately);
+            scaledBitmap = ImageFileUtils.getBitmapScaledToDisplay(imageFile, windowHeight, windowWidth, shouldScaleAccurately);
             return this;
         }
 

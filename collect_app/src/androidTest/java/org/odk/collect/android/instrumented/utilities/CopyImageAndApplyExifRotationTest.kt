@@ -24,7 +24,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.android.utilities.ImageFileUtils
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -47,8 +47,8 @@ class CopyImageAndApplyExifRotationTest {
     fun copyAndRotateImageNinety() {
         attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_ROTATE_90.toString()
         saveTestBitmapToFile(sourceFile.absolutePath, attributes)
-        FileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
-        val image = FileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())
+        ImageFileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
+        val image = ImageFileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())!!
 
         assertEquals(2, image.width)
         assertEquals(1, image.height)
@@ -61,8 +61,8 @@ class CopyImageAndApplyExifRotationTest {
     fun copyAndRotateImageTwoSeventy() {
         attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_ROTATE_270.toString()
         saveTestBitmapToFile(sourceFile.absolutePath, attributes)
-        FileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
-        val image = FileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())
+        ImageFileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
+        val image = ImageFileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())!!
 
         assertEquals(2, image.width)
         assertEquals(1, image.height)
@@ -75,8 +75,8 @@ class CopyImageAndApplyExifRotationTest {
     fun copyAndRotateImageOneEighty() {
         attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_ROTATE_180.toString()
         saveTestBitmapToFile(sourceFile.absolutePath, attributes)
-        FileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
-        val image = FileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())
+        ImageFileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
+        val image = ImageFileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())!!
 
         assertEquals(1, image.width)
         assertEquals(2, image.height)
@@ -89,8 +89,8 @@ class CopyImageAndApplyExifRotationTest {
     fun copyAndRotateImageUndefined() {
         attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_UNDEFINED.toString()
         saveTestBitmapToFile(sourceFile.absolutePath, attributes)
-        FileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
-        val image = FileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())
+        ImageFileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
+        val image = ImageFileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())!!
 
         assertEquals(1, image.width)
         assertEquals(2, image.height)
@@ -102,8 +102,8 @@ class CopyImageAndApplyExifRotationTest {
     @Test
     fun copyAndRotateImageNoExif() {
         saveTestBitmapToFile(sourceFile.absolutePath, null)
-        FileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
-        val image = FileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())
+        ImageFileUtils.copyImageAndApplyExifRotation(sourceFile, destinationFile)
+        val image = ImageFileUtils.getBitmap(destinationFile.absolutePath, BitmapFactory.Options())!!
 
         assertEquals(1, image.width)
         assertEquals(2, image.height)
@@ -132,7 +132,7 @@ class CopyImageAndApplyExifRotationTest {
         bitmap.setPixel(0, 0, Color.RED)
         bitmap.setPixel(0, 1, Color.GREEN)
 
-        FileUtils.saveBitmapToFile(bitmap, filePath)
+        ImageFileUtils.saveBitmapToFile(bitmap, filePath)
         if (attributes != null) {
             try {
                 val exifInterface = ExifInterface(filePath)

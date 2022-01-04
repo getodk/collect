@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.async.Scheduler;
 
 import java.util.Collection;
@@ -70,7 +70,7 @@ class QRCodeViewModel extends ViewModel {
 
                         BitmapFactory.Options options = new BitmapFactory.Options();
                         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                        Bitmap bitmap = FileUtils.getBitmap(filePath, options);
+                        Bitmap bitmap = ImageFileUtils.getBitmap(filePath, options);
 
                         return new Pair<>(filePath, bitmap);
                     } catch (Exception ignored) {
