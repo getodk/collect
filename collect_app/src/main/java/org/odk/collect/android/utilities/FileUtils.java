@@ -65,8 +65,6 @@ import timber.log.Timber;
  */
 public final class FileUtils {
 
-    // Used to validate and display valid form names.
-    public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
@@ -84,8 +82,6 @@ public final class FileUtils {
 
     /** Valid XML stub that can be parsed without error. */
     public static final String STUB_XML = "<?xml version='1.0' ?><stub />";
-
-    static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
     }
@@ -461,23 +457,6 @@ public final class FileUtils {
         }
 
         return mimeType;
-    }
-
-    public static void createDir(String dirPath) {
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                String message = String.format("Cannot create directory: %s", dirPath);
-                Timber.w(message);
-                throw new RuntimeException(message);
-            }
-        } else {
-            if (!dir.isDirectory()) {
-                String message = String.format("%s exists, but is not a directory", dirPath);
-                Timber.w(message);
-                throw new RuntimeException(message);
-            }
-        }
     }
 
     public static List<File> listFiles(File file) {
