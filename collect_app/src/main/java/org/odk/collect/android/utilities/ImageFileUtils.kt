@@ -46,7 +46,7 @@ object ImageFileUtils {
         if (newOptions.inSampleSize <= 0) {
             newOptions.inSampleSize = 1
         }
-        val bitmap: Bitmap = try {
+        val bitmap: Bitmap? = try {
             BitmapFactory.decodeFile(path, originalOptions)
         } catch (e: OutOfMemoryError) {
             Timber.i(e)

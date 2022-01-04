@@ -15,10 +15,12 @@
  */
 package org.odk.collect.android.instrumented.utilities
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.exifinterface.media.ExifInterface
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -112,6 +114,52 @@ class ImageFileUtilsTest {
         verifyNoExifOrientationInDestinationFile(destinationFile.absolutePath)
     }
 
+    /**
+     * These cases all have a window smaller than the image so the image should be scaled down.
+     * Note that the scaling isn't exact -- the factor is the closest power of 2 to the exact one.
+     */
+    @Test
+    fun scaleDownBitmapWhenNeeded() {
+        runScaleTest(1000, 1000, 500, 500, 500, 500, false)
+        runScaleTest(600, 800, 600, 200, 150, 200, false)
+        runScaleTest(500, 400, 250, 200, 250, 200, false)
+    }
+
+    @Test
+    fun doNotScaleDownBitmapWhenNotNeeded() {
+        runScaleTest(1000, 1000, 2000, 2000, 1000, 1000, false)
+        runScaleTest(600, 800, 600, 800, 600, 800, false)
+        runScaleTest(500, 400, 600, 600, 500, 400, false)
+        runScaleTest(2000, 800, 4000, 2000, 2000, 800, false)
+    }
+
+    @Test
+    fun accuratelyScaleBitmapToDisplay() {
+        runScaleTest(1000, 1000, 500, 500, 500, 500, true)
+        runScaleTest(600, 800, 600, 200, 150, 200, true)
+        runScaleTest(500, 400, 250, 200, 250, 200, true)
+        runScaleTest(2000, 800, 300, 400, 300, 120, true)
+        runScaleTest(1000, 1000, 2000, 2000, 2000, 2000, true)
+        runScaleTest(600, 800, 600, 800, 600, 800, true)
+        runScaleTest(500, 400, 600, 600, 600, 480, true)
+        runScaleTest(2000, 800, 4000, 2000, 4000, 1600, true)
+    }
+
+    private fun runScaleTest(
+        imageHeight: Int,
+        imageWidth: Int,
+        windowHeight: Int,
+        windowWidth: Int,
+        expectedHeight: Int,
+        expectedWidth: Int,
+        shouldScaleAccurately: Boolean
+    ) {
+        ScaleImageTest()
+            .createBitmap(imageHeight, imageWidth)
+            .scaleBitmapToDisplay(windowHeight, windowWidth, shouldScaleAccurately)
+            .assertScaledBitmapDimensions(expectedHeight, expectedWidth)
+    }
+
     private fun verifyNoExifOrientationInDestinationFile(destinationFilePath: String) {
         val exifData = getTestImageExif(destinationFilePath)
         if (exifData != null) {
@@ -159,5 +207,36 @@ class ImageFileUtilsTest {
         val temp = File.createTempFile(imageName, ".png")
         temp.deleteOnExit()
         return temp
+    }
+
+    private class ScaleImageTest {
+        private val cache = ApplicationProvider.getApplicationContext<Context>().externalCacheDir
+        private val imageFile = File(cache, "testImage.jpeg")
+        private var scaledBitmap: Bitmap? = null
+
+        fun createBitmap(imageHeight: Int, imageWidth: Int): ScaleImageTest {
+            val bitmap = Bitmap.createBitmap(imageWidth, imageHeight, Bitmap.Config.ARGB_8888)
+            ImageFileUtils.saveBitmapToFile(bitmap, imageFile.absolutePath)
+            return this
+        }
+
+        fun scaleBitmapToDisplay(
+            windowHeight: Int,
+            windowWidth: Int,
+            shouldScaleAccurately: Boolean
+        ): ScaleImageTest {
+            scaledBitmap = ImageFileUtils.getBitmapScaledToDisplay(
+                imageFile,
+                windowHeight,
+                windowWidth,
+                shouldScaleAccurately
+            )
+            return this
+        }
+
+        fun assertScaledBitmapDimensions(expectedHeight: Int, expectedWidth: Int) {
+            assertEquals(expectedHeight.toLong(), scaledBitmap!!.height.toLong())
+            assertEquals(expectedWidth.toLong(), scaledBitmap!!.width.toLong())
+        }
     }
 }
