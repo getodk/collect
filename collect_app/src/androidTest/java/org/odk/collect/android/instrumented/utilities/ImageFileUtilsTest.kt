@@ -30,7 +30,7 @@ import java.io.File
 import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class CopyImageAndApplyExifRotationTest {
+class ImageFileUtilsTest {
 
     private lateinit var sourceFile: File
     private lateinit var destinationFile: File
