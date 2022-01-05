@@ -41,17 +41,21 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -60,6 +64,9 @@ import timber.log.Timber;
  * attached to it as well as text (such as audio, video or an image).
  */
 public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
+    @Inject
+    MediaUtils mediaUtils;
+
     AudioVideoImageTextLabelBinding binding;
 
     private TextView textLabel;
@@ -72,12 +79,14 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
+        DaggerUtils.getComponent(context).inject(this);
         binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
+        DaggerUtils.getComponent(context).inject(this);
         binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
@@ -156,16 +165,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             return;
         }
 
-        Intent intent = new Intent("android.intent.action.VIEW");
-        Uri uri =
-                ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
-        FileUtils.grantFileReadPermissions(intent, uri, getContext());
-        intent.setDataAndType(uri, "video/*");
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            getContext().startActivity(intent);
-        } else {
-            ToastUtils.showShortToast(getContext(), getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video)));
-        }
+        mediaUtils.openFile(getContext(), videoFile, "video/*");
     }
 
     public TextView getLabelTextView() {

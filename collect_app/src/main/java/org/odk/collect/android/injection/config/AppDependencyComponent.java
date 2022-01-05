@@ -38,6 +38,7 @@ import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
@@ -284,6 +285,8 @@ public interface AppDependencyComponent {
     void inject(FormUriActivity formUriActivity);
 
     void inject(MapsPreferencesFragment mapsPreferencesFragment);
+
+    void inject(AudioVideoImageTextLabel audioVideoImageTextLabel);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 
