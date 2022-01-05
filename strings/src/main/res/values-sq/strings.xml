@@ -179,7 +179,6 @@
   <string name="set_color">Cakto ngjyrën</string>
   <string name="capture_video">Regjistro video</string>
   <string name="choose_video">Zgjidh video</string>
-  <string name="view_video">Shih videon</string>
   <string name="start_video_capture_instruction">Prekni ekranin për të nisur regjistrimin</string>
   <string name="stop_video_capture_instruction">Regjistrimi nisi. Prekni sërish ekranin për ta ndaluar</string>
   <string name="play_video">Shih videon</string>

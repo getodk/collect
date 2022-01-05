@@ -202,7 +202,6 @@
   <string name="set_color">Ustaw Kolor</string>
   <string name="capture_video">Nagraj Wideo</string>
   <string name="choose_video">Wybierz Wideo</string>
-  <string name="view_video">Zobacz Wideo</string>
   <string name="start_video_capture_instruction">Dotknij ekranu, by rozpocząć nagrywanie.</string>
   <string name="stop_video_capture_instruction">Rozpoczęto nagrywanie. Kliknij ponownie, by zakończyć.</string>
   <string name="play_video">Odtwórz Wideo</string>

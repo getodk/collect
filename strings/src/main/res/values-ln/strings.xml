@@ -55,7 +55,6 @@
   <string name="capture_image">kanga elili</string>
   <string name="view_image">lakisa bilili</string>
   <!--Dialog heading for saving annotated image-->
-  <string name="view_video">lakisa video</string>
   <string name="play_video">beta video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

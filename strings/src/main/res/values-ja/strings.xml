@@ -207,7 +207,6 @@
   <string name="set_color">色を設定</string>
   <string name="capture_video">ビデオを録画</string>
   <string name="choose_video">ビデオを選択</string>
-  <string name="view_video">ビデオを表示</string>
   <string name="start_video_capture_instruction">画面をタップすると記録を開始します</string>
   <string name="stop_video_capture_instruction">記録を開始しました。もう一度タップすると停止します</string>
   <string name="play_video">ビデオを再生</string>

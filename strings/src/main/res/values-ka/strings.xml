@@ -141,7 +141,6 @@
   <string name="set_color">ფერის დაყენება</string>
   <string name="capture_video">ვიდეოგადაღება</string>
   <string name="choose_video">ვიდეოს არჩევა</string>
-  <string name="view_video">ვიდეოს ნახვა</string>
   <string name="play_video">ვიდეოჩანაწერის ჩვენება</string>
   <string name="choose_file">ფაილის არჩევა</string>
   <!--Text for button that deletes a file that is the answer to a question-->

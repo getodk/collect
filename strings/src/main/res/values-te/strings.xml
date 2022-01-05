@@ -202,7 +202,6 @@
   <string name="set_color">రంగును సెట్ చేయండి</string>
   <string name="capture_video">వీడియో రికార్డు చెయ్యి </string>
   <string name="choose_video">వీడియోను ఎంచుకోండి</string>
-  <string name="view_video">వీడియోని చూడండి</string>
   <string name="start_video_capture_instruction">రికార్డింగ్ ప్రారంభించడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="stop_video_capture_instruction">రికార్డింగ్ ప్రారంభమైంది. ఆపడానికి మళ్ళీ నొక్కండి</string>
   <string name="play_video">వీడియో ప్లే చెయ్యి</string>

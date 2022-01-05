@@ -263,7 +263,6 @@
 
     <string name="capture_video">Record Video</string>
     <string name="choose_video">Choose Video</string>
-    <string name="view_video">View Video</string>
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="play_video">Play Video</string>

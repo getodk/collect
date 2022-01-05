@@ -95,7 +95,6 @@
   <!--Dialog heading for saving annotated image-->
   <string name="signature_capture">د امضا ثبت کول</string>
   <string name="capture_video">ویدیو ثبت کړی</string>
-  <string name="view_video">ویډیو ښودل</string>
   <string name="play_video">ویډیو روښانه کړی</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

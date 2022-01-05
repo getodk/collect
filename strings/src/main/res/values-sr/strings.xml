@@ -199,7 +199,6 @@
   <string name="set_color">Postavi boje</string>
   <string name="capture_video">Snimi video sadržaj</string>
   <string name="choose_video">Izaberi video</string>
-  <string name="view_video">Pogledaj video</string>
   <string name="start_video_capture_instruction">Dodirni ekran kako bi počeli sa snimanjem</string>
   <string name="stop_video_capture_instruction">Snimanje je počelo. Dodirni za prekid</string>
   <string name="play_video">Pusti video</string>

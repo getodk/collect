@@ -111,7 +111,6 @@
   <!--Dialog heading for saving annotated image-->
   <string name="capture_video"> വീഡിയോ റെക്കോർഡ് ചെയ്യുക</string>
   <string name="choose_video">വീഡിയോ തിരഞ്ഞെടുക്കുക</string>
-  <string name="view_video">വീഡിയോ വീക്ഷിക്കുക</string>
   <string name="choose_file">ഫയൽ തിരഞ്ഞെടുക്കുക</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <string name="delete_answer_file">ഡിലീറ്റ് </string>

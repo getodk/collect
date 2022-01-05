@@ -207,7 +207,6 @@
   <string name="set_color">تحديد اللون</string>
   <string name="capture_video">سجل فيديو</string>
   <string name="choose_video">إختر فيديو</string>
-  <string name="view_video">عرض الفيديو</string>
   <string name="start_video_capture_instruction">إنقر على الشاشة لبدء التسجيل</string>
   <string name="stop_video_capture_instruction">بدأ التسجيل. إنقر مجددا للتوقف</string>
   <string name="play_video">تشغيل تسجيل الفيديو</string>

@@ -163,7 +163,6 @@
   <string name="set_color">Set Color</string>
   <string name="capture_video">Video vastleggen</string>
   <string name="choose_video">Selecteer video</string>
-  <string name="view_video">Video bekijken</string>
   <string name="play_video">Bekijk video</string>
   <string name="choose_file">Bestand Kiezen</string>
   <!--Text for button that deletes a file that is the answer to a question-->

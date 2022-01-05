@@ -210,7 +210,6 @@
   <string name="set_color">Aseta väri</string>
   <string name="capture_video">Tallenna video</string>
   <string name="choose_video">Valitse video</string>
-  <string name="view_video">Katso video</string>
   <string name="start_video_capture_instruction">Napsauta näyttöä käynnistääksesi tallennuksen.</string>
   <string name="stop_video_capture_instruction">Tallennus aloitettu. Napsauta uudelleen lopettaaksesi.</string>
   <string name="play_video">Näytä video</string>

@@ -210,7 +210,6 @@
   <string name="set_color">Atur Warna</string>
   <string name="capture_video">Rekam Video</string>
   <string name="choose_video">Pilih Video</string>
-  <string name="view_video">Lihat Video</string>
   <string name="start_video_capture_instruction">Sentuh layar untuk mulai merekam</string>
   <string name="stop_video_capture_instruction">Perekaman dimulai. Sentuh lagi untuk berhenti.</string>
   <string name="play_video">Mainkan video</string>

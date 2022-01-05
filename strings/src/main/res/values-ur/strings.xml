@@ -192,7 +192,6 @@
   <string name="set_color">رنگ ترتیب دیں</string>
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
   <string name="choose_video">ویڈیو منتخب کریں </string>
-  <string name="view_video">ویڈیو دیکھیں </string>
   <string name="start_video_capture_instruction">ریکارڈ کرنے کے لیے سکرین پر ٹیپ کریں</string>
   <string name="stop_video_capture_instruction">ریکارڈنگ شروع ہوئی. روکنے کے لئے دوبارہ ٹیپ کریں</string>
   <string name="play_video">وڈیو لگا دیں</string>

@@ -210,7 +210,6 @@
   <string name="set_color">Sélectionner la couleur</string>
   <string name="capture_video">Enregistrer une vidéo</string>
   <string name="choose_video">Choisir une Vidéo</string>
-  <string name="view_video">Visionner la vidéo</string>
   <string name="start_video_capture_instruction">Toucher l\'écran pour commencer l\'enregistrement</string>
   <string name="stop_video_capture_instruction">Enregistrement commencé. Toucher l\'écran pour l\'arrêter.</string>
   <string name="play_video">Jouer la vidéo</string>

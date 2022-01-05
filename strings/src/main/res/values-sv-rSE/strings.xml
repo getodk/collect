@@ -190,7 +190,6 @@
   <string name="set_color">Välj färg</string>
   <string name="capture_video">Spela in film</string>
   <string name="choose_video">Välj film</string>
-  <string name="view_video">Visa video</string>
   <string name="start_video_capture_instruction">Tryck på skärmen för att starta inspelning</string>
   <string name="stop_video_capture_instruction">Inspelning startad. Tryck igen för att stoppa.</string>
   <string name="play_video">Spela upp film</string>

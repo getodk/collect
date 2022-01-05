@@ -196,7 +196,6 @@
   <string name="set_color">Колір</string>
   <string name="capture_video">Записати відео</string>
   <string name="choose_video">Оберіть відео</string>
-  <string name="view_video">Переглянути Відео</string>
   <string name="start_video_capture_instruction">Щоб почати запис торкніться екрану</string>
   <string name="stop_video_capture_instruction">Запис розпочато. Торкніться знову щоб зупинити</string>
   <string name="play_video">Відтворити відео</string>

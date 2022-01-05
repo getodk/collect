@@ -142,7 +142,6 @@
   <string name="set_color">เลือกสี</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="choose_video">เลือกภาพเคลื่อนไหว</string>
-  <string name="view_video">ดูภาพเคลื่อนไหว</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="choose_file">เลือกไฟล์</string>
   <!--Text for button that deletes a file that is the answer to a question-->

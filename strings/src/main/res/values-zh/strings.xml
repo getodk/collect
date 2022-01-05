@@ -123,7 +123,6 @@
   <string name="set_color">选择颜色</string>
   <string name="capture_video">拍摄视频</string>
   <string name="choose_video">选择视频</string>
-  <string name="view_video">查看视频</string>
   <string name="play_video">播放视频</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

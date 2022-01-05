@@ -167,7 +167,6 @@
   <string name="set_color">रंग सेट करें</string>
   <string name="capture_video">विडियो रिकार्ड करे</string>
   <string name="choose_video">वीडियो चुनें</string>
-  <string name="view_video">वीडियो देखें</string>
   <string name="start_video_capture_instruction">रिकॉर्डिंग प्रारंभ करने के लिए स्क्रीन को टैप करें</string>
   <string name="play_video">वीडियो चलाएं</string>
   <!--Text for button that deletes a file that is the answer to a question-->

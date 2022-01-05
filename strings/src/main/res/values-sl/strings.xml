@@ -156,7 +156,6 @@
   <string name="set_color">Nastavi barvo</string>
   <string name="capture_video">Posnemi video</string>
   <string name="choose_video">Izberi video</string>
-  <string name="view_video">Poglej video</string>
   <string name="play_video">Predvajaj video</string>
   <string name="choose_file">Izberi datoteko</string>
   <!--Text for button that deletes a file that is the answer to a question-->

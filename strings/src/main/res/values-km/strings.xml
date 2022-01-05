@@ -186,7 +186,6 @@
   <string name="set_color">កំណត់ពណ៌</string>
   <string name="capture_video">ថត​វីដេអូ</string>
   <string name="choose_video">ជ្រើសរើសវីដេអូ</string>
-  <string name="view_video">បង្ហាញវីដេអូ</string>
   <string name="start_video_capture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់​ដើម្បីចាប់​ផ្តើម​ថត</string>
   <string name="stop_video_capture_instruction">ការថតបានចាប់ផ្តើម, ប៉ះវាម្តងទៀតដើម្បីបញ្ចប់</string>
   <string name="play_video">ចាក់វីដេអូ</string>
