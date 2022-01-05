@@ -14,11 +14,8 @@
 
 package org.odk.collect.android.formentry.questions;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -37,14 +34,11 @@ import androidx.lifecycle.LiveData;
 import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.SelectItemClickListener;
-import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -213,24 +207,9 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void onImageClick() {
         if (bigImageFile != null) {
-            openImage();
+            mediaUtils.openFile(getContext(), bigImageFile, "image/*");
         } else {
             selectItem();
-        }
-    }
-
-    private void openImage() {
-        try {
-            Intent intent = new Intent("android.intent.action.VIEW");
-            Uri uri =
-                    ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImageFile);
-            FileUtils.grantFileReadPermissions(intent, uri, getContext());
-            intent.setDataAndType(uri, "image/*");
-            getContext().startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
-            ToastUtils.showShortToast(getContext(), getContext().getString(R.string.activity_not_found,
-                    getContext().getString(R.string.view_image)));
         }
     }
 
