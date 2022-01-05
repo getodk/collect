@@ -44,14 +44,11 @@ import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 /**
  * Represents a label for a prompt/question or a select choice. The label can have media
@@ -151,14 +148,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     }
 
     public void playVideo() {
-        if (!videoFile.exists()) {
-            // We should have a video clip, but the file doesn't exist.
-            String errorMsg = getContext().getString(R.string.file_missing, videoFile);
-            Timber.d("File %s is missing", videoFile);
-            ToastUtils.showLongToast(getContext(), errorMsg);
-            return;
-        }
-
         mediaUtils.openFile(getContext(), videoFile, "video/*");
     }
 

@@ -41,6 +41,13 @@ class MediaUtils {
     }
 
     fun openFile(context: Context, file: File, expectedMimeType: String?) {
+        if (!file.exists()) {
+            val errorMsg: String = context.getString(R.string.file_missing, file)
+            Timber.d("File %s is missing", file)
+            showLongToast(context, errorMsg)
+            return
+        }
+
         val contentUri = ContentUriProvider.getUriForFile(
             context,
             BuildConfig.APPLICATION_ID + ".provider",
