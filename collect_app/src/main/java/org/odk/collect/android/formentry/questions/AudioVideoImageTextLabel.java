@@ -33,7 +33,6 @@ import androidx.lifecycle.LiveData;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
@@ -139,12 +138,15 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setVideo(@NonNull File videoFile) {
         this.videoFile = videoFile;
-        setupVideoButton();
+
+        binding.videoButton.setVisibility(VISIBLE);
+        binding.mediaButtons.setVisibility(VISIBLE);
+        binding.videoButton.setOnClickListener(this);
     }
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-        binding.audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
+        binding.audioButton.setColors(new ThemeUtils(getContext()).getColorOnSurface(), playTextColor);
     }
 
     public void playVideo() {
@@ -214,12 +216,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         }
     }
 
-    private void setupVideoButton() {
-        binding.videoButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
-        binding.videoButton.setOnClickListener(this);
-    }
-
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
         binding.audioButton.setVisibility(VISIBLE);
         binding.mediaButtons.setVisibility(VISIBLE);
@@ -238,11 +234,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
                 textLabel.setText(questionText);
             }
         });
-    }
-
-    @NotNull
-    private ThemeUtils getThemeUtils() {
-        return new ThemeUtils(getContext());
     }
 
     private ScreenContext getScreenContext() {
