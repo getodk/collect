@@ -192,7 +192,6 @@
   <string name="capture_image">Fata ifoto </string>
   <string name="choose_image">Hitamo Ishusho</string>
   <string name="selected_invalid_image">Ifoto wahisemo mububiko si ifoto yukuri</string>
-  <string name="view_image">Reba ifoto </string>
   <string name="take_picture_instruction">Kora kuri screen ufate ifoto </string>
   <string name="error_front_camera_unavailable">Ifoto y\'imbere ntabwo iboneka kuri iki gikoresho</string>
   <string name="camera_error">Iyi Tablet ntabwo yemera Camera2 API</string>

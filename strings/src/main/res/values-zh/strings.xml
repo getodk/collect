@@ -112,7 +112,6 @@
   <string name="replace_barcode">替换条形码</string>
   <string name="capture_image">照相</string>
   <string name="choose_image">选择图片</string>
-  <string name="view_image">查看图片</string>
   <string name="annotate_image">注释该图片</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">保存并关闭</string>

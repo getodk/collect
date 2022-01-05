@@ -191,7 +191,6 @@
   <string name="capture_image">写真を撮影</string>
   <string name="choose_image">画像を選択</string>
   <string name="selected_invalid_image">選択したファイルは有効な画像ではありません</string>
-  <string name="view_image">画像を表示</string>
   <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="error_front_camera_unavailable">このデバイスは前面カメラが利用できません</string>
   <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>

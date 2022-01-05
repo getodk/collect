@@ -194,7 +194,6 @@
   <string name="choose_image">Escoja la Imagen</string>
   <string name="choose_account">Elegir cuenta</string>
   <string name="selected_invalid_image">El archivo seleccionado no es una imagen válida</string>
-  <string name="view_image">Ver imagen</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
   <string name="camera_error">Este dispositivo no soporta el API Camera2</string>

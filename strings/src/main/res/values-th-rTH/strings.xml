@@ -131,7 +131,6 @@
   <string name="replace_barcode">เปลี่ยนบาร์โคดใหม่</string>
   <string name="capture_image">ถ่ายภาพ</string>
   <string name="choose_image">เลือกรูปภาพ</string>
-  <string name="view_image">ดูรูปภาพ</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
   <string name="signature_capture">ลงลายมือชื่อ</string>

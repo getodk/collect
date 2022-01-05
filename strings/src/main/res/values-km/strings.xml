@@ -171,7 +171,6 @@
   <string name="capture_image">ថត​រូបភាព</string>
   <string name="choose_image">ជ្រើសរើសរូបថត</string>
   <string name="selected_invalid_image">ឯកសារ​ដែល​បាន​រើស​មិន​មែន​លក្ខណះ​ជា​រូបភាព​ត្រឹម​ត្រូវ</string>
-  <string name="view_image">បង្ហាញរូបថត</string>
   <string name="take_picture_instruction">ប៉ះលើផ្ទៃ​អេក្រង់ដើម្បីថត​រូប</string>
   <string name="error_front_camera_unavailable">កាមេរ៉ាខាងមុខមិនមាននៅលើឧបករណ៍នេះទេ</string>
   <string name="camera_error">ឧបករណ៍នេះមិនមានការគាំទ្រ​ក្នុង​ការ​ប្រើ​ប្រាស់ API របស់ Camera2</string>

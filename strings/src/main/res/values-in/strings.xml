@@ -194,7 +194,6 @@
   <string name="choose_image">Pilih Gambar</string>
   <string name="choose_account">Pilih akun</string>
   <string name="selected_invalid_image">Berkas terpilih bukan gambar yang valid</string>
-  <string name="view_image">Lihat Gambar</string>
   <string name="take_picture_instruction">Sentuh layar untuk ambil gambar</string>
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam perangkat ini.</string>
   <string name="camera_error">Perangkat ini tidak mendukung Camera2 API.</string>

@@ -194,7 +194,6 @@
   <string name="choose_image">Valitse kuva</string>
   <string name="choose_account">Valitse tili</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
-  <string name="view_image">Katso kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>

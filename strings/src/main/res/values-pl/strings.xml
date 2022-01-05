@@ -187,7 +187,6 @@
   <string name="capture_image">Zrób Zdjęcie</string>
   <string name="choose_image">Wybierz Obraz</string>
   <string name="selected_invalid_image">Wybrany plik nie jest poprawnym obrazem</string>
-  <string name="view_image">Zobacz Obraz</string>
   <string name="take_picture_instruction">Dotknij ekran, by zrobić zdjęcie</string>
   <string name="error_front_camera_unavailable">Przednia kamera nie jest dostępna w tym urządzeniu</string>
   <string name="camera_error">To urządzenie nie wspiera Camera2 API.</string>

@@ -183,7 +183,6 @@
   <string name="capture_image">Chukua picha</string>
   <string name="choose_image">Chagua picha</string>
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
-  <string name="view_image">Onesha picha</string>
   <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
   <string name="camera_error">Kifaa hiki hakina uwezo wa kutumia Kamera2 API.</string>

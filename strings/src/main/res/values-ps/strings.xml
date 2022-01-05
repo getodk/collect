@@ -90,7 +90,6 @@
   <string name="get_barcode">بار کود ثبت کړی</string>
   <string name="replace_barcode">بارکوډ تغیر کړی</string>
   <string name="capture_image">عکس واخلی</string>
-  <string name="view_image">انځور وګورئ</string>
   <string name="annotate_image">تصویر شرحه کړی</string>
   <!--Dialog heading for saving annotated image-->
   <string name="signature_capture">د امضا ثبت کول</string>

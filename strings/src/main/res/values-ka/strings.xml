@@ -129,7 +129,6 @@
   <string name="replace_barcode">ბარკოდის შეცვლა</string>
   <string name="capture_image">ფოტოს გადაღება</string>
   <string name="choose_image">სურათის არჩევა</string>
-  <string name="view_image">სურათის ნახვა</string>
   <string name="annotate_image">სურათის ანოტირება</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">შენახვა და დახურვა</string>

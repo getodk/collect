@@ -187,7 +187,6 @@
   <string name="capture_image">ఫోటో తియ్యి</string>
   <string name="choose_image">ఫోటో ని ఎంచుకోండి</string>
   <string name="selected_invalid_image">ఎంచుకున్న ఫైల్ చెల్లుబాటు అయ్యే చిత్రం కాదు</string>
-  <string name="view_image">ఫోటో ని చూడండి </string>
   <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
   <string name="camera_error">ఈ పరికరం కెమెరా2 API కి మద్దతు ఇవ్వదు.</string>

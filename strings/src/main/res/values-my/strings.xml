@@ -108,7 +108,6 @@
   <string name="replace_barcode">ဘားကုတ္(ဒ္) အစားထိုးရန္</string>
   <string name="capture_image">ပုံရိုက်ပါ</string>
   <string name="choose_image">ပံုေရြးခ်ယ္ရန္</string>
-  <string name="view_image">ပုံကြည့်ရန်</string>
   <string name="annotate_image">ပုံတွင်မှတ်ချက်ရေးပါ</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">သိမ္းဆည္း ၿပီးပိတ္ရန္</string>

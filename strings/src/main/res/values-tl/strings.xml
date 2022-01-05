@@ -102,7 +102,6 @@
   <string name="replace_barcode">Palitan ang Barcode</string>
   <string name="capture_image">Kumuha ng Larawan</string>
   <string name="choose_image">Pumili ng Imahe</string>
-  <string name="view_image">Ipakita ang Imahe</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Impukin at Isara</string>
   <string name="sign_button">Kalapin ang Pirma</string>

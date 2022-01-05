@@ -105,7 +105,6 @@
   <string name="svg_file_does_not_exist">SVG ഫയൽ നിലവിലില്ല!</string>
   <string name="capture_image">ചിത്രം എടുക്കുക</string>
   <string name="choose_image">ചിത്രം തിരഞ്ഞെടുക്കുക </string>
-  <string name="view_image">ചിത്രം വീക്ഷിക്കുക</string>
   <string name="take_picture_instruction">ചിത്രം എടുക്കാനായി സ്‌ക്രീനിൽ തൊടുക</string>
   <string name="error_front_camera_unavailable">ഈ ഉപകരണത്തിൽ മുന്നിലെ ക്യാമറ ലഭ്യമല്ല</string>
   <!--Dialog heading for saving annotated image-->

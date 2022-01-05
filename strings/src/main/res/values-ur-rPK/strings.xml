@@ -109,7 +109,6 @@
   <string name="replace_barcode">مقام کو بدل دیں</string>
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">عکس کا انتخاب کریں</string>
-  <string name="view_image">تصویر دیکھیں</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="signature_capture">دستخط حاصل کریں</string>

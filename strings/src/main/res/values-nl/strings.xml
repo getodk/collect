@@ -151,7 +151,6 @@
   <string name="open_file">Open bestand</string>
   <string name="capture_image">Foto nemen</string>
   <string name="choose_image">Selecteer afbeelding</string>
-  <string name="view_image">Afbeelding bekijken</string>
   <string name="annotate_image">Aantekening maken bij afbeelding</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Opslaan en sluiten</string>

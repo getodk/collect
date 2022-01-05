@@ -176,7 +176,6 @@
   <string name="capture_image">Ta bild</string>
   <string name="choose_image">Välj bild</string>
   <string name="selected_invalid_image">Vald fil är inte en giltig bild</string>
-  <string name="view_image">Visa bild</string>
   <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
   <string name="error_front_camera_unavailable">Frontkamera inte tillgänglig på denna enhet</string>
   <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>

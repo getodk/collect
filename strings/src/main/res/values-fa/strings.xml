@@ -126,7 +126,6 @@
   <string name="svg_file_does_not_exist">فایل SVG موجود نیست!</string>
   <string name="capture_image">گرفتن عکس</string>
   <string name="choose_image">انتخاب تصویر</string>
-  <string name="view_image">نمایش تصویر</string>
   <string name="annotate_image">نوشتن بر روی تصویر</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">ذخیره کردن و خروج</string>

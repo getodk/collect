@@ -174,7 +174,6 @@
   <string name="capture_image">Сделать снимок</string>
   <string name="choose_image">Выберите изображение</string>
   <string name="selected_invalid_image">Выбрайнный файл не является изображением</string>
-  <string name="view_image">Просмотреть изображение</string>
   <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
   <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
