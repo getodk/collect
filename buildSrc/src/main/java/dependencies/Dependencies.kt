@@ -91,7 +91,7 @@ object Dependencies {
     const val okhttp3_mockwebserver = "com.squareup.okhttp3:mockwebserver:${Versions.okhttp3}"
     const val kotlinx_coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
     const val hamcrest = "org.hamcrest:hamcrest:2.2"
-    const val robolectric = "org.robolectric:robolectric:4.5.1"
-    const val robolectric_shadows_multidex = "org.robolectric:shadows-multidex:4.5.1"
+    const val robolectric = "org.robolectric:robolectric:4.7.3"
+    const val robolectric_shadows_multidex = "org.robolectric:shadows-multidex:4.7.3"
     const val uiautomator = "androidx.test.uiautomator:uiautomator:2.2.0"
 }
