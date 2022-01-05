@@ -630,7 +630,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MediaUtils providesMediaUtils() {
-        return new MediaUtils();
+    public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
+        return new MediaUtils(intentLauncher);
     }
 }

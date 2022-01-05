@@ -84,6 +84,7 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final SettingsProvider settingsProvider;
+    private final MediaUtils mediaUtils;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -97,7 +98,8 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         SettingsProvider settingsProvider) {
+                         SettingsProvider settingsProvider,
+                         MediaUtils mediaUtils) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -111,6 +113,7 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.settingsProvider = settingsProvider;
+        this.mediaUtils = mediaUtils;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -190,9 +193,9 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_FILE_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry, fileRequester);
+                    questionWidget = new ExArbitraryFileWidget(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry, fileRequester);
                 } else {
-                    questionWidget = new ArbitraryFileWidget(context, questionDetails, new MediaUtils(), questionMediaManager, waitingForDataRegistry);
+                    questionWidget = new ArbitraryFileWidget(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
@@ -203,7 +206,7 @@ public class WidgetFactory {
                 } else if (appearance.equals(Appearances.DRAW)) {
                     questionWidget = new DrawWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 } else if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), fileRequester);
+                    questionWidget = new ExImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, mediaUtils, fileRequester);
                 } else {
                     questionWidget = new ImageWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new StoragePathProvider().getTmpImageFilePath());
                 }
@@ -217,14 +220,14 @@ public class WidgetFactory {
                 GetContentAudioFileRequester audioFileRequester = new GetContentAudioFileRequester(context, IntentLauncherImpl.INSTANCE, waitingForDataRegistry, formEntryViewModel);
 
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, new MediaUtils(), fileRequester);
+                    questionWidget = new ExAudioWidget(context, questionDetails, questionMediaManager, audioPlayer, waitingForDataRegistry, mediaUtils, fileRequester);
                 } else {
                     questionWidget = new AudioWidget(context, questionDetails, questionMediaManager, audioPlayer, recordingRequester, audioFileRequester, new AudioRecorderRecordingStatusHandler(audioRecorder, formEntryViewModel, viewLifecycle));
                 }
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
                 if (appearance.startsWith(Appearances.EX)) {
-                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, new MediaUtils(), fileRequester);
+                    questionWidget = new ExVideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry, mediaUtils, fileRequester);
                 } else {
                     questionWidget = new VideoWidget(context, questionDetails, questionMediaManager, waitingForDataRegistry);
                 }

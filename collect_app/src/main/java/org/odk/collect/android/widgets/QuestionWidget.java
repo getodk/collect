@@ -45,6 +45,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -105,6 +106,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    MediaUtils mediaUtils;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);

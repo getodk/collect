@@ -70,6 +70,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -134,6 +135,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     @Inject
     StringRequester stringRequester;
 
+    @Inject
+    MediaUtils mediaUtils;
+
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
     private final AudioRecorder audioRecorder;
@@ -187,7 +191,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 viewLifecycle,
                 fileRequester,
                 stringRequester,
-                settingsProvider
+                settingsProvider,
+                mediaUtils
         );
 
         widgets = new ArrayList<>();

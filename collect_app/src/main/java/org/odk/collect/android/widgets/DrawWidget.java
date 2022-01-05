@@ -24,7 +24,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -43,7 +42,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
     Button drawButton;
 
     public DrawWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
-        super(context, prompt, questionMediaManager, waitingForDataRegistry, new MediaUtils(), tmpImageFilePath);
+        super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
         addCurrentImageToLayout();
