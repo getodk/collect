@@ -28,9 +28,10 @@
             android:id="@+id/center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_large"
+            android:paddingHorizontal="@dimen/margin_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5">
@@ -42,97 +43,96 @@
                 android:lines="2"
                 android:text="@string/tagline"
                 android:textAppearance="?textAppearanceHeadline4"
-                app:layout_constraintBottom_toTopOf="@+id/configuration_buttons"
-                app:layout_constraintStart_toStartOf="@+id/configuration_buttons"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/configuration_buttons"
-                android:layout_width="wrap_content"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/configure_via_qr_button"
+                style="@style/Widget.Collect.Button.OutlinedButton"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="?colorPrimary"
+                android:text="@string/configure_with_qr_code"
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:icon="@drawable/ic_baseline_qr_code_scanner_24"
+                app:iconTint="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@id/tagline"
+                app:layout_constraintBottom_toTopOf="@+id/configure_manually_button"
+                app:layout_constraintEnd_toEndOf="@+id/barrierEnd"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tagline">
+                app:layout_constraintWidth_min="wrap"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/configure_via_qr_button"
-                    style="@style/Widget.Collect.Button.OutlinedButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="?colorPrimary"
-                    android:text="@string/configure_with_qr_code"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    android:textColor="@android:color/white"
-                    app:icon="@drawable/ic_baseline_qr_code_scanner_24"
-                    app:iconTint="@android:color/white"
-                    app:layout_constraintBottom_toTopOf="@+id/configure_manually_button"
-                    app:layout_constraintEnd_toEndOf="@+id/configure_manually_button"
-                    app:layout_constraintStart_toStartOf="@+id/configure_manually_button" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/configure_manually_button"
+                style="@style/Widget.Collect.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/configure_manually"
+                android:textAppearance="?attr/textAppearanceBody1"
+                app:icon="@drawable/ic_outline_edit_24"
+                app:iconTint="?colorOnSurface"
+                app:layout_constraintEnd_toEndOf="@+id/barrierEnd"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/configure_via_qr_button"
+                app:layout_constraintWidth_min="wrap"/>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/configure_manually_button"
-                    style="@style/Widget.Collect.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/configure_manually"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    app:icon="@drawable/ic_outline_edit_24"
-                    app:iconTint="?colorOnSurface"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/configure_via_qr_button" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrierEnd"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="configure_via_qr_button,configure_manually_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_large"
             android:layout_marginBottom="@dimen/margin_extra_small"
             android:textAppearance="?textAppearanceBody1"
             android:textColor="@color/color_on_surface_medium_emphasis"
-            android:layout_marginTop="@dimen/margin_extra_large"
-            app:layout_constraintBottom_toTopOf="@+id/configure_later"
+            app:layout_constraintBottom_toTopOf="@id/dont_have_server"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/center"
+            app:layout_constraintTop_toBottomOf="@id/center"
+            app:layout_constraintVertical_bias="1"
             tools:text="ODK Collect v2022.3" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/configure_later"
+        <TextView
+            android:id="@+id/dont_have_server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginBottom="@dimen/margin"
+            android:text="@string/dont_have_project"
+            android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/try_collect"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/try_collect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_extra_small"
+            android:text="@string/try_demo"
+            android:textAppearance="@style/TextAppearance.Collect.Link"
+            app:layout_constraintBottom_toBottomOf="@+id/dont_have_server"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/center">
+            app:layout_constraintStart_toEndOf="@+id/dont_have_server"
+            app:layout_constraintTop_toTopOf="@+id/dont_have_server" />
 
-            <TextView
-                android:id="@+id/dont_have_server"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dont_have_project"
-                android:textAppearance="?textAppearanceBody2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/try_collect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_extra_small"
-                android:text="@string/try_demo"
-                android:textAppearance="@style/TextAppearance.Collect.Link"
-                app:layout_constraintStart_toEndOf="@+id/dont_have_server"
-                app:layout_constraintTop_toTopOf="@+id/dont_have_server" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/configureLater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:constraint_referenced_ids="dont_have_server,try_collect" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
