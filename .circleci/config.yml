@@ -104,7 +104,10 @@ jobs:
           command: |
             cat .circleci/collect_app_test_classes.txt | circleci tests split > .circleci/fork_test_classes.txt && \
             echo "Tests for this fork:" && \
-            cat .circleci/fork_test_classes.txt
+            cat .circleci/fork_test_classes.txt && \
+            echo "" && \
+            echo "Will run command:" && \
+            echo "./gradlew collect_app:testDebug $(cat .circleci/fork_test_classes.txt | awk '{for (i=1; i<=NF; i++) printf "--tests %s ",$i}')"
 
       - run:
           name: Run app unit tests
