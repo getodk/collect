@@ -198,10 +198,6 @@ android {
             includeAndroidResources = true
             returnDefaultValues = true
         }
-
-        unitTests.all {
-            maxHeapSize = '1g'
-        }
     }
 
     lintOptions {
