@@ -2,7 +2,6 @@ package org.odk.collect.geo
 
 import android.app.Application
 import android.graphics.drawable.ColorDrawable
-import android.view.View
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,29 +24,14 @@ class AccuracyStatusViewTest {
     private val colorOnError = getThemeAttributeValue(context, R.attr.colorOnError)
 
     @Test
-    fun `initially hides info and shows progress bar`() {
-        val view = AccuracyStatusView(context)
-
-        assertThat(view.binding.progressBar.visibility, equalTo(View.VISIBLE))
-        assertThat(view.binding.currentAccuracy.visibility, equalTo(View.GONE))
-        assertThat(view.binding.text.visibility, equalTo(View.GONE))
-        assertThat(view.binding.strength.visibility, equalTo(View.GONE))
-    }
-
-    @Test
-    fun `hides progress bar and shows info when setAccuracy is called`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(9.0f, 5.0f)
-
-        assertThat(view.binding.progressBar.visibility, equalTo(View.GONE))
-        assertThat(view.binding.currentAccuracy.visibility, equalTo(View.VISIBLE))
-        assertThat(view.binding.text.visibility, equalTo(View.VISIBLE))
-        assertThat(view.binding.strength.visibility, equalTo(View.VISIBLE))
-    }
-
-    @Test
     fun `updates text and strength based on accuracy`() {
         val view = AccuracyStatusView(context)
+
+        assertThat(
+            view.binding.text.text,
+            equalTo(context.getString(R.string.waiting_for_location))
+        )
+        assertThat(view.binding.strength.progress, equalTo(20))
 
         view.setAccuracy(101f, 5f)
         assertThat(

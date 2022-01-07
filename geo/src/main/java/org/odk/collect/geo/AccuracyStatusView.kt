@@ -2,9 +2,9 @@ package org.odk.collect.geo
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.Animations
@@ -19,11 +19,6 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         private set
 
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
-        binding.progressBar.visibility = View.GONE
-        binding.currentAccuracy.visibility = View.VISIBLE
-        binding.text.visibility = View.VISIBLE
-        binding.strength.visibility = View.VISIBLE
-
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
@@ -34,7 +29,12 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
 
         val (text, strength) = getTextAndStrength(accuracy, accuracyThreshold)
         binding.text.setText(text)
-        binding.strength.progress = strength
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.strength.setProgress(strength, true)
+        } else {
+            binding.strength.progress = strength
+        }
     }
 
     private fun animateAccuracyChange(accuracy: Float) {

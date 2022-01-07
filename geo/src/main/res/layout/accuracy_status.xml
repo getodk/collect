@@ -15,59 +15,36 @@
         android:layout_gravity="start"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
         android:text="@string/accuracy_status_title"
         android:textAppearance="?textAppearanceOverline"
         android:textColor="?colorOnPrimary" />
-
-    <RelativeLayout
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        tools:visibility="gone">
-
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="@dimen/margin_large"
-            android:indeterminate="true"
-            app:indicatorColor="?colorOnPrimary" />
-
-    </RelativeLayout>
-
 
     <TextView
         android:id="@+id/current_accuracy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
+        android:text="@string/empty_accuracy"
         android:textAppearance="?textAppearanceHeadline3"
         android:textColor="?colorOnPrimary"
-        android:visibility="gone"
-        tools:text="3.25m"
-        tools:visibility="visible" />
+        tools:text="3.25m" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_large"
+        android:text="@string/waiting_for_location"
         android:textAppearance="?textAppearanceSubtitle1"
-        android:textColor="?colorOnPrimary"
-        android:visibility="gone"
-        tools:text="2.25m from goal of 1m"
-        tools:visibility="visible" />
+        android:textColor="?colorOnPrimary" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/strength"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_large"
-        android:visibility="gone"
+        android:progress="20"
         app:indicatorColor="?colorOnPrimary"
-        app:trackThickness="16dp"
-        tools:progress="50"
-        tools:visibility="visible" />
+        app:trackThickness="16dp" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
