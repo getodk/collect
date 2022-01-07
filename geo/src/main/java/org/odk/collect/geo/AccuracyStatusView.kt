@@ -22,13 +22,11 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.progressBar.visibility = View.GONE
         binding.currentAccuracy.visibility = View.VISIBLE
         binding.qualitative.visibility = View.VISIBLE
-        binding.action.visibility = View.VISIBLE
 
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
         binding.qualitative.setTextColor(textColor)
-        binding.action.setTextColor(textColor)
         binding.currentAccuracy.setTextColor(textColor)
 
         animateAccuracyChange(accuracy)
@@ -43,12 +41,6 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
             context.getString(R.string.unacceptable_accuracy)
         } else {
             context.getString(R.string.poor_accuracy)
-        }
-
-        binding.action.text = if (accuracy >= 100) {
-            context.getString(R.string.unacceptable_accuracy_tip)
-        } else {
-            context.getString(R.string.please_wait_for_improved_accuracy)
         }
     }
 

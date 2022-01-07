@@ -30,7 +30,6 @@ class AccuracyStatusViewTest {
         assertThat(view.binding.progressBar.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.GONE))
         assertThat(view.binding.qualitative.visibility, equalTo(View.GONE))
-        assertThat(view.binding.action.visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -41,7 +40,6 @@ class AccuracyStatusViewTest {
         assertThat(view.binding.progressBar.visibility, equalTo(View.GONE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.qualitative.visibility, equalTo(View.VISIBLE))
-        assertThat(view.binding.action.visibility, equalTo(View.VISIBLE))
     }
 
     @Test
@@ -71,9 +69,6 @@ class AccuracyStatusViewTest {
 
         val qualitativeColor = view.binding.qualitative.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnPrimary))
-
-        val actionColor = view.binding.action.currentTextColor
-        assertThat(actionColor, equalTo(colorOnPrimary))
     }
 
     @Test
@@ -84,17 +79,6 @@ class AccuracyStatusViewTest {
         assertThat(
             view.binding.qualitative.text,
             equalTo(context.getString(R.string.poor_accuracy))
-        )
-    }
-
-    @Test
-    fun `shows prompt to wait when accuracy is less than 100m`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(99.0f, 5.0f)
-
-        assertThat(
-            view.binding.action.text,
-            equalTo(context.getString(R.string.please_wait_for_improved_accuracy))
         )
     }
 
@@ -114,9 +98,6 @@ class AccuracyStatusViewTest {
 
         val qualitativeColor = view.binding.qualitative.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnError))
-
-        val actionColor = view.binding.action.currentTextColor
-        assertThat(actionColor, equalTo(colorOnError))
     }
 
     @Test
@@ -127,17 +108,6 @@ class AccuracyStatusViewTest {
         assertThat(
             view.binding.qualitative.text,
             equalTo(context.getString(R.string.unacceptable_accuracy))
-        )
-    }
-
-    @Test
-    fun `shows prompt to see the sky when accuracy is 100m or greater`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(100.0f, 5.0f)
-
-        assertThat(
-            view.binding.action.text,
-            equalTo(context.getString(R.string.unacceptable_accuracy_tip))
         )
     }
 }
