@@ -504,11 +504,11 @@
     <string name="get_shape">Start GeoShape</string>
     <string name="get_trace">Start GeoTrace</string>
 
-    <string name="distance_from_accuracy_goal">%1$s from goal of %2$s</string>
     <string name="time_elapsed">Time elapsed: %1$s</string>
     <string name="point_will_be_saved">Point will be saved at %1$s</string>
-    <string name="poor_accuracy">Poor accuracy</string>
-    <string name="unacceptable_accuracy">Unacceptable accuracy</string>
+    <string name="poor_accuracy">Poor accuracy. Please wait.</string>
+    <string name="unacceptable_accuracy">Unacceptable accuracy. Please wait.</string>
+    <string name="improving_accuracy">Improving accuracy. Please wait.</string>
     <string name="accuracy_status_title">Finding Location</string>
     <string name="accuracy_m">%1$sm</string>
 

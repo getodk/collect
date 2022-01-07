@@ -30,7 +30,7 @@ class AccuracyStatusViewTest {
 
         assertThat(view.binding.progressBar.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.GONE))
-        assertThat(view.binding.qualitative.visibility, equalTo(View.GONE))
+        assertThat(view.binding.text.visibility, equalTo(View.GONE))
         assertThat(view.binding.strength.visibility, equalTo(View.GONE))
     }
 
@@ -41,33 +41,28 @@ class AccuracyStatusViewTest {
 
         assertThat(view.binding.progressBar.visibility, equalTo(View.GONE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.VISIBLE))
-        assertThat(view.binding.qualitative.visibility, equalTo(View.VISIBLE))
+        assertThat(view.binding.text.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.strength.visibility, equalTo(View.VISIBLE))
     }
 
     @Test
-    fun `updates strength based on accuracy`() {
+    fun `updates text and strength based on accuracy`() {
         val view = AccuracyStatusView(context)
 
         view.setAccuracy(101f, 5f)
+        assertThat(
+            view.binding.text.text,
+            equalTo(context.getString(R.string.unacceptable_accuracy))
+        )
         assertThat(view.binding.strength.progress, equalTo(40))
 
         view.setAccuracy(100f, 5f)
+        assertThat(view.binding.text.text, equalTo(context.getString(R.string.poor_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(60))
 
         view.setAccuracy(5f + 5f, 5f)
+        assertThat(view.binding.text.text, equalTo(context.getString(R.string.improving_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(80))
-    }
-
-    @Test
-    fun `shows distance from threshold when accuracy is less than 10m`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(9.0f, 5.0f)
-
-        assertThat(
-            view.binding.qualitative.text,
-            equalTo(context.getString(R.string.distance_from_accuracy_goal, "4m", "5m"))
-        )
     }
 
     @Test
@@ -84,19 +79,8 @@ class AccuracyStatusViewTest {
         val currentAccuracyColor = view.binding.currentAccuracy.currentTextColor
         assertThat(currentAccuracyColor, equalTo(colorOnPrimary))
 
-        val qualitativeColor = view.binding.qualitative.currentTextColor
+        val qualitativeColor = view.binding.text.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnPrimary))
-    }
-
-    @Test
-    fun `shows accuracy as poor when accuracy is less than 100m`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(99.0f, 5.0f)
-
-        assertThat(
-            view.binding.qualitative.text,
-            equalTo(context.getString(R.string.poor_accuracy))
-        )
     }
 
     @Test
@@ -113,18 +97,7 @@ class AccuracyStatusViewTest {
         val currentAccuracyColor = view.binding.currentAccuracy.currentTextColor
         assertThat(currentAccuracyColor, equalTo(colorOnError))
 
-        val qualitativeColor = view.binding.qualitative.currentTextColor
+        val qualitativeColor = view.binding.text.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnError))
-    }
-
-    @Test
-    fun `shows accuracy as unnaceptable when accuracy is 100m or greater`() {
-        val view = AccuracyStatusView(context)
-        view.setAccuracy(100.0f, 5.0f)
-
-        assertThat(
-            view.binding.qualitative.text,
-            equalTo(context.getString(R.string.unacceptable_accuracy))
-        )
     }
 }

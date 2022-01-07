@@ -21,34 +21,20 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
         binding.progressBar.visibility = View.GONE
         binding.currentAccuracy.visibility = View.VISIBLE
-        binding.qualitative.visibility = View.VISIBLE
+        binding.text.visibility = View.VISIBLE
         binding.strength.visibility = View.VISIBLE
 
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
-        binding.qualitative.setTextColor(textColor)
+        binding.text.setTextColor(textColor)
         binding.currentAccuracy.setTextColor(textColor)
 
         animateAccuracyChange(accuracy)
 
-        binding.qualitative.text = if (accuracy < 10) {
-            context.getString(
-                R.string.distance_from_accuracy_goal,
-                formatAccuracy(context, accuracy - accuracyThreshold),
-                formatAccuracy(context, accuracyThreshold)
-            )
-        } else if (accuracy >= 100) {
-            context.getString(R.string.unacceptable_accuracy)
-        } else {
-            context.getString(R.string.poor_accuracy)
-        }
-
-        binding.strength.progress = when {
-            accuracy > 100 -> 40
-            accuracy > (accuracyThreshold + 5) -> 60
-            else -> 80
-        }
+        val (text, strength) = getTextAndStrength(accuracy, accuracyThreshold)
+        binding.text.setText(text)
+        binding.strength.progress = strength
     }
 
     private fun animateAccuracyChange(accuracy: Float) {
@@ -84,6 +70,14 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
                 getThemeAttributeValue(context, R.attr.colorPrimary),
                 getThemeAttributeValue(context, R.attr.colorOnPrimary)
             )
+        }
+    }
+
+    private fun getTextAndStrength(accuracy: Float, accuracyThreshold: Float): Pair<Int, Int> {
+        return when {
+            accuracy > 100 -> Pair(R.string.unacceptable_accuracy, 40)
+            accuracy > (accuracyThreshold + 5) -> Pair(R.string.poor_accuracy, 60)
+            else -> Pair(R.string.improving_accuracy, 80)
         }
     }
 }
