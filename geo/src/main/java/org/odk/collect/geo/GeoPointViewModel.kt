@@ -29,22 +29,14 @@ internal class LocationTrackerGeoPointViewModel(
 ) : GeoPointViewModel() {
 
     private val startTime = clock()
-    private val locationRepeat = scheduler.repeat(
-        {
-            locationTracker.getCurrentLocation().let {
-                trackerLocation.value = it
-
-                if (it != null && it.accuracy <= accuracyThreshold) {
-                    acceptLocation(it, false)
-                }
-            }
-        },
-        5000L
-    )
-
+    private val locationRepeat = scheduler.repeat(this::updateLocation, 5000L)
     private val timeRepeat = scheduler.repeat(
         {
             _timeElapsed.value = clock() - startTime
+
+            if (trackerLocation.value == null) {
+                updateLocation()
+            }
         },
         1000L
     )
@@ -79,6 +71,16 @@ internal class LocationTrackerGeoPointViewModel(
         locationRepeat.cancel()
         timeRepeat.cancel()
         locationTracker.stop()
+    }
+
+    private fun updateLocation() {
+        locationTracker.getCurrentLocation().let {
+            trackerLocation.value = it
+
+            if (it != null && it.accuracy <= accuracyThreshold) {
+                acceptLocation(it, false)
+            }
+        }
     }
 
     private fun acceptLocation(location: Location, isManual: Boolean) {
