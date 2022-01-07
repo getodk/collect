@@ -53,10 +53,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
 
                 Class<? extends Activity> geoPointClass;
                 if (settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_EXPERIMENTAL_GEOPOINT)) {
-                    bundle.putDouble(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                    bundle.putFloat(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                     geoPointClass = GeoPointActivityNew.class;
                 } else {
-                    bundle.putDouble(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                    bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                     geoPointClass = GeoPointActivity.class;
                 }
 

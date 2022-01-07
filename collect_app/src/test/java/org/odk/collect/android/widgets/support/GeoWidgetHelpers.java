@@ -21,7 +21,7 @@ public final class GeoWidgetHelpers {
 
     public static void assertGeoPointBundleArgumentEquals(Bundle bundle, double[] location, double accuracyThreshold, Boolean readOnly, Object draggableOnly) {
         assertThat(bundle.getDoubleArray(GeoPointMapActivity.EXTRA_LOCATION), equalTo(location));
-        assertThat(bundle.getDouble(EXTRA_ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
+        assertThat(bundle.getFloat(EXTRA_ACCURACY_THRESHOLD), equalTo(accuracyThreshold));
         assertThat(bundle.getBoolean(EXTRA_READ_ONLY), equalTo(readOnly));
         assertThat(bundle.getBoolean(EXTRA_DRAGGABLE_ONLY), equalTo(draggableOnly));
     }
