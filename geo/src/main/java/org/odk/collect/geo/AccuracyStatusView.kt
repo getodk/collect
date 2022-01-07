@@ -24,6 +24,7 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.title.setTextColor(textColor)
         binding.text.setTextColor(textColor)
         binding.currentAccuracy.setTextColor(textColor)
+        binding.strength.setIndicatorColor(textColor)
 
         animateAccuracyChange(accuracy)
 

@@ -65,6 +65,9 @@ class AccuracyStatusViewTest {
 
         val qualitativeColor = view.binding.text.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnPrimary))
+
+        val strengthColor = view.binding.strength.indicatorColor[0]
+        assertThat(strengthColor, equalTo(colorOnPrimary))
     }
 
     @Test
@@ -83,5 +86,8 @@ class AccuracyStatusViewTest {
 
         val qualitativeColor = view.binding.text.currentTextColor
         assertThat(qualitativeColor, equalTo(colorOnError))
+
+        val strengthColor = view.binding.strength.indicatorColor[0]
+        assertThat(strengthColor, equalTo(colorOnError))
     }
 }
