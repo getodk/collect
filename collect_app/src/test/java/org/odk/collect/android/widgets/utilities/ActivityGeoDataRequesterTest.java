@@ -136,7 +136,7 @@ public class ActivityGeoDataRequesterTest {
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
         assertGeoPointBundleArgumentEquals(startedIntent.getExtras(), GeoWidgetUtils.getLocationParamsFromStringAnswer(
-                answer.getDisplayText()), 10.0, false, false);
+                answer.getDisplayText()), 10.0f, false, false);
 
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
     }
