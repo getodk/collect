@@ -15,6 +15,7 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 class AccuracyStatusViewTest {
 
     private val context = getApplicationContext<Application>().also {
+        // Need a theme where primary and secondary are different for tests
         it.setTheme(R.style.Theme_MaterialComponents)
     }
 
@@ -30,6 +31,7 @@ class AccuracyStatusViewTest {
         assertThat(view.binding.progressBar.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.GONE))
         assertThat(view.binding.qualitative.visibility, equalTo(View.GONE))
+        assertThat(view.binding.strength.visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -40,6 +42,21 @@ class AccuracyStatusViewTest {
         assertThat(view.binding.progressBar.visibility, equalTo(View.GONE))
         assertThat(view.binding.currentAccuracy.visibility, equalTo(View.VISIBLE))
         assertThat(view.binding.qualitative.visibility, equalTo(View.VISIBLE))
+        assertThat(view.binding.strength.visibility, equalTo(View.VISIBLE))
+    }
+
+    @Test
+    fun `updates strength based on accuracy`() {
+        val view = AccuracyStatusView(context)
+
+        view.setAccuracy(101f, 5f)
+        assertThat(view.binding.strength.progress, equalTo(40))
+
+        view.setAccuracy(100f, 5f)
+        assertThat(view.binding.strength.progress, equalTo(60))
+
+        view.setAccuracy(5f + 5f, 5f)
+        assertThat(view.binding.strength.progress, equalTo(80))
     }
 
     @Test

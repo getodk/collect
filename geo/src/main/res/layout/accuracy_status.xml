@@ -59,4 +59,15 @@
         tools:text="2.25m from goal of 1m"
         tools:visibility="visible" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/strength"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:visibility="gone"
+        app:indicatorColor="?colorOnPrimary"
+        app:trackThickness="16dp"
+        tools:progress="50"
+        tools:visibility="visible" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>
