@@ -31,7 +31,7 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.text.setText(text)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            binding.strength.setProgress(strength, true)
+            binding.strength.setProgressCompat(strength, true)
         } else {
             binding.strength.progress = strength
         }

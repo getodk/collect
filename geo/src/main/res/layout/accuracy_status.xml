@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?colorPrimary"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/margin_standard"
+    android:paddingBottom="@dimen/margin_large">
 
     <TextView
         android:id="@+id/title"
@@ -14,37 +13,46 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginBottom="@dimen/margin_standard"
         android:text="@string/accuracy_status_title"
         android:textAppearance="?textAppearanceOverline"
-        android:textColor="?colorOnPrimary" />
+        android:textColor="?colorOnPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/current_accuracy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
         android:text="@string/empty_accuracy"
         android:textAppearance="?textAppearanceHeadline3"
         android:textColor="?colorOnPrimary"
-        tools:text="3.25m" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_large"
         android:text="@string/waiting_for_location"
         android:textAppearance="?textAppearanceSubtitle1"
-        android:textColor="?colorOnPrimary" />
+        android:textColor="?colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/current_accuracy" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/strength"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_standard"
         android:progress="20"
         app:indicatorColor="?colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text"
         app:trackThickness="16dp" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
