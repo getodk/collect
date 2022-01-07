@@ -22,7 +22,7 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract fun forceLocation()
 }
 
-internal class GeoPointViewModelImpl(
+internal class LocationTrackerGeoPointViewModel(
     private val locationTracker: LocationTracker,
     private val clock: () -> Long,
     scheduler: Scheduler

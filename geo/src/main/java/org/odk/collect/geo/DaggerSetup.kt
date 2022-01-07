@@ -76,7 +76,7 @@ open class GeoDependencyModule {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
-                return GeoPointViewModelImpl(component.locationTracker, System::currentTimeMillis, component.scheduler) as T
+                return LocationTrackerGeoPointViewModel(component.locationTracker, System::currentTimeMillis, component.scheduler) as T
             }
         }
     }

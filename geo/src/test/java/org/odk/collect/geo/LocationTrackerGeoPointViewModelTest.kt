@@ -14,7 +14,7 @@ import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.LiveDataTester
 
-class GeoPointViewModelImplTest {
+class LocationTrackerGeoPointViewModelTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -31,7 +31,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `start() starts LocationTracker with false retain mock accuracy and 1s update interval`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
 
         verify(locationTracker).start(retainMockAccuracy = false, updateInterval = 1000L)
@@ -39,7 +39,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `start() starts LocationTracker with with retain mock accuracy value when set`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(retainMockAccuracy = true)
 
         verify(locationTracker).start(true, 1000L)
@@ -47,7 +47,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `location is null when no location`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 0.0f)
 
         val location = liveDataTester.activate(viewModel.location)
@@ -58,7 +58,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `location is null when accuracy is higher than threshold value`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
         val location = liveDataTester.activate(viewModel.location)
@@ -69,7 +69,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `location is tracker location when accuracy is equal to threshold value`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
         val location = liveDataTester.activate(viewModel.location)
@@ -81,7 +81,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `location does not update after it has met the threshold`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
         val location = liveDataTester.activate(viewModel.location)
@@ -97,7 +97,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `currentAccuracy is null when no location`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
 
         val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
@@ -108,7 +108,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `currentAccuracy updates with location accuracy`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
 
         val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
@@ -124,14 +124,14 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `onCleared() stops LocationTracker`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
         viewModel.onCleared()
     }
 
     @Test
     fun `onCleared() cancels repeat`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
         viewModel.onCleared()
         assertThat(scheduler.isRepeatRunning(), equalTo(false))
@@ -139,7 +139,7 @@ class GeoPointViewModelImplTest {
 
     @Test
     fun `forceLocation() sets location to location tracker location regardless of threshold`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
         val location = liveDataTester.activate(viewModel.location)
@@ -158,7 +158,7 @@ class GeoPointViewModelImplTest {
      */
     @Test
     fun `forceLocation() locks location to current one`() {
-        val viewModel = GeoPointViewModelImpl(locationTracker, { 0 }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
 
         val location = liveDataTester.activate(viewModel.location)
@@ -176,7 +176,7 @@ class GeoPointViewModelImplTest {
     @Test
     fun `timeElapsed updates with time since creation`() {
         var timeElapsed = 0L
-        val viewModel = GeoPointViewModelImpl(locationTracker, { timeElapsed }, scheduler)
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { timeElapsed }, scheduler)
         viewModel.start()
 
         val timeElapsedLiveData = liveDataTester.activate(viewModel.timeElapsed)
