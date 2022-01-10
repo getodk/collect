@@ -1,6 +1,7 @@
 package org.odk.collect.testshared
 
 import android.app.Activity
+import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import org.junit.rules.ExternalResource
 
@@ -9,12 +10,18 @@ import org.junit.rules.ExternalResource
  * (like switch out dependencies, construct intents etc) and also allows creation of multiple
  * scenarios in a test.
  */
-class ActivityScenarioLauncherRule : ExternalResource() {
+open class ActivityScenarioLauncherRule : ExternalResource() {
 
     private val scenarios = mutableListOf<ActivityScenario<*>>()
 
     fun <A : Activity> launch(activityClass: Class<A>): ActivityScenario<A> {
         return ActivityScenario.launch(activityClass).also {
+            scenarios.add(it)
+        }
+    }
+
+    fun <A : Activity> launch(intent: Intent): ActivityScenario<A> {
+        return ActivityScenario.launch<A>(intent).also {
             scenarios.add(it)
         }
     }
