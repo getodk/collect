@@ -71,7 +71,7 @@ public class CopyFormRule implements TestRule {
             try {
                 component.currentProjectProvider().getCurrentProject();
             } catch (IllegalStateException e) {
-                component.projectImporter().importNewProject(Project.Companion.getDEMO_PROJECT());
+                component.projectsRepository().save(Project.Companion.getDEMO_PROJECT());
                 component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
                 projectCreated = true;
             }

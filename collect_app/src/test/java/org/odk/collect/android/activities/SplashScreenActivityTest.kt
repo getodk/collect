@@ -22,14 +22,13 @@ import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.rules.MainCoroutineScopeRule
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.ProjectsRepository
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {
+
     @ExperimentalCoroutinesApi
     @get:Rule
     val coroutineScope = MainCoroutineScopeRule()
@@ -37,8 +36,6 @@ class SplashScreenActivityTest {
     private val splashScreenViewModel = mock<SplashScreenViewModel> {}
 
     private val currentProjectProvider = mock<CurrentProjectProvider> {}
-
-    private val projectImporter = mock<ProjectImporter> {}
 
     @Before
     fun setup() {
@@ -60,13 +57,6 @@ class SplashScreenActivityTest {
 
             override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider?, projectsRepository: ProjectsRepository?): CurrentProjectProvider {
                 return currentProjectProvider
-            }
-
-            override fun providesProjectImporter(
-                projectsRepository: ProjectsRepository,
-                storagePathProvider: StoragePathProvider
-            ): ProjectImporter? {
-                return projectImporter
             }
         })
     }

@@ -79,7 +79,6 @@ import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragm
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ManualProjectCreatorDialog;
-import org.odk.collect.android.projects.ProjectImporter;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -303,8 +302,6 @@ public interface AppDependencyComponent {
     CurrentProjectProvider currentProjectProvider();
 
     InstancesAppState instancesAppState();
-
-    ProjectImporter projectImporter();
 
     StoragePathProvider storagePathProvider();
 

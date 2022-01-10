@@ -65,7 +65,7 @@ public class FormNavigationTest {
             .around(new RunnableRule(() -> {
                 // Set up demo project
                 AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
-                component.projectImporter().importNewProject(Project.Companion.getDEMO_PROJECT());
+                component.projectsRepository().save(Project.Companion.getDEMO_PROJECT());
                 component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
             }));
 

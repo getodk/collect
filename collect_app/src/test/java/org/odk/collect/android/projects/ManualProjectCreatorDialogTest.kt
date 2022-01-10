@@ -112,12 +112,11 @@ class ManualProjectCreatorDialogTest {
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectCreator(
-                projectImporter: ProjectImporter?,
-                projectsRepository: ProjectsRepository?,
-                currentProjectProvider: CurrentProjectProvider?,
-                settingsImporter: SettingsImporter?,
+                projectsRepository: ProjectsRepository,
+                currentProjectProvider: CurrentProjectProvider,
+                settingsImporter: SettingsImporter,
                 context: Context
-            ): ProjectCreator {
+            ): ProjectCreator? {
                 return projectCreator
             }
 

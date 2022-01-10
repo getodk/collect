@@ -28,7 +28,6 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.projects.ProjectImporter
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
@@ -52,8 +51,6 @@ class MainMenuActivityTest {
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
         on { currentProject } doReturn MutableNonNullLiveData(project)
     }
-
-    private val projectImporter = mock<ProjectImporter> {}
 
     @Before
     fun setup() {
@@ -80,13 +77,6 @@ class MainMenuActivityTest {
                         return currentProjectViewModel as T
                     }
                 }
-            }
-
-            override fun providesProjectImporter(
-                projectsRepository: ProjectsRepository,
-                storagePathProvider: StoragePathProvider
-            ): ProjectImporter? {
-                return projectImporter
             }
         })
     }

@@ -1,5 +1,19 @@
 package org.odk.collect.android.application;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -11,23 +25,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.configure.SettingsImporter;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsImporterRegressionTest {
@@ -38,7 +39,7 @@ public class SettingsImporterRegressionTest {
 
     @Before
     public void setup() {
-        getComponent(ApplicationProvider.<Collect>getApplicationContext()).projectImporter().importNewProject(Project.Companion.getDEMO_PROJECT());
+        CollectHelpers.createProject(Project.Companion.getDEMO_PROJECT());
         getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
         settingsImporter = getComponent(ApplicationProvider.<Collect>getApplicationContext()).settingsImporter();
         currentProject = getComponent(ApplicationProvider.<Collect>getApplicationContext()).currentProjectProvider().getCurrentProject();

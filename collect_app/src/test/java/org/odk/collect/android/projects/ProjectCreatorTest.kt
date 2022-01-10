@@ -17,12 +17,9 @@ class ProjectCreatorTest {
     private val newProject = Project.New("my-server.com", "M", "#3e9fcc")
     private val savedProject = Project.Saved("1", newProject)
 
-    private var projectImporter = mock<ProjectImporter> {
-        on { importNewProject() } doReturn savedProject
-    }
-
     private var projectsRepository = mock<ProjectsRepository> {
         on { getAll() } doReturn listOf(savedProject)
+        on { save(Project.New("", "", "")) } doReturn savedProject
     }
 
     private var currentProjectProvider = mock<CurrentProjectProvider> {
@@ -34,13 +31,11 @@ class ProjectCreatorTest {
 
     @Before
     fun setup() {
-        projectCreator = ProjectCreator(projectImporter, projectsRepository, currentProjectProvider, settingsImporter)
-    }
-
-    @Test
-    fun `Importing new project should be triggered`() {
-        projectCreator.createNewProject(json)
-        verify(projectImporter).importNewProject()
+        projectCreator = ProjectCreator(
+            projectsRepository,
+            currentProjectProvider,
+            settingsImporter
+        )
     }
 
     @Test
