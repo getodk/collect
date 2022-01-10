@@ -46,33 +46,33 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     @Test
-    fun `location is null when no location`() {
+    fun `acceptedLocation is null when no location`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 0.0f)
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         whenever(locationTracker.getCurrentLocation()).thenReturn(null)
         scheduler.runForeground()
         assertThat(location.value, equalTo(null))
     }
 
     @Test
-    fun `location is null when accuracy is higher than threshold value`() {
+    fun `acceptedLocation is null when accuracy is higher than threshold value`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 1.1f))
         scheduler.runForeground()
         assertThat(location.value, equalTo(null))
     }
 
     @Test
-    fun `location is tracker location when accuracy is equal to threshold value`() {
+    fun `acceptedLocation is tracker location when accuracy is equal to threshold value`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         val locationTrackerLocation = Location(0.0, 0.0, 0.0, 1.0f)
         whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
         scheduler.runForeground()
@@ -80,11 +80,11 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     @Test
-    fun `location does not update after it has met the threshold`() {
+    fun `acceptedLocation does not update after it has met the threshold`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         val locationTrackerLocation = Location(0.0, 0.0, 0.0, 1.0f)
         whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
         scheduler.runForeground()
@@ -138,11 +138,11 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     @Test
-    fun `forceLocation() sets location to location tracker location regardless of threshold`() {
+    fun `forceLocation() sets acceptedLocation to location tracker location regardless of threshold`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         val locationTrackerLocation = Location(0.0, 0.0, 0.0, 2.5f)
         whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
         scheduler.runForeground()
@@ -157,11 +157,11 @@ class LocationTrackerGeoPointViewModelTest {
      * ends up with a location fix that was never on screen.
      */
     @Test
-    fun `forceLocation() locks location to current one`() {
+    fun `forceLocation() locks acceptedLocation to current one`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start()
 
-        val location = liveDataTester.activate(viewModel.location)
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
         val locationTrackerLocation = Location(0.0, 0.0, 0.0, 2.5f)
         whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
         scheduler.runForeground()

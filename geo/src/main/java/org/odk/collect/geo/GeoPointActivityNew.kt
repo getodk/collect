@@ -22,7 +22,7 @@ class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener
         val viewModel =
             ViewModelProvider(this, geoPointViewModelFactory).get(GeoPointViewModel::class.java)
 
-        viewModel.location.observe(this) {
+        viewModel.acceptedLocation.observe(this) {
             if (it != null) {
                 Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO)
                 ExternalAppUtils.returnSingleValue(this, GeoUtils.formatLocationResultString(it))

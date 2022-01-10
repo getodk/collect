@@ -14,7 +14,7 @@ import org.odk.collect.location.tracker.LocationTracker
 internal abstract class GeoPointViewModel : ViewModel() {
     abstract val accuracyThreshold: Float
 
-    abstract val location: LiveData<Location?>
+    abstract val acceptedLocation: LiveData<Location?>
     abstract val currentAccuracy: LiveData<Float?>
     abstract val timeElapsed: LiveData<Long>
 
@@ -41,13 +41,13 @@ internal class LocationTrackerGeoPointViewModel(
         1000L
     )
 
-    private val trackerLocation = MutableLiveData<Location?>(null)
-    private val acceptedLocation = MutableLiveData<Location?>(null)
-
     override var accuracyThreshold: Float = Float.MAX_VALUE
         private set
 
-    override val location = acceptedLocation
+    private val trackerLocation = MutableLiveData<Location?>(null)
+    private val _acceptedLocation = MutableLiveData<Location?>(null)
+    override val acceptedLocation = _acceptedLocation
+
     override val currentAccuracy = Transformations.map(trackerLocation) {
         it?.accuracy
     }
@@ -84,8 +84,8 @@ internal class LocationTrackerGeoPointViewModel(
     }
 
     private fun acceptLocation(location: Location, isManual: Boolean) {
-        if (acceptedLocation.value == null) {
-            acceptedLocation.value = location
+        if (_acceptedLocation.value == null) {
+            _acceptedLocation.value = location
 
             if (isManual) {
                 logSavePointManual(location)

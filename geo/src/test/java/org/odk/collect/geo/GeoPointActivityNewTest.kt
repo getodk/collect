@@ -26,7 +26,7 @@ class GeoPointActivityNewTest {
 
     private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
     private val viewModel = mock<GeoPointViewModel> {
-        on { location } doReturn locationLiveData
+        on { acceptedLocation } doReturn locationLiveData
         on { currentAccuracy } doReturn MutableLiveData(null)
         on { timeElapsed } doReturn MutableLiveData(0)
     }
