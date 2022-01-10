@@ -80,6 +80,18 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     @Test
+    fun `acceptedLocation is tracker location when accuracy is lower than threshold value`() {
+        val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
+        viewModel.start(accuracyThreshold = 1.0f)
+
+        val location = liveDataTester.activate(viewModel.acceptedLocation)
+        val locationTrackerLocation = Location(0.0, 0.0, 0.0, 0.9f)
+        whenever(locationTracker.getCurrentLocation()).thenReturn(locationTrackerLocation)
+        scheduler.runForeground()
+        assertThat(location.value, equalTo(locationTrackerLocation))
+    }
+
+    @Test
     fun `acceptedLocation does not update after it has met the threshold`() {
         val viewModel = LocationTrackerGeoPointViewModel(locationTracker, { 0 }, scheduler)
         viewModel.start(accuracyThreshold = 1.0f)
