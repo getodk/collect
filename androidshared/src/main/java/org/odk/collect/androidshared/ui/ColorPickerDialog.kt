@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.databinding.ColorPickerDialogLayoutBinding
 import java.lang.Exception
 
@@ -36,7 +37,7 @@ class ColorPickerDialog : DialogFragment() {
         setListeners()
         setCurrentColor(requireArguments().getString(CURRENT_COLOR)!!)
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setTitle(R.string.project_color)
             .setNegativeButton(R.string.cancel) { _, _ -> dismiss() }

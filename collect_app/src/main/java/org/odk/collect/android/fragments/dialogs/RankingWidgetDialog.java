@@ -21,7 +21,6 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 import androidx.core.widget.NestedScrollView;
-import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +32,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
@@ -80,7 +81,7 @@ public class RankingWidgetDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setView(setUpRankingLayout())
                 .setPositiveButton(string.ok, (dialog, id) -> {
                     listener.onRankingChanged(rankingListAdapter.getItems());

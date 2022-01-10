@@ -9,10 +9,10 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.collect.ImmutableList;
 
 import org.odk.collect.analytics.Analytics;
@@ -122,7 +122,7 @@ public class QuitFormDialogFragment extends DialogFragment {
             }
         });
 
-        return new AlertDialog.Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(getString(R.string.quit_application, title))
                 .setNegativeButton(getActivity().getString(R.string.do_not_exit), (dialog, id) -> {
                     dialog.cancel();

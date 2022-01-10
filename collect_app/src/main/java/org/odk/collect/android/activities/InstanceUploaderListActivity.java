@@ -59,6 +59,8 @@ import timber.log.Timber;
 
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
  * the path to selected form for use by {@link MainMenuActivity}.
@@ -347,7 +349,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         String[] items = {getString(R.string.show_unsent_forms),
                 getString(R.string.show_sent_and_unsent_forms)};
 
-        AlertDialog alertDialog = new AlertDialog.Builder(this)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(getString(R.string.change_view))
                 .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {

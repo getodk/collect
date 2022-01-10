@@ -32,6 +32,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
@@ -587,7 +589,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
      * activity will exit when the user clicks "ok".
      */
     private void createAlertDialog(String title, String message, final boolean shouldExit) {
-        alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog = new MaterialAlertDialogBuilder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {

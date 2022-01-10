@@ -23,9 +23,10 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
@@ -74,7 +75,7 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
+        return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.select_date)
                 .setView(R.layout.custom_date_picker_dialog)
                 .setPositiveButton(R.string.ok, (dialog, id) -> {

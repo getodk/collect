@@ -31,6 +31,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
@@ -144,7 +146,7 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
      * Create the instance delete dialog
      */
     private void createDeleteInstancesDialog() {
-        alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog = new MaterialAlertDialogBuilder(getContext()).create();
         alertDialog.setTitle(getString(R.string.delete_file));
         alertDialog.setMessage(getString(R.string.delete_confirm,
                 String.valueOf(getCheckedCount())));

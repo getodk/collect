@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
@@ -65,7 +65,7 @@ class ProjectManagementPreferencesFragment :
                     val pref = Intent(activity, QRCodeTabsActivity::class.java)
                     startActivity(pref)
                 }
-                DELETE_PROJECT_KEY -> AlertDialog.Builder(requireActivity())
+                DELETE_PROJECT_KEY -> MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.delete_project)
                     .setMessage(R.string.delete_project_confirm_message)
                     .setNegativeButton(R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
@@ -82,14 +82,14 @@ class ProjectManagementPreferencesFragment :
 
         when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
             is DeleteProjectResult.UnsentInstances -> {
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.cannot_delete_project_title)
                     .setMessage(R.string.cannot_delete_project_message_one)
                     .setPositiveButton(R.string.ok, null)
                     .show()
             }
             is DeleteProjectResult.RunningBackgroundJobs -> {
-                AlertDialog.Builder(requireActivity())
+                MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.cannot_delete_project_title)
                     .setMessage(R.string.cannot_delete_project_message_two)
                     .setPositiveButton(R.string.ok, null)

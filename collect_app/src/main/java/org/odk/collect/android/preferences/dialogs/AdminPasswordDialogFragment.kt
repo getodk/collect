@@ -7,9 +7,9 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.widget.CompoundButton
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.AdminPasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
@@ -54,7 +54,7 @@ class AdminPasswordDialogFragment : DialogFragment() {
             }
         }
 
-        return AlertDialog.Builder(requireContext())
+        return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setTitle(getString(R.string.enter_admin_password))
             .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->

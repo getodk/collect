@@ -8,6 +8,8 @@ import org.odk.collect.android.R;
 
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public final class GoogleAccountNotSetDialog {
 
     private GoogleAccountNotSetDialog() {
@@ -15,7 +17,7 @@ public final class GoogleAccountNotSetDialog {
     }
 
     public static void show(Activity activity) {
-        AlertDialog alertDialog = new AlertDialog.Builder(activity)
+        AlertDialog alertDialog = new MaterialAlertDialogBuilder(activity)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
                 .setMessage(R.string.missing_google_account_dialog_desc)

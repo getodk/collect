@@ -21,8 +21,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -48,6 +46,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 import static org.odk.collect.strings.format.LengthFormatterKt.formatLength;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -219,7 +219,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
                 @Override
                 public void onRemoveClicked() {
-                    new AlertDialog.Builder(getContext())
+                    new MaterialAlertDialogBuilder(getContext())
                             .setTitle(R.string.delete_answer_file_question)
                             .setMessage(R.string.answer_file_delete_warning)
                             .setPositiveButton(R.string.delete_answer_file, (dialog, which) -> clearAnswer())
