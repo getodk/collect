@@ -1,3 +1,4 @@
+import dependencies.Dependencies
 import dependencies.Versions
 
 plugins {
@@ -33,4 +34,6 @@ android {
 }
 
 dependencies {
+    implementation Dependencies.glide
+    implementation Dependencies.caverock_androidsvg
 }
