@@ -5,8 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
-
-import com.bumptech.glide.Glide;
+import android.widget.ImageView;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -22,6 +21,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.glide.ImageLoader;
 
 import java.io.File;
 
@@ -134,10 +134,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     private void displayImage() {
-        Glide.with(this)
-                .load(answerFile)
-                .fitCenter()
-                .into(binding.imageView);
+        ImageLoader.loadImage(binding.imageView, answerFile, ImageView.ScaleType.FIT_CENTER);
         binding.imageView.setVisibility(VISIBLE);
     }
 }
