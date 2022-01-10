@@ -13,7 +13,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="@dimen/margin_standard"
         android:text="@string/accuracy_status_title"
         android:textAppearance="?textAppearanceOverline"
         android:textColor="?colorOnPrimary"
