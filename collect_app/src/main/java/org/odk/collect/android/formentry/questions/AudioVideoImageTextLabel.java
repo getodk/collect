@@ -31,8 +31,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.bumptech.glide.Glide;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
@@ -43,6 +41,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.audioclips.Clip;
+import org.odk.collect.glide.ImageLoader;
 
 import java.io.File;
 
@@ -112,11 +111,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         if (imageFile.exists()) {
             binding.imageView.layout(0, 0, 0, 0);
 
-            Glide.with(this)
-                    .load(imageFile)
-                    .centerInside()
-                    .into(binding.imageView);
-
+            ImageLoader.loadImage(binding.imageView, imageFile);
             binding.imageView.setVisibility(VISIBLE);
             binding.imageView.setOnClickListener(this);
         } else {
