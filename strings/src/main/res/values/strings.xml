@@ -511,7 +511,6 @@
     <string name="unacceptable_accuracy">Unacceptable accuracy. Please wait.</string>
     <string name="improving_accuracy">Improving accuracy. Please wait.</string>
     <string name="accuracy_status_title">Finding Location</string>
-    <string name="empty_accuracy">--</string>
     <string name="accuracy_m">%1$sm</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
