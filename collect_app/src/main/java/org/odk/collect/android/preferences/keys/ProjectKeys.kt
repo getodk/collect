@@ -66,6 +66,9 @@ object ProjectKeys {
     const val KEY_BACKGROUND_LOCATION = "background_location"
     const val KEY_BACKGROUND_RECORDING = "background_recording"
 
+    // experimental_preferences.xml
+    const val KEY_EXPERIMENTAL_GEOPOINT = "experimental_geopoint"
+
     // values
     const val PROTOCOL_SERVER = "odk_default"
     const val PROTOCOL_GOOGLE_SHEETS = "google_sheets"

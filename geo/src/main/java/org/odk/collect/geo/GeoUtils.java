@@ -1,10 +1,12 @@
 package org.odk.collect.geo;
 
+import android.content.Context;
 import android.location.Location;
 
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.shared.strings.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,6 +41,15 @@ public final class GeoUtils {
     }
 
     public static String formatLocationResultString(Location location) {
+        return formatLocationResultString(new org.odk.collect.location.Location(
+                location.getLatitude(),
+                location.getLongitude(),
+                location.getAltitude(),
+                location.getAccuracy()
+        ));
+    }
+
+    public static String formatLocationResultString(org.odk.collect.location.Location location) {
         return String.format("%s %s %s %s", location.getLatitude(), location.getLongitude(),
                 location.getAltitude(), location.getAccuracy());
     }
@@ -48,5 +59,10 @@ public final class GeoUtils {
      */
     public static String capitalizeGps(String locationProvider) {
         return "gps".equals(locationProvider) ? "GPS" : locationProvider;
+    }
+
+    public static String formatAccuracy(Context context, float accuracy) {
+        String formattedValue = new DecimalFormat("#.##").format(accuracy);
+        return context.getString(R.string.accuracy_m, formattedValue);
     }
 }

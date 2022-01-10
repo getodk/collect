@@ -96,14 +96,6 @@ public interface LocationClient {
     boolean isMonitoringLocation();
 
     /**
-     * Provides a way to tell if the underlying LocationClient allows the updateInterval to be set.
-     * Currently only the GoogleFusedLocationClient can handle updateInterval changes.
-     *
-     * @return Whether or the LocationClient's updateInterval can be set.
-     */
-    boolean canSetUpdateIntervals();
-
-    /**
      * Sets the LocationClient's updateInterval (how often we would like updates) and fastestUpdateInterval
      * (for throttling updates that come at a faster interval).
      * <p>

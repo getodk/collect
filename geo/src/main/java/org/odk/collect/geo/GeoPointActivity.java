@@ -33,7 +33,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -41,14 +40,14 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.analytics.AnalyticsEvents;
-import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -67,10 +66,9 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     private AlertDialog locationDialog;
 
-    private LocationClient locationClient;
     private Location location;
 
-    private double targetAccuracy = Double.MAX_VALUE;
+    private float targetAccuracy = Float.MAX_VALUE;
 
     private int locationCount;
     private int numberOfAvailableSatellites;
@@ -81,9 +79,14 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
     private Timer timer;
 
+    @Inject
+    LocationClient locationClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
+
         requireLocationPermissions(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -96,15 +99,10 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
         setTitle(getString(R.string.get_location));
 
-        locationClient = LocationClientProvider.getClient(this,
-                () -> new GoogleFusedLocationClient(getApplication()), GoogleApiAvailability
-                        .getInstance());
-        if (locationClient.canSetUpdateIntervals()) {
-            locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
-        }
+        locationClient.setUpdateIntervals(LOCATION_UPDATE_INTERVAL, LOCATION_FASTEST_UPDATE_INTERVAL);
 
         Intent intent = getIntent();
-        targetAccuracy = intent.getDoubleExtra(EXTRA_ACCURACY_THRESHOLD, Double.MAX_VALUE);
+        targetAccuracy = intent.getFloatExtra(EXTRA_ACCURACY_THRESHOLD, Float.MAX_VALUE);
         locationClient.setRetainMockAccuracy(intent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         locationClient.setListener(this);
@@ -279,7 +277,6 @@ public class GeoPointActivity extends LocalizedActivity implements LocationListe
 
             if (locationCount > 1) {
                 if (location.getAccuracy() <= targetAccuracy) {
-                    Analytics.log(AnalyticsEvents.SAVE_POINT_AUTO);
                     returnLocation();
                 }
             }

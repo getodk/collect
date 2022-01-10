@@ -32,9 +32,7 @@ class FakeScheduler : Scheduler {
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
-        foregroundTasks.add(foreground)
-
-        val task = RepeatTask(repeatPeriod, foreground, 0)
+        val task = RepeatTask(repeatPeriod, foreground, null)
         repeatTasks.add(task)
 
         return object : Cancellable {
@@ -61,9 +59,14 @@ class FakeScheduler : Scheduler {
         }
 
         repeatTasks.forEach {
-            if ((currentTime - it.lastRun) >= it.interval) {
-                it.runnable.run()
-                it.lastRun = currentTime
+            it.lastRun.let { lastRun ->
+                if (lastRun == null) {
+                    it.runnable.run()
+                    it.lastRun = currentTime
+                } else if ((currentTime - lastRun) >= it.interval) {
+                    it.runnable.run()
+                    it.lastRun = currentTime
+                }
             }
         }
     }
@@ -86,4 +89,4 @@ class FakeScheduler : Scheduler {
     override fun cancelDeferred(tag: String) {}
 }
 
-private data class RepeatTask(val interval: Long, val runnable: Runnable, var lastRun: Long)
+private data class RepeatTask(val interval: Long, val runnable: Runnable, var lastRun: Long?)

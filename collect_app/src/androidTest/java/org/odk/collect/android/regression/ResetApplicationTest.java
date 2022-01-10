@@ -106,14 +106,16 @@ public class ResetApplicationTest {
                 .assertText(R.string.theme_system)
                 .clickOnTheme()
                 .clickOnString(R.string.theme_dark);
+
         new MainMenuPage()
+                .assertOnPage()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
                 .assertText(R.string.theme_dark)
                 .clickOnLanguage()
-                .clickOnSelectedLanguage("español");
-        new MainMenuPage()
+                .clickOnSelectedLanguage("español")
+
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
@@ -126,8 +128,8 @@ public class ResetApplicationTest {
                 .clickOnResetApplication()
                 .clickOnString(R.string.reset_settings)
                 .clickOnString(R.string.reset_settings_button_reset)
-                .clickOKOnDialog();
-        new MainMenuPage()
+                .clickOKOnDialog(new MainMenuPage())
+
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()

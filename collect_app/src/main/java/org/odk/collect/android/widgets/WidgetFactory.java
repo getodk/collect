@@ -30,6 +30,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -52,10 +53,10 @@ import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHandler;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
+import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -82,6 +83,7 @@ public class WidgetFactory {
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
+    private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -94,7 +96,8 @@ public class WidgetFactory {
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
-                         StringRequester stringRequester) {
+                         StringRequester stringRequester,
+                         SettingsProvider settingsProvider) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -107,6 +110,7 @@ public class WidgetFactory {
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
+        this.settingsProvider = settingsProvider;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -146,19 +150,19 @@ public class WidgetFactory {
                     case Constants.DATATYPE_GEOPOINT:
                         if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
                             questionWidget = new GeoPointMapWidget(context, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider));
+                                    new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
                         } else {
                             questionWidget = new GeoPointWidget(context, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider));
+                                    new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry,
-                                new ActivityGeoDataRequester(permissionsProvider));
+                                new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
                         break;
                     case Constants.DATATYPE_GEOTRACE:
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
-                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
+                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry, new CameraUtils());

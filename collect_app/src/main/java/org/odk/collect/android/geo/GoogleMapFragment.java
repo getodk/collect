@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,9 +55,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,6 +82,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Inject
     ReferenceLayerRepository referenceLayerRepository;
 
+    @Inject
+    LocationClient locationClient;
+
     private GoogleMap map;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
@@ -95,7 +95,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
 
-    private LocationClient locationClient;
     private boolean clientWantsLocationUpdates;
     private MapPoint lastLocationFix;
     private String lastLocationProvider;
@@ -536,12 +535,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private void enableLocationUpdates(boolean enable) {
-        if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity(),
-                    () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
-                            .getInstance());
-            locationClient.setListener(this);
-        }
+        locationClient.setListener(this);
+
         if (enable) {
             Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
             locationClient.start();

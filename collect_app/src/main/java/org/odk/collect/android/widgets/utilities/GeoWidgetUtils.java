@@ -17,7 +17,8 @@ import java.text.DecimalFormat;
 import timber.log.Timber;
 
 public final class GeoWidgetUtils {
-    public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+
+    public static final float DEFAULT_LOCATION_ACCURACY = 5.0f;
 
     private GeoWidgetUtils() {
 
@@ -67,10 +68,10 @@ public final class GeoWidgetUtils {
         return gp;
     }
 
-    static double getAccuracyThreshold(QuestionDef questionDef) {
+    static float getAccuracyThreshold(QuestionDef questionDef) {
         // Determine the accuracy threshold to use.
         String acc = questionDef.getAdditionalAttribute(null, "accuracyThreshold");
-        return acc != null && !acc.isEmpty() ? Double.parseDouble(acc) : DEFAULT_LOCATION_ACCURACY;
+        return acc != null && !acc.isEmpty() ? Float.parseFloat(acc) : DEFAULT_LOCATION_ACCURACY;
     }
 
     static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {

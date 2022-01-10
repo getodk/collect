@@ -10,10 +10,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.google.android.gms.common.GoogleApiAvailability
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
-import org.odk.collect.location.GoogleFusedLocationClient
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.LocationClientProvider
@@ -29,9 +27,12 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
         return application.getState().get(LOCATION_KEY)
     }
 
-    override fun start(retainMockAccuracy: Boolean) {
-        val intent = Intent(application, LocationTrackerService::class.java).also {
-            it.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+    override fun start(retainMockAccuracy: Boolean, updateInterval: Long?) {
+        val intent = Intent(application, LocationTrackerService::class.java).also { intent ->
+            intent.putExtra(LocationTrackerService.EXTRA_RETAIN_MOCK_ACCURACY, retainMockAccuracy)
+            updateInterval?.let {
+                intent.putExtra(LocationTrackerService.EXTRA_UPDATE_INTERVAL, it)
+            }
         }
 
         application.startService(intent)
@@ -51,11 +52,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
 class LocationTrackerService : Service() {
 
     private val locationClient: LocationClient by lazy {
-        LocationClientProvider.getClient(
-            this,
-            { GoogleFusedLocationClient(application) },
-            GoogleApiAvailability.getInstance()
-        )
+        LocationClientProvider.getClient(application)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -68,6 +65,21 @@ class LocationTrackerService : Service() {
             NOTIFICATION_ID,
             createNotification()
         )
+
+        locationClient.setRetainMockAccuracy(
+            intent?.getBooleanExtra(
+                EXTRA_RETAIN_MOCK_ACCURACY,
+                false
+            ) ?: false
+        )
+
+        if (intent?.hasExtra(EXTRA_UPDATE_INTERVAL) == true) {
+            val interval = intent.getLongExtra(EXTRA_UPDATE_INTERVAL, -1)
+            locationClient.setUpdateIntervals(
+                interval,
+                interval / 2
+            )
+        }
 
         locationClient.setListener(object : LocationClient.LocationClientListener {
             override fun onClientStart() {
@@ -88,19 +100,13 @@ class LocationTrackerService : Service() {
             }
         })
 
-        locationClient.setRetainMockAccuracy(
-            intent?.getBooleanExtra(
-                EXTRA_RETAIN_MOCK_ACCURACY,
-                false
-            ) ?: false
-        )
-
         locationClient.start()
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
         locationClient.stop()
+        application.getState().clear(LOCATION_KEY)
     }
 
     private fun createNotification(): Notification {
@@ -134,6 +140,7 @@ class LocationTrackerService : Service() {
 
     companion object {
         const val EXTRA_RETAIN_MOCK_ACCURACY = "retain_mock_accuracy"
+        const val EXTRA_UPDATE_INTERVAL = "update_interval"
 
         private const val NOTIFICATION_ID = 1
         private const val NOTIFICATION_CHANNEL = "location_tracking"

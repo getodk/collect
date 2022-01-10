@@ -1,7 +1,9 @@
 package org.odk.collect.android.support;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.odk.collect.androidshared.data.AppStateKt.getState;
 
+import android.app.Application;
 import android.content.Context;
 
 import androidx.preference.PreferenceManager;
@@ -52,19 +54,24 @@ public class ResetStateRule implements TestRule {
 
         @Override
         public void evaluate() throws Throwable {
-            Context context = ApplicationProvider.getApplicationContext();
+            Application application = ApplicationProvider.getApplicationContext();
 
             resetDagger();
-            clearPrefs(context);
+            clearPrefs(application);
             clearDisk();
+            clearAppState(application);
             setTestState();
 
-            AppDependencyComponent component = DaggerUtils.getComponent(context.getApplicationContext());
+            AppDependencyComponent component = DaggerUtils.getComponent(application.getApplicationContext());
 
             // Reinitialize any application state with new deps/state
             component.applicationInitializer().initialize();
             base.evaluate();
         }
+    }
+
+    private void clearAppState(Application application) {
+        getState(application).clear();
     }
 
     private void setTestState() {

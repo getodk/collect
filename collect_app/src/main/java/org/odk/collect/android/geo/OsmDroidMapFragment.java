@@ -36,7 +36,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -47,9 +46,7 @@ import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.LocationClientProvider;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -92,6 +89,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Inject
     ReferenceLayerRepository referenceLayerRepository;
 
+    @Inject
+    LocationClient locationClient;
+
     private MapView map;
     private ReadyListener readyListener;
     private PointListener clickListener;
@@ -100,7 +100,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
     private MyLocationNewOverlay myLocationOverlay;
-    private LocationClient locationClient;
     private OsmLocationClientWrapper osmLocationClientWrapper;
     private int nextFeatureId = 1;
     private final Map<Integer, MapFeature> features = new HashMap<>();
@@ -194,9 +193,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
 
-        locationClient = LocationClientProvider.getClient(getActivity(),
-                () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
-                        .getInstance());
         locationClient.setListener(this);
 
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
@@ -430,12 +426,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override public void onClientStop() { }
 
     private void enableLocationUpdates(boolean enable) {
-        if (locationClient == null) {
-            locationClient = LocationClientProvider.getClient(getActivity(),
-                    () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
-                            .getInstance());
-            locationClient.setListener(this);
-        }
+        locationClient.setListener(this);
 
         if (enable) {
             Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);

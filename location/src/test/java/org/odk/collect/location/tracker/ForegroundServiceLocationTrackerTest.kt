@@ -63,6 +63,34 @@ class ForegroundServiceLocationTrackerTest : LocationTrackerTest() {
 
         assertThat(locationClient.getRetainMockAccuracy(), equalTo(false))
     }
+
+    @Test
+    fun start_whenUpdateIntervalIsNull_doesNotSetIntervalOnClient() {
+        locationTracker.start(updateInterval = null)
+        runBackground()
+
+        assertThat(locationClient.getUpdateIntervals(), equalTo(null))
+    }
+
+    @Test
+    fun start_whenUpdateIntervalIsNonNull_setsIntervalsOnClient() {
+        locationTracker.start(updateInterval = 1000)
+        runBackground()
+
+        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(1000L, 500L)))
+    }
+
+    @Test
+    fun start_afterAnotherStart_updatesClient() {
+        locationTracker.start(retainMockAccuracy = false, updateInterval = 1000L)
+        runBackground()
+
+        locationTracker.start(retainMockAccuracy = true, updateInterval = 2000L)
+        runBackground()
+
+        assertThat(locationClient.getRetainMockAccuracy(), equalTo(true))
+        assertThat(locationClient.getUpdateIntervals(), equalTo(Pair(2000L, 1000L)))
+    }
 }
 
 private class FakeLocationClient : LocationClient {
@@ -71,6 +99,7 @@ private class FakeLocationClient : LocationClient {
     private var locationListener: LocationListener? = null
     private var locationClientListener: LocationClient.LocationClientListener? = null
     private var retainMockAccuracy: Boolean = false
+    private var updateIntervals: Pair<Long, Long>? = null
 
     override fun start() {
         this.started = true
@@ -118,12 +147,8 @@ private class FakeLocationClient : LocationClient {
         TODO("Not yet implemented")
     }
 
-    override fun canSetUpdateIntervals(): Boolean {
-        TODO("Not yet implemented")
-    }
-
     override fun setUpdateIntervals(updateInterval: Long, fastestUpdateInterval: Long) {
-        TODO("Not yet implemented")
+        updateIntervals = Pair(updateInterval, fastestUpdateInterval)
     }
 
     fun updateLocation(location: android.location.Location) {
@@ -134,5 +159,9 @@ private class FakeLocationClient : LocationClient {
 
     fun getRetainMockAccuracy(): Boolean {
         return retainMockAccuracy
+    }
+
+    fun getUpdateIntervals(): Pair<Long, Long>? {
+        return updateIntervals
     }
 }
