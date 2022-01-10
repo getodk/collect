@@ -9,8 +9,12 @@ import java.io.File
 object ImageLoader {
 
     @JvmStatic
-    fun ImageView.loadImage(imageFile: File) {
-        if (imageFile.name.endsWith("svg")) {
+    fun ImageView.loadImage(imageFile: File?) {
+        if (imageFile == null) {
+            return
+        }
+
+        if (imageFile.name != null && imageFile.name.endsWith("svg")) {
             Glide.with(this)
                 .`as`(PictureDrawable::class.java)
                 .listener(SvgSoftwareLayerSetter())
