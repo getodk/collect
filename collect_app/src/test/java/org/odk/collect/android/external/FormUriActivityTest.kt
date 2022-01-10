@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -37,6 +36,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.testshared.ActivityScenarioLauncherRule
 import org.odk.collect.testshared.RecordedIntentsRule
 
 @RunWith(AndroidJUnit4::class)
@@ -49,6 +49,9 @@ class FormUriActivityTest {
 
     @get:Rule
     val activityRule = RecordedIntentsRule()
+
+    @get:Rule
+    val launcherRule = ActivityScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -74,7 +77,7 @@ class FormUriActivityTest {
 
     @Test
     fun `When there are no projects then display alert dialog`() {
-        val scenario = ActivityScenario.launch(FormUriActivity::class.java)
+        val scenario = launcherRule.launch(FormUriActivity::class.java)
         onView(withText(R.string.app_not_configured)).inRoot(isDialog())
             .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
@@ -86,7 +89,7 @@ class FormUriActivityTest {
     fun `When there is project id specified in uri and it does not match current project id then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = ActivityScenario.launch<FormUriActivity>(getIntent(secondProject.uuid))
+        val scenario = launcherRule.launch<FormUriActivity>(getIntent(secondProject.uuid))
 
         onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
             .check(matches(isDisplayed()))
@@ -99,7 +102,7 @@ class FormUriActivityTest {
     fun `When there is project id specified in uri and it matches current project id then start form filling`() {
         saveTestProjects()
 
-        ActivityScenario.launch<FormUriActivity>(getIntent(firstProject.uuid))
+        launcherRule.launch<FormUriActivity>(getIntent(firstProject.uuid))
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name))
         Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
@@ -112,7 +115,7 @@ class FormUriActivityTest {
 
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(secondProject)
 
-        val scenario = ActivityScenario.launch<FormUriActivity>(getIntent())
+        val scenario = launcherRule.launch<FormUriActivity>(getIntent())
 
         onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
             .check(matches(isDisplayed()))
@@ -125,7 +128,7 @@ class FormUriActivityTest {
     fun `When there is no project id specified in uri and first available project id matches current project id then start form filling`() {
         saveTestProjects()
 
-        ActivityScenario.launch<FormUriActivity>(getIntent())
+        launcherRule.launch<FormUriActivity>(getIntent())
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name))
         val uri = FormsContract.getUri("", 1)
