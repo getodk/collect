@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
-import org.odk.collect.androidshared.ui.Animations
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.AccuracyStatusBinding
 
@@ -26,7 +25,7 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.currentAccuracy.setTextColor(textColor)
         binding.strength.setIndicatorColor(textColor)
 
-        animateAccuracyChange(accuracy)
+        binding.currentAccuracy.text = formatAccuracy(context, accuracy)
 
         val (text, strength) = getTextAndStrength(accuracy, accuracyThreshold)
         binding.text.setText(text)
@@ -35,28 +34,6 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
             binding.strength.setProgress(strength, true)
         } else {
             binding.strength.progress = strength
-        }
-    }
-
-    private fun animateAccuracyChange(accuracy: Float) {
-        if (binding.currentAccuracy.text.isBlank()) {
-            binding.currentAccuracy.text = formatAccuracy(context, accuracy)
-        } else {
-            Animations.createAlphaAnimation(
-                view = binding.currentAccuracy,
-                startValue = 1.0f,
-                endValue = 0.1f,
-                duration = 500
-            ).onEnd {
-                binding.currentAccuracy.text = formatAccuracy(context, accuracy)
-            }.then(
-                Animations.createAlphaAnimation(
-                    view = binding.currentAccuracy,
-                    startValue = 0.1f,
-                    endValue = 1.0f,
-                    duration = 2000
-                )
-            ).start()
         }
     }
 
