@@ -504,13 +504,19 @@
     <string name="get_shape">Start GeoShape</string>
     <string name="get_trace">Start GeoTrace</string>
 
+    <!-- %1$s is the time taken so far in hh:mm:ss -->
     <string name="time_elapsed">Time elapsed: %1$s</string>
+
+    <!-- %1$s is the accuracy required for a point to be automatically saved-->
     <string name="point_will_be_saved">Point will be saved at %1$s</string>
+
     <string name="waiting_for_location">Trying to get location. Please wait.</string>
     <string name="poor_accuracy">Poor accuracy. Please wait.</string>
     <string name="unacceptable_accuracy">Unacceptable accuracy. Please wait.</string>
     <string name="improving_accuracy">Improving accuracy. Please wait.</string>
-    <string name="accuracy_status_title">Finding Location</string>
+    <string name="accuracy_status_title">Getting Location</string>
+
+    <!-- The accuracy of a location fix in meters -->
     <string name="accuracy_m">%1$sm</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
