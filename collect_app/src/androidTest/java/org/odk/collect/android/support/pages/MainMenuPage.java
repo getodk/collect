@@ -198,8 +198,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public ViewSentFormPage clickViewSentForm(int formCount) {
         String text = formCount < 1
-                ? getTranslatedString(R.string.view_sent_forms_button)
-                .replace(" (%s)", "")
+                ? getTranslatedString(R.string.view_sent_forms)
                 : getTranslatedString(R.string.view_sent_forms_button, formCount);
         onView(withText(text)).perform(click());
         return new ViewSentFormPage().assertOnPage();
