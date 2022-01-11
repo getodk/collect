@@ -23,6 +23,7 @@ import org.odk.collect.fragmentstest.DialogFragmentTest.launchDialogFragment
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointDialogFragmentTest {
@@ -73,7 +74,7 @@ class GeoPointDialogFragmentTest {
                     "5m"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
     }
@@ -84,11 +85,11 @@ class GeoPointDialogFragmentTest {
 
         currentAccuracyLiveData.value = 50.2f
         scheduler.runForeground()
-        onViewInDialog(withText("50.2m")).check(matches(isDisplayed()))
+        onViewInDialog(withText("50.2m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
 
         currentAccuracyLiveData.value = 15.65f
         scheduler.runForeground()
-        onViewInDialog(withText("15.65m")).check(matches(isDisplayed()))
+        onViewInDialog(withText("15.65m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
     }
 
     @Test
@@ -104,7 +105,7 @@ class GeoPointDialogFragmentTest {
                     "00:00"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
 
@@ -117,7 +118,7 @@ class GeoPointDialogFragmentTest {
                     "01:02"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
     }

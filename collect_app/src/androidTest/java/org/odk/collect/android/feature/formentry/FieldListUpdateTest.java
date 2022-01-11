@@ -40,7 +40,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
-import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
+import static org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo;
 
 import android.Manifest;
 import android.app.Activity;
