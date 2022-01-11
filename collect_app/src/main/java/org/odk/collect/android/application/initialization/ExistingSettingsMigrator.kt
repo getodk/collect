@@ -1,8 +1,8 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.application.initialization.upgrade.Upgrade
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.upgrade.Upgrade
 
 class ExistingSettingsMigrator(
     private val projectsRepository: ProjectsRepository,

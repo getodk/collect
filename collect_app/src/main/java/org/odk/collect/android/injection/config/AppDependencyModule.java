@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -37,7 +36,7 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsMigrator;
-import org.odk.collect.android.application.initialization.upgrade.AppUpgrader;
+import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
@@ -111,7 +110,6 @@ import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.LaunchState;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ScreenUtils;
@@ -521,11 +519,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public LaunchState providesAppStateProvider(Context context, SettingsProvider settingsProvider) {
-        return new LaunchState(context, settingsProvider.getMetaSettings(), BuildConfig.VERSION_CODE);
-    }
-
-    @Provides
     public MainMenuViewModel.Factory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
                                                                       SettingsProvider settingsProvider, InstancesAppState instancesAppState,
                                                                       Scheduler scheduler) {
@@ -578,17 +571,19 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AppUpgrader providesAppUpgrader(SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
-        return new AppUpgrader(settingsProvider.getMetaSettings(), asList(
+    public UpgradeInitializer providesUpgradeInitializer(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, ExistingSettingsMigrator existingSettingsMigrator, FormUpdatesUpgrade formUpdatesUpgrade) {
+        return new UpgradeInitializer(
+                context,
+                settingsProvider,
                 existingProjectMigrator,
                 existingSettingsMigrator,
                 formUpdatesUpgrade
-        ));
+        );
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, LaunchState launchState, AppUpgrader appUpgrader, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, launchState, appUpgrader, analyticsInitializer, projectsRepository, settingsProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
+        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, upgradeInitializer, analyticsInitializer, projectsRepository, settingsProvider);
     }
 
     @Provides

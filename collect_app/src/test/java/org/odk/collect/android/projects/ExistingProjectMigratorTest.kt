@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
@@ -27,6 +28,12 @@ class ExistingProjectMigratorTest {
     private val settingsProvider = component.settingsProvider()
     private val currentProjectProvider = component.currentProjectProvider()
     private val rootDir = storagePathProvider.odkRootDirPath
+
+    @Before
+    fun setup() {
+        // Should not run when upgrading from version with LAST_LAUNCHED
+        settingsProvider.getMetaSettings().remove(MetaKeys.LAST_LAUNCHED)
+    }
 
     @Test
     fun `creates existing project with details based on its url`() {
@@ -166,6 +173,26 @@ class ExistingProjectMigratorTest {
     @Test
     fun `has key`() {
         assertThat(existingProjectMigrator.key(), `is`(MetaKeys.EXISTING_PROJECT_IMPORTED))
+    }
+
+    /**
+     * Versions of the app before v2021.3.3 did not include a call to [AppUpgrader.install] and so
+     * this [Upgrade] would get incorrectly run on upgrades from versions after
+     * [AppUpgrader] and Projects (along with LAST_LAUNCHED) were added but before the call
+     * to [AppUpgrader.install] was introduced.
+     */
+    @Test
+    fun `does not run if previous app version already had projects`() {
+        PreferenceManager
+            .getDefaultSharedPreferences(context)
+            .edit()
+            .putString(ProjectKeys.KEY_SERVER_URL, "https://my-server.com")
+            .apply()
+
+        settingsProvider.getMetaSettings().save(MetaKeys.LAST_LAUNCHED, 3115)
+
+        existingProjectMigrator.run()
+        assertThat(projectsRepository.getAll().size, `is`(0))
     }
 
     private fun getProjectDirPaths(projectId: String): Array<String> {

@@ -15,12 +15,11 @@ import org.javarosa.xform.parse.XFormParser
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.application.initialization.upgrade.AppUpgrader
+import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
 import org.odk.collect.android.geo.MapboxUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.utilities.LaunchState
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.utilities.UserAgentProvider
 import org.osmdroid.config.Configuration
@@ -32,23 +31,26 @@ class ApplicationInitializer(
     private val userAgentProvider: UserAgentProvider,
     private val propertyManager: PropertyManager,
     private val analytics: Analytics,
-    private val launchState: LaunchState,
-    private val appUpgrader: AppUpgrader,
+    private val upgradeInitializer: UpgradeInitializer,
     private val analyticsInitializer: AnalyticsInitializer,
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider
 ) {
     fun initialize() {
-        performUpgradeIfNeeded()
+        runInitializers()
         initializeFrameworks()
         initializeLocale()
-        launchState.appLaunched()
     }
 
-    private fun performUpgradeIfNeeded() {
-        if (launchState.isUpgradedFirstLaunch()) {
-            appUpgrader.upgrade()
-        }
+    private fun runInitializers() {
+        upgradeInitializer.initialize()
+        analyticsInitializer.initialize()
+        UserPropertiesInitializer(
+            analytics,
+            projectsRepository,
+            settingsProvider,
+            context
+        ).initialize()
     }
 
     private fun initializeFrameworks() {
@@ -57,13 +59,6 @@ class ApplicationInitializer(
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         initializeMapFrameworks()
         initializeJavaRosa()
-        analyticsInitializer.initialize()
-        UserPropertiesInitializer(
-            analytics,
-            projectsRepository,
-            settingsProvider,
-            context
-        ).initialize()
     }
 
     private fun initializeLocale() {

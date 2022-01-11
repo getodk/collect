@@ -3,7 +3,6 @@ package org.odk.collect.android.application.initialization
 import android.content.Context
 import androidx.preference.PreferenceManager
 import org.apache.commons.io.FileUtils
-import org.odk.collect.android.application.initialization.upgrade.Upgrade
 import org.odk.collect.android.preferences.keys.MetaKeys
 import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SettingsProvider
@@ -11,6 +10,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.upgrade.Upgrade
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -34,6 +34,11 @@ class ExistingProjectMigrator(
     }
 
     override fun run() {
+        if (settingsProvider.getMetaSettings().contains(MetaKeys.LAST_LAUNCHED)) {
+            // We're upgrading from a version with Projects so shouldn't be running this
+            return
+        }
+
         val generalSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
 
         val newProject = projectDetailsCreator.createProjectFromDetails(
