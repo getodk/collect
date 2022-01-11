@@ -1,12 +1,12 @@
 package org.odk.collect.android.preferences.screens
 
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.ViewModel
 import androidx.preference.Preference
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -16,6 +16,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
 
@@ -28,6 +29,9 @@ class ProjectPreferencesFragmentTest {
         on { isAdminPasswordSet } doReturn false
     }
     private val projectPreferencesViewModel = ProjectPreferencesViewModel(adminPasswordProvider)
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -50,7 +54,7 @@ class ProjectPreferencesFragmentTest {
     fun `List of preferences should be updated after changing settings in protected settings`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
@@ -99,7 +103,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Server' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
         }
@@ -110,7 +114,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_SERVER, false)
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(false))
         }
@@ -120,7 +124,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Server' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
         }
@@ -131,7 +135,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_SERVER, false)
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
         }
@@ -141,7 +145,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Server' option is enabled in protected settings should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(true))
         }
@@ -152,7 +156,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_SERVER, false)
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("protocol")!!.isVisible, `is`(false))
         }
@@ -162,7 +166,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Project display' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
         }
@@ -173,7 +177,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(false))
         }
@@ -183,7 +187,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Project display' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
         }
@@ -194,7 +198,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
         }
@@ -204,7 +208,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Project display' option is enabled in protected settings should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(true))
         }
@@ -215,7 +219,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_PROJECT_DISPLAY, false)
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("project_display")!!.isVisible, `is`(false))
         }
@@ -231,7 +235,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(true))
         }
@@ -247,7 +251,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(false))
         }
@@ -263,7 +267,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(true))
         }
@@ -279,7 +283,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(true))
         }
@@ -295,7 +299,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(true))
         }
@@ -311,7 +315,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_interface")!!.isVisible, `is`(false))
         }
@@ -321,7 +325,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Maps' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(true))
         }
@@ -332,7 +336,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_MAPS, false)
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(false))
         }
@@ -342,7 +346,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Maps' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(true))
         }
@@ -353,7 +357,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_MAPS, false)
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(true))
         }
@@ -363,7 +367,7 @@ class ProjectPreferencesFragmentTest {
     fun `If 'Maps' option is enabled in protected settings should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(true))
         }
@@ -374,7 +378,7 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_MAPS, false)
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("maps")!!.isVisible, `is`(false))
         }
@@ -398,7 +402,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(true))
         }
@@ -422,7 +426,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(false))
         }
@@ -446,7 +450,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(true))
         }
@@ -470,7 +474,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(true))
         }
@@ -494,7 +498,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(true))
         }
@@ -518,7 +522,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("form_management")!!.isVisible, `is`(false))
         }
@@ -531,7 +535,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(true))
         }
@@ -544,7 +548,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(false))
         }
@@ -557,7 +561,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(true))
         }
@@ -570,7 +574,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(true))
         }
@@ -583,7 +587,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(true))
         }
@@ -596,7 +600,7 @@ class ProjectPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("user_and_device_identity")!!.isVisible, `is`(false))
         }
@@ -606,7 +610,7 @@ class ProjectPreferencesFragmentTest {
     fun `If in Locked state protected preferences should be hidden`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(true))
 
@@ -630,7 +634,7 @@ class ProjectPreferencesFragmentTest {
     fun `If in Unlocked state protected preferences should be visible`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
 
@@ -654,7 +658,7 @@ class ProjectPreferencesFragmentTest {
     fun `If in NotProtected state protected preferences should be visible`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(ProjectPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectPreferencesFragment::class.java)
         scenario.onFragment { fragment: ProjectPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>("unlock_protected_settings")!!.isVisible, `is`(false))
 

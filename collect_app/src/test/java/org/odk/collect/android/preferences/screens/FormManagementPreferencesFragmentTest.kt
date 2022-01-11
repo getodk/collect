@@ -3,7 +3,6 @@ package org.odk.collect.android.preferences.screens
 import android.app.Application
 import android.content.Context
 import android.os.Looper
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.ViewModel
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
@@ -14,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -29,6 +29,7 @@ import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -48,6 +49,9 @@ class FormManagementPreferencesFragmentTest {
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
 
     private val projectPreferencesViewModel = ProjectPreferencesViewModel(adminPasswordProvider)
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -76,7 +80,7 @@ class FormManagementPreferencesFragmentTest {
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             assertThat(
                 f.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.summary,
@@ -104,7 +108,7 @@ class FormManagementPreferencesFragmentTest {
     @Test
     fun `When 'Manual Updates' enabled disables prefs`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(context))
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             assertThat(
                 f.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isEnabled,
@@ -120,7 +124,7 @@ class FormManagementPreferencesFragmentTest {
     @Test
     fun `When 'Previously Downloaded Only 'enabled disables prefs`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY.getValue(context))
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             assertThat(
                 f.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isEnabled,
@@ -136,7 +140,7 @@ class FormManagementPreferencesFragmentTest {
     @Test
     fun `When 'Match Exactly' enabled disables prefs`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             assertThat(
                 f.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isEnabled,
@@ -153,7 +157,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When 'Match Exactly' enabled and 'Automatic Download' disabled shows 'Automatic Download' as checked`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
         generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, false)
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             val automaticDownload = f.findPreference<CheckBoxPreference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)
             assertThat(automaticDownload!!.isChecked, `is`(true))
@@ -168,7 +172,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When 'Manual Updates' enabled and 'Automatic Download' enabled shows 'Automatic Download' as not checked`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(context))
         generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             val automaticDownload = f.findPreference<CheckBoxPreference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)
             assertThat(automaticDownload!!.isChecked, `is`(false))
@@ -183,7 +187,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When Google Drive used as server and 'Automatic Download' enabled shows 'Automatic Download' as not checked`() {
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             val automaticDownload = f.findPreference<CheckBoxPreference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)
             assertThat(automaticDownload!!.isChecked, `is`(false))
@@ -198,7 +202,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When 'Manual Updates' enabled and 'Automatic Download' disabled setting to 'Previously Downloaded' resets 'Automatic Download'`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(context))
         generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, false)
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             val updateMode = f.findPreference<ListPreference>(ProjectKeys.KEY_FORM_UPDATE_MODE)
             updateMode!!.value = FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY.getValue(context)
@@ -216,7 +220,7 @@ class FormManagementPreferencesFragmentTest {
     fun `Changing Form Update Mode should not cause any crash if related preferences are disabled in Protected Settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
-        val scenario = FragmentScenario.launch(
+        val scenario = launcherRule.launch(
             FormManagementPreferencesFragment::class.java
         )
         scenario.onFragment { f: FormManagementPreferencesFragment ->
@@ -233,7 +237,7 @@ class FormManagementPreferencesFragmentTest {
     fun `Enabled preferences should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
@@ -269,7 +273,7 @@ class FormManagementPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
@@ -291,7 +295,7 @@ class FormManagementPreferencesFragmentTest {
     fun `Enabled preferences should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
@@ -327,7 +331,7 @@ class FormManagementPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
@@ -349,7 +353,7 @@ class FormManagementPreferencesFragmentTest {
     fun `Enabled preferences should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(true))
@@ -385,7 +389,7 @@ class FormManagementPreferencesFragmentTest {
 
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isVisible, `is`(false))
@@ -410,7 +414,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_update_category")!!.isVisible, `is`(false))
         }
@@ -423,7 +427,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOMATIC_UPDATE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_update_category")!!.isVisible, `is`(true))
         }
@@ -434,7 +438,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_submission")!!.isVisible, `is`(false))
         }
@@ -445,7 +449,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, true)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_submission")!!.isVisible, `is`(true))
         }
@@ -460,7 +464,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
         adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_filling")!!.isVisible, `is`(false))
         }
@@ -475,7 +479,7 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_GUIDANCE_HINT, false)
         adminSettings.save(ProtectedProjectKeys.KEY_EXTERNAL_APP_RECORDING, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_filling")!!.isVisible, `is`(true))
         }
@@ -485,7 +489,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When all preferences in 'Form import' category are hidden, the category should be hidden as well`() {
         adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, false)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_import")!!.isVisible, `is`(false))
         }
@@ -495,7 +499,7 @@ class FormManagementPreferencesFragmentTest {
     fun `When al least one preference in 'Form import' category is visible, the category should be visible as well`() {
         adminSettings.save(ProtectedProjectKeys.KEY_INSTANCE_FORM_SYNC, true)
 
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("form_import")!!.isVisible, `is`(true))
         }
@@ -503,8 +507,7 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When Auto send preference is enabled, finalized forms should be scheduled for submission`() {
-
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "wifi"
         }
@@ -513,8 +516,7 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When Auto send preference is disabled, no submissions should be scheduled`() {
-
-        val scenario = FragmentScenario.launch(FormManagementPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormManagementPreferencesFragment ->
             fragment.findPreference<ListPreference>(ProjectKeys.KEY_AUTOSEND)!!.value = "off"
         }

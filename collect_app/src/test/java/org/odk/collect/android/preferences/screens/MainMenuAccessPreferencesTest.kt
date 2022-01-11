@@ -1,18 +1,19 @@
 package org.odk.collect.android.preferences.screens
 
 import android.content.Context
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.preference.CheckBoxPreference
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -22,6 +23,9 @@ class MainMenuAccessPreferencesTest {
     private lateinit var context: Context
     private lateinit var generalSettings: Settings
     private lateinit var adminSettings: Settings
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -33,7 +37,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Edit Saved Form option should be checked if it's enabled in settings`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isChecked, `is`(true))
         }
@@ -43,7 +47,7 @@ class MainMenuAccessPreferencesTest {
     fun `Edit Saved Form option should be unchecked if it's disabled in settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isChecked, `is`(false))
         }
@@ -51,7 +55,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Clicking on the Edit Saved Form option should change its state`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_EDIT_SAVED)
             assertThat(option!!.isChecked, `is`(true))
@@ -66,7 +70,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Fragment recreation should not change the state of the Edit Saved Form option`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_EDIT_SAVED)
             assertThat(option!!.isChecked, `is`(true))
@@ -84,7 +88,7 @@ class MainMenuAccessPreferencesTest {
     fun `Edit Saved Form option should be disabled if editing forms is disabled`() {
         adminSettings.save(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_EDIT_SAVED)!!.isEnabled, `is`(false))
         }
@@ -92,7 +96,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Send Finalized Form option should be checked if it's enabled in settings`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SEND_FINALIZED)!!.isChecked, `is`(true))
         }
@@ -102,7 +106,7 @@ class MainMenuAccessPreferencesTest {
     fun `Send Finalized Form option should be unchecked if it's disabled in settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_SEND_FINALIZED, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SEND_FINALIZED)!!.isChecked, `is`(false))
         }
@@ -110,7 +114,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Clicking on the Send Finalized Form option should change its state`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SEND_FINALIZED)
             assertThat(option!!.isChecked, `is`(true))
@@ -125,7 +129,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Fragment recreation should not change the state of the Send Finalized Form option`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SEND_FINALIZED)
             assertThat(option!!.isChecked, `is`(true))
@@ -141,7 +145,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `View Sent Form option should be checked if it's enabled in settings`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_VIEW_SENT)!!.isChecked, `is`(true))
         }
@@ -151,7 +155,7 @@ class MainMenuAccessPreferencesTest {
     fun `View Sent Form option should be unchecked if it's disabled in settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_VIEW_SENT, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_VIEW_SENT)!!.isChecked, `is`(false))
         }
@@ -159,7 +163,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Clicking on the View Sent Form option should change its state`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_VIEW_SENT)
             assertThat(option!!.isChecked, `is`(true))
@@ -174,7 +178,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Fragment recreation should not change the state of the View Sent Form option`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_VIEW_SENT)
             assertThat(option!!.isChecked, `is`(true))
@@ -190,7 +194,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Get Blank Form option should be checked if it's enabled in settings`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)!!.isChecked, `is`(true))
         }
@@ -200,7 +204,7 @@ class MainMenuAccessPreferencesTest {
     fun `Get Blank Form option should be unchecked if it's disabled in settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_GET_BLANK, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)!!.isChecked, `is`(false))
         }
@@ -208,7 +212,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Clicking on the Get Blank Form option should change its state`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)
             assertThat(option!!.isChecked, `is`(true))
@@ -223,7 +227,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Fragment recreation should not change the state of the Get Blank Form option`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)
             assertThat(option!!.isChecked, `is`(true))
@@ -239,7 +243,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Delete Saved Form option should be checked if it's enabled in settings`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_DELETE_SAVED)!!.isChecked, `is`(true))
         }
@@ -249,7 +253,7 @@ class MainMenuAccessPreferencesTest {
     fun `Delete Saved Form option should be unchecked if it's disabled in settings`() {
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_SAVED, false)
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_DELETE_SAVED)!!.isChecked, `is`(false))
         }
@@ -257,7 +261,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Clicking on the Delete Saved Form option should change its state`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_DELETE_SAVED)
             assertThat(option!!.isChecked, `is`(true))
@@ -272,7 +276,7 @@ class MainMenuAccessPreferencesTest {
 
     @Test
     fun `Fragment recreation should not change the state of the Delete Saved Form option`() {
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_DELETE_SAVED)
             assertThat(option!!.isChecked, `is`(true))
@@ -290,7 +294,7 @@ class MainMenuAccessPreferencesTest {
     fun `When match exactly enabled shows the Get Blank Form option as unchecked and disabled`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
 
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
 
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)
@@ -305,7 +309,7 @@ class MainMenuAccessPreferencesTest {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
 
         generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        val scenario = FragmentScenario.launch(MainMenuAccessPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)!!.isEnabled, `is`(true))
         }
