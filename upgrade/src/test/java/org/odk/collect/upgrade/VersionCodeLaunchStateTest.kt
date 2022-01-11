@@ -11,7 +11,7 @@ class VersionCodeLaunchStateTest {
 
     @Test
     fun `isUpgradedFirstLaunch() returns false for empty settings`() {
-        val appStateProvider = VersionCodeLaunchState("key", InMemSettings(), 1)
+        val appStateProvider = VersionCodeLaunchState("key", InMemSettings(), 1, mock())
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -20,7 +20,7 @@ class VersionCodeLaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save("key", 1)
 
-        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 1)
+        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 1, mock())
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }
 
@@ -29,7 +29,7 @@ class VersionCodeLaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save("key", 1)
 
-        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 2)
+        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 2, mock())
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(true))
     }
 
@@ -38,7 +38,7 @@ class VersionCodeLaunchStateTest {
         val inMemSettings = InMemSettings()
         inMemSettings.save("key", 1)
 
-        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 2)
+        val appStateProvider = VersionCodeLaunchState("key", inMemSettings, 2, mock())
         appStateProvider.appLaunched()
         assertThat(appStateProvider.isUpgradedFirstLaunch(), equalTo(false))
     }

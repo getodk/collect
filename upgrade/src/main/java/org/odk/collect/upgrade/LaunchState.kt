@@ -11,14 +11,14 @@ class VersionCodeLaunchState(
     private val key: String,
     private val settings: Settings,
     private val currentVersion: Int,
-    private val installDetector: InstallDetector? = null
+    private val installDetector: InstallDetector
 ) : LaunchState {
 
     override fun isUpgradedFirstLaunch(): Boolean {
         return if (settings.contains(key)) {
             settings.getInt(key) < currentVersion
         } else {
-            return installDetector?.installDetected() ?: false
+            return installDetector.installDetected()
         }
     }
 
