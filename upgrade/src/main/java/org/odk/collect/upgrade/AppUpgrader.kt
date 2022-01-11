@@ -3,7 +3,7 @@ package org.odk.collect.upgrade
 import android.app.Application
 import org.odk.collect.shared.Settings
 
-class AppUpgrader(
+class AppUpgrader internal constructor(
     private val settings: Settings,
     private val launchState: LaunchState,
     private val upgrades: List<Upgrade>

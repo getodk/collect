@@ -2,12 +2,12 @@ package org.odk.collect.upgrade
 
 import org.odk.collect.shared.Settings
 
-interface LaunchState {
+internal interface LaunchState {
     fun isUpgradedFirstLaunch(): Boolean
     fun appLaunched()
 }
 
-class VersionCodeLaunchState(
+internal class VersionCodeLaunchState(
     private val key: String,
     private val settings: Settings,
     private val currentVersion: Int,
