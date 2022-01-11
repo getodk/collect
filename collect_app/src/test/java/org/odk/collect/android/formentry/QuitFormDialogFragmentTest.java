@@ -1,5 +1,14 @@
 package org.odk.collect.android.formentry;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import android.content.DialogInterface;
 import android.widget.TextView;
 
@@ -11,34 +20,29 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.fragmentstest.DialogFragmentTest;
-import org.odk.collect.testshared.RobolectricHelpers;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
+import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class QuitFormDialogFragmentTest {
 
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
+
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Before
     public void setup() {
@@ -59,7 +63,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectButtons() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
             assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(GONE));
@@ -70,7 +74,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectTitle_whenNoFormIsLoaded() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
@@ -82,7 +86,7 @@ public class QuitFormDialogFragmentTest {
     public void shouldShowCorrectTitle_whenFormIsLoaded() {
         when(formSaveViewModel.getFormName()).thenReturn("blah");
 
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
@@ -92,7 +96,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void dialogIsCancellable() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(true));
         });
@@ -100,7 +104,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void clickingCancel_shouldDismissTheDialog() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             assertTrue(dialog.isShowing());

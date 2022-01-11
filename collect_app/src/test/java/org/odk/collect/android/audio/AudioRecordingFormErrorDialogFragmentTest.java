@@ -13,6 +13,7 @@ import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -20,7 +21,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
-import org.odk.collect.fragmentstest.DialogFragmentTest;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.io.File;
@@ -29,6 +30,9 @@ import java.io.File;
 public class AudioRecordingFormErrorDialogFragmentTest {
 
     private StubAudioRecorder audioRecorder;
+
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Before
     public void setup() throws Exception {
@@ -45,7 +49,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void clickingOK_dismissesDialog() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
@@ -60,7 +64,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void onDismiss_consumesConsumable() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(DialogFragment::dismiss);
         assertThat(audioRecorder.failedToStart().getValue().isConsumed(), is(true));
     }

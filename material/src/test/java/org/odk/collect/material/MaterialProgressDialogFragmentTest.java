@@ -16,16 +16,21 @@ import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Matchers;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 
 @RunWith(AndroidJUnit4.class)
 public class MaterialProgressDialogFragmentTest {
 
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+
     @Test
     public void setTitle_updatesTitle() {
-        FragmentScenario<MaterialProgressDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> scenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         scenario.onFragment(fragment -> {
             fragment.setTitle("blah");
             CharSequence message = shadowOf(fragment.getDialog()).getTitle();
@@ -35,7 +40,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsTitle() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setTitle("blah");
         });
@@ -49,7 +54,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void whenMessageNotSet_showsProgressBar() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             View dialogView = fragment.getDialogView();
             assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), Matchers.is(View.VISIBLE));
@@ -58,7 +63,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void setMessage_updatesMessage() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             View dialogView = fragment.getDialogView();
 
@@ -69,7 +74,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsMessage() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setMessage("blah");
         });
@@ -83,7 +88,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void setCancellableFalse_makesTheDialogNotCancellable() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setCancelable(false);
             assertThat(fragment.isCancelable(), equalTo(false));
@@ -105,7 +110,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void cancelling_callsCancelOnCancellable() {
-        FragmentScenario<TestProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(TestProgressDialogFragment.class);
+        FragmentScenario<TestProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(TestProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             MaterialProgressDialogFragment.OnCancelCallback onCancelCallback = mock(MaterialProgressDialogFragment.OnCancelCallback.class);
             fragment.setCancellableCallback(onCancelCallback);
@@ -117,7 +122,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void whenThereIsCancelButtonText_clickingCancel_dismissesAndCallsCancelOnCancellable() {
-        FragmentScenario<TestProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(TestProgressDialogFragment.class);
+        FragmentScenario<TestProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(TestProgressDialogFragment.class);
 
         fragmentScenario.onFragment(fragment -> {
             MaterialProgressDialogFragment.OnCancelCallback onCancelCallback = mock(MaterialProgressDialogFragment.OnCancelCallback.class);
