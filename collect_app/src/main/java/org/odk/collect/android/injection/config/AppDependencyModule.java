@@ -80,10 +80,6 @@ import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
 import org.odk.collect.android.network.ConnectivityProvider;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder;
-import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder;
-import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder;
-import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -367,28 +363,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormUpdatesDownloadedNotificationBuilder providesFormsDownloadNotificationBuilder(Application application) {
-        return new FormUpdatesDownloadedNotificationBuilder(application);
-    }
-
-    @Provides
-    public FormsSyncFailedNotificationBuilder providesFormsSyncFailedNotificationBuilder(Application application) {
-        return new FormsSyncFailedNotificationBuilder(application);
-    }
-
-    @Provides
-    public FormUpdatesAvailableNotificationBuilder providesFormUpdatesAvailableNotificationBuilder(Application application) {
-        return new FormUpdatesAvailableNotificationBuilder(application);
-    }
-
-    @Provides
-    public FormsSubmissionNotificationBuilder providesFormsSubmissionNotificationBuilder(Application application) {
-        return new FormsSubmissionNotificationBuilder(application);
-    }
-
-    @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, FormUpdatesDownloadedNotificationBuilder formUpdatesDownloadedNotificationBuilder, FormsSyncFailedNotificationBuilder formsSyncFailedNotificationBuilder, ProjectsRepository projectsRepository, FormUpdatesAvailableNotificationBuilder formUpdatesAvailableNotificationBuilder, FormsSubmissionNotificationBuilder formsSubmissionNotificationBuilder) {
-        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository, formUpdatesDownloadedNotificationBuilder, formsSyncFailedNotificationBuilder, formUpdatesAvailableNotificationBuilder, formsSubmissionNotificationBuilder);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository);
     }
 
     @Provides

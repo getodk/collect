@@ -20,11 +20,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 class NotificationManagerNotifier(
     private val application: Application,
     private val settingsProvider: SettingsProvider,
-    private val projectsRepository: ProjectsRepository,
-    private val formUpdatesDownloadedNotificationBuilder: FormUpdatesDownloadedNotificationBuilder,
-    private val formsSyncFailedNotificationBuilder: FormsSyncFailedNotificationBuilder,
-    private val formUpdatesAvailableNotificationBuilder: FormUpdatesAvailableNotificationBuilder,
-    private val formsSubmissionNotificationBuilder: FormsSubmissionNotificationBuilder
+    private val projectsRepository: ProjectsRepository
 ) : Notifier {
     private val notificationManager: NotificationManager =
         application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -36,7 +32,7 @@ class NotificationManagerNotifier(
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) != updateId) {
             notificationManager.notify(
                 FORM_UPDATE_NOTIFICATION_ID,
-                formUpdatesAvailableNotificationBuilder.build(
+                FormUpdatesAvailableNotificationBuilder(application).build(
                     getProjectName(projectId)
                 )
             )
@@ -47,7 +43,7 @@ class NotificationManagerNotifier(
     override fun onUpdatesDownloaded(result: Map<ServerFormDetails, String>, projectId: String) {
         notificationManager.notify(
             FORM_UPDATE_NOTIFICATION_ID,
-            formUpdatesDownloadedNotificationBuilder.build(
+            FormUpdatesDownloadedNotificationBuilder(application).build(
                 result,
                 getProjectName(projectId)
             )
@@ -60,7 +56,7 @@ class NotificationManagerNotifier(
         } else {
             notificationManager.notify(
                 FORM_SYNC_NOTIFICATION_ID,
-                formsSyncFailedNotificationBuilder.build(
+                FormsSyncFailedNotificationBuilder(application).build(
                     exception,
                     getProjectName(projectId)
                 )
@@ -71,7 +67,7 @@ class NotificationManagerNotifier(
     override fun onSubmission(failure: Boolean, message: String, projectId: String) {
         notificationManager.notify(
             AUTO_SEND_RESULT_NOTIFICATION_ID,
-            formsSubmissionNotificationBuilder.build(failure, message, getProjectName(projectId))
+            FormsSubmissionNotificationBuilder(application).build(failure, message, getProjectName(projectId))
         )
     }
 

@@ -10,13 +10,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.ServerFormDetails
-import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
-import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
-import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
-import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.ManifestFile
 import org.odk.collect.projects.InMemProjectsRepository
@@ -31,10 +26,6 @@ class NotificationManagerNotifierTest {
     private val projectsRepository: ProjectsRepository = InMemProjectsRepository().apply {
         save(Project.DEMO_PROJECT)
     }
-    private val formUpdatesDownloadedNotificationBuilder = mock<FormUpdatesDownloadedNotificationBuilder>()
-    private val formsSyncFailedNotificationBuilder = mock<FormsSyncFailedNotificationBuilder>()
-    private val formUpdatesAvailableNotificationBuilder = mock<FormUpdatesAvailableNotificationBuilder>()
-    private val formsSubmissionNotificationBuilder = mock<FormsSubmissionNotificationBuilder>()
 
     @Before
     fun setup() {
@@ -44,11 +35,7 @@ class NotificationManagerNotifierTest {
         notifier = NotificationManagerNotifier(
             context,
             TestSettingsProvider.getSettingsProvider(),
-            projectsRepository,
-            formUpdatesDownloadedNotificationBuilder,
-            formsSyncFailedNotificationBuilder,
-            formUpdatesAvailableNotificationBuilder,
-            formsSubmissionNotificationBuilder
+            projectsRepository
         )
     }
 
