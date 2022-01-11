@@ -12,9 +12,9 @@ import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.strings.localization.getLocalizedString
 
-class FormUpdatesAvailableNotificationBuilder(private val application: Application) {
+object FormUpdatesAvailableNotificationBuilder {
 
-    fun build(projectName: String): Notification {
+    fun build(application: Application, projectName: String): Notification {
         val intent = Intent(application, FormDownloadListActivity::class.java).apply {
             putExtra(FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS, true)
         }

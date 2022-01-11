@@ -16,9 +16,9 @@ import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.Serializable
 
-class FormUpdatesDownloadedNotificationBuilder(private val application: Application) {
+object FormUpdatesDownloadedNotificationBuilder {
 
-    fun build(result: Map<ServerFormDetails, String>, projectName: String): Notification {
+    fun build(application: Application, result: Map<ServerFormDetails, String>, projectName: String): Notification {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, application)
 
         val intent = if (allFormsDownloadedSuccessfully) {

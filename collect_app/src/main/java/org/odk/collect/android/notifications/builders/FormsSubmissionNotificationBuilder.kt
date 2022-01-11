@@ -13,9 +13,9 @@ import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.strings.localization.getLocalizedString
 
-class FormsSubmissionNotificationBuilder(private val application: Application) {
+object FormsSubmissionNotificationBuilder {
 
-    fun build(submissionFailed: Boolean, message: String, projectName: String): Notification {
+    fun build(application: Application, submissionFailed: Boolean, message: String, projectName: String): Notification {
         val notifyIntent =
             if (submissionFailed) Intent(application, InstanceUploaderListActivity::class.java)
             else Intent(application, MainMenuActivity::class.java)

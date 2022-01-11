@@ -32,7 +32,8 @@ class NotificationManagerNotifier(
         if (metaPrefs.getStringSet(MetaKeys.LAST_UPDATED_NOTIFICATION) != updateId) {
             notificationManager.notify(
                 FORM_UPDATE_NOTIFICATION_ID,
-                FormUpdatesAvailableNotificationBuilder(application).build(
+                FormUpdatesAvailableNotificationBuilder.build(
+                    application,
                     getProjectName(projectId)
                 )
             )
@@ -43,7 +44,8 @@ class NotificationManagerNotifier(
     override fun onUpdatesDownloaded(result: Map<ServerFormDetails, String>, projectId: String) {
         notificationManager.notify(
             FORM_UPDATE_NOTIFICATION_ID,
-            FormUpdatesDownloadedNotificationBuilder(application).build(
+            FormUpdatesDownloadedNotificationBuilder.build(
+                application,
                 result,
                 getProjectName(projectId)
             )
@@ -56,7 +58,8 @@ class NotificationManagerNotifier(
         } else {
             notificationManager.notify(
                 FORM_SYNC_NOTIFICATION_ID,
-                FormsSyncFailedNotificationBuilder(application).build(
+                FormsSyncFailedNotificationBuilder.build(
+                    application,
                     exception,
                     getProjectName(projectId)
                 )
@@ -67,7 +70,12 @@ class NotificationManagerNotifier(
     override fun onSubmission(failure: Boolean, message: String, projectId: String) {
         notificationManager.notify(
             AUTO_SEND_RESULT_NOTIFICATION_ID,
-            FormsSubmissionNotificationBuilder(application).build(failure, message, getProjectName(projectId))
+            FormsSubmissionNotificationBuilder.build(
+                application,
+                failure,
+                message,
+                getProjectName(projectId)
+            )
         )
     }
 

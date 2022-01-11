@@ -13,9 +13,9 @@ import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.strings.localization.getLocalizedString
 
-class FormsSyncFailedNotificationBuilder(private val application: Application) {
+object FormsSyncFailedNotificationBuilder {
 
-    fun build(exception: FormSourceException, projectName: String): Notification {
+    fun build(application: Application, exception: FormSourceException, projectName: String): Notification {
         val contentIntent = PendingIntent.getActivity(
             application,
             NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
