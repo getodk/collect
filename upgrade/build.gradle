@@ -44,9 +44,9 @@ android {
 
 dependencies {
     implementation Dependencies.androidx_core_ktx
-    implementation project(path: ':shared')
+    implementation project(':shared')
 
-    testImplementation project(path: ':testshared')
+    testImplementation project(':testshared')
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
