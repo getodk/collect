@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_INSTALL_ID;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -37,7 +36,6 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.SettingsMigrator;
-import org.odk.collect.android.application.initialization.upgrade.BeforeProjectsInstallDetector;
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -138,7 +136,6 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.shared.strings.UUIDGenerator;
-import org.odk.collect.upgrade.AppUpgrader;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -571,20 +568,6 @@ public class AppDependencyModule {
     @Provides
     public ExistingSettingsMigrator providesExistingSettingsMigrator(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsMigrator settingsMigrator) {
         return new ExistingSettingsMigrator(projectsRepository, settingsProvider, settingsMigrator);
-    }
-
-    @Provides
-    public AppUpgrader providesAppUpgrader(Context context, SettingsProvider settingsProvider, ExistingProjectMigrator existingProjectMigrator, FormUpdatesUpgrade formUpdatesUpgrade, ExistingSettingsMigrator existingSettingsMigrator) {
-        return new AppUpgrader(
-                MetaKeys.LAST_LAUNCHED,
-                settingsProvider.getMetaSettings(),
-                BuildConfig.VERSION_CODE,
-                new BeforeProjectsInstallDetector(context),
-                asList(
-                existingProjectMigrator,
-                existingSettingsMigrator,
-                formUpdatesUpgrade
-        ));
     }
 
     @Provides
