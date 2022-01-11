@@ -14,7 +14,7 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage
 
 @RunWith(AndroidJUnit4::class)
 class AutoSendTest {
-    private var rule = CollectTestRule()
+    private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
     private val notificationDrawerRule = NotificationDrawerRule()
 
@@ -67,7 +67,7 @@ class AutoSendTest {
 
         notificationDrawerRule
             .open()
-            .assertNotification("ODK Collect", "Forms upload failed", null)
+            .assertNotification("ODK Collect", "Forms upload failed")
             .clickNotification("ODK Collect", "Forms upload failed", "Forms upload failed", SendFinalizedFormPage())
     }
 
@@ -113,7 +113,7 @@ class AutoSendTest {
 
         notificationDrawerRule
             .open()
-            .assertNotification("ODK Collect", "Forms upload failed", null)
+            .assertNotification("ODK Collect", "Forms upload failed")
             .clickNotification("ODK Collect", "Forms upload failed", "Forms upload failed", SendFinalizedFormPage())
     }
 }
