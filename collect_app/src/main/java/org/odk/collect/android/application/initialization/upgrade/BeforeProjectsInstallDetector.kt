@@ -3,9 +3,9 @@ package org.odk.collect.android.application.initialization.upgrade
 import android.content.Context
 import androidx.preference.PreferenceManager
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.upgrade.AppUpgrader
 import org.odk.collect.upgrade.InstallDetector
 import java.io.File
-import org.odk.collect.upgrade.AppUpgrader
 
 /**
  * Implementation of [InstallDetector] that looks for signs that a version of Collect
