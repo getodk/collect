@@ -24,6 +24,9 @@ class AppUpgrader internal constructor(
      * Runs the list of passed [Upgrade] implementations in order if this is the first launch of a
      * new version of the app (an "app upgrade"). This should be called in (or from somewhere called
      * from) [Application.onCreate].
+     *
+     * [Upgrade]s that return non-null values from [Upgrade.key] will only be run if they have not
+     * been run before.
      */
     fun upgradeIfNeeded() {
         if (launchState.isUpgradedFirstLaunch()) {
