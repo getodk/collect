@@ -205,13 +205,11 @@
   <string name="topographic">توپوگرافی</string>
   <string name="carto_map_style_positron">پوزیترون</string>
   <string name="change_location">تغییر موقعیت</string>
-  <string name="getting_location">در حال بارگزاری موقعیت جغرافیایی</string>
-  <string name="get_location">ثبت مکان</string>
+    <string name="get_location">ثبت مکان</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">رفتن به تنظیمات </string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">ذخیره GeoPoint</string>
   <string name="get_point">آغاز GeoPoint</string>
   <string name="geopoint_view_read_only">نمایش GeoPoint</string>
   <string name="get_shape">آغاز GeoShape</string>

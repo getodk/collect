@@ -192,8 +192,7 @@
     tile caches, and are not shown in the UI.-->
   <string name="streets">Barabara</string>
   <string name="view_change_location">Tazama au badilisha Eneo/Mahali</string>
-  <string name="getting_location">inaweka Eneo/Mahali</string>
-  <string name="get_location">Rekodi Eneo/Mahali</string>
+    <string name="get_location">Rekodi Eneo/Mahali</string>
   <string name="provider_disabled_error">Samahani, viwekaji mahali/eneo vimezimwa!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->

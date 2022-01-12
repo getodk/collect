@@ -344,14 +344,11 @@
   <string name="view_change_location">Tazama au badilisha eneo</string>
   <string name="change_location">Badilisha eneo</string>
   <string name="record_geopoint">Rekodi pointi</string>
-  <string name="getting_location">Inatafuta mahali</string>
-  <string name="get_location">Rekodi mahali</string>
+    <string name="get_location">Rekodi mahali</string>
   <string name="provider_disabled_error">Samahani, kionesha mahali hakijawezeshwa!</string>
   <string name="gps_result">Latitude: %1$s \nLongitude: %2$s \nUrefumwambao:%3$s m\nUsahihi: %4$s m</string>
-  <string name="location_metadata">Satelite zipo: %1$d/24\n\nMuda umepita: %2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
   <string name="get_shape">Anza umbo la kijografia</string>

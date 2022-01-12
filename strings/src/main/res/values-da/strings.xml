@@ -249,12 +249,10 @@
   <string name="change_location">Skift position</string>
   <string name="location_accuracy">Præcision: 1%1$s m</string>
   <string name="location_provider">Lokalitetsudbyder: 1%s</string>
-  <string name="getting_location">Finder lokation</string>
-  <string name="get_location">Gem lokation</string>
+    <string name="get_location">Gem lokation</string>
   <string name="provider_disabled_error">Geolokation er slået fra</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Gem GeoPoint</string>
   <string name="get_point">Start GeoPoint</string>
   <string name="geopoint_view_read_only">Vis GeoPoint</string>
   <string name="geoshape_view_read_only">Vis GeoShape</string>

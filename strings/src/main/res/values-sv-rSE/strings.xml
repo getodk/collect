@@ -339,13 +339,11 @@
   <string name="reference_layer">Referenslager</string>
   <string name="view_change_location">Visa eller ändra position</string>
   <string name="change_location">Ändra plats</string>
-  <string name="getting_location">Laddar position</string>
-  <string name="get_location">Spara position</string>
+    <string name="get_location">Spara position</string>
   <string name="provider_disabled_error">Tyvärr, platstjänster är inaktiverade!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nNoggrannhet: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Spara GeoPoint</string>
   <string name="get_point">Starta GeoPoint</string>
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <string name="get_shape">Starta GeoShape</string>

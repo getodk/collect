@@ -31,7 +31,6 @@ interface GeoDependencyComponent {
         fun build(): GeoDependencyComponent
     }
 
-    fun inject(geoPointActivity: GeoPointActivity)
     fun inject(geoPointMapActivity: GeoPointMapActivity)
     fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)

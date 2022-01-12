@@ -252,13 +252,11 @@
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गूगल मानचित्र तक पहुंचने में असमर्थ क्या गूगल प्ले सर्विस इनस्टॉल है?</string>
   <string name="view_change_location">लोकेशन देखें या बदलें</string>
-  <string name="getting_location">लोकेशन लोड हो रही है</string>
-  <string name="get_location">लोकेशन  रिकार्ड करें </string>
+    <string name="get_location">लोकेशन  रिकार्ड करें </string>
   <string name="provider_disabled_error">क्षमा करें, लोकेशन प्रदाता सक्षम नही हैं!</string>
   <string name="gps_result">अक्षांश: %1$s \n देशांतर: %2$s \n ऊंचाई: %3$sm \n शुद्धता: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">जिओपॉइंट संरक्षित करे</string>
   <string name="get_point"> जिओपॉइंट शुरू करे </string>
   <string name="geopoint_view_read_only">जिओपॉइंट  देखे</string>
   <string name="get_shape">जिओशेप शुरू करे </string>

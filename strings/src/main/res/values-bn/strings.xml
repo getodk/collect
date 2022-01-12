@@ -165,12 +165,10 @@
   <string name="terrain">ভূখণ্ড</string>
   <string name="hybrid">হাইব্রিড</string>
   <string name="satellite">উপগ্রহ</string>
-  <string name="getting_location">অবস্থান নির্ধারণ করা হচ্ছে</string>
-  <string name="get_location">জিপিএস স্থান চিন্হিত করুন</string>
+    <string name="get_location">জিপিএস স্থান চিন্হিত করুন</string>
   <string name="provider_disabled_error">দুঃখিত, অবস্থান প্রদানকারী সেবা বন্ধ আছে!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">অবস্থান সংরক্ষণ</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->

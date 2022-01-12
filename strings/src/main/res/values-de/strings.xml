@@ -394,11 +394,9 @@
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="location_accuracy">Genauigkeit: %1$s m</string>
   <string name="location_provider">Standortdienst: %s</string>
-  <string name="getting_location">Lade Standort</string>
-  <string name="get_location">Standort erfassen</string>
+    <string name="get_location">Standort erfassen</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
-  <string name="location_metadata">verfügbare Satelliten: %1$d/24\n\nabgelaufene Zeit: %2$s</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
   <string name="location_providers_disabled_dialog_message">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Standortdienste sind deaktiviert. Bitte den Standortzugriff in den Android-Einstellungen aktivieren.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -407,7 +405,6 @@
   <string name="track_location">Standort nachverfolgen</string>
   <string name="background_location_disabled">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Standortaufzeichnung ist deaktiviert. Bitte oben im %1$s Menü aktivieren.</string>
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
-  <string name="save_point">Standort speichern</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="geoshape_view_read_only">GeoShape anzeigen</string>

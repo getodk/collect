@@ -370,11 +370,9 @@
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="location_accuracy">%1$s ఖచ్చితత్వం</string>
   <string name="location_provider">%s ప్రదేశ అనుమతులు</string>
-  <string name="getting_location">లొకేషన్ లోడ్ అవుతోంది</string>
-  <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
+    <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
   <string name="provider_disabled_error">క్షమించండి, లొకేషన్ ప్రొవైడర్లు డిసేబుల్ చెయ్యబడ్డాయి!</string>
   <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
-  <string name="location_metadata">అందుబాటులో ఉన్న ఉపగ్రహాలు: %1$d/ 24 \n\n ముగిసిన సమయం:%2$s</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
   <string name="location_providers_disabled_dialog_message">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని స్థాన ప్రొవైడర్లు నిలిపివేయబడ్డారు. దయచేసి Android సెట్టింగ్‌లలో ప్రారంభించండి.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -383,7 +381,6 @@
   <string name="track_location">మీ ప్రదేశాన్ని ట్రాక్ చేయండి</string>
   <string name="background_location_disabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని ట్రాకింగ్ నిలిపివేయబడింది. దయచేసి పై మెను %1$sలో ప్రారంభించండి.</string>
   <string name="background_location_enabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేస్తుంది. పై మెను%1$sలో మీరు ట్రాకింగ్‌ను నిలిపివేయవచ్చు.</string>
-  <string name="save_point">జియోపాయింట్‌ను సేవ్ చేయండి</string>
   <string name="get_point">జియోపాయింట్ ప్రారంభించండి</string>
   <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
   <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>

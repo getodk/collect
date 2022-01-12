@@ -394,11 +394,9 @@
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="location_provider">Fornitore di posizione: %s</string>
-  <string name="getting_location">Posizionamento in corso</string>
-  <string name="get_location">Registra Posizione</string>
+    <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
-  <string name="location_metadata">Satelliti disponibili:%1$d/24\n\nTempo trascorso: %2$s</string>
   <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
   <string name="location_providers_disabled_dialog_message">Questo formulario vuole monitorare la tua posizione ma i fornitori di servizi di localizzazione sono disabilitati. Si prega di abilitare nelle impostazioni di Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -407,7 +405,6 @@
   <string name="track_location">Registra la posizione</string>
   <string name="background_location_disabled">Questo modulo vuole tracciare la tua posizione ma il tracciamento è disabilitato. Abilita nel %1$s menu sopra.</string>
   <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
-  <string name="save_point">Salva Geo-punto</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>

@@ -138,8 +138,7 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="view_change_location">Lokasyonu Göster ya da Değiştir</string>
-  <string name="getting_location">Lokasyon Yükleniyor</string>
-  <string name="get_location">Yeri kaydet</string>
+    <string name="get_location">Yeri kaydet</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->

@@ -138,10 +138,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.FormHierarchyActivity" />
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity
-            android:name="org.odk.collect.geo.GeoPointActivity"
-            android:theme="@style/Theme.Collect"
-            tools:replace="android:theme" />
-        <activity
             android:name="org.odk.collect.geo.GeoPointActivityNew"
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme" />
