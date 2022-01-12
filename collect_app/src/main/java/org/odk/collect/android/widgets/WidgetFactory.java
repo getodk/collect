@@ -30,7 +30,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapProvider;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -83,7 +82,6 @@ public class WidgetFactory {
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
-    private final SettingsProvider settingsProvider;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -96,8 +94,7 @@ public class WidgetFactory {
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
-                         StringRequester stringRequester,
-                         SettingsProvider settingsProvider) {
+                         StringRequester stringRequester) {
         this.context = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -110,7 +107,6 @@ public class WidgetFactory {
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
-        this.settingsProvider = settingsProvider;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -150,19 +146,19 @@ public class WidgetFactory {
                     case Constants.DATATYPE_GEOPOINT:
                         if (hasAppearance(questionDetails.getPrompt(), PLACEMENT_MAP) || hasAppearance(questionDetails.getPrompt(), MAPS)) {
                             questionWidget = new GeoPointMapWidget(context, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
+                                    new ActivityGeoDataRequester(permissionsProvider));
                         } else {
                             questionWidget = new GeoPointWidget(context, questionDetails, waitingForDataRegistry,
-                                    new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
+                                    new ActivityGeoDataRequester(permissionsProvider));
                         }
                         break;
                     case Constants.DATATYPE_GEOSHAPE:
                         questionWidget = new GeoShapeWidget(context, questionDetails, waitingForDataRegistry,
-                                new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
+                                new ActivityGeoDataRequester(permissionsProvider));
                         break;
                     case Constants.DATATYPE_GEOTRACE:
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
-                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, settingsProvider));
+                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(context, questionDetails, waitingForDataRegistry, new CameraUtils());

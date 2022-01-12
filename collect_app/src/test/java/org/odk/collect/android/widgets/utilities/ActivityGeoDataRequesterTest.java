@@ -16,7 +16,6 @@ import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.prom
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
-import static org.odk.collect.geo.GeoPointActivity.EXTRA_ACCURACY_THRESHOLD;
 import static org.robolectric.Shadows.shadowOf;
 import static java.util.Arrays.asList;
 
@@ -36,10 +35,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
-import org.odk.collect.android.support.InMemSettingsProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.geo.GeoPointActivity;
+import org.odk.collect.geo.GeoPointActivityNew;
 import org.odk.collect.geo.GeoPointMapActivity;
 import org.odk.collect.geo.GeoPolyActivity;
 import org.robolectric.Robolectric;
@@ -49,7 +47,7 @@ import org.robolectric.shadows.ShadowActivity;
 public class ActivityGeoDataRequesterTest {
 
     private final FakePermissionsProvider permissionsProvider = new FakePermissionsProvider();
-    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider, new InMemSettingsProvider());
+    private final ActivityGeoDataRequester activityGeoDataRequester = new ActivityGeoDataRequester(permissionsProvider);
     private final FakeWaitingForDataRegistry waitingForDataRegistry = new FakeWaitingForDataRegistry();
     private final GeoPointData answer = new GeoPointData(getRandomDoubleArray());
 
@@ -123,7 +121,7 @@ public class ActivityGeoDataRequesterTest {
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, answer.getDisplayText(), waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
-        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivityNew.class));
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
     }
 
@@ -134,11 +132,11 @@ public class ActivityGeoDataRequesterTest {
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, answer.getDisplayText(), waitingForDataRegistry);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
 
-        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivityNew.class));
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
 
         Bundle bundle = startedIntent.getExtras();
-        assertThat(bundle.getFloat(EXTRA_ACCURACY_THRESHOLD), equalTo(10.0f));
+        assertThat(bundle.getFloat(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD), equalTo(10.0f));
     }
 
     @Test
@@ -257,7 +255,7 @@ public class ActivityGeoDataRequesterTest {
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
 
         Intent startedIntent = shadowActivity.getNextStartedActivity();
-        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivityNew.class));
         assertTrue(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, false));
 
         when(prompt.getBindAttributes())
@@ -266,7 +264,7 @@ public class ActivityGeoDataRequesterTest {
         activityGeoDataRequester.requestGeoPoint(testActivity, prompt, "blah", waitingForDataRegistry);
 
         startedIntent = shadowActivity.getNextStartedActivity();
-        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivityNew.class));
         assertFalse(startedIntent.getBooleanExtra(EXTRA_RETAIN_MOCK_ACCURACY, true));
     }
 

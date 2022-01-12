@@ -186,8 +186,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
                 audioRecorder,
                 viewLifecycle,
                 fileRequester,
-                stringRequester,
-                settingsProvider
+                stringRequester
         );
 
         widgets = new ArrayList<>();
