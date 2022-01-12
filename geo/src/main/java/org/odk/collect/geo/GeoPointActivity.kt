@@ -10,7 +10,7 @@ import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener {
+class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     @Inject
     lateinit var geoPointViewModelFactory: GeoPointViewModelFactory

@@ -22,7 +22,7 @@ import org.odk.collect.testshared.Extensions.isFinishing
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
-class GeoPointActivityNewTest {
+class GeoPointActivityTest {
 
     private val locationLiveData: MutableLiveData<Location?> = MutableLiveData(null)
     private val viewModel = mock<GeoPointViewModel> {
@@ -50,15 +50,15 @@ class GeoPointActivityNewTest {
 
     @Test
     fun `starts view model`() {
-        val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
+        val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
 
-        ActivityScenario.launch<GeoPointActivityNew>(intent)
+        ActivityScenario.launch<GeoPointActivity>(intent)
         verify(viewModel).start(retainMockAccuracy = false)
     }
 
     @Test
     fun `shows dialog`() {
-        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
+        val scenario = ActivityScenario.launch(GeoPointActivity::class.java)
         scenario.onActivity {
             val fragments = it.supportFragmentManager.fragments
             assertThat(fragments[0].javaClass, equalTo(GeoPointDialogFragment::class.java))
@@ -67,7 +67,7 @@ class GeoPointActivityNewTest {
 
     @Test
     fun `finishes with location when available`() {
-        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
+        val scenario = ActivityScenario.launch(GeoPointActivity::class.java)
 
         val location = Location(0.0, 0.0, 0.0, 0.0f)
         locationLiveData.value = location
@@ -84,7 +84,7 @@ class GeoPointActivityNewTest {
 
     @Test
     fun `finishes when dialog is cancelled`() {
-        val scenario = ActivityScenario.launch(GeoPointActivityNew::class.java)
+        val scenario = ActivityScenario.launch(GeoPointActivity::class.java)
         scenario.onActivity {
             it.onCancel()
         }
@@ -95,19 +95,19 @@ class GeoPointActivityNewTest {
 
     @Test
     fun `passes retain mock accuracy extra to view model`() {
-        val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
+        val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
-        ActivityScenario.launch<GeoPointActivityNew>(intent)
+        ActivityScenario.launch<GeoPointActivity>(intent)
         verify(viewModel).start(retainMockAccuracy = true)
     }
 
     @Test
     fun `passes threshold extra to view model`() {
-        val intent = Intent(getApplicationContext(), GeoPointActivityNew::class.java)
-        intent.putExtra(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, 5.0f)
+        val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
+        intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0f)
 
-        ActivityScenario.launch<GeoPointActivityNew>(intent)
+        ActivityScenario.launch<GeoPointActivity>(intent)
         verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f)
     }
 }

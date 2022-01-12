@@ -13,7 +13,7 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
-import org.odk.collect.geo.GeoPointActivityNew;
+import org.odk.collect.geo.GeoPointActivity;
 import org.odk.collect.geo.GeoPointMapActivity;
 import org.odk.collect.geo.GeoPolyActivity;
 import org.odk.collect.permissions.PermissionListener;
@@ -42,12 +42,12 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                     bundle.putDoubleArray(GeoPointMapActivity.EXTRA_LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
-                bundle.putFloat(GeoPointActivityNew.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
 
-                Intent intent = new Intent(activity, isMapsAppearance(prompt) ? GeoPointMapActivity.class : GeoPointActivityNew.class);
+                Intent intent = new Intent(activity, isMapsAppearance(prompt) ? GeoPointMapActivity.class : GeoPointActivity.class);
                 intent.putExtras(bundle);
                 activity.startActivityForResult(intent, ApplicationConstants.RequestCodes.LOCATION_CAPTURE);
             }

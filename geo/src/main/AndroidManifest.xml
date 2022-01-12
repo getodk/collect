@@ -12,7 +12,7 @@
             android:theme="@style/Theme.MaterialComponents" />
 
         <activity
-            android:name=".GeoPointActivityNew"
+            android:name=".GeoPointActivity"
             android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>
