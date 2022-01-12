@@ -12,11 +12,15 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
+import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.NotificationDrawerRule
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.pages.FillBlankFormPage
+import org.odk.collect.android.support.pages.FormsDownloadErrorPage
 import org.odk.collect.android.support.pages.GetBlankFormPage
+import org.odk.collect.android.support.pages.MainMenuPage
 
 class PreviouslyDownloadedOnlyTest {
     private val testDependencies = TestDependencies()
@@ -65,6 +69,66 @@ class PreviouslyDownloadedOnlyTest {
                 "Form updates available",
                 GetBlankFormPage()
             )
+    }
+
+    @Test
+    fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_checkingAutoDownload_downloadsUpdatedForms_andDisplaysNotification() {
+        val page = MainMenuPage().assertOnPage()
+            .setServer(testDependencies.server.url)
+            .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
+
+        AdbFormLoadingUtils.copyFormToDemoProject("one-question.xml")
+
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        page.clickFillBlankForm()
+            .assertText("One Question Updated")
+
+        notificationDrawerRule.open()
+            .assertNotification(
+                "ODK Collect",
+                "Forms download succeeded",
+                "All downloads succeeded!"
+            )
+            .clickNotification("ODK Collect", "Forms download succeeded", "All downloads succeeded!", FillBlankFormPage())
+    }
+
+    @Test
+    fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_checkingAutoDownload_downloadsUpdatedForms_andDisplaysNotificationWhenFails() {
+        testDependencies.server.errorOnFetchingForms()
+
+        val page = MainMenuPage().assertOnPage()
+            .setServer(testDependencies.server.url)
+            .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
+
+        AdbFormLoadingUtils.copyFormToDemoProject("one-question.xml")
+
+        testDependencies.server.addForm(
+            "One Question Updated",
+            "one_question",
+            "2",
+            "one-question-updated.xml"
+        )
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        page.clickFillBlankForm()
+            .assertFormDoesNotExist("One Question Updated")
+
+        notificationDrawerRule.open()
+            .assertNotification(
+                "ODK Collect",
+                "Forms download failed",
+                "1 of 1 downloads failed!"
+            )
+            .clickNotification("ODK Collect", "Forms download failed", "1 of 1 downloads failed!", FormsDownloadErrorPage())
     }
 
     @Test

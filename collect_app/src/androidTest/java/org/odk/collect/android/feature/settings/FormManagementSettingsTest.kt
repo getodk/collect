@@ -11,28 +11,21 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.NotificationDrawerRule
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
-import org.odk.collect.android.support.pages.FillBlankFormPage
-import org.odk.collect.android.support.pages.FormsDownloadErrorPage
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.testshared.RecordedIntentsRule
 
 @RunWith(AndroidJUnit4::class)
 class FormManagementSettingsTest {
     private val testDependencies = TestDependencies()
-    private val notificationDrawer = NotificationDrawerRule()
     private val rule = CollectTestRule()
 
     @get:Rule
     var ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
         .around(RecordedIntentsRule())
-        .around(notificationDrawer)
         .around(rule)
 
     @Test
@@ -87,80 +80,6 @@ class FormManagementSettingsTest {
         assertThat(deferredTasks.size, `is`(1))
         assertThat(deferredTasks[0].tag, `is`(previouslyDownloadedTag))
         assertThat(deferredTasks[0].repeatPeriod, `is`(1000L * 60 * 60))
-    }
-
-    @Test
-    fun whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms_andDisplaysNotification() {
-        val page = MainMenuPage().assertOnPage()
-            .setServer(testDependencies.server.url)
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickFormManagement()
-            .clickUpdateForms()
-            .clickOption(R.string.previously_downloaded_only)
-            .clickOnString(R.string.automatic_download)
-
-        AdbFormLoadingUtils.copyFormToDemoProject("one-question.xml")
-
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
-
-        testDependencies.scheduler.runDeferredTasks()
-
-        page.pressBack(ProjectSettingsPage())
-            .pressBack(MainMenuPage())
-            .clickFillBlankForm()
-            .assertText("One Question Updated")
-
-        notificationDrawer.open()
-            .assertNotification(
-                "ODK Collect",
-                "Forms download succeeded",
-                "All downloads succeeded!"
-            )
-            .clickNotification("ODK Collect", "Forms download succeeded", "All downloads succeeded!", FillBlankFormPage())
-    }
-
-    @Test
-    fun whenPreviouslyDownloadedOnlyEnabled_checkingAutoDownload_downloadsUpdatedForms_andDisplaysNotificationWhenFails() {
-        testDependencies.server.errorOnFetchingForms()
-
-        val page = MainMenuPage().assertOnPage()
-            .setServer(testDependencies.server.url)
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickFormManagement()
-            .clickUpdateForms()
-            .clickOption(R.string.previously_downloaded_only)
-            .clickOnString(R.string.automatic_download)
-
-        AdbFormLoadingUtils.copyFormToDemoProject("one-question.xml")
-
-        testDependencies.server.addForm(
-            "One Question Updated",
-            "one_question",
-            "2",
-            "one-question-updated.xml"
-        )
-
-        testDependencies.scheduler.runDeferredTasks()
-
-        page.pressBack(ProjectSettingsPage())
-            .pressBack(MainMenuPage())
-            .clickFillBlankForm()
-            .assertFormDoesNotExist("One Question Updated")
-
-        notificationDrawer.open()
-            .assertNotification(
-                "ODK Collect",
-                "Forms download failed",
-                "1 of 1 downloads failed!"
-            )
-            .clickNotification("ODK Collect", "Forms download failed", "1 of 1 downloads failed!", FormsDownloadErrorPage())
     }
 
     @Test

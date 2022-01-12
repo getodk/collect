@@ -142,6 +142,17 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
+    public MainMenuPage enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload() {
+        return openProjectSettingsDialog()
+                .clickSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.previously_downloaded_only)
+                .clickOnString(R.string.automatic_download)
+                .pressBack(new ProjectSettingsPage())
+                .pressBack(new MainMenuPage());
+    }
+
     public MainMenuPage enableMatchExactly() {
         return openProjectSettingsDialog()
                 .clickSettings()
