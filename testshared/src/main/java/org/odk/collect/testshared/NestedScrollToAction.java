@@ -29,8 +29,6 @@ import org.hamcrest.Matcher;
 
 public class NestedScrollToAction implements ViewAction {
 
-    private static final String TAG = ScrollToAction.class.getSimpleName();
-
     public static NestedScrollToAction nestedScrollTo() {
         return new NestedScrollToAction();
     }
