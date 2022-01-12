@@ -61,7 +61,7 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoTrace(context, prompt, getAnswerText(), waitingForDataRegistry);
+                geoDataRequester.requestGeoTrace(prompt, getAnswerText(), waitingForDataRegistry);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }
