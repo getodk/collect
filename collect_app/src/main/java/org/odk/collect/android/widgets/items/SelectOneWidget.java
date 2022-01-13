@@ -67,7 +67,7 @@ public class SelectOneWidget extends BaseSelectListWidget {
 
         recyclerViewAdapter = new SelectOneListAdapter(getSelectedValue(), this, getContext(), items,
                 getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
-                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
+                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, mediaUtils);
         return recyclerViewAdapter;
     }
 

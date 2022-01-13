@@ -35,6 +35,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,8 +51,8 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
 
     public SelectOneListAdapter(String selectedValue, SelectItemClickListener listener, Context context,
                                 List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
-                                AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode) {
-        super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
+                                AudioHelper audioHelper, int playColor, int numColumns, boolean noButtonsMode, MediaUtils mediaUtils) {
+        super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode, mediaUtils);
         this.originallySelectedValue = selectedValue;
         this.selectedValue = selectedValue;
         this.listener = listener;

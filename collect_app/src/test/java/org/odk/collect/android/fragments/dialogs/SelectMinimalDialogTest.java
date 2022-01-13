@@ -16,6 +16,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class SelectMinimalDialogTest {
     public void whenClickBackButton_shouldDialogBeClosed() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
-        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
+        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false, mock(MediaUtils.class));
         SelectMinimalDialog.SelectMinimalDialogListener listener = mock(SelectMinimalDialog.SelectMinimalDialogListener.class);
         dialogFragment.setListener(listener);
 
@@ -59,7 +60,7 @@ public class SelectMinimalDialogTest {
     public void whenClickBackArrowButton_shouldDialogBeClosed() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
-        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
+        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false, mock(MediaUtils.class));
         SelectMinimalDialog.SelectMinimalDialogListener listener = mock(SelectMinimalDialog.SelectMinimalDialogListener.class);
         dialogFragment.setListener(listener);
 
@@ -75,7 +76,7 @@ public class SelectMinimalDialogTest {
     public void whenAutoCompleteAppearanceUsed_shouldSearchBarBeVisible() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
-        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
+        dialogFragment = new SelectOneMinimalDialog(null, false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false, mock(MediaUtils.class));
         SelectMinimalDialog.SelectMinimalDialogListener listener = mock(SelectMinimalDialog.SelectMinimalDialogListener.class);
         dialogFragment.setListener(listener);
 

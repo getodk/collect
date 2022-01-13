@@ -20,6 +20,8 @@ import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.WidgetTestActivity;
+import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -218,6 +220,7 @@ public class AudioVideoImageTextLabelTest {
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
         audioVideoImageTextLabel.setVideo(videoFile);
+        audioVideoImageTextLabel.setMediaUtils(new MediaUtils(IntentLauncherImpl.INSTANCE));
         audioVideoImageTextLabel.getVideoButton().performClick();
 
         assertEquals(ShadowToast.getTextOfLatestToast(), "File: file:/video.mp4 is missing.");

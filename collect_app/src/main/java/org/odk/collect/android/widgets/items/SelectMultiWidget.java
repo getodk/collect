@@ -53,7 +53,7 @@ public class SelectMultiWidget extends BaseSelectListWidget {
 
         recyclerViewAdapter = new SelectMultipleListAdapter(getSelectedItems(), this, getContext(),
                 items, getFormEntryPrompt(), getReferenceManager(), getAudioHelper(),
-                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode);
+                getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, mediaUtils);
         return recyclerViewAdapter;
     }
 

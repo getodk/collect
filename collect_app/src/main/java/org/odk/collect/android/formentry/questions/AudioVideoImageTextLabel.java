@@ -36,7 +36,6 @@ import com.bumptech.glide.Glide;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -47,16 +46,11 @@ import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
 
-import javax.inject.Inject;
-
 /**
  * Represents a label for a prompt/question or a select choice. The label can have media
  * attached to it as well as text (such as audio, video or an image).
  */
 public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnClickListener {
-    @Inject
-    MediaUtils mediaUtils;
-
     AudioVideoImageTextLabelBinding binding;
 
     private TextView textLabel;
@@ -66,17 +60,16 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private SelectItemClickListener listener;
     private File videoFile;
     private File bigImageFile;
+    private MediaUtils mediaUtils;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
-        DaggerUtils.getComponent(context).inject(this);
         binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
 
     public AudioVideoImageTextLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerUtils.getComponent(context).inject(this);
         binding = AudioVideoImageTextLabelBinding.inflate(LayoutInflater.from(context), this, true);
         textLabel = binding.textLabel;
     }
@@ -147,6 +140,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
         binding.audioButton.setColors(new ThemeUtils(getContext()).getColorOnSurface(), playTextColor);
+    }
+
+    public void setMediaUtils(MediaUtils mediaUtils) {
+        this.mediaUtils = mediaUtils;
     }
 
     public void playVideo() {

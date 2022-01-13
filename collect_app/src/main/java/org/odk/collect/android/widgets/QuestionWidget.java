@@ -108,6 +108,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     SettingsProvider settingsProvider;
 
     @Inject
+    protected
     MediaUtils mediaUtils;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
@@ -170,6 +171,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private void setupQuestionLabel() {
         audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
         audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), questionTextSizeHelper.getHeadline6());
+        audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
         String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();
         String videoURI = formEntryPrompt.getSpecialFormQuestionText("video");
