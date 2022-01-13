@@ -135,9 +135,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     @Inject
     StringRequester stringRequester;
 
-    @Inject
-    MediaUtils mediaUtils;
-
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
     private final AudioRecorder audioRecorder;
@@ -151,7 +148,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
+    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester, MediaUtils mediaUtils) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
         this.audioRecorder = audioRecorder;

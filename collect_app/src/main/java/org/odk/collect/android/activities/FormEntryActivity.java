@@ -158,6 +158,7 @@ import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -355,6 +356,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     IntentLauncher intentLauncher;
+
+    @Inject
+    MediaUtils mediaUtils;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1196,7 +1200,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, factory)
                 .get(AudioClipViewModel.class), odkViewLifecycle);
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, mediaUtils);
     }
 
     @Override
