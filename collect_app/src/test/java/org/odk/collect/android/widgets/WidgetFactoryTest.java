@@ -35,7 +35,7 @@ public class WidgetFactoryTest {
     @Before
     public void setup() {
         Activity activity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
-        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null, null, new InMemSettingsProvider(), null);
+        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null, null, new InMemSettingsProvider());
     }
 
     @Test

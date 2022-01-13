@@ -20,7 +20,6 @@ import org.odk.collect.android.databinding.ExAudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -41,20 +40,17 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
     private final AudioPlayer audioPlayer;
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-    private final MediaUtils mediaUtils;
     private final FileRequester fileRequester;
 
     File answerFile;
 
     public ExAudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
-                         AudioPlayer audioPlayer, WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         FileRequester fileRequester) {
+                         AudioPlayer audioPlayer, WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
 
         this.audioPlayer = audioPlayer;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
-        this.mediaUtils = mediaUtils;
         this.fileRequester = fileRequester;
 
         updateVisibilities();

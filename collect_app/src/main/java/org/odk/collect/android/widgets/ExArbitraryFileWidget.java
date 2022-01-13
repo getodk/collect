@@ -6,13 +6,10 @@ import android.content.Context;
 import android.util.TypedValue;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.ExArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -23,10 +20,10 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
 
     private final FileRequester fileRequester;
 
-    public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
+    public ExArbitraryFileWidget(Context context, QuestionDetails questionDetails,
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
                                  FileRequester fileRequester) {
-        super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
+        super(context, questionDetails, questionMediaManager, waitingForDataRegistry);
         this.fileRequester = fileRequester;
     }
 

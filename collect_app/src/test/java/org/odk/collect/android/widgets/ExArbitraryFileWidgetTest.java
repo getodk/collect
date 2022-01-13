@@ -5,19 +5,25 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.StringData;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
@@ -25,10 +31,21 @@ import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FO
 
 public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWidget> {
     @Mock
-    MediaUtils mediaUtils;
-
-    @Mock
     FileRequester fileRequester;
+
+    private MediaUtils mediaUtils;
+
+    @Before
+    public void setup() {
+        mediaUtils = mock(MediaUtils.class);
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
+                return mediaUtils;
+            }
+        });
+        when(mediaUtils.isAudioFile(any())).thenReturn(true);
+    }
 
     @Override
     public StringData getInitialAnswer() {
@@ -45,7 +62,7 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     @Override
     public ExArbitraryFileWidget createWidget() {
         return new ExArbitraryFileWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                mediaUtils, new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), fileRequester);
+                new FakeQuestionMediaManager(), new FakeWaitingForDataRegistry(), fileRequester);
     }
 
     @Test
