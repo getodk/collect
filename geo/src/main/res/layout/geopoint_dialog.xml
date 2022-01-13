@@ -51,7 +51,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_standard"
             android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toTopOf="@id/threshold"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/accuracy_status"
             tools:text="Point will be saved at 1m" />
@@ -62,13 +61,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:textAppearance="?textAppearanceBody2"
-            app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/threshold"
             tools:text="Time elapsed: 03:52" />
 
+        <TextView
+            android:id="@+id/satellites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textAppearance="?textAppearanceBody2"
+            app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/time"
+            tools:text="Satellites available: 3/24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.core.widget.NestedScrollView>

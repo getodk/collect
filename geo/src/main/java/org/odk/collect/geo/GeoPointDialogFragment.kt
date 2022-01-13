@@ -57,6 +57,10 @@ class GeoPointDialogFragment : DialogFragment() {
                 getString(R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
         }
 
+        viewModel.satellites.observe(this) {
+            binding.satellites.text = getString(R.string.satellites, it.toString())
+        }
+
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }

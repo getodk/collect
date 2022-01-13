@@ -507,6 +507,9 @@
     <!-- %1$s is the accuracy required for a point to be automatically saved-->
     <string name="point_will_be_saved">Point will be saved at %1$s</string>
 
+    <!-- %1$s is the number of satellites being used to get location -->
+    <string name="satellites">Satellites: %1$s</string>
+
     <string name="waiting_for_location">Trying to get location. Please wait.</string>
     <string name="poor_accuracy">Poor accuracy. Please wait.</string>
     <string name="unacceptable_accuracy">Unacceptable accuracy. Please wait.</string>

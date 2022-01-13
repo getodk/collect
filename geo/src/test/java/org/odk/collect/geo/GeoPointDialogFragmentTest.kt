@@ -19,6 +19,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.DialogFragmentTest.launchDialogFragment
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.strings.localization.getLocalizedString
@@ -33,9 +34,11 @@ class GeoPointDialogFragmentTest {
 
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
     private val timeElapsedLiveData: MutableLiveData<Long> = MutableLiveData(0)
+    private val satellitesLiveData = MutableNonNullLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
         on { currentAccuracy } doReturn currentAccuracyLiveData
         on { timeElapsed } doReturn timeElapsedLiveData
+        on { satellites } doReturn satellitesLiveData
     }
 
     @Before
@@ -121,6 +124,21 @@ class GeoPointDialogFragmentTest {
         ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
+    }
+
+    @Test
+    fun `shows and updates satellites`() {
+        launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 0)))
+            .perform(nestedScrollTo())
+            .check(matches(isDisplayed()))
+
+        satellitesLiveData.value =  5
+
+        onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 5)))
+            .perform(nestedScrollTo())
+            .check(matches(isDisplayed()))
     }
 
     @Test

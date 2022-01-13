@@ -9,6 +9,7 @@ import dagger.Provides
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.location.LocationClient
+import org.odk.collect.location.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import javax.inject.Singleton
 
@@ -38,6 +39,7 @@ interface GeoDependencyComponent {
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker
+    val satelliteInfoClient: SatelliteInfoClient
 }
 
 @Module
@@ -69,13 +71,23 @@ open class GeoDependencyModule {
     }
 
     @Provides
+    open fun providesSatelliteInfoClient(): SatelliteInfoClient {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
     internal open fun providesGeoPointViewModelFactory(application: Application): GeoPointViewModelFactory {
         return object : GeoPointViewModelFactory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
-                return LocationTrackerGeoPointViewModel(component.locationTracker, System::currentTimeMillis, component.scheduler) as T
+                return LocationTrackerGeoPointViewModel(
+                    component.locationTracker,
+                    component.satelliteInfoClient,
+                    System::currentTimeMillis,
+                    component.scheduler
+                ) as T
             }
         }
     }

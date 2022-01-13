@@ -6,17 +6,21 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics.Companion.log
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.location.Location
+import org.odk.collect.location.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 
 internal abstract class GeoPointViewModel : ViewModel() {
+
     abstract val accuracyThreshold: Float
 
     abstract val acceptedLocation: LiveData<Location?>
     abstract val currentAccuracy: LiveData<Float?>
     abstract val timeElapsed: LiveData<Long>
+    abstract val satellites: NonNullLiveData<Int>
 
     abstract fun start(retainMockAccuracy: Boolean = false, accuracyThreshold: Float? = null)
     abstract fun forceLocation()
@@ -24,6 +28,7 @@ internal abstract class GeoPointViewModel : ViewModel() {
 
 internal class LocationTrackerGeoPointViewModel(
     private val locationTracker: LocationTracker,
+    private val satelliteInfoClient: SatelliteInfoClient,
     private val clock: () -> Long,
     scheduler: Scheduler
 ) : GeoPointViewModel() {
@@ -50,6 +55,8 @@ internal class LocationTrackerGeoPointViewModel(
 
     private val _timeElapsed = MutableLiveData<Long>(0)
     override val timeElapsed = _timeElapsed
+
+    override val satellites: NonNullLiveData<Int> = satelliteInfoClient.satellitesUsedInLastFix
 
     override fun start(retainMockAccuracy: Boolean, accuracyThreshold: Float?) {
         if (accuracyThreshold != null) {

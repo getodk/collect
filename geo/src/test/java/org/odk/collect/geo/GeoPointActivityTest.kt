@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.location.Location
@@ -29,6 +30,7 @@ class GeoPointActivityTest {
         on { acceptedLocation } doReturn locationLiveData
         on { currentAccuracy } doReturn MutableLiveData(null)
         on { timeElapsed } doReturn MutableLiveData(0)
+        on { satellites } doReturn MutableNonNullLiveData(0)
     }
     private val scheduler = FakeScheduler()
 
