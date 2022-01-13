@@ -19,7 +19,9 @@ object FormsSyncFailedNotificationBuilder {
         val contentIntent = PendingIntent.getActivity(
             application,
             NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
-            Intent(application, FillBlankFormActivity::class.java),
+            Intent(application, FillBlankFormActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            },
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 

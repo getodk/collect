@@ -22,7 +22,9 @@ object FormUpdatesDownloadedNotificationBuilder {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, application)
 
         val intent = if (allFormsDownloadedSuccessfully) {
-            Intent(application, FillBlankFormActivity::class.java)
+            Intent(application, FillBlankFormActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
         } else {
             Intent(application, ErrorActivity::class.java).apply {
                 putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, application) as Serializable)

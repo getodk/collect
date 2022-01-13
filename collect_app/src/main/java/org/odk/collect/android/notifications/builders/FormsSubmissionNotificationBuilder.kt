@@ -16,9 +16,13 @@ import org.odk.collect.strings.localization.getLocalizedString
 object FormsSubmissionNotificationBuilder {
 
     fun build(application: Application, submissionFailed: Boolean, message: String, projectName: String): Notification {
-        val notifyIntent =
-            if (submissionFailed) Intent(application, InstanceUploaderListActivity::class.java)
-            else Intent(application, MainMenuActivity::class.java)
+        val notifyIntent = if (submissionFailed) {
+            Intent(application, InstanceUploaderListActivity::class.java)
+        } else {
+            Intent(application, MainMenuActivity::class.java)
+        }.apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
 
         val pendingNotify = PendingIntent.getActivity(
             application,
