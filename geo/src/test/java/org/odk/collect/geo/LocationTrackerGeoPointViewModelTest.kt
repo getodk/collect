@@ -11,7 +11,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.location.Location
-import org.odk.collect.location.SatelliteInfoClient
+import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.LiveDataTester

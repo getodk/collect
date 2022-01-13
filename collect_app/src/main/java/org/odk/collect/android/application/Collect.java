@@ -54,7 +54,7 @@ import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.location.GpsStatusSatelliteInfoClient;
 import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.SatelliteInfoClient;
+import org.odk.collect.location.satellites.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;

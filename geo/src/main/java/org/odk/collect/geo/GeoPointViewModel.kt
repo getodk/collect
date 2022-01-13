@@ -11,7 +11,7 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.location.Location
-import org.odk.collect.location.SatelliteInfoClient
+import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 
 internal abstract class GeoPointViewModel : ViewModel() {

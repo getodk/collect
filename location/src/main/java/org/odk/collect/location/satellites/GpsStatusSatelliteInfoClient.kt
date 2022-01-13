@@ -4,17 +4,18 @@ import android.annotation.SuppressLint
 import android.location.GpsStatus
 import android.location.LocationManager
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.location.satellites.SatelliteInfoClient
 
 class GpsStatusSatelliteInfoClient(private val locationManager: LocationManager) :
     SatelliteInfoClient {
 
     override val satellitesUsedInLastFix: NonNullLiveData<Int>
-        get() = SatellitesLiveData(locationManager)
+        get() = GpsStatusSatellitesLiveData(locationManager)
 }
 
 @SuppressLint("MissingPermission")
 @Suppress("deprecation")
-private class SatellitesLiveData(private val locationManager: LocationManager) :
+private class GpsStatusSatellitesLiveData(private val locationManager: LocationManager) :
     NonNullLiveData<Int>(0),
     GpsStatus.Listener {
 
