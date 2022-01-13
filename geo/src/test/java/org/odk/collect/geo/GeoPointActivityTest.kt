@@ -29,7 +29,7 @@ class GeoPointActivityTest {
     private val viewModel = mock<GeoPointViewModel> {
         on { acceptedLocation } doReturn locationLiveData
         on { currentAccuracy } doReturn MutableLiveData(null)
-        on { timeElapsed } doReturn MutableLiveData(0)
+        on { timeElapsed } doReturn MutableNonNullLiveData(0)
         on { satellites } doReturn MutableNonNullLiveData(0)
     }
     private val scheduler = FakeScheduler()

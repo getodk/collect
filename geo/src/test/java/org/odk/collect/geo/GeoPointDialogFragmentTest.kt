@@ -33,7 +33,7 @@ class GeoPointDialogFragmentTest {
     private val scheduler = FakeScheduler()
 
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
-    private val timeElapsedLiveData: MutableLiveData<Long> = MutableLiveData(0)
+    private val timeElapsedLiveData: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
     private val satellitesLiveData = MutableNonNullLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
         on { currentAccuracy } doReturn currentAccuracyLiveData
