@@ -1,7 +1,6 @@
 package org.odk.collect.geo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.After
@@ -192,7 +191,7 @@ class LocationTrackerGeoPointViewModelTest {
     @Test
     fun `timeElapsed updates with time since creation`() {
         var timeElapsed = 0L
-        val viewModel = createViewModel(clock = { timeElapsed})
+        val viewModel = createViewModel(clock = { timeElapsed })
         viewModel.start()
 
         val timeElapsedLiveData = liveDataTester.activate(viewModel.timeElapsed)

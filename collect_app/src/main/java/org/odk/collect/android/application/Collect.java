@@ -39,6 +39,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
@@ -52,6 +53,7 @@ import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.location.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
@@ -298,6 +300,12 @@ public class Collect extends Application implements
                         @Override
                         public Scheduler providesScheduler() {
                             return applicationComponent.scheduler();
+                        }
+
+                        @NonNull
+                        @Override
+                        public SatelliteInfoClient providesSatelliteInfoClient() {
+                            return () -> new MutableNonNullLiveData<>(0);
                         }
                     })
                     .build();

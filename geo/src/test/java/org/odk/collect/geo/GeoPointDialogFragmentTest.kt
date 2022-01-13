@@ -134,7 +134,7 @@ class GeoPointDialogFragmentTest {
             .perform(nestedScrollTo())
             .check(matches(isDisplayed()))
 
-        satellitesLiveData.value =  5
+        satellitesLiveData.value = 5
 
         onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 5)))
             .perform(nestedScrollTo())
