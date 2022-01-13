@@ -61,7 +61,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesLocationClient(application: Application): LocationClient {
+    open fun providesLocationClient(): LocationClient {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 

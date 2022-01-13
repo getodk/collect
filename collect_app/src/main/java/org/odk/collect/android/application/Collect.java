@@ -19,6 +19,7 @@ import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_1
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
@@ -52,6 +52,7 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.location.GpsStatusSatelliteInfoClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
@@ -292,7 +293,7 @@ public class Collect extends Application implements
 
                         @NonNull
                         @Override
-                        public LocationClient providesLocationClient(@NonNull Application application) {
+                        public LocationClient providesLocationClient() {
                             return applicationComponent.locationClient();
                         }
 
@@ -305,7 +306,8 @@ public class Collect extends Application implements
                         @NonNull
                         @Override
                         public SatelliteInfoClient providesSatelliteInfoClient() {
-                            return () -> new MutableNonNullLiveData<>(0);
+                            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                            return new GpsStatusSatelliteInfoClient(locationManager);
                         }
                     })
                     .build();
