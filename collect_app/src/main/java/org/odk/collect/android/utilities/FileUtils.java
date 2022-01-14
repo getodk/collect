@@ -18,8 +18,6 @@ import static java.util.Arrays.asList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
@@ -67,8 +65,6 @@ import timber.log.Timber;
  */
 public final class FileUtils {
 
-    // Used to validate and display valid form names.
-    public static final String VALID_FILENAME = "[ _\\-A-Za-z0-9]*.x[ht]*ml";
     public static final String FORMID = "formid";
     public static final String VERSION = "version"; // arbitrary string in OpenRosa 1.0
     public static final String TITLE = "title";
@@ -86,8 +82,6 @@ public final class FileUtils {
 
     /** Valid XML stub that can be parsed without error. */
     public static final String STUB_XML = "<?xml version='1.0' ?><stub />";
-
-    static int bufSize = 16 * 1024; // May be set by unit test
 
     private FileUtils() {
     }
@@ -112,66 +106,6 @@ public final class FileUtils {
     public static boolean createFolder(String path) {
         File dir = new File(path);
         return dir.exists() || dir.mkdirs();
-    }
-
-    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth) {
-        return getBitmapScaledToDisplay(file, screenHeight, screenWidth, false);
-    }
-
-    /**
-     * Scales image according to the given display
-     *
-     * @param file           containing the image
-     * @param screenHeight   height of the display
-     * @param screenWidth    width of the display
-     * @param upscaleEnabled determines whether the image should be up-scaled or not
-     *                       if the window size is greater than the image size
-     * @return scaled bitmap
-     */
-    public static Bitmap getBitmapScaledToDisplay(File file, int screenHeight, int screenWidth, boolean upscaleEnabled) {
-        // Determine image size of file
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        getBitmap(file.getAbsolutePath(), options);
-
-        Bitmap bitmap;
-        double scale;
-        if (upscaleEnabled) {
-            // Load full size bitmap image
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
-
-            double heightScale = ((double) (options.outHeight)) / screenHeight;
-            double widthScale = ((double) options.outWidth) / screenWidth;
-            scale = Math.max(widthScale, heightScale);
-
-            double newHeight = Math.ceil(options.outHeight / scale);
-            double newWidth = Math.ceil(options.outWidth / scale);
-
-            bitmap = Bitmap.createScaledBitmap(bitmap, (int) newWidth, (int) newHeight, false);
-        } else {
-            int heightScale = options.outHeight / screenHeight;
-            int widthScale = options.outWidth / screenWidth;
-
-            // Powers of 2 work faster, sometimes, according to the doc.
-            // We're just doing closest size that still fills the screen.
-            scale = Math.max(widthScale, heightScale);
-
-            // get bitmap with scale ( < 1 is the same as 1)
-            options = new BitmapFactory.Options();
-            options.inInputShareable = true;
-            options.inPurgeable = true;
-            options.inSampleSize = (int) scale;
-            bitmap = getBitmap(file.getAbsolutePath(), options);
-        }
-
-        if (bitmap != null) {
-            Timber.i("Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
-                    screenHeight, screenWidth, scale, bitmap.getHeight(), bitmap.getWidth());
-        }
-        return bitmap;
     }
 
     public static String copyFile(File sourceFile, File destFile) {
@@ -444,40 +378,6 @@ public final class FileUtils {
         deleteAndReport(tempMediaFolder);
     }
 
-    public static void saveBitmapToFile(Bitmap bitmap, String path) {
-        final Bitmap.CompressFormat compressFormat = path.toLowerCase(Locale.getDefault()).endsWith(".png") ?
-                Bitmap.CompressFormat.PNG : Bitmap.CompressFormat.JPEG;
-
-        try (FileOutputStream out = new FileOutputStream(path)) {
-            bitmap.compress(compressFormat, 100, out);
-        } catch (Exception e) {
-            Timber.e(e);
-        }
-    }
-
-    /*
-    This method is used to avoid OutOfMemoryError exception during loading an image.
-    If the exception occurs we catch it and try to load a smaller image.
-     */
-    public static Bitmap getBitmap(String path, BitmapFactory.Options originalOptions) {
-        BitmapFactory.Options newOptions = new BitmapFactory.Options();
-        newOptions.inSampleSize = originalOptions.inSampleSize;
-        if (newOptions.inSampleSize <= 0) {
-            newOptions.inSampleSize = 1;
-        }
-
-        Bitmap bitmap;
-        try {
-            bitmap = BitmapFactory.decodeFile(path, originalOptions);
-        } catch (OutOfMemoryError e) {
-            Timber.i(e);
-            newOptions.inSampleSize++;
-            return getBitmap(path, newOptions);
-        }
-
-        return bitmap;
-    }
-
     public static byte[] read(File file) {
         byte[] bytes = new byte[(int) file.length()];
         try (InputStream is = new FileInputStream(file)) {
@@ -557,23 +457,6 @@ public final class FileUtils {
         }
 
         return mimeType;
-    }
-
-    public static void createDir(String dirPath) {
-        File dir = new File(dirPath);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                String message = String.format("Cannot create directory: %s", dirPath);
-                Timber.w(message);
-                throw new RuntimeException(message);
-            }
-        } else {
-            if (!dir.isDirectory()) {
-                String message = String.format("%s exists, but is not a directory", dirPath);
-                Timber.w(message);
-                throw new RuntimeException(message);
-            }
-        }
     }
 
     public static List<File> listFiles(File file) {

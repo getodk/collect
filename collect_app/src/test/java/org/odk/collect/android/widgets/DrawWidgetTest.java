@@ -11,8 +11,8 @@ import androidx.core.util.Pair;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import net.bytebuddy.utility.RandomString;
-
 import org.javarosa.core.model.data.StringData;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -100,6 +100,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     }
 
     @Test
+    @Ignore
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
@@ -121,6 +122,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     }
 
     @Test
+    @Ignore
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
         currentFile = new File(imagePath);
