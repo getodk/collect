@@ -220,12 +220,10 @@
 </string>
   <string name="view_change_location">แสดงหรือเปลี่ยนตำแหน่ง</string>
   <string name="change_location">เปลี่ยนตำแหน่งพิกัด</string>
-  <string name="getting_location">กำลังค้นหาตำแหน่ง</string>
-  <string name="get_location">บันทึกตำแหน่งที่อยู่</string>
+    <string name="get_location">บันทึกตำแหน่งที่อยู่</string>
   <string name="provider_disabled_error">ขออภัย GPS ถูกปิดการใช้งานไว้</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">บันทึกจุดพิกัด</string>
   <string name="get_point">เริ่มต้นจุดพิกัด</string>
   <string name="geopoint_view_read_only">แสดงจุดพิกัด</string>
   <string name="get_shape">เริ่มต้น GeoShape</string>

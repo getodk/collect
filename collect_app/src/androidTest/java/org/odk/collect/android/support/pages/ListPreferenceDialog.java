@@ -18,6 +18,6 @@ public class ListPreferenceDialog<T extends Page<T>> extends Page<ListPreference
 
     public T clickOption(int option) {
         clickOnString(option);
-        return page;
+        return page.assertOnPage();
     }
 }

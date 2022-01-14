@@ -227,8 +227,7 @@
   <string name="satellite">Satelit</string>
   <string name="view_change_location">Poglej ali spremeni lokacijo</string>
   <string name="change_location">Spremeni lokacijo</string>
-  <string name="getting_location">Nalagam lokacijo</string>
-  <string name="get_location">Zapiši lokacijo</string>
+    <string name="get_location">Zapiši lokacijo</string>
   <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->

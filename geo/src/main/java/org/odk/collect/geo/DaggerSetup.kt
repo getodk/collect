@@ -9,6 +9,7 @@ import dagger.Provides
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.location.LocationClient
+import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import javax.inject.Singleton
 
@@ -31,14 +32,14 @@ interface GeoDependencyComponent {
         fun build(): GeoDependencyComponent
     }
 
-    fun inject(geoPointActivity: GeoPointActivity)
     fun inject(geoPointMapActivity: GeoPointMapActivity)
     fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
-    fun inject(geoPointActivityNew: GeoPointActivityNew)
+    fun inject(geoPointActivity: GeoPointActivity)
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker
+    val satelliteInfoClient: SatelliteInfoClient
 }
 
 @Module
@@ -60,12 +61,17 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesLocationClient(application: Application): LocationClient {
+    open fun providesLocationClient(): LocationClient {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
     @Provides
     open fun providesScheduler(): Scheduler {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesSatelliteInfoClient(): SatelliteInfoClient {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
@@ -76,7 +82,12 @@ open class GeoDependencyModule {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
-                return LocationTrackerGeoPointViewModel(component.locationTracker, System::currentTimeMillis, component.scheduler) as T
+                return LocationTrackerGeoPointViewModel(
+                    component.locationTracker,
+                    component.satelliteInfoClient,
+                    System::currentTimeMillis,
+                    component.scheduler
+                ) as T
             }
         }
     }

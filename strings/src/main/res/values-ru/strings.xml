@@ -326,14 +326,11 @@
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <string name="view_change_location">Показать или изменить местоположение</string>
   <string name="change_location">Изменить местоположение</string>
-  <string name="getting_location">Определяется местоположение</string>
-  <string name="get_location">Записать местоположение</string>
+    <string name="get_location">Записать местоположение</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
-  <string name="location_metadata">Спутников видно: %1$d/24\n\nВремени прошло: %2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Сохранить местоположение</string>
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
   <string name="get_shape">Начать геофигуру</string>

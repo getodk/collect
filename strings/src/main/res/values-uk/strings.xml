@@ -332,11 +332,9 @@
   <string name="view_change_location">Подивитись або змінити місцезнаходження</string>
   <string name="change_location">Змінити Місцезнаходження</string>
   <string name="record_geopoint">Записати точку</string>
-  <string name="getting_location">Завантаження місцезнаходження</string>
-  <string name="get_location">Записати місцезнаходження</string>
+    <string name="get_location">Записати місцезнаходження</string>
   <string name="provider_disabled_error">Вибачте! Джерела місцезнаходження не доступні!</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
-  <string name="location_metadata">Доступні супутники: %1$d/24\n\nПриблизний час: %2$s</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
   <string name="location_providers_disabled_dialog_message">Ця анкета хоче відслідковувати ваше розташування але розташування вимкнене. Будь ласка, увімкніть його в налаштуваннях Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -345,7 +343,6 @@
   <string name="track_location">Відслідковувати розташування</string>
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
-  <string name="save_point">Зберегти ГеоТочку</string>
   <string name="get_point">Записати ГеоТочку</string>
   <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
   <string name="get_shape">Почати ГеоФігуру</string>

@@ -35,7 +35,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
-import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
+import static org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo;
 
 import android.Manifest;
 import android.app.Activity;

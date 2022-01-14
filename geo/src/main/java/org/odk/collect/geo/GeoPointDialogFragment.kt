@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.geo.GeoUtils.formatAccuracy
-import org.odk.collect.geo.databinding.GeopointDialogNewBinding
+import org.odk.collect.geo.databinding.GeopointDialogBinding
 import javax.inject.Inject
 
 class GeoPointDialogFragment : DialogFragment() {
@@ -20,7 +20,7 @@ class GeoPointDialogFragment : DialogFragment() {
 
     var listener: Listener? = null
 
-    private lateinit var binding: GeopointDialogNewBinding
+    private lateinit var binding: GeopointDialogBinding
     private lateinit var viewModel: GeoPointViewModel
 
     override fun onAttach(context: Context) {
@@ -39,9 +39,9 @@ class GeoPointDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = GeopointDialogNewBinding.inflate(LayoutInflater.from(context))
+        binding = GeopointDialogBinding.inflate(LayoutInflater.from(context))
 
-        val accuracyThreshold = viewModel.accuracyThreshold.toFloat()
+        val accuracyThreshold = viewModel.accuracyThreshold
 
         viewModel.currentAccuracy.observe(this) {
             if (it != null) {
@@ -55,6 +55,10 @@ class GeoPointDialogFragment : DialogFragment() {
         viewModel.timeElapsed.observe(this) {
             binding.time.text =
                 getString(R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
+        }
+
+        viewModel.satellites.observe(this) {
+            binding.satellites.text = getString(R.string.satellites, it.toString())
         }
 
         val dialog = MaterialAlertDialogBuilder(requireContext())

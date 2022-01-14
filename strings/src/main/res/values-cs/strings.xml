@@ -394,11 +394,9 @@
   <string name="record_geopoint">Zaznamenat bod</string>
   <string name="location_accuracy">Přesnost: %1$s m</string>
   <string name="location_provider">Poskytovatel polohy: %s</string>
-  <string name="getting_location">Načítám pozici</string>
-  <string name="get_location">Uložit pozici</string>
+    <string name="get_location">Uložit pozici</string>
   <string name="provider_disabled_error">Nástroje pro získání polohy jsou zakázané!</string>
   <string name="gps_result">Zeměpisná šířka:%1$s \n Zeměpisná délka: %2$s \n Výška: %3$s m \n Přesnost %4$sm</string>
-  <string name="location_metadata">Dostupné satelity: %1$d /24\n\nUplynulý čas: %2$s</string>
   <string name="google_play_services_not_available">Tento formulář chce sledovat vaši polohu, ale služby Google Play nejsou k dispozici.</string>
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -407,7 +405,6 @@
   <string name="track_location">Sledovat polohu</string>
   <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím v nabídce %1$s výše.</string>
   <string name="background_location_enabled">Tento formulář sleduje vaši polohu. Sledování můžete zakázat v nabídce %1$s výše.</string>
-  <string name="save_point">Uložit GeoPoint</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
   <string name="geoshape_view_read_only">Zobrazit GeoShape</string>

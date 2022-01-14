@@ -482,11 +482,9 @@
     <string name="record_geopoint">Record a point</string>
     <string name="location_accuracy">Accuracy: %1$s m</string>
     <string name="location_provider">Location provider: %s</string>
-    <string name="getting_location">Loading Location</string>
     <string name="get_location">Record Location</string>
     <string name="provider_disabled_error">Sorry, Location providers are disabled!</string>
     <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nAccuracy: %4$sm</string>
-    <string name="location_metadata">Satellites available: %1$d/24\n\nTime elapsed: %2$s</string>
     <string name="google_play_services_not_available">This form wants to track your location but Google Play Services are not available.</string>
     <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <!-- Action to go to Android settings. Displayed when location providers are disabled. -->
@@ -496,7 +494,6 @@
     <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
     <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
 
-    <string name="save_point">Save GeoPoint</string>
     <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
     <string name="geoshape_view_read_only">View GeoShape</string>
@@ -509,6 +506,9 @@
 
     <!-- %1$s is the accuracy required for a point to be automatically saved-->
     <string name="point_will_be_saved">Point will be saved at %1$s</string>
+
+    <!-- %1$s is the number of satellites being used to get location -->
+    <string name="satellites">Satellites: %1$s</string>
 
     <string name="waiting_for_location">Trying to get location. Please wait.</string>
     <string name="poor_accuracy">Poor accuracy. Please wait.</string>

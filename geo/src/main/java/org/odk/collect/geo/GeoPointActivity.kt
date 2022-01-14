@@ -1,5 +1,8 @@
 package org.odk.collect.geo
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
@@ -10,13 +13,19 @@ import org.odk.collect.geo.analytics.AnalyticsEvents
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class GeoPointActivityNew : LocalizedActivity(), GeoPointDialogFragment.Listener {
+class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     @Inject
     lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            setTranslucent(true)
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
         (application as GeoDependencyComponentProvider).geoDependencyComponent.inject(this)
 
         val viewModel =

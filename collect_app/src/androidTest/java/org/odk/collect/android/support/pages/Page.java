@@ -30,7 +30,7 @@ import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
-import static org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo;
+import static org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo;
 import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
 
 import android.app.Activity;

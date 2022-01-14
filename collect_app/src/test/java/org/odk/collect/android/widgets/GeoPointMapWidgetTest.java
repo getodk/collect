@@ -157,7 +157,7 @@ public class GeoPointMapWidgetTest {
         FormEntryPrompt prompt = promptWithAnswer(answer);
         GeoPointMapWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
-        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, answer.getDisplayText(), waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class GeoPointMapWidgetTest {
         widget.clearAnswer();
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, null, waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoint(prompt, null, waitingForDataRegistry);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class GeoPointMapWidgetTest {
         widget.setData(answer);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoPoint(widget.getContext(), prompt, answer.getDisplayText(), waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
     }
 
     private GeoPointMapWidget createWidget(FormEntryPrompt prompt) {

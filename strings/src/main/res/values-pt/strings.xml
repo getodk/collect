@@ -385,11 +385,9 @@ Escolher Imagem</string>
   <string name="record_geopoint">Registre um ponto</string>
   <string name="location_accuracy">Precisão: %1$s m</string>
   <string name="location_provider">Provedor de localização: %s</string>
-  <string name="getting_location">Carregando Localização</string>
-  <string name="get_location">Gravar Localização</string>
+    <string name="get_location">Gravar Localização</string>
   <string name="provider_disabled_error">Desculpe, provedor de localização desabilitado!</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrecisão:%4$s m</string>
-  <string name="location_metadata">Satélites disponíveis: %1$d/24\n\nTempo decorrido: %2$s</string>
   <string name="google_play_services_not_available">Este formulário necessita rastrear sua localização</string>
   <string name="location_providers_disabled_dialog_message">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu dispositivo. Favor habilitar nas configurações do celular.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -398,7 +396,6 @@ Escolher Imagem</string>
   <string name="track_location">Rastrear localização</string>
   <string name="background_location_disabled">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu celular. Por favor, habilite no menu %1$s acima.</string>
   <string name="background_location_enabled">Este formulário rastreia a sua localização. Você pode desabilitar o rastreamento de localização no menu %1$s acima.</string>
-  <string name="save_point">Salva GeoPoint</string>
   <string name="get_point">Inicia GeoPoint</string>
   <string name="geopoint_view_read_only">Visualiza GeoPoint</string>
   <string name="geoshape_view_read_only">Visualizar GeoShape</string>
