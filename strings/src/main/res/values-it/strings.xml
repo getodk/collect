@@ -498,9 +498,6 @@
   <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="odk_permissions_fail">Errore auto invio ODK, perpiacere assicurati di avere tutti i permessi necessari</string>
-  <string name="odk_auto_note">Invio automatico dei risultati ODK</string>
-  <string name="odk_auto_download_notification_title">Download automatico dei risultati ODK</string>
-  <string name="notification_error">Errore di visualizzazione nella notifica</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -855,7 +852,6 @@
   <string name="canceling">Annullando</string>
   <string name="notification_channel_name">Impostazioni Generali</string>
   <string name="success">Successo</string>
-  <string name="failures">Errori</string>
   <string name="error_occured">Si è verificato un errore.</string>
   <string name="please_wait">Si prega di attendere qualche istante.</string>
   <string name="please_wait_long">Si prega di attendere. Questo potrebbe richiedere alcuni minuti.</string>

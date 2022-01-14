@@ -225,7 +225,6 @@
   <string name="show_sent_and_unsent_forms">ສະແດງແບບຟອມທີ່ສົ່ງແລ້ວ ແລະ ຍັງບໍ່ໄດ້ສົ່ງ
 </string>
   <string name="show_unsent_forms">ສະແດງແບບຟອມທີ່ຍັງບໍ່ທັນໄດ້ສົ່ງ</string>
-  <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

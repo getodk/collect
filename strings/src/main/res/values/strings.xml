@@ -619,9 +619,10 @@
     <string name="send_in_progress">Background send running, please try again shortly</string>
 
     <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
-    <string name="odk_auto_note">ODK auto-send results</string>
-    <string name="odk_auto_download_notification_title">ODK auto-download results</string>
-    <string name="notification_error">Error displaying notification text</string>
+
+    <string name="forms_upload_succeeded">Forms upload succeeded</string>
+    <string name="forms_upload_failed">Forms upload failed</string>
+    <string name="all_uploads_succeeded">All uploads succeeded!</string>
 
     <!--
     ##############################################
@@ -646,6 +647,8 @@
 
     <string name="load_remote_form_error">Form list download failed</string>
 
+    <string name="forms_download_succeeded">Forms download succeeded</string>
+    <string name="forms_download_failed">Forms download failed</string>
     <string name="all_downloads_succeeded">All downloads succeeded!</string>
     <string name="some_downloads_failed">%1$s of %2$s downloads failed!</string>
     <!-- Part of form download dialog. Clicking it displays additional information about a form that failed -->
@@ -1050,7 +1053,6 @@
     <string name="notification_channel_name">General notifications</string>
 
     <string name="success">Success</string>
-    <string name="failures">Failures</string>
     <string name="error_occured">Error Occurred</string>
 
     <string name="please_wait">Please wait a few moments.</string>

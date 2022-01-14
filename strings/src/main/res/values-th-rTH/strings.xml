@@ -274,7 +274,6 @@
   <string name="show_sent_and_unsent_forms">แสดงแบบสำรวจที่ส่งแล้วและยังไม่ได้ส่ง</string>
   <string name="show_unsent_forms">แสดงแบบสำรวจที่ยังไม่ได้ส่ง</string>
   <string name="send_in_progress">กำลังส่งข้อมูล โปรดลองใหม่อีกครั้ง</string>
-  <string name="notification_error">การแสดงข้อความเตือนผิดพลาด</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

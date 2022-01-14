@@ -414,9 +414,6 @@
   <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
   <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
-  <string name="odk_auto_note">Majibu ya ODK yanajituma yenyewe</string>
-  <string name="odk_auto_download_notification_title">Majibu ya ODK yaliyo jipakuwa yenyewe</string>
-  <string name="notification_error">Kosa linaonesha ujumbe wa maandishi</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -708,7 +705,6 @@
   <string name="do_not_exit">Sitisha</string>
   <string name="canceling">Inasitishwa</string>
   <string name="success">Mafanikio</string>
-  <string name="failures">Zimeshindikana</string>
   <string name="error_occured">Kosa limetokea</string>
   <string name="please_wait">Tafadhali subiri kidogo.</string>
   <string name="please_wait_long">Tafadhali subiri. Hii itachukua dakika chache.</string>

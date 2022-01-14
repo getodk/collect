@@ -402,7 +402,6 @@
   <string name="media_upload_error">Fel vid uppladdning av mediafil som inte finns: %1$s</string>
   <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
   <string name="odk_permissions_fail">ODK auto inskickningsfel, kontrollera att du har beviljat nödvändiga rättigheter</string>
-  <string name="notification_error">Fel vid visning av notifikationstext</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -694,7 +693,6 @@ Dela ODK Collect med dem.</string>
   <string name="canceling">Avbryter</string>
   <string name="notification_channel_name">Allmäna notifieringar</string>
   <string name="success">Lyckades</string>
-  <string name="failures">Fel</string>
   <string name="error_occured">Ett fel inträffade</string>
   <string name="please_wait">Var vänlig och vänta ett tag.</string>
   <string name="please_wait_long">Var vänlig och vänta. Detta kan ta en stund.</string>

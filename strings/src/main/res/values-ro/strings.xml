@@ -249,7 +249,6 @@
   <string name="show_sent_and_unsent_forms">Afișați formularele trimise și netrimise</string>
   <string name="show_unsent_forms">Doar formularele netrimise</string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
-  <string name="notification_error">Eroare la afișarea textului notificării</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

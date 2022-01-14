@@ -283,7 +283,6 @@
   <string name="show_sent_and_unsent_forms">पठाईएका र नपठाईएका फारमहरू देखाउनुहोस् </string>
   <string name="show_unsent_forms">नपठाईएका फारमहरू देखाउनुहोस् </string>
   <string name="send_in_progress">पृष्‍ठभूमीमा send सन्चालित हुँदै , कृपया फेरी प्रयास गर्नुहोस् ।</string>
-  <string name="notification_error">सूचना देखाउन गल्ती भयो </string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

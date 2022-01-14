@@ -385,9 +385,6 @@
   <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
-  <string name="odk_auto_note">Результаты авто-выгрузки</string>
-  <string name="odk_auto_download_notification_title">Результаты авто-загрузки</string>
-  <string name="notification_error">Ошибка отображения текста уведомления</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -676,7 +673,6 @@
   <string name="do_not_exit">Отмена</string>
   <string name="canceling">Отменяю</string>
   <string name="success">Успешно</string>
-  <string name="failures">Неудачи</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="please_wait">Подождите несколько секунд.</string>
   <string name="please_wait_long">Пожалуйста, подождите. Это может занять несколько минут.</string>

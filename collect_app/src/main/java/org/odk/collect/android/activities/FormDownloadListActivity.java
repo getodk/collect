@@ -60,9 +60,9 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.errors.ErrorItem;
 import org.odk.collect.forms.FormSourceException;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -660,16 +660,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-        ArrayList<ErrorItem> failures = new ArrayList<>();
-        for (Map.Entry<ServerFormDetails, String> entry : result.entrySet()) {
-            if (!entry.getValue().equals(getString(R.string.success))) {
-                failures.add(new ErrorItem(entry.getKey().getFormName(), getString(R.string.form_details, entry.getKey().getFormId(), entry.getKey().getFormVersion()), entry.getValue()));
-            }
-        }
-
         Bundle args = new Bundle();
-        args.putSerializable(FormsDownloadResultDialog.ARG_FAILURES, failures);
-        args.putSerializable(FormsDownloadResultDialog.ARG_NUMBER_OF_ALL_FORMS, result.size());
+        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, (Serializable) result);
         DialogFragmentUtils.showIfNotShowing(FormsDownloadResultDialog.class, args, getSupportFragmentManager());
 
         // Set result to true for forms which were downloaded

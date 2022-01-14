@@ -248,7 +248,6 @@
   <string name="change_view">እይታን ለውጥ</string>
   <string name="show_sent_and_unsent_forms">የተላኩ እና ያልተላኩ ቅጾችን አሳይ</string>
   <string name="show_unsent_forms">ያልተላኩ ቅጾችን አሳይ</string>
-  <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

@@ -298,7 +298,6 @@
   <string name="show_sent_and_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
   <string name="show_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
-  <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

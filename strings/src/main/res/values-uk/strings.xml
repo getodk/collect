@@ -430,9 +430,6 @@
   <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
   <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
-  <string name="odk_auto_note">Результати автонадсилання ODK</string>
-  <string name="odk_auto_download_notification_title">Результати автозавантаження ODK</string>
-  <string name="notification_error">Помилка відображення тексту оповіщення</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -723,7 +720,6 @@
   <string name="canceling">Скасування</string>
   <string name="notification_channel_name">Загальні сповіщення</string>
   <string name="success">Успішно!</string>
-  <string name="failures">Невдалі</string>
   <string name="error_occured">Сталась помилка</string>
   <string name="please_wait">Будь ласка, зачекайте.</string>
   <string name="please_wait_long">Будь ласка, зачекайте. Це може зайняти кілька хвилин.</string>

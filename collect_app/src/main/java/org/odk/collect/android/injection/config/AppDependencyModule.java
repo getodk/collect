@@ -361,8 +361,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider) {
-        return new NotificationManagerNotifier(application, settingsProvider);
+    public Notifier providesNotifier(Application application, SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
+        return new NotificationManagerNotifier(application, settingsProvider, projectsRepository);
     }
 
     @Provides
