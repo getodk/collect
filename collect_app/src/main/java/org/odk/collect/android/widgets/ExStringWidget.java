@@ -35,6 +35,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ToastUtils;
+import org.odk.collect.android.utilities.Utilities;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -131,7 +132,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        answerText.setText(stringData == null ? null : stringData.getValue().toString());
+        answerText.setText(stringData == null ? null : Utilities.stripInvalidCharacters(stringData.getValue().toString()));   // smap remove binary chars
         widgetValueChanged();
     }
 
@@ -226,4 +227,5 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         focusAnswer();
         Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
     }
+
 }

@@ -36,6 +36,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
 
@@ -67,7 +68,7 @@ public class StringWidget extends QuestionWidget {
     @Override
     public IAnswerData getAnswer() {
         String answer = getAnswerText();
-        return !answer.isEmpty() ? new StringData(answer) : null;
+        return !answer.isEmpty() ? new StringData(Utilities.stripInvalidCharacters(answer)) : null; // smap strip invalid characters
     }
 
     @NonNull

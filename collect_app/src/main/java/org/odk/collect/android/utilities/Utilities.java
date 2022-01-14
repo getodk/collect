@@ -1209,4 +1209,13 @@ public class Utilities {
         return sortOrderExpr;
     }
 
+    /*
+     * smap
+     * Remove control characters, invisible characters and unused code points.
+     * this is copied from barcode widget but should be a common function
+     */
+    public static String stripInvalidCharacters(String data) {
+        return data == null ? null : data.replaceAll("\\p{C}", " ");
+    }
+
 }
