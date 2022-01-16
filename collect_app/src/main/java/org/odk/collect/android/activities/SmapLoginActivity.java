@@ -162,7 +162,7 @@ public class SmapLoginActivity extends CollectAbstractActivity implements SmapLo
 
     @Override
     public void loginComplete(String status) {
-        Timber.i("----------" + status);
+        Timber.i("---------- %s", status);
 
         progressBar.setVisibility(View.GONE);
         loginButton.setEnabled(true);

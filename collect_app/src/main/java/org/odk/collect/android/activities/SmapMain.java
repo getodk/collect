@@ -245,7 +245,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         // Initiate a refresh if requested in start parameters
         String refresh = getIntent().getStringExtra(EXTRA_REFRESH);
         if(refresh != null && refresh.equals("yes")) {
-            processGetTask(false);
+            processGetTask(true);   // Set manual true so that refresh after logon works (logon = manual refresh request)
         }
 
         // Start the location service
