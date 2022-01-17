@@ -10,19 +10,19 @@ class FormUpdateDownloader {
         formDownloader: FormDownloader,
         successMessage: String,
         failureMessage: String
-    ): Map<ServerFormDetails, String> {
-        val results = mutableMapOf<ServerFormDetails, String>()
+    ): Map<ServerFormDetails, FormDownloadException?> {
+        val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
 
         changeLock.withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 for (serverFormDetails in updatedForms) {
                     try {
                         formDownloader.downloadForm(serverFormDetails, null, null)
-                        results[serverFormDetails] = successMessage
+                        results[serverFormDetails] = null
                     } catch (e: FormDownloadException.DownloadingInterrupted) {
                         break
                     } catch (e: FormDownloadException) {
-                        results[serverFormDetails] = failureMessage
+                        results[serverFormDetails] = e
                     }
                 }
             }

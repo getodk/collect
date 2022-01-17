@@ -2,6 +2,7 @@ package org.odk.collect.android.formmanagement
 
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.mockito.Mockito.any
 import org.mockito.Mockito.doAnswer
@@ -66,6 +67,6 @@ class FormUpdateDownloaderTest {
         )
 
         assertThat(results.size, `is`(1))
-        assertThat(results[serverForms[0]], `is`("success"))
+        assertThat(results[serverForms[0]], equalTo(null))
     }
 }

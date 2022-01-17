@@ -15,7 +15,7 @@ import org.odk.collect.android.support.pages.GetBlankFormPage;
 @RunWith(AndroidJUnit4.class)
 public class GetBlankFormsTest {
 
-    public CollectTestRule rule = new CollectTestRule();
+    public CollectTestRule rule = new CollectTestRule(false);
 
     final TestDependencies testDependencies = new TestDependencies();
 
@@ -28,8 +28,7 @@ public class GetBlankFormsTest {
         testDependencies.server.setCredentials("Draymond", "Green");
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
 
-        rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getURL())
                 .clickGetBlankFormWithAuthenticationError()
                 .fillUsername("Draymond")
                 .fillPassword("Green")
@@ -41,8 +40,7 @@ public class GetBlankFormsTest {
     public void whenThereIsAnErrorFetchingFormList_showsError() {
         testDependencies.server.alwaysReturnError();
 
-        rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getURL())
                 .clickGetBlankFormWithError()
                 .assertText(R.string.load_remote_form_error)
                 .clickOK(new GetBlankFormPage());
@@ -53,8 +51,7 @@ public class GetBlankFormsTest {
         testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml");
         testDependencies.server.errorOnFetchingForms();
 
-        rule.startAtMainMenu()
-                .setServer(testDependencies.server.getURL())
+        rule.withProject(testDependencies.server.getURL())
                 .clickGetBlankForm()
                 .clickGetSelected()
                 .assertMessage("1 of 1 downloads failed!")

@@ -17,6 +17,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.testshared.RobolectricHelpers
@@ -30,9 +31,13 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, FormDownloadException>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(it.isCancelable, `is`(true))
         }
@@ -41,20 +46,31 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, FormDownloadException>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok)))
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+            )
         }
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, FormDownloadException>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -67,9 +83,13 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `onCloseDownloadingResult() should be called after clicking on the 'POSITIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, FormDownloadException>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).performClick()
@@ -79,11 +99,15 @@ class FormsDownloadResultDialogTest {
     }
 
     @Test
-    fun `onCloseDownloadingResult() should be called after clicking on the 'NEGATIVE BUTTON'`() {
+    fun `if there are errors onCloseDownloadingResult() should be called after clicking on the 'NEGATIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf(resultItem to "Exception"))
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf(resultItem to FormDownloadException.InvalidSubmission())
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
@@ -95,7 +119,10 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, String>()
+        )
 
         DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         DialogFragmentTest
@@ -109,23 +136,36 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are no errors 'SHOW DETAILS' button should be hidden`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf<ServerFormDetails, String>())
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, String>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility, `is`(View.GONE))
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility,
+                `is`(View.GONE)
+            )
         }
     }
 
     @Test
     fun `If there are errors an appropriate message should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf(resultItem to "Exception"))
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf(resultItem to FormDownloadException.InvalidSubmission())
+        )
 
         DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         DialogFragmentTest
             .onViewInDialog(
-                withText(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.some_downloads_failed, "1", "1"))
+                withText(
+                    ApplicationProvider.getApplicationContext<Collect>()
+                        .getString(R.string.some_downloads_failed, "1", "1")
+                )
             ).check(
                 matches(
                     isDisplayed()
@@ -136,21 +176,38 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `If there are errors 'SHOW DETAILS' button should be displayed`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf(resultItem to "Exception"))
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf(resultItem to FormDownloadException.InvalidSubmission())
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility, `is`(View.VISIBLE))
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.show_details)))
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility,
+                `is`(View.VISIBLE)
+            )
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
+                `is`(
+                    ApplicationProvider.getApplicationContext<Collect>()
+                        .getString(R.string.show_details)
+                )
+            )
         }
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'NEGATIVE BUTTON'`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf(resultItem to "Exception"))
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf<ServerFormDetails, String>()
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -163,21 +220,43 @@ class FormsDownloadResultDialogTest {
     @Test
     fun `Recreation should not change the state of dialog`() {
         val args = Bundle()
-        args.putSerializable(FormsDownloadResultDialog.ARG_RESULT, hashMapOf(resultItem to "Exception"))
+        args.putSerializable(
+            FormsDownloadResultDialog.ARG_RESULT,
+            hashMapOf(resultItem to FormDownloadException.InvalidSubmission())
+        )
 
-        val scenario = DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        val scenario =
+            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok)))
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.show_details)))
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+            )
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
+                `is`(
+                    ApplicationProvider.getApplicationContext<Collect>()
+                        .getString(R.string.show_details)
+                )
+            )
         }
 
         scenario.recreate()
 
         scenario.onFragment {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok)))
-            assertThat((it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text, `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.show_details)))
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+            )
+            assertThat(
+                (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
+                `is`(
+                    ApplicationProvider.getApplicationContext<Collect>()
+                        .getString(R.string.show_details)
+                )
+            )
         }
     }
 }

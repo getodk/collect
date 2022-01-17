@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import org.odk.collect.android.R
+import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
@@ -41,7 +42,7 @@ class NotificationManagerNotifier(
         }
     }
 
-    override fun onUpdatesDownloaded(result: Map<ServerFormDetails, String>, projectId: String) {
+    override fun onUpdatesDownloaded(result: Map<ServerFormDetails, FormDownloadException?>, projectId: String) {
         notificationManager.notify(
             FORM_UPDATE_NOTIFICATION_ID,
             FormUpdatesDownloadedNotificationBuilder.build(
