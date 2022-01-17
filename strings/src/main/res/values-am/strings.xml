@@ -209,8 +209,7 @@
   <string name="terrain">መልከአ ምድር</string>
   <string name="satellite">ሳተላይት</string>
   <string name="view_change_location">አካባቢን ይመልከቱ ወይም ይቀይሩ</string>
-  <string name="getting_location">ቦታን በመጫን ላይ</string>
-  <string name="get_location">ቦታን መዝግብ</string>
+    <string name="get_location">ቦታን መዝግብ</string>
   <string name="provider_disabled_error">ይቅርታ፣ የአካባቢ አቅራቢዎች አይሰሩም፡፡</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -248,7 +247,6 @@
   <string name="change_view">እይታን ለውጥ</string>
   <string name="show_sent_and_unsent_forms">የተላኩ እና ያልተላኩ ቅጾችን አሳይ</string>
   <string name="show_unsent_forms">ያልተላኩ ቅጾችን አሳይ</string>
-  <string name="notification_error">የማሳወቂያ ጽሁፍ በማሳየት ላይ ስህተት</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

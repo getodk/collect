@@ -390,12 +390,9 @@
   <string name="record_geopoint">Irabika amakuru</string>
   <string name="location_accuracy">Birizewe: %1$s m</string>
   <string name="location_provider">Igitanga aho uri ubu: %s</string>
-  <string name="getting_location">Iri gushakicyisha icyerekezo</string>
-  <string name="get_location">Fata amakuru y\'ahantu</string>
+    <string name="get_location">Fata amakuru y\'ahantu</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
   <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
-  <string name="location_metadata">Saterite iraboneka: %1$d /24\n\nIgihe
-Hashize: %2$s</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
   <string name="location_providers_disabled_dialog_message">Iyi nyandiko shingiro irashaka kugenzura aho uherereye, ariko banyirigikorwa baho ntabwo bemejwe. Usabwa kwemeza igenamiterere ya Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -404,7 +401,6 @@ Hashize: %2$s</string>
   <string name="track_location">Kugenzu Icyerezo </string>
   <string name="background_location_disabled">Iyi form ishaka kwerekana aho uherereye ariko ntiwabifunguye. Yishyireho 1%1$s murutonde ruri hejuru.</string>
   <string name="background_location_enabled">Iyi form iri kwerekana aho uherereye.Ushobobora kubihagarika muri 1%1$s unyuze ku rutonde ruri hejuru aha</string>
-  <string name="save_point">Bika amakuru y\'ahantu</string>
   <string name="get_point">Reba amakuru y\'ahantu</string>
   <string name="geopoint_view_read_only">Reba amakuru y\'ahantu</string>
   <string name="geoshape_view_read_only">Garagaza imiterere yahantu.</string>
@@ -492,9 +488,6 @@ Hashize: %2$s</string>
   <string name="media_upload_error">Mugukurura amajwi ntaboneke mu bubiko, ntabwo abarimo ku: %1$s</string>
   <string name="send_in_progress">Ohereza ibyagaragajwe bitaremezwa, hita wongera ugerageze.</string>
   <string name="odk_permissions_fail">ODK ihita yohereza ibitemejwe, izere neza niba wemeje ibisabwa byose.</string>
-  <string name="odk_auto_note">ODK yohereje ibisubizo</string>
-  <string name="odk_auto_download_notification_title">ODK yadawunirodinze ibisubizo</string>
-  <string name="notification_error">Birerekanako habayeho ikosa</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -821,7 +814,6 @@ Hashize: %2$s</string>
   <string name="canceling">Birikuvamo</string>
   <string name="notification_channel_name">Ubutumwa bukwibutsa</string>
   <string name="success">Byakunze</string>
-  <string name="failures">Ntabwo byakunze</string>
   <string name="error_occured">Hari ikosa ribaye</string>
   <string name="please_wait">Rindira igihe gito</string>
   <string name="please_wait_long">Rindira. Bishobora gufata igihe gito.</string>

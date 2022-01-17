@@ -389,11 +389,9 @@
   <string name="record_geopoint">位置を記録</string>
   <string name="location_accuracy">精度: %1$s m</string>
   <string name="location_provider">ロケーションプロバイダー: %s</string>
-  <string name="getting_location">ロケーションをロード中</string>
-  <string name="get_location">記録場所</string>
+    <string name="get_location">記録場所</string>
   <string name="provider_disabled_error">申し訳ありません、ロケーション プロバイダーが無効です!</string>
   <string name="gps_result">緯度: %1$s\n経度: %2$s\n高度: %3$sm\n精度: %4$sm</string>
-  <string name="location_metadata">利用可能なサテライト: %1$d/24\n\n経過した時間: %2$s</string>
   <string name="google_play_services_not_available">このフォームは位置を追跡しようとしますが、Google Play サービスが利用できません。</string>
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -402,7 +400,6 @@
   <string name="track_location">位置情報を追跡</string>
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
-  <string name="save_point">地理位置を保存</string>
   <string name="get_point">地理位置を開始</string>
   <string name="geopoint_view_read_only">地理位置を表示</string>
   <string name="geoshape_view_read_only">GeoShape を表示</string>
@@ -487,9 +484,6 @@
   <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
   <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
-  <string name="odk_auto_note">ODK 自動送信結果</string>
-  <string name="odk_auto_download_notification_title">ODK 自動ダウンロード結果</string>
-  <string name="notification_error">通知テキストの表示中にエラー</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -810,7 +804,6 @@
   <string name="canceling">キャンセル中</string>
   <string name="notification_channel_name">全般通知</string>
   <string name="success">成功しました</string>
-  <string name="failures">失敗</string>
   <string name="error_occured">エラーが発生しました</string>
   <string name="please_wait">しばらくお待ちください。</string>
   <string name="please_wait_long">しばらくお待ちください。数分間かかることがあります。</string>

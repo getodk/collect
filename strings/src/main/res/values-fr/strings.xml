@@ -392,11 +392,9 @@
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="location_accuracy">Précision: %1$s m</string>
   <string name="location_provider">Fournisseur de la localisation: 1%s</string>
-  <string name="getting_location">Chargement de la localisation</string>
-  <string name="get_location">Enregistrement du lieu</string>
+    <string name="get_location">Enregistrement du lieu</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
-  <string name="location_metadata">Satellites disponibles: %1$d/24\n\nTemps écoulé: %2$s</string>
   <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
   <string name="location_providers_disabled_dialog_message">Ce formulaire souhaite suivre votre localisation, mais les fournisseurs d\'emplacements sont désactivés. Merci de vérifier les paramétres Android</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -405,7 +403,6 @@
   <string name="track_location">Localisation du trajet</string>
   <string name="background_location_disabled">Ce formulaire veut suivre votre position mais le suivi est désactivé. S\'il vous plaît activer dans le %1$s menu ci-dessus.</string>
   <string name="background_location_enabled">Ce formulaire suit votre position. Vous pouvez désactiver le suivi dans le %1$s menu ci-dessus.</string>
-  <string name="save_point">Enregistrer le PointGéo</string>
   <string name="get_point">Démarrer le PointGéo</string>
   <string name="geopoint_view_read_only">Voir le PointGéo</string>
   <string name="geoshape_view_read_only">Voir la forme</string>
@@ -496,9 +493,6 @@
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
-  <string name="odk_auto_note">Résultats d\'envoi automatique ODK</string>
-  <string name="odk_auto_download_notification_title">Résultats de téléchargement automatique ODK</string>
-  <string name="notification_error">Erreur d\'affichage du texte de notification</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -854,7 +848,6 @@
   <string name="canceling">En train d\'annuler</string>
   <string name="notification_channel_name">Notifications générales</string>
   <string name="success">Succès</string>
-  <string name="failures">Échecs</string>
   <string name="error_occured">Une erreur s\'est produite</string>
   <string name="please_wait">Veuillez patienter.</string>
   <string name="please_wait_long">Veuillez patienter. Cette action peut prendre quelques minutes.</string>

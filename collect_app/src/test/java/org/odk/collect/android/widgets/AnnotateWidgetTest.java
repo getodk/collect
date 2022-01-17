@@ -14,6 +14,7 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
@@ -125,6 +126,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
+    @Ignore
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
         overrideReferenceManager(setupFakeReferenceManager(singletonList(
@@ -146,6 +148,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
+    @Ignore
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
         currentFile = new File(imagePath);

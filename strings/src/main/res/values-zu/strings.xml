@@ -175,8 +175,7 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="view_change_location">Bheka noma ushintshe isizinda/indawo</string>
-  <string name="getting_location">Ukushicilelwa kwendawo</string>
-  <string name="get_location">Bhala Indawo</string>
+    <string name="get_location">Bhala Indawo</string>
   <string name="provider_disabled_error">Uxolo, indawo enikeziwe ayisebenzi</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -206,7 +205,6 @@
   <string name="change_view">Shintsha indlela okubukakala ngayo</string>
   <string name="show_sent_and_unsent_forms">Bonisa amaFomu asethunyeliwe kanye namaFomu angakathunyelwa</string>
   <string name="show_unsent_forms">Bonisa amaFomu angakathunyelwa</string>
-  <string name="notification_error">Iphutha likhombisa umbiko wokwazisa</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

@@ -103,12 +103,6 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.NotificationActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-        <activity
             android:name=".activities.DrawActivity"
             android:screenOrientation="landscape" />
         <activity
@@ -139,10 +133,6 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.ViewOnlyFormHierarchyActivity" />
         <activity
             android:name="org.odk.collect.geo.GeoPointActivity"
-            android:theme="@style/Theme.Collect"
-            tools:replace="android:theme" />
-        <activity
-            android:name="org.odk.collect.geo.GeoPointActivityNew"
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme" />
         <activity

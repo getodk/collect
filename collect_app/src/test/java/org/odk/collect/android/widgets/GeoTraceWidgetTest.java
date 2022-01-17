@@ -177,7 +177,7 @@ public class GeoTraceWidgetTest {
         when(mapConfigurator.isAvailable(widget.getContext())).thenReturn(false);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester, never()).requestGeoTrace(widget.getContext(), prompt, "",  waitingForDataRegistry);
+        verify(geoDataRequester, never()).requestGeoTrace(prompt, "",  waitingForDataRegistry);
         verify(mapConfigurator).showUnavailableMessage(widget.getContext());
     }
 
@@ -187,7 +187,7 @@ public class GeoTraceWidgetTest {
         GeoTraceWidget widget = createWidget(prompt);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class GeoTraceWidgetTest {
         widget.clearAnswer();
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, "", waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoTrace(prompt, "", waitingForDataRegistry);
     }
 
     @Test
@@ -207,7 +207,7 @@ public class GeoTraceWidgetTest {
         widget.setData(answer);
         widget.binding.simpleButton.performClick();
 
-        verify(geoDataRequester).requestGeoTrace(widget.getContext(), prompt, answer, waitingForDataRegistry);
+        verify(geoDataRequester).requestGeoTrace(prompt, answer, waitingForDataRegistry);
     }
 
     private GeoTraceWidget createWidget(FormEntryPrompt prompt) {

@@ -242,13 +242,11 @@
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="view_change_location">दृश्य किंवा स्थान बदला</string>
-  <string name="getting_location">स्थान लोड करत आहे</string>
-  <string name="get_location">स्थान रेकॉर्ड</string>
+    <string name="get_location">स्थान रेकॉर्ड</string>
   <string name="provider_disabled_error">क्षमस्व, स्थान प्रदाता अक्षम केले आहेत!</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">जिओ पॉईंट जतन करा</string>
   <string name="get_point">जिओ पॉईंट प्रारंभ करा</string>
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
@@ -298,7 +296,6 @@
   <string name="show_sent_and_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
   <string name="show_unsent_forms">पाठवलेले आणि रद्द केलेले फॉर्म दर्शवा</string>
   <string name="send_in_progress">पार्श्वभूमी पाठविणे चालू आहे, कृपया लवकरच पुन्हा प्रयत्न करा</string>
-  <string name="notification_error">सूचना मजकूर प्रदर्शित करताना त्रुटी</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

@@ -225,8 +225,7 @@
   <string name="satellite">Satelit</string>
   <string name="view_change_location">Poglej ali spremeni lokacijo</string>
   <string name="change_location">Spremeni lokacijo</string>
-  <string name="getting_location">Nalagam lokacijo</string>
-  <string name="get_location">Zapiši lokacijo</string>
+    <string name="get_location">Zapiši lokacijo</string>
   <string name="provider_disabled_error">Ponudniki lociranja so onemogočeni!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -269,9 +268,6 @@
   <string name="show_unsent_forms">Pokaži neposlane obrazce</string>
   <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
   <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
-  <string name="odk_auto_note">Rezultati ODK samodejnega pošiljanja</string>
-  <string name="odk_auto_download_notification_title">Rezultati ODK samodejnega prenosa</string>
-  <string name="notification_error">Napaka pri prikazu obvestila</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -475,7 +471,6 @@
   <string name="do_not_exit">Prekini</string>
   <string name="canceling">Prekinjam</string>
   <string name="success">Uspešno</string>
-  <string name="failures">Neuspehi</string>
   <string name="error_occured">Nastala je napaka</string>
   <string name="please_wait">Malo počakaj, prosim.</string>
   <string name="please_wait_long">Počakaj. To lahko traja nekaj minut.</string>

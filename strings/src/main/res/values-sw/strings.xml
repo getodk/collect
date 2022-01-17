@@ -342,14 +342,11 @@
   <string name="view_change_location">Tazama au badilisha eneo</string>
   <string name="change_location">Badilisha eneo</string>
   <string name="record_geopoint">Rekodi pointi</string>
-  <string name="getting_location">Inatafuta mahali</string>
-  <string name="get_location">Rekodi mahali</string>
+    <string name="get_location">Rekodi mahali</string>
   <string name="provider_disabled_error">Samahani, kionesha mahali hakijawezeshwa!</string>
   <string name="gps_result">Latitude: %1$s \nLongitude: %2$s \nUrefumwambao:%3$s m\nUsahihi: %4$s m</string>
-  <string name="location_metadata">Satelite zipo: %1$d/24\n\nMuda umepita: %2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Hifadhi geopoint</string>
   <string name="get_point">Anza geopoint</string>
   <string name="geopoint_view_read_only">Tazama geopoint</string>
   <string name="get_shape">Anza umbo la kijografia</string>
@@ -412,9 +409,6 @@
   <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
   <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
-  <string name="odk_auto_note">Majibu ya ODK yanajituma yenyewe</string>
-  <string name="odk_auto_download_notification_title">Majibu ya ODK yaliyo jipakuwa yenyewe</string>
-  <string name="notification_error">Kosa linaonesha ujumbe wa maandishi</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -706,7 +700,6 @@
   <string name="do_not_exit">Sitisha</string>
   <string name="canceling">Inasitishwa</string>
   <string name="success">Mafanikio</string>
-  <string name="failures">Zimeshindikana</string>
   <string name="error_occured">Kosa limetokea</string>
   <string name="please_wait">Tafadhali subiri kidogo.</string>
   <string name="please_wait_long">Tafadhali subiri. Hii itachukua dakika chache.</string>

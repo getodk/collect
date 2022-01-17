@@ -23,7 +23,7 @@ import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.FileUtils
 import org.odk.collect.android.support.ResetStateRule
 import org.odk.collect.android.support.TestRuleChain
-import org.odk.collect.android.support.actions.NestedScrollToAction.nestedScrollTo
+import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.testshared.RecordedIntentsRule
 import java.io.File
 

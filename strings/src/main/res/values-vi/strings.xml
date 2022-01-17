@@ -160,8 +160,7 @@
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-  <string name="getting_location">Tải địa điểm</string>
-  <string name="get_location">Ghi lại vị trí</string>
+    <string name="get_location">Ghi lại vị trí</string>
   <string name="provider_disabled_error">Xin lỗi, Khả năng xác định vị trí không được kích hoạt!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->

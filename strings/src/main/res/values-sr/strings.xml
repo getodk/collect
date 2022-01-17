@@ -333,11 +333,9 @@
   <string name="view_change_location">Vidi ili promijeni lokaciju</string>
   <string name="change_location">Promijeni lokaciju</string>
   <string name="record_geopoint">Zabilježi lokaciju</string>
-  <string name="getting_location">Učitavam lokaciju</string>
-  <string name="get_location">Zabilježi lokaciju</string>
+    <string name="get_location">Zabilježi lokaciju</string>
   <string name="provider_disabled_error">Pronalaženje lokacije je isključeno!</string>
   <string name="gps_result">Geografska širina:%1$s\nGeografska dužina: %2$s\nVisina: %3$sm\nPreciznost: %4$sm</string>
-  <string name="location_metadata">Sateliti dostupni: %1$d/24\n\n proteklo vrijeme: %2$s</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
   <string name="location_providers_disabled_dialog_message">Ovaj formular želi da prati vašu lokaciju ali provajderi lokacije su isključeni. Molim uključite ih u podešavanjima Androida.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -346,7 +344,6 @@
   <string name="track_location">Prati lokaciju</string>
   <string name="background_location_disabled">Ovaj formular želi da prati vašu lokaciju ali je ona isključena. Molim uključite lokaciju u %1$s meniju iznad.</string>
   <string name="background_location_enabled">Ovaj formular bilježi tvoju lokaciju. Možeš onemogućiti praćenje u %1$s meniju iznad.</string>
-  <string name="save_point">Sačuvaj GeoPoint</string>
   <string name="get_point">Započni GeoPoint</string>
   <string name="geopoint_view_read_only">Vidi GeoPoint</string>
   <string name="get_shape">Započni GeoShape</string>
@@ -428,9 +425,6 @@
   <string name="media_upload_error">Greška prilikom otpreme medija fajla koji ne postoji: %1$s</string>
   <string name="send_in_progress">Otpremanje u pozadini je u toku, molim pokušajte za koji trenutak</string>
   <string name="odk_permissions_fail">ODK automatsko otpremanje nije uspjelo, molim da se uvjerite da ste odobrili sve neophodne pristupe</string>
-  <string name="odk_auto_note">Rezultati ODK auto-otpreme</string>
-  <string name="odk_auto_download_notification_title">Rezultati ODK auto-preuzimanja</string>
-  <string name="notification_error">Greška u prikazu teksta obavještenja</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -724,7 +718,6 @@
   <string name="canceling">Odustajem</string>
   <string name="notification_channel_name">Opšta obavještenja</string>
   <string name="success">Uspjeh</string>
-  <string name="failures">Neuspijeh</string>
   <string name="error_occured">Greška</string>
   <string name="please_wait">Molim sačekajte par trenutaka</string>
   <string name="please_wait_long">Molim sačekajte. Ovo može potrajati nekoliko minuta.</string>

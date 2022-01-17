@@ -43,7 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
@@ -133,7 +133,7 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
                                 DisplayMetrics metrics = context.getResources().getDisplayMetrics();
                                 int screenWidth = metrics.widthPixels;
                                 int screenHeight = metrics.heightPixels;
-                                b = FileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
+                                b = ImageFileUtils.getBitmapScaledToDisplay(imageFile, screenHeight, screenWidth);
                             } catch (OutOfMemoryError e) {
                                 errorMsg = "ERROR: " + e.getMessage();
                             }

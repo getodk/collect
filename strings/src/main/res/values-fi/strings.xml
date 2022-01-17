@@ -392,11 +392,9 @@
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
-  <string name="getting_location">Lataussijainti</string>
-  <string name="get_location">Tallenna sijainti</string>
+    <string name="get_location">Tallenna sijainti</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
-  <string name="location_metadata">Käytettävissä sateliitteja: %1$d/24\n\nKulunut aika: %2$s</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -405,7 +403,6 @@
   <string name="track_location">Sijainnin seuranta</string>
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
-  <string name="save_point">Tallenna GeoPoint</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="geoshape_view_read_only">Katso GeoShape</string>
@@ -496,9 +493,6 @@
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
-  <string name="odk_auto_note">ODK automaattisen lähetyksen tulokset</string>
-  <string name="odk_auto_download_notification_title">ODK automaattisen lataamisen tulokset</string>
-  <string name="notification_error">Virhe näyttäessä ilmoitustekstiä</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -854,7 +848,6 @@
   <string name="canceling">Perutaan</string>
   <string name="notification_channel_name">Yleiset ilmoitukset</string>
   <string name="success">Onnistui</string>
-  <string name="failures">Epäonnistuneet</string>
   <string name="error_occured">Virhe</string>
   <string name="please_wait">Odota hetki.</string>
   <string name="please_wait_long">Ole hyvä ja odota. Tämä voi kestää muutaman minuutin.</string>

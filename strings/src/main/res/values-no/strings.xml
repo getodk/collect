@@ -196,8 +196,7 @@
     tile caches, and are not shown in the UI.-->
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
   <string name="view_change_location">Vis eller endre plassering</string>
-  <string name="getting_location">Henter posisjon</string>
-  <string name="get_location">Registrer posisjon</string>
+    <string name="get_location">Registrer posisjon</string>
   <string name="provider_disabled_error">Beklager, stedstjenesten er deaktivert!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -228,7 +227,6 @@
   <string name="show_sent_and_unsent_forms">Sendte og usendte skjemaer</string>
   <string name="show_unsent_forms">Usendte skjemaer</string>
   <string name="send_in_progress">Bakgrunnssending kjører, vennligst prøv igjen senere</string>
-  <string name="notification_error">Feil ved visning av kvitteringstekst</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

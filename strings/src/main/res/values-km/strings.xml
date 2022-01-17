@@ -325,16 +325,13 @@
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="view_change_location">មើល ឬផ្លាស់ប្តូរទីតាំង</string>
   <string name="change_location">ផ្លាស់ប្តូរ​ទីតាំង</string>
-  <string name="getting_location">កំពុងផ្ទុកទីតាំង</string>
-  <string name="get_location">ចាប់​យក​ទីតាំង</string>
+    <string name="get_location">ចាប់​យក​ទីតាំង</string>
   <string name="provider_disabled_error">សុំទោស, សេវាចាប់យកទីតាំងត្រូវបានបិទ</string>
   <string name="gps_result">រយៈទទឹង: %1$s\nរយៈបណ្ដោយ: %2$s\nរយៈកំពស់: %3$sm\nភាពត្រឹមត្រូវ: %4$sm</string>
-  <string name="location_metadata">ផ្កាយរណបមាន៖ %1$d/24\n\nពេលវេលាកន្លងទៅ៖ %2$s</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">ទៅកាន់ការកំណត់</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="track_location">តាមដានទីតាំង</string>
-  <string name="save_point">រក្សា GeoPoint</string>
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>
@@ -389,7 +386,6 @@
   <string name="show_unsent_forms">បង្ហាញសំណុំ​បែប​បទដែលមិនទាន់បានផ្ញើចេញ</string>
   <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
-  <string name="notification_error">បង្ហាញសារជួនដំណឹងដែលមានបញ្ហា</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -677,7 +673,6 @@
   <string name="canceling">កំពុង​បោះបង់</string>
   <string name="notification_channel_name">ការជូនដំណឹង​ជាទូទៅ</string>
   <string name="success">ជោគជ័យ</string>
-  <string name="failures">បរាជ័យ</string>
   <string name="error_occured">មានបញ្ហាបានកើតឡើង</string>
   <string name="please_wait">សូមរង់ចាំមួយភ្លែត</string>
   <string name="please_wait_long">សូមរងចាំ. វាអាចចំណាយរយះពេលពីរបីនាទី.</string>

@@ -231,13 +231,11 @@
   <string name="satellite">Satelliit</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="view_change_location">Vaata või muuda asukohta</string>
-  <string name="getting_location">Asukoha laadimine</string>
-  <string name="get_location">Salvesta asukoht</string>
+    <string name="get_location">Salvesta asukoht</string>
   <string name="provider_disabled_error">Kahjuks on asukoha küsimine maha keeratud!</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Salvesta asukohapunkt</string>
   <string name="get_point">Loo asukohapunkt</string>
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
   <string name="get_shape">Loo polügoon</string>
@@ -286,7 +284,6 @@
   <string name="show_sent_and_unsent_forms">Näita saadetud ja saatmata vorme</string>
   <string name="show_unsent_forms">Näita </string>
   <string name="send_in_progress">Taustal jookseb andmete saatmine. Palun proovige varsti uuesti</string>
-  <string name="notification_error">Viga teate näitamisel </string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

@@ -205,12 +205,10 @@
   <string name="satellite">Satelit</string>
   <string name="google_play_services_error_occured">Nu am putut accesa Google Maps. Aveți instalat Google Play Services?</string>
   <string name="view_change_location">Vizualizați sau modificați locația</string>
-  <string name="getting_location">Încărcare locație</string>
-  <string name="get_location">Înregistrați coordonatele</string>
+    <string name="get_location">Înregistrați coordonatele</string>
   <string name="provider_disabled_error">Ne pare rău, localizarea este dezactivată!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Salvați GeoPoint</string>
   <string name="get_point">Start GeoPoint</string>
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>
@@ -249,7 +247,6 @@
   <string name="show_sent_and_unsent_forms">Afișați formularele trimise și netrimise</string>
   <string name="show_unsent_forms">Doar formularele netrimise</string>
   <string name="send_in_progress">Trimiterea în fundal rulează, vă rugăm să încercați din nou mai târziu.</string>
-  <string name="notification_error">Eroare la afișarea textului notificării</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

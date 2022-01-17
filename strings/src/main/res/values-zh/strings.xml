@@ -177,8 +177,7 @@
     tile caches, and are not shown in the UI.-->
   <string name="view_change_location">查看或修改位置</string>
   <string name="change_location">更改地点</string>
-  <string name="getting_location">正在获取位置</string>
-  <string name="get_location">获取位置</string>
+    <string name="get_location">获取位置</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->

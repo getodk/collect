@@ -196,8 +196,7 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="view_change_location">Vertoon of Verander Posisie</string>
-  <string name="getting_location">Besig om posisie te laai</string>
-  <string name="get_location">Stoor Posisie</string>
+    <string name="get_location">Stoor Posisie</string>
   <string name="provider_disabled_error">Jammer, Posisie-verskaffers is afgeskakel!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -227,7 +226,6 @@
   <string name="change_view">Verander Vertoning</string>
   <string name="show_sent_and_unsent_forms">Wys Gestuurde en Ongestuurde Vorms</string>
   <string name="show_unsent_forms">Wys Ongestuurde Vorms</string>
-  <string name="notification_error">Fout met vertoon van kennisgewing teks</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

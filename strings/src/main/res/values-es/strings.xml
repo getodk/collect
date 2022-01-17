@@ -392,11 +392,9 @@
   <string name="record_geopoint">Registrando un punto</string>
   <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="location_provider">Proveedor de Ubicación: %s</string>
-  <string name="getting_location">Cargando la Ubicación</string>
-  <string name="get_location">Obtener localización</string>
+    <string name="get_location">Obtener localización</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
-  <string name="location_metadata">Satélites disponibles: %1$d/24\n\nTiempo transcurrido: %2$s</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -405,7 +403,6 @@
   <string name="track_location">Rastrear ubicación</string>
   <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
   <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
-  <string name="save_point">Guardar Ubicación</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
   <string name="geoshape_view_read_only">Ver GeoArea</string>
@@ -496,9 +493,6 @@
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
-  <string name="odk_auto_note">ODK resultados de auto-envío</string>
-  <string name="odk_auto_download_notification_title">ODK resultados de auto-descarga</string>
-  <string name="notification_error">Error al mostrar texto de la notificación</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -854,7 +848,6 @@
   <string name="canceling">Cancelando</string>
   <string name="notification_channel_name">Notificaciones generales</string>
   <string name="success">Correcto</string>
-  <string name="failures">Fallas</string>
   <string name="error_occured">Se ha producido un error</string>
   <string name="please_wait">Por favor, espere un momento.</string>
   <string name="please_wait_long">Por favor espere. Esto podria demorarse unos minutos.</string>

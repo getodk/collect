@@ -61,9 +61,9 @@ class FormsUpdater(
                         TranslationHandler.getString(context, R.string.failure)
                     )
 
-                    notifier.onUpdatesDownloaded(results)
+                    notifier.onUpdatesDownloaded(results, projectId)
                 } else {
-                    notifier.onUpdatesAvailable(updatedForms)
+                    notifier.onUpdatesAvailable(updatedForms, projectId)
                 }
             }
 
@@ -98,11 +98,11 @@ class FormsUpdater(
                 val exception = try {
                     serverFormsSynchronizer.synchronize()
                     syncStatusAppState.finishSync(projectId, null)
-                    notifier.onSync(null)
+                    notifier.onSync(null, projectId)
                     null
                 } catch (e: FormSourceException) {
                     syncStatusAppState.finishSync(projectId, e)
-                    notifier.onSync(e)
+                    notifier.onSync(e, projectId)
                     e
                 }
 

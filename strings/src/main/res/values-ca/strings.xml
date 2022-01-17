@@ -225,13 +225,11 @@
   <string name="satellite">Satel·lit</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="view_change_location">Veure o modificar posició</string>
-  <string name="getting_location">Carregant Localització</string>
-  <string name="get_location">Enregistrar Localització</string>
+    <string name="get_location">Enregistrar Localització</string>
   <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="save_point">Desar posició gps</string>
   <string name="get_point">Comença localització gps</string>
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
@@ -276,7 +274,6 @@
   <string name="show_sent_and_unsent_forms">Formularis enviats i pendents</string>
   <string name="show_unsent_forms">Nomes Formularis pendents d\'enviar</string>
   <string name="send_in_progress">Enviament funcionant, si us plau, re-intenteu en un moment.</string>
-  <string name="notification_error">Error mostrant notificació</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

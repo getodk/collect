@@ -53,7 +53,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.simpleButton.setOnClickListener(v ->
-                geoDataRequester.requestGeoShape(context, prompt, getAnswerText(), waitingForDataRegistry));
+                geoDataRequester.requestGeoShape(prompt, getAnswerText(), waitingForDataRegistry));
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);

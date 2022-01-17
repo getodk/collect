@@ -389,11 +389,9 @@
   <string name="record_geopoint">سجل نقطة</string>
   <string name="location_accuracy">الدقة: %1$s متر </string>
   <string name="location_provider">مزود خدمة تحديد الموقع: %s</string>
-  <string name="getting_location">تحميل الموقع</string>
-  <string name="get_location">تسجيل الموقع</string>
+    <string name="get_location">تسجيل الموقع</string>
   <string name="provider_disabled_error">عذراً، مزود خدمة الموقع معطّل.</string>
   <string name="gps_result">خط العرض: %1$s\n خط الطول : %2$s\nالارتفاع : %3$s\nالدقة : %4$s متر</string>
-  <string name="location_metadata">الأقمار الصناعية المتاحة: %1$d\24 \n\nالوقت المنقضي: %2$s</string>
   <string name="google_play_services_not_available">تريد هذه الاستمارة تتبع موقعك ولكن خدمات Google Play غير متوفرة.</string>
   <string name="location_providers_disabled_dialog_message">تريد هذه الاستمارة تتبع موقعك ولكن موفري الموقع معطلين. يرجى التمكين في إعدادات أندرويد.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -402,7 +400,6 @@
   <string name="track_location">تتبع الموقع</string>
   <string name="background_location_disabled">تريد هذه الاستمارة تتبع موقعك ولكن تم تعطيل التتبع. يرجى التمكين في القائمة %1$s أعلاه.</string>
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
-  <string name="save_point">حفظ النقطة</string>
   <string name="get_point">البدء بتحديد النقطة</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
   <string name="geoshape_view_read_only">عرض GeoShape</string>
@@ -502,9 +499,6 @@
   <string name="media_upload_error">فشل في تحميل ملف الوسائط المتعددة الغير موجود: %1$s</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
   <string name="odk_permissions_fail">فشل إذن ODK للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
-  <string name="odk_auto_note">ODK يرسل النتائج تلقائيا</string>
-  <string name="odk_auto_download_notification_title">ODK ينزل النتائج تلقائيا</string>
-  <string name="notification_error">خطأ في عرض اشعار النص</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -825,7 +819,6 @@
   <string name="canceling">جاري الإلغاء</string>
   <string name="notification_channel_name">الإشعارات العامة</string>
   <string name="success">نجاح</string>
-  <string name="failures">فشل</string>
   <string name="error_occured">حدث خطأ</string>
   <string name="please_wait">الرجاء الانتظار للحظات قليلة.</string>
   <string name="please_wait_long">الرجاء الانتظار. قد يتطلّب ذلك بضع دقائق.</string>

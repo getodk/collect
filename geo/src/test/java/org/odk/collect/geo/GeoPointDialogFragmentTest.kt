@@ -19,10 +19,12 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.DialogFragmentTest.launchDialogFragment
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointDialogFragmentTest {
@@ -31,10 +33,12 @@ class GeoPointDialogFragmentTest {
     private val scheduler = FakeScheduler()
 
     private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
-    private val timeElapsedLiveData: MutableLiveData<Long> = MutableLiveData(0)
+    private val timeElapsedLiveData: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
+    private val satellitesLiveData = MutableNonNullLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
         on { currentAccuracy } doReturn currentAccuracyLiveData
         on { timeElapsed } doReturn timeElapsedLiveData
+        on { satellites } doReturn satellitesLiveData
     }
 
     @Before
@@ -73,7 +77,7 @@ class GeoPointDialogFragmentTest {
                     "5m"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
     }
@@ -84,11 +88,11 @@ class GeoPointDialogFragmentTest {
 
         currentAccuracyLiveData.value = 50.2f
         scheduler.runForeground()
-        onViewInDialog(withText("50.2m")).check(matches(isDisplayed()))
+        onViewInDialog(withText("50.2m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
 
         currentAccuracyLiveData.value = 15.65f
         scheduler.runForeground()
-        onViewInDialog(withText("15.65m")).check(matches(isDisplayed()))
+        onViewInDialog(withText("15.65m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
     }
 
     @Test
@@ -104,7 +108,7 @@ class GeoPointDialogFragmentTest {
                     "00:00"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
 
@@ -117,9 +121,24 @@ class GeoPointDialogFragmentTest {
                     "01:02"
                 )
             )
-        ).check(
+        ).perform(nestedScrollTo()).check(
             matches(isDisplayed())
         )
+    }
+
+    @Test
+    fun `shows and updates satellites`() {
+        launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 0)))
+            .perform(nestedScrollTo())
+            .check(matches(isDisplayed()))
+
+        satellitesLiveData.value = 5
+
+        onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 5)))
+            .perform(nestedScrollTo())
+            .check(matches(isDisplayed()))
     }
 
     @Test

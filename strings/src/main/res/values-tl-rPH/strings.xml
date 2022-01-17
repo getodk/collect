@@ -46,8 +46,7 @@
   <string name="file_missing">Talaksa: %s ay nawawala.</string>
   <string name="finished_disk_scan">Tapos na ang pag-scan. Naka-karga na ang lahat ng forms.</string>
   <string name="forms">Mga Blangkong Form</string>
-  <string name="getting_location">Sini-set ang Kinalalagyan</string>
-  <string name="get_barcode">Kunin ang Barcode</string>
+    <string name="get_barcode">Kunin ang Barcode</string>
   <string name="get_forms">Kumuha ng Blangkong Form</string>
   <string name="get_location">Itala ang Kinalalagyan</string>
   <string name="provider_disabled_error">Paumanhin, ang mga provider ng Kinalalagyan ay hindi pinagana!</string>

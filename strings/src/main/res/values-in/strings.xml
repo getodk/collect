@@ -392,11 +392,9 @@
   <string name="record_geopoint">Rekam titik</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="location_provider">Lokasi penyedia jasa: %s</string>
-  <string name="getting_location">Memuat Lokasi</string>
-  <string name="get_location">Rekam Lokasi</string>
+    <string name="get_location">Rekam Lokasi</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
-  <string name="location_metadata">Satelit tersedia: %1$d /24\n\nWaktu berlalu: %2$s</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
   <string name="location_providers_disabled_dialog_message">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi layanan lokasi tidak aktif. Mohon aktifkan terlebih dahulu di pengaturan Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -405,7 +403,6 @@
   <string name="track_location">Rekam pergerakan lokasi</string>
   <string name="background_location_disabled">Formulir ini hendak melacak lokasi Anda, tetapi pelacakan lokasi tidak aktif. Mohon aktifkan melalui menu %1$s di atas.</string>
   <string name="background_location_enabled">Formulir ini melacak lokasi Anda. Anda dapat menonaktifkan pelacakan melalui menu %1$s di atas.</string>
-  <string name="save_point">Simpan GeoPoint</string>
   <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Lihat GeoPoint</string>
   <string name="geoshape_view_read_only">Lihat GeoShape</string>
@@ -493,9 +490,6 @@
   <string name="media_upload_error">Tidak berhasil mengunggah berkas media yang tidak ditemukan: %1$s</string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, mohon coba beberapa saat lagi.</string>
   <string name="odk_permissions_fail">Izin pengiriman otomatis tidak berhasil, mohon pastikan semua izin yang dibutuhkan telah diberikan.</string>
-  <string name="odk_auto_note">Hasil pengiriman otomatis ODK</string>
-  <string name="odk_auto_download_notification_title">Hasil unduh otomatis ODK</string>
-  <string name="notification_error">Kesalahan menampilkan teks notifikasi.</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -850,7 +844,6 @@
   <string name="canceling">Membatalkan</string>
   <string name="notification_channel_name">Pemberitahuan umum</string>
   <string name="success">Berhasil</string>
-  <string name="failures">Tidak Berhasil</string>
   <string name="error_occured">Terjadi Kesalahan</string>
   <string name="please_wait">Mohon tunggu sebentar…</string>
   <string name="please_wait_long">Mohon tunggu. Proses ini membutuhkan waktu beberapa menit.</string>

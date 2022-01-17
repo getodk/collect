@@ -142,6 +142,17 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
+    public MainMenuPage enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload() {
+        return openProjectSettingsDialog()
+                .clickSettings()
+                .clickFormManagement()
+                .clickUpdateForms()
+                .clickOption(R.string.previously_downloaded_only)
+                .clickOnString(R.string.automatic_download)
+                .pressBack(new ProjectSettingsPage())
+                .pressBack(new MainMenuPage());
+    }
+
     public MainMenuPage enableMatchExactly() {
         return openProjectSettingsDialog()
                 .clickSettings()
@@ -198,8 +209,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public ViewSentFormPage clickViewSentForm(int formCount) {
         String text = formCount < 1
-                ? getTranslatedString(R.string.view_sent_forms_button)
-                .replace(" (%s)", "")
+                ? getTranslatedString(R.string.view_sent_forms)
                 : getTranslatedString(R.string.view_sent_forms_button, formCount);
         onView(withText(text)).perform(click());
         return new ViewSentFormPage().assertOnPage();

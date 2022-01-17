@@ -366,11 +366,9 @@
   <string name="view_change_location">Obejrzyj lub Zmień Lokalizację</string>
   <string name="change_location">Zmień Lokalizację</string>
   <string name="record_geopoint">Zapisz punkt</string>
-  <string name="getting_location">Wczytywanie Lokalizacji</string>
-  <string name="get_location">Zapisz Lokalizację</string>
+    <string name="get_location">Zapisz Lokalizację</string>
   <string name="provider_disabled_error">Przykro mi, dostawcy usługi Lokalizacji są niedostępni.</string>
   <string name="gps_result">Szerokość: %1$s\nDługość: %2$s\nWzniesienie: %3$sm\nDokładność: %4$sm</string>
-  <string name="location_metadata">Dostępne satelity: %1$d/24\n\nUpłynęło: %2$s</string>
   <string name="google_play_services_not_available">Ten formularz chce śledzić twoją lokalizację, ale usługi Google Play nie są dostępne.</string>
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -379,7 +377,6 @@
   <string name="track_location">Śledź lokalizację</string>
   <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
   <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
-  <string name="save_point">Zapisz GeoPoint</string>
   <string name="get_point">Zacznij GeoPoint</string>
   <string name="geopoint_view_read_only">Pokaż GeoPoint</string>
   <string name="get_shape">Zacznij GeoShape</string>
@@ -466,9 +463,6 @@
   <string name="media_upload_error">Nie można załadować multimediów, plik nie istnieje: %1$s</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
   <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania ODK. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
-  <string name="odk_auto_note">Wyniki automatycznego wysyłania ODK</string>
-  <string name="odk_auto_download_notification_title">Wyniki automatycznego pobierania ODK</string>
-  <string name="notification_error">Błąd przy wyświetlaniu tekstu powiadomienia</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -763,7 +757,6 @@
   <string name="canceling">Anulowanie</string>
   <string name="notification_channel_name">Ogólne powiadomienia</string>
   <string name="success">Sukces</string>
-  <string name="failures">Niepowodzenia</string>
   <string name="error_occured">Wystąpił Błąd</string>
   <string name="please_wait">Poczekaj kilka chwil.</string>
   <string name="please_wait_long">Poczekaj. To może zająć kilka minut.</string>

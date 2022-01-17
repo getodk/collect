@@ -197,8 +197,7 @@
   <string name="streets">ქუჩები</string>
   <string name="view_change_location">მდებარეობის ნახვა ან შეცვლა</string>
   <string name="change_location">ადგილმდებარეობის შეცვლა</string>
-  <string name="getting_location">ადგილმდებარეობის ჩატვირთვა</string>
-  <string name="get_location">ადგილმდებარეობის ჩანიშვნა</string>
+    <string name="get_location">ადგილმდებარეობის ჩანიშვნა</string>
   <string name="provider_disabled_error">უკაცრავად, მდებარეობის მიმღები არ არის გააქტიურებული!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -233,7 +232,6 @@
   <string name="change_view">ხედის შეცვლა</string>
   <string name="show_sent_and_unsent_forms">გაგზავნილი და გაუგზავნელი ფორმები</string>
   <string name="show_unsent_forms">მხოლოდ გაუგზავნელი ფორმები</string>
-  <string name="notification_error">შეცდომა შეტყობინების ტექსტის ჩვენებისას</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -398,7 +396,6 @@
   <string name="do_not_exit">გაუქმება</string>
   <string name="canceling">მიმდინარეობს გაუქმება</string>
   <string name="success">წარმატება</string>
-  <string name="failures">წარუმატებლობები</string>
   <string name="error_occured">მოხდა შეცდომა</string>
   <string name="please_wait">გთხოვთ, დაიცადოთ.</string>
   <string name="please_wait_long">გთხოვთ, დაიცადოთ; ოპერაციის შესრულებას შეიძლება რამდენიმე წუთი დაჭირდეს</string>

@@ -7,6 +7,7 @@ import com.google.zxing.WriterException;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.ImageFileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
 
             Timber.i("Saving QR Code to disk... : %s", getQRCodeFilepath());
-            FileUtils.saveBitmapToFile(bmp, getQRCodeFilepath());
+            ImageFileUtils.saveBitmapToFile(bmp, getQRCodeFilepath());
 
             FileUtils.write(mdCacheFile, messageDigest);
             Timber.i("Updated %s file contents", SETTINGS_MD5_FILE);

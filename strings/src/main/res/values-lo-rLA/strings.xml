@@ -193,8 +193,7 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="view_change_location">ເບີ່ງ ຫຼື ປ່ຽນຈຸດ​ທີ່​ຕັ້ງ</string>
-  <string name="getting_location">ກຳລັງຊອກຫາຈຸດທີ່ຕັ້ງ</string>
-  <string name="get_location">ບັນທືກຈຸດ GPS ຂອງທີ່ຕັ້ງ</string>
+    <string name="get_location">ບັນທືກຈຸດ GPS ຂອງທີ່ຕັ້ງ</string>
   <string name="provider_disabled_error">ຄຳສັ່ງບັນທຶກຈຸດທີ່ຕັ້ງ GPS ຖືກປິດໃຫ້ໃຊ້ງານ</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -225,7 +224,6 @@
   <string name="show_sent_and_unsent_forms">ສະແດງແບບຟອມທີ່ສົ່ງແລ້ວ ແລະ ຍັງບໍ່ໄດ້ສົ່ງ
 </string>
   <string name="show_unsent_forms">ສະແດງແບບຟອມທີ່ຍັງບໍ່ທັນໄດ້ສົ່ງ</string>
-  <string name="notification_error">ຂໍ້ຜິດພາດສະແດງຂໍ້ຄວາມແຈ້ງເຕືອນ</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->

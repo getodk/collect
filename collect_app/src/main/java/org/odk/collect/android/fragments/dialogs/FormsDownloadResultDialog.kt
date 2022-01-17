@@ -7,26 +7,27 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
+import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
 import org.odk.collect.errors.ErrorActivity
-import org.odk.collect.errors.ErrorItem
-import java.util.ArrayList
+import java.io.Serializable
 
 class FormsDownloadResultDialog : DialogFragment() {
-    private lateinit var failures: ArrayList<ErrorItem>
-    private var numberOfAllForms = 0
+    private lateinit var result: Map<ServerFormDetails, String>
 
     var listener: FormDownloadResultDialogListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        DaggerUtils.getComponent(context).inject(this)
         if (context is FormDownloadResultDialogListener) {
             listener = context
         }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        failures = arguments?.getSerializable(ARG_FAILURES) as ArrayList<ErrorItem>
-        numberOfAllForms = arguments?.getInt(ARG_NUMBER_OF_ALL_FORMS)!!
+        result = arguments?.getSerializable(ARG_RESULT) as Map<ServerFormDetails, String>
 
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())
@@ -34,10 +35,10 @@ class FormsDownloadResultDialog : DialogFragment() {
                 listener?.onCloseDownloadingResult()
             }
 
-        if (failures.isNotEmpty()) {
+        if (!FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
                 val intent = Intent(context, ErrorActivity::class.java).apply {
-                    putExtra(ErrorActivity.EXTRA_ERRORS, failures)
+                    putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, requireContext()) as Serializable)
                 }
                 startActivity(intent)
                 listener?.onCloseDownloadingResult()
@@ -48,10 +49,10 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     private fun getMessage(): String {
-        return if (failures.isEmpty()) {
+        return if (FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
             getString(R.string.all_downloads_succeeded)
         } else {
-            getString(R.string.some_downloads_failed, failures.size.toString(), numberOfAllForms.toString())
+            getString(R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result, requireContext()).toString(), result.size.toString())
         }
     }
 
@@ -60,7 +61,6 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     companion object {
-        const val ARG_FAILURES = "FAILURES"
-        const val ARG_NUMBER_OF_ALL_FORMS = "NUMBER_OF_ALL_FORMS"
+        const val ARG_RESULT = "RESULT"
     }
 }
