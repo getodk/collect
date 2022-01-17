@@ -37,7 +37,8 @@ allprojects {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
         }
-        
+
+        // Local repo for dependencies that only existed in the defunct JCenter repo
         maven {
           url "${rootDir}/jcenter-local-m2"
         }
