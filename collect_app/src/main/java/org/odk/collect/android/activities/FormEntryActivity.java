@@ -383,7 +383,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             try {
                 new WebView(this);
             } catch (Exception | Error e) {
-                // ignored
+                // Don't crash if WebView not available
             }
         }
 
