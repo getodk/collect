@@ -8,11 +8,11 @@ buildscript {
         google()
 
         mavenCentral()
-        jcenter()
-
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+
+        jcenter() // Only use as fallback to everything else
     }
 
     dependencies {
@@ -32,7 +32,6 @@ allprojects {
         google()
 
         mavenCentral()
-        jcenter()
 
         maven { url 'https://oss.sonatype.org/content/groups/public' }
         maven { url 'https://jitpack.io' }
@@ -40,6 +39,8 @@ allprojects {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
         }
+
+        jcenter() // Only use as fallback to everything else
     }
 }
 
