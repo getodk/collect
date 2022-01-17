@@ -7,9 +7,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.Collections;
 
@@ -22,13 +20,13 @@ public class CascadingSelectWithNumberInHeaderTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule("numberInCSV.xml", Collections.singletonList("itemSets.csv")))
             .around(rule);
 
     @Test
     public void fillForm_ShouldFillFormWithNumberInCsvHeader() {
 
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("numberInCSV.xml", Collections.singletonList("itemSets.csv"))
                 .startBlankForm("numberInCSV")
                 .swipeToNextQuestion()
                 .clickOnText("Venda de animais")

@@ -11,10 +11,8 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 
 // Issue number NODK-211
@@ -27,14 +25,14 @@ public class SignatureWidgetTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"))
             .around(rule);
 
     @Test
     public void saveIgnoreDialog_ShouldUseBothOptions() {
 
         //TestCase1
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("All_widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
@@ -60,7 +58,8 @@ public class SignatureWidgetTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
 
         //TestCase2
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("All_widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")

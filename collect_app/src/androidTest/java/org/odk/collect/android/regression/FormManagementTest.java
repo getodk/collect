@@ -11,7 +11,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -27,15 +26,14 @@ public class FormManagementTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("OnePageFormValid2.xml"))
-            .around(new CopyFormRule("hints_textq.xml"))
             .around(rule);
 
     @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test
     public void validationUponSwipe_ShouldDisplay() {
         //TestCase7,8
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("OnePageFormValid2.xml")
                 .startBlankForm("OnePageFormValid")
                 .inputText("Bla")
                 .swipeToNextQuestionWithConstraintViolation("Response length must be between 5 and 15")
@@ -54,7 +52,8 @@ public class FormManagementTest {
     @Test
     public void guidanceForQuestion_ShouldDisplayAlways() {
         //TestCase10
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("hints_textq.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()
@@ -71,7 +70,8 @@ public class FormManagementTest {
     @Test
     public void guidanceForQuestion_ShouldBeCollapsed() {
         //TestCase11
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("hints_textq.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()

@@ -21,7 +21,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -36,13 +35,12 @@ public class EncryptedFormTest {
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(testDependencies)
-            .around(new CopyFormRule("encrypted.xml"))
-            .around(new CopyFormRule("encrypted-no-instanceID.xml"))
             .around(rule);
 
     @Test
     public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
         rule.startAtMainMenu()
+                .copyForm("encrypted.xml")
                 .startBlankForm("encrypted")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()
@@ -57,6 +55,7 @@ public class EncryptedFormTest {
     @Test
     public void instanceOfEncryptedForm_cantBeViewedAfterSending() {
         rule.startAtMainMenu()
+                .copyForm("encrypted.xml")
                 .setServer(testDependencies.server.getURL())
 
                 .startBlankForm("encrypted")
@@ -80,6 +79,7 @@ public class EncryptedFormTest {
     @Test
     public void instanceOfEncryptedFormWithoutInstanceID_failsFinalizationWithMessage() {
         rule.startAtMainMenu()
+                .copyForm("encrypted-no-instanceID.xml")
                 .startBlankForm("encrypted-no-instanceID")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()

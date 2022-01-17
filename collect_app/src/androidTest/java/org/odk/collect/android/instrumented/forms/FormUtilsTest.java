@@ -2,13 +2,14 @@ package org.odk.collect.android.instrumented.forms;
 
 import org.javarosa.core.reference.RootTranslator;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.utilities.FormUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
@@ -18,11 +19,18 @@ import java.util.List;
 
 public class FormUtilsTest {
     private static final String BASIC_FORM = "basic.xml";
+    private final CollectTestRule rule = new CollectTestRule();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(BASIC_FORM));
+            .around(rule);
+
+    @Before
+    public void setUp() {
+        rule.startAtFirstLaunch()
+                .copyForm(BASIC_FORM);
+    }
 
     /* Verify that each host string matches only a single root translator, allowing for them to
      be defined in any order. See: https://github.com/getodk/collect/issues/3334

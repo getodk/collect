@@ -11,7 +11,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -26,12 +25,12 @@ public class TriggerWidgetTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("Automated_guidance_hint_form.xml"))
             .around(rule);
 
     @Test
     public void guidanceIcons_ShouldBeAlwaysShown() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("Automated_guidance_hint_form.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()
@@ -48,7 +47,8 @@ public class TriggerWidgetTest {
 
     @Test
     public void guidanceIcons_ShouldBeCollapsed() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("Automated_guidance_hint_form.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()

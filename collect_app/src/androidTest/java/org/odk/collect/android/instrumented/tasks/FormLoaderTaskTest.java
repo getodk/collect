@@ -1,12 +1,13 @@
 package org.odk.collect.android.instrumented.tasks;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
 
@@ -20,6 +21,7 @@ import static org.hamcrest.Matchers.notNullValue;
 public class FormLoaderTaskTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
+    private final CollectTestRule rule = new CollectTestRule();
 
     private static final String SECONDARY_INSTANCE_EXTERNAL_CSV_FORM = "external_csv_form.xml";
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_FORM = "simple-search-external-csv.xml";
@@ -29,9 +31,14 @@ public class FormLoaderTaskTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM,
-                    Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv")))
-            .around(new CopyFormRule(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE)));
+            .around(rule);
+
+    @Before
+    public void setUp() {
+        rule.startAtFirstLaunch()
+                .copyForm(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM, Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv"))
+                .copyForm(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE));
+    }
 
     // Validate the use of CSV files as secondary instances accessed through "jr://file-csv"
     @Test

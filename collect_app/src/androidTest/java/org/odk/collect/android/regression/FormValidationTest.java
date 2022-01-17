@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -26,12 +25,12 @@ public class FormValidationTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("OnePageFormShort.xml"))
             .around(rule);
 
     @Test
     public void invalidAnswer_ShouldDisplayAllQuestionsOnOnePage() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("OnePageFormShort.xml")
                 .startBlankForm("OnePageFormShort")
                 .answerQuestion(0, "A")
                 .clickGoToArrow()
@@ -47,7 +46,8 @@ public class FormValidationTest {
     @Test
     public void openHierarchyView_ShouldSeeShortForms() {
         //TestCase3
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("OnePageFormShort.xml")
                 .startBlankForm("OnePageFormShort")
                 .clickGoToArrow()
                 .assertText("YY MM")

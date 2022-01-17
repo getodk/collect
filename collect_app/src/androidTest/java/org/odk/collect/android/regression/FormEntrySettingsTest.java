@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.AccessControlPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
@@ -25,13 +24,13 @@ public class FormEntrySettingsTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("All_widgets.xml"))
             .around(rule);
 
     @SuppressWarnings("PMD.AvoidCallingFinalize")
     @Test
     public void movingBackwards_shouldBeTurnedOn() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("All_widgets.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()

@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
@@ -24,12 +23,12 @@ public class QuittingFormTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(new ResetStateRule())
-            .around(new CopyFormRule("two-question.xml"))
             .around(rule);
 
     @Test
     public void partiallyFillingForm_andPressingBack_andClickingSaveChanges_savesCurrentAnswers() {
         rule.startAtMainMenu()
+                .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion()
@@ -45,6 +44,7 @@ public class QuittingFormTest {
     @Test
     public void partiallyFillingForm_andPressingBack_andClickingIgnoreChanges_doesNotSaveForm() {
         rule.startAtMainMenu()
+                .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))

@@ -4,9 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.MainMenuPage;
 
 import java.util.Collections;
 
@@ -22,12 +20,12 @@ public class ExternalSelectsTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule("selectOneExternal.xml", Collections.singletonList("selectOneExternal-media/itemsets.csv")))
             .around(rule);
 
     @Test
     public void displaysAllChoicesFromItemsetsCSV() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm("selectOneExternal.xml", Collections.singletonList("selectOneExternal-media/itemsets.csv"))
                 .startBlankForm("selectOneExternal")
                 .clickOnText("Texas")
                 .swipeToNextQuestion("county")
