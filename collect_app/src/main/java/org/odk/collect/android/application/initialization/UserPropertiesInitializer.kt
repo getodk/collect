@@ -18,7 +18,7 @@ class UserPropertiesInitializer(
     fun initialize() {
         val projects = projectsRepository.getAll()
 
-        analytics.setUserProperty("ProjectsCount", projects.size.toString())
+        analytics.setUserProperty("UsingMultipleProjects", (projects.size > 1).toString())
 
         analytics.setUserProperty(
             "UsingLegacyFormUpdate",
