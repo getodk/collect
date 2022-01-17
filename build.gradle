@@ -11,8 +11,6 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-
-        jcenter() // Only use as fallback to everything else
     }
 
     dependencies {
@@ -39,8 +37,6 @@ allprojects {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
         }
-
-        jcenter() // Only use as fallback to everything else
     }
 }
 
