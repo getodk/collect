@@ -103,6 +103,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -631,6 +632,6 @@ public class AppDependencyModule {
 
     @Provides
     public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
-        return new MediaUtils(intentLauncher);
+        return new MediaUtils(intentLauncher, new ContentUriProvider());
     }
 }

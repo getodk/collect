@@ -23,11 +23,8 @@ import timber.log.Timber;
 public final class ContentUriProvider {
     private static final String HUAWEI_MANUFACTURER = "Huawei";
 
-    private ContentUriProvider() {
-    }
-
     // https://stackoverflow.com/a/41309223/5479029
-    public static Uri getUriForFile(@NonNull Context context, @NonNull String authority, @NonNull File file) {
+    public Uri getUriForFile(@NonNull Context context, @NonNull String authority, @NonNull File file) {
         if (HUAWEI_MANUFACTURER.equalsIgnoreCase(Build.MANUFACTURER)) {
             Timber.w("%s: %s", ContentUriProvider.class.getSimpleName(), "Using a Huawei device Increased likelihood of failure...");
             try {

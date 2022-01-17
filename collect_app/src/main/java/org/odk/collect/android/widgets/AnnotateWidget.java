@@ -183,7 +183,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         // the size. boo.
 
         try {
-            Uri uri = ContentUriProvider.getUriForFile(getContext(),
+            Uri uri = new ContentUriProvider().getUriForFile(getContext(),
                     BuildConfig.APPLICATION_ID + ".provider",
                     new File(tmpImageFilePath));
             // if this gets modified, the onActivityResult in

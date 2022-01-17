@@ -35,7 +35,7 @@ import java.io.File
  * @author mitchellsundt@gmail.com
  * @author paulburke
  */
-class MediaUtils(private val intentLauncher: IntentLauncher) {
+class MediaUtils(private val intentLauncher: IntentLauncher, private val contentUriProvider: ContentUriProvider) {
     fun deleteMediaFile(imageFile: String) {
         FileUtils.deleteAndReport(File(imageFile))
     }
@@ -48,7 +48,7 @@ class MediaUtils(private val intentLauncher: IntentLauncher) {
             return
         }
 
-        val contentUri = ContentUriProvider.getUriForFile(
+        val contentUri = contentUriProvider.getUriForFile(
             context,
             BuildConfig.APPLICATION_ID + ".provider",
             file
