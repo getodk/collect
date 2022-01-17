@@ -29,10 +29,6 @@ allprojects {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
-        maven {
-          url "${rootDir}/local-m2"
-        }
-
         mavenCentral()
 
         maven { url 'https://oss.sonatype.org/content/groups/public' }
@@ -40,6 +36,10 @@ allprojects {
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
+        }
+        
+        maven {
+          url "${rootDir}/jcenter-local-m2"
         }
     }
 }
