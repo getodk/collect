@@ -9,7 +9,11 @@ import com.bumptech.glide.module.AppGlideModule
 import com.caverock.androidsvg.SVG
 import java.io.InputStream
 
-/** Module for the SVG sample app.  */
+/**
+ *  Module for the SVG sample app.
+ *
+ *  https://github.com/bumptech/glide/tree/master/samples/svg
+ */
 @GlideModule
 open class SvgModule : AppGlideModule() {
     override fun registerComponents(

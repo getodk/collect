@@ -12,6 +12,8 @@ import java.io.InputStream
 
 /**
  * Decodes an SVG internal representation from an [InputStream].
+ *
+ * https://github.com/bumptech/glide/tree/master/samples/svg
  */
 class SvgDecoder : ResourceDecoder<InputStream, SVG> {
     override fun handles(source: InputStream, options: Options): Boolean {
