@@ -22,7 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -38,7 +38,7 @@ public class LikertTest {
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
             .around(new ResetStateRule())
-            .around(new CopyFormRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg"), true));
+            .around(new CollectTestRule(LIKERT_TEST_FORM, Collections.singletonList("famous.jpg"), true));
 
     @Test
     public void allText_canClick() {

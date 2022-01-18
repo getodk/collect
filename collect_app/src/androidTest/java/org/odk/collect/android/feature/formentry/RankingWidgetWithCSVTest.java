@@ -3,7 +3,7 @@ package org.odk.collect.android.feature.formentry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -19,7 +19,7 @@ public class RankingWidgetWithCSVTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(TEST_FORM, Collections.singletonList("fruits.csv"), true))
+            .around(new CollectTestRule(TEST_FORM, Collections.singletonList("fruits.csv"), true))
             .around(activityTestRule);
 
 

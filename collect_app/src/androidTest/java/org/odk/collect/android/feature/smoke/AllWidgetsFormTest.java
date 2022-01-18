@@ -14,8 +14,9 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
+import org.odk.collect.android.support.ResetStateRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
@@ -37,7 +38,8 @@ public class AllWidgetsFormTest {
 
     @Rule
     public RuleChain copyFormChain = RuleChain
-            .outerRule(new CopyFormRule("all-widgets.xml", true))
+            .outerRule(new ResetStateRule())
+            .around(new CollectTestRule("all-widgets.xml", true))
             .around(activityTestRule);
 
     @BeforeClass

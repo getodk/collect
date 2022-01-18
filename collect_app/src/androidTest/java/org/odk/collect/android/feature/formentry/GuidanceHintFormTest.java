@@ -23,7 +23,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -44,7 +44,7 @@ public class GuidanceHintFormTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(GUIDANCE_SAMPLE_FORM, true));
+            .around(new CollectTestRule(GUIDANCE_SAMPLE_FORM, true));
 
     @Test
     public void guidanceHint_ShouldBeHiddenByDefault() {

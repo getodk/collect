@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CopyFormRule;
+import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.TestRuleChain;
 
@@ -26,7 +26,7 @@ public class SetGeopointActionTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
-            .around(new CopyFormRule(SETGEOPOINT_ACTION_FORM, true))
+            .around(new CollectTestRule(SETGEOPOINT_ACTION_FORM, true))
             .around(rule);
 
     @Test
