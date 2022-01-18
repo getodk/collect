@@ -20,7 +20,6 @@ import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.formentry.RequiresFormController;
@@ -36,6 +35,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.Result;
@@ -86,8 +86,9 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final Scheduler scheduler;
     private final AudioRecorder audioRecorder;
     private final CurrentProjectProvider currentProjectProvider;
+    private final InstancesRepository instancesRepository;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, InstancesRepository instancesRepository) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -96,6 +97,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         this.scheduler = scheduler;
         this.audioRecorder = audioRecorder;
         this.currentProjectProvider = currentProjectProvider;
+        this.instancesRepository = instancesRepository;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -169,7 +171,8 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
                 SaveFormToDisk.removeSavepointFiles(formController.getInstanceFile().getName());
 
                 // if it's not already saved, erase everything
-                if (!InstancesDaoHelper.isInstanceAvailable(getAbsoluteInstancePath())) {
+                String instancePath = getAbsoluteInstancePath();
+                if (instancePath != null && instancesRepository.getOneByPath(instancePath) != null) {
                     String instanceFolder = formController.getInstanceFile().getParent();
                     FileUtils.purgeMediaPath(instanceFolder);
                 }

@@ -93,7 +93,6 @@ import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -971,7 +970,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+                saveForm(false, isInstanceComplete(false), null, true);
                 return true;
         }
 
@@ -1271,7 +1270,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), new FormEndView.Listener() {
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, isInstanceComplete(true), new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
                 // Seems like this is needed for rotation?
@@ -1808,7 +1807,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSaveChangesClicked() {
-        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+        saveForm(true, isInstanceComplete(false), null, true);
     }
 
     @Nullable
@@ -2636,5 +2635,34 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else {
             return new HashMap<>();
         }
+    }
+
+    /**
+     * Checks the database to determine if the current instance being edited has
+     * already been 'marked completed'. A form can be 'unmarked' complete and
+     * then resaved.
+     *
+     * @return true if form has been marked completed, false otherwise.
+     **/
+    private boolean isInstanceComplete(boolean end) {
+        // default to false if we're mid form
+        boolean complete = false;
+
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null && formController.getInstanceFile() != null) {
+            // First check if we're at the end of the form, then check the preferences
+            complete = end && settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT);
+
+            // Then see if we've already marked this form as complete before
+            String path = formController.getInstanceFile().getAbsolutePath();
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
+            if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
+                complete = true;
+            }
+        } else {
+            Timber.w("FormController or its instanceFile field has a null value");
+        }
+
+        return complete;
     }
 }

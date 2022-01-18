@@ -19,6 +19,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.testshared.RobolectricHelpers;
@@ -44,7 +45,7 @@ public class QuitFormDialogFragmentTest {
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils) {
+            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, InstancesRepositoryProvider instancesRepositoryProvider) {
                 return (owner, defaultArgs) -> new ViewModelProvider.Factory() {
 
                     @NonNull

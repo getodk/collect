@@ -25,6 +25,7 @@ import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.Project;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
@@ -72,6 +73,7 @@ public class FormSaveViewModelTest {
     private FormController formController;
     private AudioRecorder audioRecorder;
     private CurrentProjectProvider currentProjectProvider;
+    private InstancesRepository instancesRepository;
 
     @Before
     public void setup() {
@@ -81,6 +83,7 @@ public class FormSaveViewModelTest {
         formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
+        instancesRepository = mock(InstancesRepository.class);
         Analytics analytics = mock(Analytics.class);
 
         when(formController.getAuditEventLogger()).thenReturn(logger);
@@ -90,7 +93,7 @@ public class FormSaveViewModelTest {
         currentProjectProvider = mock(CurrentProjectProvider.class);
         when(currentProjectProvider.getCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider, instancesRepository);
         viewModel.formLoaded(formController);
     }
 
@@ -470,7 +473,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, instancesRepository);
         restoredViewModel.formLoaded(formController);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
@@ -493,7 +496,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, instancesRepository);
         restoredViewModel.formLoaded(formController);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
@@ -568,7 +571,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, instancesRepository);
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 
