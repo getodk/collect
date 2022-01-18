@@ -5,6 +5,8 @@ import static org.odk.collect.shared.strings.StringUtils.removeEnd;
 import android.content.Context;
 import android.location.Location;
 
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
@@ -68,10 +70,11 @@ public final class GeoWidgetUtils {
         return gp;
     }
 
-    static float getAccuracyThreshold(QuestionDef questionDef) {
+    @Nullable
+    static Float getFloatAttribute(QuestionDef questionDef, String attribute) {
         // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, "accuracyThreshold");
-        return acc != null && !acc.isEmpty() ? Float.parseFloat(acc) : DEFAULT_LOCATION_ACCURACY;
+        String acc = questionDef.getAdditionalAttribute(null, attribute);
+        return acc != null && !acc.isEmpty() ? Float.parseFloat(acc) : null;
     }
 
     static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {

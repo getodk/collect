@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.utilities;
 
+import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
@@ -42,7 +43,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                     bundle.putDoubleArray(GeoPointMapActivity.EXTRA_LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
-                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
+                Float accuracyThreshold = GeoWidgetUtils.getFloatAttribute(prompt.getQuestion(), "accuracyThreshold");
+                Float unacceptableAccuracyThreshold = GeoWidgetUtils.getFloatAttribute(prompt.getQuestion(), "unacceptableAccuracyThreshold");
+                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, accuracyThreshold != null ? accuracyThreshold : DEFAULT_LOCATION_ACCURACY);
+                bundle.putFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, unacceptableAccuracyThreshold != null ? unacceptableAccuracyThreshold : 100f);
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));

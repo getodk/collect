@@ -143,6 +143,20 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
+    public void whenWidgetHasUnacceptableAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
+        when(questionDef.getAdditionalAttribute(null, "unacceptableAccuracyThreshold")).thenReturn("20");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(20.0f));
+    }
+
+    @Test
     public void whenWidgetHasMapsAppearance_requestGeoPoint_launchesCorrectIntent() {
         when(prompt.getAppearanceHint()).thenReturn(Appearances.MAPS);
 

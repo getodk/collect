@@ -31,7 +31,7 @@ class AccuracyStatusViewTest {
             equalTo(context.getString(R.string.empty_accuracy))
         )
 
-        view.setAccuracy(52f, 5f)
+        view.accuracy = GeoPointAccuracy.Improving(52f)
         assertThat(
             view.binding.currentAccuracy.text,
             equalTo(context.getString(R.string.accuracy_m, "52"))
@@ -48,26 +48,26 @@ class AccuracyStatusViewTest {
         )
         assertThat(view.binding.strength.progress, equalTo(20))
 
-        view.setAccuracy(101f, 5f)
+        view.accuracy = GeoPointAccuracy.Unacceptable(10f)
         assertThat(
             view.binding.text.text,
             equalTo(context.getString(R.string.unacceptable_accuracy))
         )
         assertThat(view.binding.strength.progress, equalTo(40))
 
-        view.setAccuracy(100f, 5f)
+        view.accuracy = GeoPointAccuracy.Poor(10f)
         assertThat(view.binding.text.text, equalTo(context.getString(R.string.poor_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(60))
 
-        view.setAccuracy(5f + 5f, 5f)
+        view.accuracy = GeoPointAccuracy.Improving(10f)
         assertThat(view.binding.text.text, equalTo(context.getString(R.string.improving_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(80))
     }
 
     @Test
-    fun `has primary background when accuracy is less than 100m`() {
+    fun `has primary background when accuracy is poor`() {
         val view = AccuracyStatusView(context)
-        view.setAccuracy(99.0f, 5.0f)
+        view.accuracy = GeoPointAccuracy.Poor(10f)
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorPrimary))
@@ -86,9 +86,9 @@ class AccuracyStatusViewTest {
     }
 
     @Test
-    fun `has error background when accuracy is 100m or greater`() {
+    fun `has error background when accuracy is unacceptable`() {
         val view = AccuracyStatusView(context)
-        view.setAccuracy(100.0f, 5.0f)
+        view.accuracy = GeoPointAccuracy.Unacceptable(10f)
 
         val backgroundColor = (view.binding.root.background as ColorDrawable).color
         assertThat(backgroundColor, equalTo(colorError))

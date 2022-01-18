@@ -44,9 +44,7 @@ class GeoPointDialogFragment : DialogFragment() {
         val accuracyThreshold = viewModel.accuracyThreshold
 
         viewModel.currentAccuracy.observe(this) {
-            if (it != null) {
-                binding.accuracyStatus.setAccuracy(it, viewModel.accuracyThreshold)
-            }
+            binding.accuracyStatus.accuracy = it
         }
 
         binding.threshold.text =
