@@ -14,7 +14,7 @@ public class RecordingRequesterProvider {
     }
 
     public RecordingRequester create(FormEntryPrompt prompt, boolean externalRecorderPreferred) {
-        String audioQuality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
+        String audioQuality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
 
         if (audioQuality != null && (audioQuality.equals("normal") || audioQuality.equals("voice-only") || audioQuality.equals("low"))) {
             return internalRecordingRequester;

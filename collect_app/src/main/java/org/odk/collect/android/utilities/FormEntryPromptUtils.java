@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.utilities;
 
+import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
+
 import android.content.Context;
 
 import org.javarosa.core.model.Constants;
@@ -39,8 +41,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
-
-import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
 public final class FormEntryPromptUtils {
 
@@ -131,12 +131,18 @@ public final class FormEntryPromptUtils {
     }
 
     @Nullable
-    public static String getAttributeValue(FormEntryPrompt prompt, String attributeName) {
+    public static String getBindAttribute(FormEntryPrompt prompt, String attributeName) {
         List<TreeElement> attributes = prompt.getBindAttributes();
         Optional<TreeElement> attribute = attributes.stream().filter(attr ->
                 attr.getName().equals(attributeName)
         ).findAny();
 
         return attribute.map(TreeElement::getAttributeValue).orElse(null);
+    }
+
+    @Nullable
+    public static String getAttribute(FormEntryPrompt formEntryPrompt, String attributeName) {
+        String acc = formEntryPrompt.getQuestion().getAdditionalAttribute(null, attributeName);
+        return acc != null && !acc.isEmpty() ? acc : null;
     }
 }

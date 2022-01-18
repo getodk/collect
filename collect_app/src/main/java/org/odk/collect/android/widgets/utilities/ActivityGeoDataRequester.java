@@ -43,10 +43,11 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                     bundle.putDoubleArray(GeoPointMapActivity.EXTRA_LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
 
-                Float accuracyThreshold = GeoWidgetUtils.getFloatAttribute(prompt.getQuestion(), "accuracyThreshold");
-                Float unacceptableAccuracyThreshold = GeoWidgetUtils.getFloatAttribute(prompt.getQuestion(), "unacceptableAccuracyThreshold");
-                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, accuracyThreshold != null ? accuracyThreshold : DEFAULT_LOCATION_ACCURACY);
-                bundle.putFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, unacceptableAccuracyThreshold != null ? unacceptableAccuracyThreshold : 100f);
+                String accuracyThreshold = FormEntryPromptUtils.getAttribute(prompt, "accuracyThreshold");
+                String unacceptableAccuracyThreshold = FormEntryPromptUtils.getAttribute(prompt, "unacceptableAccuracyThreshold");
+
+                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, accuracyThreshold != null ? Float.parseFloat(accuracyThreshold) : DEFAULT_LOCATION_ACCURACY);
+                bundle.putFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, unacceptableAccuracyThreshold != null ? Float.parseFloat(unacceptableAccuracyThreshold) : 100f);
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));
@@ -107,7 +108,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     }
 
     private boolean getAllowMockAccuracy(FormEntryPrompt prompt) {
-        return Boolean.parseBoolean(FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy"));
+        return Boolean.parseBoolean(FormEntryPromptUtils.getBindAttribute(prompt, "allow-mock-accuracy"));
     }
 
     private boolean isMapsAppearance(FormEntryPrompt prompt) {

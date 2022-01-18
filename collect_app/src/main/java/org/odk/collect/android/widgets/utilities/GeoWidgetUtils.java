@@ -5,9 +5,6 @@ import static org.odk.collect.shared.strings.StringUtils.removeEnd;
 import android.content.Context;
 import android.location.Location;
 
-import androidx.annotation.Nullable;
-
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
@@ -70,13 +67,6 @@ public final class GeoWidgetUtils {
         return gp;
     }
 
-    @Nullable
-    static Float getFloatAttribute(QuestionDef questionDef, String attribute) {
-        // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, attribute);
-        return acc != null && !acc.isEmpty() ? Float.parseFloat(acc) : null;
-    }
-
     static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {
         String coordinateDegrees = Location.convert(Math.abs(coordinate), Location.FORMAT_SECONDS);
         String[] coordinateSplit = coordinateDegrees.split(":");
@@ -108,7 +98,7 @@ public final class GeoWidgetUtils {
     }
 
     public static void logAllowMockAccuracy(FormEntryPrompt prompt) {
-        String attributeValue = FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy");
+        String attributeValue = FormEntryPromptUtils.getBindAttribute(prompt, "allow-mock-accuracy");
         boolean allowMockAccuracy = Boolean.parseBoolean(attributeValue);
 
         if (allowMockAccuracy) {

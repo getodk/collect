@@ -30,7 +30,7 @@ public class InternalRecordingRequester implements RecordingRequester {
         permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
             @Override
             public void granted() {
-                String quality = FormEntryPromptUtils.getAttributeValue(prompt, "quality");
+                String quality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
                 if (quality != null && quality.equals("voice-only")) {
                     audioRecorder.start(prompt.getIndex(), Output.AMR);
                 } else if (quality != null && quality.equals("low")) {
