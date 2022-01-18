@@ -6,8 +6,8 @@ apply plugin: "com.github.ben-manes.versions"
 buildscript {
     repositories {
         google()
-        jcenter()
 
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -29,12 +29,18 @@ allprojects {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
-        jcenter()
+        mavenCentral()
+
         maven { url 'https://oss.sonatype.org/content/groups/public' }
         maven { url 'https://jitpack.io' }
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
+        }
+
+        // Local repo for dependencies that only existed in the defunct JCenter repo
+        maven {
+          url "${rootDir}/jcenter-local-m2"
         }
     }
 }
