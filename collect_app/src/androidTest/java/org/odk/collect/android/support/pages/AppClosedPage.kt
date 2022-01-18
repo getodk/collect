@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 class AppClosedPage : Page<AppClosedPage>() {
 
     override fun assertOnPage(): AppClosedPage {
-        assertThat(getCurrentActivity(), equalTo(null))
+        assertThat(currentActivity, equalTo(null))
         return this
     }
 }

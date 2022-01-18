@@ -58,10 +58,6 @@ public final class AdbFormLoadingUtils {
         }
     }
 
-    public static void copyFormToStorage(String formFilename, String projectName) throws IOException {
-        copyFormToStorage(formFilename, null, false, formFilename, projectName);
-    }
-
     /**
      * Copies a form with the given file name to the SD Card where it will be loaded by
      * {@link FormLoaderTask}.
@@ -72,10 +68,6 @@ public final class AdbFormLoadingUtils {
 
     public static void copyFormToDemoProject(String formFilename, String copyTo) throws IOException {
         copyFormToStorage(formFilename, null, false, copyTo, "Demo project");
-    }
-
-    public static void copyFormToDemoProject(String formFilename, boolean copyToDatabase) throws IOException {
-        copyFormToStorage(formFilename, null, copyToDatabase, formFilename, "Demo project");
     }
 
     public static void copyInstanceToDemoProject(String instanceFileName) throws IOException {

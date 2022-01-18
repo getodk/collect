@@ -59,7 +59,7 @@ public class BadServerTest {
         testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", Arrays.asList("fruits.csv"));
 
         rule.withProject(testDependencies.server.getURL())
-                .copyForm("one-question.xml", Arrays.asList("fruits.csv"), testDependencies.server.getHostName())
+                .copyForm("one-question.xml", Arrays.asList("fruits.csv"), false, testDependencies.server.getHostName())
                 .clickGetBlankForm()
                 .assertText(R.string.newer_version_of_a_form_info);
     }
