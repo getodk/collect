@@ -426,6 +426,26 @@ public abstract class Page<T extends Page<T>> {
         return (T) this;
     }
 
+    public T copyForm(String formFilename, boolean copyToDatabase) {
+        try {
+            AdbFormLoadingUtils.copyFormToDemoProject(formFilename, copyToDatabase);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return (T) this;
+    }
+
+    public T copyForm(String formFilename, List<String> mediaFileNames, boolean copyToDatabase) {
+        try {
+            AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, copyToDatabase, formFilename, "Demo project");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return (T) this;
+    }
+
     public T copyForm(String formFilename, List<String> mediaFileNames) {
         try {
             AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, false, formFilename, "Demo project");

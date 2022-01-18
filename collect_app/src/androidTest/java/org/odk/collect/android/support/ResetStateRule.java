@@ -77,7 +77,7 @@ public class ResetStateRule implements TestRule {
     private void setTestState() {
         MultiClickGuard.test = true;
         DecoratedBarcodeView.test = true;
-        CopyFormRule.projectCreated = false;
+        CollectTestRule.projectCreated = false;
         ToastUtils.setRecordToasts(true);
     }
 
