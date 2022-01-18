@@ -380,7 +380,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
         if (Build.VERSION.SDK_INT >= 24) {
-            new WebView(this);
+            try {
+                new WebView(this);
+            } catch (Exception | Error e) {
+                // Don't crash if WebView not available
+            }
         }
 
         super.onCreate(savedInstanceState);
