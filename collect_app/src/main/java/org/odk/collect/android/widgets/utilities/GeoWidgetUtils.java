@@ -17,8 +17,6 @@ import timber.log.Timber;
 
 public final class GeoWidgetUtils {
 
-    public static final float DEFAULT_LOCATION_ACCURACY = 5.0f;
-
     private GeoWidgetUtils() {
 
     }

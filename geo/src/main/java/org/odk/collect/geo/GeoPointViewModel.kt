@@ -28,7 +28,7 @@ internal abstract class GeoPointViewModel : ViewModel() {
         accuracyThreshold: Float? = null,
         unacceptableAccuracyThreshold: Float? = null
     )
-    
+
     abstract fun forceLocation()
 }
 

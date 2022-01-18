@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.utilities;
 
-import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
@@ -21,6 +20,9 @@ import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 
 public class ActivityGeoDataRequester implements GeoDataRequester {
+
+    public static final float DEFAULT_ACCURACY_THRESHOLD = 5f;
+    public static final float DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD = 100f;
 
     private final PermissionsProvider permissionsProvider;
     private final Activity activity;
@@ -46,8 +48,8 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 String accuracyThreshold = FormEntryPromptUtils.getAttribute(prompt, "accuracyThreshold");
                 String unacceptableAccuracyThreshold = FormEntryPromptUtils.getAttribute(prompt, "unacceptableAccuracyThreshold");
 
-                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, accuracyThreshold != null ? Float.parseFloat(accuracyThreshold) : DEFAULT_LOCATION_ACCURACY);
-                bundle.putFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, unacceptableAccuracyThreshold != null ? Float.parseFloat(unacceptableAccuracyThreshold) : 100f);
+                bundle.putFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, accuracyThreshold != null ? Float.parseFloat(accuracyThreshold) : DEFAULT_ACCURACY_THRESHOLD);
+                bundle.putFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, unacceptableAccuracyThreshold != null ? Float.parseFloat(unacceptableAccuracyThreshold) : DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD);
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
                 bundle.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly());
                 bundle.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt));

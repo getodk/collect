@@ -126,6 +126,10 @@ public class ActivityGeoDataRequesterTest {
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_ACCURACY_THRESHOLD));
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
     }
 
     @Test
