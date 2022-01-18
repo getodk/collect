@@ -46,8 +46,6 @@ class GeoPointDialogFragmentTest {
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
             .application(application)
             .geoDependencyModule(object : GeoDependencyModule() {
-                override fun providesScheduler() = scheduler
-
                 override fun providesGeoPointViewModelFactory(application: Application) =
                     mock<GeoPointViewModelFactory> {
                         on { create(GeoPointViewModel::class.java) } doReturn viewModel
@@ -84,15 +82,22 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates current accuracy`() {
-        launchDialogFragment(GeoPointDialogFragment::class.java)
+        whenever(viewModel.accuracyThreshold).thenReturn(3.0f)
+
+        val scenario = launchDialogFragment(GeoPointDialogFragment::class.java)
 
         currentAccuracyLiveData.value = 50.2f
-        scheduler.runForeground()
-        onViewInDialog(withText("50.2m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
+        scenario.onFragment {
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(50.2f))
+            assertThat(it.binding.accuracyStatus.accuracyThreshold, equalTo(3.0f))
+        }
 
         currentAccuracyLiveData.value = 15.65f
-        scheduler.runForeground()
         onViewInDialog(withText("15.65m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
+        scenario.onFragment {
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(15.65f))
+            assertThat(it.binding.accuracyStatus.accuracyThreshold, equalTo(3.0f))
+        }
     }
 
     @Test
@@ -100,7 +105,6 @@ class GeoPointDialogFragmentTest {
         launchDialogFragment(GeoPointDialogFragment::class.java)
 
         timeElapsedLiveData.value = 0
-        scheduler.runForeground()
         onViewInDialog(
             withText(
                 application.getLocalizedString(
@@ -113,7 +117,6 @@ class GeoPointDialogFragmentTest {
         )
 
         timeElapsedLiveData.value = 62000
-        scheduler.runForeground()
         onViewInDialog(
             withText(
                 application.getLocalizedString(

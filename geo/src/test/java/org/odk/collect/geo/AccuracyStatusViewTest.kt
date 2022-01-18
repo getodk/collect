@@ -24,6 +24,21 @@ class AccuracyStatusViewTest {
     private val colorOnError = getThemeAttributeValue(context, R.attr.colorOnError)
 
     @Test
+    fun `updates current accuracy`() {
+        val view = AccuracyStatusView(context)
+        assertThat(
+            view.binding.currentAccuracy.text,
+            equalTo(context.getString(R.string.empty_accuracy))
+        )
+
+        view.setAccuracy(52f, 5f)
+        assertThat(
+            view.binding.currentAccuracy.text,
+            equalTo(context.getString(R.string.accuracy_m, "52"))
+        )
+    }
+
+    @Test
     fun `updates text and strength based on accuracy`() {
         val view = AccuracyStatusView(context)
 

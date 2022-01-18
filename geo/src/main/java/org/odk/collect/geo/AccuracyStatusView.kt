@@ -17,7 +17,13 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
     var binding = AccuracyStatusBinding.inflate(LayoutInflater.from(context), this, true)
         private set
 
+    var accuracy: Float? = null
+    var accuracyThreshold: Float? = null
+
     fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
+        this.accuracy = accuracy
+        this.accuracyThreshold = accuracyThreshold
+
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
