@@ -8,7 +8,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.argumentCaptor
@@ -24,16 +23,9 @@ import java.io.File
 class MediaUtilsTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
-    private lateinit var intentLauncher: IntentLauncher
-    private lateinit var contentUriProvider: ContentUriProvider
-    private lateinit var mediaUtils: MediaUtils
-
-    @Before
-    fun setup() {
-        intentLauncher = mock()
-        contentUriProvider = mock()
-        this.mediaUtils = MediaUtils(intentLauncher, contentUriProvider)
-    }
+    private var intentLauncher = mock<IntentLauncher>()
+    private var contentUriProvider = mock<ContentUriProvider>()
+    private var mediaUtils = MediaUtils(intentLauncher, contentUriProvider)
 
     @Test
     fun `When file that we try to open does not exist a toast should be displayed`() {
