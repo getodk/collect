@@ -8,7 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
@@ -19,12 +18,10 @@ public class DeletingRepeatGroupsTest {
     private static final String TEST_FORM = "repeat_groups.xml";
 
     private final FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "repeatGroups");
-    private final CollectTestRule rule = new CollectTestRule(TEST_FORM, true);
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(rule)
             .around(activityTestRule);
 
     @Test

@@ -16,8 +16,6 @@ import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.Page;
 import org.odk.collect.android.support.pages.ShortcutsPage;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class CollectTestRule implements TestRule {
@@ -25,24 +23,9 @@ public class CollectTestRule implements TestRule {
     public static boolean projectCreated;
 
     private final boolean useDemoProject;
-    private String formFilename;
-    private boolean copyToDatabase;
-    private List<String> mediaFilePaths;
 
     public CollectTestRule() {
         this(true);
-    }
-
-    public CollectTestRule(String formFilename, boolean copyToDatabase) {
-        this(true);
-        this.formFilename = formFilename;
-        this.copyToDatabase = copyToDatabase;
-        this.mediaFilePaths = new ArrayList<>();
-    }
-
-    public CollectTestRule(String fileName, List<String> mediaFilePaths, boolean copyToDatabase) {
-        this(fileName, copyToDatabase);
-        this.mediaFilePaths = mediaFilePaths;
     }
 
     public CollectTestRule(boolean skipLaunchScreen) {
@@ -64,11 +47,6 @@ public class CollectTestRule implements TestRule {
                     if (useDemoProject) {
                         firstLaunchPage.clickTryCollect();
                     }
-                }
-
-                if (formFilename != null) {
-                    new MainMenuPage()
-                            .copyForm(formFilename, mediaFilePaths, copyToDatabase);
                 }
 
                 base.evaluate();

@@ -14,7 +14,6 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 
@@ -39,7 +38,6 @@ public class AllWidgetsFormTest {
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(new ResetStateRule())
-            .around(new CollectTestRule("all-widgets.xml", true))
             .around(activityTestRule);
 
     @BeforeClass

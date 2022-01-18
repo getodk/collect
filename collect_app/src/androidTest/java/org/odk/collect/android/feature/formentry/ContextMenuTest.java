@@ -4,21 +4,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.CollectTestRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.TestRuleChain;
 
 public class ContextMenuTest {
     private static final String STRING_WIDGETS_TEST_FORM = "string_widgets_in_field_list.xml";
 
-    private final CollectTestRule rule = new CollectTestRule(STRING_WIDGETS_TEST_FORM, true);
-
-    @Rule
     public FormActivityTestRule activityTestRule = new FormActivityTestRule(STRING_WIDGETS_TEST_FORM, "fl");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(rule);
+            .around(activityTestRule);
 
     @Test
     public void whenRemoveStringAnswer_ShouldAppropriateQuestionBeCleared() {
