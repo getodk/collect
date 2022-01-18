@@ -5,11 +5,11 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-
-import com.bumptech.glide.Glide;
+import android.widget.ImageView;
 
 import org.odk.collect.android.databinding.NoButtonsItemLayoutBinding;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.glide.ImageLoader;
 
 import java.io.File;
 
@@ -28,15 +28,9 @@ public class NoButtonsItem extends FrameLayout {
         if (imageFile != null && imageFile.exists()) {
             binding.imageView.setVisibility(View.VISIBLE);
             if (isInGridView) {
-                Glide.with(this)
-                        .load(imageFile)
-                        .fitCenter()
-                        .into(binding.imageView);
+                ImageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.FIT_CENTER);
             } else {
-                Glide.with(this)
-                        .load(imageFile)
-                        .centerInside()
-                        .into(binding.imageView);
+                ImageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE);
             }
         } else {
             binding.label.setVisibility(View.VISIBLE);

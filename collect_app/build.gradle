@@ -249,6 +249,7 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
+    implementation project(':glide')
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
