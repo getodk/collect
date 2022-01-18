@@ -346,6 +346,9 @@ dependencies {
 
     implementation Dependencies.armen101_audio_recorder_view
 
+    // Glide
+    implementation Dependencies.glide
+
     implementation(Dependencies.mp4parser_muxer) {
         exclude group: 'org.hamcrest'
     }
