@@ -11,19 +11,22 @@ import net.bytebuddy.utility.RandomString;
 import org.javarosa.core.model.data.StringData;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.androidshared.system.IntentLauncher;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,15 +34,12 @@ import static org.mockito.Mockito.when;
  * @author James Knight
  */
 public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
-    @Mock
-    MediaUtils mediaUtils;
-
     private String destinationName;
 
     @NonNull
     @Override
     public VideoWidget createWidget() {
-        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride), new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils(), mediaUtils);
+        return new VideoWidget(activity, new QuestionDetails(formEntryPrompt, readOnlyOverride), new FakeWaitingForDataRegistry(), new FakeQuestionMediaManager(), new CameraUtils());
     }
 
     @NonNull
@@ -56,6 +56,14 @@ public class VideoWidgetTest extends FileWidgetTest<VideoWidget> {
 
     @Test
     public void buttonsShouldLaunchCorrectIntents() {
+        MediaUtils mediaUtils = mock(MediaUtils.class);
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
+                return mediaUtils;
+            }
+        });
+
         stubAllRuntimePermissionsGranted(true);
 
         Intent intent = getIntentLaunchedByClick(R.id.capture_video);

@@ -36,6 +36,7 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 
@@ -82,14 +83,14 @@ public class ChoicesRecyclerViewTest {
 
     @Test
     public void whenNonFLexAppearanceIsUsed_shouldGridLayoutManagerBeUsed() {
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false, mock(MediaUtils.class));
         initRecyclerView(adapter, false);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(GridLayoutManager.class.getName()));
     }
 
     @Test
     public void whenFLexAppearanceIsUsed_shouldFlexboxLayoutManagerBeUsed() {
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, null, new ArrayList<>(), null, null, null, 0, 1, false, mock(MediaUtils.class));
         initRecyclerView(adapter, true);
         assertThat(recyclerView.getLayoutManager().getClass().getName(), equalTo(FlexboxLayoutManager.class.getName()));
     }
@@ -99,7 +100,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -112,7 +113,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -124,7 +125,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 2, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, true);
 
@@ -136,7 +137,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -156,7 +157,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -176,7 +177,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -196,7 +197,7 @@ public class ChoicesRecyclerViewTest {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "no-buttons");
 
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), null, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -217,7 +218,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -236,7 +237,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -255,7 +256,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "no-buttons");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -274,7 +275,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "no-buttons");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -293,7 +294,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -312,7 +313,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -331,7 +332,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "no-buttons");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
+        SelectOneListAdapter adapter = new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -350,7 +351,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "no-buttons");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -369,7 +370,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -396,7 +397,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "no-buttons");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, true, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -411,7 +412,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         List<Selection> selectedItems = new ArrayList<>();
         selectedItems.add(items.get(0).selection());
-        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false);
+        SelectMultipleListAdapter adapter = new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, null, 0, 1, false, mock(MediaUtils.class));
 
         initRecyclerView(adapter, false);
 
@@ -435,7 +436,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         AudioHelper audioHelper = mock(AudioHelper.class);
-        SelectOneListAdapter adapter = spy(new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+        SelectOneListAdapter adapter = spy(new SelectOneListAdapter(null, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class)));
 
         initRecyclerView(adapter, false);
 
@@ -450,7 +451,7 @@ public class ChoicesRecyclerViewTest {
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         AudioHelper audioHelper = mock(AudioHelper.class);
-        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class)));
         initRecyclerView(adapter, false);
 
         clickChoice(0); // Select AAA
@@ -465,7 +466,7 @@ public class ChoicesRecyclerViewTest {
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
         List<Selection> selectedItems = new ArrayList<>();
         selectedItems.add(items.get(0).selection());
-        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true));
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(selectedItems, listener, activityController.get(), items, formEntryPrompt, null, audioHelper, 0, 1, true, mock(MediaUtils.class)));
         initRecyclerView(adapter, false);
 
         clickChoice(0); // Unselect AAA
@@ -479,7 +480,7 @@ public class ChoicesRecyclerViewTest {
         setUpFormEntryPrompt(items, "columns-pack");
 
         SelectItemClickListener listener = mock(SelectItemClickListener.class);
-        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, referenceManager, null, 0, 1, false));
+        SelectMultipleListAdapter adapter = spy(new SelectMultipleListAdapter(new ArrayList<>(), listener, activityController.get(), items, formEntryPrompt, referenceManager, null, 0, 1, false, mock(MediaUtils.class)));
         initRecyclerView(adapter, true);
 
         assertThat(getAudioVideoImageTextLabelView(0).getImageView().getVisibility(), is(View.GONE));

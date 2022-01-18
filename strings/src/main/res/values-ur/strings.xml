@@ -177,7 +177,6 @@
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">تصویر کا انتخاب کریں</string>
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
-  <string name="view_image">تصویر دیکھیں </string>
   <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
   <string name="camera_error">یہ ڈیوائس اے پی آئ کمیرہ 2 سپورٹ نہیں کرتا </string>
@@ -192,7 +191,6 @@
   <string name="set_color">رنگ ترتیب دیں</string>
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
   <string name="choose_video">ویڈیو منتخب کریں </string>
-  <string name="view_video">ویڈیو دیکھیں </string>
   <string name="start_video_capture_instruction">ریکارڈ کرنے کے لیے سکرین پر ٹیپ کریں</string>
   <string name="stop_video_capture_instruction">ریکارڈنگ شروع ہوئی. روکنے کے لئے دوبارہ ٹیپ کریں</string>
   <string name="play_video">وڈیو لگا دیں</string>

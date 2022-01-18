@@ -14,7 +14,6 @@ import org.odk.collect.android.databinding.ExVideoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -32,19 +31,16 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-    private final MediaUtils mediaUtils;
     private final FileRequester fileRequester;
 
     File answerFile;
 
     public ExVideoWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
-                         WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils,
-                         FileRequester fileRequester) {
+                         WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
-        this.mediaUtils = mediaUtils;
         this.fileRequester = fileRequester;
     }
 

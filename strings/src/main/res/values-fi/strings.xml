@@ -194,7 +194,6 @@
   <string name="choose_image">Valitse kuva</string>
   <string name="choose_account">Valitse tili</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
-  <string name="view_image">Katso kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
   <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
@@ -210,7 +209,6 @@
   <string name="set_color">Aseta väri</string>
   <string name="capture_video">Tallenna video</string>
   <string name="choose_video">Valitse video</string>
-  <string name="view_video">Katso video</string>
   <string name="start_video_capture_instruction">Napsauta näyttöä käynnistääksesi tallennuksen.</string>
   <string name="stop_video_capture_instruction">Tallennus aloitettu. Napsauta uudelleen lopettaaksesi.</string>
   <string name="play_video">Näytä video</string>

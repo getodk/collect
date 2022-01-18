@@ -191,7 +191,6 @@
   <string name="choose_image">
 Escolher Imagem</string>
   <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
-  <string name="view_image">Ver Imagem</string>
   <string name="take_picture_instruction">Toque na tela para tirar uma fotografia</string>
   <string name="error_front_camera_unavailable">A câmera da frente não está disponível neste dispositivo</string>
   <string name="camera_error">Este dispositivo não suporta a API da Câmera2</string>
@@ -206,7 +205,6 @@ Escolher Imagem</string>
   <string name="set_color">Definir Cor</string>
   <string name="capture_video">Gravar Vídeo</string>
   <string name="choose_video">Escolher Vídeo</string>
-  <string name="view_video">Ver vídeo</string>
   <string name="start_video_capture_instruction">Toque na tela para iniciar a gravação</string>
   <string name="stop_video_capture_instruction">Gravação iniciada. Toque novamente para parar</string>
   <string name="play_video">Assistir o Vídeo</string>

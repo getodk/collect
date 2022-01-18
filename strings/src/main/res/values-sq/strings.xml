@@ -165,7 +165,6 @@
   <string name="capture_image">Bëj foto</string>
   <string name="choose_image">Zgjidh imazh</string>
   <string name="selected_invalid_image">File i përzgjedhur nuk është imazh i vlefshëm</string>
-  <string name="view_image">Shih Imazhin</string>
   <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
   <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
@@ -179,7 +178,6 @@
   <string name="set_color">Cakto ngjyrën</string>
   <string name="capture_video">Regjistro video</string>
   <string name="choose_video">Zgjidh video</string>
-  <string name="view_video">Shih videon</string>
   <string name="start_video_capture_instruction">Prekni ekranin për të nisur regjistrimin</string>
   <string name="stop_video_capture_instruction">Regjistrimi nisi. Prekni sërish ekranin për ta ndaluar</string>
   <string name="play_video">Shih videon</string>

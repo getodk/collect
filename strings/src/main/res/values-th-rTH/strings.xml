@@ -131,7 +131,6 @@
   <string name="replace_barcode">เปลี่ยนบาร์โคดใหม่</string>
   <string name="capture_image">ถ่ายภาพ</string>
   <string name="choose_image">เลือกรูปภาพ</string>
-  <string name="view_image">ดูรูปภาพ</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">บันทึกและปิดการทำงาน</string>
   <string name="signature_capture">ลงลายมือชื่อ</string>
@@ -142,7 +141,6 @@
   <string name="set_color">เลือกสี</string>
   <string name="capture_video">บันทึกภาพเคลื่อนไหว</string>
   <string name="choose_video">เลือกภาพเคลื่อนไหว</string>
-  <string name="view_video">ดูภาพเคลื่อนไหว</string>
   <string name="play_video">เปิดภาพเคลื่อนไหว</string>
   <string name="choose_file">เลือกไฟล์</string>
   <!--Text for button that deletes a file that is the answer to a question-->

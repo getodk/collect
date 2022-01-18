@@ -45,6 +45,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -106,6 +107,10 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    protected
+    MediaUtils mediaUtils;
+
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
         getComponent(context).inject(this);
@@ -121,7 +126,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         containerView = inflate(context, getLayout(), this).findViewById(R.id.question_widget_container);
 
         audioVideoImageTextLabel = containerView.findViewById(R.id.question_label);
-        setupQuestionLabel(audioVideoImageTextLabel, formEntryPrompt);
+        setupQuestionLabel();
 
         helpTextLayout = findViewById(R.id.help_text);
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
@@ -163,14 +168,15 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         return R.layout.question_widget;
     }
 
-    private void setupQuestionLabel(AudioVideoImageTextLabel label, FormEntryPrompt prompt) {
-        label.setTag(getClipID(prompt));
-        label.setText(prompt.getLongText(), prompt.isRequired(), questionTextSizeHelper.getHeadline6());
+    private void setupQuestionLabel() {
+        audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
+        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), questionTextSizeHelper.getHeadline6());
+        audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
-        String imageURI = this instanceof SelectImageMapWidget ? null : prompt.getImageText();
-        String videoURI = prompt.getSpecialFormQuestionText("video");
-        String bigImageURI = prompt.getSpecialFormQuestionText("big-image");
-        String playableAudioURI = getPlayableAudioURI(prompt, referenceManager);
+        String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();
+        String videoURI = formEntryPrompt.getSpecialFormQuestionText("video");
+        String bigImageURI = formEntryPrompt.getSpecialFormQuestionText("big-image");
+        String playableAudioURI = getPlayableAudioURI(formEntryPrompt, referenceManager);
         try {
             if (imageURI != null) {
                 audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
@@ -182,13 +188,13 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
                 audioVideoImageTextLabel.setVideo(new File(referenceManager.deriveReference(videoURI).getLocalURI()));
             }
             if (playableAudioURI != null) {
-                label.setAudio(playableAudioURI, audioHelper);
+                audioVideoImageTextLabel.setAudio(playableAudioURI, audioHelper);
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid media reference due to %s ", e.getMessage());
         }
 
-        label.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
+        audioVideoImageTextLabel.setPlayTextColor(getPlayColor(formEntryPrompt, themeUtils));
     }
 
     private TextView setupGuidanceTextAndLayout(TextView guidanceTextView, FormEntryPrompt prompt) {

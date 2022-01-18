@@ -143,7 +143,6 @@
   <string name="open_file">Åben fil</string>
   <string name="capture_image">Tag billede</string>
   <string name="choose_image">Vælg billede</string>
-  <string name="view_image">Vis billede</string>
   <string name="error_front_camera_unavailable">Frontkamera er ikke tilgængeligt på dette device</string>
   <string name="annotate_image">Kommentér billede</string>
   <!--Dialog heading for saving annotated image-->
@@ -154,7 +153,6 @@
   <string name="set_color">Definér farve</string>
   <string name="capture_video">Optag video</string>
   <string name="choose_video">Vælg video</string>
-  <string name="view_video">Vis video</string>
   <string name="play_video">Afspil video</string>
   <string name="choose_file">Vælg fil</string>
   <!--Text for button that deletes a file that is the answer to a question-->

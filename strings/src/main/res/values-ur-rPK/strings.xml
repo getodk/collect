@@ -109,7 +109,6 @@
   <string name="replace_barcode">مقام کو بدل دیں</string>
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">عکس کا انتخاب کریں</string>
-  <string name="view_image">تصویر دیکھیں</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="signature_capture">دستخط حاصل کریں</string>
@@ -119,7 +118,6 @@
   <string name="reset_image">دوبارہ ترتیب دیں</string>
   <string name="set_color">رنگ ترتیب دیں</string>
   <string name="capture_video">وڈیو ریکارڈ کریں</string>
-  <string name="view_video">وڈیو دیکھیں</string>
   <string name="play_video">وڈیو لگا دیں</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->

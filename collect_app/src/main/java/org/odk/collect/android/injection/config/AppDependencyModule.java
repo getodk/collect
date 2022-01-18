@@ -103,6 +103,7 @@ import org.odk.collect.android.utilities.AdminPasswordProvider;
 import org.odk.collect.android.utilities.AndroidUserAgent;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
+import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -394,12 +395,12 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
+    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils) {
         return (owner, defaultArgs) -> new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
             @NonNull
             @Override
             protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), new MediaUtils(), analytics, scheduler, audioRecorder, currentProjectProvider);
+                return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider);
             }
         };
     }
@@ -627,5 +628,10 @@ public class AppDependencyModule {
     @Provides
     public LocationClient providesLocationClient(Application application) {
         return LocationClientProvider.getClient(application);
+    }
+
+    @Provides
+    public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
+        return new MediaUtils(intentLauncher, new ContentUriProvider());
     }
 }

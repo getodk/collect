@@ -194,7 +194,6 @@
   <string name="choose_image">Seleziona Foto</string>
   <string name="choose_account">Scegli l\'account</string>
   <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
-  <string name="view_image">Visualizza Immagine</string>
   <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
   <string name="error_front_camera_unavailable">Fotocamera frontale non disponibile in questo dispositivo</string>
   <string name="camera_error">Questo dispositivo non supporta la Camera2 API.</string>
@@ -210,7 +209,6 @@
   <string name="set_color">Imposta Colore</string>
   <string name="capture_video">Registra Video</string>
   <string name="choose_video">Seleziona Video</string>
-  <string name="view_video">Mostra Video</string>
   <string name="start_video_capture_instruction">Tocca lo schermo per iniziare a registrare</string>
   <string name="stop_video_capture_instruction">Registrazione avviata. Per fermare, tocca lo schermo</string>
   <string name="play_video">Riproduci Video</string>

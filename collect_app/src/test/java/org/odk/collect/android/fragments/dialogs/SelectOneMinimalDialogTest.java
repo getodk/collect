@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.SelectChoice;
 import org.junit.Test;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class SelectOneMinimalDialogTest extends SelectMinimalDialogTest {
     public void whenClickBackButton_shouldAnswerBeSavedOnlyIfChanged() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
-        dialogFragment = new SelectOneMinimalDialog("AAA", false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
+        dialogFragment = new SelectOneMinimalDialog("AAA", false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false, mock(MediaUtils.class));
         SelectMinimalDialog.SelectMinimalDialogListener listener = mock(SelectMinimalDialog.SelectMinimalDialogListener.class);
         dialogFragment.setListener(listener);
 
@@ -36,7 +37,7 @@ public class SelectOneMinimalDialogTest extends SelectMinimalDialogTest {
     public void whenClickBackArrowButton_shouldAnswerBeSavedOnlyIfChanged() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "autocomplete");
-        dialogFragment = new SelectOneMinimalDialog("AAA", false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false);
+        dialogFragment = new SelectOneMinimalDialog("AAA", false, true, ApplicationProvider.getApplicationContext(), items, formEntryPrompt, null, 0, 1, false, mock(MediaUtils.class));
         SelectMinimalDialog.SelectMinimalDialogListener listener = mock(SelectMinimalDialog.SelectMinimalDialogListener.class);
         dialogFragment.setListener(listener);
 

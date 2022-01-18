@@ -19,7 +19,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import androidx.annotation.NonNull;
 
 import android.util.TypedValue;
 import android.view.View;
@@ -28,7 +27,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.ArbitraryFileWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -38,15 +36,11 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements FileWidget, WidgetDataReceiver {
     ArbitraryFileWidgetAnswerBinding binding;
 
-    @NonNull
-    private final MediaUtils mediaUtils;
-
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    ArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
+    ArbitraryFileWidget(Context context, QuestionDetails questionDetails,
                         QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, questionDetails, mediaUtils, questionMediaManager, waitingForDataRegistry);
-        this.mediaUtils = mediaUtils;
+        super(context, questionDetails, questionMediaManager, waitingForDataRegistry);
         this.waitingForDataRegistry = waitingForDataRegistry;
     }
 

@@ -18,8 +18,8 @@ import android.content.Context
 import android.content.Intent
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
-import org.odk.collect.androidshared.system.IntentLauncherImpl
-import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.ToastUtils
 import timber.log.Timber
 import java.io.File
 
@@ -35,42 +35,54 @@ import java.io.File
  * @author mitchellsundt@gmail.com
  * @author paulburke
  */
-class MediaUtils {
+class MediaUtils(private val intentLauncher: IntentLauncher, private val contentUriProvider: ContentUriProvider) {
     fun deleteMediaFile(imageFile: String) {
         FileUtils.deleteAndReport(File(imageFile))
     }
 
     fun openFile(context: Context, file: File, expectedMimeType: String?) {
-        val contentUri = ContentUriProvider.getUriForFile(
+        if (!file.exists()) {
+            val errorMsg: String = context.getString(R.string.file_missing, file)
+            Timber.d("File %s is missing", file)
+            ToastUtils.showLongToast(context, errorMsg)
+            return
+        }
+
+        val contentUri = contentUriProvider.getUriForFile(
             context,
             BuildConfig.APPLICATION_ID + ".provider",
             file
         )
-        val intent = Intent()
-        intent.action = Intent.ACTION_VIEW
 
-        val mimeType =
-            if (expectedMimeType == null || expectedMimeType.isEmpty()) FileUtils.getMimeType(file)
-            else expectedMimeType
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            setDataAndType(contentUri, getMimeType(file, expectedMimeType))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
 
-        intent.setDataAndType(contentUri, mimeType)
-        FileUtils.grantFileReadPermissions(intent, contentUri, context)
-
-        IntentLauncherImpl.launch(context, intent) {
+        intentLauncher.launch(context, intent) {
             val message = context.getString(
                 R.string.activity_not_found,
                 context.getString(R.string.open_file)
             )
-            showLongToast(context, message)
+            ToastUtils.showLongToast(context, message)
             Timber.w(message)
         }
     }
 
+    private fun getMimeType(file: File, expectedMimeType: String?) =
+        if (expectedMimeType == null || expectedMimeType.isEmpty()) FileUtils.getMimeType(file)
+        else expectedMimeType
+
     fun pickFile(activity: Activity, mimeType: String, requestCode: Int) {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        intent.type = mimeType
-        activity.startActivityForResult(intent, requestCode)
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = mimeType
+        }
+
+        intentLauncher.launchForResult(activity, intent, requestCode) {
+            // Do nothing
+        }
     }
 
     fun isVideoFile(file: File): Boolean {

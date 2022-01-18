@@ -194,7 +194,6 @@
   <string name="choose_image">Bild auswählen</string>
   <string name="choose_account">Konto auswählen</string>
   <string name="selected_invalid_image">Ausgewählte Datei ist kein gültiges Bild.</string>
-  <string name="view_image">Bild anzeigen</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
   <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
@@ -210,7 +209,6 @@
   <string name="set_color">Farbe wählen</string>
   <string name="capture_video">Video aufnehmen</string>
   <string name="choose_video">Video auswählen</string>
-  <string name="view_video">Video anzeigen</string>
   <string name="start_video_capture_instruction">Bildschirm berühren um eine Aufnahme zu starten</string>
   <string name="stop_video_capture_instruction">Aufnahme gestartet. Zum Stoppen Bildschirm erneut berühren.</string>
   <string name="play_video">Video abspielen</string>

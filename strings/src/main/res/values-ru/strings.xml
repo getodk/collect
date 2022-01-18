@@ -174,7 +174,6 @@
   <string name="capture_image">Сделать снимок</string>
   <string name="choose_image">Выберите изображение</string>
   <string name="selected_invalid_image">Выбрайнный файл не является изображением</string>
-  <string name="view_image">Просмотреть изображение</string>
   <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
   <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
@@ -189,7 +188,6 @@
   <string name="set_color">Выбрать цвет</string>
   <string name="capture_video">Записать видео</string>
   <string name="choose_video">Выберите видео</string>
-  <string name="view_video">Просмотреть видео</string>
   <string name="start_video_capture_instruction">Коснитесь экрана, чтобы начать запись</string>
   <string name="stop_video_capture_instruction">Запись началась. Коснитесь экрана ещё раз, чтобы остановить.</string>
   <string name="play_video">Проиграть видео</string>

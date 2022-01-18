@@ -246,7 +246,6 @@
     <string name="choose_image">Choose Image</string>
     <string name="choose_account">Choose account</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
-    <string name="view_image">View Image</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
     <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
@@ -263,7 +262,6 @@
 
     <string name="capture_video">Record Video</string>
     <string name="choose_video">Choose Video</string>
-    <string name="view_video">View Video</string>
     <string name="start_video_capture_instruction">Tap the screen to start recording</string>
     <string name="stop_video_capture_instruction">Recording started. Tap again to stop</string>
     <string name="play_video">Play Video</string>

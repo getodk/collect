@@ -10,6 +10,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.List;
 
@@ -19,10 +20,10 @@ public class SelectOneMinimalDialog extends SelectMinimalDialog implements Selec
 
     public SelectOneMinimalDialog(String selectedItem, boolean isFlex, boolean isAutoComplete, Context context,
                                   List<SelectChoice> items, FormEntryPrompt prompt, ReferenceManager referenceManager,
-                                  int playColor, int numColumns, boolean noButtonsMode) {
+                                  int playColor, int numColumns, boolean noButtonsMode, MediaUtils mediaUtils) {
         super(isFlex, isAutoComplete);
         adapter = new SelectOneListAdapter(selectedItem, this, context, items, prompt,
-                referenceManager, null, playColor, numColumns, noButtonsMode);
+                referenceManager, null, playColor, numColumns, noButtonsMode, mediaUtils);
     }
 
     @Override

@@ -41,6 +41,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
@@ -70,10 +71,11 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
     protected final int playColor;
     protected final int numColumns;
     protected boolean noButtonsMode;
+    private final MediaUtils mediaUtils;
 
     AbstractSelectListAdapter(Context context, List<SelectChoice> items, FormEntryPrompt prompt,
                               ReferenceManager referenceManager, AudioHelper audioHelper,
-                              int playColor, int numColumns, boolean noButtonsMode) {
+                              int playColor, int numColumns, boolean noButtonsMode, MediaUtils mediaUtils) {
         this.context = context;
         this.items = items;
         this.filteredItems = items;
@@ -83,6 +85,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         this.playColor = playColor;
         this.numColumns = numColumns;
         this.noButtonsMode = noButtonsMode;
+        this.mediaUtils = mediaUtils;
     }
 
     @Override
@@ -228,6 +231,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
 
             audioVideoImageTextLabel.setTag(getClipID(prompt, item));
             audioVideoImageTextLabel.setTextView(textView);
+            audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
             String imageURI = getImageURI(index, items);
             String videoURI = prompt.getSpecialFormSelectChoiceText(item, "video");

@@ -126,7 +126,6 @@
   <string name="svg_file_does_not_exist">فایل SVG موجود نیست!</string>
   <string name="capture_image">گرفتن عکس</string>
   <string name="choose_image">انتخاب تصویر</string>
-  <string name="view_image">نمایش تصویر</string>
   <string name="annotate_image">نوشتن بر روی تصویر</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">ذخیره کردن و خروج</string>
@@ -136,7 +135,6 @@
   <string name="reset_image">تنظیم مجدد</string>
   <string name="capture_video">ثبت ویدیو</string>
   <string name="choose_video">انتخاب ویدیو</string>
-  <string name="view_video">نشان دادن ویدیو</string>
   <string name="start_video_capture_instruction">برای آغاز کردن ثبت روی صفحه را فشار دهید</string>
   <string name="stop_video_capture_instruction">ثبت آغاز شد. برای توقف آن دوباره روی صفحه را فشار دهید</string>
   <string name="play_video">پخش ویدیو</string>

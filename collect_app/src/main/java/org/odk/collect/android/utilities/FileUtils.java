@@ -425,15 +425,6 @@ public final class FileUtils {
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
     }
 
-    /**
-     * Grants read permissions to a content URI added to the specified Intent.
-     *
-     * See {@link #grantFileReadPermissions(Intent, Uri, Context)} for details.
-     */
-    public static void grantFileReadPermissions(Intent intent, Uri uri, Context context) {
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-    }
-
     @SuppressWarnings("PMD.DoNotHardCodeSDCard")
     public static String expandAndroidStoragePath(String path) {
         if (path != null && path.startsWith("/storage/emulated/0/")) {

@@ -52,9 +52,7 @@
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
   <string name="choose_image">Pilih Gambar</string>
-  <string name="view_image">Lihat Gambar</string>
   <!--Dialog heading for saving annotated image-->
-  <string name="view_video">Lihat Video</string>
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <!--Text for button that lets the user choose a sound file on their device-->

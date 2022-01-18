@@ -14,11 +14,8 @@
 
 package org.odk.collect.android.formentry.questions;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -36,24 +33,18 @@ import androidx.lifecycle.LiveData;
 
 import com.bumptech.glide.Glide;
 
-import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
 import org.odk.collect.android.listeners.SelectItemClickListener;
-import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.Clip;
 
 import java.io.File;
-
-import timber.log.Timber;
 
 /**
  * Represents a label for a prompt/question or a select choice. The label can have media
@@ -69,6 +60,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
     private SelectItemClickListener listener;
     private File videoFile;
     private File bigImageFile;
+    private MediaUtils mediaUtils;
 
     public AudioVideoImageTextLabel(Context context) {
         super(context);
@@ -139,33 +131,23 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     public void setVideo(@NonNull File videoFile) {
         this.videoFile = videoFile;
-        setupVideoButton();
+
+        binding.videoButton.setVisibility(VISIBLE);
+        binding.mediaButtons.setVisibility(VISIBLE);
+        binding.videoButton.setOnClickListener(this);
     }
 
     public void setPlayTextColor(int textColor) {
         playTextColor = textColor;
-        binding.audioButton.setColors(getThemeUtils().getColorOnSurface(), playTextColor);
+        binding.audioButton.setColors(new ThemeUtils(getContext()).getColorOnSurface(), playTextColor);
+    }
+
+    public void setMediaUtils(MediaUtils mediaUtils) {
+        this.mediaUtils = mediaUtils;
     }
 
     public void playVideo() {
-        if (!videoFile.exists()) {
-            // We should have a video clip, but the file doesn't exist.
-            String errorMsg = getContext().getString(R.string.file_missing, videoFile);
-            Timber.d("File %s is missing", videoFile);
-            ToastUtils.showLongToast(getContext(), errorMsg);
-            return;
-        }
-
-        Intent intent = new Intent("android.intent.action.VIEW");
-        Uri uri =
-                ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", videoFile);
-        FileUtils.grantFileReadPermissions(intent, uri, getContext());
-        intent.setDataAndType(uri, "video/*");
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            getContext().startActivity(intent);
-        } else {
-            ToastUtils.showShortToast(getContext(), getContext().getString(R.string.activity_not_found, getContext().getString(R.string.view_video)));
-        }
+        mediaUtils.openFile(getContext(), videoFile, "video/*");
     }
 
     public TextView getLabelTextView() {
@@ -213,24 +195,9 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     private void onImageClick() {
         if (bigImageFile != null) {
-            openImage();
+            mediaUtils.openFile(getContext(), bigImageFile, "image/*");
         } else {
             selectItem();
-        }
-    }
-
-    private void openImage() {
-        try {
-            Intent intent = new Intent("android.intent.action.VIEW");
-            Uri uri =
-                    ContentUriProvider.getUriForFile(getContext(), BuildConfig.APPLICATION_ID + ".provider", bigImageFile);
-            FileUtils.grantFileReadPermissions(intent, uri, getContext());
-            intent.setDataAndType(uri, "image/*");
-            getContext().startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Timber.d(e, "No Activity found to handle due to %s", e.getMessage());
-            ToastUtils.showShortToast(getContext(), getContext().getString(R.string.activity_not_found,
-                    getContext().getString(R.string.view_image)));
         }
     }
 
@@ -244,12 +211,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         if (listener != null) {
             listener.onItemClicked();
         }
-    }
-
-    private void setupVideoButton() {
-        binding.videoButton.setVisibility(VISIBLE);
-        binding.mediaButtons.setVisibility(VISIBLE);
-        binding.videoButton.setOnClickListener(this);
     }
 
     private void setupAudioButton(String audioURI, AudioHelper audioHelper) {
@@ -270,11 +231,6 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
                 textLabel.setText(questionText);
             }
         });
-    }
-
-    @NotNull
-    private ThemeUtils getThemeUtils() {
-        return new ThemeUtils(getContext());
     }
 
     private ScreenContext getScreenContext() {

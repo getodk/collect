@@ -35,6 +35,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
+import org.odk.collect.android.utilities.MediaUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,8 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
     public SelectMultipleListAdapter(List<Selection> selectedItems, SelectItemClickListener listener,
                                      Context context, List<SelectChoice> items,
                                      FormEntryPrompt prompt, ReferenceManager referenceManager, AudioHelper audioHelper,
-                                     int playColor, int numColumns, boolean noButtonsMode) {
-        super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode);
+                                     int playColor, int numColumns, boolean noButtonsMode, MediaUtils mediaUtils) {
+        super(context, items, prompt, referenceManager, audioHelper, playColor, numColumns, noButtonsMode, mediaUtils);
         this.originallySelectedItems = new ArrayList<>(selectedItems);
         this.selectedItems = selectedItems;
         this.listener = listener;

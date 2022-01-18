@@ -2,12 +2,9 @@ package org.odk.collect.android.widgets;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
-
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -18,18 +15,14 @@ import java.io.File;
 import timber.log.Timber;
 
 public abstract class BaseArbitraryFileWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver  {
-    @NonNull
-    protected final MediaUtils mediaUtils;
-
     private final QuestionMediaManager questionMediaManager;
     protected final WaitingForDataRegistry waitingForDataRegistry;
 
     protected File answerFile;
 
-    public BaseArbitraryFileWidget(Context context, QuestionDetails questionDetails, @NonNull MediaUtils mediaUtils,
-                                   QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
+    public BaseArbitraryFileWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
+                                   WaitingForDataRegistry waitingForDataRegistry) {
         super(context, questionDetails);
-        this.mediaUtils = mediaUtils;
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
     }

@@ -38,7 +38,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -70,15 +69,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     private final WaitingForDataRegistry waitingForDataRegistry;
     private final QuestionMediaManager questionMediaManager;
-    private final MediaUtils mediaUtils;
     protected final String tmpImageFilePath;
 
     public BaseImageWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager,
-                           WaitingForDataRegistry waitingForDataRegistry, MediaUtils mediaUtils, String tmpImageFilePath) {
+                           WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
-        this.mediaUtils = mediaUtils;
         this.tmpImageFilePath = tmpImageFilePath;
     }
 
