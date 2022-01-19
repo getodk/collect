@@ -25,7 +25,7 @@ class ActivityGeoDataRequester(
 
     override fun requestGeoPoint(
         prompt: FormEntryPrompt,
-        answerText: String,
+        answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestLocationPermissions(
@@ -35,7 +35,7 @@ class ActivityGeoDataRequester(
                     waitingForDataRegistry.waitForData(prompt.index)
 
                     val bundle = Bundle().also {
-                        if (answerText.isNotEmpty()) {
+                        if (!answerText.isNullOrEmpty()) {
                             it.putDoubleArray(
                                 GeoPointMapActivity.EXTRA_LOCATION,
                                 GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText),
@@ -86,7 +86,7 @@ class ActivityGeoDataRequester(
 
     override fun requestGeoShape(
         prompt: FormEntryPrompt,
-        answerText: String,
+        answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestLocationPermissions(
@@ -118,7 +118,7 @@ class ActivityGeoDataRequester(
 
     override fun requestGeoTrace(
         prompt: FormEntryPrompt,
-        answerText: String,
+        answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestLocationPermissions(
