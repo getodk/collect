@@ -20,8 +20,7 @@ import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import java.io.File
 import java.io.IOException
-import java.lang.IllegalArgumentException
-import java.util.*
+import java.util.Arrays
 
 /**
  * Emulates the process of copying a form via ADB
