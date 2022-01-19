@@ -98,7 +98,7 @@ If you have finished testing a pull request, please use a template from [Testing
 
 1. Use Android Studio to import the project from its Gradle settings. To run the project, click on the green arrow at the top of the screen.
 
-1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WindowsDevSetup.md).
+1. Windows developers: continue configuring Android Studio with the steps in this document: [Developing ODK Collect on Windows](docs/WINDOWS-DEV-SETUP.md).
 
 1. Make sure you can run unit tests by running everything under `collect_app/src/test/java` in Android Studio or on the command line:
 
