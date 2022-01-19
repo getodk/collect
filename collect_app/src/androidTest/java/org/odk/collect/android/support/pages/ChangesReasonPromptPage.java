@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -10,6 +8,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
+
+import java.util.concurrent.Callable;
 
 public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
@@ -38,6 +41,13 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
     public <D extends Page<D>> D clickSave(D destination) {
         clickOnString(R.string.save);
+
+        // Make sure we wait for form saving to finish
+        WaitFor.waitFor((Callable<Void>) () -> {
+            assertTextDoesNotExist(R.string.saving_form);
+            return null;
+        });
+
         return destination.assertOnPage();
     }
 
