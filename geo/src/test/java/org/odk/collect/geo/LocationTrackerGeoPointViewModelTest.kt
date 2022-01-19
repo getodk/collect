@@ -142,6 +142,38 @@ class LocationTrackerGeoPointViewModelTest {
     }
 
     @Test
+    fun `currentAccuracy is never Poor when unacceptableAccuracyThreshold is equal to accuracyThreshold + 5`() {
+        val viewModel = createViewModel()
+        viewModel.start(accuracyThreshold = 5f, unacceptableAccuracyThreshold = 10f)
+
+        val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 11f))
+        scheduler.runForeground()
+        assertThat(currentAccuracy.value, equalTo(GeoPointAccuracy.Unacceptable(11f)))
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 10f))
+        scheduler.runForeground()
+        assertThat(currentAccuracy.value, equalTo(GeoPointAccuracy.Improving(10f)))
+    }
+
+    @Test
+    fun `currentAccuracy is never Poor when unacceptableAccuracyThreshold is less than accuracyThreshold + 5`() {
+        val viewModel = createViewModel()
+        viewModel.start(accuracyThreshold = 5f, unacceptableAccuracyThreshold = 9f)
+
+        val currentAccuracy = liveDataTester.activate(viewModel.currentAccuracy)
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 10f))
+        scheduler.runForeground()
+        assertThat(currentAccuracy.value, equalTo(GeoPointAccuracy.Unacceptable(10f)))
+
+        whenever(locationTracker.getCurrentLocation()).thenReturn(Location(0.0, 0.0, 0.0, 9f))
+        scheduler.runForeground()
+        assertThat(currentAccuracy.value, equalTo(GeoPointAccuracy.Improving(9f)))
+    }
+
+    @Test
     fun `onCleared() stops LocationTracker`() {
         val viewModel = createViewModel()
         viewModel.start()
