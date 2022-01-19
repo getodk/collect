@@ -342,7 +342,7 @@ abstract class Page<T : Page<T>> {
     }
 
     @JvmOverloads
-    fun copyForm(formFilename: String, mediaFileNames: List<String?>? = null, copyToDatabase: Boolean = false, projectName: String? = "Demo project"): T {
+    fun copyForm(formFilename: String, mediaFileNames: List<String>? = null, copyToDatabase: Boolean = false, projectName: String = "Demo project"): T {
         try {
             AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, copyToDatabase, formFilename, projectName)
         } catch (e: IOException) {
@@ -351,7 +351,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun copyInstance(instanceFileName: String?): T {
+    fun copyInstance(instanceFileName: String): T {
         try {
             AdbFormLoadingUtils.copyInstanceToDemoProject(instanceFileName)
         } catch (e: IOException) {
