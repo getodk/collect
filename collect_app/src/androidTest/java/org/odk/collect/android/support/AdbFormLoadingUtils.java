@@ -74,6 +74,10 @@ public final class AdbFormLoadingUtils {
         copyFormToStorage(formFilename, mediaFilePaths, false, formFilename, "Demo project");
     }
 
+    public static void copyFormToDemoProject(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase) throws IOException  {
+        copyFormToStorage(formFilename, mediaFilePaths, copyToDatabase, formFilename, "Demo project");
+    }
+
     public static void copyInstanceToDemoProject(String instanceFileName) throws IOException {
         String instanceDirPath = getInstancesDirPath("Demo project") + instanceFileName.split("\\.")[0];
         new File(instanceDirPath).mkdir();
