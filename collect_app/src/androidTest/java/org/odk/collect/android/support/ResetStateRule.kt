@@ -1,8 +1,6 @@
 package org.odk.collect.android.support
 
 import android.app.Application
-import android.content.Context
-import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import org.apache.commons.io.FileUtils
 import org.junit.rules.TestRule
@@ -27,11 +25,10 @@ class ResetStateRule @JvmOverloads constructor(private val appDependencyModule: 
     override fun apply(base: Statement, description: Description): Statement = ResetStateStatement(base)
 
     private inner class ResetStateStatement(private val base: Statement) : Statement() {
-        @Throws(Throwable::class)
         override fun evaluate() {
             val application = ApplicationProvider.getApplicationContext<Application>()
             resetDagger()
-            clearPrefs(application)
+            clearPrefs()
             clearDisk()
             clearAppState(application)
             setTestState()
@@ -68,11 +65,7 @@ class ResetStateRule @JvmOverloads constructor(private val appDependencyModule: 
         CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
     }
 
-    private fun clearPrefs(context: Context) {
+    private fun clearPrefs() {
         settingsProvider.clearAll()
-
-        // Delete legacy prefs in case older version of app was run on test device
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply()
-        context.getSharedPreferences("admin_prefs", Context.MODE_PRIVATE).edit().clear().apply()
     }
 }

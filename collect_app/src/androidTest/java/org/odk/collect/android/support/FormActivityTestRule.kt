@@ -17,27 +17,16 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
 import java.io.IOException
 
-class FormActivityTestRule : TestRule {
-    private val formFilename: String
-    private val formName: String
-    private val mediaFilePaths: List<String>?
+class FormActivityTestRule @JvmOverloads constructor(
+    private val formFilename: String,
+    private val formName: String,
+    private val mediaFilePaths: List<String>? = null
+) : TestRule {
+
     private var formEntryPage: FormEntryPage? = null
-
-    constructor(formFilename: String, formName: String) {
-        this.formFilename = formFilename
-        this.formName = formName
-        mediaFilePaths = null
-    }
-
-    constructor(formFilename: String, formName: String, mediaFilePaths: List<String>?) {
-        this.formFilename = formFilename
-        this.formName = formName
-        this.mediaFilePaths = mediaFilePaths
-    }
 
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
-            @Throws(Throwable::class)
             override fun evaluate() {
                 setUpProjectAndCopyForm()
                 ActivityScenario.launch<Activity>(activityIntent)

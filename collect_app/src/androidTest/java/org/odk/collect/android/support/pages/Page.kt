@@ -5,34 +5,51 @@ import android.content.pm.ActivityInfo
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.core.internal.deps.guava.collect.Iterables
-import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
-import org.hamcrest.CoreMatchers
-import org.hamcrest.Matchers
-import org.hamcrest.core.StringContains
-import org.hamcrest.core.StringEndsWith
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.core.StringContains.containsString
+import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
 import org.odk.collect.android.R
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.AdbFormLoadingUtils
-import org.odk.collect.android.support.CustomMatchers
+import org.odk.collect.android.support.CustomMatchers.withIndex
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher
 import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
-import org.odk.collect.testshared.NestedScrollToAction
+import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -57,6 +74,7 @@ import java.io.IOException
  * @see [Fluent Interfaces](https://en.wikipedia.org/wiki/Fluent_interface)
  */
 
+@Suppress("UNCHECKED_CAST")
 abstract class Page<T : Page<T>> {
 
     abstract fun assertOnPage(): T
@@ -75,14 +93,14 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertText(text: String?): T {
-        Espresso.onView(Matchers.allOf(ViewMatchers.withText(text), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
         return this as T
     }
 
     fun assertText(vararg text: String?): T {
         closeSoftKeyboard()
         for (t in text) {
-            Espresso.onView(Matchers.allOf(ViewMatchers.withText(t), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
         }
         return this as T
     }
@@ -95,7 +113,7 @@ abstract class Page<T : Page<T>> {
     fun checkIsTranslationDisplayed(vararg text: String?): T {
         for (s in text) {
             try {
-                Espresso.onView(ViewMatchers.withText(s)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+                onView(withText(s)).check(matches(isDisplayed()))
             } catch (e: NoMatchingViewException) {
                 Timber.i(e)
             }
@@ -109,7 +127,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextDoesNotExist(text: String?): T {
-        Espresso.onView(ViewMatchers.withText(text)).check(ViewAssertions.doesNotExist())
+        onView(withText(text)).check(doesNotExist())
         return this as T
     }
 
@@ -119,7 +137,7 @@ abstract class Page<T : Page<T>> {
 
     fun assertTextDoesNotExist(vararg text: String?): T {
         for (t in text) {
-            Espresso.onView(Matchers.allOf(ViewMatchers.withText(t), ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(ViewAssertions.doesNotExist())
+            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
         }
         return this as T
     }
@@ -143,23 +161,23 @@ abstract class Page<T : Page<T>> {
 
     fun clickOnText(text: String): T {
         try {
-            Espresso.onView(ViewMatchers.withText(text)).perform(ViewActions.click())
+            onView(withText(text)).perform(click())
         } catch (e: PerformException) {
             Timber.e(e)
 
             // Create a standard view match error so the view hierarchy is visible in the failure
-            Espresso.onView(ViewMatchers.withText("PerformException thrown clicking on \"$text\"")).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            onView(withText("PerformException thrown clicking on \"$text\"")).check(matches(isDisplayed()))
         }
         return this as T
     }
 
     fun clickOnId(id: Int): T {
-        Espresso.onView(ViewMatchers.withId(id)).perform(ViewActions.click())
+        onView(withId(id)).perform(click())
         return this as T
     }
 
     fun checkIsIdDisplayed(id: Int): T {
-        Espresso.onView(ViewMatchers.withId(id)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(id)).check(matches(isDisplayed()))
         return this as T
     }
 
@@ -177,9 +195,9 @@ abstract class Page<T : Page<T>> {
 
     fun <D : Page<D>?> clickOnButtonInDialog(buttonText: Int, destination: D): D {
         wait250ms() // https://github.com/android/android-test/issues/444
-        Espresso.onView(ViewMatchers.withText(getTranslatedString(buttonText)))
-            .inRoot(RootMatchers.isDialog())
-            .perform(ViewActions.click())
+        onView(withText(getTranslatedString(buttonText)))
+            .inRoot(isDialog())
+            .perform(click())
         return destination!!.assertOnPage()
     }
 
@@ -188,60 +206,60 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {
-        Espresso.onView(CustomMatchers.withIndex(ViewMatchers.withClassName(StringEndsWith.endsWith(clazz)), index)).perform(ViewActions.click())
+        onView(withIndex(withClassName(endsWith(clazz)), index)).perform(click())
         return this as T
     }
 
     fun addText(existingText: String?, text: String?): T {
-        Espresso.onView(ViewMatchers.withText(existingText)).perform(ViewActions.typeText(text))
+        onView(withText(existingText)).perform(typeText(text))
         return this as T
     }
 
     fun inputText(text: String?): T {
-        Espresso.onView(ViewMatchers.withClassName(StringEndsWith.endsWith("EditText"))).perform(ViewActions.replaceText(text))
+        onView(withClassName(endsWith("EditText"))).perform(replaceText(text))
         closeSoftKeyboard()
         return this as T
     }
 
     fun inputText(hint: Int, text: String?): T {
-        Espresso.onView(ViewMatchers.withHint(getTranslatedString(hint))).perform(ViewActions.replaceText(text))
+        onView(withHint(getTranslatedString(hint))).perform(replaceText(text))
         closeSoftKeyboard()
         return this as T
     }
 
     fun checkIfElementIsGone(id: Int): T {
-        Espresso.onView(ViewMatchers.withId(id)).check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        onView(withId(id)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         return this as T
     }
 
     fun clearTheText(text: String?): T {
-        Espresso.onView(ViewMatchers.withText(text)).perform(ViewActions.clearText())
+        onView(withText(text)).perform(ViewActions.clearText())
         return this as T
     }
 
     fun checkIsTextDisplayedOnDialog(text: String?): T {
-        Espresso.onView(ViewMatchers.withId(android.R.id.message)).check(ViewAssertions.matches(ViewMatchers.withText(StringContains.containsString(text))))
+        onView(withId(android.R.id.message)).check(matches(withText(containsString(text))))
         return this as T
     }
 
     fun assertEnabled(string: Int): T {
-        Espresso.onView(ViewMatchers.withText(string)).check(ViewAssertions.matches(Matchers.allOf(ViewMatchers.isDisplayed(), ViewMatchers.isEnabled())))
+        onView(withText(string)).check(matches(allOf(isDisplayed(), isEnabled())))
         return this as T
     }
 
     fun assertDisabled(string: Int): T {
-        Espresso.onView(ViewMatchers.withText(string)).check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.isEnabled())))
+        onView(withText(string)).check(matches(not(isEnabled())))
         return this as T
     }
 
     fun <D : Page<D>?> rotateToLandscape(destination: D): D {
-        Espresso.onView(ViewMatchers.isRoot()).perform(rotateToLandscape())
+        onView(isRoot()).perform(rotateToLandscape())
         waitForRotationToEnd()
         return destination!!.assertOnPage()
     }
 
     fun <D : Page<D>?> rotateToPortrait(destination: D): D {
-        Espresso.onView(ViewMatchers.isRoot()).perform(rotateToPortrait())
+        onView(isRoot()).perform(rotateToPortrait())
         waitForRotationToEnd()
         return destination!!.assertOnPage()
     }
@@ -256,56 +274,56 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsSnackbarErrorVisible(): T {
-        Espresso.onView(Matchers.allOf(ViewMatchers.withId(R.id.snackbar_text))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(allOf(withId(R.id.snackbar_text))).check(matches(isDisplayed()))
         return this as T
     }
 
     fun scrollToAndClickText(text: Int): T {
-        Espresso.onView(ViewMatchers.withText(getTranslatedString(text))).perform(NestedScrollToAction.nestedScrollTo(), ViewActions.click())
+        onView(withText(getTranslatedString(text))).perform(nestedScrollTo(), click())
         return this as T
     }
 
     fun scrollToAndClickText(text: String?): T {
-        Espresso.onView(ViewMatchers.withText(text)).perform(NestedScrollToAction.nestedScrollTo(), ViewActions.click())
+        onView(withText(text)).perform(nestedScrollTo(), click())
         return this as T
     }
 
     fun scrollToRecyclerViewItemAndClickText(text: String?): T {
-        Espresso.onView(ViewMatchers.withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(text)), ViewActions.scrollTo()))
-        Espresso.onView(ViewMatchers.withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(text)), ViewActions.click()))
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(text)), scrollTo()))
+        onView(withId(R.id.recycler_view)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(text)), click()))
         return this as T
     }
 
     fun scrollToRecyclerViewItemAndClickText(string: Int): T {
-        Espresso.onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(getTranslatedString(string))), ViewActions.scrollTo()))
-        Espresso.onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(getTranslatedString(string))), ViewActions.click()))
+        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), scrollTo()))
+        onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), click()))
         return this as T
     }
 
     fun scrollToAndAssertText(text: String?): T {
-        Espresso.onView(ViewMatchers.withText(text)).perform(NestedScrollToAction.nestedScrollTo())
-        Espresso.onView(ViewMatchers.withText(text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(text)).perform(nestedScrollTo())
+        onView(withText(text)).check(matches(isDisplayed()))
         return this as T
     }
 
     fun clickOnElementInHierarchy(index: Int): T {
-        Espresso.onView(ViewMatchers.withId(R.id.list)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
-        Espresso.onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).perform(ViewActions.click())
+        onView(withId(R.id.list)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
+        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).perform(click())
         return this as T
     }
 
     fun checkListSizeInHierarchy(index: Int): T {
-        Espresso.onView(ViewMatchers.withId(R.id.list)).check(ViewAssertions.matches(RecyclerViewMatcher.withListSize(index)))
+        onView(withId(R.id.list)).check(matches(RecyclerViewMatcher.withListSize(index)))
         return this as T
     }
 
     fun checkIfElementInHierarchyMatchesToText(text: String?, index: Int): T {
-        Espresso.onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).check(ViewAssertions.matches(ViewMatchers.withText(text)))
+        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).check(matches(withText(text)))
         return this as T
     }
 
     fun checkIfWebViewActivityIsDisplayed(): T {
-        Espresso.onView(ViewMatchers.withClassName(StringEndsWith.endsWith("WebView"))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withClassName(endsWith("WebView"))).check(matches(isDisplayed()))
         return this as T
     }
 
@@ -329,12 +347,12 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextNotDisplayed(string: Int): T {
-        Espresso.onView(ViewMatchers.withText(getTranslatedString(string))).check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.isDisplayed())))
+        onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())))
         return this as T
     }
 
     protected fun assertToolbarTitle(title: String?) {
-        Espresso.onView(Matchers.allOf(ViewMatchers.withText(title), ViewMatchers.isDescendantOfA(ViewMatchers.withId(R.id.toolbar)))).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(allOf(withText(title), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()))
     }
 
     protected fun assertToolbarTitle(title: Int) {
@@ -361,17 +379,17 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertContentDescriptionDisplayed(string: Int): T {
-        Espresso.onView(ViewMatchers.withContentDescription(string)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withContentDescription(string)).check(matches(isDisplayed()))
         return this as T
     }
 
     fun assertContentDescriptionNotDisplayed(string: Int): T {
-        Espresso.onView(ViewMatchers.withContentDescription(string)).check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.isDisplayed())))
+        onView(withContentDescription(string)).check(matches(not(isDisplayed())))
         return this as T
     }
 
     fun clickOnContentDescription(string: Int): T {
-        Espresso.onView(ViewMatchers.withContentDescription(string)).perform(ViewActions.click())
+        onView(withContentDescription(string)).perform(click())
         return this as T
     }
 
