@@ -10,11 +10,12 @@ This is a living document. If you see something that could be improved, edit thi
 * [Triage issues](#triage-issues-)
 
 ## Submitting a pull request
+
 To contribute code to ODK Collect, you will need to open a [pull request](https://help.github.com/articles/about-pull-requests/) which will be reviewed by the community and then merged into the core project. Generally, a pull request is submitted when a unit of work is considered complete but it can sometimes be helpful to share ideas through a work in progress (WIP) pull request ([learn more](#work-in-progress-pull-requests)).
 
 1. Read our ["state of the union"](STATE.md) to get a quick understanding of the codebase and its history. The "Where we're going" section may suggest efforts you can get involved in if you are having a hard time finding ways to contribute.
 
-1. Read our [code style guidelines](CODE-GUIDELINES.md). 
+1. Read our [code style guidelines](CODE-GUIDELINES.md).
 
 1. Read our documentation on [automated testing](TEST-GUIDELINES.md).
 
@@ -45,6 +46,7 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 1. Pull requests will be reviewed when committers have time. If you haven't received a review in 10 days, you may notify committers by putting `@getodk/collect` in a comment.
 
 ## Making sure your pull request is accepted
+
 1. Confirm that your code compiles.
 
 1. Verify the functionality. Ideally, include automated tests with each pull request. If that's not possible, describe in the pull request comment which cases you tried manually to confirm that your code works as expected. Attach a test form when appropriate. This form should only include questions which are useful for verifying your change.
@@ -55,22 +57,19 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
 1. Keep your pull request focused on one narrow goal. This could mean addressing an issue with multiple, smaller pull requests. Small pull requests are easier to review and less likely to introduce bugs. If you would like to make stylistic changes to the code, create a separate pull request.
 
-1. Run `./gradlew checkCode` and fix any errors.
-
 1. Write clear code. Use descriptive names and create meaningful abstractions (methods, classes).
 
 1. Document your reasoning. Your commit messages should make it clear why each change has been made.
 
 1. Point out decisions you made and what alternatives you considered. If you're unsure about a particular approach, ask a question to make your own thinking clear and help the reviewer identify controversial parts of the proposed solution. For example: "here I returned a result object to represent the status after the transaction. I also considered throwing an exception in case of error but I didn't like that it made it unclear where an error happened. Which do you prefer and why?" This is particularly important for [work in progress pull requests](#work-in-progress-pull-requests).
 
-1. If your pull request makes user-facing changes, we likely need to update documentation. [File an issue on the docs repo](https://github.com/getodk/docs/issues/new) describing the changes.
-
 1. Follow the guidelines below.
 
 ## The review process
-Bug fixes, pull requests corresponding to issues with a clearly stated goal and pull requests with clear tests and/or process for manual verification are given priority. Pull requests that are unclear or controversial may be tagged as `needs discussion` and/or may take longer to review.
 
-We try to have at least two people review every pull request and we encourage everyone to participate in the review process to get familiar with the code base and help ensure higher quality. Reviewers should ask themselves some or all of the following questions:
+Bug fixes, pull requests corresponding to issues with a clearly stated goal and pull requests with clear tests and/or process for manual verification are given priority. Pull requests that are unclear or controversial may be labelled as `needs discussion` and/or may take longer to review.
+
+We encourage everyone to participate in the review process to get familiar with the code base and help ensure higher quality. Reviewers should ask themselves some or all of the following questions:
 - Was this change adequately discussed prior to implementation?
 - Is the intended behavior clear under all conditions?
 - What interesting cases should be verified?
@@ -80,18 +79,18 @@ We try to have at least two people review every pull request and we encourage ev
 - Is the code easy to understand and to maintain?
 - Is there sufficient detail to inform any changes to documentation?
 
-When a pull request is first created, @getodk-bot tags it as `needs review` to indicate that code review is needed. Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, tags the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may go back and forth between `needs testing` and `needs review` until the behavior is thoroughly verified. Once the behavior has been thoroughly verified, the pull request is tagged as `behavior verified`. A maintainer then merges the changes. Pull requests that need more complete reviews including review of approach and/or appropriateness are tagged with `reviews wanted`. Any community member is encouraged to participate in the review process!
+Community members review the code and leave their comments, verifying that the changes included are relevant and properly address the issue. A maintainer does a thorough code review and when satisfied with the code, accepts and may label the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may have `needs testing` removed and added again several times until the behavior is thoroughly verified. Once the behavior has been verified, the pull request is labelled as `behavior verified`.
 
-Small fixes that target very particular bugs may occasionally be merged without a second review.
+## Merging pull requests
+
+Pull requests can be merged by committers once they are accepted or once they have been accepted and have been labelled as `behavior verified` unless:
+
+* There is a currently a "code freeze" due to an [ongoing release](/README.md#release-cycle)
+* [CI](https://app.circleci.com/pipelines/github/getodk/collect) is currently failing
 
 ## Work in progress pull requests
 
-Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction. These should ideally ideally be created as [Draft Pull Requests](https://help.github.com/en/articles/about-pull-requests#draft-pull-requests). 
-
-If a pull request is already a non-draft (there is currently no way to move it back to a draft) the PR:
-- Should include `[WIP]` in front of the pull request title.
-- Should specifically describe the proposed solution and feedback wanted.
-- Will not be merged until you remove `[WIP]` from the title.
+Work in progress (WIP) pull requests are useful to illustrate a proposed direction and get early feedback before committing to a solution direction. These should ideally ideally be created as [Draft Pull Requests](https://help.github.com/en/articles/about-pull-requests#draft-pull-requests).
 
 ## Triage issues [![Open Source Helpers](https://www.codetriage.com/getodk/collect/badges/users.svg)](https://www.codetriage.com/getodk/collect)
 
