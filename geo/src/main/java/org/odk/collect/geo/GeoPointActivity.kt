@@ -16,7 +16,7 @@ import javax.inject.Inject
 class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     @Inject
-    lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

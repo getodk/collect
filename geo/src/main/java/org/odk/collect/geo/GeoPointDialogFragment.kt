@@ -16,7 +16,7 @@ import javax.inject.Inject
 class GeoPointDialogFragment : DialogFragment() {
 
     @Inject
-    lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
 
     var listener: Listener? = null
 
