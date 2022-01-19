@@ -15,20 +15,28 @@ import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
+
+import timber.log.Timber;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Clock clock;
+    private final SettingsProvider settingsProvider;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
@@ -40,8 +48,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock) {
+    public FormEntryViewModel(Clock clock, SettingsProvider settingsProvider) {
         this.clock = clock;
+        this.settingsProvider = settingsProvider;
     }
 
     @Override
@@ -179,19 +188,50 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return hasBackgroundRecording;
     }
 
+    /**
+     * Checks the database to determine if the current instance being edited has
+     * already been 'marked completed'. A form can be 'unmarked' complete and
+     * then resaved.
+     *
+     * @return true if form has been marked completed, false otherwise.
+     **/
+    public boolean isInstanceComplete(boolean end) {
+        // default to false if we're mid form
+        boolean complete = false;
+
+        FormController formController = Collect.getInstance().getFormController();
+        if (formController != null && formController.getInstanceFile() != null) {
+            // First check if we're at the end of the form, then check the preferences
+            complete = end && settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT);
+
+            // Then see if we've already marked this form as complete before
+            String path = formController.getInstanceFile().getAbsolutePath();
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
+            if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
+                complete = true;
+            }
+        } else {
+            Timber.w("FormController or its instanceFile field has a null value");
+        }
+
+        return complete;
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Clock clock;
+        private final SettingsProvider settingsProvider;
 
-        public Factory(Clock clock) {
+        public Factory(Clock clock, SettingsProvider settingsProvider) {
             this.clock = clock;
+            this.settingsProvider = settingsProvider;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock);
+            return (T) new FormEntryViewModel(clock, settingsProvider);
         }
     }
 

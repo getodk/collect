@@ -80,8 +80,8 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
-                return new FormEntryViewModel.Factory(clock) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, SettingsProvider settingsProvider) {
+                return new FormEntryViewModel.Factory(clock, settingsProvider) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

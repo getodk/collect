@@ -433,8 +433,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
-        return new FormEntryViewModel.Factory(clock);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, SettingsProvider settingsProvider) {
+        return new FormEntryViewModel.Factory(clock, settingsProvider);
     }
 
     @Provides

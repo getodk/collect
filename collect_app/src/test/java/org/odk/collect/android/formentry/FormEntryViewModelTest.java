@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.utilities.Clock;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class FormEntryViewModelTest {
         AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
 
-        viewModel = new FormEntryViewModel(mock(Clock.class));
+        viewModel = new FormEntryViewModel(mock(Clock.class), mock(SettingsProvider.class));
         viewModel.formLoaded(formController);
     }
 
