@@ -98,7 +98,7 @@ class ProjectListItemViewTest {
     }
 
     @Test
-    fun `shows Google account and Google Drive if protocol is Google Drive`() {
+    fun `shows Google account and "Google Drive" if protocol is Google Drive`() {
         val generalSettings = mock<Settings> {
             on { getString(ProjectKeys.KEY_PROTOCOL) } doReturn ProjectKeys.PROTOCOL_GOOGLE_SHEETS
             on { getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } doReturn "foo@bar.baz"
@@ -110,7 +110,7 @@ class ProjectListItemViewTest {
     }
 
     @Test
-    fun `shows Google Drive if protocol is Google Drive and username is not set`() {
+    fun `shows "Google Drive" if protocol is Google Drive and username is not set`() {
         val generalSettings = mock<Settings> {
             on { getString(ProjectKeys.KEY_PROTOCOL) } doReturn ProjectKeys.PROTOCOL_GOOGLE_SHEETS
         }
