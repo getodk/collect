@@ -31,10 +31,11 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
+import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -61,7 +62,7 @@ class QrCodeProjectCreatorDialogTest {
     @Test
     fun `If camera permission is not granted the dialog should not be dismissed`() {
         permissionsProvider.setPermissionGranted(false)
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
         }
@@ -69,17 +70,17 @@ class QrCodeProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.cancel)).perform(click())
+            onViewInDialog(withText(R.string.cancel)).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -89,9 +90,9 @@ class QrCodeProjectCreatorDialogTest {
 
     @Test
     fun `The ManualProjectCreatorDialog should be displayed after switching to the manual mode`() {
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withText(R.string.configure_manually)).perform(scrollTo(), click())
+            onViewInDialog(withText(R.string.configure_manually)).perform(scrollTo(), click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
@@ -121,7 +122,7 @@ class QrCodeProjectCreatorDialogTest {
         })
 
         Intents.init()
-        val scenario = RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
 
         scenario.onFragment {
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
@@ -153,7 +154,7 @@ class QrCodeProjectCreatorDialogTest {
             }
         })
 
-        RobolectricHelpers.launchDialogFragmentInContainer(QrCodeProjectCreatorDialog::class.java, R.style.Theme_MaterialComponents)
+        DialogFragmentTest.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
         assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
         verifyNoInteractions(projectCreator)
     }

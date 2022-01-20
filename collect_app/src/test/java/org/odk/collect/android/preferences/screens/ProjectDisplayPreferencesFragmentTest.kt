@@ -19,10 +19,10 @@ import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.TranslationHandler
+import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.UUIDGenerator
-import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ProjectDisplayPreferencesFragmentTest {
@@ -50,7 +50,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.isVisible,
@@ -61,7 +61,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.title,
@@ -77,7 +77,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.summary,
@@ -88,7 +88,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.isVisible,
@@ -99,7 +99,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.title,
@@ -115,7 +115,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.summary,
@@ -126,7 +126,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should be visible`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.isVisible,
@@ -137,7 +137,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper title`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.title,
@@ -153,7 +153,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper summary`() {
-        val scenario = RobolectricHelpers.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java, R.style.ThemeOverlay_MaterialComponents)
+        val scenario = DialogFragmentTest.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.summary.toString(),

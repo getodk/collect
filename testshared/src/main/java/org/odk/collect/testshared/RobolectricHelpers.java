@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
-import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import android.widget.ImageButton;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentFactory;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.core.app.ApplicationProvider;
@@ -99,48 +96,12 @@ public final class RobolectricHelpers {
         return null;
     }
 
-    /**
-     * @deprecated use `FragmentsTest.launchDialogFragment` instead
-     */
-    @Deprecated
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragment(Class<F> fragmentClass, int theme) {
-        return FragmentScenario.launch(fragmentClass, null, theme, (FragmentFactory) null);
-    }
-
-    /**
-     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
-     */
-    @Deprecated
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, int theme) {
-        return launchDialogFragmentInContainer(fragmentClass, null, theme);
-    }
-
-    /**
-     * @deprecated use `FragmentsTest.launchDialogFragment` and `FragmentsTest.onViewWithDialog` instead
-     */
-    @Deprecated
-    public static <F extends Fragment> FragmentScenario<F> launchDialogFragmentInContainer(Class<F> fragmentClass, Bundle fragmentArgs, int theme) {
-        /*
-          Needed to avoid explosion (NullPointerException) inside internal platform code (WindowDecorActionBar).
-          For some reason AppCompat.Light or AppCompat.Light.NoActionBar don't work. Our theme must declare
-          something that is missing in those base themes when they are used in Robolectric.
-
-          This is probably something that should be fixed within Robolectric.
-         */
-        ApplicationProvider.getApplicationContext().setTheme(theme);
-        return FragmentScenario.launchInContainer(fragmentClass, fragmentArgs);
-    }
-
     public static void runLooper() {
         shadowOf(getMainLooper()).idle();
     }
 
     public static void clearServices() {
         services.clear();
-    }
-
-    public static void runServices() {
-        runServices(false);
     }
 
     public static void runServices(boolean keepServices) {
