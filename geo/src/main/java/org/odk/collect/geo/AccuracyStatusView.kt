@@ -10,14 +10,23 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.AccuracyStatusBinding
 
-class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs) {
 
     constructor(context: Context) : this(context, null)
 
     var binding = AccuracyStatusBinding.inflate(LayoutInflater.from(context), this, true)
         private set
 
-    fun setAccuracy(accuracy: Float, accuracyThreshold: Float) {
+    var accuracy: GeoPointAccuracy? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                render(value)
+            }
+        }
+
+    private fun render(accuracy: GeoPointAccuracy) {
         val (backgroundColor, textColor) = getBackgroundAndTextColor(accuracy)
         binding.root.background = ColorDrawable(backgroundColor)
         binding.title.setTextColor(textColor)
@@ -25,9 +34,9 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         binding.currentAccuracy.setTextColor(textColor)
         binding.strength.setIndicatorColor(textColor)
 
-        binding.currentAccuracy.text = formatAccuracy(context, accuracy)
+        binding.currentAccuracy.text = formatAccuracy(context, accuracy.value)
 
-        val (text, strength) = getTextAndStrength(accuracy, accuracyThreshold)
+        val (text, strength) = getTextAndStrength(accuracy)
         binding.text.setText(text)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -37,8 +46,8 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         }
     }
 
-    private fun getBackgroundAndTextColor(accuracy: Float): Pair<Int, Int> {
-        return if (accuracy >= 100) {
+    private fun getBackgroundAndTextColor(accuracy: GeoPointAccuracy): Pair<Int, Int> {
+        return if (accuracy is GeoPointAccuracy.Unacceptable) {
             Pair(
                 getThemeAttributeValue(context, R.attr.colorError),
                 getThemeAttributeValue(context, R.attr.colorOnError)
@@ -51,11 +60,11 @@ class AccuracyStatusView(context: Context, attrs: AttributeSet?) : FrameLayout(c
         }
     }
 
-    private fun getTextAndStrength(accuracy: Float, accuracyThreshold: Float): Pair<Int, Int> {
-        return when {
-            accuracy > 100 -> Pair(R.string.unacceptable_accuracy, 40)
-            accuracy > (accuracyThreshold + 5) -> Pair(R.string.poor_accuracy, 60)
-            else -> Pair(R.string.improving_accuracy, 80)
+    private fun getTextAndStrength(accuracy: GeoPointAccuracy): Pair<Int, Int> {
+        return when (accuracy) {
+            is GeoPointAccuracy.Improving -> Pair(R.string.improving_accuracy, 80)
+            is GeoPointAccuracy.Poor -> Pair(R.string.poor_accuracy, 60)
+            is GeoPointAccuracy.Unacceptable -> Pair(R.string.unacceptable_accuracy, 40)
         }
     }
 }

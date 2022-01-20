@@ -32,7 +32,7 @@ class GeoPointDialogFragmentTest {
     private val application = getApplicationContext<RobolectricApplication>()
     private val scheduler = FakeScheduler()
 
-    private val currentAccuracyLiveData: MutableLiveData<Float?> = MutableLiveData(null)
+    private val currentAccuracyLiveData: MutableLiveData<GeoPointAccuracy?> = MutableLiveData(null)
     private val timeElapsedLiveData: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
     private val satellitesLiveData = MutableNonNullLiveData(0)
     private val viewModel = mock<GeoPointViewModel> {
@@ -46,8 +46,6 @@ class GeoPointDialogFragmentTest {
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
             .application(application)
             .geoDependencyModule(object : GeoDependencyModule() {
-                override fun providesScheduler() = scheduler
-
                 override fun providesGeoPointViewModelFactory(application: Application) =
                     mock<GeoPointViewModelFactory> {
                         on { create(GeoPointViewModel::class.java) } doReturn viewModel
@@ -61,7 +59,7 @@ class GeoPointDialogFragmentTest {
         launchDialogFragment(GeoPointDialogFragment::class.java)
         onViewInDialog(withText(R.string.save)).check(matches(not(isEnabled())))
 
-        currentAccuracyLiveData.value = 5.0f
+        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
         onViewInDialog(withText(R.string.save)).check(matches(isEnabled()))
     }
 
@@ -84,15 +82,18 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates current accuracy`() {
-        launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launchDialogFragment(GeoPointDialogFragment::class.java)
 
-        currentAccuracyLiveData.value = 50.2f
-        scheduler.runForeground()
-        onViewInDialog(withText("50.2m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
+        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(50.2f)
+        scenario.onFragment {
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(GeoPointAccuracy.Improving(50.2f)))
+        }
 
-        currentAccuracyLiveData.value = 15.65f
-        scheduler.runForeground()
+        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(15.65f)
         onViewInDialog(withText("15.65m")).perform(nestedScrollTo()).check(matches(isDisplayed()))
+        scenario.onFragment {
+            assertThat(it.binding.accuracyStatus.accuracy, equalTo(GeoPointAccuracy.Improving(15.65f)))
+        }
     }
 
     @Test
@@ -100,7 +101,6 @@ class GeoPointDialogFragmentTest {
         launchDialogFragment(GeoPointDialogFragment::class.java)
 
         timeElapsedLiveData.value = 0
-        scheduler.runForeground()
         onViewInDialog(
             withText(
                 application.getLocalizedString(
@@ -113,7 +113,6 @@ class GeoPointDialogFragmentTest {
         )
 
         timeElapsedLiveData.value = 62000
-        scheduler.runForeground()
         onViewInDialog(
             withText(
                 application.getLocalizedString(
@@ -157,7 +156,7 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `clicking save calls forceLocation() on view model`() {
         launchDialogFragment(GeoPointDialogFragment::class.java)
-        currentAccuracyLiveData.value = 5.0f
+        currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
 
         onViewInDialog(withText(R.string.save)).perform(click())
         verify(viewModel).forceLocation()

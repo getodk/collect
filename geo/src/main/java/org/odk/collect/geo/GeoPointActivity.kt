@@ -16,7 +16,7 @@ import javax.inject.Inject
 class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     @Inject
-    lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +48,12 @@ class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
                 EXTRA_RETAIN_MOCK_ACCURACY,
                 false
             ),
-            accuracyThreshold = (this.intent.extras?.get(EXTRA_ACCURACY_THRESHOLD) as? Float)
+            accuracyThreshold = (this.intent.extras?.get(EXTRA_ACCURACY_THRESHOLD) as? Float),
+            unacceptableAccuracyThreshold = (
+                this.intent.extras?.get(
+                    EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD
+                ) as? Float
+                )
         )
     }
 
@@ -58,5 +63,6 @@ class GeoPointActivity : LocalizedActivity(), GeoPointDialogFragment.Listener {
 
     companion object {
         const val EXTRA_ACCURACY_THRESHOLD = "extra_accuracy_threshold"
+        const val EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD = "extra_unacceptable_accuracy_threshold"
     }
 }

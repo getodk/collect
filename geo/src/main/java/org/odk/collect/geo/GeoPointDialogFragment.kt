@@ -16,11 +16,11 @@ import javax.inject.Inject
 class GeoPointDialogFragment : DialogFragment() {
 
     @Inject
-    lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
+    internal lateinit var geoPointViewModelFactory: GeoPointViewModelFactory
 
     var listener: Listener? = null
 
-    private lateinit var binding: GeopointDialogBinding
+    lateinit var binding: GeopointDialogBinding
     private lateinit var viewModel: GeoPointViewModel
 
     override fun onAttach(context: Context) {
@@ -44,9 +44,7 @@ class GeoPointDialogFragment : DialogFragment() {
         val accuracyThreshold = viewModel.accuracyThreshold
 
         viewModel.currentAccuracy.observe(this) {
-            if (it != null) {
-                binding.accuracyStatus.setAccuracy(it, accuracyThreshold)
-            }
+            binding.accuracyStatus.accuracy = it
         }
 
         binding.threshold.text =

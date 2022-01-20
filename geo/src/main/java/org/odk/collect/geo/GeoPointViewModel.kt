@@ -19,11 +19,16 @@ internal abstract class GeoPointViewModel : ViewModel() {
     abstract val accuracyThreshold: Float
 
     abstract val acceptedLocation: LiveData<Location?>
-    abstract val currentAccuracy: LiveData<Float?>
+    abstract val currentAccuracy: LiveData<GeoPointAccuracy?>
     abstract val timeElapsed: NonNullLiveData<Long>
     abstract val satellites: NonNullLiveData<Int>
 
-    abstract fun start(retainMockAccuracy: Boolean = false, accuracyThreshold: Float? = null)
+    abstract fun start(
+        retainMockAccuracy: Boolean = false,
+        accuracyThreshold: Float? = null,
+        unacceptableAccuracyThreshold: Float? = null
+    )
+
     abstract fun forceLocation()
 }
 
@@ -46,19 +51,37 @@ internal class LocationTrackerGeoPointViewModel(
     override var accuracyThreshold: Float = Float.MAX_VALUE
         private set
 
+    private var unacceptableAccuracyThreshold: Float = Float.MAX_VALUE
+
     private val trackerLocation = MutableLiveData<Location?>(null)
     override val acceptedLocation: MutableLiveData<Location?> = MutableLiveData<Location?>(null)
 
     override val currentAccuracy = Transformations.map(trackerLocation) {
-        it?.accuracy
+        if (it != null) {
+            when {
+                it.accuracy > unacceptableAccuracyThreshold -> GeoPointAccuracy.Unacceptable(it.accuracy)
+                it.accuracy > (accuracyThreshold + 5) -> GeoPointAccuracy.Poor(it.accuracy)
+                else -> GeoPointAccuracy.Improving(it.accuracy)
+            }
+        } else {
+            null
+        }
     }
 
     override val timeElapsed: MutableNonNullLiveData<Long> = MutableNonNullLiveData(0)
     override val satellites: NonNullLiveData<Int> = satelliteInfoClient.satellitesUsedInLastFix
 
-    override fun start(retainMockAccuracy: Boolean, accuracyThreshold: Float?) {
+    override fun start(
+        retainMockAccuracy: Boolean,
+        accuracyThreshold: Float?,
+        unacceptableAccuracyThreshold: Float?
+    ) {
         if (accuracyThreshold != null) {
             this.accuracyThreshold = accuracyThreshold
+        }
+
+        if (unacceptableAccuracyThreshold != null) {
+            this.unacceptableAccuracyThreshold = unacceptableAccuracyThreshold
         }
 
         locationTracker.start(retainMockAccuracy, 1000L)
@@ -112,4 +135,4 @@ internal class LocationTrackerGeoPointViewModel(
     }
 }
 
-interface GeoPointViewModelFactory : ViewModelProvider.Factory
+internal interface GeoPointViewModelFactory : ViewModelProvider.Factory

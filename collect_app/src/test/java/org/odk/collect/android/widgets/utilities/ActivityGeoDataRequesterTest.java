@@ -126,6 +126,10 @@ public class ActivityGeoDataRequesterTest {
 
         assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
         assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_ACCURACY_THRESHOLD));
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
     }
 
     @Test
@@ -140,6 +144,20 @@ public class ActivityGeoDataRequesterTest {
 
         Bundle bundle = startedIntent.getExtras();
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(10.0f));
+    }
+
+    @Test
+    public void whenWidgetHasUnacceptableAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
+        when(questionDef.getAdditionalAttribute(null, "unacceptableAccuracyThreshold")).thenReturn("20");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(20.0f));
     }
 
     @Test

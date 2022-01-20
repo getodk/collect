@@ -32,6 +32,7 @@ class GeoPointActivityTest {
         on { timeElapsed } doReturn MutableNonNullLiveData(0)
         on { satellites } doReturn MutableNonNullLiveData(0)
     }
+
     private val scheduler = FakeScheduler()
 
     @Before
@@ -55,7 +56,7 @@ class GeoPointActivityTest {
         val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
 
         ActivityScenario.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = false)
+        verify(viewModel).start(retainMockAccuracy = false,)
     }
 
     @Test
@@ -101,7 +102,7 @@ class GeoPointActivityTest {
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
         ActivityScenario.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = true)
+        verify(viewModel).start(retainMockAccuracy = true,)
     }
 
     @Test
@@ -110,6 +111,15 @@ class GeoPointActivityTest {
         intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0f)
 
         ActivityScenario.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f)
+        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f,)
+    }
+
+    @Test
+    fun `passes unacceptable threshold extra to view model`() {
+        val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
+        intent.putExtra(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD, 10.0f)
+
+        ActivityScenario.launch<GeoPointActivity>(intent)
+        verify(viewModel).start(retainMockAccuracy = false, unacceptableAccuracyThreshold = 10.0f)
     }
 }

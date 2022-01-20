@@ -5,7 +5,6 @@ import static org.odk.collect.shared.strings.StringUtils.removeEnd;
 import android.content.Context;
 import android.location.Location;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
@@ -17,8 +16,6 @@ import java.text.DecimalFormat;
 import timber.log.Timber;
 
 public final class GeoWidgetUtils {
-
-    public static final float DEFAULT_LOCATION_ACCURACY = 5.0f;
 
     private GeoWidgetUtils() {
 
@@ -68,12 +65,6 @@ public final class GeoWidgetUtils {
         return gp;
     }
 
-    static float getAccuracyThreshold(QuestionDef questionDef) {
-        // Determine the accuracy threshold to use.
-        String acc = questionDef.getAdditionalAttribute(null, "accuracyThreshold");
-        return acc != null && !acc.isEmpty() ? Float.parseFloat(acc) : DEFAULT_LOCATION_ACCURACY;
-    }
-
     static String convertCoordinatesIntoDegreeFormat(Context context, double coordinate, String type) {
         String coordinateDegrees = Location.convert(Math.abs(coordinate), Location.FORMAT_SECONDS);
         String[] coordinateSplit = coordinateDegrees.split(":");
@@ -105,7 +96,7 @@ public final class GeoWidgetUtils {
     }
 
     public static void logAllowMockAccuracy(FormEntryPrompt prompt) {
-        String attributeValue = FormEntryPromptUtils.getAttributeValue(prompt, "allow-mock-accuracy");
+        String attributeValue = FormEntryPromptUtils.getBindAttribute(prompt, "allow-mock-accuracy");
         boolean allowMockAccuracy = Boolean.parseBoolean(attributeValue);
 
         if (allowMockAccuracy) {
