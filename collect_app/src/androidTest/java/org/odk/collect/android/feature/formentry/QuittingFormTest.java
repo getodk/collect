@@ -26,7 +26,7 @@ public class QuittingFormTest {
                 .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("What is your age?")
                 .answerQuestion("What is your age?", "10")
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
                 .clickSaveChanges()

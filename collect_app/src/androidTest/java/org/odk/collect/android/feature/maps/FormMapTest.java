@@ -83,7 +83,7 @@ public class FormMapTest {
                 .clickOnMapIconForForm("Single geopoint")
                 .clickFillBlankFormButton("Single geopoint")
                 .inputText("Foo")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("Location")
                 .clickWidgetButton()
                 .swipeToEndScreen()
                 .clickSaveAndExitBackToMap()

@@ -49,7 +49,7 @@ public class DynamicPreLoadedDataSelects {
                 .assertText("Cherimoya")
                 .assertText("Carrot")
                 .assertTextDoesNotExist("Blueberry")
-                .swipeToPreviousQuestion()
+                .swipeToPreviousQuestion("Produce search")
                 .inputText("B")
                 .swipeToNextQuestion("Produce")
                 .assertText("Banana")

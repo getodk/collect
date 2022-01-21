@@ -24,7 +24,7 @@ public class ExternalDataFileNotFoundTest {
 
         activityTestRule.startInFormEntry()
                 .assertText(R.string.file_missing, formsDirPath + "/external_data_questions-media/fruits.csv")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("External csv")
                 .assertText(R.string.file_missing, formsDirPath + "/external_data_questions-media/itemsets.csv");
     }
 }
