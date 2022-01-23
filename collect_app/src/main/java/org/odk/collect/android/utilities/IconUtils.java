@@ -31,10 +31,6 @@ public final class IconUtils {
     private IconUtils() {
     }
 
-    public static int getNotificationAppIcon() {
-        return R.drawable.ic_notes_white;
-    }
-
     /** Renders a Drawable (such as a vector drawable) into a Bitmap. */
     public static Bitmap getBitmap(Context context, int drawableId) {
         Drawable drawable = ContextCompat.getDrawable(context, drawableId);

@@ -9,7 +9,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
-import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormUpdatesAvailableNotificationBuilder {
@@ -34,7 +33,7 @@ object FormUpdatesAvailableNotificationBuilder {
             setContentTitle(application.getLocalizedString(R.string.form_updates_available))
             setContentText(null)
             setSubText(projectName)
-            setSmallIcon(IconUtils.getNotificationAppIcon())
+            setSmallIcon(R.drawable.ic_notes_white)
             setAutoCancel(true)
         }.build()
     }

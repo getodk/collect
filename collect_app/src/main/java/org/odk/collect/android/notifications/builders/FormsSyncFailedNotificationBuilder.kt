@@ -9,7 +9,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FillBlankFormActivity
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
 import org.odk.collect.android.notifications.NotificationManagerNotifier
-import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -36,7 +35,7 @@ object FormsSyncFailedNotificationBuilder {
                 NotificationCompat.BigTextStyle()
                     .bigText(FormSourceExceptionMapper(application).getMessage(exception))
             )
-            setSmallIcon(IconUtils.getNotificationAppIcon())
+            setSmallIcon(R.drawable.ic_notes_white)
             setAutoCancel(true)
         }.build()
     }
