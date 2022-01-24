@@ -20,8 +20,6 @@ import java.util.function.Consumer;
 
 public class CollectTestRule implements TestRule {
 
-    public static boolean projectCreated;
-
     private final boolean useDemoProject;
 
     public CollectTestRule() {
@@ -39,14 +37,10 @@ public class CollectTestRule implements TestRule {
             public void evaluate() throws Throwable {
                 ActivityScenario.launch(SplashScreenActivity.class);
 
-                if (projectCreated) {
-                    new MainMenuPage().assertOnPage();
-                } else {
-                    FirstLaunchPage firstLaunchPage = new FirstLaunchPage().assertOnPage();
+                FirstLaunchPage firstLaunchPage = new FirstLaunchPage().assertOnPage();
 
-                    if (useDemoProject) {
-                        firstLaunchPage.clickTryCollect();
-                    }
+                if (useDemoProject) {
+                    firstLaunchPage.clickTryCollect();
                 }
 
                 base.evaluate();

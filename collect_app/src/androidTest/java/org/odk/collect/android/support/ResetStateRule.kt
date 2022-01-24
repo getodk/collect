@@ -18,26 +18,25 @@ import org.odk.collect.androidshared.ui.ToastUtils.recordToasts
 import java.io.File
 import java.io.IOException
 
-class ResetStateRule @JvmOverloads constructor(private val appDependencyModule: AppDependencyModule? = null) : TestRule {
+private class ResetStateStatement(
+    private val base: Statement,
+    private val appDependencyModule: AppDependencyModule? = null
+) : Statement() {
 
     private val settingsProvider = getSettingsProvider()
 
-    override fun apply(base: Statement, description: Description): Statement = ResetStateStatement(base)
+    override fun evaluate() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        resetDagger()
+        clearPrefs()
+        clearDisk()
+        clearAppState(application)
+        setTestState()
+        val component = DaggerUtils.getComponent(application.applicationContext)
 
-    private inner class ResetStateStatement(private val base: Statement) : Statement() {
-        override fun evaluate() {
-            val application = ApplicationProvider.getApplicationContext<Application>()
-            resetDagger()
-            clearPrefs()
-            clearDisk()
-            clearAppState(application)
-            setTestState()
-            val component = DaggerUtils.getComponent(application.applicationContext)
-
-            // Reinitialize any application state with new deps/state
-            component.applicationInitializer().initialize()
-            base.evaluate()
-        }
+        // Reinitialize any application state with new deps/state
+        component.applicationInitializer().initialize()
+        base.evaluate()
     }
 
     private fun clearAppState(application: Application) {
@@ -47,7 +46,6 @@ class ResetStateRule @JvmOverloads constructor(private val appDependencyModule: 
     private fun setTestState() {
         MultiClickGuard.test = true
         DecoratedBarcodeView.test = true
-        CollectTestRule.projectCreated = false
         recordToasts = true
     }
 
@@ -68,4 +66,12 @@ class ResetStateRule @JvmOverloads constructor(private val appDependencyModule: 
     private fun clearPrefs() {
         settingsProvider.clearAll()
     }
+}
+
+class ResetStateRule @JvmOverloads constructor(
+    private val appDependencyModule: AppDependencyModule? = null
+) : TestRule {
+
+    override fun apply(base: Statement, description: Description): Statement =
+        ResetStateStatement(base, appDependencyModule)
 }

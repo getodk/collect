@@ -12,6 +12,7 @@ import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.pages.FormEndPage;
+import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 
 public class DeletingRepeatGroupsTest {
@@ -123,7 +124,7 @@ public class DeletingRepeatGroupsTest {
                 .deleteGroup()
                 .clickOnText("repeatGroup > 1")
                 .deleteGroup()
-                .pressBack(activityTestRule.startInFormEntry())
+                .pressBack(new FormEntryPage("repeatGroups"))
                 .assertText("text0");
     }
 
@@ -140,7 +141,7 @@ public class DeletingRepeatGroupsTest {
                 .deleteGroup()
                 .clickOnText("repeatGroup > 1")
                 .deleteGroup()
-                .pressBack(activityTestRule.startInFormEntry())
+                .pressBack(new FormEntryPage("repeatGroups"))
                 .assertText("text0");
     }
 
@@ -282,7 +283,7 @@ public class DeletingRepeatGroupsTest {
                 .deleteGroup()
                 .clickOnText("repeatGroupFieldList > 1")
                 .deleteGroup()
-                .pressBack(activityTestRule.startInFormEntry())
+                .pressBack(new FormEntryPage("repeatGroups"))
                 .assertText("repeatGroup > 4");
     }
 
@@ -299,7 +300,7 @@ public class DeletingRepeatGroupsTest {
                 .deleteGroup()
                 .clickOnText("repeatGroupFieldList > 1")
                 .deleteGroup()
-                .pressBack(activityTestRule.startInFormEntry())
+                .pressBack(new FormEntryPage("repeatGroups"))
                 .assertText("text0");
     }
 

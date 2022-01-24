@@ -19,7 +19,6 @@ public class ContextMenuTest {
     @Test
     public void whenRemoveStringAnswer_ShouldAppropriateQuestionBeCleared() {
         activityTestRule.startInFormEntry()
-                .assertOnPage()
                 .answerQuestion(0, "TestString")
                 .answerQuestion(1, "1234")
                 .assertText("TestString")
