@@ -27,20 +27,20 @@ object RobolectricHelpers {
     var services: MutableMap<Class<*>, ServiceScenario<*>> = HashMap()
 
     @JvmStatic
-    fun <T : FragmentActivity?> createThemedActivity(clazz: Class<T>?, theme: Int): T {
+    fun <T : FragmentActivity> createThemedActivity(clazz: Class<T>, theme: Int): T {
         val activity = Robolectric.buildActivity(clazz)
         activity.get()!!.setTheme(theme)
         return activity.setup().get()
     }
 
     @JvmStatic
-    fun getCreatedFromResId(drawable: Drawable?): Int {
+    fun getCreatedFromResId(drawable: Drawable): Int {
         return Shadows.shadowOf(drawable).createdFromResId
     }
 
     @JvmStatic
     @JvmOverloads
-    fun setupMediaPlayerDataSource(testFile: String?, duration: Int = 322450): DataSource {
+    fun setupMediaPlayerDataSource(testFile: String, duration: Int = 322450): DataSource {
         val dataSource = DataSource.toDataSource(testFile)
         ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, duration.toString())
         ShadowMediaPlayer.addMediaInfo(dataSource, MediaInfo(duration, 0))
@@ -52,8 +52,8 @@ object RobolectricHelpers {
     }
 
     @JvmStatic
-    fun <T : ViewGroup?> populateRecyclerView(view: T): T {
-        for (i in 0 until view!!.childCount) {
+    fun <T : ViewGroup> populateRecyclerView(view: T): T {
+        for (i in 0 until view.childCount) {
             val child = view.getChildAt(i)
             if (child is RecyclerView) {
                 child.measure(0, 0)
