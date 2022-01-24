@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences.dialogs;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -19,6 +18,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,6 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
     @Inject
     ProjectResetter projectResetter;
 
-    private ProgressDialog progressDialog;
     private AppCompatCheckBox preferences;
     private AppCompatCheckBox instances;
     private AppCompatCheckBox forms;
@@ -125,7 +124,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
             new AsyncTask<Void, Void, List<Integer>>() {
                 @Override
                 protected void onPreExecute() {
-                    showProgressDialog();
+                    DialogFragmentUtils.showIfNotShowing(ResetProgressDialog.class, ((CollectAbstractActivity) context).getSupportFragmentManager());
                 }
 
                 @Override
@@ -135,22 +134,11 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
                 @Override
                 protected void onPostExecute(List<Integer> failedResetActions) {
+                    DialogFragmentUtils.dismissDialog(ResetProgressDialog.class, ((CollectAbstractActivity) context).getSupportFragmentManager());
                     handleResult(resetActions, failedResetActions);
-                    hideProgressDialog();
                 }
             }.execute();
         }
-    }
-
-    private void showProgressDialog() {
-        progressDialog = ProgressDialog.show(context,
-                        context.getString(R.string.please_wait),
-                        context.getString(R.string.reset_in_progress),
-                        true);
-    }
-
-    private void hideProgressDialog() {
-        progressDialog.dismiss();
     }
 
     private void handleResult(final List<Integer> resetActions, List<Integer> failedResetActions) {
