@@ -36,12 +36,12 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.ImageWidget;
 
@@ -76,8 +76,7 @@ public class ImageConverterTest {
     private final Context context = ApplicationProvider.getApplicationContext();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RunnableRule(() -> {
                 // Set up demo project
                 AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());

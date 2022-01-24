@@ -7,7 +7,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 
 public class ExternalDataFileNotFoundTest {
     private static final String EXTERNAL_DATA_QUESTIONS = "external_data_questions.xml";
@@ -15,8 +15,7 @@ public class ExternalDataFileNotFoundTest {
     public FormActivityTestRule activityTestRule = new FormActivityTestRule(EXTERNAL_DATA_QUESTIONS, "externalDataQuestions");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(activityTestRule);
 
     @Test

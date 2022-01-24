@@ -9,8 +9,8 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.projects.Project;
 
@@ -36,8 +36,7 @@ public class FormLoaderTaskTest {
     private static final String SIMPLE_SEARCH_EXTERNAL_DB_FILE = "simple-search-external-csv-fruits.db";
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RunnableRule(() -> {
                 try {
                     // Set up demo project

@@ -4,7 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
 import java.util.Collections;
@@ -16,8 +16,7 @@ public class RankingWidgetWithCSVTest {
     public FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "ranking_widget", Collections.singletonList("fruits.csv"));
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(activityTestRule);
 
 

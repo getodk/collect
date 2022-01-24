@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -21,8 +21,7 @@ public class DeletingRepeatGroupsTest {
     private final FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "repeatGroups");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(activityTestRule);
 
     @Test

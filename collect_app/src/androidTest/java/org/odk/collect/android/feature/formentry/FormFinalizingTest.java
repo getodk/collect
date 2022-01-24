@@ -1,16 +1,13 @@
 package org.odk.collect.android.feature.formentry;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 
@@ -22,9 +19,7 @@ public class FormFinalizingTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-            .around(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
 

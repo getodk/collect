@@ -9,8 +9,8 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -24,8 +24,7 @@ public class TrackChangesReasonTest {
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Rule

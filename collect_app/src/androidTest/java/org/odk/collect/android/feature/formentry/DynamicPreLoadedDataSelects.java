@@ -4,7 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 
 import java.util.Collections;
 
@@ -20,8 +20,7 @@ public class DynamicPreLoadedDataSelects {
     public FormActivityTestRule rule = new FormActivityTestRule(EXTERNAL_CSV_SEARCH_FORM, "external-csv-search", Collections.singletonList("external-csv-search-produce.csv"));
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Test

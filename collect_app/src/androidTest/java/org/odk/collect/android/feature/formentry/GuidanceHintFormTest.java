@@ -24,7 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
@@ -40,8 +40,7 @@ public class GuidanceHintFormTest {
     public FormActivityTestRule activityTestRule = new FormActivityTestRule(GUIDANCE_SAMPLE_FORM, "Guidance Form Sample");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(activityTestRule);
 
     @Test
