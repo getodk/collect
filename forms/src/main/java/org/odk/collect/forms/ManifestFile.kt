@@ -15,7 +15,9 @@
  */
 package org.odk.collect.forms
 
+import java.io.Serializable
+
 data class ManifestFile(
     val hash: String?,
     val mediaFiles: List<MediaFile>
-)
+) : Serializable
