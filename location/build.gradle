@@ -52,7 +52,6 @@ dependencies {
     implementation Dependencies.play_services_location
     implementation Dependencies.timber
     implementation Dependencies.androidx_appcompat
-    implementation Dependencies.android_material
 
     testImplementation project(':testshared')
     testImplementation Dependencies.junit

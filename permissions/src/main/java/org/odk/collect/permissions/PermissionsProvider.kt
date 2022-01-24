@@ -3,9 +3,16 @@ package org.odk.collect.permissions
 import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.location.LocationManagerCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.DexterBuilder
 import com.karumi.dexter.MultiplePermissionsReport
@@ -110,6 +117,44 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
         )
     }
 
+    /**
+     * Request location permissions and make sure Location is enabled at a system level. If the
+     * latter is not true, show a dialog prompting the user to do so rather than
+     * [PermissionListener.granted].
+     */
+    fun requestEnabledLocationPermissions(activity: Activity, action: PermissionListener) {
+        requestLocationPermissions(
+            activity,
+            object : PermissionListener {
+                override fun granted() {
+                    if (isLocationEnabled(activity)) {
+                        action.granted()
+                    } else {
+                        MaterialAlertDialogBuilder(activity)
+                            .setMessage(activity.getString(R.string.gps_enable_message))
+                            .setCancelable(false)
+                            .setPositiveButton(
+                                activity.getString(R.string.enable_gps)
+                            ) { _: DialogInterface?, _: Int ->
+                                activity.startActivityForResult(
+                                    Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0
+                                )
+                            }
+                            .setNegativeButton(
+                                activity.getString(R.string.cancel)
+                            ) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                            .create()
+                            .show()
+                    }
+                }
+
+                override fun denied() {
+                    action.denied()
+                }
+            }
+        )
+    }
+
     open fun requestRecordAudioPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
@@ -120,8 +165,11 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
 
                 override fun denied() {
                     showAdditionalExplanation(
-                        activity, R.string.record_audio_runtime_permission_denied_title,
-                        R.string.record_audio_runtime_permission_denied_desc, R.drawable.ic_mic, action
+                        activity,
+                        R.string.record_audio_runtime_permission_denied_title,
+                        R.string.record_audio_runtime_permission_denied_desc,
+                        R.drawable.ic_mic,
+                        action
                     )
                 }
             },
@@ -313,5 +361,10 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
         } catch (e: Error) {
             listener.denied()
         }
+    }
+
+    private fun isLocationEnabled(activity: Activity): Boolean {
+        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
     }
 }

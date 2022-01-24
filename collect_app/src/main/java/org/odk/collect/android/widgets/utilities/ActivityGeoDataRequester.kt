@@ -14,7 +14,6 @@ import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.GeoPointActivity
 import org.odk.collect.geo.GeoPointMapActivity
 import org.odk.collect.geo.GeoPolyActivity
-import org.odk.collect.location.LocationUtils
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import java.lang.Boolean.parseBoolean
@@ -29,62 +28,60 @@ class ActivityGeoDataRequester(
         answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
-        if (LocationUtils.checkLocationServicesEnabled(activity)) {
-            permissionsProvider.requestLocationPermissions(
-                activity,
-                object : PermissionListener {
-                    override fun granted() {
-                        waitingForDataRegistry.waitForData(prompt.index)
+        permissionsProvider.requestEnabledLocationPermissions(
+            activity,
+            object : PermissionListener {
+                override fun granted() {
+                    waitingForDataRegistry.waitForData(prompt.index)
 
-                        val bundle = Bundle().also {
-                            if (!answerText.isNullOrEmpty()) {
-                                it.putDoubleArray(
-                                    GeoPointMapActivity.EXTRA_LOCATION,
-                                    GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText),
-                                )
-                            }
-
-                            val accuracyThreshold =
-                                FormEntryPromptUtils.getBodyAttribute(prompt, "accuracyThreshold")
-                            val unacceptableAccuracyThreshold =
-                                FormEntryPromptUtils.getBodyAttribute(
-                                    prompt,
-                                    "unacceptableAccuracyThreshold",
-                                )
-
-                            it.putFloat(
-                                GeoPointActivity.EXTRA_ACCURACY_THRESHOLD,
-                                accuracyThreshold?.toFloat() ?: DEFAULT_ACCURACY_THRESHOLD,
+                    val bundle = Bundle().also {
+                        if (!answerText.isNullOrEmpty()) {
+                            it.putDoubleArray(
+                                GeoPointMapActivity.EXTRA_LOCATION,
+                                GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText),
                             )
-
-                            it.putFloat(
-                                GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD,
-                                unacceptableAccuracyThreshold?.toFloat()
-                                    ?: DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD,
-                            )
-
-                            it.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
-                            it.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly)
-                            it.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt))
                         }
 
-                        val intent = Intent(
-                            activity,
-                            if (isMapsAppearance(prompt)) GeoPointMapActivity::class.java else GeoPointActivity::class.java,
-                        ).also {
-                            it.putExtras(bundle)
-                        }
+                        val accuracyThreshold =
+                            FormEntryPromptUtils.getBodyAttribute(prompt, "accuracyThreshold")
+                        val unacceptableAccuracyThreshold =
+                            FormEntryPromptUtils.getBodyAttribute(
+                                prompt,
+                                "unacceptableAccuracyThreshold",
+                            )
 
-                        activity.startActivityForResult(
-                            intent,
-                            ApplicationConstants.RequestCodes.LOCATION_CAPTURE,
+                        it.putFloat(
+                            GeoPointActivity.EXTRA_ACCURACY_THRESHOLD,
+                            accuracyThreshold?.toFloat() ?: DEFAULT_ACCURACY_THRESHOLD,
                         )
+
+                        it.putFloat(
+                            GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD,
+                            unacceptableAccuracyThreshold?.toFloat()
+                                ?: DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD,
+                        )
+
+                        it.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
+                        it.putBoolean(EXTRA_READ_ONLY, prompt.isReadOnly)
+                        it.putBoolean(EXTRA_DRAGGABLE_ONLY, hasPlacementMapAppearance(prompt))
                     }
 
-                    override fun denied() {}
-                },
-            )
-        }
+                    val intent = Intent(
+                        activity,
+                        if (isMapsAppearance(prompt)) GeoPointMapActivity::class.java else GeoPointActivity::class.java,
+                    ).also {
+                        it.putExtras(bundle)
+                    }
+
+                    activity.startActivityForResult(
+                        intent,
+                        ApplicationConstants.RequestCodes.LOCATION_CAPTURE,
+                    )
+                }
+
+                override fun denied() {}
+            },
+        )
     }
 
     override fun requestGeoShape(
