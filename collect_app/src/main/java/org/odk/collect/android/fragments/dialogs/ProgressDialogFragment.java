@@ -21,7 +21,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ProgressDialogFragment extends DialogFragment {
 
-    public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
     public static final String TITLE = "title";
     public static final String MESSAGE = "message";
     public static final String CANCELABLE = "true";

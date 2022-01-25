@@ -63,8 +63,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -253,6 +251,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_AUTO_SAVED = "autosaved";
 
     public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
+
+    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + ProgressDialogFragment.class.getName() + "mediaLoading";
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -885,7 +885,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             public void granted() {
                 ProgressDialogFragment progressDialog = new ProgressDialogFragment();
                 progressDialog.setMessage(getString(R.string.please_wait));
-                progressDialog.show(getSupportFragmentManager(), ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+                DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 
                 mediaLoadingFragment.beginMediaLoadingTask(uri);
             }
@@ -2018,11 +2018,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
           to avoid blocking the UI.
          */
         if (!mediaLoadingFragment.isMediaLoadingTaskRunning()) {
-            Fragment progressDialogFragment =
-                    getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-            if (progressDialogFragment != null) {
-                ((DialogFragment) progressDialogFragment).dismiss();
-            }
+            DialogFragmentUtils.dismissDialog(TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
         }
     }
 
