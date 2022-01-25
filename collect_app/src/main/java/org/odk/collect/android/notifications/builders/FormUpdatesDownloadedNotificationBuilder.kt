@@ -58,7 +58,7 @@ object FormUpdatesDownloadedNotificationBuilder {
             setContentTitle(title)
             setContentText(message)
             setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notes_white)
+            setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

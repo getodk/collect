@@ -33,7 +33,7 @@ object FormUpdatesAvailableNotificationBuilder {
             setContentTitle(application.getLocalizedString(R.string.form_updates_available))
             setContentText(null)
             setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notes_white)
+            setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

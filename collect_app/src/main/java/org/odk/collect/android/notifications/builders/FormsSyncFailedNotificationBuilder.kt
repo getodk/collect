@@ -35,7 +35,7 @@ object FormsSyncFailedNotificationBuilder {
                 NotificationCompat.BigTextStyle()
                     .bigText(FormSourceExceptionMapper(application).getMessage(exception))
             )
-            setSmallIcon(R.drawable.ic_notes_white)
+            setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

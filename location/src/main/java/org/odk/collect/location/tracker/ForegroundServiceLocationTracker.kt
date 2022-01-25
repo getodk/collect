@@ -104,7 +104,7 @@ class LocationTrackerService : Service() {
 
     private fun createNotification(): Notification {
         val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.ic_notes_white)
+            .setSmallIcon(R.drawable.ic_notification_small)
             .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(createNotificationIntent())
