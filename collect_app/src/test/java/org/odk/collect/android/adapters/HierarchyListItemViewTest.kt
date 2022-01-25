@@ -82,12 +82,12 @@ class HierarchyListItemViewTest {
     }
 
     @Test
-    fun `When secondary text is html displays as is`() {
+    fun `When secondary text is html should be styled`() {
         val view = HierarchyListItemView(context)
 
         view.setElement(getHierarchyElement(null, "", "<h1>Secondary text</h1>"))
 
-        assertThat(view.binding.secondaryText.text.toString(), `is`("<h1>Secondary text</h1>"))
+        assertThat(view.binding.secondaryText.text.toString(), `is`("Secondary text"))
     }
 
     private fun getHierarchyElement(icon: Drawable?, primaryText: String, secondaryText: String?) =
