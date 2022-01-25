@@ -21,6 +21,8 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     @Override
     public FormHierarchyPage assertOnPage() {
         assertToolbarTitle(formName);
+        assertText(R.string.jump_to_beginning);
+        assertText(R.string.jump_to_end);
         return this;
     }
 
