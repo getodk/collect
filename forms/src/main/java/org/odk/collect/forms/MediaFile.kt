@@ -15,8 +15,10 @@
  */
 package org.odk.collect.forms
 
+import java.io.Serializable
+
 data class MediaFile(
     val filename: String,
     val hash: String,
     val downloadUrl: String
-)
+) : Serializable
