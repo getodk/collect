@@ -23,6 +23,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.AltDatabasePathContext;
@@ -34,15 +38,13 @@ import org.odk.collect.android.utilities.SQLiteUtils;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
@@ -113,8 +115,13 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
 
         CSVReader reader = null;
         try {
-            reader = new CSVReader(new InputStreamReader(new FileInputStream(dataSetFile), "UTF-8"),
-                    DELIMITING_CHAR, QUOTE_CHAR, ESCAPE_CHAR);
+            reader = new CSVReaderBuilder(new FileReader(dataSetFile))
+                    .withCSVParser(new CSVParserBuilder()
+                            .withSeparator(DELIMITING_CHAR)
+                            .withQuoteChar(QUOTE_CHAR)
+                            .withEscapeChar(ESCAPE_CHAR)
+                            .build())
+                    .build();
             String[] headerRow = reader.readNext();
 
             headerRow[0] = removeByteOrderMark(headerRow[0]);

@@ -56,11 +56,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 /**
  * Background task for loading a form.
@@ -556,7 +558,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 ida.addRow(pathHash, columnHeaders, nextLine);
 
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException | SQLException | CsvValidationException e) {
             warningMsg = e.getMessage();
         } finally {
             if (withinTransaction) {
