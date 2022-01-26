@@ -12,7 +12,6 @@ import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
-import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.Serializable
@@ -59,7 +58,7 @@ object FormUpdatesDownloadedNotificationBuilder {
             setContentTitle(title)
             setContentText(message)
             setSubText(projectName)
-            setSmallIcon(IconUtils.getNotificationAppIcon())
+            setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

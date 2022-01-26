@@ -10,7 +10,6 @@ import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
-import org.odk.collect.android.utilities.IconUtils
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormsSubmissionNotificationBuilder {
@@ -47,7 +46,7 @@ object FormsSubmissionNotificationBuilder {
             setContentTitle(title)
             setContentText(content)
             setSubText(projectName)
-            setSmallIcon(IconUtils.getNotificationAppIcon())
+            setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }
