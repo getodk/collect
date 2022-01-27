@@ -38,4 +38,13 @@ dependencies {
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment
+    implementation project(':androidshared')
+
+    debugImplementation project(':fragmentstest')
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.hamcrest
+    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.robolectric
 }

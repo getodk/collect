@@ -1,4 +1,12 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.material;
+
+import static android.os.Looper.getMainLooper;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.shadows.ShadowView.innerText;
 
 import android.content.DialogInterface;
 import android.view.View;
@@ -7,26 +15,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
 
-import static android.os.Looper.getMainLooper;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.shadows.ShadowView.innerText;
-
 @RunWith(AndroidJUnit4.class)
-public class ProgressDialogFragmentTest {
+public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void setTitle_updatesTitle() {
-        FragmentScenario<ProgressDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         scenario.onFragment(fragment -> {
             fragment.setTitle("blah");
             CharSequence message = shadowOf(fragment.getDialog()).getTitle();
@@ -36,7 +35,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsTitle() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setTitle("blah");
         });
@@ -50,16 +49,16 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void whenMessageNotSet_showsProgressBar() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             View dialogView = fragment.getDialogView();
-            assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), is(View.VISIBLE));
+            assertThat(dialogView.findViewById(R.id.progress_bar).getVisibility(), Matchers.is(View.VISIBLE));
         });
     }
 
     @Test
     public void setMessage_updatesMessage() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             View dialogView = fragment.getDialogView();
 
@@ -70,7 +69,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsMessage() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setMessage("blah");
         });
@@ -84,7 +83,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void setCancellableFalse_makesTheDialogNotCancellable() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setCancelable(false);
             assertThat(fragment.isCancelable(), equalTo(false));
@@ -93,7 +92,7 @@ public class ProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsCancellable() {
-        FragmentScenario<ProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(ProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setCancelable(false);
         });
@@ -108,7 +107,7 @@ public class ProgressDialogFragmentTest {
     public void cancelling_callsCancelOnCancellable() {
         FragmentScenario<TestProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(TestProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
-            ProgressDialogFragment.OnCancelCallback onCancelCallback = mock(ProgressDialogFragment.OnCancelCallback.class);
+            MaterialProgressDialogFragment.OnCancelCallback onCancelCallback = mock(MaterialProgressDialogFragment.OnCancelCallback.class);
             fragment.setCancellableCallback(onCancelCallback);
 
             fragment.onCancel(fragment.getDialog());
@@ -121,7 +120,7 @@ public class ProgressDialogFragmentTest {
         FragmentScenario<TestProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(TestProgressDialogFragment.class);
 
         fragmentScenario.onFragment(fragment -> {
-            ProgressDialogFragment.OnCancelCallback onCancelCallback = mock(ProgressDialogFragment.OnCancelCallback.class);
+            MaterialProgressDialogFragment.OnCancelCallback onCancelCallback = mock(MaterialProgressDialogFragment.OnCancelCallback.class);
             fragment.setCancellableCallback(onCancelCallback);
 
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
@@ -133,7 +132,7 @@ public class ProgressDialogFragmentTest {
         });
     }
 
-    public static class TestProgressDialogFragment extends ProgressDialogFragment {
+    public static class TestProgressDialogFragment extends MaterialProgressDialogFragment {
 
         private OnCancelCallback onCancelCallback;
 

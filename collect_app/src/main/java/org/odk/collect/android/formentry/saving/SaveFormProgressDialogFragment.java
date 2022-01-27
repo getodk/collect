@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.async.Scheduler;
 
@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 
-public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
+public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragment {
 
     @Inject
     Analytics analytics;

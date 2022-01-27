@@ -128,7 +128,7 @@ import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
 import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog;
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
@@ -252,7 +252,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
 
-    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + ProgressDialogFragment.class.getName() + "mediaLoading";
+    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -883,7 +883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), new PermissionListener() {
             @Override
             public void granted() {
-                ProgressDialogFragment progressDialog = new ProgressDialogFragment();
+                MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
                 progressDialog.setMessage(getString(R.string.please_wait));
                 DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 

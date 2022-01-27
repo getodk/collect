@@ -20,9 +20,9 @@ import android.content.Context;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
-public class FormLoadingDialogFragment extends ProgressDialogFragment {
+public class FormLoadingDialogFragment extends MaterialProgressDialogFragment {
 
     public interface FormLoadingDialogFragmentListener {
         void onCancelFormLoading();

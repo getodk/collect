@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
-public class RefreshFormListDialogFragment extends ProgressDialogFragment {
+public class RefreshFormListDialogFragment extends MaterialProgressDialogFragment {
 
     protected RefreshFormListDialogFragmentListener listener;
 

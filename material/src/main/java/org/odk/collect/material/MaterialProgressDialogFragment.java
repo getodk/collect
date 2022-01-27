@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.material;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -10,15 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import org.odk.collect.android.R;
-
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.Serializable;
 
-public class ProgressDialogFragment extends DialogFragment {
+/**
+ * Provides a reusable progress dialog implemented with {@link MaterialAlertDialogBuilder}. Progress
+ * dialogs don't appear in the Material guidelines/specs due to the design language's instistance
+ * that progress shouldn't block the user - this is pretty unrealistic for the app in it's current
+ * state so having a reliable "Material" version of the Android progress dialog is useful.
+ */
+public class MaterialProgressDialogFragment extends DialogFragment {
 
     private static final String TITLE = "title";
     private static final String MESSAGE = "message";

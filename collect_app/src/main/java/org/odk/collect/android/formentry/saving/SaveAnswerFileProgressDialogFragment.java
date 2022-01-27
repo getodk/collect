@@ -5,9 +5,9 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
-public class SaveAnswerFileProgressDialogFragment extends ProgressDialogFragment {
+public class SaveAnswerFileProgressDialogFragment extends MaterialProgressDialogFragment {
 
     @Override
     public void onAttach(@NonNull Context context) {
