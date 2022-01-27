@@ -40,6 +40,14 @@ public class ProgressDialogFragment extends DialogFragment {
         return null;
     }
 
+    public String getTitle() {
+        return getArguments().getString(TITLE);
+    }
+
+    public String getMessage() {
+        return getArguments().getString(MESSAGE);
+    }
+
     public void setTitle(String title) {
         setArgument(TITLE, title);
 
