@@ -17,10 +17,10 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.odk.collect.utilities.Clock;
 
 import java.util.HashSet;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -38,11 +38,11 @@ public class BackgroundAudioViewModelTest {
     private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
 
     private BackgroundAudioViewModel viewModel;
-    private Clock clock;
+    private Supplier<Long> clock;
 
     @Before
     public void setup() {
-        clock = mock(Clock.class);
+        clock = mock(Supplier.class);
 
         Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
         generalSettings.clear();
@@ -163,7 +163,7 @@ public class BackgroundAudioViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
         viewModel.formLoaded(formController);
 
-        when(clock.getCurrentTime()).thenReturn(1234L);
+        when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(false);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
     }
@@ -175,7 +175,7 @@ public class BackgroundAudioViewModelTest {
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
         viewModel.formLoaded(formController);
 
-        when(clock.getCurrentTime()).thenReturn(1234L);
+        when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(true);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, 1234L);
     }

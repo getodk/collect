@@ -5,11 +5,11 @@ import com.google.common.io.Files;
 import org.junit.Test;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.utilities.Clock;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,13 +21,13 @@ public class FormInstanceFileCreatorTest {
 
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH);
     private final StoragePathProvider pathProvider = mock(StoragePathProvider.class);
-    private final Clock clock = mock(Clock.class);
+    private final Supplier<Long> clock = mock(Supplier.class);
 
     @Test
     public void createsDirectory_basedOnDefinitionPathAndCurrentTime_inInstancesDirectory() throws Exception {
         String instancesDir = Files.createTempDir().getAbsolutePath();
         when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
-        when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
+        when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
         instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");
@@ -41,7 +41,7 @@ public class FormInstanceFileCreatorTest {
     public void returnsInstanceFile_inInstanceDirectory() throws Exception {
         String instancesDir = Files.createTempDir().getAbsolutePath();
         when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(instancesDir);
-        when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
+        when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
         File instanceFile = instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");
@@ -54,7 +54,7 @@ public class FormInstanceFileCreatorTest {
     public void whenCreatingDirFails_returnsNull() throws Exception {
         File tempFile = File.createTempFile("not-a", "dir"); // Create a file where it needs a dir
         when(pathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)).thenReturn(tempFile.getAbsolutePath());
-        when(clock.getCurrentTime()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
+        when(clock.get()).thenReturn(simpleDateFormat.parse("1990-04-24_00-00-00").getTime());
 
         FormInstanceFileCreator instanceFileCreator = new FormInstanceFileCreator(pathProvider, clock);
         File instanceFile = instanceFileCreator.createInstanceFile("/blah/blah/Cool form name.xml");

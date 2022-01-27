@@ -20,15 +20,15 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
-import org.odk.collect.utilities.Clock;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
-    private final Clock clock;
+    private final Supplier<Long> clock;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
@@ -40,7 +40,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private FormIndex jumpBackIndex;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Clock clock) {
+    public FormEntryViewModel(Supplier<Long> clock) {
         this.clock = clock;
     }
 
@@ -168,7 +168,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void openHierarchy() {
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.getCurrentTime());
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.get());
     }
 
     public void logFormEvent(String event) {
@@ -181,9 +181,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public static class Factory implements ViewModelProvider.Factory {
 
-        private final Clock clock;
+        private final Supplier<Long> clock;
 
-        public Factory(Clock clock) {
+        public Factory(Supplier<Long> clock) {
             this.clock = clock;
         }
 

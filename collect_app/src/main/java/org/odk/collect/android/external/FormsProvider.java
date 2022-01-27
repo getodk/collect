@@ -39,7 +39,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.utilities.Clock;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,9 +76,6 @@ public class FormsProvider extends ContentProvider {
     private static final int NEWEST_FORMS_BY_FORM_ID = 3;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
-
-    @Inject
-    Clock clock;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;

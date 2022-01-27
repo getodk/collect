@@ -37,7 +37,6 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.shared.strings.Md5;
-import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.Result;
 
 import java.io.File;
@@ -49,6 +48,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import timber.log.Timber;
 
@@ -62,7 +62,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     public static final String RECENT_FILES = "recentFiles";
 
     private final SavedStateHandle stateHandle;
-    private final Clock clock;
+    private final Supplier<Long> clock;
     private final FormSaver formSaver;
     private final MediaUtils mediaUtils;
 
@@ -87,7 +87,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
     private final AudioRecorder audioRecorder;
     private final CurrentProjectProvider currentProjectProvider;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Clock clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -233,7 +233,7 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             return false;
         }
 
-        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.getCurrentTime(), reason);
+        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CHANGE_REASON, null, true, null, clock.get(), reason);
         return true;
     }
 
@@ -260,17 +260,17 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
         switch (taskResult.getSaveResult()) {
             case SAVED:
             case SAVED_AND_EXIT: {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.getCurrentTime());
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_SAVE, false, clock.get());
 
                 if (saveRequest.viewExiting) {
                     if (saveRequest.shouldFinalize) {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.getCurrentTime());
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.getCurrentTime());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, false, clock.get());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_FINALIZE, true, clock.get());
                     } else {
-                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.getCurrentTime());
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.get());
                     }
                 } else {
-                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.getCurrentTime());
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
                 }
 
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage()));
@@ -278,20 +278,20 @@ public class FormSaveViewModel extends ViewModel implements ProgressDialogFragme
             }
 
             case SaveFormToDisk.SAVE_ERROR: {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.getCurrentTime());
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.SAVE_ERROR, true, clock.get());
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
             case SaveFormToDisk.ENCRYPTION_ERROR: {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.getCurrentTime());
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FINALIZE_ERROR, true, clock.get());
                 saveResult.setValue(new SaveResult(SaveResult.State.FINALIZE_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
 
             case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
             case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY: {
-                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.getCurrentTime());
+                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.CONSTRAINT_ERROR, true, clock.get());
                 saveResult.setValue(new SaveResult(SaveResult.State.CONSTRAINT_ERROR, saveRequest, taskResult.getSaveErrorMessage()));
                 break;
             }
