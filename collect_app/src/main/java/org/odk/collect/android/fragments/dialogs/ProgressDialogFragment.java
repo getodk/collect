@@ -59,23 +59,6 @@ public class ProgressDialogFragment extends DialogFragment {
         }
     }
 
-    /*
-    We keep this just in case to avoid problems if someone tries to show a dialog after
-    the activity’s state have been saved. Basically it shouldn't take place since we should control
-    the activity state if we want to show a dialog (especially after long tasks).
-     */
-    @Override
-    public void show(FragmentManager manager, String tag) {
-        try {
-            manager
-                    .beginTransaction()
-                    .add(this, tag)
-                    .commit();
-        } catch (IllegalStateException e) {
-            Timber.w(e);
-        }
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
