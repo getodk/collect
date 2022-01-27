@@ -203,10 +203,10 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     private void deleteSelectedForms() {
         // only start if no other task is running
         if (backgroundTasks.deleteFormsTask == null) {
-            Bundle args = new Bundle();
-            args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
-            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
-            DialogFragmentUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
+            ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
+            progressDialogFragment.setMessage(getResources().getString(R.string.form_delete_message));
+            progressDialogFragment.setCancelable(false);
+            DialogFragmentUtils.showIfNotShowing(progressDialogFragment, ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
 
             backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);

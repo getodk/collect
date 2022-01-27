@@ -49,7 +49,7 @@ public class SaveFormProgressDialogFragment extends ProgressDialogFragment {
     }
 
     @Override
-    protected Cancellable getCancellable() {
+    protected OnCancelCallback getOnCancelCallback() {
         return viewModel;
     }
 }

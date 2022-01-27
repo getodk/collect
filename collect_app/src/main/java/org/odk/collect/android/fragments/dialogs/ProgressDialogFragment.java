@@ -9,28 +9,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
-
-import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.Serializable;
+
 public class ProgressDialogFragment extends DialogFragment {
 
-    public static final String TITLE = "title";
-    public static final String MESSAGE = "message";
-    public static final String CANCELABLE = "true";
+    private static final String TITLE = "title";
+    private static final String MESSAGE = "message";
+    private static final String CANCELABLE = "true";
 
     private View dialogView;
 
     /**
      * Override to have something cancelled when the ProgressDialog's cancel button is pressed
      */
-    protected Cancellable getCancellable() {
+    protected OnCancelCallback getOnCancelCallback() {
         return null;
     }
 
@@ -42,7 +41,7 @@ public class ProgressDialogFragment extends DialogFragment {
     }
 
     public void setTitle(String title) {
-        setArgument(title, TITLE);
+        setArgument(TITLE, title);
 
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
@@ -51,12 +50,18 @@ public class ProgressDialogFragment extends DialogFragment {
     }
 
     public void setMessage(String message) {
-        setArgument(message, MESSAGE);
+        setArgument(MESSAGE, message);
 
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
             setupView(dialog);
         }
+    }
+
+    @Override
+    public void setCancelable(boolean cancelable) {
+        setArgument(CANCELABLE, cancelable);
+        super.setCancelable(cancelable);
     }
 
     @Override
@@ -75,9 +80,9 @@ public class ProgressDialogFragment extends DialogFragment {
 
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
-        Cancellable cancellable = getCancellable();
-        if (cancellable != null) {
-            cancellable.cancel();
+        OnCancelCallback onCancelCallback = getOnCancelCallback();
+        if (onCancelCallback != null) {
+            onCancelCallback.cancel();
         }
     }
 
@@ -97,20 +102,20 @@ public class ProgressDialogFragment extends DialogFragment {
         if (getCancelButtonText() != null) {
             dialog.setButton(BUTTON_NEGATIVE, getCancelButtonText(), (dialog1, which) -> {
                 dismiss();
-                getCancellable().cancel();
+                getOnCancelCallback().cancel();
             });
         }
     }
 
-    private void setArgument(String key, String value) {
+    private void setArgument(String key, Serializable value) {
         if (getArguments() == null) {
             setArguments(new Bundle());
         }
 
-        getArguments().putString(value, key);
+        getArguments().putSerializable(key, value);
     }
 
-    public interface Cancellable {
+    public interface OnCancelCallback {
         boolean cancel();
     }
 

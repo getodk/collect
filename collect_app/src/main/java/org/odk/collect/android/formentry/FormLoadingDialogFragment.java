@@ -55,7 +55,7 @@ public class FormLoadingDialogFragment extends ProgressDialogFragment {
     }
 
     @Override
-    protected Cancellable getCancellable() {
+    protected OnCancelCallback getOnCancelCallback() {
         return () -> {
             listener.onCancelFormLoading();
             return true;

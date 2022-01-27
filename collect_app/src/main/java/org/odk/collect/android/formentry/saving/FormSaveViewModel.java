@@ -56,7 +56,7 @@ import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
 import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
-public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.Cancellable, RequiresFormController, QuestionMediaManager {
+public class FormSaveViewModel extends ViewModel implements ProgressDialogFragment.OnCancelCallback, RequiresFormController, QuestionMediaManager {
 
     public static final String ORIGINAL_FILES = "originalFiles";
     public static final String RECENT_FILES = "recentFiles";

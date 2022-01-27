@@ -36,7 +36,7 @@ public class RefreshFormListDialogFragment extends ProgressDialogFragment {
     }
 
     @Override
-    protected Cancellable getCancellable() {
+    protected OnCancelCallback getOnCancelCallback() {
         return () -> {
             listener.onCancelFormLoading();
             dismiss();
