@@ -10,8 +10,6 @@ import org.junit.runner.RunWith
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.permissions.R
 import org.odk.collect.strings.localization.getLocalizedString
-import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowView
 
 @RunWith(AndroidJUnit4::class)
 class ResetProgressDialogTest {
