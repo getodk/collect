@@ -3,13 +3,17 @@ package org.odk.collect.android.preferences.dialogs
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.preference.PreferenceDialogFragmentCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog
@@ -19,7 +23,6 @@ import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFE
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import timber.log.Timber
-import java.util.ArrayList
 import javax.inject.Inject
 
 class ResetDialogPreferenceFragmentCompat :
@@ -30,30 +33,44 @@ class ResetDialogPreferenceFragmentCompat :
     @Inject
     var projectResetter: ProjectResetter? = null
 
-    private var preferences: AppCompatCheckBox? = null
-    private var instances: AppCompatCheckBox? = null
-    private var forms: AppCompatCheckBox? = null
-    private var layers: AppCompatCheckBox? = null
-    private var cache: AppCompatCheckBox? = null
-    private var _context: Context? = null
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
+
+    private var _preferences: AppCompatCheckBox? = null
+    private val preferences: AppCompatCheckBox
+        get() = _preferences!!
+    private var _instances: AppCompatCheckBox? = null
+    private val instances: AppCompatCheckBox
+        get() = _instances!!
+    private var _forms: AppCompatCheckBox? = null
+    private val forms: AppCompatCheckBox
+        get() = _forms!!
+    private var _layers: AppCompatCheckBox? = null
+    private val layers: AppCompatCheckBox
+        get() = _layers!!
+    private var _cache: AppCompatCheckBox? = null
+    private val cache: AppCompatCheckBox
+        get() = _cache!!
+
+    private lateinit var _context: Context
 
     override fun onAttach(context: Context) {
-        this._context = context
+        _context = context
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
     }
 
     public override fun onBindDialogView(view: View) {
-        preferences = view.findViewById(R.id.preferences)
-        instances = view.findViewById(R.id.instances)
-        forms = view.findViewById(R.id.forms)
-        layers = view.findViewById(R.id.layers)
-        cache = view.findViewById(R.id.cache)
-        preferences!!.setOnCheckedChangeListener(this)
-        instances!!.setOnCheckedChangeListener(this)
-        forms!!.setOnCheckedChangeListener(this)
-        layers!!.setOnCheckedChangeListener(this)
-        cache!!.setOnCheckedChangeListener(this)
+        _preferences = view.findViewById(R.id.preferences)
+        _instances = view.findViewById(R.id.instances)
+        _forms = view.findViewById(R.id.forms)
+        _layers = view.findViewById(R.id.layers)
+        _cache = view.findViewById(R.id.cache)
+        preferences.setOnCheckedChangeListener(this)
+        instances.setOnCheckedChangeListener(this)
+        forms.setOnCheckedChangeListener(this)
+        layers.setOnCheckedChangeListener(this)
+        cache.setOnCheckedChangeListener(this)
         super.onBindDialogView(view)
     }
 
@@ -63,12 +80,17 @@ class ResetDialogPreferenceFragmentCompat :
     }
 
     override fun onDetach() {
-        preferences = null
-        instances = null
-        forms = null
-        layers = null
-        cache = null
+        _preferences = null
+        _instances = null
+        _forms = null
+        _layers = null
+        _cache = null
         super.onDetach()
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -78,44 +100,42 @@ class ResetDialogPreferenceFragmentCompat :
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {}
+
     private fun resetSelected() {
         val resetActions: MutableList<Int> = ArrayList()
-        if (preferences!!.isChecked) {
+        if (preferences.isChecked) {
             resetActions.add(RESET_PREFERENCES)
         }
-        if (instances!!.isChecked) {
+        if (instances.isChecked) {
             resetActions.add(ProjectResetter.ResetAction.RESET_INSTANCES)
         }
-        if (forms!!.isChecked) {
+        if (forms.isChecked) {
             resetActions.add(ProjectResetter.ResetAction.RESET_FORMS)
         }
-        if (layers!!.isChecked) {
+        if (layers.isChecked) {
             resetActions.add(ProjectResetter.ResetAction.RESET_LAYERS)
         }
-        if (cache!!.isChecked) {
+        if (cache.isChecked) {
             resetActions.add(ProjectResetter.ResetAction.RESET_CACHE)
         }
-        if (!resetActions.isEmpty()) {
-            object : AsyncTask<Void?, Void?, List<Int>>() {
-                override fun onPreExecute() {
-                    showIfNotShowing(
-                        ResetProgressDialog::class.java,
-                        (_context as CollectAbstractActivity?)!!.supportFragmentManager
-                    )
-                }
+        if (resetActions.isNotEmpty()) {
+            showIfNotShowing(
+                ResetProgressDialog::class.java,
+                (_context as CollectAbstractActivity).supportFragmentManager
+            )
 
-                override fun doInBackground(vararg voids: Void?): List<Int> {
-                    return projectResetter!!.reset(resetActions)
-                }
+            scope.launch(Dispatchers.IO) {
 
-                override fun onPostExecute(failedResetActions: List<Int>) {
+                val failedResetActions = projectResetter!!.reset(resetActions)
+
+                withContext(Dispatchers.Main) {
                     dismissDialog(
                         ResetProgressDialog::class.java,
-                        (_context as CollectAbstractActivity?)!!.supportFragmentManager
+                        (_context as CollectAbstractActivity).supportFragmentManager
                     )
                     handleResult(resetActions, failedResetActions)
                 }
-            }.execute()
+            }
         }
     }
 
@@ -126,15 +146,15 @@ class ResetDialogPreferenceFragmentCompat :
                 RESET_PREFERENCES -> if (failedResetActions.contains(action)) {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_settings_result),
-                            _context!!.getString(R.string.error_occured)
+                            _context.getString(R.string.reset_settings_result),
+                            _context.getString(R.string.error_occured)
                         )
                     )
                 } else {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_settings_result),
-                            _context!!.getString(R.string.success)
+                            _context.getString(R.string.reset_settings_result),
+                            _context.getString(R.string.success)
                         )
                     )
                 }
@@ -144,60 +164,60 @@ class ResetDialogPreferenceFragmentCompat :
                 ) {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_saved_forms_result),
-                            _context!!.getString(R.string.error_occured)
+                            _context.getString(R.string.reset_saved_forms_result),
+                            _context.getString(R.string.error_occured)
                         )
                     )
                 } else {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_saved_forms_result),
-                            _context!!.getString(R.string.success)
+                            _context.getString(R.string.reset_saved_forms_result),
+                            _context.getString(R.string.success)
                         )
                     )
                 }
                 ProjectResetter.ResetAction.RESET_FORMS -> if (failedResetActions.contains(action)) {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_blank_forms_result),
-                            _context!!.getString(R.string.error_occured)
+                            _context.getString(R.string.reset_blank_forms_result),
+                            _context.getString(R.string.error_occured)
                         )
                     )
                 } else {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_blank_forms_result),
-                            _context!!.getString(R.string.success)
+                            _context.getString(R.string.reset_blank_forms_result),
+                            _context.getString(R.string.success)
                         )
                     )
                 }
                 ProjectResetter.ResetAction.RESET_CACHE -> if (failedResetActions.contains(action)) {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_cache_result),
-                            _context!!.getString(R.string.error_occured)
+                            _context.getString(R.string.reset_cache_result),
+                            _context.getString(R.string.error_occured)
                         )
                     )
                 } else {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_cache_result),
-                            _context!!.getString(R.string.success)
+                            _context.getString(R.string.reset_cache_result),
+                            _context.getString(R.string.success)
                         )
                     )
                 }
                 ProjectResetter.ResetAction.RESET_LAYERS -> if (failedResetActions.contains(action)) {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_layers_result),
-                            _context!!.getString(R.string.error_occured)
+                            _context.getString(R.string.reset_layers_result),
+                            _context.getString(R.string.error_occured)
                         )
                     )
                 } else {
                     resultMessage.append(
                         String.format(
-                            _context!!.getString(R.string.reset_layers_result),
-                            _context!!.getString(R.string.success)
+                            _context.getString(R.string.reset_layers_result),
+                            _context.getString(R.string.success)
                         )
                     )
                 }
@@ -206,16 +226,16 @@ class ResetDialogPreferenceFragmentCompat :
                 resultMessage.append("\n\n")
             }
         }
-        if (!(_context as CollectAbstractActivity?)!!.isInstanceStateSaved) {
-            (_context as CollectAbstractActivity?)!!.runOnUiThread {
+        if (!(_context as CollectAbstractActivity).isInstanceStateSaved) {
+            (_context as CollectAbstractActivity).runOnUiThread {
                 if (resetActions.contains(RESET_PREFERENCES)) {
-                    (_context as CollectAbstractActivity?)!!.recreate()
+                    (_context as CollectAbstractActivity).recreate()
                 }
                 val resetSettingsResultDialog =
                     ResetSettingsResultDialog.newInstance(resultMessage.toString())
                 try {
                     resetSettingsResultDialog.show(
-                        (_context as CollectAbstractActivity?)!!.supportFragmentManager,
+                        (_context as CollectAbstractActivity).supportFragmentManager,
                         ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG
                     )
                 } catch (e: ClassCastException) {
@@ -223,36 +243,34 @@ class ResetDialogPreferenceFragmentCompat :
                 }
             }
         }
-        _context = null
     }
 
     override fun onCheckedChanged(compoundButton: CompoundButton, b: Boolean) {
         adjustResetButtonAccessibility()
     }
 
-    fun adjustResetButtonAccessibility() {
-        if (preferences!!.isChecked || instances!!.isChecked || forms!!.isChecked
-            || layers!!.isChecked || cache!!.isChecked
+    private fun adjustResetButtonAccessibility() {
+        if (preferences.isChecked ||
+            instances.isChecked ||
+            forms.isChecked ||
+            layers.isChecked ||
+            cache.isChecked
         ) {
-            (dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
-            (dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor((dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).currentTextColor)
+            (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+            (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+                .setTextColor((dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).currentTextColor)
         } else {
-            (dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
-            (dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setTextColor(
-                    getPartiallyTransparentColor(
-                        (dialog as AlertDialog?)!!.getButton(
-                            AlertDialog.BUTTON_NEGATIVE
-                        ).currentTextColor
-                    )
+            (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+            (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                getPartiallyTransparentColor(
+                    (dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).currentTextColor
                 )
+            )
         }
     }
 
-    private fun getPartiallyTransparentColor(color: Int): Int {
-        return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color))
-    }
+    private fun getPartiallyTransparentColor(color: Int): Int =
+        Color.argb(150, Color.red(color), Color.green(color), Color.blue(color))
 
     companion object {
         fun newInstance(key: String?): ResetDialogPreferenceFragmentCompat {
