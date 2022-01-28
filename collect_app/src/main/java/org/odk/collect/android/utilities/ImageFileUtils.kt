@@ -28,7 +28,7 @@ object ImageFileUtils {
             else CompressFormat.JPEG
         try {
             if (bitmap != null) {
-                FileOutputStream(path).use { out -> bitmap.compress(compressFormat, 100, out) }
+                FileOutputStream(path).use { out -> bitmap.compress(compressFormat, 80, out) }
             }
         } catch (e: Exception) {
             Timber.e(e)
