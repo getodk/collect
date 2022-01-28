@@ -1,14 +1,12 @@
 package org.odk.collect.android.configure
 
 import androidx.core.util.Pair
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -24,7 +22,6 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings
 
-@RunWith(AndroidJUnit4::class)
 class SettingsImporterTest {
 
     private var currentProject = Project.Saved("1", "Project X", "X", "#cccccc")
