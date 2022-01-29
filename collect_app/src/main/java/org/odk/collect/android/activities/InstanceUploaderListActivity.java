@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -43,7 +43,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
@@ -54,6 +53,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.settings.ProjectKeys;
 
 import java.util.List;
 

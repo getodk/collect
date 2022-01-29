@@ -11,7 +11,6 @@ import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
@@ -23,6 +22,7 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)

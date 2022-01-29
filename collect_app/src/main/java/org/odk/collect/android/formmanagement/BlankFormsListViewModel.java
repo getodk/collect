@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.preferences.utilities.FormUpdateMode;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -25,6 +24,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 

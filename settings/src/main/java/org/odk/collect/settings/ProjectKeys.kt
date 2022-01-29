@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.keys
+package org.odk.collect.settings
 
 object ProjectKeys {
     // server_preferences.xml

@@ -1,7 +1,7 @@
 package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
-import static org.odk.collect.android.configure.keys.MetaKeys.KEY_INSTALL_ID;
+import static org.odk.collect.settings.MetaKeys.KEY_INSTALL_ID;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -48,7 +48,6 @@ import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.SettingsMigrator;
 import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.configure.SettingsValidator;
-import org.odk.collect.android.configure.keys.MetaKeys;
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -140,6 +139,7 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
+import org.odk.collect.settings.MetaKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 

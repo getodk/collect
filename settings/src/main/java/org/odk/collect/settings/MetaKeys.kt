@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.keys
+package org.odk.collect.settings
 
 object MetaKeys {
     const val KEY_INSTALL_ID = "metadata_installid"

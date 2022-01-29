@@ -25,13 +25,13 @@ import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
+import org.odk.collect.settings.ProjectKeys;
 
 import java.util.Map;
 import java.util.function.Supplier;

@@ -1,14 +1,5 @@
 package org.odk.collect.android.configure;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.android.configure.migration.MigrationUtils.combineKeys;
 import static org.odk.collect.android.configure.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.android.configure.migration.MigrationUtils.moveKey;
@@ -16,6 +7,15 @@ import static org.odk.collect.android.configure.migration.MigrationUtils.removeK
 import static org.odk.collect.android.configure.migration.MigrationUtils.renameKey;
 import static org.odk.collect.android.configure.migration.MigrationUtils.translateKey;
 import static org.odk.collect.android.configure.migration.MigrationUtils.translateValue;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.settings.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.settings.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static java.util.Arrays.asList;
 
 import org.odk.collect.android.configure.migration.KeyRenamer;

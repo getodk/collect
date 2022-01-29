@@ -259,6 +259,7 @@ dependencies {
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
+    implementation project(':settings')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support

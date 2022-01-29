@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
@@ -21,6 +20,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.util.ArrayList;

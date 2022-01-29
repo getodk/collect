@@ -30,8 +30,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.settings.ProjectKeys;
 
 import javax.inject.Inject;
 

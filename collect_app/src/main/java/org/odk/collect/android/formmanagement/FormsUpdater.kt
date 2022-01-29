@@ -5,7 +5,6 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
@@ -17,6 +16,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.File
 import java.util.stream.Collectors

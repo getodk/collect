@@ -1,16 +1,16 @@
 package org.odk.collect.android.geo;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.settings.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.settings.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.settings.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 import android.content.Context;
 

@@ -18,9 +18,9 @@ package org.odk.collect.android.preferences
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.settings.ProjectKeys
 
 class PreferenceVisibilityHandler(
     private val settingsProvider: SettingsProvider,

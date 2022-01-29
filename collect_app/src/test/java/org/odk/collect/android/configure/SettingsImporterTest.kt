@@ -12,12 +12,12 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.migration.SharedPreferenceUtils
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.shared.Settings
 
 class SettingsImporterTest {

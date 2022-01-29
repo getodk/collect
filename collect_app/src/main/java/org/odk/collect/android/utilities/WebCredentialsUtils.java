@@ -5,10 +5,10 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.net.URI;

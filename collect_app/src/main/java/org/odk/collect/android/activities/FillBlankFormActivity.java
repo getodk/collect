@@ -31,7 +31,6 @@ import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.external.FormsContract;
@@ -48,6 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.settings.ProjectKeys;
 
 import javax.inject.Inject;
 

@@ -13,8 +13,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
 

@@ -1,16 +1,16 @@
 package org.odk.collect.android.backgroundwork;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
 
 import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;

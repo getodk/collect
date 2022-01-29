@@ -16,11 +16,11 @@ package org.odk.collect.android.preferences.screens;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_APP_THEME;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_SPLASH_PATH;
+import static org.odk.collect.settings.ProjectKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.settings.ProjectKeys.KEY_APP_THEME;
+import static org.odk.collect.settings.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.ProjectKeys.KEY_NAVIGATION;
+import static org.odk.collect.settings.ProjectKeys.KEY_SPLASH_PATH;
 
 import android.content.Context;
 import android.content.Intent;

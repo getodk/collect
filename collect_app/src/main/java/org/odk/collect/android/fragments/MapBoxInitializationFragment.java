@@ -1,6 +1,6 @@
 package org.odk.collect.android.fragments;
 
-import static org.odk.collect.android.configure.keys.MetaKeys.KEY_MAPBOX_INITIALIZED;
+import static org.odk.collect.settings.MetaKeys.KEY_MAPBOX_INITIALIZED;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

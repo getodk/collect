@@ -23,12 +23,12 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.settings.ProjectKeys;
 
 import java.util.HashMap;
 import java.util.Set;

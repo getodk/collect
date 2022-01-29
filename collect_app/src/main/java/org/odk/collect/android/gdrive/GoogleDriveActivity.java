@@ -43,7 +43,6 @@ import com.google.api.services.drive.Drive;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -59,6 +58,7 @@ import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;

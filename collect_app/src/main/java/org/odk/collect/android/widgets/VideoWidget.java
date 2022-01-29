@@ -35,7 +35,6 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
 import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
@@ -47,6 +46,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.settings.ProjectKeys;
 
 import java.io.File;
 import java.util.Locale;

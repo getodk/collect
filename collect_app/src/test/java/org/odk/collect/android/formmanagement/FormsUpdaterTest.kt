@@ -18,7 +18,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
@@ -30,6 +29,7 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.testshared.BooleanChangeLock
 

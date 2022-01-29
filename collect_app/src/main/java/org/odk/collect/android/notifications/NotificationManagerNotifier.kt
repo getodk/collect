@@ -7,7 +7,6 @@ import android.content.Context
 import android.os.Build
 import org.odk.collect.android.R
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.MetaKeys
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
@@ -16,6 +15,7 @@ import org.odk.collect.android.notifications.builders.FormsSubmissionNotificatio
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.MetaKeys
 import org.odk.collect.strings.localization.getLocalizedString
 
 class NotificationManagerNotifier(

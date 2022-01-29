@@ -1,6 +1,6 @@
 package org.odk.collect.android.formentry.questions;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.ProjectKeys.KEY_FONT_SIZE;
 
 import org.odk.collect.shared.Settings;
 

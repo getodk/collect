@@ -11,9 +11,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.preferences.utilities.FormUpdateMode;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 @RunWith(AndroidJUnit4.class)

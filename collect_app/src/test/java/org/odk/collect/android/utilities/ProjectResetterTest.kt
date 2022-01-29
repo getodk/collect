@@ -15,7 +15,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
@@ -29,6 +28,7 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.shared.Settings
 import java.io.File
 

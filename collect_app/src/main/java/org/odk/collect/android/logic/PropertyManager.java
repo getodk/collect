@@ -14,10 +14,10 @@
 
 package org.odk.collect.android.logic;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_USERNAME;
+import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.settings.ProjectKeys.KEY_USERNAME;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;

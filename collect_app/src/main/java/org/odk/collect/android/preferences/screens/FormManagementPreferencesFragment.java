@@ -14,17 +14,17 @@
 
 package org.odk.collect.android.preferences.screens;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.ProjectKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.settings.ProjectKeys.KEY_AUTOSEND;
+import static org.odk.collect.settings.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.settings.ProjectKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.settings.ProjectKeys.KEY_GUIDANCE_HINT;
+import static org.odk.collect.settings.ProjectKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.settings.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -40,7 +40,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.configure.keys.ProjectKeys;
+import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import javax.inject.Inject;

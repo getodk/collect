@@ -2,13 +2,13 @@ package org.odk.collect.android.analytics;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.INVALID_FORM_HASH;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_SERVER_URL;
 import static org.odk.collect.forms.FormSourceException.AuthRequired;
 import static org.odk.collect.forms.FormSourceException.FetchError;
 import static org.odk.collect.forms.FormSourceException.ParseError;
 import static org.odk.collect.forms.FormSourceException.SecurityError;
 import static org.odk.collect.forms.FormSourceException.ServerError;
 import static org.odk.collect.forms.FormSourceException.Unreachable;
+import static org.odk.collect.settings.ProjectKeys.KEY_SERVER_URL;
 import static java.lang.String.format;
 
 import org.odk.collect.analytics.Analytics;

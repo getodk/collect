@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.ProjectKeys.KEY_FONT_SIZE;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

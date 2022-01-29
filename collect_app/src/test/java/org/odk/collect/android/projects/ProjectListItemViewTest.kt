@@ -13,8 +13,8 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)

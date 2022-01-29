@@ -6,11 +6,11 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class SettingsConnectionMatcherTest {

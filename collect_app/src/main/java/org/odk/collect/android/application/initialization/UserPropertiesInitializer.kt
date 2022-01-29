@@ -3,11 +3,11 @@ package org.odk.collect.android.application.initialization
 import android.content.Context
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.ProjectKeys
 
 class UserPropertiesInitializer(
     private val analytics: Analytics,

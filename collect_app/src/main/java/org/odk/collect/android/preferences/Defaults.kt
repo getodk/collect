@@ -4,8 +4,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.mapbox.mapboxsdk.maps.Style
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.utilities.QuestionFontSizeUtils
+import org.odk.collect.settings.ProjectKeys
 
 object Defaults {
 

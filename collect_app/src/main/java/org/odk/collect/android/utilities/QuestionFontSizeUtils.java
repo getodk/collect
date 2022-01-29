@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.ProjectKeys.KEY_FONT_SIZE;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;

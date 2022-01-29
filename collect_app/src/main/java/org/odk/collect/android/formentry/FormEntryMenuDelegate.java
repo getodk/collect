@@ -1,6 +1,6 @@
 package org.odk.collect.android.formentry;
 
-import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.settings.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 import android.content.Intent;
 import android.view.Menu;

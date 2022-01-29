@@ -6,7 +6,7 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade
 import org.odk.collect.android.configure.SettingsProvider
-import org.odk.collect.android.configure.keys.MetaKeys
+import org.odk.collect.settings.MetaKeys
 import org.odk.collect.upgrade.AppUpgrader
 
 class UpgradeInitializer(
