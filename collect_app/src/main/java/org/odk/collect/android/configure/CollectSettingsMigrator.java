@@ -18,9 +18,6 @@ import static org.odk.collect.android.configure.migration.MigrationUtils.transla
 import static org.odk.collect.android.configure.migration.MigrationUtils.translateValue;
 import static java.util.Arrays.asList;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.mapbox.mapboxsdk.maps.Style;
-
 import org.odk.collect.android.configure.migration.KeyRenamer;
 import org.odk.collect.android.configure.migration.KeyTranslator;
 import org.odk.collect.android.configure.migration.Migration;
@@ -65,19 +62,19 @@ public class CollectSettingsMigrator implements SettingsMigrator {
                 // value for "terrain" in previous versions of ODK Collect, so we need to
                 // include that character to match that value correctly.
                 translateKey("map_basemap_behavior").toKey(KEY_GOOGLE_MAP_STYLE)
-                        .fromValue("streets").toValue(Integer.toString(GoogleMap.MAP_TYPE_NORMAL))
-                        .fromValue("terrain\u200e").toValue(Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))
-                        .fromValue("terrain").toValue(Integer.toString(GoogleMap.MAP_TYPE_TERRAIN))
-                        .fromValue("hybrid").toValue(Integer.toString(GoogleMap.MAP_TYPE_HYBRID))
-                        .fromValue("satellite").toValue(Integer.toString(GoogleMap.MAP_TYPE_SATELLITE)),
+                        .fromValue("streets").toValue(Integer.toString(1))
+                        .fromValue("terrain\u200e").toValue(Integer.toString(3))
+                        .fromValue("terrain").toValue(Integer.toString(3))
+                        .fromValue("hybrid").toValue(Integer.toString(4))
+                        .fromValue("satellite").toValue(Integer.toString(2)),
 
                 translateKey("map_basemap_behavior").toKey(KEY_MAPBOX_MAP_STYLE)
-                        .fromValue("mapbox_streets").toValue(Style.MAPBOX_STREETS)
-                        .fromValue("mapbox_light").toValue(Style.LIGHT)
-                        .fromValue("mapbox_dark").toValue(Style.DARK)
-                        .fromValue("mapbox_satellite").toValue(Style.SATELLITE)
-                        .fromValue("mapbox_satellite_streets").toValue(Style.SATELLITE_STREETS)
-                        .fromValue("mapbox_outdoors").toValue(Style.OUTDOORS),
+                        .fromValue("mapbox_streets").toValue("mapbox://styles/mapbox/streets-v11")
+                        .fromValue("mapbox_light").toValue("mapbox://styles/mapbox/light-v10")
+                        .fromValue("mapbox_dark").toValue("mapbox://styles/mapbox/dark-v10")
+                        .fromValue("mapbox_satellite").toValue("mapbox://styles/mapbox/satellite-v9")
+                        .fromValue("mapbox_satellite_streets").toValue("mapbox://styles/mapbox/satellite-streets-v11")
+                        .fromValue("mapbox_outdoors").toValue("mapbox://styles/mapbox/outdoors-v11"),
 
                 // When the map_sdk_behavior is "osmdroid", we have to also examine the
                 // map_basemap_behavior key to determine the new basemap source.
