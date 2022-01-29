@@ -1,5 +1,10 @@
 package org.odk.collect.android.application.initialization;
 
+import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefs;
+import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefsEmpty;
+import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.initPrefs;
+import static java.util.Arrays.asList;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -9,14 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.configure.CollectSettingsMigrator;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefsEmpty;
-import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(AndroidJUnit4.class)
 public class CollectSettingsMigratorTest {

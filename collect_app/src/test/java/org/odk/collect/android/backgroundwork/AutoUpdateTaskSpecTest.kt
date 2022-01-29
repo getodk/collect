@@ -11,12 +11,12 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.DATA_PROJECT_ID
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider

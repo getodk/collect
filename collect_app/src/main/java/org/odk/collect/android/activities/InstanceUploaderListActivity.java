@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_PROTOCOL;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -34,17 +36,19 @@ import androidx.loader.content.Loader;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
@@ -56,10 +60,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores

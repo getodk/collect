@@ -1,4 +1,4 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
 
 /** A single preference setting, consisting of a String key and a value of varying type. */
 class KeyValuePair {

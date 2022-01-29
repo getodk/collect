@@ -1,11 +1,10 @@
-package org.odk.collect.android.configure;
+package org.odk.collect.android.preferences.utilities;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 public final class SettingsUtils {

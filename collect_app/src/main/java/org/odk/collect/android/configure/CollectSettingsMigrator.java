@@ -1,32 +1,32 @@
-package org.odk.collect.android.application.initialization;
+package org.odk.collect.android.configure;
+
+import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.android.configure.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.android.configure.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.configure.migration.MigrationUtils.extractNewKey;
+import static org.odk.collect.android.configure.migration.MigrationUtils.moveKey;
+import static org.odk.collect.android.configure.migration.MigrationUtils.removeKey;
+import static org.odk.collect.android.configure.migration.MigrationUtils.renameKey;
+import static org.odk.collect.android.configure.migration.MigrationUtils.translateKey;
+import static org.odk.collect.android.configure.migration.MigrationUtils.translateValue;
+import static java.util.Arrays.asList;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
-import org.odk.collect.android.application.initialization.migration.KeyRenamer;
-import org.odk.collect.android.application.initialization.migration.KeyTranslator;
-import org.odk.collect.android.application.initialization.migration.Migration;
+import org.odk.collect.android.configure.migration.KeyRenamer;
+import org.odk.collect.android.configure.migration.KeyTranslator;
+import org.odk.collect.android.configure.migration.Migration;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.extractNewKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.moveKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.removeKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.renameKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateKey;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.translateValue;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 /**
  * Migrates old preference keys and values to new ones.

@@ -14,26 +14,26 @@
 
 package org.odk.collect.android.gdrive;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.upload.UploadException;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 
 import java.util.List;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.DEFAULT_SUCCESSFUL_TEXT;
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 

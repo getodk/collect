@@ -1,17 +1,22 @@
 package org.odk.collect.android.instancemanagement;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.util.Pair;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader;
 import org.odk.collect.android.instancemanagement.SubmitException.Type;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.InstanceUploader;
 import org.odk.collect.android.upload.UploadException;
@@ -30,11 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class InstanceSubmitter {
 

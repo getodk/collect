@@ -6,6 +6,7 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.odk.collect.android.configure.SettingsMigrator
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project

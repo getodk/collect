@@ -14,8 +14,8 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.fragmentstest.DialogFragmentTest

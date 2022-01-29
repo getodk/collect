@@ -6,7 +6,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository

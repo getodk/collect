@@ -4,8 +4,8 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.openrosa.OpenRosaFormSource
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 
 class FormSourceProviderTest {

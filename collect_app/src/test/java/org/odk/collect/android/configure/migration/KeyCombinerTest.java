@@ -1,4 +1,8 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
+
+import static org.odk.collect.android.configure.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefs;
+import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.initPrefs;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -6,10 +10,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.shared.Settings;
-
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils.initPrefs;
 
 @RunWith(AndroidJUnit4.class)
 public class KeyCombinerTest {

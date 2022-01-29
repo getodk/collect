@@ -1,4 +1,4 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
 
 import org.odk.collect.shared.Settings;
 

@@ -1,8 +1,8 @@
 package org.odk.collect.android.application.initialization
 
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.version.VersionInformation
 
 class AnalyticsInitializer(

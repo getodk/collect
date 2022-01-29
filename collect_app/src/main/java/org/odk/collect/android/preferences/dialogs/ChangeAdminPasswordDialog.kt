@@ -11,11 +11,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.databinding.PasswordDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.androidshared.ui.ToastUtils
 import javax.inject.Inject

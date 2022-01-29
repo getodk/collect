@@ -13,9 +13,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
+import org.odk.collect.android.configure.keys.MetaKeys
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance

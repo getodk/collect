@@ -1,11 +1,11 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
+
+import static org.odk.collect.android.configure.migration.MigrationUtils.replace;
 
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.replace;
 
 public class KeyTranslator implements Migration {
 

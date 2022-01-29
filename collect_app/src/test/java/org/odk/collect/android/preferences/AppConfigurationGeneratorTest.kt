@@ -9,10 +9,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project

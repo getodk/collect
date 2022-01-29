@@ -1,5 +1,11 @@
 package org.odk.collect.android.formmanagement;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import android.app.Application;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -14,20 +20,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.projects.Project;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class BlankFormsListViewModelTest {

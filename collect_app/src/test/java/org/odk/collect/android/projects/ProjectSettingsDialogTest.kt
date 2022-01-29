@@ -22,9 +22,9 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData

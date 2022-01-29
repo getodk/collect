@@ -15,9 +15,9 @@
  */
 package org.odk.collect.android.utilities
 
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
 import org.odk.collect.android.logic.PropertyManager
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import java.io.File

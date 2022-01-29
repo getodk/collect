@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.keys
+package org.odk.collect.android.configure.keys
 
 object ProtectedProjectKeys {
     const val KEY_ADMIN_PW = "admin_pw"

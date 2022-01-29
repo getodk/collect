@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences.keys
+package org.odk.collect.android.configure.keys
 
 import com.google.android.gms.maps.GoogleMap
 import com.mapbox.mapboxsdk.maps.Style

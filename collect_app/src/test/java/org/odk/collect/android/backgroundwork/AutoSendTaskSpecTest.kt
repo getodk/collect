@@ -10,14 +10,14 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.TestSettingsProvider
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider

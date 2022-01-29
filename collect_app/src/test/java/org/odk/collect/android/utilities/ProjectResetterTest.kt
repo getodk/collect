@@ -14,13 +14,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers

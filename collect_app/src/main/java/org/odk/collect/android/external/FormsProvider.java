@@ -14,39 +14,6 @@
 
 package org.odk.collect.android.external;
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-
-import androidx.annotation.NonNull;
-
-import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.dao.CursorLoaderFactory;
-import org.odk.collect.android.database.forms.DatabaseFormsRepository;
-import org.odk.collect.android.formmanagement.FormDeleter;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.utilities.ContentUriHelper;
-import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.projects.ProjectsRepository;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.inject.Inject;
-
 import static android.provider.BaseColumns._ID;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromValues;
@@ -67,6 +34,39 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERS
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
+
+import android.content.ContentProvider;
+import android.content.ContentValues;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+
+import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
+import org.odk.collect.android.configure.SettingsProvider;
+import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.forms.DatabaseFormsRepository;
+import org.odk.collect.android.formmanagement.FormDeleter;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.projects.ProjectsRepository;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 public class FormsProvider extends ContentProvider {
 

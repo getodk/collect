@@ -2,9 +2,9 @@ package org.odk.collect.android.application.initialization
 
 import android.content.Context
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.FormUpdateMode
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 

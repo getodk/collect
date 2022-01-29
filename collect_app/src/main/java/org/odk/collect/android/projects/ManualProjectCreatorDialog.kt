@@ -17,11 +17,11 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
 import org.odk.collect.android.utilities.SoftKeyboardController

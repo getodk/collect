@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.application;
 
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.android.configure.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 import android.app.Application;
 import android.content.Context;
@@ -29,13 +29,13 @@ import androidx.multidex.MultiDex;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
+import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;

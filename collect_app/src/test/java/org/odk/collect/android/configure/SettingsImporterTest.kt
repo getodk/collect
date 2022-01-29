@@ -12,11 +12,9 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.application.initialization.SettingsMigrator
-import org.odk.collect.android.application.initialization.migration.SharedPreferenceUtils
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.configure.migration.SharedPreferenceUtils
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository

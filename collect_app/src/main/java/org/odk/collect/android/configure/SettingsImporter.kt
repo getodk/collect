@@ -2,11 +2,8 @@ package org.odk.collect.android.configure
 
 import org.json.JSONException
 import org.json.JSONObject
-import org.odk.collect.android.application.initialization.SettingsMigrator
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
-import org.odk.collect.android.projects.ProjectDetailsCreator
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.Settings

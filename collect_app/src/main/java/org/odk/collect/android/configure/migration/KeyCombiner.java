@@ -1,4 +1,7 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
+
+import static org.odk.collect.android.configure.migration.MigrationUtils.asPairs;
+import static org.odk.collect.android.configure.migration.MigrationUtils.replace;
 
 import org.odk.collect.shared.Settings;
 
@@ -6,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.asPairs;
-import static org.odk.collect.android.application.initialization.migration.MigrationUtils.replace;
 
 public class KeyCombiner implements Migration {
 

@@ -20,8 +20,8 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.SplashScreenViewModel
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.CollectHelpers

@@ -2,9 +2,9 @@ package org.odk.collect.android.projects
 
 import org.json.JSONException
 import org.json.JSONObject
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.ProjectsRepository
 
 class SettingsConnectionMatcher(

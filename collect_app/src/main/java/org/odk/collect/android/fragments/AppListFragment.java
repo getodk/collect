@@ -39,10 +39,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
+import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 
 import java.util.ArrayList;

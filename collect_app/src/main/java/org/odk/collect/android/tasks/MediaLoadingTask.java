@@ -1,15 +1,15 @@
 package org.odk.collect.android.tasks;
 
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_IMAGE_SIZE;
 
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;

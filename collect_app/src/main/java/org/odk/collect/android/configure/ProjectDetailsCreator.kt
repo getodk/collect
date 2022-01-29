@@ -1,4 +1,4 @@
-package org.odk.collect.android.projects
+package org.odk.collect.android.configure
 
 import android.content.Context
 import androidx.core.content.ContextCompat

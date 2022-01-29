@@ -23,12 +23,12 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.FormUpdateMode
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler

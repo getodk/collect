@@ -19,8 +19,8 @@ import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation

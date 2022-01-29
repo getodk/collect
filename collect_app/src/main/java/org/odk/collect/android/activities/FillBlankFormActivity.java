@@ -31,6 +31,7 @@ import androidx.loader.content.Loader;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.external.FormsContract;
@@ -40,7 +41,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;

@@ -1,4 +1,4 @@
-package org.odk.collect.android.preferences;
+package org.odk.collect.android.preferences.utilities;
 
 import android.content.Context;
 

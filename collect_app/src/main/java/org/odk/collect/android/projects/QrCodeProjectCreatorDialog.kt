@@ -20,10 +20,10 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.SettingsImporter
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.qr.QRCodeDecoder
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.views.BarcodeViewDecoder

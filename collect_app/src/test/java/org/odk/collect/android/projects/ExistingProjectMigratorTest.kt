@@ -10,9 +10,9 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.configure.keys.MetaKeys
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.shared.TempFiles
 import java.io.File

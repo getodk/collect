@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 import android.animation.ArgbEvaluator;
@@ -59,6 +59,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
@@ -67,7 +68,6 @@ import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;

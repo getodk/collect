@@ -24,9 +24,9 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers

@@ -7,8 +7,8 @@ import android.view.MotionEvent;
 import androidx.core.widget.NestedScrollView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.formentry.ODKView;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
 import org.odk.collect.shared.Settings;

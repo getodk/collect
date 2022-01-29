@@ -1,5 +1,7 @@
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.android.configure.keys.ProjectKeys.KEY_REFERENCE_LAYER;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -16,8 +18,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 class OsmDroidMapConfigurator implements MapConfigurator {
     private final String prefKey;

@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.backgroundwork;
 
+import static java.lang.Boolean.parseBoolean;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -22,11 +24,11 @@ import android.os.Environment;
 import androidx.work.WorkerParameters;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.android.configure.SettingsProvider;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.TaskSpec;
 import org.odk.collect.async.WorkerAdapter;
@@ -35,8 +37,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
-
-import static java.lang.Boolean.parseBoolean;
 
 public class AutoSendTaskSpec implements TaskSpec {
 

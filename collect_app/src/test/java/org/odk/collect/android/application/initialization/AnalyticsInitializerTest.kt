@@ -7,7 +7,7 @@ import org.mockito.kotlin.only
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.version.VersionInformation
 

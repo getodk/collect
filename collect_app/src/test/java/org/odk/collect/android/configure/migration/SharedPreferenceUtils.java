@@ -1,9 +1,9 @@
-package org.odk.collect.android.application.initialization.migration;
+package org.odk.collect.android.configure.migration;
+
+import static org.junit.Assert.assertEquals;
 
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.shared.Settings;
-
-import static org.junit.Assert.assertEquals;
 
 public final class SharedPreferenceUtils {
 

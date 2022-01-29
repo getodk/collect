@@ -2,7 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository

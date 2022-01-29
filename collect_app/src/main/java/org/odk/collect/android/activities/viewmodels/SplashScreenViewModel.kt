@@ -3,7 +3,7 @@ package org.odk.collect.android.activities.viewmodels
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.android.preferences.keys.ProjectKeys
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.utilities.ImageFileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import org.odk.collect.projects.ProjectsRepository

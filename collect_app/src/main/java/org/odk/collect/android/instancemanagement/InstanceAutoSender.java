@@ -1,17 +1,19 @@
 package org.odk.collect.android.instancemanagement;
 
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
+
 import android.content.Context;
 import android.util.Pair;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
+import org.odk.collect.android.configure.SettingsProvider;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.notifications.Notifier;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -23,8 +25,6 @@ import org.odk.collect.shared.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
 
 public class InstanceAutoSender {
 

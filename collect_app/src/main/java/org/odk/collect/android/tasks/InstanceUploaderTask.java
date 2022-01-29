@@ -16,13 +16,15 @@
 
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeDeleted;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.configure.SettingsProvider;
+import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
@@ -31,8 +33,6 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Stream;
-
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeDeleted;
 
 public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploaderTask.Outcome> {
 

@@ -1,7 +1,7 @@
 package org.odk.collect.android.projects
 
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.configure.SettingsProvider
+import org.odk.collect.android.configure.keys.MetaKeys
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 
