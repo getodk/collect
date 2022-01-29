@@ -1,15 +1,13 @@
 package org.odk.collect.android.configure
 
-import android.content.Context
-import androidx.core.content.ContextCompat
-import org.odk.collect.android.R
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.projects.Project
 import org.odk.collect.shared.strings.StringUtils
 import java.net.URL
 import java.util.regex.Pattern
 import kotlin.math.abs
 
-class ProjectDetailsCreator(private val context: Context) {
+class ProjectDetailsCreator(private val colors: List<String>) {
 
     fun createProjectFromDetails(name: String = "", icon: String = "", color: String = "", connectionIdentifier: String = ""): Project {
         val projectName = if (name.isNotBlank()) {
@@ -34,7 +32,9 @@ class ProjectDetailsCreator(private val context: Context) {
     }
 
     private fun getProjectNameFromConnectionIdentifier(connectionIdentifier: String): String {
-        return if (connectionIdentifier.isBlank() || connectionIdentifier.startsWith(context.getString(R.string.default_server_url))) {
+        val defaultServer = ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL] as String
+
+        return if (connectionIdentifier.isBlank() || connectionIdentifier.startsWith(defaultServer)) {
             Project.DEMO_PROJECT_NAME
         } else {
             try {
@@ -50,11 +50,8 @@ class ProjectDetailsCreator(private val context: Context) {
             return Project.DEMO_PROJECT_COLOR
         }
 
-        val colorId = (abs(projectName.hashCode()) % 15) + 1
-        val colorName = "color$colorId"
-        val colorValue = context.resources.getIdentifier(colorName, "color", context.packageName)
-
-        return "#${Integer.toHexString(ContextCompat.getColor(context, colorValue)).substring(2)}"
+        val colorIndex = abs(projectName.hashCode()) % colors.size
+        return colors[colorIndex]
     }
 
     private fun isProjectColorValid(hexColor: String): Boolean {
@@ -62,13 +59,5 @@ class ProjectDetailsCreator(private val context: Context) {
             .compile("^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})\$", Pattern.CASE_INSENSITIVE)
             .matcher(hexColor)
             .matches()
-    }
-
-    private fun getFirstSign(value: String): String {
-        return if (Character.codePointCount(value, 0, value.length) == 1) {
-            value
-        } else {
-            getFirstSign(value.substring(0, value.length - 1))
-        }
     }
 }

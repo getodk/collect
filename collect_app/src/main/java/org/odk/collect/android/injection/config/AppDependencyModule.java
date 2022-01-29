@@ -2,6 +2,7 @@ package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.android.configure.keys.MetaKeys.KEY_INSTALL_ID;
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -10,6 +11,7 @@ import android.media.MediaPlayer;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
@@ -143,6 +145,8 @@ import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -332,7 +336,25 @@ public class AppDependencyModule {
                 ProtectedProjectKeys.getDefaults(),
                 settingsChangeHandler,
                 projectsRepository,
-                new ProjectDetailsCreator(context)
+                new ProjectDetailsCreator(Stream.of(
+                        R.color.color1,
+                        R.color.color2,
+                        R.color.color3,
+                        R.color.color4,
+                        R.color.color5,
+                        R.color.color6,
+                        R.color.color7,
+                        R.color.color8,
+                        R.color.color9,
+                        R.color.color10,
+                        R.color.color11,
+                        R.color.color12,
+                        R.color.color13,
+                        R.color.color14,
+                        R.color.color15
+                ).map(integer -> {
+                    return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
+                }).collect(Collectors.toList()))
         );
     }
 
@@ -555,7 +577,25 @@ public class AppDependencyModule {
 
     @Provides
     public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
-        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider, new ProjectDetailsCreator(context));
+        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider, new ProjectDetailsCreator(Stream.of(
+                R.color.color1,
+                R.color.color2,
+                R.color.color3,
+                R.color.color4,
+                R.color.color5,
+                R.color.color6,
+                R.color.color7,
+                R.color.color8,
+                R.color.color9,
+                R.color.color10,
+                R.color.color11,
+                R.color.color12,
+                R.color.color13,
+                R.color.color14,
+                R.color.color15
+        ).map(integer -> {
+            return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
+        }).collect(Collectors.toList())));
     }
 
     @Provides

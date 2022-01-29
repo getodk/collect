@@ -89,7 +89,7 @@ object ProjectKeys {
         get() {
             val hashMap = HashMap<String, Any>()
             // odk_server_preferences.xml
-            hashMap[KEY_SERVER_URL] = Collect.getInstance().getString(R.string.default_server_url)
+            hashMap[KEY_SERVER_URL] = "https://demo.getodk.org"
             hashMap[KEY_USERNAME] = ""
             hashMap[KEY_PASSWORD] = ""
             // form_management_preferences.xml

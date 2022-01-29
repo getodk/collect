@@ -13,7 +13,10 @@ import org.odk.collect.projects.Project
 @RunWith(AndroidJUnit4::class)
 class ProjectDetailsCreatorTest {
 
-    private val projectDetailsCreator = ProjectDetailsCreator(ApplicationProvider.getApplicationContext())
+    private val projectDetailsCreator = ProjectDetailsCreator(listOf(
+        "#EA4633",
+        "#9E9E9E"
+    ))
 
     @Test
     fun `If project name is included in project details should be used`() {
@@ -77,7 +80,7 @@ class ProjectDetailsCreatorTest {
 
     @Test
     fun `If project color is not included in project details should be generated based on project name`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X").color, `is`("#9f50b0"))
+        assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X").color, `is`("#9E9E9E"))
     }
 
     @Test
@@ -87,20 +90,6 @@ class ProjectDetailsCreatorTest {
 
     @Test
     fun `If project color is included in project details but invalid should be generated based on project name`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X", icon = "#cc").color, `is`("#9f50b0"))
-    }
-
-    @Test
-    fun `Generated project color should be the same for identical project names`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color, `is`(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
-    }
-
-    @Test
-    fun `Generated project color should be different for different project names`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color))
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://www.my-project.com").color, not(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://your-project.com/one").color))
+        assertThat(projectDetailsCreator.createProjectFromDetails(name = "Project X", icon = "#cc").color, `is`("#9E9E9E"))
     }
 }
