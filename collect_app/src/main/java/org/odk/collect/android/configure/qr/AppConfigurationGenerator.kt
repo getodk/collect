@@ -4,6 +4,7 @@ import org.json.JSONObject
 import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.projects.CurrentProjectProvider
 
 class AppConfigurationGenerator(
@@ -51,7 +52,7 @@ class AppConfigurationGenerator(
         val generalPrefs = JSONObject()
 
         val generalSettings = settingsProvider.getUnprotectedSettings().getAll()
-        val defaultGeneralSettings: Map<String, *> = ProjectKeys.defaults
+        val defaultGeneralSettings: Map<String, *> = Defaults.unprotected
 
         for (key in defaultGeneralSettings.keys) {
             if (key == ProjectKeys.KEY_PASSWORD && !includedPasswordKeys.contains(ProjectKeys.KEY_PASSWORD)) {

@@ -101,7 +101,7 @@ class AppConfigurationGeneratorTest {
 
     @Test
     fun `Saved but default settings should not be included in json`() {
-        val generalPrefs = ProjectKeys.defaults.filter {
+        val generalPrefs = Defaults.unprotected.filter {
             it.key == ProjectKeys.KEY_DELETE_AFTER_SEND || it.key == ProjectKeys.KEY_APP_THEME
         }
 

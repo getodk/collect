@@ -7,7 +7,7 @@ import java.net.URL
 import java.util.regex.Pattern
 import kotlin.math.abs
 
-class ProjectDetailsCreator(private val colors: List<String>) {
+class ProjectDetailsCreator(private val colors: List<String>, private val defaults: Map<String, Any>) {
 
     fun createProjectFromDetails(name: String = "", icon: String = "", color: String = "", connectionIdentifier: String = ""): Project {
         val projectName = if (name.isNotBlank()) {
@@ -32,7 +32,7 @@ class ProjectDetailsCreator(private val colors: List<String>) {
     }
 
     private fun getProjectNameFromConnectionIdentifier(connectionIdentifier: String): String {
-        val defaultServer = ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL] as String
+        val defaultServer = defaults[ProjectKeys.KEY_SERVER_URL] as String
 
         return if (connectionIdentifier.isBlank() || connectionIdentifier.startsWith(defaultServer)) {
             Project.DEMO_PROJECT_NAME

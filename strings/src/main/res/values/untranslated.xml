@@ -8,7 +8,6 @@ the specific language governing permissions and limitations under the License. -
 <resources>
     <!-- strings that should not be translated -->
     <string name="collect_app_name" translatable="false">ODK Collect</string>
-    <string name="default_server_url" translatable="false">https://demo.getodk.org</string>
     <string name="app_url" translatable="false">https://getodk.org</string>
     <string name="forum_url" translatable="false">"https://forum.getodk.org"</string>
     <string name="never_value" translatable="false">never</string>

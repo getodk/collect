@@ -21,6 +21,7 @@ import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
@@ -76,13 +77,13 @@ class ProjectResetterTest {
         assertThat(
             getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
-                ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
+                Defaults.unprotected[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
             getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
-                ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
+                Defaults.unprotected[ProjectKeys.KEY_PASSWORD]
             )
         )
     }

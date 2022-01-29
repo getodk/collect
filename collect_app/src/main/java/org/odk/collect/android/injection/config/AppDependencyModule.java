@@ -2,7 +2,6 @@ package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 import static org.odk.collect.android.configure.keys.MetaKeys.KEY_INSTALL_ID;
-import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -50,7 +49,6 @@ import org.odk.collect.android.configure.SettingsMigrator;
 import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.keys.MetaKeys;
-import org.odk.collect.android.configure.keys.ProjectKeys;
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -93,6 +91,7 @@ import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.openrosa.okhttp.OkHttpConnection;
 import org.odk.collect.android.openrosa.okhttp.OkHttpOpenRosaServerClientProvider;
+import org.odk.collect.android.preferences.Defaults;
 import org.odk.collect.android.preferences.PreferenceVisibilityHandler;
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel;
 import org.odk.collect.android.preferences.source.SettingsStore;
@@ -332,7 +331,7 @@ public class AppDependencyModule {
                 settingsProvider,
                 preferenceMigrator,
                 settingsValidator,
-                ProjectKeys.getDefaults(),
+                Defaults.getUnprotected(),
                 ProtectedProjectKeys.getDefaults(),
                 settingsChangeHandler,
                 projectsRepository,
@@ -354,7 +353,7 @@ public class AppDependencyModule {
                         R.color.color15
                 ).map(integer -> {
                     return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
-                }).collect(Collectors.toList()))
+                }).collect(Collectors.toList()), Defaults.getUnprotected())
         );
     }
 
@@ -595,7 +594,7 @@ public class AppDependencyModule {
                 R.color.color15
         ).map(integer -> {
             return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
-        }).collect(Collectors.toList())));
+        }).collect(Collectors.toList()), Defaults.getUnprotected()));
     }
 
     @Provides

@@ -1,11 +1,5 @@
 package org.odk.collect.android.configure.keys
 
-import com.google.android.gms.maps.GoogleMap
-import com.mapbox.mapboxsdk.maps.Style
-import org.odk.collect.android.R
-import org.odk.collect.android.application.Collect
-import org.odk.collect.android.utilities.QuestionFontSizeUtils
-
 object ProjectKeys {
     // server_preferences.xml
     const val KEY_PROTOCOL = "protocol"
@@ -70,8 +64,6 @@ object ProjectKeys {
     const val NAVIGATION_BUTTONS = "buttons"
     const val NAVIGATION_BOTH = "swipe_buttons"
     const val CONSTRAINT_BEHAVIOR_ON_SWIPE = "on_swipe"
-    private const val AUTOSEND_OFF = "off"
-    private const val GUIDANCE_HINT_OFF = "no"
 
     // basemap section
     const val CATEGORY_BASEMAP = "category_basemap"
@@ -83,55 +75,4 @@ object ProjectKeys {
     const val BASEMAP_SOURCE_USGS = "usgs"
     const val BASEMAP_SOURCE_STAMEN = "stamen"
     const val BASEMAP_SOURCE_CARTO = "carto"
-
-    @JvmStatic
-    val defaults: HashMap<String, Any>
-        get() {
-            val hashMap = HashMap<String, Any>()
-            // odk_server_preferences.xml
-            hashMap[KEY_SERVER_URL] = "https://demo.getodk.org"
-            hashMap[KEY_USERNAME] = ""
-            hashMap[KEY_PASSWORD] = ""
-            // form_management_preferences.xml
-            hashMap[KEY_AUTOSEND] = AUTOSEND_OFF
-            hashMap[KEY_GUIDANCE_HINT] = GUIDANCE_HINT_OFF
-            hashMap[KEY_DELETE_AFTER_SEND] = false
-            hashMap[KEY_COMPLETED_DEFAULT] = true
-            hashMap[KEY_CONSTRAINT_BEHAVIOR] = CONSTRAINT_BEHAVIOR_ON_SWIPE
-            hashMap[KEY_HIGH_RESOLUTION] = true
-            hashMap[KEY_IMAGE_SIZE] = "original_image_size"
-            hashMap[KEY_INSTANCE_SYNC] = true
-            hashMap[KEY_PERIODIC_FORM_UPDATES_CHECK] = "every_fifteen_minutes"
-            hashMap[KEY_AUTOMATIC_UPDATE] = false
-            hashMap[KEY_HIDE_OLD_FORM_VERSIONS] = true
-            hashMap[KEY_BACKGROUND_LOCATION] = true
-            hashMap[KEY_BACKGROUND_RECORDING] = true
-            hashMap[KEY_FORM_UPDATE_MODE] = "manual"
-            // form_metadata_preferences.xml
-            hashMap[KEY_METADATA_USERNAME] = ""
-            hashMap[KEY_METADATA_PHONENUMBER] = ""
-            hashMap[KEY_METADATA_EMAIL] = ""
-            // google_preferences.xml
-            hashMap[KEY_SELECTED_GOOGLE_ACCOUNT] = ""
-            hashMap[KEY_GOOGLE_SHEETS_URL] = ""
-            // identity_preferences.xml
-            hashMap[KEY_ANALYTICS] = true
-            // server_preferences.xml
-            hashMap[KEY_PROTOCOL] = PROTOCOL_SERVER
-            // user_interface_preferences.xml
-            hashMap[KEY_APP_THEME] = Collect.getInstance().getString(R.string.app_theme_system)
-            hashMap[KEY_APP_LANGUAGE] = ""
-            hashMap[KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
-            hashMap[KEY_NAVIGATION] = NAVIGATION_BOTH
-            hashMap[KEY_SHOW_SPLASH] = false
-            hashMap[KEY_SPLASH_PATH] = Collect.getInstance().getString(R.string.default_splash_path)
-            hashMap[KEY_EXTERNAL_APP_RECORDING] = false
-            // map_preferences.xml
-            hashMap[KEY_BASEMAP_SOURCE] = BASEMAP_SOURCE_GOOGLE
-            hashMap[KEY_CARTO_MAP_STYLE] = "positron"
-            hashMap[KEY_USGS_MAP_STYLE] = "topographic"
-            hashMap[KEY_GOOGLE_MAP_STYLE] = GoogleMap.MAP_TYPE_NORMAL.toString()
-            hashMap[KEY_MAPBOX_MAP_STYLE] = Style.MAPBOX_STREETS
-            return hashMap
-        }
 }

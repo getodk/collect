@@ -1,22 +1,26 @@
 package org.odk.collect.android.projects
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.configure.ProjectDetailsCreator
+import org.odk.collect.android.configure.keys.ProjectKeys
 import org.odk.collect.projects.Project
 
 @RunWith(AndroidJUnit4::class)
 class ProjectDetailsCreatorTest {
 
-    private val projectDetailsCreator = ProjectDetailsCreator(listOf(
-        "#EA4633",
-        "#9E9E9E"
-    ))
+    private val projectDetailsCreator = ProjectDetailsCreator(
+        listOf(
+            "#EA4633",
+            "#9E9E9E"
+        ),
+        mapOf<String, Any>(
+            ProjectKeys.KEY_SERVER_URL to "http://default.example.com"
+        )
+    )
 
     @Test
     fun `If project name is included in project details should be used`() {
@@ -38,7 +42,7 @@ class ProjectDetailsCreatorTest {
 
     @Test
     fun `When no project name is specified and the connection identifier is the demo project explicitly or by default, the project name is 'Demo project'`() {
-        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://demo.getodk.org").name, `is`(Project.DEMO_PROJECT_NAME))
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://default.example.com").name, `is`(Project.DEMO_PROJECT_NAME))
         assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "").name, `is`(Project.DEMO_PROJECT_NAME))
     }
 

@@ -7,6 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.configure.keys.ProjectKeys
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
@@ -34,9 +35,9 @@ class SettingsConnectionMatcherTest {
 
     @Test
     fun `returns a matching project uuid when a default project exists and a user tries to add another default project`() {
-        assertThat("Test assumes wrong default", ProjectKeys.defaults[ProjectKeys.KEY_PROTOCOL], `is`(ProjectKeys.PROTOCOL_SERVER))
+        assertThat("Test assumes wrong default", Defaults.unprotected[ProjectKeys.KEY_PROTOCOL], `is`(ProjectKeys.PROTOCOL_SERVER))
 
-        val defaultUrl = ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL] as String
+        val defaultUrl = Defaults.unprotected[ProjectKeys.KEY_SERVER_URL] as String
         createServerProject("a uuid", defaultUrl, "")
         val jsonSettings = getDefaultServerSettingsJson()
 
