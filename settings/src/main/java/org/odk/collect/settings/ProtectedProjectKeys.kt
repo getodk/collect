@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.keys
+package org.odk.collect.settings
 
 object ProtectedProjectKeys {
     const val KEY_ADMIN_PW = "admin_pw"
@@ -45,20 +45,6 @@ object ProtectedProjectKeys {
     const val KEY_MARK_AS_FINALIZED = "mark_as_finalized"
 
     const val ALLOW_OTHER_WAYS_OF_EDITING_FORM = "allow_other_ways_of_editing_form"
-
-    @JvmStatic
-    val defaults: Map<String, Any>
-        get() {
-            val defaults: MutableMap<String, Any> = HashMap()
-            for (key in allKeys()) {
-                if (key == KEY_ADMIN_PW) {
-                    defaults[key] = ""
-                } else {
-                    defaults[key] = true
-                }
-            }
-            return defaults
-        }
 
     fun allKeys() = listOf(
         KEY_ADMIN_PW,

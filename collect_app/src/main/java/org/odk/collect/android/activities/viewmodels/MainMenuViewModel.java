@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer;
 import org.odk.collect.android.preferences.utilities.FormUpdateMode;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.ProtectedProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.Settings;
 

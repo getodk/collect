@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.Context
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.settings.MetaKeys
 import org.odk.collect.settings.SettingsProvider
@@ -29,7 +28,7 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         val settingsId = getSettingsId(ADMIN_SETTINGS_NAME, projectId)
 
         return settings.getOrPut(settingsId) {
-            SharedPreferencesSettings(getSharedPrefs(settingsId), ProtectedProjectKeys.defaults)
+            SharedPreferencesSettings(getSharedPrefs(settingsId), Defaults.protected)
         }
     }
 

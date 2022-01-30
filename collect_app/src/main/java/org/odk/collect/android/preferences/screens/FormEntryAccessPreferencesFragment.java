@@ -1,12 +1,12 @@
 package org.odk.collect.android.preferences.screens;
 
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_JUMP_TO;
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_SAVE_MID;
 import static org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MOVING_BACKWARDS_DIALOG_TAG;
 import static org.odk.collect.settings.ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE;
+import static org.odk.collect.settings.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_JUMP_TO;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_SAVE_MID;
 
 import android.os.Bundle;
 

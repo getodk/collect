@@ -40,7 +40,6 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
@@ -332,7 +331,7 @@ public class AppDependencyModule {
                 preferenceMigrator,
                 settingsValidator,
                 Defaults.getUnprotected(),
-                ProtectedProjectKeys.getDefaults(),
+                Defaults.getProtected(),
                 settingsChangeHandler,
                 projectsRepository,
                 new ProjectDetailsCreator(Stream.of(

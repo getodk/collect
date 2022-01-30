@@ -35,7 +35,6 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
@@ -53,6 +52,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.settings.ProtectedProjectKeys;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

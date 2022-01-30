@@ -34,7 +34,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
@@ -44,6 +43,7 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.settings.ProtectedProjectKeys;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 

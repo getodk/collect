@@ -1,6 +1,6 @@
 package org.odk.collect.android.utilities;
 
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_ADMIN_PW;
 
 import org.odk.collect.shared.Settings;
 

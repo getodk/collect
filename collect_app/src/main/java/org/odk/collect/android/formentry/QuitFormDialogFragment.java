@@ -21,7 +21,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -30,6 +29,7 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.settings.ProtectedProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
 
 import java.util.List;

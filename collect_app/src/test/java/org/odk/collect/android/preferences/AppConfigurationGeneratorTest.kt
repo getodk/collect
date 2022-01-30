@@ -9,13 +9,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.AppConfigurationKeys
 import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.ProtectedProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class AppConfigurationGeneratorTest {
@@ -105,7 +105,7 @@ class AppConfigurationGeneratorTest {
             it.key == ProjectKeys.KEY_DELETE_AFTER_SEND || it.key == ProjectKeys.KEY_APP_THEME
         }
 
-        val adminPrefs = ProtectedProjectKeys.defaults.filter {
+        val adminPrefs = Defaults.protected.filter {
             it.key == ProtectedProjectKeys.KEY_GET_BLANK || it.key == ProtectedProjectKeys.KEY_DELETE_SAVED
         }
 

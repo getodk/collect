@@ -14,8 +14,8 @@ package org.odk.collect.android.configure.qr;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 import static org.odk.collect.settings.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.ProtectedProjectKeys.KEY_ADMIN_PW;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -15,13 +15,13 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.TestSettingsProvider
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)

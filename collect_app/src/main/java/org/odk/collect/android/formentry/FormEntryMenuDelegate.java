@@ -15,7 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormHierarchyActivity;
-import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -26,6 +25,7 @@ import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.settings.ProtectedProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
 
 public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {

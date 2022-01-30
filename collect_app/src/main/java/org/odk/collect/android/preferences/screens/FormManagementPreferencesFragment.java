@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.preferences.screens;
 
-import static org.odk.collect.android.configure.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.settings.ProjectKeys.KEY_AUTOMATIC_UPDATE;
@@ -25,6 +24,7 @@ import static org.odk.collect.settings.ProjectKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.settings.ProjectKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.settings.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
 import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 
 import android.content.Context;
 import android.os.Bundle;

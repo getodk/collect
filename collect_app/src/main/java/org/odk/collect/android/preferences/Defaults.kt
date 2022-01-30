@@ -6,6 +6,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.utilities.QuestionFontSizeUtils
 import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.ProtectedProjectKeys
 
 object Defaults {
 
@@ -58,5 +59,20 @@ object Defaults {
             hashMap[ProjectKeys.KEY_GOOGLE_MAP_STYLE] = GoogleMap.MAP_TYPE_NORMAL.toString()
             hashMap[ProjectKeys.KEY_MAPBOX_MAP_STYLE] = Style.MAPBOX_STREETS
             return hashMap
+        }
+
+    @JvmStatic
+    val protected: Map<String, Any>
+        get() {
+            val defaults: MutableMap<String, Any> = HashMap()
+            for (key in ProtectedProjectKeys.allKeys()) {
+                if (key == ProtectedProjectKeys.KEY_ADMIN_PW) {
+                    defaults[key] = ""
+                } else {
+                    defaults[key] = true
+                }
+            }
+
+            return defaults
         }
 }
