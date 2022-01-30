@@ -78,12 +78,13 @@ class AppConfigurationGenerator(
         val defaultAdminSettings = Defaults.protected
 
         for (key in ProtectedProjectKeys.allKeys()) {
-            if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(
-                    ProtectedProjectKeys.KEY_ADMIN_PW
-                )
+            if (
+                key == ProtectedProjectKeys.KEY_ADMIN_PW &&
+                !includedPasswordKeys.contains(ProtectedProjectKeys.KEY_ADMIN_PW)
             ) {
                 continue
             }
+
             val value = adminSettings[key]
             if (value != null && value != defaultAdminSettings[key]) {
                 adminPrefs.put(key, value)
