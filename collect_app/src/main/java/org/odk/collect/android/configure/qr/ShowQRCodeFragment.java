@@ -32,10 +32,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.databinding.ShowQrcodeFragmentBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;

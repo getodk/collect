@@ -15,7 +15,6 @@ import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
@@ -23,6 +22,7 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import javax.inject.Inject
 
 class ProjectSettingsDialog : DialogFragment() {

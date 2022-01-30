@@ -24,9 +24,9 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.io.IOException;
 

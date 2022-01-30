@@ -1,5 +1,9 @@
 package org.odk.collect.android.configure.qr;
 
+import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHOTO;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -9,16 +13,12 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
 import org.odk.collect.projects.Project;
+import org.odk.collect.settings.SettingsImporter;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
-import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHOTO;
 
 public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
 

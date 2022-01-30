@@ -17,7 +17,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.gdrive.GoogleAccountsManager
@@ -32,6 +31,7 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 

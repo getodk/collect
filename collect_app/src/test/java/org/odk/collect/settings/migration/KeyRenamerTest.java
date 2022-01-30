@@ -1,8 +1,8 @@
-package org.odk.collect.android.configure.migration;
+package org.odk.collect.settings.migration;
 
-import static org.odk.collect.android.configure.migration.MigrationUtils.renameKey;
-import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.initPrefs;
+import static org.odk.collect.settings.migration.MigrationUtils.renameKey;
+import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
+import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 

@@ -20,12 +20,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.projects.Project;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.testshared.LiveDataTester;
 

@@ -12,12 +12,17 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.configure.migration.SharedPreferenceUtils
-import org.odk.collect.android.configure.qr.AppConfigurationKeys
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.AppConfigurationKeys
+import org.odk.collect.settings.ProjectDetailsCreator
 import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.SettingsChangeHandler
+import org.odk.collect.settings.SettingsImporter
+import org.odk.collect.settings.SettingsMigrator
+import org.odk.collect.settings.SettingsValidator
+import org.odk.collect.settings.migration.SharedPreferenceUtils
 import org.odk.collect.shared.Settings
 
 class SettingsImporterTest {
@@ -246,7 +251,8 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.ADMIN, JSONObject())
     }
 
-    private class RecordingSettingsChangeHandler : SettingsChangeHandler {
+    private class RecordingSettingsChangeHandler :
+        SettingsChangeHandler {
         var changes: MutableList<Pair<String, Any>> = ArrayList()
         override fun onSettingChanged(projectId: String, newValue: Any, changedKey: String) {
             changes.add(Pair(changedKey, newValue))

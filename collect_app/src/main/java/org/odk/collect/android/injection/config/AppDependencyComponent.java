@@ -27,8 +27,6 @@ import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
-import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
@@ -96,6 +94,8 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.settings.SettingsImporter;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.inject.Singleton;
 

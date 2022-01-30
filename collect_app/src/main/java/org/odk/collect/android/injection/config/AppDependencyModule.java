@@ -40,14 +40,6 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.configure.CollectSettingsMigrator;
-import org.odk.collect.android.configure.JsonSchemaSettingsValidator;
-import org.odk.collect.android.configure.ProjectDetailsCreator;
-import org.odk.collect.android.configure.SettingsChangeHandler;
-import org.odk.collect.android.configure.SettingsImporter;
-import org.odk.collect.android.configure.SettingsMigrator;
-import org.odk.collect.android.configure.SettingsProvider;
-import org.odk.collect.android.configure.SettingsValidator;
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
@@ -139,7 +131,15 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
+import org.odk.collect.settings.JsonSchemaSettingsValidator;
 import org.odk.collect.settings.MetaKeys;
+import org.odk.collect.settings.ODKSettingsMigrator;
+import org.odk.collect.settings.ProjectDetailsCreator;
+import org.odk.collect.settings.SettingsChangeHandler;
+import org.odk.collect.settings.SettingsImporter;
+import org.odk.collect.settings.SettingsMigrator;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.SettingsValidator;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -311,7 +311,7 @@ public class AppDependencyModule {
 
     @Provides
     public SettingsMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
-        return new CollectSettingsMigrator(settingsProvider.getMetaSettings());
+        return new ODKSettingsMigrator(settingsProvider.getMetaSettings());
     }
 
     @Provides

@@ -8,9 +8,9 @@ import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
 import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;

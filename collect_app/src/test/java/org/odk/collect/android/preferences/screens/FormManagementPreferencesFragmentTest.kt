@@ -23,7 +23,6 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
@@ -32,6 +31,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.Settings
 import org.robolectric.Shadows
 

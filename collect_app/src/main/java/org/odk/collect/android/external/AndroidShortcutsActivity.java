@@ -27,10 +27,10 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel.BlankForm;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.List;
 

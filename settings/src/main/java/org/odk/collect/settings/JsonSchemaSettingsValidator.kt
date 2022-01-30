@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure
+package org.odk.collect.settings
 
 import com.github.fge.jackson.JsonNodeReader
 import com.github.fge.jsonschema.main.JsonSchemaFactory

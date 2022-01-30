@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.qr
+package org.odk.collect.settings
 
 object AppConfigurationKeys {
     const val GENERAL = "general"

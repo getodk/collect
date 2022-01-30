@@ -5,8 +5,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.configure.ProjectDetailsCreator
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.ProjectDetailsCreator
 import org.odk.collect.settings.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)

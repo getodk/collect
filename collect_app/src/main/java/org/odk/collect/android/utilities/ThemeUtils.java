@@ -29,9 +29,9 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.inject.Inject;
 

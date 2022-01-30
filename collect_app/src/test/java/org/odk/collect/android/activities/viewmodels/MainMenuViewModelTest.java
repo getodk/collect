@@ -11,10 +11,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.SettingsProvider;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MainMenuViewModelTest {

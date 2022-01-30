@@ -11,9 +11,9 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.SettingsChangeHandler;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.logic.PropertyManager;
+import org.odk.collect.settings.SettingsChangeHandler;
+import org.odk.collect.settings.SettingsProvider;
 
 public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 

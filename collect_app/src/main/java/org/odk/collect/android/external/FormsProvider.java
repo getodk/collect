@@ -46,7 +46,6 @@ import androidx.annotation.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
@@ -60,6 +59,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.HashMap;
 import java.util.HashSet;

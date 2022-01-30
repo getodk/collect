@@ -22,11 +22,11 @@ import static org.odk.collect.settings.ProjectKeys.KEY_USERNAME;
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;

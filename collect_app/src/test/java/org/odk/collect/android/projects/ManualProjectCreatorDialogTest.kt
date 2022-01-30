@@ -24,8 +24,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
-import org.odk.collect.android.configure.SettingsImporter
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
@@ -34,6 +32,8 @@ import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsImporter
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.ErrorIntentLauncher
 import org.robolectric.shadows.ShadowToast
 

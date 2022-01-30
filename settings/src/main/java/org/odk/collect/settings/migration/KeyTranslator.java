@@ -1,6 +1,6 @@
-package org.odk.collect.android.configure.migration;
+package org.odk.collect.settings.migration;
 
-import static org.odk.collect.android.configure.migration.MigrationUtils.replace;
+import static org.odk.collect.settings.migration.MigrationUtils.replace;
 
 import org.odk.collect.shared.Settings;
 

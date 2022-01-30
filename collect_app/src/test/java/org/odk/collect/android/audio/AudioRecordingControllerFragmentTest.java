@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.config.AppDependencyModule;
@@ -34,6 +33,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.settings.SettingsProvider;
 import org.robolectric.annotation.Config;
 
 import java.io.File;

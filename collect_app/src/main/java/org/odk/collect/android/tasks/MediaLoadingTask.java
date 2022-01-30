@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -16,6 +15,7 @@ import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.io.File;
 import java.lang.ref.WeakReference;

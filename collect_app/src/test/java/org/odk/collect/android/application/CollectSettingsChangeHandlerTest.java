@@ -7,9 +7,9 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 
 public class CollectSettingsChangeHandlerTest {
 

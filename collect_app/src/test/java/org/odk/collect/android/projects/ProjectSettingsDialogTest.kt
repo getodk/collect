@@ -22,7 +22,6 @@ import org.mockito.kotlin.verify
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.storage.StoragePathProvider
@@ -32,6 +31,7 @@ import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.UUIDGenerator
 import org.odk.collect.testshared.RobolectricHelpers
 

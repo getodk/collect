@@ -3,6 +3,7 @@ package org.odk.collect.android.configure
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.odk.collect.settings.JsonSchemaSettingsValidator
 
 class JsonSchemaSettingsValidatorTest {
 

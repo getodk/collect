@@ -1,8 +1,8 @@
 package org.odk.collect.android.application.initialization;
 
-import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.assertPrefsEmpty;
-import static org.odk.collect.android.configure.migration.SharedPreferenceUtils.initPrefs;
+import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
+import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefsEmpty;
+import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
 import static java.util.Arrays.asList;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,13 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.configure.CollectSettingsMigrator;
+import org.odk.collect.settings.ODKSettingsMigrator;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class CollectSettingsMigratorTest {
+public class ODKSettingsMigratorTest {
 
     private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
     private final Settings adminSettings = TestSettingsProvider.getProtectedSettings();
@@ -267,6 +267,6 @@ public class CollectSettingsMigratorTest {
     }
 
     private void runMigrations() {
-        new CollectSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
+        new ODKSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
     }
 }

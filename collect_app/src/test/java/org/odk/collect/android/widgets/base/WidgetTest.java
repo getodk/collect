@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.configure.SettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 

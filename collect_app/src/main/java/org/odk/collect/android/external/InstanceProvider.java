@@ -34,7 +34,6 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -47,6 +46,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

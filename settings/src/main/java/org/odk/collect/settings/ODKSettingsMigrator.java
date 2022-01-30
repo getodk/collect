@@ -1,12 +1,5 @@
-package org.odk.collect.android.configure;
+package org.odk.collect.settings;
 
-import static org.odk.collect.android.configure.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.android.configure.migration.MigrationUtils.extractNewKey;
-import static org.odk.collect.android.configure.migration.MigrationUtils.moveKey;
-import static org.odk.collect.android.configure.migration.MigrationUtils.removeKey;
-import static org.odk.collect.android.configure.migration.MigrationUtils.renameKey;
-import static org.odk.collect.android.configure.migration.MigrationUtils.translateKey;
-import static org.odk.collect.android.configure.migration.MigrationUtils.translateValue;
 import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_STAMEN;
@@ -16,11 +9,18 @@ import static org.odk.collect.settings.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.settings.migration.MigrationUtils.combineKeys;
+import static org.odk.collect.settings.migration.MigrationUtils.extractNewKey;
+import static org.odk.collect.settings.migration.MigrationUtils.moveKey;
+import static org.odk.collect.settings.migration.MigrationUtils.removeKey;
+import static org.odk.collect.settings.migration.MigrationUtils.renameKey;
+import static org.odk.collect.settings.migration.MigrationUtils.translateKey;
+import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
 import static java.util.Arrays.asList;
 
-import org.odk.collect.android.configure.migration.KeyRenamer;
-import org.odk.collect.android.configure.migration.KeyTranslator;
-import org.odk.collect.android.configure.migration.Migration;
+import org.odk.collect.settings.migration.KeyRenamer;
+import org.odk.collect.settings.migration.KeyTranslator;
+import org.odk.collect.settings.migration.Migration;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;
@@ -28,11 +28,11 @@ import java.util.List;
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class CollectSettingsMigrator implements SettingsMigrator {
+public class ODKSettingsMigrator implements SettingsMigrator {
 
     private final Settings metaPrefs;
 
-    public CollectSettingsMigrator(Settings metaPrefs) {
+    public ODKSettingsMigrator(Settings metaPrefs) {
         this.metaPrefs = metaPrefs;
     }
 

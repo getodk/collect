@@ -359,10 +359,6 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
-    implementation(Dependencies.json_schema_validator) {
-        exclude group: 'joda-time'
-    }
-
     testImplementation project(':formstest')
 
     // Testing-only dependencies

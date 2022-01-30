@@ -8,13 +8,13 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.fragments.BarCodeScannerFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.settings.SettingsImporter
 import java.io.File
 import java.io.IOException
 import java.util.zip.DataFormatException

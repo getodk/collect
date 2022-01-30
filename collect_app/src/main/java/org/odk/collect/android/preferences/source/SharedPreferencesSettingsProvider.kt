@@ -1,10 +1,10 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.Context
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.configure.keys.ProtectedProjectKeys
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.settings.MetaKeys
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.Settings
 import javax.inject.Singleton
 

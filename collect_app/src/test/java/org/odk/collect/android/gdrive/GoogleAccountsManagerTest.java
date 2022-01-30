@@ -23,9 +23,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.Settings;
 
 /**

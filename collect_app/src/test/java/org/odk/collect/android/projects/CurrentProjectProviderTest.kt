@@ -7,11 +7,11 @@ import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.MetaKeys
+import org.odk.collect.settings.SettingsProvider
 
 class CurrentProjectProviderTest {
 

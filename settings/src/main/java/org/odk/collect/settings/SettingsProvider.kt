@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure
+package org.odk.collect.settings
 
 import org.odk.collect.shared.Settings
 

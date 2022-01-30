@@ -1,8 +1,8 @@
 package org.odk.collect.android.application.initialization
 
-import org.odk.collect.android.configure.SettingsMigrator
-import org.odk.collect.android.configure.SettingsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsMigrator
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.upgrade.Upgrade
 
 class ExistingSettingsMigrator(

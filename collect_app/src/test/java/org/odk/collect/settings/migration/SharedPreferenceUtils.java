@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.migration;
+package org.odk.collect.settings.migration;
 
 import static org.junit.Assert.assertEquals;
 

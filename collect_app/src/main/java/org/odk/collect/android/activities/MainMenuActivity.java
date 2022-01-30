@@ -31,7 +31,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
-import org.odk.collect.android.configure.SettingsProvider;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.ProjectIconView;
@@ -42,6 +41,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.settings.MetaKeys;
 import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.inject.Inject;
 
