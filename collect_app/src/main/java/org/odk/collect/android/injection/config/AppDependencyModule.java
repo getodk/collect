@@ -1,7 +1,7 @@
 package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
-import static org.odk.collect.settings.MetaKeys.KEY_INSTALL_ID;
+import static org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID;
 import static java.util.Collections.singletonList;
 
 import android.app.Application;
@@ -130,15 +130,15 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
-import org.odk.collect.settings.JsonSchemaSettingsValidator;
-import org.odk.collect.settings.MetaKeys;
-import org.odk.collect.settings.ODKSettingsMigrator;
-import org.odk.collect.settings.ProjectDetailsCreator;
-import org.odk.collect.settings.SettingsChangeHandler;
-import org.odk.collect.settings.SettingsImporter;
-import org.odk.collect.settings.SettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.SettingsValidator;
+import org.odk.collect.settings.importing.ProjectDetailsCreator;
+import org.odk.collect.settings.importing.SettingsChangeHandler;
+import org.odk.collect.settings.importing.SettingsImporter;
+import org.odk.collect.settings.importing.SettingsMigrator;
+import org.odk.collect.settings.importing.SettingsValidator;
+import org.odk.collect.settings.keys.MetaKeys;
+import org.odk.collect.settings.migration.ODKSettingsMigrator;
+import org.odk.collect.settings.validation.JsonSchemaSettingsValidator;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -351,7 +351,7 @@ public class AppDependencyModule {
                         R.color.color14,
                         R.color.color15
                 ).map(integer -> {
-                    return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
+                    return "#" + Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
                 }).collect(Collectors.toList()), Defaults.getUnprotected())
         );
     }
@@ -592,7 +592,7 @@ public class AppDependencyModule {
                 R.color.color14,
                 R.color.color15
         ).map(integer -> {
-            return Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
+            return "#" + Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
         }).collect(Collectors.toList()), Defaults.getUnprotected()));
     }
 

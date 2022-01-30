@@ -24,7 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.projects.Project;
-import org.odk.collect.settings.SettingsImporter;
+import org.odk.collect.settings.importing.SettingsImporter;
 import org.robolectric.Robolectric;
 
 import java.io.ByteArrayInputStream;

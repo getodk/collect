@@ -94,8 +94,8 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.settings.SettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.importing.SettingsImporter;
 
 import javax.inject.Singleton;
 

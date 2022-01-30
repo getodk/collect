@@ -46,7 +46,7 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.permissions.PermissionListener;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.File;
 import java.util.Locale;

@@ -3,10 +3,10 @@ package org.odk.collect.android.configure.qr
 import org.json.JSONObject
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.settings.AppConfigurationKeys
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProtectedProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class AppConfigurationGenerator(
     private val settingsProvider: SettingsProvider,

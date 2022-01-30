@@ -11,8 +11,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.androidshared.utils.AppBarUtils
-import org.odk.collect.settings.SettingsChangeHandler
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsChangeHandler
 import org.odk.collect.shared.Settings.OnSettingChangeListener
 import javax.inject.Inject
 

@@ -35,7 +35,7 @@ import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.SettingsImporter
+import org.odk.collect.settings.importing.SettingsImporter
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)

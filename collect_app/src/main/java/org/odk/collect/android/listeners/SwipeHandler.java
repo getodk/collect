@@ -10,7 +10,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.android.utilities.ScreenUtils;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import timber.log.Timber;

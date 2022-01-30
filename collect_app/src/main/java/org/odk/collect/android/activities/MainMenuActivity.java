@@ -39,9 +39,9 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.settings.MetaKeys;
-import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import javax.inject.Inject;
 

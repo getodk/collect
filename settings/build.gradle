@@ -34,6 +34,11 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    packagingOptions {
+        // These library licenses will be referenced in-app
+        exclude 'META-INF/ASL-2.0.txt'
+    }
 }
 
 dependencies {

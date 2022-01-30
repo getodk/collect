@@ -33,8 +33,8 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.SettingsImporter
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsImporter
 import timber.log.Timber
 import javax.inject.Inject
 

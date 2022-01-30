@@ -29,8 +29,8 @@ import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.settings.ProtectedProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.util.List;
 

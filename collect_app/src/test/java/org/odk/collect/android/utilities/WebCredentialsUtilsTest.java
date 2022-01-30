@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 public class WebCredentialsUtilsTest {

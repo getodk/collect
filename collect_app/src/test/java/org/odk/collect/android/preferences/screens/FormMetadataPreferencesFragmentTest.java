@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
 import android.app.Activity;
 import android.content.Context;

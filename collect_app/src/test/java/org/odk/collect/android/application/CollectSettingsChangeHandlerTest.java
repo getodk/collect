@@ -8,8 +8,8 @@ import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 public class CollectSettingsChangeHandlerTest {
 

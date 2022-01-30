@@ -1,6 +1,6 @@
 package org.odk.collect.android.geo;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_REFERENCE_LAYER;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 import android.content.Context;
 import android.os.Bundle;

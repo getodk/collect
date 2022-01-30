@@ -15,13 +15,13 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.AppConfigurationKeys
-import org.odk.collect.settings.ProjectDetailsCreator
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.SettingsChangeHandler
-import org.odk.collect.settings.SettingsImporter
-import org.odk.collect.settings.SettingsMigrator
-import org.odk.collect.settings.SettingsValidator
+import org.odk.collect.settings.importing.ProjectDetailsCreator
+import org.odk.collect.settings.importing.SettingsChangeHandler
+import org.odk.collect.settings.importing.SettingsImporter
+import org.odk.collect.settings.importing.SettingsMigrator
+import org.odk.collect.settings.importing.SettingsValidator
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.migration.SharedPreferenceUtils
 import org.odk.collect.shared.Settings
 
@@ -254,7 +254,7 @@ class SettingsImporterTest {
     private class RecordingSettingsChangeHandler :
         SettingsChangeHandler {
         var changes: MutableList<Pair<String, Any>> = ArrayList()
-        override fun onSettingChanged(projectId: String, newValue: Any, changedKey: String) {
+        override fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String) {
             changes.add(Pair(changedKey, newValue))
         }
     }

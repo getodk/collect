@@ -6,8 +6,8 @@ import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.ProjectDetailsCreator
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.importing.ProjectDetailsCreator
+import org.odk.collect.settings.keys.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class ProjectDetailsCreatorTest {

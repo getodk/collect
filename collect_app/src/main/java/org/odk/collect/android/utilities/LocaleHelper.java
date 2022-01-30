@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.util.Locale;

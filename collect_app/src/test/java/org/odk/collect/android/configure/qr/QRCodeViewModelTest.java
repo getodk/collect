@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.settings.ProjectKeys.KEY_PASSWORD;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 import static java.util.Arrays.asList;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;

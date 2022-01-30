@@ -16,8 +16,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProtectedProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 
 @RunWith(AndroidJUnit4::class)

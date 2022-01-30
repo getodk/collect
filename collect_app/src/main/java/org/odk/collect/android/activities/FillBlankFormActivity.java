@@ -47,7 +47,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.permissions.PermissionListener;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import javax.inject.Inject;
 

@@ -1,7 +1,7 @@
 package org.odk.collect.android.configure.qr;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_PASSWORD;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 import static java.util.Arrays.asList;
 
 import android.graphics.Bitmap;

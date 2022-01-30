@@ -23,7 +23,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import javax.inject.Inject
 
 class IdentityPreferencesFragment : BaseProjectPreferencesFragment() {

@@ -1,9 +1,12 @@
-package org.odk.collect.settings
+package org.odk.collect.settings.importing
 
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.Settings
 
 class SettingsImporter(
@@ -133,4 +136,16 @@ class SettingsImporter(
             )
         )
     }
+}
+
+fun interface SettingsValidator {
+    fun isValid(json: String): Boolean
+}
+
+fun interface SettingsChangeHandler {
+    fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String)
+}
+
+fun interface SettingsMigrator {
+    fun migrate(generalSettings: Settings, adminSettings: Settings)
 }

@@ -1,4 +1,4 @@
-package org.odk.collect.settings
+package org.odk.collect.settings.keys
 
 object ProtectedProjectKeys {
     const val KEY_ADMIN_PW = "admin_pw"

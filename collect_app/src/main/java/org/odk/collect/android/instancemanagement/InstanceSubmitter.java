@@ -2,7 +2,7 @@ package org.odk.collect.android.instancemanagement;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE;
-import static org.odk.collect.settings.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_SHEETS_URL;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.util.Pair;
@@ -27,7 +27,7 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 
 import java.util.HashMap;

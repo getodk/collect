@@ -68,7 +68,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.testshared.RecordedIntentsRule;
 
 import java.io.File;

@@ -49,7 +49,7 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.permissions.PermissionListener;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.IOException;
 import java.util.HashMap;

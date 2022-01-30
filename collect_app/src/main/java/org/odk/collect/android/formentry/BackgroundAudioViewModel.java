@@ -1,6 +1,6 @@
 package org.odk.collect.android.formentry;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_BACKGROUND_RECORDING;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_RECORDING;
 
 import android.Manifest;
 import android.os.Handler;

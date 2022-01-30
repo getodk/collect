@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.application;
 
-import static org.odk.collect.settings.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 import android.app.Application;
 import android.content.Context;

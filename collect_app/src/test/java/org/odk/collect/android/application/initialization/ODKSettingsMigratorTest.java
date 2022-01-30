@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.settings.ODKSettingsMigrator;
+import org.odk.collect.settings.migration.ODKSettingsMigrator;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;

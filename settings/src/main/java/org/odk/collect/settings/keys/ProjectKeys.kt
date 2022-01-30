@@ -1,4 +1,4 @@
-package org.odk.collect.settings
+package org.odk.collect.settings.keys
 
 object ProjectKeys {
     // server_preferences.xml

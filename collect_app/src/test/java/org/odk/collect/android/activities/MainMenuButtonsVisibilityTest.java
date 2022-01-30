@@ -2,11 +2,11 @@ package org.odk.collect.android.activities;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_DELETE_SAVED;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_EDIT_SAVED;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_GET_BLANK;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_SEND_FINALIZED;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_VIEW_SENT;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_DELETE_SAVED;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_GET_BLANK;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_SEND_FINALIZED;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_VIEW_SENT;
 
 import android.view.View;
 import android.widget.Button;

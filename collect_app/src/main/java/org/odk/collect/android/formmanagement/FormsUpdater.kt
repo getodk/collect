@@ -15,8 +15,8 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.getLocalizedString
 import java.io.File
 import java.util.stream.Collectors

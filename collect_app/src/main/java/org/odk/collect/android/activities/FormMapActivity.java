@@ -52,7 +52,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.settings.ProtectedProjectKeys;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

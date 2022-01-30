@@ -1,7 +1,8 @@
-package org.odk.collect.settings
+package org.odk.collect.settings.validation
 
 import com.github.fge.jackson.JsonNodeReader
 import com.github.fge.jsonschema.main.JsonSchemaFactory
+import org.odk.collect.settings.importing.SettingsValidator
 import java.io.InputStream
 import java.io.StringReader
 

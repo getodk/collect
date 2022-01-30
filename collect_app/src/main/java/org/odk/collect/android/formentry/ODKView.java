@@ -16,7 +16,7 @@ package org.odk.collect.android.formentry;
 
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
-import static org.odk.collect.settings.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;

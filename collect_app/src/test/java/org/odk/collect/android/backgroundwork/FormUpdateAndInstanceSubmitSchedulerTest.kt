@@ -14,10 +14,10 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.MATCH_EXACTLY
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
 import org.odk.collect.async.Scheduler
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProjectKeys.KEY_FORM_UPDATE_MODE
-import org.odk.collect.settings.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
-import org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE
+import org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
+import org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL
 
 @RunWith(AndroidJUnit4::class)
 class FormUpdateAndInstanceSubmitSchedulerTest {

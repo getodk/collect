@@ -1,4 +1,4 @@
-package org.odk.collect.settings
+package org.odk.collect.settings.keys
 
 object AppConfigurationKeys {
     const val GENERAL = "general"

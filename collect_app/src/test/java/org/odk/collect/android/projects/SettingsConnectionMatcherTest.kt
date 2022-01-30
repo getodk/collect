@@ -10,7 +10,7 @@ import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class SettingsConnectionMatcherTest {
@@ -35,7 +35,8 @@ class SettingsConnectionMatcherTest {
 
     @Test
     fun `returns a matching project uuid when a default project exists and a user tries to add another default project`() {
-        assertThat("Test assumes wrong default", Defaults.unprotected[ProjectKeys.KEY_PROTOCOL], `is`(ProjectKeys.PROTOCOL_SERVER))
+        assertThat("Test assumes wrong default", Defaults.unprotected[ProjectKeys.KEY_PROTOCOL], `is`(
+            ProjectKeys.PROTOCOL_SERVER))
 
         val defaultUrl = Defaults.unprotected[ProjectKeys.KEY_SERVER_URL] as String
         createServerProject("a uuid", defaultUrl, "")

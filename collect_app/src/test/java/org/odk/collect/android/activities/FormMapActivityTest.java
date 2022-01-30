@@ -43,7 +43,7 @@ import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.settings.ProtectedProjectKeys;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 

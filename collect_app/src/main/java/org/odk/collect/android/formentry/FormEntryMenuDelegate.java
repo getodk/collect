@@ -1,6 +1,6 @@
 package org.odk.collect.android.formentry;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_BACKGROUND_LOCATION;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 import android.content.Intent;
 import android.view.Menu;
@@ -25,8 +25,8 @@ import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.settings.ProtectedProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {
 

@@ -6,7 +6,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.odk.collect.android.openrosa.OpenRosaFormSource
 import org.odk.collect.android.support.InMemSettingsProvider
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
 
 class FormSourceProviderTest {
 

@@ -28,9 +28,9 @@ import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
-import static org.odk.collect.settings.ProjectKeys.KEY_COMPLETED_DEFAULT;
-import static org.odk.collect.settings.ProjectKeys.KEY_NAVIGATION;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -180,8 +180,8 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
-import org.odk.collect.settings.ProjectKeys;
-import org.odk.collect.settings.ProtectedProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.io.File;
 import java.util.ArrayList;

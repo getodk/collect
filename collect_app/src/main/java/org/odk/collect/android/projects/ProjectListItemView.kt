@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import org.odk.collect.android.R
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.Settings
 import java.net.URL
 

@@ -12,8 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.settings.MetaKeys
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
 

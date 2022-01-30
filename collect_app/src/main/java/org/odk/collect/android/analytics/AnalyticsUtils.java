@@ -8,7 +8,7 @@ import static org.odk.collect.forms.FormSourceException.ParseError;
 import static org.odk.collect.forms.FormSourceException.SecurityError;
 import static org.odk.collect.forms.FormSourceException.ServerError;
 import static org.odk.collect.forms.FormSourceException.Unreachable;
-import static org.odk.collect.settings.ProjectKeys.KEY_SERVER_URL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_SERVER_URL;
 import static java.lang.String.format;
 
 import org.odk.collect.analytics.Analytics;

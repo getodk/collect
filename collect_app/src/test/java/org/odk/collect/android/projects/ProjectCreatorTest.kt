@@ -10,7 +10,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.SettingsImporter
+import org.odk.collect.settings.importing.SettingsImporter
 
 class ProjectCreatorTest {
     private val json = "{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}"

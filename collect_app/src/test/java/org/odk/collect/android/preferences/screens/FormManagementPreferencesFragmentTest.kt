@@ -29,9 +29,9 @@ import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.async.Scheduler
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProtectedProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 import org.robolectric.Shadows
 

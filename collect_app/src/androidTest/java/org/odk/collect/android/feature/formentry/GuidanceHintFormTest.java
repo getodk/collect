@@ -24,7 +24,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;

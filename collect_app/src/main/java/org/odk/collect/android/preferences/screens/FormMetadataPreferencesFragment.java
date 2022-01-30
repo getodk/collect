@@ -2,8 +2,8 @@ package org.odk.collect.android.preferences.screens;
 
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
 import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
-import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.settings.ProjectKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
 import android.content.Context;
 import android.os.Bundle;

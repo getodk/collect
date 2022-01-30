@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -53,7 +53,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.settings.ProjectKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.util.List;
 

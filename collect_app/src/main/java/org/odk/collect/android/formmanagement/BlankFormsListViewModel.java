@@ -23,8 +23,8 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.Settings;
 import org.odk.collect.shared.strings.Md5;
 

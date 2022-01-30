@@ -30,8 +30,8 @@ import org.odk.collect.android.preferences.PrefUtils
 import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog
 import org.odk.collect.android.preferences.screens.ReferenceLayerPreferenceUtils.populateReferenceLayerPref
 import org.odk.collect.android.utilities.MultiClickGuard.allowClick
-import org.odk.collect.settings.ProjectKeys.CATEGORY_BASEMAP
-import org.odk.collect.settings.ProjectKeys.KEY_BASEMAP_SOURCE
+import org.odk.collect.settings.keys.ProjectKeys.CATEGORY_BASEMAP
+import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
 import java.io.File
 import javax.inject.Inject
 

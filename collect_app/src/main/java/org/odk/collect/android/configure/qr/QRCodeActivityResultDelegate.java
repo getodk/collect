@@ -15,7 +15,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
 import org.odk.collect.projects.Project;
-import org.odk.collect.settings.SettingsImporter;
+import org.odk.collect.settings.importing.SettingsImporter;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

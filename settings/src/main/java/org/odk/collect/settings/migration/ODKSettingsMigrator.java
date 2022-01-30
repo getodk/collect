@@ -1,14 +1,14 @@
-package org.odk.collect.settings;
+package org.odk.collect.settings.migration;
 
-import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_CARTO;
-import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_STAMEN;
-import static org.odk.collect.settings.ProjectKeys.BASEMAP_SOURCE_USGS;
-import static org.odk.collect.settings.ProjectKeys.KEY_BASEMAP_SOURCE;
-import static org.odk.collect.settings.ProjectKeys.KEY_CARTO_MAP_STYLE;
-import static org.odk.collect.settings.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.settings.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.settings.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.settings.migration.MigrationUtils.combineKeys;
 import static org.odk.collect.settings.migration.MigrationUtils.extractNewKey;
 import static org.odk.collect.settings.migration.MigrationUtils.moveKey;
@@ -18,9 +18,7 @@ import static org.odk.collect.settings.migration.MigrationUtils.translateKey;
 import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
 import static java.util.Arrays.asList;
 
-import org.odk.collect.settings.migration.KeyRenamer;
-import org.odk.collect.settings.migration.KeyTranslator;
-import org.odk.collect.settings.migration.Migration;
+import org.odk.collect.settings.importing.SettingsMigrator;
 import org.odk.collect.shared.Settings;
 
 import java.util.List;

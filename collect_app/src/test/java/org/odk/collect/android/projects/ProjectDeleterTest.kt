@@ -20,9 +20,9 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.MetaKeys
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProtectedProjectKeys
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File

@@ -6,8 +6,8 @@ import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
 class UserPropertiesInitializer(
     private val analytics: Analytics,

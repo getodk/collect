@@ -6,10 +6,10 @@ import org.apache.commons.io.FileUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.MetaKeys
-import org.odk.collect.settings.ProjectDetailsCreator
-import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.ProjectDetailsCreator
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.upgrade.Upgrade
 import java.io.File
 import java.io.FileNotFoundException

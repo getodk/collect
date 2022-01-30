@@ -4,9 +4,9 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.AppConfigurationKeys
-import org.odk.collect.settings.ProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
 
 class SettingsConnectionMatcher(
     private val projectsRepository: ProjectsRepository,

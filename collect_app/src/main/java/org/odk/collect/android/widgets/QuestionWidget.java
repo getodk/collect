@@ -58,8 +58,8 @@ import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.settings.ProjectKeys;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.File;
 import java.util.Locale;

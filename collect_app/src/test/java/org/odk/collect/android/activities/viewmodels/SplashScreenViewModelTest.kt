@@ -9,7 +9,7 @@ import org.mockito.Mockito.mock
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.ProjectKeys
+import org.odk.collect.settings.keys.ProjectKeys
 
 class SplashScreenViewModelTest {
 

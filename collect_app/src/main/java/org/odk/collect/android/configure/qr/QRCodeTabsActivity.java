@@ -21,7 +21,7 @@ import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.utils.AppBarUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.permissions.PermissionListener;
-import org.odk.collect.settings.SettingsImporter;
+import org.odk.collect.settings.importing.SettingsImporter;
 
 import javax.inject.Inject;
 

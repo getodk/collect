@@ -16,8 +16,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.androidshared.ui.ToastUtils
-import org.odk.collect.settings.ProtectedProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import javax.inject.Inject
 
 class ChangeAdminPasswordDialog : DialogFragment() {

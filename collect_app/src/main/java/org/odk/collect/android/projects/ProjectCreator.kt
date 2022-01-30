@@ -2,7 +2,7 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.SettingsImporter
+import org.odk.collect.settings.importing.SettingsImporter
 
 class ProjectCreator(
     private val projectsRepository: ProjectsRepository,

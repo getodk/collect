@@ -1,6 +1,6 @@
 package org.odk.collect.android.tasks;
 
-import static org.odk.collect.settings.ProjectKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_IMAGE_SIZE;
 
 import android.net.Uri;
 import android.os.AsyncTask;

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
-import static org.odk.collect.settings.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 
 import android.view.View;
 

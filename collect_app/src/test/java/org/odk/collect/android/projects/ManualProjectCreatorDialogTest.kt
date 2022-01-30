@@ -32,8 +32,8 @@ import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.SettingsImporter
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsImporter
 import org.odk.collect.testshared.ErrorIntentLauncher
 import org.robolectric.shadows.ShadowToast
 

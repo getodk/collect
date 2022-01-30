@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.settings.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 
 import org.junit.Test;
 import org.odk.collect.shared.Settings;

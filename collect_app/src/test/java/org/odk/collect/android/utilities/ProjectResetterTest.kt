@@ -26,9 +26,9 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.ProjectKeys
-import org.odk.collect.settings.ProtectedProjectKeys
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.Settings
 import java.io.File
 
