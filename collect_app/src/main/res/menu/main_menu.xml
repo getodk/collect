@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2016 Nafundi
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright 2016 Nafundi
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -20,5 +19,5 @@ limitations under the License.
         android:id="@+id/projects"
         android:title="@string/projects"
         app:actionLayout="@layout/current_project_menu_icon"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

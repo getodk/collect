@@ -1,14 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
-
-import org.hamcrest.core.StringContains;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.WaitFor;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
@@ -21,6 +12,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
+
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+
+import org.hamcrest.core.StringContains;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -35,12 +35,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
 
-        onView(withId(R.id.projects)).perform(click());
-        // It seems there is some lag here sometimes
-        return WaitFor.waitFor(() -> {
-            // It seems there is some lag here sometimes
-            return new ProjectSettingsDialogPage().assertOnPage();
-        });
+        clickOnContentDescription(R.string.projects);
+        return new ProjectSettingsDialogPage().assertOnPage();
     }
 
     public FormEntryPage startBlankForm(String formName) {
