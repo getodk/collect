@@ -130,9 +130,4 @@ public final class ImageConverter {
             }
         }
     }
-
-    public static Bitmap scaleImageToNewWidth(Bitmap bitmap, int newWidth) {
-        int newHeight = (int) (((double) newWidth / (double) bitmap.getWidth()) * bitmap.getHeight());
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
-    }
 }
