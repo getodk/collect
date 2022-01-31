@@ -10,7 +10,6 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.CopyFormRule
 import org.odk.collect.android.support.NotificationDrawerRule
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.TestRuleChain
@@ -26,13 +25,13 @@ class MatchExactlyTest {
     @get:Rule
     var ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(notificationDrawerRule)
-        .around(CopyFormRule("one-question.xml"))
-        .around(CopyFormRule("one-question-repeat.xml"))
         .around(rule)
 
     @Test
     fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_getsLatestFormsFromServer() {
         val page = rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .clickFillBlankForm()
@@ -59,6 +58,8 @@ class MatchExactlyTest {
         testDependencies.server.alwaysReturnError()
 
         rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .clickFillBlankForm()
@@ -87,6 +88,8 @@ class MatchExactlyTest {
         testDependencies.server.setCredentials("Klay", "Thompson")
 
         rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .clickFillBlankForm()
@@ -101,6 +104,8 @@ class MatchExactlyTest {
     @Test
     fun whenMatchExactlyEnabled_getsLatestFormsFromServer_automaticallyAndRepeatedly() {
         var page = rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
 
@@ -134,6 +139,8 @@ class MatchExactlyTest {
     @Test
     fun whenMatchExactlyEnabled_hidesGetBlankFormsAndDeleteBlankForms() {
         rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .enableMatchExactly()
             .assertTextNotDisplayed(R.string.get_forms)
             .clickDeleteSavedForm()
@@ -143,6 +150,8 @@ class MatchExactlyTest {
     @Test
     fun whenMatchExactlyDisabled_stopsSyncingAutomatically() {
         rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
             .setServer(testDependencies.server.url)
             .enableMatchExactly()
             .enableManualUpdates()

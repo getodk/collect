@@ -9,9 +9,8 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.ScreenshotOnFailureTestRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -21,15 +20,11 @@ import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 public class TrackChangesReasonTest {
 
     private static final String TRACK_CHANGES_REASON_ON_EDIT_FORM = "track-changes-reason-on-edit.xml";
-    private static final String NO_TRACK_CHANGES_REASON_FORM = "no-track-changes-reason.xml";
 
     public CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(TRACK_CHANGES_REASON_ON_EDIT_FORM))
-            .around(new CopyFormRule(NO_TRACK_CHANGES_REASON_FORM))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Rule
@@ -37,7 +32,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -54,7 +50,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andPressingBack_returnsToForm() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -72,7 +69,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andClickingCross_returnsToForm() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -90,7 +88,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andRotating_remainsOnPrompt() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -110,7 +109,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andPressingBack_andClickingSaveChanges_promptsForReason() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -126,7 +126,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andChangingAValue_andPressingBack_andIgnoringChanges_returnsToMainMenu() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -142,7 +143,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingAFormToEdit_andNotChangingAValue_andClickingSaveAndExit_returnsToMainMenu() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()
@@ -157,7 +159,8 @@ public class TrackChangesReasonTest {
 
     @Test
     public void openingFormToEdit_andChangingValue_andClickingSave_promptsForReason() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(TRACK_CHANGES_REASON_ON_EDIT_FORM)
                 .startBlankForm("Track Changes Reason")
                 .inputText("Nothing much...")
                 .swipeToEndScreen()

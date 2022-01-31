@@ -20,7 +20,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.ResetStateRule
 import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -32,7 +31,6 @@ class FormNavigationTest {
 
     @get:Rule
     var copyFormChain: RuleChain = TestRuleChain.chain()
-        .around(ResetStateRule())
         .around(rule)
 
     @Test // TestCase14

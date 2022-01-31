@@ -66,7 +66,6 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -82,15 +81,14 @@ import java.util.UUID;
 public class FieldListUpdateTest {
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
 
-    @Rule
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(FIELD_LIST_TEST_FORM, "fieldlist-updates");
+    public FormActivityTestRule activityTestRule = new FormActivityTestRule(FIELD_LIST_TEST_FORM, "fieldlist-updates", Collections.singletonList("fruits.csv"));
 
     @Rule
     public RuleChain copyFormChain = RuleChain
             .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
             .around(new RecordedIntentsRule())
             .around(new ResetStateRule())
-            .around(new CopyFormRule(FIELD_LIST_TEST_FORM, Collections.singletonList("fruits.csv"), true));
+            .around(activityTestRule);
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {

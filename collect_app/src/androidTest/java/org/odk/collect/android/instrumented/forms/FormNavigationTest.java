@@ -34,8 +34,8 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.projects.Project;
 
@@ -60,8 +60,7 @@ import static junit.framework.Assert.assertEquals;
 public class FormNavigationTest {
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RunnableRule(() -> {
                 // Set up demo project
                 AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());

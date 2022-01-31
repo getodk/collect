@@ -4,10 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,11 +12,9 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.EndOfFormPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.MainMenuPage;
 
 @RunWith(AndroidJUnit4.class)
 public class AddRepeatTest {
@@ -31,17 +26,13 @@ public class AddRepeatTest {
     private final CollectTestRule rule = new CollectTestRule();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
-            .around(new ResetStateRule())
-            .around(new CopyFormRule(ONE_QUESTION_REPEAT))
-            .around(new CopyFormRule(FIELD_LIST_REPEAT))
-            .around(new CopyFormRule(FIXED_COUNT_REPEAT))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
     @Test
     public void whenInRepeat_swipingNext_andClickingAdd_addsAnotherRepeat() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
@@ -51,7 +42,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeat_swipingNext_andClickingDoNotAdd_leavesRepeatGroup() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
@@ -60,7 +52,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeat_thatIsAFieldList_swipingNext_andClickingAdd_addsAnotherRepeat() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(FIELD_LIST_REPEAT)
                 .startBlankForm("Field-List Repeat")
                 .assertText("Person > 1")
                 .assertText("What is their age?")
@@ -74,7 +67,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeat_clickingPlus_andClickingAdd_addsRepeatToEndOfSeries() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
@@ -88,7 +82,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInARepeat_clickingPlus_andClickingDoNotAdd_returns() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")
@@ -102,7 +97,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInRepeatWithFixedCount_noPlusButtonAppears() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(FIXED_COUNT_REPEAT)
                 .startBlankForm("Fixed Count Repeat");
 
         onView(withId(R.id.menu_add_repeat)).check(doesNotExist());
@@ -110,7 +106,8 @@ public class AddRepeatTest {
 
     @Test
     public void whenInHierarchyForRepeat_clickingPlus_addsRepeatAtEndOfSeries() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(ONE_QUESTION_REPEAT)
                 .startBlankForm("One Question Repeat")
                 .assertText("Person > 1")
                 .swipeToNextQuestionWithRepeatGroup("Person")

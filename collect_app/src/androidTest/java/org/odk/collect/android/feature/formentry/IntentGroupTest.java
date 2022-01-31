@@ -56,7 +56,6 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.FormActivityTestRule;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.testshared.RecordedIntentsRule;
@@ -76,7 +75,6 @@ public class IntentGroupTest {
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RecordedIntentsRule())
             .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)) // Needed to write temp file
-            .around(new CopyFormRule(INTENT_GROUP_FORM, true))
             .around(rule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.

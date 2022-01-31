@@ -25,7 +25,6 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.ResetStateRule;
 import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.support.pages.BlankFormSearchPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
@@ -46,7 +45,6 @@ public class FillBlankFormTest {
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(new ResetStateRule())
             .around(rule);
 
     @Test

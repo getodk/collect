@@ -16,9 +16,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.CopyFormRule;
 import org.odk.collect.android.support.ResetStateRule;
-import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.testshared.RecordedIntentsRule;
 
@@ -37,8 +35,6 @@ public class FormMapTest {
             .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION))
             .around(new RecordedIntentsRule())
             .around(new ResetStateRule())
-            .around(new CopyFormRule(SINGLE_GEOPOINT_FORM))
-            .around(new CopyFormRule(NO_GEOPOINT_FORM))
             .around(rule);
 
     @Before
@@ -58,7 +54,9 @@ public class FormMapTest {
 
     @Test
     public void gettingBlankFormList_showsMapIcon_onlyForFormsWithGeometry() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(SINGLE_GEOPOINT_FORM)
+                .copyForm(NO_GEOPOINT_FORM)
                 .clickFillBlankForm()
                 .checkMapIconDisplayedForForm("Single geopoint")
                 .checkMapIconNotDisplayedForForm("basic");
@@ -66,7 +64,9 @@ public class FormMapTest {
 
     @Test
     public void clickingOnMapIcon_opensMapForForm() {
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(SINGLE_GEOPOINT_FORM)
+                .copyForm(NO_GEOPOINT_FORM)
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
                 .assertText("Single geopoint");
@@ -76,7 +76,9 @@ public class FormMapTest {
     public void fillingBlankForm_addsInstanceToMap() {
         String oneInstanceString = ApplicationProvider.getApplicationContext().getResources().getString(R.string.geometry_status, 1, 1);
 
-        new MainMenuPage()
+        rule.startAtMainMenu()
+                .copyForm(SINGLE_GEOPOINT_FORM)
+                .copyForm(NO_GEOPOINT_FORM)
                 .clickFillBlankForm()
                 .clickOnMapIconForForm("Single geopoint")
                 .clickFillBlankFormButton("Single geopoint")

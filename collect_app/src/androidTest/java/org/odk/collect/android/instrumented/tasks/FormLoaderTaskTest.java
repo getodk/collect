@@ -4,18 +4,27 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.CopyFormRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.RunnableRule;
+import org.odk.collect.android.support.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.projects.Project;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
+
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
 
 public class FormLoaderTaskTest {
 
@@ -27,11 +36,20 @@ public class FormLoaderTaskTest {
     private static final String SIMPLE_SEARCH_EXTERNAL_DB_FILE = "simple-search-external-csv-fruits.db";
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new ResetStateRule())
-            .around(new CopyFormRule(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM,
-                    Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv")))
-            .around(new CopyFormRule(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE)));
+    public RuleChain copyFormChain = TestRuleChain.chain()
+            .around(new RunnableRule(() -> {
+                try {
+                    // Set up demo project
+                    AppDependencyComponent component = DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext());
+                    component.projectsRepository().save(Project.Companion.getDEMO_PROJECT());
+                    component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
+
+                    AdbFormLoadingUtils.copyFormToDemoProject(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM, Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv"));
+                    AdbFormLoadingUtils.copyFormToDemoProject(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
 
     // Validate the use of CSV files as secondary instances accessed through "jr://file-csv"
     @Test
