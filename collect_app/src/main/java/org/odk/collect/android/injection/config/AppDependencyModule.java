@@ -137,7 +137,6 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.shared.strings.UUIDGenerator;
-import org.odk.collect.utilities.Clock;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
@@ -406,11 +405,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public Clock providesClock() {
-        return System::currentTimeMillis;
-    }
-
-    @Provides
     public SoftKeyboardController provideSoftKeyboardController() {
         return new SoftKeyboardController();
     }
@@ -433,13 +427,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
-        return new FormEntryViewModel.Factory(clock);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Analytics analytics) {
+        return new FormEntryViewModel.Factory(System::currentTimeMillis);
     }
 
     @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, clock);
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics) {
+        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis);
     }
 
     @Provides

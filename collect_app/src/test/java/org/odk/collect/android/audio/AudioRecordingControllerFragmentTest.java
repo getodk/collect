@@ -34,7 +34,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.permissions.PermissionsChecker;
-import org.odk.collect.utilities.Clock;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
@@ -69,8 +68,8 @@ public class AudioRecordingControllerFragmentTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, clock) {
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -80,8 +79,8 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Clock clock, Analytics analytics) {
-                return new FormEntryViewModel.Factory(clock) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Analytics analytics) {
+                return new FormEntryViewModel.Factory(System::currentTimeMillis) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

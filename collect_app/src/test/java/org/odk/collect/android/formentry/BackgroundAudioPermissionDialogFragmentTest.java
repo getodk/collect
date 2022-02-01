@@ -30,7 +30,6 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.testshared.RobolectricHelpers;
-import org.odk.collect.utilities.Clock;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioPermissionDialogFragmentTest {
@@ -46,8 +45,8 @@ public class BackgroundAudioPermissionDialogFragmentTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Clock clock, Analytics analytics) {
-                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, clock) {
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
