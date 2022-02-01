@@ -1,14 +1,12 @@
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.source.SettingsProvider;
@@ -17,13 +15,12 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
 import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
 
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
@@ -67,10 +64,8 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Override
     protected void onPostExecute(File result) {
-        Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
-            ((DialogFragment) prev).dismiss();
-        }
-        formEntryActivity.get().setWidgetData(result);
+        FormEntryActivity activity = this.formEntryActivity.get();
+        DialogFragmentUtils.dismissDialog(FormEntryActivity.TAG_PROGRESS_DIALOG_MEDIA_LOADING, activity.getSupportFragmentManager());
+        activity.setWidgetData(result);
     }
 }

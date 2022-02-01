@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 /**
  * {@link ProgressDialog} that uses dark or light themes correctly. This will not use correct theme
@@ -13,7 +14,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
  *
  * @deprecated {@link ProgressDialog} is deprecated and should be replaced by
  * {@link androidx.appcompat.app.AlertDialog} or
- * {@link org.odk.collect.android.fragments.dialogs.ProgressDialogFragment}
+ * {@link MaterialProgressDialogFragment}
  */
 
 @Deprecated

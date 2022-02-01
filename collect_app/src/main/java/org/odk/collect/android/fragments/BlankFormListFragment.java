@@ -31,7 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
-import org.odk.collect.android.fragments.dialogs.ProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
@@ -113,7 +113,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             deleteComplete(backgroundTasks.deleteFormsTask.getDeleteCount());
         }
         if (backgroundTasks.deleteFormsTask == null) {
-            DialogFragmentUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
+            DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class, getActivity().getSupportFragmentManager());
         }
     }
 
@@ -188,8 +188,8 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     @Override
     public void progressUpdate(Integer progress, Integer total) {
         String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message), progress, total);
-        ProgressDialogFragment existingDialog = (ProgressDialogFragment) requireActivity().getSupportFragmentManager()
-                .findFragmentByTag(ProgressDialogFragment.class.getName());
+        MaterialProgressDialogFragment existingDialog = (MaterialProgressDialogFragment) requireActivity().getSupportFragmentManager()
+                .findFragmentByTag(MaterialProgressDialogFragment.class.getName());
 
         if (existingDialog != null) {
             existingDialog.setMessage(message);
@@ -203,10 +203,10 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     private void deleteSelectedForms() {
         // only start if no other task is running
         if (backgroundTasks.deleteFormsTask == null) {
-            Bundle args = new Bundle();
-            args.putSerializable(ProgressDialogFragment.MESSAGE, getResources().getString(R.string.form_delete_message));
-            args.putBoolean(ProgressDialogFragment.CANCELABLE, false);
-            DialogFragmentUtils.showIfNotShowing(ProgressDialogFragment.class, args, getActivity().getSupportFragmentManager());
+            MaterialProgressDialogFragment progressDialogFragment = new MaterialProgressDialogFragment();
+            progressDialogFragment.setMessage(getResources().getString(R.string.form_delete_message));
+            progressDialogFragment.setCancelable(false);
+            DialogFragmentUtils.showIfNotShowing(progressDialogFragment, MaterialProgressDialogFragment.class, getActivity().getSupportFragmentManager());
 
             backgroundTasks.deleteFormsTask = new DeleteFormsTask(formsRepositoryProvider.get(), instancesRepositoryProvider.get());
             backgroundTasks.deleteFormsTask.setDeleteListener(this);
@@ -250,7 +250,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
         deleteButton.setEnabled(false);
 
         updateAdapter();
-        DialogFragmentUtils.dismissDialog(ProgressDialogFragment.class, getActivity().getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class, getActivity().getSupportFragmentManager());
     }
 
     @Override

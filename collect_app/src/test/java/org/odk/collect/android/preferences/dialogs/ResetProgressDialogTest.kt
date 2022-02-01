@@ -10,8 +10,6 @@ import org.junit.runner.RunWith
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.permissions.R
 import org.odk.collect.strings.localization.getLocalizedString
-import org.robolectric.Shadows
-import org.robolectric.shadows.ShadowView
 
 @RunWith(AndroidJUnit4::class)
 class ResetProgressDialogTest {
@@ -30,10 +28,10 @@ class ResetProgressDialogTest {
         val scenario = DialogFragmentTest.launchDialogFragment(ResetProgressDialog::class.java)
         scenario.onFragment {
             // Title
-            assertThat(Shadows.shadowOf(it.dialog).title, `is`(context.getLocalizedString(R.string.please_wait)))
+            assertThat(it.title, `is`(context.getLocalizedString(R.string.please_wait)))
 
             // Message
-            assertThat(ShadowView.innerText(it.dialogView), `is`(context.getLocalizedString(R.string.reset_in_progress)))
+            assertThat(it.message, `is`(context.getLocalizedString(R.string.reset_in_progress)))
         }
     }
 }

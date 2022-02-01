@@ -30,10 +30,18 @@ object DialogFragmentUtils {
         dialogClass: Class<T>,
         fragmentManager: FragmentManager
     ) {
+        showIfNotShowing(newDialog, dialogClass.name, fragmentManager)
+    }
+
+    @JvmStatic
+    fun <T : DialogFragment> showIfNotShowing(
+        newDialog: T,
+        tag: String,
+        fragmentManager: FragmentManager
+    ) {
         if (fragmentManager.isStateSaved) {
             return
         }
-        val tag = dialogClass.name
         val existingDialog = fragmentManager.findFragmentByTag(tag) as T?
         if (existingDialog == null) {
             newDialog.show(fragmentManager.beginTransaction(), tag)
@@ -51,7 +59,12 @@ object DialogFragmentUtils {
 
     @JvmStatic
     fun dismissDialog(dialogClazz: Class<*>, fragmentManager: FragmentManager) {
-        val existingDialog = fragmentManager.findFragmentByTag(dialogClazz.name) as DialogFragment?
+        dismissDialog(dialogClazz.name, fragmentManager)
+    }
+
+    @JvmStatic
+    fun dismissDialog(tag: String, fragmentManager: FragmentManager) {
+        val existingDialog = fragmentManager.findFragmentByTag(tag) as DialogFragment?
         if (existingDialog != null) {
             existingDialog.dismissAllowingStateLoss()
 

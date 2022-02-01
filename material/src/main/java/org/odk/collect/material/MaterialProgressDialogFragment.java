@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments.dialogs;
+package org.odk.collect.material;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,29 +9,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentManager;
-
-import org.odk.collect.android.R;
-
-import timber.log.Timber;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-public class ProgressDialogFragment extends DialogFragment {
+import java.io.Serializable;
 
-    public static final String COLLECT_PROGRESS_DIALOG_TAG = "collectProgressDialogTag";
-    public static final String TITLE = "title";
-    public static final String MESSAGE = "message";
-    public static final String CANCELABLE = "true";
+/**
+ * Provides a reusable progress dialog implemented with {@link MaterialAlertDialogBuilder}. Progress
+ * dialogs don't appear in the Material guidelines/specs due to the design language's instistance
+ * that progress shouldn't block the user - this is pretty unrealistic for the app in it's current
+ * state so having a reliable "Material" version of the Android progress dialog is useful.
+ */
+public class MaterialProgressDialogFragment extends DialogFragment {
+
+    private static final String TITLE = "title";
+    private static final String MESSAGE = "message";
+    private static final String CANCELABLE = "true";
 
     private View dialogView;
 
     /**
      * Override to have something cancelled when the ProgressDialog's cancel button is pressed
      */
-    protected Cancellable getCancellable() {
+    protected OnCancelCallback getOnCancelCallback() {
         return null;
     }
 
@@ -42,8 +44,16 @@ public class ProgressDialogFragment extends DialogFragment {
         return null;
     }
 
+    public String getTitle() {
+        return getArguments().getString(TITLE);
+    }
+
+    public String getMessage() {
+        return getArguments().getString(MESSAGE);
+    }
+
     public void setTitle(String title) {
-        setArgument(title, TITLE);
+        setArgument(TITLE, title);
 
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
@@ -52,7 +62,7 @@ public class ProgressDialogFragment extends DialogFragment {
     }
 
     public void setMessage(String message) {
-        setArgument(message, MESSAGE);
+        setArgument(MESSAGE, message);
 
         AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
@@ -60,21 +70,10 @@ public class ProgressDialogFragment extends DialogFragment {
         }
     }
 
-    /*
-    We keep this just in case to avoid problems if someone tries to show a dialog after
-    the activity’s state have been saved. Basically it shouldn't take place since we should control
-    the activity state if we want to show a dialog (especially after long tasks).
-     */
     @Override
-    public void show(FragmentManager manager, String tag) {
-        try {
-            manager
-                    .beginTransaction()
-                    .add(this, tag)
-                    .commit();
-        } catch (IllegalStateException e) {
-            Timber.w(e);
-        }
+    public void setCancelable(boolean cancelable) {
+        setArgument(CANCELABLE, cancelable);
+        super.setCancelable(cancelable);
     }
 
     @Override
@@ -93,9 +92,9 @@ public class ProgressDialogFragment extends DialogFragment {
 
     @Override
     public void onCancel(@NonNull DialogInterface dialog) {
-        Cancellable cancellable = getCancellable();
-        if (cancellable != null) {
-            cancellable.cancel();
+        OnCancelCallback onCancelCallback = getOnCancelCallback();
+        if (onCancelCallback != null) {
+            onCancelCallback.cancel();
         }
     }
 
@@ -115,20 +114,20 @@ public class ProgressDialogFragment extends DialogFragment {
         if (getCancelButtonText() != null) {
             dialog.setButton(BUTTON_NEGATIVE, getCancelButtonText(), (dialog1, which) -> {
                 dismiss();
-                getCancellable().cancel();
+                getOnCancelCallback().cancel();
             });
         }
     }
 
-    private void setArgument(String key, String value) {
+    private void setArgument(String key, Serializable value) {
         if (getArguments() == null) {
             setArguments(new Bundle());
         }
 
-        getArguments().putString(value, key);
+        getArguments().putSerializable(key, value);
     }
 
-    public interface Cancellable {
+    public interface OnCancelCallback {
         boolean cancel();
     }
 
