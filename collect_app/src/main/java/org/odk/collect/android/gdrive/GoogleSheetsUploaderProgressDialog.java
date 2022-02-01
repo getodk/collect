@@ -17,20 +17,18 @@
 package org.odk.collect.android.gdrive;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import timber.log.Timber;
 
-public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
+public class GoogleSheetsUploaderProgressDialog extends MaterialProgressDialogFragment {
     public static final String GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG = "googleSheetsUploaderProgressDialogTag";
     private static final String MESSAGE = "message";
 
@@ -39,8 +37,6 @@ public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
     public interface OnSendingFormsCanceledListener {
         void onSendingFormsCanceled();
     }
-
-    private ProgressDialog dialog;
 
     public static GoogleSheetsUploaderProgressDialog newInstance(String message) {
         Bundle bundle = new Bundle();
@@ -86,15 +82,12 @@ public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
 
         setRetainInstance(true);
         setCancelable(false);
-
-        dialog = new DayNightProgressDialog(getActivity());
-        dialog.setTitle(getString(R.string.uploading_data));
-        dialog.setMessage(getString(R.string.please_wait));
-        dialog.setCancelable(false);
-        dialog.setIndeterminate(true);
-        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setButton(getString(R.string.cancel), (dialog1, which) -> onSendingFormsCanceled.onSendingFormsCanceled());
-        return dialog;
+        setTitle(getString(R.string.uploading_data));
+        setTitle(getString(R.string.uploading_data));
+        setMessage(getString(R.string.please_wait));
+        setCancelable(false);
+        setNegativeButton(getString(R.string.cancel), (dialog1, which) -> onSendingFormsCanceled.onSendingFormsCanceled());
+        return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
@@ -104,9 +97,5 @@ public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
             dialog.setDismissMessage(null);
         }
         super.onDestroyView();
-    }
-
-    public void setMessage(String alertMsg) {
-        dialog.setMessage(alertMsg);
     }
 }
