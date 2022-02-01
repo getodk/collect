@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -24,12 +23,12 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.android.preferences.dialogs.BearingProgressDialog;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.Locale;
 
 public class BearingActivity extends CollectAbstractActivity implements SensorEventListener {
-    private ProgressDialog bearingDialog;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -48,8 +47,6 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
-        setupBearingDialog();
     }
 
     @Override
@@ -58,10 +55,7 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
 
         sensorManager.unregisterListener(this, accelerometer);
         sensorManager.unregisterListener(this, magnetometer);
-
-        if (bearingDialog != null && bearingDialog.isShowing()) {
-            bearingDialog.dismiss();
-        }
+        DialogFragmentUtils.dismissDialog(BearingProgressDialog.class, getSupportFragmentManager());
     }
 
     @Override
@@ -69,7 +63,7 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         super.onResume();
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-        bearingDialog.show();
+        setupBearingDialog();
     }
 
     /**
@@ -77,36 +71,21 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
      * searching.
      */
     private void setupBearingDialog() {
-        // dialog displayed while fetching bearing
-        bearingDialog = new DayNightProgressDialog(this);
         DialogInterface.OnClickListener geopointButtonListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                returnBearing();
-                                break;
-                            case DialogInterface.BUTTON_NEGATIVE:
-                                bearingDecimal = null;
-                                finish();
-                                break;
-                        }
+                (dialog, which) -> {
+                    switch (which) {
+                        case DialogInterface.BUTTON_POSITIVE:
+                            returnBearing();
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            bearingDecimal = null;
+                            finish();
+                            break;
                     }
                 };
 
-        // back button doesn't cancel
-        bearingDialog.setCancelable(false);
-        bearingDialog.setIndeterminate(true);
-        bearingDialog.setIcon(android.R.drawable.ic_dialog_info);
-        bearingDialog.setTitle(getString(R.string.getting_bearing));
-        bearingDialog.setMessage(getString(R.string.please_wait_long));
-        bearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                getString(R.string.accept_bearing),
-                geopointButtonListener);
-        bearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                getString(R.string.cancel_location),
-                geopointButtonListener);
+        BearingProgressDialog dialog = new BearingProgressDialog(geopointButtonListener);
+        DialogFragmentUtils.showIfNotShowing(dialog, BearingProgressDialog.class, getSupportFragmentManager());
     }
 
     private void returnBearing() {
@@ -172,9 +151,13 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                bearingDialog.setMessage(getString(R.string.direction, dir)
-                        + "\n" + getString(R.string.bearing, degrees));
+                BearingProgressDialog existingDialog = (BearingProgressDialog) getSupportFragmentManager()
+                        .findFragmentByTag(BearingProgressDialog.class.getName());
 
+                if (existingDialog != null) {
+                    existingDialog.setMessage(getString(R.string.direction, dir)
+                            + "\n" + getString(R.string.bearing, degrees));
+                }
             }
         }
     }
