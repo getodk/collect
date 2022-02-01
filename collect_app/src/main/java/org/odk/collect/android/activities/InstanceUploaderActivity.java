@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import static java.util.Arrays.stream;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +26,7 @@ import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
+import org.odk.collect.android.preferences.dialogs.InstanceUploaderProgressDialog;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ArrayUtils;
@@ -34,7 +34,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 
@@ -60,8 +60,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private static final String AUTH_URI = "auth";
     private static final String ALERT_MSG = "alertmsg";
     private static final String TO_SEND = "tosend";
-
-    private ProgressDialog progressDialog;
 
     private String alertMsg;
 
@@ -257,31 +255,27 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Override
     public void progressUpdate(int progress, int total) {
         alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
-        progressDialog.setMessage(alertMsg);
+        InstanceUploaderProgressDialog existingDialog = (InstanceUploaderProgressDialog) getSupportFragmentManager()
+                .findFragmentByTag(InstanceUploaderProgressDialog.class.getName());
+        if (existingDialog != null) {
+            existingDialog.setMessage(alertMsg);
+        }
     }
 
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                progressDialog = new DayNightProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                instanceServerUploaderTask.cancel(true);
-                                instanceServerUploaderTask.setUploaderListener(null);
-                                finish();
-                            }
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            instanceServerUploaderTask.cancel(true);
+                            instanceServerUploaderTask.setUploaderListener(null);
+                            finish();
                         };
-                progressDialog.setTitle(getString(R.string.uploading_data));
-                progressDialog.setMessage(alertMsg);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
+                InstanceUploaderProgressDialog dialog = new InstanceUploaderProgressDialog(alertMsg, loadingButtonListener);
+                DialogFragmentUtils.showIfNotShowing(dialog, InstanceUploaderProgressDialog.class, getSupportFragmentManager());
+                return dialog.getDialog();
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
                         instancesToSend.length);
@@ -308,10 +302,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
      */
     @Override
     public void authRequest(Uri url, HashMap<String, String> messagesByInstanceIdAttempted) {
-        if (progressDialog.isShowing()) {
-            // should always be showing here
-            progressDialog.dismiss();
-        }
+        DialogFragmentUtils.dismissDialog(InstanceUploaderProgressDialog.class, getSupportFragmentManager());
 
         // Remove sent instances from instances to send
         ArrayList<Long> workingSet = new ArrayList<>();
