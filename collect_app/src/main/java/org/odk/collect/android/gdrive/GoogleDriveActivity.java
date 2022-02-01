@@ -20,7 +20,6 @@ package org.odk.collect.android.gdrive;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -44,7 +43,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.android.preferences.dialogs.GoogleDriveProgressDialog;
+import org.odk.collect.android.preferences.dialogs.RetrieveDriveFileContentsProgressDialog;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
@@ -367,23 +368,15 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case PROGRESS_DIALOG:
-                ProgressDialog progressDialog = new DayNightProgressDialog(this);
                 DialogInterface.OnClickListener loadingButtonListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                                getFileTask.cancel(true);
-                                getFileTask.setGoogleDriveFormDownloadListener(null);
-                            }
+                        (dialog, which) -> {
+                            dialog.dismiss();
+                            getFileTask.cancel(true);
+                            getFileTask.setGoogleDriveFormDownloadListener(null);
                         };
-                progressDialog.setTitle(getString(R.string.downloading_data));
-                progressDialog.setMessage(alertMsg);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
-                return progressDialog;
+                GoogleDriveProgressDialog googleDriveProgressDialog = new GoogleDriveProgressDialog(loadingButtonListener, alertMsg);
+                DialogFragmentUtils.showIfNotShowing(googleDriveProgressDialog, GoogleDriveProgressDialog.class, getSupportFragmentManager());
+                return googleDriveProgressDialog.getDialog();
             case GOOGLE_USER_DIALOG:
                 MaterialAlertDialogBuilder gudBuilder = new MaterialAlertDialogBuilder(this);
 
@@ -623,8 +616,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             AsyncTask<String, Void, HashMap<String, Object>> {
         private TaskListener listener;
 
-        private ProgressDialog progressDialog;
-
         void setTaskListener(TaskListener tl) {
             listener = tl;
         }
@@ -632,18 +623,13 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new DayNightProgressDialog(GoogleDriveActivity.this);
-            progressDialog.setMessage(getString(R.string.reading_files));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setCancelable(false);
-            progressDialog.setButton(getString(R.string.cancel), (dialog, which) -> {
+            RetrieveDriveFileContentsProgressDialog dialog = new RetrieveDriveFileContentsProgressDialog((d, which) -> {
                 cancel(true);
                 rootButton.setEnabled(true);
                 driveList.clear();
                 updateAdapter();
             });
-            progressDialog.show();
+            DialogFragmentUtils.showIfNotShowing(dialog, RetrieveDriveFileContentsProgressDialog.class, getSupportFragmentManager());
         }
 
         @Override
@@ -738,9 +724,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPostExecute(HashMap<String, Object> results) {
             super.onPostExecute(results);
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
+            DialogFragmentUtils.dismissDialog(RetrieveDriveFileContentsProgressDialog.class, getSupportFragmentManager());
 
             if (results == null) {
                 // was an auth request
