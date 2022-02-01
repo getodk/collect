@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -50,13 +49,13 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
+import org.odk.collect.android.preferences.dialogs.FormDownloadListProgressDialog;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
-import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
@@ -106,7 +105,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private static final String FORM_VERSION_KEY = "formversion";
 
     private AlertDialog alertDialog;
-    private ProgressDialog cancelDialog;
     private Button downloadButton;
 
     private DownloadFormListTask downloadFormListTask;
@@ -628,14 +626,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     }
 
     private void createCancelDialog() {
-        cancelDialog = new DayNightProgressDialog(this);
-        cancelDialog.setTitle(getString(R.string.canceling));
-        cancelDialog.setMessage(getString(R.string.please_wait));
-        cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
-        cancelDialog.setIndeterminate(true);
-        cancelDialog.setCancelable(false);
         viewModel.setCancelDialogShowing(true);
-        DialogUtils.showDialog(cancelDialog, this);
+        DialogFragmentUtils.showIfNotShowing(FormDownloadListProgressDialog.class, getSupportFragmentManager());
     }
 
     @Override
@@ -685,10 +677,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         cleanUpWebCredentials();
 
-        if (cancelDialog != null && cancelDialog.isShowing()) {
-            cancelDialog.dismiss();
-            viewModel.setCancelDialogShowing(false);
-        }
+        DialogFragmentUtils.dismissDialog(FormDownloadListProgressDialog.class, getSupportFragmentManager());
+        viewModel.setCancelDialogShowing(false);
 
         if (viewModel.isDownloadOnlyMode()) {
             setReturnResult(false, "Download cancelled", null);
