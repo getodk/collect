@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -27,8 +29,13 @@ public class MaterialProgressDialogFragment extends DialogFragment {
     private static final String TITLE = "title";
     private static final String MESSAGE = "message";
     private static final String CANCELABLE = "true";
+    public static final String ICON = "icon";
+    public static final String POSITIVE_BUTTON_TEXT = "positive_button_text";
+    public static final String NEGATIVE_BUTTON_TEXT = "negative_button_text";
 
     private View dialogView;
+    private DialogInterface.OnClickListener onPositiveButtonClickListener;
+    private DialogInterface.OnClickListener onNegativeButtonClickListener;
 
     /**
      * Override to have something cancelled when the ProgressDialog's cancel button is pressed
@@ -52,22 +59,35 @@ public class MaterialProgressDialogFragment extends DialogFragment {
         return getArguments().getString(MESSAGE);
     }
 
+    public @DrawableRes int getIcon() {
+        return getArguments().getInt(ICON);
+    }
+
     public void setTitle(String title) {
         setArgument(TITLE, title);
-
-        AlertDialog dialog = (AlertDialog) getDialog();
-        if (dialog != null) {
-            setupView(dialog);
-        }
+        setupView();
     }
 
     public void setMessage(String message) {
         setArgument(MESSAGE, message);
+        setupView();
+    }
 
-        AlertDialog dialog = (AlertDialog) getDialog();
-        if (dialog != null) {
-            setupView(dialog);
-        }
+    public void setIcon(@DrawableRes int iconId) {
+        setArgument(ICON, iconId);
+        setupView();
+    }
+
+    public void setPositiveButton(String text, final DialogInterface.OnClickListener listener) {
+        setArgument(POSITIVE_BUTTON_TEXT, text);
+        onPositiveButtonClickListener = listener;
+        setupView();
+    }
+
+    public void setNegativeButton(String text, final DialogInterface.OnClickListener listener) {
+        setArgument(NEGATIVE_BUTTON_TEXT, text);
+        onNegativeButtonClickListener = listener;
+        setupView();
     }
 
     @Override
@@ -98,6 +118,13 @@ public class MaterialProgressDialogFragment extends DialogFragment {
         }
     }
 
+    private void setupView() {
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+            setupView(dialog);
+        }
+    }
+
     private void setupView(@NonNull AlertDialog dialog) {
         if (getArguments() != null && getArguments().getString(TITLE) != null) {
             dialog.setTitle(getArguments().getString(TITLE));
@@ -105,6 +132,10 @@ public class MaterialProgressDialogFragment extends DialogFragment {
 
         if (getArguments() != null && getArguments().getString(MESSAGE) != null) {
             ((TextView) dialogView.findViewById(R.id.message)).setText(getArguments().getString(MESSAGE));
+        }
+
+        if (getArguments() != null && getArguments().getInt(ICON, -1) != -1) {
+            dialog.setIcon(getArguments().getInt(ICON));
         }
 
         if (getArguments() != null) {
@@ -116,6 +147,12 @@ public class MaterialProgressDialogFragment extends DialogFragment {
                 dismiss();
                 getOnCancelCallback().cancel();
             });
+        } else if (getArguments() != null && getArguments().getString(NEGATIVE_BUTTON_TEXT) != null) {
+            dialog.setButton(BUTTON_NEGATIVE, getArguments().getString(NEGATIVE_BUTTON_TEXT), onNegativeButtonClickListener);
+        }
+
+        if (getArguments() != null && getArguments().getString(POSITIVE_BUTTON_TEXT) != null) {
+            dialog.setButton(BUTTON_POSITIVE, getArguments().getString(POSITIVE_BUTTON_TEXT), onPositiveButtonClickListener);
         }
     }
 
@@ -133,5 +170,13 @@ public class MaterialProgressDialogFragment extends DialogFragment {
 
     public View getDialogView() {
         return dialogView;
+    }
+
+    public boolean isShowing() {
+        AlertDialog dialog = (AlertDialog) getDialog();
+        if (dialog != null) {
+            return dialog.isShowing();
+        }
+        return false;
     }
 }
