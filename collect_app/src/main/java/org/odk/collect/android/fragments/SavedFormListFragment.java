@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -40,11 +39,12 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
+import org.odk.collect.android.preferences.dialogs.SavedFormListProgressDialog;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
 import javax.inject.Inject;
@@ -63,7 +63,6 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
 
     DeleteInstancesTask deleteInstancesTask;
     private AlertDialog alertDialog;
-    private ProgressDialog progressDialog;
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
@@ -170,7 +169,11 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
     @Override
     public void progressUpdate(int progress, int total) {
         String message = String.format(getResources().getString(R.string.deleting_form_dialog_update_message), progress, total);
-        progressDialog.setMessage(message);
+        SavedFormListProgressDialog existingDialog = (SavedFormListProgressDialog) getParentFragmentManager()
+                .findFragmentByTag(SavedFormListProgressDialog.class.getName());
+        if (existingDialog != null) {
+            existingDialog.setMessage(message);
+        }
     }
 
     /**
@@ -179,11 +182,7 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
      */
     private void deleteSelectedInstances() {
         if (deleteInstancesTask == null) {
-            progressDialog = new DayNightProgressDialog(getContext());
-            progressDialog.setMessage(getResources().getString(R.string.form_delete_message));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+            DialogFragmentUtils.showIfNotShowing(SavedFormListProgressDialog.class, getParentFragmentManager());
 
             deleteInstancesTask = new DeleteInstancesTask(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
             deleteInstancesTask.setDeleteListener(this);
@@ -222,7 +221,7 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
         deleteButton.setEnabled(false);
 
         updateAdapter();
-        progressDialog.dismiss();
+        DialogFragmentUtils.dismissDialog(SavedFormListProgressDialog.class, getParentFragmentManager());
     }
 
     @Override
