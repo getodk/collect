@@ -3,25 +3,21 @@ package org.odk.collect.settings.migration;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.settings.migration.MigrationUtils.moveKey;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
+import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.InMemSettings;
 import org.odk.collect.shared.Settings;
 
-@RunWith(AndroidJUnit4.class)
 public class KeyMoverTest {
 
-    private final Settings prefs = TestSettingsProvider.getTestSettings("test");
-    private final Settings other = TestSettingsProvider.getTestSettings("other");
+    private final Settings prefs = new InMemSettings();
+    private final Settings other = new InMemSettings();
 
     @Test
     public void movesKeyAndValueToOtherPrefs() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "key", "value"
         );
 
@@ -30,7 +26,7 @@ public class KeyMoverTest {
                 .apply(prefs);
 
         assertThat(prefs.getAll().size(), is(0));
-        assertPrefs(other,
+        assertSettings(other,
                 "key", "value"
         );
     }
@@ -47,11 +43,11 @@ public class KeyMoverTest {
 
     @Test
     public void whenKeyInOtherPrefs_doesNothing() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "key", "value"
         );
 
-        initPrefs(other,
+        initSettings(other,
                 "key", "other-value"
         );
 
@@ -59,11 +55,11 @@ public class KeyMoverTest {
                 .toPreferences(other)
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "key", "value"
         );
 
-        assertPrefs(other,
+        assertSettings(other,
                 "key", "other-value"
         );
     }

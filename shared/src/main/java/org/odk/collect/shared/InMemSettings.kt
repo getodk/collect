@@ -1,6 +1,4 @@
-package org.odk.collect.testshared
-
-import org.odk.collect.shared.Settings
+package org.odk.collect.shared
 
 class InMemSettings : Settings {
 

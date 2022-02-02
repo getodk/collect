@@ -1,56 +1,52 @@
 package org.odk.collect.settings.migration;
 
 import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
+import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.InMemSettings;
 import org.odk.collect.shared.Settings;
 
-@RunWith(AndroidJUnit4.class)
 public class ValueTranslatorTest {
 
-    private final Settings prefs = TestSettingsProvider.getTestSettings("test");
+    private final Settings prefs = new InMemSettings();
 
     @Test
     public void translatesValueForKey() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "key", "value"
         );
 
         translateValue("value").toValue("newValue").forKey("key").apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "key", "newValue"
         );
     }
 
     @Test
     public void doesNotTranslateOtherValues() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "key", "otherValue"
         );
 
         translateValue("value").toValue("newValue").forKey("key").apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "key", "otherValue"
         );
     }
 
     @Test
     public void whenKeyNotInPrefs_doesNothing() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "otherKey", "value"
         );
 
         translateValue("value").toValue("newValue").forKey("key").apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "otherKey", "value"
         );
     }

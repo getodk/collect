@@ -231,6 +231,7 @@ configurations.all {
         cacheChangingModulesFor(0, 'seconds')
 
         force 'org.objenesis:objenesis:2.6'
+        force 'joda-time:joda-time:2.10.12'
     }
     transitive = true
 }
@@ -259,7 +260,9 @@ dependencies {
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
-    implementation project(':settings')
+    implementation(project(':settings')) {
+        exclude group: 'joda-time'
+    }
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support

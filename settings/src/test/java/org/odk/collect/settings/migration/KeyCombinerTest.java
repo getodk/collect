@@ -1,24 +1,20 @@
 package org.odk.collect.settings.migration;
 
 import static org.odk.collect.settings.migration.MigrationUtils.combineKeys;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
+import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.InMemSettings;
 import org.odk.collect.shared.Settings;
 
-@RunWith(AndroidJUnit4.class)
 public class KeyCombinerTest {
 
-    private final Settings prefs = TestSettingsProvider.getTestSettings("test");
+    private final Settings prefs = new InMemSettings();
 
     @Test
     public void combinesValuesOfTwoKeys_andRemovesOldKeys() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "red", true,
                 "blue", true
         );
@@ -28,7 +24,7 @@ public class KeyCombinerTest {
                 .toPairs("color", "purple")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "color", "purple"
         );
     }
@@ -40,32 +36,32 @@ public class KeyCombinerTest {
                 .withValues(false, true).toPairs("color", "blue")
                 .withValues(true, false).toPairs("color", "red");
 
-        initPrefs(prefs,
+        initSettings(prefs,
                 "red", true,
                 "blue", false
         );
 
         combiner.apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "color", "red"
         );
 
-        initPrefs(prefs,
+        initSettings(prefs,
                 "red", false,
                 "blue", true
         );
 
         combiner.apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "color", "blue"
         );
     }
 
     @Test
     public void whenCombinedKeyExists_removesOtherKey_andModifiesExistingKey() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "direction", "north",
                 "other-direction", "west"
         );
@@ -75,7 +71,7 @@ public class KeyCombinerTest {
                 .toPairs("direction", "north-west")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "direction", "north-west"
         );
     }

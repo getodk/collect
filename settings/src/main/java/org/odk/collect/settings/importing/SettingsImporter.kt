@@ -149,3 +149,7 @@ fun interface SettingsChangeHandler {
 fun interface SettingsMigrator {
     fun migrate(generalSettings: Settings, adminSettings: Settings)
 }
+
+interface ProjectDetailsCreator {
+    fun createProjectFromDetails(name: String = "", icon: String = "", color: String = "", connectionIdentifier: String = ""): Project
+}

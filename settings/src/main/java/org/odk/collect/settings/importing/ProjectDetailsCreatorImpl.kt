@@ -7,9 +7,9 @@ import java.net.URL
 import java.util.regex.Pattern
 import kotlin.math.abs
 
-class ProjectDetailsCreator(private val colors: List<String>, private val defaults: Map<String, Any>) {
+class ProjectDetailsCreatorImpl(private val colors: List<String>, private val defaults: Map<String, Any>) : ProjectDetailsCreator {
 
-    fun createProjectFromDetails(name: String = "", icon: String = "", color: String = "", connectionIdentifier: String = ""): Project {
+    override fun createProjectFromDetails(name: String, icon: String, color: String, connectionIdentifier: String): Project {
         val projectName = if (name.isNotBlank()) {
             name
         } else {

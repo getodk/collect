@@ -1,8 +1,7 @@
-package org.odk.collect.android.support
+package org.odk.collect.settings
 
-import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.shared.InMemSettings
 import org.odk.collect.shared.Settings
-import org.odk.collect.testshared.InMemSettings
 
 class InMemSettingsProvider : SettingsProvider {
 

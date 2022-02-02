@@ -1,24 +1,20 @@
 package org.odk.collect.settings.migration;
 
 import static org.odk.collect.settings.migration.MigrationUtils.translateKey;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
+import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.InMemSettings;
 import org.odk.collect.shared.Settings;
 
-@RunWith(AndroidJUnit4.class)
 public class KeyTranslatorTest {
 
-    private final Settings prefs = TestSettingsProvider.getTestSettings("test");
+    private final Settings prefs = new InMemSettings();
 
     @Test
     public void renamesKeyAndTranslatesValues() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "colour", "red"
         );
 
@@ -28,7 +24,7 @@ public class KeyTranslatorTest {
                 .toValue("rouge")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "couleur", "rouge"
         );
     }
@@ -42,30 +38,30 @@ public class KeyTranslatorTest {
                 .fromValue("green")
                 .toValue("vert");
 
-        initPrefs(prefs,
+        initSettings(prefs,
                 "colour", "red"
         );
 
         translator.apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "couleur", "rouge"
         );
 
-        initPrefs(prefs,
+        initSettings(prefs,
                 "colour", "green"
         );
 
         translator.apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "couleur", "vert"
         );
     }
 
     @Test
     public void whenKeyHasUnknownValue_doesNotDoAnything() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "colour", "blue"
         );
 
@@ -75,14 +71,14 @@ public class KeyTranslatorTest {
                 .toValue("rouge")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "colour", "blue"
         );
     }
 
     @Test
     public void whenNewKeyExists_doesNotDoAnything() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "colour", "red",
                 "couleur", "bleu"
         );
@@ -93,7 +89,7 @@ public class KeyTranslatorTest {
                 .toValue("rouge")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "colour", "red",
                 "couleur", "bleu"
         );

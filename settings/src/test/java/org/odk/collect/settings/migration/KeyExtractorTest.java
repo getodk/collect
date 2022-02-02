@@ -1,25 +1,20 @@
 package org.odk.collect.settings.migration;
 
 import static org.odk.collect.settings.migration.MigrationUtils.extractNewKey;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefs;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.assertPrefsEmpty;
-import static org.odk.collect.settings.migration.SharedPreferenceUtils.initPrefs;
-
-import androidx.test.ext.junit.runners.AndroidJUnit4;
+import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
+import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.InMemSettings;
 import org.odk.collect.shared.Settings;
 
-@RunWith(AndroidJUnit4.class)
 public class KeyExtractorTest {
 
-    private final Settings prefs = TestSettingsProvider.getTestSettings("test");
+    private final Settings prefs = new InMemSettings();
 
     @Test
     public void createsNewKeyBasedOnExistingKeysValue() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "oldKey", "blah"
         );
 
@@ -27,7 +22,7 @@ public class KeyExtractorTest {
                 .fromValue("blah").toValue("newBlah")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "oldKey", "blah",
                 "newKey", "newBlah"
         );
@@ -35,7 +30,7 @@ public class KeyExtractorTest {
 
     @Test
     public void whenNewKeyExists_doesNothing() {
-        initPrefs(prefs,
+        initSettings(prefs,
                 "oldKey", "oldBlah",
                 "newKey", "existing"
         );
@@ -44,7 +39,7 @@ public class KeyExtractorTest {
                 .fromValue("oldBlah").toValue("newBlah")
                 .apply(prefs);
 
-        assertPrefs(prefs,
+        assertSettings(prefs,
                 "oldKey", "oldBlah",
                 "newKey", "existing"
         );
@@ -52,12 +47,12 @@ public class KeyExtractorTest {
 
     @Test
     public void whenOldKeyMissing_doesNothing() {
-        initPrefs(prefs);
+        initSettings(prefs);
 
         extractNewKey("newKey").fromKey("oldKey")
                 .fromValue("oldBlah").toValue("newBlah")
                 .apply(prefs);
 
-        assertPrefsEmpty(prefs);
+        assertSettings(prefs);
     }
 }

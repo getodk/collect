@@ -45,7 +45,9 @@ dependencies {
     implementation project(':shared')
     implementation project(':projects')
 
-    implementation(Dependencies.json_schema_validator) {
-        exclude group: 'joda-time'
-    }
+    implementation Dependencies.json_schema_validator
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.hamcrest
+    testImplementation Dependencies.mockito_kotlin
 }

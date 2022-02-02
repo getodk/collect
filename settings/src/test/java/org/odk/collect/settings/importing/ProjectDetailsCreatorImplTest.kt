@@ -1,18 +1,14 @@
-package org.odk.collect.android.projects
+package org.odk.collect.settings.importing
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.importing.ProjectDetailsCreator
 import org.odk.collect.settings.keys.ProjectKeys
 
-@RunWith(AndroidJUnit4::class)
-class ProjectDetailsCreatorTest {
+class ProjectDetailsCreatorImplTest {
 
-    private val projectDetailsCreator = ProjectDetailsCreator(
+    private val projectDetailsCreator = ProjectDetailsCreatorImpl(
         listOf(
             "#EA4633",
             "#9E9E9E"

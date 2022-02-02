@@ -1,6 +1,5 @@
-package org.odk.collect.android.configure
+package org.odk.collect.settings.importing
 
-import androidx.core.util.Pair
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -12,17 +11,13 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.importing.ProjectDetailsCreator
-import org.odk.collect.settings.importing.SettingsChangeHandler
-import org.odk.collect.settings.importing.SettingsImporter
-import org.odk.collect.settings.importing.SettingsMigrator
-import org.odk.collect.settings.importing.SettingsValidator
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.settings.migration.SharedPreferenceUtils
+import org.odk.collect.settings.support.SettingsUtils.assertSettings
+import org.odk.collect.settings.support.SettingsUtils.initSettings
 import org.odk.collect.shared.Settings
 
 class SettingsImporterTest {
@@ -75,12 +70,12 @@ class SettingsImporterTest {
     @Test
     fun forSettingsKeysNotINJSON_savesDefaults() {
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
-        SharedPreferenceUtils.assertPrefs(
+        assertSettings(
             generalSettings,
             "key1", "default",
             "key2", true
         )
-        SharedPreferenceUtils.assertPrefs(
+        assertSettings(
             adminSettings,
             "key1", 5
         )
@@ -88,22 +83,22 @@ class SettingsImporterTest {
 
     @Test
     fun whenKeysAlreadyExistInPrefs_overridesWithDefaults() {
-        SharedPreferenceUtils.initPrefs(
+        initSettings(
             generalSettings,
             "key1", "existing",
             "key2", false
         )
-        SharedPreferenceUtils.initPrefs(
+        initSettings(
             adminSettings,
             "key1", 0
         )
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
-        SharedPreferenceUtils.assertPrefs(
+        assertSettings(
             generalSettings,
             "key1", "default",
             "key2", true
         )
-        SharedPreferenceUtils.assertPrefs(
+        assertSettings(
             adminSettings,
             "key1", 5
         )
@@ -181,7 +176,7 @@ class SettingsImporterTest {
             projectDetailsCreator
         )
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
-        assertThat<List<Pair<String, Any>>>(
+        assertThat<List<Pair<String, Any?>>>(
             handler.changes,
             containsInAnyOrder(
                 Pair("key1", "default"),
@@ -204,11 +199,25 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.ADMIN, JSONObject())
             .put(AppConfigurationKeys.PROJECT, projectJson)
 
-        whenever(projectDetailsCreator.createProjectFromDetails(newProject.name, newProject.icon, newProject.color, "")).thenReturn(newProject)
+        whenever(
+            projectDetailsCreator.createProjectFromDetails(
+                newProject.name,
+                newProject.icon,
+                newProject.color,
+                ""
+            )
+        ).thenReturn(newProject)
 
         importer.fromJSON(settings.toString(), currentProject)
         verify(projectsRepository)
-            .save(Project.Saved(currentProject.uuid, newProject.name, newProject.icon, newProject.color))
+            .save(
+                Project.Saved(
+                    currentProject.uuid,
+                    newProject.name,
+                    newProject.icon,
+                    newProject.color
+                )
+            )
     }
 
     @Test
@@ -219,7 +228,14 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.GENERAL, generalJson)
             .put(AppConfigurationKeys.ADMIN, JSONObject())
 
-        whenever(projectDetailsCreator.createProjectFromDetails(any(), any(), any(), any())).thenReturn(Project.New("A", "B", "C"))
+        whenever(
+            projectDetailsCreator.createProjectFromDetails(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        ).thenReturn(Project.New("A", "B", "C"))
 
         importer.fromJSON(settings.toString(), currentProject)
         verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo")
@@ -234,7 +250,14 @@ class SettingsImporterTest {
             .put(AppConfigurationKeys.GENERAL, generalJson)
             .put(AppConfigurationKeys.ADMIN, JSONObject())
 
-        whenever(projectDetailsCreator.createProjectFromDetails(any(), any(), any(), any())).thenReturn(Project.New("A", "B", "C"))
+        whenever(
+            projectDetailsCreator.createProjectFromDetails(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        ).thenReturn(Project.New("A", "B", "C"))
 
         importer.fromJSON(settings.toString(), currentProject)
         verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo@bar.baz")
@@ -253,7 +276,7 @@ class SettingsImporterTest {
 
     private class RecordingSettingsChangeHandler :
         SettingsChangeHandler {
-        var changes: MutableList<Pair<String, Any>> = ArrayList()
+        var changes: MutableList<Pair<String, Any?>> = ArrayList()
         override fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String) {
             changes.add(Pair(changedKey, newValue))
         }

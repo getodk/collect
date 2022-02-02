@@ -131,7 +131,7 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.importing.ProjectDetailsCreator;
+import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
 import org.odk.collect.settings.importing.SettingsImporter;
 import org.odk.collect.settings.importing.SettingsMigrator;
@@ -334,7 +334,7 @@ public class AppDependencyModule {
                 Defaults.getProtected(),
                 settingsChangeHandler,
                 projectsRepository,
-                new ProjectDetailsCreator(Stream.of(
+                new ProjectDetailsCreatorImpl(Stream.of(
                         R.color.color1,
                         R.color.color2,
                         R.color.color3,
@@ -575,7 +575,7 @@ public class AppDependencyModule {
 
     @Provides
     public ExistingProjectMigrator providesExistingProjectMigrator(Context context, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, CurrentProjectProvider currentProjectProvider) {
-        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider, new ProjectDetailsCreator(Stream.of(
+        return new ExistingProjectMigrator(context, storagePathProvider, projectsRepository, settingsProvider, currentProjectProvider, new ProjectDetailsCreatorImpl(Stream.of(
                 R.color.color1,
                 R.color.color2,
                 R.color.color3,

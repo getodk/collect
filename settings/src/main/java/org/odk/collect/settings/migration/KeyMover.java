@@ -19,7 +19,7 @@ public class KeyMover implements Migration {
 
     @Override
     public void apply(Settings prefs) {
-        if (newPrefs.contains(key)) {
+        if (newPrefs.contains(key) || !prefs.contains(key)) {
             return;
         }
 
