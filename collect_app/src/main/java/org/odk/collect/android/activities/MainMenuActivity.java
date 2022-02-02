@@ -238,6 +238,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         ProjectIconView projectIconView = (ProjectIconView) projectsMenuItem.getActionView();
         projectIconView.setProject(currentProjectViewModel.getCurrentProject().getValue());
         projectIconView.setOnClickListener(v -> onOptionsItemSelected(projectsMenuItem));
+        projectIconView.setContentDescription(getString(R.string.projects));
 
         return super.onPrepareOptionsMenu(menu);
     }
