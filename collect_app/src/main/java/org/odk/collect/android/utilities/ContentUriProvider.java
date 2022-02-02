@@ -47,8 +47,8 @@ public final class ContentUriProvider {
                         Timber.i("%s: %s", ContentUriProvider.class.getSimpleName(), "Completed Android N+ Huawei file copy. Attempting to return the cached file");
                         return FileProvider.getUriForFile(context, authority, cacheLocation);
                     } catch (IOException e1) {
-                        Timber.e(e1, "%s: %s", ContentUriProvider.class.getSimpleName(), "Failed to copy the Huawei file. Re-throwing exception");
-                        throw new IllegalArgumentException("Huawei devices are unsupported for Android N", e1);
+                        Timber.i(e1, "%s: %s", ContentUriProvider.class.getSimpleName(), "Failed to copy the Huawei file. Re-throwing exception");
+                        return null;
                     } finally {
                         IOUtils.closeQuietly(in);
                         IOUtils.closeQuietly(out);
