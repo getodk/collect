@@ -14,8 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class SetGeopointActionTest {
     private static final String SETGEOPOINT_ACTION_FORM = "setgeopoint-action.xml";

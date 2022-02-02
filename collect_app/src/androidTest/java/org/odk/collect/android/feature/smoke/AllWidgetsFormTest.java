@@ -14,8 +14,8 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;

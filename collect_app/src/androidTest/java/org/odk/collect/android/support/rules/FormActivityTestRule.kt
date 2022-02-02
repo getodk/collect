@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.android.support.rules
 
 import android.app.Activity
 import android.app.Application
@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT

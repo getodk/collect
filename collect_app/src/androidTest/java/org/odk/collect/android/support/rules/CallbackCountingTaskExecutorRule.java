@@ -1,4 +1,4 @@
-package org.odk.collect.android.support;
+package org.odk.collect.android.support.rules;
 
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 

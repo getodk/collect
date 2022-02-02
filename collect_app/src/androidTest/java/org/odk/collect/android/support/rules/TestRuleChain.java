@@ -1,10 +1,14 @@
-package org.odk.collect.android.support;
+package org.odk.collect.android.support.rules;
 
 import android.Manifest;
 
 import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.support.TestDependencies;
+import org.odk.collect.android.support.rules.DisableDeviceAnimationsRule;
+import org.odk.collect.android.support.rules.IdlingResourceRule;
+import org.odk.collect.android.support.rules.ResetStateRule;
 
 public final class TestRuleChain {
 

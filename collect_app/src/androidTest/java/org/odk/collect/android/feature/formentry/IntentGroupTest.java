@@ -56,8 +56,8 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.testshared.RecordedIntentsRule;
 
 import java.io.File;

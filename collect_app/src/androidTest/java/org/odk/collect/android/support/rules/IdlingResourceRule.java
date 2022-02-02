@@ -1,4 +1,4 @@
-package org.odk.collect.android.support;
+package org.odk.collect.android.support.rules;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
