@@ -19,8 +19,8 @@ import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.FileUtils
+import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.testshared.RecordedIntentsRule

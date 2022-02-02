@@ -46,7 +46,6 @@ class CollectTestRule @JvmOverloads constructor(
             .inputUrl(serverUrl!!)
             .addProject()
 
-
     fun launchShortcuts(): ShortcutsPage {
         val scenario = ActivityScenario.launch(AndroidShortcutsActivity::class.java)
         return ShortcutsPage(scenario).assertOnPage()
