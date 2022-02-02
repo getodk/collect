@@ -54,6 +54,11 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
             file
         )
 
+        if (contentUri == null) {
+            ToastUtils.showLongToast(context, "Can't' open file!")
+            return;
+        }
+
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             setDataAndType(contentUri, getMimeType(file, expectedMimeType))
