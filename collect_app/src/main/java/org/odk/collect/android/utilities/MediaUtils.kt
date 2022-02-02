@@ -56,7 +56,7 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
 
         if (contentUri == null) {
             ToastUtils.showLongToast(context, "Can't' open file!")
-            return;
+            return
         }
 
         val intent = Intent().apply {
