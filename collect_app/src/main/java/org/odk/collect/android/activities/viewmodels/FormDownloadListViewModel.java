@@ -16,16 +16,26 @@
 
 package org.odk.collect.android.activities.viewmodels;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.formmanagement.ServerFormDetails;
+import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.forms.FormSourceException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 public class FormDownloadListViewModel extends ViewModel {
 
@@ -54,7 +64,19 @@ public class FormDownloadListViewModel extends ViewModel {
     private String url;
     private String username;
     private String password;
+    private WebCredentialsUtils webCredentialsUtils;
     private final HashMap<String, Boolean> formResults = new HashMap<>();
+    private final Scheduler scheduler;
+    private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+
+    private final MutableLiveData<Pair<HashMap<String, ServerFormDetails>, FormSourceException>> downloadMutableLiveData = new
+            MutableLiveData<>(null);
+    public final LiveData<Pair<HashMap<String, ServerFormDetails>, FormSourceException>> downloadFormListLiveData = downloadMutableLiveData;
+
+    public FormDownloadListViewModel(Scheduler scheduler, ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
+        this.scheduler = scheduler;
+        this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
+    }
 
     public HashMap<String, ServerFormDetails> getFormDetailsByFormId() {
         return formDetailsByFormId;
@@ -196,13 +218,91 @@ public class FormDownloadListViewModel extends ViewModel {
         this.loadingCanceled = loadingCanceled;
     }
 
+    public void downloadFormList() {
+        scheduler.immediate(
+                () -> {
+                    if (webCredentialsUtils != null) {
+                        setTemporaryCredentials();
+                    }
+
+                    List<ServerFormDetails> formList = null;
+                    FormSourceException exception = null;
+
+                    try {
+                        formList = serverFormsDetailsFetcher.fetchFormDetails();
+                    } catch (FormSourceException e) {
+                        exception = e;
+                    } finally {
+                        if (webCredentialsUtils != null) {
+                            clearTemporaryCredentials();
+                        }
+                    }
+
+                    return new Pair<>(formList, exception);
+                },
+                result -> {
+                    if (result.first != null) {
+                        HashMap<String, ServerFormDetails> detailsHashMap = new HashMap<>();
+                        for (ServerFormDetails details : result.first) {
+                            detailsHashMap.put(details.getFormId(), details);
+                        }
+
+                        downloadMutableLiveData.postValue(new Pair<>(detailsHashMap, result.second));
+                    } else {
+                        downloadMutableLiveData.postValue(new Pair<>(null, result.second));
+                    }
+                }
+        );
+    }
+
+    public void setAlternateCredentials(WebCredentialsUtils webCredentialsUtils) {
+        this.webCredentialsUtils = webCredentialsUtils;
+        serverFormsDetailsFetcher.updateCredentials(webCredentialsUtils);
+
+        if (url != null && !url.isEmpty()) {
+            serverFormsDetailsFetcher.updateUrl(url);
+        }
+    }
+
+    private void setTemporaryCredentials() {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                if (username != null && password != null) {
+                    webCredentialsUtils.saveCredentials(url, username, password);
+                } else {
+                    webCredentialsUtils.clearCredentials(url);
+                }
+            }
+        }
+    }
+
+    private void clearTemporaryCredentials() {
+        if (url != null) {
+            String host = Uri.parse(url).getHost();
+
+            if (host != null) {
+                webCredentialsUtils.clearCredentials(url);
+            }
+        }
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
+
+        private final Scheduler scheduler;
+        private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
+
+        public Factory(Scheduler scheduler, ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
+            this.scheduler = scheduler;
+            this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
+        }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormDownloadListViewModel();
+            return (T) new FormDownloadListViewModel(scheduler, serverFormsDetailsFetcher);
         }
     }
 }

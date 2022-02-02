@@ -51,7 +51,6 @@ import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
@@ -61,6 +60,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.FormSourceException;
 
 import java.io.Serializable;
@@ -112,7 +112,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private ProgressDialog cancelDialog;
     private Button downloadButton;
 
-    private DownloadFormListTask downloadFormListTask;
     private DownloadFormsTask downloadFormsTask;
     private Button toggleButton;
 
@@ -139,6 +138,9 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Inject
     FormDownloader formDownloader;
 
+    @Inject
+    Scheduler scheduler;
+
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,8 +150,10 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         setContentView(R.layout.form_download_list);
         setTitle(getString(R.string.get_forms));
 
-        viewModel = new ViewModelProvider(this, new FormDownloadListViewModel.Factory())
-                .get(FormDownloadListViewModel.class);
+        viewModel = new ViewModelProvider(
+                this,
+                new FormDownloadListViewModel.Factory(scheduler, serverFormsDetailsFetcher)
+        ).get(FormDownloadListViewModel.class);
 
         init(savedInstanceState);
     }
@@ -227,13 +231,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         filteredFormList.addAll(viewModel.getFormList());
 
-        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormListTask) {
-            downloadFormListTask = (DownloadFormListTask) getLastCustomNonConfigurationInstance();
-            if (downloadFormListTask.getStatus() == AsyncTask.Status.FINISHED) {
-                DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
-                downloadFormsTask = null;
-            }
-        } else if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
+        if (getLastCustomNonConfigurationInstance() instanceof DownloadFormsTask) {
             downloadFormsTask = (DownloadFormsTask) getLastCustomNonConfigurationInstance();
             if (downloadFormsTask.getStatus() == AsyncTask.Status.FINISHED) {
                 DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
@@ -286,26 +284,16 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
             viewModel.clearFormDetailsByFormId();
             DialogFragmentUtils.showIfNotShowing(RefreshFormListDialogFragment.class, getSupportFragmentManager());
 
-            if (downloadFormListTask != null
-                    && downloadFormListTask.getStatus() != AsyncTask.Status.FINISHED) {
-                return; // we are already doing the download!!!
-            } else if (downloadFormListTask != null) {
-                downloadFormListTask.setDownloaderListener(null);
-                downloadFormListTask.cancel(true);
-                downloadFormListTask = null;
-            }
-
             if (viewModel.isDownloadOnlyMode()) {
                 // Handle external app download case with different server
-                downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
-                downloadFormListTask.setAlternateCredentials(webCredentialsUtils, viewModel.getUrl(), viewModel.getUsername(), viewModel.getPassword());
-                downloadFormListTask.setDownloaderListener(this);
-                downloadFormListTask.execute();
-            } else {
-                downloadFormListTask = new DownloadFormListTask(serverFormsDetailsFetcher);
-                downloadFormListTask.setDownloaderListener(this);
-                downloadFormListTask.execute();
+                viewModel.setAlternateCredentials(webCredentialsUtils);
             }
+            viewModel.downloadFormList();
+            viewModel.downloadFormListLiveData.observe(this, result -> {
+                if (result != null) {
+                    formListDownloadingComplete(result.first, result.second);
+                }
+            });
         }
     }
 
@@ -420,18 +408,11 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        if (downloadFormsTask != null) {
-            return downloadFormsTask;
-        } else {
-            return downloadFormListTask;
-        }
+        return downloadFormsTask;
     }
 
     @Override
     protected void onDestroy() {
-        if (downloadFormListTask != null) {
-            downloadFormListTask.setDownloaderListener(null);
-        }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(null);
         }
@@ -440,9 +421,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     protected void onResume() {
-        if (downloadFormListTask != null) {
-            downloadFormListTask.setDownloaderListener(this);
-        }
         if (downloadFormsTask != null) {
             downloadFormsTask.setDownloaderListener(this);
         }
@@ -492,8 +470,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     @Override
     public void formListDownloadingComplete(HashMap<String, ServerFormDetails> formList, FormSourceException exception) {
         DialogFragmentUtils.dismissDialog(RefreshFormListDialogFragment.class, getSupportFragmentManager());
-        downloadFormListTask.setDownloaderListener(null);
-        downloadFormListTask = null;
 
         if (exception == null) {
             // Everything worked. Clear the list and add the results.
@@ -760,10 +736,8 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Override
     public void onCancelFormLoading() {
-        if (downloadFormListTask != null) {
-            downloadFormListTask.setDownloaderListener(null);
-            downloadFormListTask.cancel(true);
-            downloadFormListTask = null;
+        if (viewModel.downloadFormListLiveData.hasObservers()) {
+            viewModel.downloadFormListLiveData.removeObservers(this);
 
             // Only explicitly exit if DownloadFormListTask is running since
             // DownloadFormTask has a callback when cancelled and has code to handle
