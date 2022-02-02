@@ -48,6 +48,7 @@ public class TraceProvider extends ContentProvider {
         try {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
+            Timber.e(e);
             return null;
         }
 

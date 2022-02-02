@@ -141,6 +141,9 @@ public class DatabaseFormsRepository implements FormsRepository {
         v.put(AUTO_SEND, form.getAutoSend());
         v.put(GEOMETRY_XPATH, form.getGeometryXpath());
 
+        // Smap Some old database tables may require displaySubtext to be not null
+        v.put("displaySubtext", "");
+
         if (form.isDeleted()) {
             v.put(DELETED_DATE, 0L);
         } else {
