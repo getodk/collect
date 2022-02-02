@@ -3,7 +3,7 @@ package org.odk.collect.android.openrosa;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.openrosa.support.MockWebServerRule;
+import org.odk.collect.android.rules.MockWebServerRule;
 
 import java.net.URI;
 
