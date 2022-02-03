@@ -9,7 +9,7 @@ object Dependencies {
     const val androidx_lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     const val androidx_viewpager2= "androidx.viewpager2:viewpager2:1.0.0"
     const val androidx_lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
-    const val androidx_lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel:2.4.0"
+    const val androidx_lifecycle_viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
     const val androidx_core_ktx = "androidx.core:core-ktx:1.7.0"
     const val androidx_browser = "androidx.browser:browser:1.4.0"
     const val androidx_recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
