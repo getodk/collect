@@ -42,11 +42,13 @@ class FormUriActivity : Activity() {
             logAnalytics(uriProjectId)
 
             if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-                startActivity(
+                startActivityForResult(
                     Intent(this, FormEntryActivity::class.java).also {
+                        it.action = intent.action
                         it.data = uri
                         intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                    }
+                    },
+                    1
                 )
             } else {
                 MaterialAlertDialogBuilder(this)
@@ -58,6 +60,12 @@ class FormUriActivity : Activity() {
                     .show()
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        setResult(resultCode, data)
+        finish()
     }
 
     private fun logAnalytics(uriProjectId: String?) {
