@@ -10,20 +10,26 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
+import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectManagementPreferencesFragmentViewModel
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
+import org.odk.collect.android.preferences.dialogs.ResetProgressDialog
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.utilities.ProjectResetter
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.async.Scheduler
+import org.odk.collect.strings.localization.getLocalizedString
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProjectManagementPreferencesFragment :
@@ -66,6 +72,7 @@ class ProjectManagementPreferencesFragment :
             }
             if (resetDialogPreference != null) {
                 val dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(preference.key)
+                dialogFragment.setOnResetClickListener(::onResetClick)
                 dialogFragment.setTargetFragment(this, 0)
                 dialogFragment.show(parentFragmentManager, null)
             } else {
@@ -130,6 +137,103 @@ class ProjectManagementPreferencesFragment :
                         requireActivity(),
                         SplashScreenActivity::class.java
                     )
+                }
+            }
+        }
+    }
+
+    private fun onResetClick(resetActions: List<Int>) {
+        DialogFragmentUtils.showIfNotShowing(
+            ResetProgressDialog::class.java,
+            (requireActivity() as CollectAbstractActivity).supportFragmentManager
+        )
+
+        viewModel.reset(resetActions).observe(
+            viewLifecycleOwner,
+            {
+                handleResult(it.first, it.second)
+            }
+        )
+    }
+
+    private fun handleResult(resetActions: List<Int>, failedResetActions: List<Int>) {
+        DialogFragmentUtils.dismissDialog(
+            ResetProgressDialog::class.java,
+            (requireActivity() as CollectAbstractActivity).supportFragmentManager
+        )
+
+        val resultMessage = StringBuilder()
+        for (action in resetActions) {
+            when (action) {
+                ProjectResetter.ResetAction.RESET_PREFERENCES -> resultMessage.append(
+                    requireContext().getLocalizedString(
+                        R.string.reset_settings_result,
+                        if (failedResetActions.contains(action)) {
+                            R.string.error_occured
+                        } else {
+                            R.string.success
+                        }
+                    )
+                )
+                ProjectResetter.ResetAction.RESET_INSTANCES -> resultMessage.append(
+                    requireContext().getLocalizedString(
+                        R.string.reset_saved_forms_result,
+                        if (failedResetActions.contains(action)) {
+                            R.string.error_occured
+                        } else {
+                            R.string.success
+                        }
+                    )
+                )
+                ProjectResetter.ResetAction.RESET_FORMS -> resultMessage.append(
+                    requireContext().getLocalizedString(
+                        R.string.reset_blank_forms_result,
+                        if (failedResetActions.contains(action)) {
+                            R.string.error_occured
+                        } else {
+                            R.string.success
+                        }
+                    )
+                )
+                ProjectResetter.ResetAction.RESET_CACHE -> resultMessage.append(
+                    requireContext().getLocalizedString(
+                        R.string.reset_cache_result,
+                        if (failedResetActions.contains(action)) {
+                            R.string.error_occured
+                        } else {
+                            R.string.success
+                        }
+                    )
+                )
+                ProjectResetter.ResetAction.RESET_LAYERS -> resultMessage.append(
+                    requireContext().getLocalizedString(
+                        R.string.reset_layers_result,
+                        if (failedResetActions.contains(action)) {
+                            R.string.error_occured
+                        } else {
+                            R.string.success
+                        }
+                    )
+                )
+            }
+            if (resetActions.indexOf(action) < resetActions.size - 1) {
+                resultMessage.append("\n\n")
+            }
+        }
+        if (!(requireActivity() as CollectAbstractActivity).isInstanceStateSaved) {
+            (requireActivity() as CollectAbstractActivity).runOnUiThread {
+                if (resetActions.contains(ProjectResetter.ResetAction.RESET_PREFERENCES)) {
+                    (requireActivity() as CollectAbstractActivity).recreate()
+                }
+                val resetSettingsResultDialog =
+                    ResetSettingsResultDialog.newInstance(resultMessage.toString())
+                try {
+                    resetSettingsResultDialog.show(
+                        (requireActivity() as CollectAbstractActivity).supportFragmentManager,
+                        ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG
+                    )
+                } catch (e: ClassCastException) {
+                    Timber.i(e)
                 }
             }
         }

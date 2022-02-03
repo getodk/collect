@@ -10,8 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.preference.PreferenceDialogFragmentCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.CollectAbstractActivity
-import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.ProjectResetter
 import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_CACHE
@@ -19,11 +17,7 @@ import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_FORMS
 import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_INSTANCES
 import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_LAYERS
 import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES
-import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
-import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.async.Scheduler
-import org.odk.collect.strings.localization.getLocalizedString
-import timber.log.Timber
 import javax.inject.Inject
 
 class ResetDialogPreferenceFragmentCompat :
@@ -41,6 +35,8 @@ class ResetDialogPreferenceFragmentCompat :
     private var forms: AppCompatCheckBox? = null
     private var layers: AppCompatCheckBox? = null
     private var cache: AppCompatCheckBox? = null
+
+    private lateinit var onResetClickListener: (List<Int>) -> Unit
 
     private lateinit var _context: Context
 
@@ -109,101 +105,7 @@ class ResetDialogPreferenceFragmentCompat :
             resetActions.add(RESET_CACHE)
         }
         if (resetActions.isNotEmpty()) {
-            showIfNotShowing(
-                ResetProgressDialog::class.java,
-                (_context as CollectAbstractActivity).supportFragmentManager
-            )
-
-            scheduler.immediate(
-                {
-                    return@immediate projectResetter.reset(resetActions)
-                },
-                { failedResetActions: List<Int> ->
-                    dismissDialog(
-                        ResetProgressDialog::class.java,
-                        (_context as CollectAbstractActivity).supportFragmentManager
-                    )
-                    handleResult(resetActions, failedResetActions)
-                }
-            )
-        }
-    }
-
-    private fun handleResult(resetActions: List<Int>, failedResetActions: List<Int>) {
-        val resultMessage = StringBuilder()
-        for (action in resetActions) {
-            when (action) {
-                RESET_PREFERENCES -> resultMessage.append(
-                    _context.getLocalizedString(
-                        R.string.reset_settings_result,
-                        if (failedResetActions.contains(action)) {
-                            R.string.error_occured
-                        } else {
-                            R.string.success
-                        }
-                    )
-                )
-                RESET_INSTANCES -> resultMessage.append(
-                    _context.getLocalizedString(
-                        R.string.reset_saved_forms_result,
-                        if (failedResetActions.contains(action)) {
-                            R.string.error_occured
-                        } else {
-                            R.string.success
-                        }
-                    )
-                )
-                RESET_FORMS -> resultMessage.append(
-                    _context.getLocalizedString(
-                        R.string.reset_blank_forms_result,
-                        if (failedResetActions.contains(action)) {
-                            R.string.error_occured
-                        } else {
-                            R.string.success
-                        }
-                    )
-                )
-                RESET_CACHE -> resultMessage.append(
-                    _context.getLocalizedString(
-                        R.string.reset_cache_result,
-                        if (failedResetActions.contains(action)) {
-                            R.string.error_occured
-                        } else {
-                            R.string.success
-                        }
-                    )
-                )
-                RESET_LAYERS -> resultMessage.append(
-                    _context.getLocalizedString(
-                        R.string.reset_layers_result,
-                        if (failedResetActions.contains(action)) {
-                            R.string.error_occured
-                        } else {
-                            R.string.success
-                        }
-                    )
-                )
-            }
-            if (resetActions.indexOf(action) < resetActions.size - 1) {
-                resultMessage.append("\n\n")
-            }
-        }
-        if (!(_context as CollectAbstractActivity).isInstanceStateSaved) {
-            (_context as CollectAbstractActivity).runOnUiThread {
-                if (resetActions.contains(RESET_PREFERENCES)) {
-                    (_context as CollectAbstractActivity).recreate()
-                }
-                val resetSettingsResultDialog =
-                    ResetSettingsResultDialog.newInstance(resultMessage.toString())
-                try {
-                    resetSettingsResultDialog.show(
-                        (_context as CollectAbstractActivity).supportFragmentManager,
-                        ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG
-                    )
-                } catch (e: ClassCastException) {
-                    Timber.i(e)
-                }
-            }
+            onResetClickListener(resetActions)
         }
     }
 
@@ -233,6 +135,10 @@ class ResetDialogPreferenceFragmentCompat :
 
     private fun getPartiallyTransparentColor(color: Int): Int =
         Color.argb(150, Color.red(color), Color.green(color), Color.blue(color))
+
+    fun setOnResetClickListener(listener: (List<Int>) -> Unit) {
+        this.onResetClickListener = listener
+    }
 
     companion object {
         fun newInstance(key: String): ResetDialogPreferenceFragmentCompat {
