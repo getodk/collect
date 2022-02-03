@@ -53,7 +53,7 @@ class MediaUtilsTest {
 
         mediaUtils.openFile(context, file, "image/*")
 
-        assertThat(ShadowToast.getTextOfLatestToast(), `is`("Can't' open file!"))
+        assertThat(ShadowToast.getTextOfLatestToast(), `is`("Can't open file. If you are on a Huawei device, this is expected and will not be fixed."))
         assertThat(ShadowToast.getLatestToast().duration, `is`(Toast.LENGTH_LONG))
         verify(intentLauncher, never()).launch(any(), any(), any())
     }
