@@ -27,14 +27,17 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
-    public MainMenuPage clickSaveAndExit() {
+    public <D extends Page<D>> D clickSaveAndExit(D destination) {
         onView(withId(R.id.save_exit_button)).perform(click());
-        return new MainMenuPage().assertOnPage();
+        return destination.assertOnPage();
+    }
+
+    public MainMenuPage clickSaveAndExit() {
+        return clickSaveAndExit(new MainMenuPage());
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
-        onView(withId(R.id.save_exit_button)).perform(click());
-        return new FormMapPage().assertOnPage();
+        return clickSaveAndExit(new FormMapPage());
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {
@@ -44,13 +47,11 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public OkDialog clickSaveAndExitWithErrorDialog() {
-        onView(withId(R.id.save_exit_button)).perform(click());
-        return new OkDialog().assertOnPage();
+        return clickSaveAndExit(new OkDialog());
     }
 
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
-        onView(withId(R.id.save_exit_button)).perform(click());
-        return new ChangesReasonPromptPage(formName).assertOnPage();
+        return clickSaveAndExit(new ChangesReasonPromptPage(formName));
     }
 
     public FormEndPage assertMarkFinishedIsSelected() {

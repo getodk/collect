@@ -288,7 +288,6 @@ the specific language governing permissions and limitations under the License.
         Do not use the activity directly as its name/package might change. -->
         <activity
             android:name=".external.FormUriActivity"
-            android:noHistory="true"
             tools:ignore="AppLinkUrlError">
 
             <intent-filter>
