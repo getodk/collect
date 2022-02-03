@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
@@ -14,12 +15,15 @@ import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.preferences.ProjectManagementPreferencesFragmentViewModel
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.android.utilities.MultiClickGuard
+import org.odk.collect.android.utilities.ProjectResetter
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.async.Scheduler
 import javax.inject.Inject
 
 class ProjectManagementPreferencesFragment :
@@ -29,9 +33,21 @@ class ProjectManagementPreferencesFragment :
     @Inject
     lateinit var projectDeleter: ProjectDeleter
 
+    @Inject
+    lateinit var scheduler: Scheduler
+
+    @Inject
+    lateinit var projectResetter: ProjectResetter
+
+    private lateinit var viewModel: ProjectManagementPreferencesFragmentViewModel
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        viewModel = ViewModelProvider(
+            this,
+            ProjectManagementPreferencesFragmentViewModel.Factory(scheduler, projectResetter)
+        ).get(ProjectManagementPreferencesFragmentViewModel::class.java)
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
