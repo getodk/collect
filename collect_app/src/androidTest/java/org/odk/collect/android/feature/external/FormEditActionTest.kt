@@ -26,7 +26,7 @@ class FormEditActionTest {
         .around(rule)
 
     @Test
-    fun opensFormAndReturnsInstanceURIAfterFormEntry() {
+    fun editForm_andThenFillingForm_returnsNewInstanceURI() {
         rule.startAtMainMenu()
             .copyAndSyncForm("one-question.xml")
 
