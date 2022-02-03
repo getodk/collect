@@ -10,7 +10,6 @@ class RunnableRule(
 
     override fun apply(base: Statement, description: Description): Statement =
         object : Statement() {
-            @Throws(Throwable::class)
             override fun evaluate() {
                 runnable.run()
                 base.evaluate()

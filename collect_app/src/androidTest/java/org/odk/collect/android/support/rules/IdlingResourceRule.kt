@@ -20,7 +20,6 @@ class IdlingResourceRule(
         private val base: Statement
     ) : Statement() {
 
-        @Throws(Throwable::class)
         override fun evaluate() {
             for (idlingResources in idlingResources) {
                 IdlingRegistry.getInstance().register(idlingResources)

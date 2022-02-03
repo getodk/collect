@@ -21,7 +21,6 @@ class CollectTestRule @JvmOverloads constructor(
 
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
-            @Throws(Throwable::class)
             override fun evaluate() {
                 ActivityScenario.launch(SplashScreenActivity::class.java)
 
@@ -40,10 +39,10 @@ class CollectTestRule @JvmOverloads constructor(
 
     fun startAtFirstLaunch() = FirstLaunchPage()
 
-    fun withProject(serverUrl: String?): MainMenuPage =
+    fun withProject(serverUrl: String): MainMenuPage =
         startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
-            .inputUrl(serverUrl!!)
+            .inputUrl(serverUrl)
             .addProject()
 
     fun launchShortcuts(): ShortcutsPage {
@@ -51,18 +50,18 @@ class CollectTestRule @JvmOverloads constructor(
         return ShortcutsPage(scenario).assertOnPage()
     }
 
-    fun <T : Page<T>?> launch(intent: Intent, destination: T): T {
+    fun <T : Page<T>> launch(intent: Intent, destination: T): T {
         ActivityScenario.launch<Activity>(intent)
-        return destination!!.assertOnPage()
+        return destination.assertOnPage()
     }
 
-    fun <T : Page<T>?> launchForResult(
+    fun <T : Page<T>> launchForResult(
         intent: Intent,
         destination: T,
         actions: Consumer<T>
     ): Instrumentation.ActivityResult {
         val scenario = ActivityScenario.launch<Activity>(intent)
-        destination!!.assertOnPage()
+        destination.assertOnPage()
         actions.accept(destination)
         return scenario.result
     }
