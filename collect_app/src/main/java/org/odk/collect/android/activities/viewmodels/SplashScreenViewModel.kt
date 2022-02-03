@@ -34,7 +34,7 @@ class SplashScreenViewModel(
         private val generalSettings: Settings,
         private val projectsRepository: ProjectsRepository
     ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SplashScreenViewModel(generalSettings, projectsRepository) as T
         }
     }

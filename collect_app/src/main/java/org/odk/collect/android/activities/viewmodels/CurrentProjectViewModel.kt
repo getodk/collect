@@ -36,7 +36,7 @@ class CurrentProjectViewModel(
         private val analyticsInitializer: AnalyticsInitializer
     ) :
         ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return CurrentProjectViewModel(
                 currentProjectProvider,
                 analyticsInitializer
