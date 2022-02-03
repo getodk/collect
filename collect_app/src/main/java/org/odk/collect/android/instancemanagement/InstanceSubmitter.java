@@ -28,7 +28,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
 import java.util.List;

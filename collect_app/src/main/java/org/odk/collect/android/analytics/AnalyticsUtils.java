@@ -14,7 +14,7 @@ import static java.lang.String.format;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;

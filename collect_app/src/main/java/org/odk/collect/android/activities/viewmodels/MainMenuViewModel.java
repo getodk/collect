@@ -17,7 +17,7 @@ import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 public class MainMenuViewModel extends ViewModel {
 

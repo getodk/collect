@@ -18,7 +18,7 @@ import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.support.SettingsUtils.assertSettings
 import org.odk.collect.settings.support.SettingsUtils.initSettings
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 class SettingsImporterTest {
 

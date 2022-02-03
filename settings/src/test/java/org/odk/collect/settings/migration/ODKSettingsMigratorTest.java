@@ -6,8 +6,8 @@ import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
-import org.odk.collect.shared.InMemSettings;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.InMemSettings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.List;
 

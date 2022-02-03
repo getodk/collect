@@ -15,7 +15,7 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 @RunWith(AndroidJUnit4::class)
 class ProjectListItemViewTest {

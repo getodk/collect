@@ -27,7 +27,7 @@ import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
 import java.util.List;

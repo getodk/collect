@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
 

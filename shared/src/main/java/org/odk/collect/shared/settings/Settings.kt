@@ -1,4 +1,4 @@
-package org.odk.collect.shared
+package org.odk.collect.shared.settings
 
 interface Settings {
     fun setDefaultForAllSettingsWithoutValues()

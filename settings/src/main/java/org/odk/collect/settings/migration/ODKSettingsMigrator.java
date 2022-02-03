@@ -19,7 +19,7 @@ import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
 import static java.util.Arrays.asList;
 
 import org.odk.collect.settings.importing.SettingsMigrator;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.List;
 

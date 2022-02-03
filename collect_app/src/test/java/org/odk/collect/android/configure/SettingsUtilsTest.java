@@ -14,7 +14,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.utilities.FormUpdateMode;
 import org.odk.collect.android.preferences.utilities.SettingsUtils;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsUtilsTest {

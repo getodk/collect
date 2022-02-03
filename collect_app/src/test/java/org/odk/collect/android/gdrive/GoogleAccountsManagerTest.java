@@ -26,7 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 /**
  * @author Shobhit Agarwal

@@ -5,8 +5,8 @@ import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
 import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.odk.collect.shared.InMemSettings;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.InMemSettings;
+import org.odk.collect.shared.settings.Settings;
 
 public class KeyRenamerTest {
 

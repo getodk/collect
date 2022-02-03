@@ -6,7 +6,7 @@ import androidx.preference.ListPreference;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.Arrays;
 

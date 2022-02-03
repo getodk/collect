@@ -18,7 +18,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
 

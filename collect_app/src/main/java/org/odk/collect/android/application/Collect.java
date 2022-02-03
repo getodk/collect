@@ -62,7 +62,7 @@ import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedApplication;
 

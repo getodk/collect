@@ -18,7 +18,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.Collection;
 

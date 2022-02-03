@@ -5,8 +5,8 @@ import static org.odk.collect.settings.support.SettingsUtils.assertSettingsEmpty
 import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 
 import org.junit.Test;
-import org.odk.collect.shared.InMemSettings;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.InMemSettings;
+import org.odk.collect.shared.settings.Settings;
 
 public class KeyRemoverTest {
 

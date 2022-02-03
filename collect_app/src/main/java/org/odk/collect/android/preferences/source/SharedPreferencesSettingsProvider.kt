@@ -4,7 +4,7 @@ import android.content.Context
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 import javax.inject.Singleton
 
 @Singleton

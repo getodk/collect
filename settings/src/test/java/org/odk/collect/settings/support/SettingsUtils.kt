@@ -1,7 +1,7 @@
 package org.odk.collect.settings.support
 
 import org.junit.Assert
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 object SettingsUtils {
 

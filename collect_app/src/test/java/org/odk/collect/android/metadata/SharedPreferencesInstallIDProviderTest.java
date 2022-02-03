@@ -1,19 +1,18 @@
 package org.odk.collect.android.metadata;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.shared.Settings;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.settings.Settings;
 
 @RunWith(AndroidJUnit4.class)
 public class SharedPreferencesInstallIDProviderTest {

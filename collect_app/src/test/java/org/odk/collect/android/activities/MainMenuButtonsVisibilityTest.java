@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 import org.robolectric.Robolectric;
 
 @RunWith(AndroidJUnit4.class)

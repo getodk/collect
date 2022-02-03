@@ -29,7 +29,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)

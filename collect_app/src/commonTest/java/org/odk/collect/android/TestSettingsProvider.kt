@@ -6,7 +6,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.source.SharedPreferencesSettings
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 // Use just for testing
 object TestSettingsProvider {

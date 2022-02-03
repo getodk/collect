@@ -3,7 +3,7 @@ package org.odk.collect.settings.migration;
 import static org.odk.collect.settings.migration.MigrationUtils.asPairs;
 import static org.odk.collect.settings.migration.MigrationUtils.replace;
 
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;

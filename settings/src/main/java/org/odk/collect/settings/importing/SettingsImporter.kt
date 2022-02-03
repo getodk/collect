@@ -7,7 +7,7 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 class SettingsImporter(
     private val settingsProvider: SettingsProvider,

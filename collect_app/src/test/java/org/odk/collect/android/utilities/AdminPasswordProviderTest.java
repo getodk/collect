@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
 
 import org.junit.Test;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 public class AdminPasswordProviderTest {
 

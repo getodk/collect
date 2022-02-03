@@ -1,7 +1,7 @@
 package org.odk.collect.settings
 
-import org.odk.collect.shared.InMemSettings
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.InMemSettings
+import org.odk.collect.shared.settings.Settings
 
 class InMemSettingsProvider : SettingsProvider {
 

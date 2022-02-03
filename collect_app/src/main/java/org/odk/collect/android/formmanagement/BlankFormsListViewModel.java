@@ -25,7 +25,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
