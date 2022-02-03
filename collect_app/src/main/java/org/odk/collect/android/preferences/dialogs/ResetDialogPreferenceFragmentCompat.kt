@@ -14,6 +14,10 @@ import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.ProjectResetter
+import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_CACHE
+import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_FORMS
+import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_INSTANCES
+import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_LAYERS
 import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
@@ -93,16 +97,16 @@ class ResetDialogPreferenceFragmentCompat :
             resetActions.add(RESET_PREFERENCES)
         }
         if (instances!!.isChecked) {
-            resetActions.add(ProjectResetter.ResetAction.RESET_INSTANCES)
+            resetActions.add(RESET_INSTANCES)
         }
         if (forms!!.isChecked) {
-            resetActions.add(ProjectResetter.ResetAction.RESET_FORMS)
+            resetActions.add(RESET_FORMS)
         }
         if (layers!!.isChecked) {
-            resetActions.add(ProjectResetter.ResetAction.RESET_LAYERS)
+            resetActions.add(RESET_LAYERS)
         }
         if (cache!!.isChecked) {
-            resetActions.add(ProjectResetter.ResetAction.RESET_CACHE)
+            resetActions.add(RESET_CACHE)
         }
         if (resetActions.isNotEmpty()) {
             showIfNotShowing(
@@ -129,84 +133,56 @@ class ResetDialogPreferenceFragmentCompat :
         val resultMessage = StringBuilder()
         for (action in resetActions) {
             when (action) {
-                RESET_PREFERENCES -> if (failedResetActions.contains(action)) {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_settings_result,
+                RESET_PREFERENCES -> resultMessage.append(
+                    _context.getLocalizedString(
+                        R.string.reset_settings_result,
+                        if (failedResetActions.contains(action)) {
                             R.string.error_occured
-                        )
-                    )
-                } else {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_settings_result,
+                        } else {
                             R.string.success
-                        )
+                        }
                     )
-                }
-                ProjectResetter.ResetAction.RESET_INSTANCES -> if (failedResetActions.contains(
-                        action
-                    )
-                ) {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_saved_forms_result,
+                )
+                RESET_INSTANCES -> resultMessage.append(
+                    _context.getLocalizedString(
+                        R.string.reset_saved_forms_result,
+                        if (failedResetActions.contains(action)) {
                             R.string.error_occured
-                        )
-                    )
-                } else {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_saved_forms_result,
+                        } else {
                             R.string.success
-                        )
+                        }
                     )
-                }
-                ProjectResetter.ResetAction.RESET_FORMS -> if (failedResetActions.contains(action)) {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_blank_forms_result,
+                )
+                RESET_FORMS -> resultMessage.append(
+                    _context.getLocalizedString(
+                        R.string.reset_blank_forms_result,
+                        if (failedResetActions.contains(action)) {
                             R.string.error_occured
-                        )
-                    )
-                } else {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_blank_forms_result,
+                        } else {
                             R.string.success
-                        )
+                        }
                     )
-                }
-                ProjectResetter.ResetAction.RESET_CACHE -> if (failedResetActions.contains(action)) {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_cache_result,
+                )
+                RESET_CACHE -> resultMessage.append(
+                    _context.getLocalizedString(
+                        R.string.reset_cache_result,
+                        if (failedResetActions.contains(action)) {
                             R.string.error_occured
-                        )
-                    )
-                } else {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_cache_result,
+                        } else {
                             R.string.success
-                        )
+                        }
                     )
-                }
-                ProjectResetter.ResetAction.RESET_LAYERS -> if (failedResetActions.contains(action)) {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_layers_result,
+                )
+                RESET_LAYERS -> resultMessage.append(
+                    _context.getLocalizedString(
+                        R.string.reset_layers_result,
+                        if (failedResetActions.contains(action)) {
                             R.string.error_occured
-                        )
-                    )
-                } else {
-                    resultMessage.append(
-                        _context.getLocalizedString(
-                            R.string.reset_layers_result,
+                        } else {
                             R.string.success
-                        )
+                        }
                     )
-                }
+                )
             }
             if (resetActions.indexOf(action) < resetActions.size - 1) {
                 resultMessage.append("\n\n")
@@ -259,7 +235,7 @@ class ResetDialogPreferenceFragmentCompat :
         Color.argb(150, Color.red(color), Color.green(color), Color.blue(color))
 
     companion object {
-        fun newInstance(key: String?): ResetDialogPreferenceFragmentCompat {
+        fun newInstance(key: String): ResetDialogPreferenceFragmentCompat {
             val fragment = ResetDialogPreferenceFragmentCompat()
             val bundle = Bundle(1)
             bundle.putString(ARG_KEY, key)
