@@ -56,7 +56,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -76,6 +75,8 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -685,7 +686,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         for (ServerFormDetails k : keys) {
             b.append(k.getFormName() + " ("
                     + ((k.getFormVersion() != null)
-                    ? (TranslationHandler.getString(Collect.getInstance(), R.string.version) + ": " + k.getFormVersion() + " ")
+                    ? (getLocalizedString(Collect.getInstance(), R.string.version) + ": " + k.getFormVersion() + " ")
                     : "") + "ID: " + k.getFormId() + ") - " + result.get(k));
             b.append("\n\n");
         }

@@ -35,7 +35,6 @@ import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -51,6 +50,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class InstanceDiskSynchronizer {
 
@@ -147,7 +148,7 @@ public class InstanceDiskSynchronizer {
                     }
                 }
                 if (counter > 0) {
-                    currentStatus += TranslationHandler.getString(Collect.getInstance(), R.string.instance_scan_count, counter);
+                    currentStatus += getLocalizedString(Collect.getInstance(), R.string.instance_scan_count, counter);
                 }
             }
         } finally {

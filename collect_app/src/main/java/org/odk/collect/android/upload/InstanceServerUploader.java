@@ -27,7 +27,6 @@ import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.ResponseMessageParser;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.shared.Settings;
@@ -44,6 +43,8 @@ import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class InstanceServerUploader extends InstanceUploader {
     private static final String URL_PATH_SEP = "/";
@@ -93,7 +94,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 submissionComplete(instance, false);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new UploadException(TranslationHandler.getString(Collect.getInstance(), R.string.url_error));
+                throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.url_error));
             }
 
             HttpHeadResult headResult;
@@ -119,7 +120,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 submissionComplete(instance, false);
-                throw new UploadAuthRequestedException(TranslationHandler.getString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
+                throw new UploadAuthRequestedException(getLocalizedString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received

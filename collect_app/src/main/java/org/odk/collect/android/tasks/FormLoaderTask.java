@@ -45,7 +45,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.shared.strings.Md5;
 
@@ -61,6 +60,7 @@ import au.com.bytecode.opencsv.CSVReader;
 import timber.log.Timber;
 
 import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Background task for loading a form.
@@ -139,7 +139,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             formDef = createFormDefFromCacheOrXml(formPath, formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
-            errorMsg = TranslationHandler.getString(Collect.getInstance(), R.string.too_complex_form);
+            errorMsg = getLocalizedString(Collect.getInstance(), R.string.too_complex_form);
         } catch (Exception | Error e) {
             Timber.w(e);
             errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";
@@ -222,7 +222,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
         publishProgress(
-                TranslationHandler.getString(Collect.getInstance(), R.string.survey_loading_reading_form_message));
+                getLocalizedString(Collect.getInstance(), R.string.survey_loading_reading_form_message));
 
         final FormDef formDefFromCache = FormDefCache.readCache(formXml);
         if (formDefFromCache != null) {
@@ -314,7 +314,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // This order is important. Import data, then initialize.
                 try {
                     Timber.i("Importing data");
-                    publishProgress(TranslationHandler.getString(Collect.getInstance(), R.string.survey_loading_reading_data_message));
+                    publishProgress(getLocalizedString(Collect.getInstance(), R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (IOException | RuntimeException e) {

@@ -23,7 +23,6 @@ import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.UploadAuthRequestedException;
 import org.odk.collect.android.upload.UploadException;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -32,6 +31,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.SUBMISSION;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Background task for uploading completed forms.
@@ -79,7 +79,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        customMessage != null ? customMessage : TranslationHandler.getString(Collect.getInstance(), R.string.success));
+                        customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (UploadAuthRequestedException e) {

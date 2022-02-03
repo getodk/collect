@@ -23,6 +23,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
 
     private static int counter;
@@ -171,7 +173,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                Timber.d(TranslationHandler.getString(Collect.getInstance(), R.string.finished_disk_scan));
+                Timber.d(getLocalizedString(Collect.getInstance(), R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -224,7 +226,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.displayName(title);
         } else {
             throw new IllegalArgumentException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                    getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
                             formDefFile.getName(), "title"));
         }
         String formid = fields.get(FileUtils.FORMID);
@@ -232,7 +234,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.formId(formid);
         } else {
             throw new IllegalArgumentException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                    getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
                             formDefFile.getName(), "id"));
         }
         String version = fields.get(FileUtils.VERSION);
@@ -245,7 +247,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                 builder.submissionUri(submission);
             } else {
                 throw new IllegalArgumentException(
-                        TranslationHandler.getString(Collect.getInstance(), R.string.xform_parse_error,
+                        getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
                                 formDefFile.getName(), "submission url"));
             }
         }

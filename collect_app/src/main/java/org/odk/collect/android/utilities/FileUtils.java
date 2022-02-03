@@ -15,6 +15,7 @@
 package org.odk.collect.android.utilities;
 
 import static java.util.Arrays.asList;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.Context;
 import android.content.Intent;
@@ -351,7 +352,7 @@ public final class FileUtils {
             boolean deleted = mediaDir.delete();
             if (!deleted) {
                 throw new RuntimeException(
-                        TranslationHandler.getString(Collect.getInstance(), R.string.fs_delete_media_path_if_file_error,
+                        getLocalizedString(Collect.getInstance(), R.string.fs_delete_media_path_if_file_error,
                                 mediaDir.getAbsolutePath()));
             }
         }
@@ -360,7 +361,7 @@ public final class FileUtils {
         boolean createdOrExisted = createFolder(mediaDir.getAbsolutePath());
         if (!createdOrExisted) {
             throw new RuntimeException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.fs_create_media_folder_error,
+                    getLocalizedString(Collect.getInstance(), R.string.fs_create_media_folder_error,
                             mediaDir.getAbsolutePath()));
         }
     }
