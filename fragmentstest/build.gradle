@@ -1,4 +1,5 @@
 import dependencies.Dependencies
+import dependencies.Versions
 
 plugins {
     id 'com.android.library'
@@ -8,11 +9,11 @@ plugins {
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion Versions.android_compile_sdk
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

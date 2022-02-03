@@ -57,7 +57,7 @@ class MainMenuActivityTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMainMenuViewModelFactory(versionInformation: VersionInformation, application: Application, settingsProvider: SettingsProvider, instancesAppState: InstancesAppState, scheduler: Scheduler): MainMenuViewModel.Factory {
                 return object : MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState, scheduler) {
-                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return mainMenuViewModel as T
                     }
                 }
@@ -68,12 +68,12 @@ class MainMenuActivityTest {
                 analyticsInitializer: AnalyticsInitializer,
                 storagePathProvider: StoragePathProvider,
                 projectsRepository: ProjectsRepository
-            ): CurrentProjectViewModel.Factory? {
+            ): CurrentProjectViewModel.Factory {
                 return object : CurrentProjectViewModel.Factory(
                     currentProjectProvider,
                     analyticsInitializer
                 ) {
-                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return currentProjectViewModel as T
                     }
                 }

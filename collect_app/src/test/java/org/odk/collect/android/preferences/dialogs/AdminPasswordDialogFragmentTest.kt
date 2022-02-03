@@ -44,7 +44,7 @@ class AdminPasswordDialogFragmentTest {
 
             override fun providesProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider): ProjectPreferencesViewModel.Factory {
                 return object : ProjectPreferencesViewModel.Factory(adminPasswordProvider) {
-                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return projectPreferencesViewModel as T
                     }
                 }
