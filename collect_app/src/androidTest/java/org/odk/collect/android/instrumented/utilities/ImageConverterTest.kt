@@ -38,8 +38,8 @@ import org.odk.collect.android.TestSettingsProvider.getUnprotectedSettings
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.RunnableRule
-import org.odk.collect.android.support.TestRuleChain
+import org.odk.collect.android.support.rules.RunnableRule
+import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.android.utilities.ApplicationConstants.Namespaces
 import org.odk.collect.android.utilities.ImageConverter
 import org.odk.collect.android.utilities.ImageFileUtils
