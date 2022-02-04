@@ -43,7 +43,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.preferences.dialogs.GoogleDriveProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
@@ -374,9 +373,13 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                             getFileTask.cancel(true);
                             getFileTask.setGoogleDriveFormDownloadListener(null);
                         };
-                GoogleDriveProgressDialog googleDriveProgressDialog = new GoogleDriveProgressDialog(loadingButtonListener, alertMsg);
-                DialogFragmentUtils.showIfNotShowing(googleDriveProgressDialog, GoogleDriveProgressDialog.class, getSupportFragmentManager());
-                return googleDriveProgressDialog.getDialog();
+                MaterialProgressDialogFragment dialogFragment = new MaterialProgressDialogFragment();
+                dialogFragment.setTitle(getString(R.string.downloading_data));
+                dialogFragment.setMessage(alertMsg);
+                dialogFragment.setCancelable(false);
+                dialogFragment.setNegativeButton(getString(R.string.cancel), loadingButtonListener);
+                DialogFragmentUtils.showIfNotShowing(dialogFragment, MaterialProgressDialogFragment.class, getSupportFragmentManager());
+                return dialogFragment.getDialog();
             case GOOGLE_USER_DIALOG:
                 MaterialAlertDialogBuilder gudBuilder = new MaterialAlertDialogBuilder(this);
 
