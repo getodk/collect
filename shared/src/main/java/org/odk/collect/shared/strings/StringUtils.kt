@@ -2,6 +2,7 @@ package org.odk.collect.shared.strings
 
 import com.vdurmont.emoji.EmojiParser
 import java.lang.StringBuilder
+import kotlin.math.abs
 
 object StringUtils {
 
@@ -93,5 +94,10 @@ object StringUtils {
         return if (str.endsWith(remove)) {
             str.substring(0, str.length - remove.length)
         } else str
+    }
+
+    fun <T> List<T>.itemFromHashOf(string: String): T {
+        val index = abs(string.hashCode()) % this.size
+        return this[index]
     }
 }

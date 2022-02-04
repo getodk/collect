@@ -3,9 +3,9 @@ package org.odk.collect.settings.importing
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.strings.StringUtils
+import org.odk.collect.shared.strings.StringUtils.itemFromHashOf
 import java.net.URL
 import java.util.regex.Pattern
-import kotlin.math.abs
 
 class ProjectDetailsCreatorImpl(private val colors: List<String>, private val defaults: Map<String, Any>) : ProjectDetailsCreator {
 
@@ -50,8 +50,7 @@ class ProjectDetailsCreatorImpl(private val colors: List<String>, private val de
             return Project.DEMO_PROJECT_COLOR
         }
 
-        val colorIndex = abs(projectName.hashCode()) % colors.size
-        return colors[colorIndex]
+        return colors.itemFromHashOf(projectName)
     }
 
     private fun isProjectColorValid(hexColor: String): Boolean {
