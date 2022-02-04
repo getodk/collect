@@ -324,7 +324,6 @@ public class AppDependencyModule {
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
         return new ODKAppSettingsImporter(
-                context,
                 projectsRepository,
                 settingsProvider,
                 Defaults.getUnprotected(),
