@@ -146,7 +146,7 @@ fun interface SettingsChangeHandler {
     fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String)
 }
 
-fun interface SettingsMigrator {
+internal fun interface SettingsMigrator {
     fun migrate(generalSettings: Settings, adminSettings: Settings)
 }
 

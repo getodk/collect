@@ -6,7 +6,6 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl
 import org.odk.collect.settings.importing.SettingsChangeHandler
 import org.odk.collect.settings.importing.SettingsImporter
-import org.odk.collect.settings.migration.ODKSettingsMigrator
 import org.odk.collect.settings.validation.JsonSchemaSettingsValidator
 
 class ODKAppSettingsImporter(
@@ -21,7 +20,7 @@ class ODKAppSettingsImporter(
 
     private val settingsImporter = SettingsImporter(
         settingsProvider,
-        ODKSettingsMigrator(settingsProvider.getMetaSettings()),
+        ODKAppSettingsMigrator(settingsProvider.getMetaSettings()),
         JsonSchemaSettingsValidator { context.resources.openRawResource(R.raw.settings_schema) },
         generalDefaults,
         adminDefaults,

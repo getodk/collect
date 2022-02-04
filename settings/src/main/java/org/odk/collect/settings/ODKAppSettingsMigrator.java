@@ -1,4 +1,4 @@
-package org.odk.collect.settings.migration;
+package org.odk.collect.settings;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
@@ -19,6 +19,9 @@ import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
 import static java.util.Arrays.asList;
 
 import org.odk.collect.settings.importing.SettingsMigrator;
+import org.odk.collect.settings.migration.KeyRenamer;
+import org.odk.collect.settings.migration.KeyTranslator;
+import org.odk.collect.settings.migration.Migration;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.List;
@@ -26,11 +29,11 @@ import java.util.List;
 /**
  * Migrates old preference keys and values to new ones.
  */
-public class ODKSettingsMigrator implements SettingsMigrator {
+public class ODKAppSettingsMigrator implements SettingsMigrator {
 
     private final Settings metaPrefs;
 
-    public ODKSettingsMigrator(Settings metaPrefs) {
+    public ODKAppSettingsMigrator(Settings metaPrefs) {
         this.metaPrefs = metaPrefs;
     }
 

@@ -6,6 +6,7 @@ import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
+import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.shared.settings.InMemSettings;
 import org.odk.collect.shared.settings.Settings;
 
@@ -251,6 +252,6 @@ public class ODKSettingsMigratorTest {
     }
 
     private void runMigrations() {
-        new ODKSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
+        new ODKAppSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
     }
 }

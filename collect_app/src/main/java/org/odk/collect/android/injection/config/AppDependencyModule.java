@@ -134,11 +134,8 @@ import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
-import org.odk.collect.settings.importing.SettingsMigrator;
-import org.odk.collect.settings.importing.SettingsValidator;
 import org.odk.collect.settings.keys.MetaKeys;
-import org.odk.collect.settings.migration.ODKSettingsMigrator;
-import org.odk.collect.settings.validation.JsonSchemaSettingsValidator;
+import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
@@ -309,8 +306,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
-        return new ODKSettingsMigrator(settingsProvider.getMetaSettings());
+    public ODKAppSettingsMigrator providesPreferenceMigrator(SettingsProvider settingsProvider) {
+        return new ODKAppSettingsMigrator(settingsProvider.getMetaSettings());
     }
 
     @Provides
@@ -353,11 +350,6 @@ public class AppDependencyModule {
                 }).collect(Collectors.toList()),
                 settingsChangeHandler
         );
-    }
-
-    @Provides
-    public SettingsValidator providesSettingsValidator(Context context) {
-        return new JsonSchemaSettingsValidator(() -> context.getResources().openRawResource(R.raw.settings_schema));
     }
 
     @Provides
@@ -601,7 +593,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ExistingSettingsMigrator providesExistingSettingsMigrator(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsMigrator settingsMigrator) {
+    public ExistingSettingsMigrator providesExistingSettingsMigrator(ProjectsRepository projectsRepository, SettingsProvider settingsProvider, ODKAppSettingsMigrator settingsMigrator) {
         return new ExistingSettingsMigrator(projectsRepository, settingsProvider, settingsMigrator);
     }
 
