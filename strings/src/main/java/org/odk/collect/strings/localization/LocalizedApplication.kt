@@ -9,7 +9,7 @@ interface LocalizedApplication {
     val locale: Locale
 }
 
-fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any?): String {
+fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any): String {
     return when (applicationContext) {
         is LocalizedApplication -> {
             val localizedApplication = applicationContext as LocalizedApplication

@@ -106,7 +106,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(stringID: Int, vararg formatArgs: Any?): T {
+    fun assertText(stringID: Int, vararg formatArgs: Any): T {
         assertText(getTranslatedString(stringID, *formatArgs))
         return this as T
     }
@@ -151,7 +151,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun checkIsToastWithMessageDisplayed(id: Int?, vararg formatArgs: Any?): T {
+    fun checkIsToastWithMessageDisplayed(id: Int?, vararg formatArgs: Any): T {
         return checkIsToastWithMessageDisplayed(getTranslatedString(id, *formatArgs))
     }
 
@@ -202,7 +202,7 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun getTranslatedString(id: Int?, vararg formatArgs: Any?): String {
+    fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
         return ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(id!!, *formatArgs)
     }
 
