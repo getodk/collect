@@ -54,6 +54,11 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
             file
         )
 
+        if (contentUri == null) {
+            ToastUtils.showLongToast(context, "Can't open file. If you are on a Huawei device, this is expected and will not be fixed.")
+            return
+        }
+
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             setDataAndType(contentUri, getMimeType(file, expectedMimeType))
