@@ -1,4 +1,4 @@
-package org.odk.collect.settings.migration;
+package org.odk.collect.settings;
 
 import static org.odk.collect.settings.support.SettingsUtils.assertSettings;
 import static org.odk.collect.settings.support.SettingsUtils.assertSettingsEmpty;
@@ -12,7 +12,7 @@ import org.odk.collect.shared.settings.Settings;
 
 import java.util.List;
 
-public class ODKSettingsMigratorTest {
+public class ODKAppSettingsMigratorTest {
 
     private final Settings generalSettings = new InMemSettings();
     private final Settings adminSettings = new InMemSettings();
