@@ -49,7 +49,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -180,6 +179,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStop() {
         mapProvider.onMapFragmentStop(this);
         super.onStop();
+    }
+
+    @Override public void onDestroy() {
+        MapsMarkerCache.clearCache();
+        super.onDestroy();
     }
 
     @Override public void applyConfig(Bundle config) {
@@ -635,8 +639,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private BitmapDescriptor getBitmapDescriptor(int drawableId) {
-        return BitmapDescriptorFactory.fromBitmap(
-            IconUtils.getBitmap(getActivity(), drawableId));
+        return BitmapDescriptorFactory.fromBitmap(MapsMarkerCache.getMarkerBitmap(drawableId, getContext()));
     }
 
     private void showGpsDisabledAlert() {
