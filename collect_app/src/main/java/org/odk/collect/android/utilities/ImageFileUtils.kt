@@ -14,6 +14,9 @@ import java.util.Locale
 import kotlin.math.ceil
 
 object ImageFileUtils {
+    // 80% JPEG quality gives a greater file size reduction with almost no loss in quality
+    private const val IMAGE_COMPRESS_QUALITY = 80
+
     private val EXIF_ORIENTATION_ROTATIONS = arrayOf(
         ExifInterface.ORIENTATION_ROTATE_90,
         ExifInterface.ORIENTATION_ROTATE_180,
@@ -28,7 +31,7 @@ object ImageFileUtils {
             else CompressFormat.JPEG
         try {
             if (bitmap != null) {
-                FileOutputStream(path).use { out -> bitmap.compress(compressFormat, 100, out) }
+                FileOutputStream(path).use { out -> bitmap.compress(compressFormat, IMAGE_COMPRESS_QUALITY, out) }
             }
         } catch (e: Exception) {
             Timber.e(e)
