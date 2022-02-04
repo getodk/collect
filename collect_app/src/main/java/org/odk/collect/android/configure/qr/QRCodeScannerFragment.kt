@@ -14,15 +14,16 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
-import org.odk.collect.settings.importing.SettingsImporter
+import org.odk.collect.settings.ODKAppSettingsImporter
 import java.io.File
 import java.io.IOException
 import java.util.zip.DataFormatException
 import javax.inject.Inject
 
 class QRCodeScannerFragment : BarCodeScannerFragment() {
+
     @Inject
-    lateinit var settingsImporter: SettingsImporter
+    lateinit var settingsImporter: ODKAppSettingsImporter
 
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider

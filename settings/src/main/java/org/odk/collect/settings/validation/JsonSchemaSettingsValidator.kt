@@ -6,7 +6,7 @@ import org.odk.collect.settings.importing.SettingsValidator
 import java.io.InputStream
 import java.io.StringReader
 
-class JsonSchemaSettingsValidator(private val schemaProvider: () -> InputStream) :
+internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> InputStream) :
     SettingsValidator {
 
     override fun isValid(json: String): Boolean {

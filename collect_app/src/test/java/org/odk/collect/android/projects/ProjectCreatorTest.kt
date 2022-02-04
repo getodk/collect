@@ -10,7 +10,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.importing.SettingsImporter
+import org.odk.collect.settings.ODKAppSettingsImporter
 
 class ProjectCreatorTest {
     private val json = "{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}"
@@ -25,7 +25,7 @@ class ProjectCreatorTest {
     private var currentProjectProvider = mock<CurrentProjectProvider> {
         on { getCurrentProject() } doReturn savedProject
     }
-    private var settingsImporter = mock<SettingsImporter> {}
+    private var settingsImporter = mock<ODKAppSettingsImporter> {}
 
     private lateinit var projectCreator: ProjectCreator
 

@@ -15,7 +15,7 @@ import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.utilities.ActivityResultDelegate;
 import org.odk.collect.projects.Project;
-import org.odk.collect.settings.importing.SettingsImporter;
+import org.odk.collect.settings.ODKAppSettingsImporter;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -23,11 +23,11 @@ import java.io.InputStream;
 public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
 
     private final Activity activity;
-    private final SettingsImporter settingsImporter;
+    private final ODKAppSettingsImporter settingsImporter;
     private final QRCodeDecoder qrCodeDecoder;
     private final Project.Saved project;
 
-    public QRCodeActivityResultDelegate(Activity activity, SettingsImporter settingsImporter,
+    public QRCodeActivityResultDelegate(Activity activity, ODKAppSettingsImporter settingsImporter,
                                         QRCodeDecoder qrCodeDecoder, Project.Saved project) {
         this.activity = activity;
         this.settingsImporter = settingsImporter;

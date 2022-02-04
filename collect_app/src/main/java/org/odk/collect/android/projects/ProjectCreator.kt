@@ -2,12 +2,12 @@ package org.odk.collect.android.projects
 
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.importing.SettingsImporter
+import org.odk.collect.settings.ODKAppSettingsImporter
 
 class ProjectCreator(
     private val projectsRepository: ProjectsRepository,
     private val currentProjectProvider: CurrentProjectProvider,
-    private val settingsImporter: SettingsImporter
+    private val settingsImporter: ODKAppSettingsImporter
 ) {
 
     fun createNewProject(settingsJson: String): Boolean {

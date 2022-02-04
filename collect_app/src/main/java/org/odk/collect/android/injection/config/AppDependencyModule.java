@@ -130,10 +130,10 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
+import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
-import org.odk.collect.settings.importing.SettingsImporter;
 import org.odk.collect.settings.importing.SettingsMigrator;
 import org.odk.collect.settings.importing.SettingsValidator;
 import org.odk.collect.settings.keys.MetaKeys;
@@ -325,16 +325,14 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsImporter providesCollectSettingsImporter(SettingsProvider settingsProvider, SettingsMigrator preferenceMigrator, SettingsValidator settingsValidator, SettingsChangeHandler settingsChangeHandler, ProjectsRepository projectsRepository, Context context) {
-        return new SettingsImporter(
+    public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
+        return new ODKAppSettingsImporter(
+                context,
+                projectsRepository,
                 settingsProvider,
-                preferenceMigrator,
-                settingsValidator,
                 Defaults.getUnprotected(),
                 Defaults.getProtected(),
-                settingsChangeHandler,
-                projectsRepository,
-                new ProjectDetailsCreatorImpl(Stream.of(
+                Stream.of(
                         R.color.color1,
                         R.color.color2,
                         R.color.color3,
@@ -352,7 +350,8 @@ public class AppDependencyModule {
                         R.color.color15
                 ).map(integer -> {
                     return "#" + Integer.toHexString(ContextCompat.getColor(context, integer)).substring(2);
-                }).collect(Collectors.toList()), Defaults.getUnprotected())
+                }).collect(Collectors.toList()),
+                settingsChangeHandler
         );
     }
 
@@ -484,7 +483,7 @@ public class AppDependencyModule {
 
     @Provides
     public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository,
-                                                 CurrentProjectProvider currentProjectProvider, SettingsImporter settingsImporter,
+                                                 CurrentProjectProvider currentProjectProvider, ODKAppSettingsImporter settingsImporter,
                                                  Context context) {
         return new ProjectCreator(projectsRepository, currentProjectProvider, settingsImporter);
     }

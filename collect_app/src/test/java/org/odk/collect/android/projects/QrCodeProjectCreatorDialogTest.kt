@@ -35,7 +35,7 @@ import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.importing.SettingsImporter
+import org.odk.collect.settings.ODKAppSettingsImporter
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -112,7 +112,7 @@ class QrCodeProjectCreatorDialogTest {
             override fun providesProjectCreator(
                 projectsRepository: ProjectsRepository,
                 currentProjectProvider: CurrentProjectProvider,
-                settingsImporter: SettingsImporter,
+                settingsImporter: ODKAppSettingsImporter,
                 context: Context
             ): ProjectCreator? {
                 return mock {
@@ -147,7 +147,7 @@ class QrCodeProjectCreatorDialogTest {
             override fun providesProjectCreator(
                 projectsRepository: ProjectsRepository,
                 currentProjectProvider: CurrentProjectProvider,
-                settingsImporter: SettingsImporter,
+                settingsImporter: ODKAppSettingsImporter,
                 context: Context
             ): ProjectCreator? {
                 return projectCreator

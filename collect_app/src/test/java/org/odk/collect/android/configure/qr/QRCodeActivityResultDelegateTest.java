@@ -24,7 +24,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.projects.Project;
-import org.odk.collect.settings.importing.SettingsImporter;
+import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.robolectric.Robolectric;
 
 import java.io.ByteArrayInputStream;
@@ -36,7 +36,7 @@ import java.util.Map;
 @RunWith(AndroidJUnit4.class)
 public class QRCodeActivityResultDelegateTest {
     private final FakeQRDecoder fakeQRDecoder = new FakeQRDecoder();
-    private final SettingsImporter settingsImporter = mock(SettingsImporter.class);
+    private final ODKAppSettingsImporter settingsImporter = mock(ODKAppSettingsImporter.class);
     private final Project.Saved project = mock(Project.Saved.class);
     private Activity context;
 

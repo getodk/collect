@@ -9,7 +9,7 @@ import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 
-class SettingsImporter(
+internal class SettingsImporter(
     private val settingsProvider: SettingsProvider,
     private val settingsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
@@ -138,7 +138,7 @@ class SettingsImporter(
     }
 }
 
-fun interface SettingsValidator {
+internal fun interface SettingsValidator {
     fun isValid(json: String): Boolean
 }
 
