@@ -19,7 +19,6 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.androidshared.data.Consumable;
@@ -31,6 +30,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.zip4;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
@@ -105,10 +105,10 @@ public class AudioRecordingControllerFragment extends Fragment {
         } else {
             if (hasBackgroundRecording && failedToStart.getValue() != null) {
                 binding.getRoot().setVisibility(VISIBLE);
-                renderRecordingProblem(TranslationHandler.getString(requireContext(), R.string.start_recording_failed));
+                renderRecordingProblem(getLocalizedString(requireContext(), R.string.start_recording_failed));
             } else if (hasBackgroundRecording && !isBackgroundRecordingEnabled) {
                 binding.getRoot().setVisibility(VISIBLE);
-                renderRecordingProblem(TranslationHandler.getString(requireContext(), R.string.recording_disabled, "⋮"));
+                renderRecordingProblem(getLocalizedString(requireContext(), R.string.recording_disabled, "⋮"));
             } else {
                 binding.getRoot().setVisibility(GONE);
             }

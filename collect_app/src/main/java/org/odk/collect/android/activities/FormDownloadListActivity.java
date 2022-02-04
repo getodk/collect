@@ -38,7 +38,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
@@ -56,7 +55,6 @@ import org.odk.collect.android.tasks.DownloadFormsTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -71,7 +69,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -677,20 +674,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
             setReturnResult(true, null, viewModel.getFormResults());
         }
-    }
-
-    public static String getDownloadResultMessage(Map<ServerFormDetails, String> result) {
-        Set<ServerFormDetails> keys = result.keySet();
-        StringBuilder b = new StringBuilder();
-        for (ServerFormDetails k : keys) {
-            b.append(k.getFormName() + " ("
-                    + ((k.getFormVersion() != null)
-                    ? (TranslationHandler.getString(Collect.getInstance(), R.string.version) + ": " + k.getFormVersion() + " ")
-                    : "") + "ID: " + k.getFormId() + ") - " + result.get(k));
-            b.append("\n\n");
-        }
-
-        return b.toString().trim();
     }
 
     @Override

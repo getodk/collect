@@ -18,11 +18,11 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.strings.localization.getLocalizedString
 
 @RunWith(AndroidJUnit4::class)
 class ProjectDisplayPreferencesFragmentTest {
@@ -66,8 +66,7 @@ class ProjectDisplayPreferencesFragmentTest {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.title,
                 `is`(
-                    TranslationHandler.getString(
-                        ApplicationProvider.getApplicationContext<Collect>(),
+                    ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
                         R.string.project_name
                     )
                 )
@@ -104,8 +103,8 @@ class ProjectDisplayPreferencesFragmentTest {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.title,
                 `is`(
-                    TranslationHandler.getString(
-                        ApplicationProvider.getApplicationContext<Collect>(),
+
+                    ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
                         R.string.project_icon
                     )
                 )
@@ -142,8 +141,7 @@ class ProjectDisplayPreferencesFragmentTest {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.title,
                 `is`(
-                    TranslationHandler.getString(
-                        ApplicationProvider.getApplicationContext<Collect>(),
+                    ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
                         R.string.project_color
                     )
                 )

@@ -23,8 +23,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.TranslationHandler.getString
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.strings.localization.getLocalizedString
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchActivityTest {
@@ -76,8 +76,7 @@ class FirstLaunchActivityTest {
             verify(versionInformation).versionToDisplay
             onView(
                 withText(
-                    getString(
-                        ApplicationProvider.getApplicationContext<Collect>(),
+                    ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
                         R.string.collect_app_name
                     ) + " vfake"
                 )

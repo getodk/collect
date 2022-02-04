@@ -40,6 +40,7 @@ import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
 import org.odk.collect.android.R
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.CustomMatchers.withIndex
@@ -47,8 +48,8 @@ import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher
-import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 import timber.log.Timber
 import java.io.File
@@ -105,7 +106,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(stringID: Int, vararg formatArgs: Any?): T {
+    fun assertText(stringID: Int, vararg formatArgs: Any): T {
         assertText(getTranslatedString(stringID, *formatArgs))
         return this as T
     }
@@ -150,7 +151,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun checkIsToastWithMessageDisplayed(id: Int?, vararg formatArgs: Any?): T {
+    fun checkIsToastWithMessageDisplayed(id: Int?, vararg formatArgs: Any): T {
         return checkIsToastWithMessageDisplayed(getTranslatedString(id, *formatArgs))
     }
 
@@ -201,8 +202,8 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun getTranslatedString(id: Int?, vararg formatArgs: Any?): String {
-        return TranslationHandler.getString(ApplicationProvider.getApplicationContext(), id!!, *formatArgs)
+    fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
+        return ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(id!!, *formatArgs)
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {

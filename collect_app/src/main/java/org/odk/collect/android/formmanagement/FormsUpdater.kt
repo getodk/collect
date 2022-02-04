@@ -16,8 +16,8 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.android.utilities.TranslationHandler
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.strings.localization.getLocalizedString
 import java.io.File
 import java.util.stream.Collectors
 
@@ -57,8 +57,8 @@ class FormsUpdater(
                         updatedForms,
                         sandbox.formsLock,
                         formDownloader,
-                        TranslationHandler.getString(context, R.string.success),
-                        TranslationHandler.getString(context, R.string.failure)
+                        context.getLocalizedString(R.string.success),
+                        context.getLocalizedString(R.string.failure)
                     )
 
                     notifier.onUpdatesDownloaded(results, projectId)

@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 public final class InstanceUploaderUtils {
 
     public static final String DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successful!";
@@ -78,7 +80,7 @@ public final class InstanceUploaderUtils {
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
         if (text != null && text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
-            text = TranslationHandler.getString(Collect.getInstance(), R.string.success);
+            text = getLocalizedString(Collect.getInstance(), R.string.success);
         }
         return text;
     }

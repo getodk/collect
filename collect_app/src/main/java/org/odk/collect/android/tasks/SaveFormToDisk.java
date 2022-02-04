@@ -54,7 +54,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -68,6 +67,7 @@ import java.util.ArrayList;
 import timber.log.Timber;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Background task for loading a form.
@@ -109,7 +109,7 @@ public class SaveFormToDisk {
     public SaveToDiskResult saveForm(FormSaver.ProgressListener progressListener) {
         SaveToDiskResult saveToDiskResult = new SaveToDiskResult();
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_validating_message));
+        progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_validating_message));
 
         try {
             int validateStatus = formController.validateAnswers(shouldFinalize);
@@ -332,7 +332,7 @@ public class SaveFormToDisk {
     private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
         FormController formController = Collect.getInstance().getFormController();
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_collecting_message));
+        progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
         // write out xml
@@ -342,7 +342,7 @@ public class SaveFormToDisk {
             mediaUtils.deleteMediaFile(fileName);
         }
 
-        progressListener.onProgressUpdate(TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_saving_message));
+        progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_saving_message));
 
         writeFile(payload, instancePath);
 
@@ -374,7 +374,7 @@ public class SaveFormToDisk {
             // write out submission.xml -- the data to actually submit to aggregate
 
             progressListener.onProgressUpdate(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_finalizing_message));
+                    getLocalizedString(Collect.getInstance(), R.string.survey_saving_finalizing_message));
 
             writeFile(payload, submissionXml.getAbsolutePath());
 
@@ -386,7 +386,7 @@ public class SaveFormToDisk {
                 // and encrypt the submission (this is a one-way operation)...
 
                 progressListener.onProgressUpdate(
-                        TranslationHandler.getString(Collect.getInstance(), R.string.survey_saving_encrypting_message));
+                        getLocalizedString(Collect.getInstance(), R.string.survey_saving_encrypting_message));
 
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;

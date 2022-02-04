@@ -1,11 +1,12 @@
 package org.odk.collect.android.geo;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.osmdroid.tileprovider.tilesource.OnlineTileSourceBase;
 import org.osmdroid.util.MapTileIndex;
 
 import java.io.Serializable;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * A serializable definition of a Web Map Service in terms of its URL structure
@@ -33,7 +34,7 @@ class WebMapService implements Serializable {
 
     @Deprecated WebMapService(int cacheNameStringId, int minZoomLevel,
         int maxZoomLevel, int tileSize, String copyright, String... urlTemplates) {
-        this(TranslationHandler.getString(Collect.getInstance(), cacheNameStringId),
+        this(getLocalizedString(Collect.getInstance(), cacheNameStringId),
             minZoomLevel, maxZoomLevel, tileSize, copyright, urlTemplates);
     }
 

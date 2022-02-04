@@ -34,7 +34,6 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.externaldata.handler.ExternalDataHandlerSearch;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.TranslationHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,6 +49,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 /**
  * Author: Meletis Margaritis
  * Date: 30/04/13
@@ -129,32 +131,32 @@ public final class ExternalDataUtil {
                             return xpathFuncExpr;
                         } else {
                             Toast.makeText(Collect.getInstance(),
-                                    TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error),
+                                    getLocalizedString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error),
                                     Toast.LENGTH_SHORT).show();
-                            Timber.i(TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error));
+                            Timber.i(getLocalizedString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error));
                             return null;
                         }
                     } else {
                         // this might mean a problem in the regex above. Unit tests required.
                         Toast.makeText(Collect.getInstance(),
-                                TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_wrong_function_error, xpathFuncExpr.id.name),
+                                getLocalizedString(Collect.getInstance(), R.string.ext_search_wrong_function_error, xpathFuncExpr.id.name),
                                 Toast.LENGTH_SHORT).show();
-                        Timber.i(TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_wrong_function_error, xpathFuncExpr.id.name));
+                        Timber.i(getLocalizedString(Collect.getInstance(), R.string.ext_search_wrong_function_error, xpathFuncExpr.id.name));
                         return null;
                     }
                 } else {
                     // this might mean a problem in the regex above. Unit tests required.
                     Toast.makeText(Collect.getInstance(),
-                            TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_bad_function_error, function),
+                            getLocalizedString(Collect.getInstance(), R.string.ext_search_bad_function_error, function),
                             Toast.LENGTH_SHORT).show();
-                    Timber.i(TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_bad_function_error, function));
+                    Timber.i(getLocalizedString(Collect.getInstance(), R.string.ext_search_bad_function_error, function));
                     return null;
                 }
             } catch (XPathSyntaxException e) {
                 Toast.makeText(Collect.getInstance(),
-                        TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_generic_error, appearance),
+                        getLocalizedString(Collect.getInstance(), R.string.ext_search_generic_error, appearance),
                         Toast.LENGTH_SHORT).show();
-                Timber.i(TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_generic_error, appearance));
+                Timber.i(getLocalizedString(Collect.getInstance(), R.string.ext_search_generic_error, appearance));
                 return null;
             }
         } else {
@@ -205,7 +207,7 @@ public final class ExternalDataUtil {
                         }
                     } else {
                         throw new ExternalDataException(
-                                TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_return_error,
+                                getLocalizedString(Collect.getInstance(), R.string.ext_search_return_error,
                                         eval.getClass().getName()));
                     }
                 }

@@ -31,7 +31,6 @@ import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.externaldata.ExternalDataUtil;
 import org.odk.collect.android.externaldata.ExternalSQLiteOpenHelper;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
-import org.odk.collect.android.utilities.TranslationHandler;
 import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.ArrayList;
@@ -41,6 +40,8 @@ import java.util.List;
 import java.util.Set;
 
 import timber.log.Timber;
+
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Author: Meletis Margaritis
@@ -101,7 +102,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
             // we should never get here since it is already handled in ExternalDataUtil
             // .getSearchXPathExpression(String appearance)
             throw new ExternalDataException(
-                    TranslationHandler.getString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error));
+                    getLocalizedString(Collect.getInstance(), R.string.ext_search_wrong_arguments_error));
         }
 
         String searchType = null;
@@ -183,7 +184,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
                         selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
-                Timber.e(TranslationHandler.getString(Collect.getInstance(), R.string.ext_import_csv_missing_error, dataSetName, dataSetName));
+                Timber.e(getLocalizedString(Collect.getInstance(), R.string.ext_import_csv_missing_error, dataSetName, dataSetName));
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
                         selectionArgs, null, null, null);
             }
