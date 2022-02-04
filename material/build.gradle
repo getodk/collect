@@ -2,6 +2,8 @@ import dependencies.Dependencies
 import dependencies.Versions
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 apply from: '../config/quality.gradle'
 
