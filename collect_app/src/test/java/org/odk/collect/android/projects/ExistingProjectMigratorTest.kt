@@ -50,7 +50,7 @@ class ExistingProjectMigratorTest {
         val project = projectsRepository.getAll()[0]
         assertThat(project.name, `is`("my-server.com"))
         assertThat(project.icon, `is`("M"))
-        assertThat(project.color, `is`("#53bdd4"))
+        assertThat(project.color, `is`("#53BDD4"))
     }
 
     @Test
