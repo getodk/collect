@@ -44,7 +44,6 @@ import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
 import org.odk.collect.android.preferences.dialogs.GoogleDriveProgressDialog;
-import org.odk.collect.android.preferences.dialogs.RetrieveDriveFileContentsProgressDialog;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
@@ -59,6 +58,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.permissions.PermissionListener;
 
@@ -623,13 +623,16 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            RetrieveDriveFileContentsProgressDialog dialog = new RetrieveDriveFileContentsProgressDialog((d, which) -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage(getString(R.string.reading_files));
+            dialog.setCancelable(false);
+            dialog.setNegativeButton(getString(R.string.cancel), (d, which) -> {
                 cancel(true);
                 rootButton.setEnabled(true);
                 driveList.clear();
                 updateAdapter();
             });
-            DialogFragmentUtils.showIfNotShowing(dialog, RetrieveDriveFileContentsProgressDialog.class, getSupportFragmentManager());
+            DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class, getSupportFragmentManager());
         }
 
         @Override
@@ -724,7 +727,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         @Override
         protected void onPostExecute(HashMap<String, Object> results) {
             super.onPostExecute(results);
-            DialogFragmentUtils.dismissDialog(RetrieveDriveFileContentsProgressDialog.class, getSupportFragmentManager());
+            DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class, getSupportFragmentManager());
 
             if (results == null) {
                 // was an auth request
