@@ -17,10 +17,10 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.database.Cursor
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -28,15 +28,14 @@ import org.odk.collect.android.R
 import org.odk.collect.android.adapters.InstanceListCursorAdapter
 import org.odk.collect.android.dao.CursorLoaderFactory
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns
+import org.odk.collect.android.fragments.viewmodels.SavedFormListFragmentViewModel
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.listeners.DeleteInstancesListener
+import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.tasks.DeleteInstancesTask
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.views.DayNightProgressDialog
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
+import org.odk.collect.async.Scheduler
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,27 +46,29 @@ import javax.inject.Inject
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-class SavedFormListFragment : InstanceListFragment(), DeleteInstancesListener, View.OnClickListener {
+class SavedFormListFragment : InstanceListFragment(), View.OnClickListener {
 
-    private var deleteInstancesTask: DeleteInstancesTask? = null
     private var alertDialog: AlertDialog? = null
     private var progressDialog: ProgressDialog? = null
 
-    @JvmField
-    @Inject
-    var instancesRepositoryProvider: InstancesRepositoryProvider? = null
+    private lateinit var viewModel: SavedFormListFragmentViewModel
 
-    @JvmField
     @Inject
-    var formsRepositoryProvider: FormsRepositoryProvider? = null
+    lateinit var scheduler: Scheduler
 
-    @JvmField
     @Inject
-    var currentProjectProvider: CurrentProjectProvider? = null
+    lateinit var instanceDeleter: InstanceDeleter
+
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+        viewModel = ViewModelProvider(
+            this,
+            SavedFormListFragmentViewModel.Factory(scheduler, instanceDeleter)
+        ).get(SavedFormListFragmentViewModel::class.java)
     }
 
     override fun onViewCreated(rootView: View, savedInstanceState: Bundle?) {
@@ -77,24 +78,7 @@ class SavedFormListFragment : InstanceListFragment(), DeleteInstancesListener, V
         super.onViewCreated(rootView, savedInstanceState)
     }
 
-    override fun onResume() {
-        // hook up to receive completion events
-        if (deleteInstancesTask != null) {
-            deleteInstancesTask!!.setDeleteListener(this)
-        }
-        super.onResume()
-        // async task may have completed while we were reorienting...
-        if (deleteInstancesTask != null
-            && deleteInstancesTask!!.status == AsyncTask.Status.FINISHED
-        ) {
-            deleteComplete(deleteInstancesTask!!.deleteCount)
-        }
-    }
-
     override fun onPause() {
-        if (deleteInstancesTask != null) {
-            deleteInstancesTask!!.setDeleteListener(null)
-        }
         if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.dismiss()
         }
@@ -150,7 +134,27 @@ class SavedFormListFragment : InstanceListFragment(), DeleteInstancesListener, V
         alertDialog!!.show()
     }
 
-    override fun progressUpdate(progress: Int, total: Int) {
+    /**
+     * Deletes the selected files. Content provider handles removing the files
+     * from the filesystem.
+     */
+    private fun deleteSelectedInstances() {
+        progressDialog = DayNightProgressDialog(context)
+        progressDialog!!.setMessage(resources.getString(R.string.form_delete_message))
+        progressDialog!!.isIndeterminate = true
+        progressDialog!!.setCancelable(false)
+        progressDialog!!.show()
+
+        viewModel.deleteInstances(listOf(*checkedIdObjects)).observe(viewLifecycleOwner) {
+            if (it.complete) {
+                deleteComplete(it.progress, it.total)
+            } else {
+                progressUpdate(it.progress, it.total)
+            }
+        }
+    }
+
+    private fun progressUpdate(progress: Int, total: Int) {
         val message = String.format(
             resources.getString(R.string.deleting_form_dialog_update_message),
             progress,
@@ -159,32 +163,8 @@ class SavedFormListFragment : InstanceListFragment(), DeleteInstancesListener, V
         progressDialog!!.setMessage(message)
     }
 
-    /**
-     * Deletes the selected files. Content provider handles removing the files
-     * from the filesystem.
-     */
-    private fun deleteSelectedInstances() {
-        if (deleteInstancesTask == null) {
-            progressDialog = DayNightProgressDialog(context)
-            progressDialog!!.setMessage(resources.getString(R.string.form_delete_message))
-            progressDialog!!.setIndeterminate(true)
-            progressDialog!!.setCancelable(false)
-            progressDialog!!.show()
-
-            deleteInstancesTask = DeleteInstancesTask(
-                instancesRepositoryProvider!!.get(),
-                formsRepositoryProvider!!.get()
-            )
-            deleteInstancesTask!!.setDeleteListener(this)
-            deleteInstancesTask!!.execute(*checkedIdObjects)
-        } else {
-            showLongToast(requireContext(), R.string.file_delete_in_progress)
-        }
-    }
-
-    override fun deleteComplete(deletedInstances: Int) {
+    private fun deleteComplete(deletedInstances: Int, toDeleteCount: Int) {
         Timber.i("Delete instances complete")
-        val toDeleteCount = deleteInstancesTask!!.toDeleteCount
         if (deletedInstances == toDeleteCount) {
             // all deletes were successful
             showShortToast(
@@ -203,7 +183,6 @@ class SavedFormListFragment : InstanceListFragment(), DeleteInstancesListener, V
                 )
             )
         }
-        deleteInstancesTask = null
         listView.clearChoices() // doesn't unset the checkboxes
         for (i in 0 until listView.count) {
             listView.setItemChecked(i, false)

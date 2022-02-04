@@ -73,6 +73,7 @@ import org.odk.collect.android.geo.DirectoryReferenceLayerRepository;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.ReferenceLayerRepository;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
+import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
@@ -501,6 +502,11 @@ public class AppDependencyModule {
     @Provides
     public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
         return new InstancesRepositoryProvider(context, storagePathProvider);
+    }
+
+    @Provides
+    public InstanceDeleter providesInstanceDeleter(InstancesRepositoryProvider instancesRepositoryProvider, FormsRepositoryProvider formsRepositoryProvider) {
+        return new InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get());
     }
 
     @Provides
