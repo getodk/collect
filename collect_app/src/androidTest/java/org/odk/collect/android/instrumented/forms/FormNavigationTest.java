@@ -34,8 +34,8 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
-import org.odk.collect.android.support.RunnableRule;
-import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.rules.RunnableRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.projects.Project;
 

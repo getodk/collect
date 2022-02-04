@@ -4,8 +4,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.FormActivityTestRule;
-import org.odk.collect.android.support.TestRuleChain;
+import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class ContextMenuTest {
     private static final String STRING_WIDGETS_TEST_FORM = "string_widgets_in_field_list.xml";

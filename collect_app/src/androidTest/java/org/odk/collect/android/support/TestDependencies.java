@@ -13,6 +13,7 @@ import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.support.rules.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;

@@ -2,6 +2,8 @@ package org.odk.collect.android.support;
 
 import androidx.test.espresso.IdlingResource;
 
+import org.odk.collect.android.support.rules.CallbackCountingTaskExecutorRule;
+
 public class CountingTaskExecutorIdlingResource implements IdlingResource {
 
     private final CallbackCountingTaskExecutorRule rule;

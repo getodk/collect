@@ -15,8 +15,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.support.CollectTestRule;
-import org.odk.collect.android.support.ResetStateRule;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.testshared.RecordedIntentsRule;
 

@@ -7,11 +7,11 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.ResetStateRule
 import org.odk.collect.android.support.StubBarcodeViewDecoder
-import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ResetStateRule
+import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.android.views.BarcodeViewDecoder
 
 @RunWith(AndroidJUnit4::class)

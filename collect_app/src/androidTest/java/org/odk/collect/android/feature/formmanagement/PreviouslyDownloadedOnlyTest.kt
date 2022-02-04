@@ -13,14 +13,14 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.support.AdbFormLoadingUtils
-import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.NotificationDrawerRule
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.FillBlankFormPage
 import org.odk.collect.android.support.pages.FormsDownloadErrorPage
 import org.odk.collect.android.support.pages.GetBlankFormPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.NotificationDrawerRule
+import org.odk.collect.android.support.rules.TestRuleChain
 
 class PreviouslyDownloadedOnlyTest {
     private val testDependencies = TestDependencies()
@@ -97,7 +97,12 @@ class PreviouslyDownloadedOnlyTest {
                 "Forms download succeeded",
                 "All downloads succeeded!"
             )
-            .clickNotification("ODK Collect", "Forms download succeeded", "All downloads succeeded!", FillBlankFormPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms download succeeded",
+                "All downloads succeeded!",
+                FillBlankFormPage()
+            )
     }
 
     @Test
@@ -128,7 +133,12 @@ class PreviouslyDownloadedOnlyTest {
                 "Forms download failed",
                 "1 of 1 downloads failed!"
             )
-            .clickNotification("ODK Collect", "Forms download failed", "1 of 1 downloads failed!", FormsDownloadErrorPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms download failed",
+                "1 of 1 downloads failed!",
+                FormsDownloadErrorPage()
+            )
     }
 
     @Test

@@ -9,13 +9,13 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.metadata.InstallIDProvider
-import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.ResetStateRule
-import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.ResetStateRule
+import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.android.utilities.DeviceDetailsProvider
 
 @RunWith(AndroidJUnit4::class)

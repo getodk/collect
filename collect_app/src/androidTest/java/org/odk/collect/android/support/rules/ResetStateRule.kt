@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.android.support.rules
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
@@ -11,6 +11,7 @@ import org.odk.collect.android.database.DatabaseConnection.Companion.closeAll
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.views.DecoratedBarcodeView
 import org.odk.collect.androidshared.data.getState

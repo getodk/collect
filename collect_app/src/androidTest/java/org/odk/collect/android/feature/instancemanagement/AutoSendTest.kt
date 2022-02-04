@@ -5,12 +5,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.support.CollectTestRule
-import org.odk.collect.android.support.NotificationDrawerRule
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.NotificationDrawerRule
+import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class AutoSendTest {
@@ -43,7 +43,12 @@ class AutoSendTest {
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload succeeded", "All uploads succeeded!")
-            .clickNotification("ODK Collect", "Forms upload succeeded", "All uploads succeeded!", MainMenuPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms upload succeeded",
+                "All uploads succeeded!",
+                MainMenuPage()
+            )
     }
 
     @Test
@@ -68,7 +73,12 @@ class AutoSendTest {
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed")
-            .clickNotification("ODK Collect", "Forms upload failed", "Forms upload failed", SendFinalizedFormPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms upload failed",
+                "Forms upload failed",
+                SendFinalizedFormPage()
+            )
     }
 
     @Test
@@ -90,7 +100,12 @@ class AutoSendTest {
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload succeeded", "All uploads succeeded!")
-            .clickNotification("ODK Collect", "Forms upload succeeded", "All uploads succeeded!", MainMenuPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms upload succeeded",
+                "All uploads succeeded!",
+                MainMenuPage()
+            )
     }
 
     @Test
@@ -114,6 +129,11 @@ class AutoSendTest {
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed")
-            .clickNotification("ODK Collect", "Forms upload failed", "Forms upload failed", SendFinalizedFormPage())
+            .clickNotification(
+                "ODK Collect",
+                "Forms upload failed",
+                "Forms upload failed",
+                SendFinalizedFormPage()
+            )
     }
 }

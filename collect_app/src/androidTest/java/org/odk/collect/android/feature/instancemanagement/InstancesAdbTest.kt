@@ -8,10 +8,10 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.CollectTestRule
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.TestRuleChain
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.rules.CollectTestRule
+import org.odk.collect.android.support.rules.TestRuleChain
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -42,7 +42,8 @@ class InstancesAdbTest {
             .swipeToEndScreen()
             .clickSaveAndExit()
 
-        val instancesDir = testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
+        val instancesDir =
+            testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
         val instanceDeleted = File(instancesDir).listFiles()[0].deleteRecursively()
         Assert.assertTrue(instanceDeleted)
 
