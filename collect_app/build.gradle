@@ -231,8 +231,8 @@ configurations.all {
         cacheChangingModulesFor(0, 'seconds')
 
         force 'org.objenesis:objenesis:2.6'
-        force 'joda-time:joda-time:2.10.12'
     }
+    
     transitive = true
 }
 
