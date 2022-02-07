@@ -64,7 +64,6 @@ object Dependencies {
     const val mp4parser_muxer = "org.mp4parser:muxer:1.9.41"
     const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}"
     const val kotlin_stdlib_jdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
-    const val json = "org.json:json:20210307"
     const val gson = "com.google.code.gson:gson:2.8.8"
     const val firebase_analytics = "com.google.firebase:firebase-analytics:19.0.2"
     const val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:18.2.3"
