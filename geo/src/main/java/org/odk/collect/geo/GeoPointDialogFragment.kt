@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
@@ -63,6 +64,14 @@ class GeoPointDialogFragment : DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
+            .setOnKeyListener { _: DialogInterface, keyCode: Int, _: KeyEvent ->
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    listener?.onCancel()
+                    true
+                } else {
+                    false
+                }
+            }
             .create()
 
         dialog.setOnShowListener {
