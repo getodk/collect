@@ -38,6 +38,7 @@ dependencies {
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment
+    implementation Dependencies.kotlin_stdlib
     implementation project(':androidshared')
 
     debugImplementation project(':fragmentstest')
