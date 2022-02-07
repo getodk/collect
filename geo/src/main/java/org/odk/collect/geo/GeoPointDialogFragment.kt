@@ -64,8 +64,8 @@ class GeoPointDialogFragment : DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
-            .setOnKeyListener { _: DialogInterface, keyCode: Int, _: KeyEvent ->
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
+            .setOnKeyListener { _: DialogInterface, keyCode: Int, keyEvent: KeyEvent ->
+                if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
                     listener?.onCancel()
                     true
                 } else {
