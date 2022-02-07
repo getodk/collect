@@ -158,7 +158,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `pressing back calls listener`() {
-        val scenario = launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
 
         val listener = mock<GeoPointDialogFragment.Listener>()
         scenario.onFragment {
@@ -179,7 +179,7 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
-    fun `dialog not is cancellable`() {
+    fun `dialog is not cancellable`() {
         launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java).onFragment {
             assertThat(it.isCancelable, equalTo(false))
         }
