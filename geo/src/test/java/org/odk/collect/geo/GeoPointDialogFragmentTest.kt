@@ -165,7 +165,7 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
-    fun `dialog is cancellable`() {
+    fun `dialog not is cancellable`() {
         launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java).onFragment {
             assertThat(it.isCancelable, equalTo(false))
         }
