@@ -19,7 +19,6 @@ import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.fragmentstest.DialogFragmentTest;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 
 @RunWith(AndroidJUnit4.class)
@@ -97,7 +96,7 @@ public class MaterialProgressDialogFragmentTest {
 
     @Test
     public void recreate_persistsCancellable() {
-        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = DialogFragmentTest.launchDialogFragment(MaterialProgressDialogFragment.class);
+        FragmentScenario<MaterialProgressDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(MaterialProgressDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.setCancelable(false);
         });

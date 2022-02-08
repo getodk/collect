@@ -20,7 +20,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
-import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows
@@ -130,12 +130,7 @@ class FormsDownloadResultDialogTest {
         )
 
         launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
-        DialogFragmentTest
-            .onViewInDialog(
-                withText(R.string.all_downloads_succeeded)
-            ).check(
-                matches(isDisplayed())
-            )
+        onViewInDialog(withText(R.string.all_downloads_succeeded)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -165,17 +160,12 @@ class FormsDownloadResultDialogTest {
         )
 
         launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
-        DialogFragmentTest
-            .onViewInDialog(
-                withText(
-                    ApplicationProvider.getApplicationContext<Collect>()
-                        .getString(R.string.some_downloads_failed, "1", "1")
-                )
-            ).check(
-                matches(
-                    isDisplayed()
-                )
+        onViewInDialog(
+            withText(
+                ApplicationProvider.getApplicationContext<Collect>()
+                    .getString(R.string.some_downloads_failed, "1", "1")
             )
+        ).check(matches(isDisplayed()))
     }
 
     @Test

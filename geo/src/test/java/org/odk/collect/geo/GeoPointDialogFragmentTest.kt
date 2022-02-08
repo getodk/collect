@@ -21,7 +21,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.fragmentstest.DialogFragmentTest.launchDialogFragment
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedString
@@ -130,7 +129,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates satellites`() {
-        launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
 
         onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 0)))
             .perform(nestedScrollTo())
