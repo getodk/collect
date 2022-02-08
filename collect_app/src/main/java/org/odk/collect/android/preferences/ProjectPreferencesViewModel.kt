@@ -44,7 +44,7 @@ class ProjectPreferencesViewModel(adminPasswordProvider: AdminPasswordProvider) 
     }
 
     open class Factory(private val adminPasswordProvider: AdminPasswordProvider) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ProjectPreferencesViewModel(adminPasswordProvider) as T
         }
     }

@@ -38,7 +38,7 @@ dependencies {
     implementation project(':async')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_lifecycle_viewmodel
+    implementation Dependencies.androidx_lifecycle_viewmodel_ktx
     implementation Dependencies.androidx_lifecycle_livedata_ktx
 
     testImplementation project(path: ':testshared')

@@ -8,6 +8,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
@@ -44,12 +45,12 @@ class SplashScreenActivityTest {
             override fun providesSplashScreenViewModel(
                 settingsProvider: SettingsProvider,
                 projectsRepository: ProjectsRepository
-            ): SplashScreenViewModel.Factory? {
+            ): SplashScreenViewModel.Factory {
                 return object : SplashScreenViewModel.Factory(
                     settingsProvider.getUnprotectedSettings(),
                     projectsRepository
                 ) {
-                    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return splashScreenViewModel as T
                     }
                 }

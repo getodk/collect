@@ -62,4 +62,5 @@
 
     <!-- This flags IDs used via View Binding: https://issuetracker.google.com/issues/170658134 -->
     <issue id="UnusedIds" severity="ignore" />
+    <issue id="Range" severity="ignore" /> <!-- https://stackoverflow.com/questions/69053061/android-studio-value-must-be-%e2%89%a5-0 -->
 </lint>
