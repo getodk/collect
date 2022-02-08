@@ -23,7 +23,7 @@ import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.testshared.RecordedIntentsRule;
+import org.odk.collect.testshared.android.RecordedIntentsRule;
 
 import java.io.File;
 import java.io.IOException;

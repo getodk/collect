@@ -21,8 +21,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.testshared.RecordedIntentsRule
 import org.odk.collect.testshared.RobolectricHelpers
+import org.odk.collect.testshared.android.RecordedIntentsRule
 
 @RunWith(AndroidJUnit4::class)
 class PermissionDeniedDialogTest {

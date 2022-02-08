@@ -19,9 +19,9 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.location.Location
-import org.odk.collect.testshared.ActivityScenarioLauncherRule
-import org.odk.collect.testshared.Extensions.isFinishing
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
+import org.odk.collect.testshared.android.Extensions.isFinishing
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointActivityTest {

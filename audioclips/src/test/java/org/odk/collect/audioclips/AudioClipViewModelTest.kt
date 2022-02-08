@@ -17,7 +17,7 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.LiveDataTester
+import org.odk.collect.testshared.android.LiveDataTester
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList

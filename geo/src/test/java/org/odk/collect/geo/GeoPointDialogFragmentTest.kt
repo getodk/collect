@@ -24,7 +24,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
+import org.odk.collect.testshared.android.NestedScrollToAction.nestedScrollTo
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointDialogFragmentTest {

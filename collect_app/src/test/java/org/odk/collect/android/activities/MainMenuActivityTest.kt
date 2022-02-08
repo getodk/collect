@@ -36,7 +36,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.testshared.ActivityScenarioLauncherRule
+import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
 
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {

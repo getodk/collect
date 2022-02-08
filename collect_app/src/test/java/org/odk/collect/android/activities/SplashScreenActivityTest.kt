@@ -25,7 +25,7 @@ import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.testshared.ActivityScenarioLauncherRule
+import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
 
 @RunWith(AndroidJUnit4::class)
 class SplashScreenActivityTest {

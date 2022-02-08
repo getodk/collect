@@ -17,7 +17,7 @@ import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
 import org.odk.collect.android.support.pages.SendFinalizedFormPage;
-import org.odk.collect.testshared.RecordedIntentsRule;
+import org.odk.collect.testshared.android.RecordedIntentsRule;
 
 @RunWith(AndroidJUnit4.class)
 public class SendFinalizedFormTest {

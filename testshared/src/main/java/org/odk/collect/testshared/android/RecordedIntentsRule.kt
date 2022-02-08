@@ -1,4 +1,4 @@
-package org.odk.collect.testshared
+package org.odk.collect.testshared.android
 
 import androidx.test.espresso.intent.Intents
 import org.junit.rules.TestRule

@@ -25,7 +25,7 @@ import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.ActivityScenarioLauncherRule
+import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchActivityTest {

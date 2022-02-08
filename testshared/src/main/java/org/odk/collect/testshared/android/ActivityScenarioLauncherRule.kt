@@ -1,4 +1,4 @@
-package org.odk.collect.testshared
+package org.odk.collect.testshared.android
 
 import android.app.Activity
 import android.content.Intent

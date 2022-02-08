@@ -14,7 +14,7 @@ import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
-import org.odk.collect.testshared.ActivityScenarioLauncherRule
+import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
 import java.io.IOException
 
 class FormActivityTestRule @JvmOverloads constructor(

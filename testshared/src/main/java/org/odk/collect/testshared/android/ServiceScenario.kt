@@ -1,4 +1,4 @@
-package org.odk.collect.testshared
+package org.odk.collect.testshared.android
 
 import android.app.NotificationManager
 import android.app.Service
@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import org.odk.collect.testshared.NotificationDetails
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ServiceController

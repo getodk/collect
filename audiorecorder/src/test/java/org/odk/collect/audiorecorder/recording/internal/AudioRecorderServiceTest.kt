@@ -21,7 +21,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.ServiceScenario
+import org.odk.collect.testshared.android.ServiceScenario
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf

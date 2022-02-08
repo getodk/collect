@@ -1,4 +1,4 @@
-package org.odk.collect.testshared;
+package org.odk.collect.testshared.android;
 
 import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;

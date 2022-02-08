@@ -22,8 +22,8 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.FileUtils
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
-import org.odk.collect.testshared.RecordedIntentsRule
+import org.odk.collect.testshared.android.NestedScrollToAction.nestedScrollTo
+import org.odk.collect.testshared.android.RecordedIntentsRule
 import java.io.File
 
 class ImageWidgetTest {

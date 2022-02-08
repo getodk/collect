@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.testshared.FakeLifecycleOwner;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.testshared.LiveDataTester;
+import org.odk.collect.testshared.android.LiveDataTester;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowMediaPlayer;

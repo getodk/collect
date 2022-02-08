@@ -1,7 +1,8 @@
-package org.odk.collect.testshared
+package org.odk.collect.testshared.android
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import org.odk.collect.testshared.FakeLifecycleOwner
 
 class LiveDataTester {
 

@@ -14,7 +14,7 @@ import org.odk.collect.location.Location
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.LiveDataTester
+import org.odk.collect.testshared.android.LiveDataTester
 
 class LocationTrackerGeoPointViewModelTest {
 

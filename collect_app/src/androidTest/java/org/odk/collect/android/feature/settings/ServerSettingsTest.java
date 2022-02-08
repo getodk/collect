@@ -13,7 +13,7 @@ import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.testshared.RecordedIntentsRule;
+import org.odk.collect.testshared.android.RecordedIntentsRule;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

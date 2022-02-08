@@ -18,7 +18,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.geo.GeoUtils;
-import org.odk.collect.testshared.RecordedIntentsRule;
+import org.odk.collect.testshared.android.RecordedIntentsRule;
 
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;

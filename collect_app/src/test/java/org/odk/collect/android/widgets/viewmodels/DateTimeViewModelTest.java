@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.testshared.LiveDataTester;
+import org.odk.collect.testshared.android.LiveDataTester;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
