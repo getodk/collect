@@ -29,24 +29,16 @@ android {
         }
     }
 }
-
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(path: ':async')
-    implementation project(path: ':shared')
-    implementation project(path: ':androidshared')
-    implementation project(path: ':androidtest')
-    implementation Dependencies.androidx_recyclerview
-    implementation Dependencies.kotlin_stdlib
-    implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_appcompat
-    implementation Dependencies.robolectric
     implementation Dependencies.junit
+    implementation Dependencies.androidx_test_core_ktx
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
+    implementation Dependencies.androidx_lifecycle_runtime_ktx
+    implementation Dependencies.androidx_test_espresso_core
+    implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_test_espresso_intents
-    implementation Dependencies.android_material
-    implementation(Dependencies.androidx_fragment_testing) {
-        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
-    }
+    implementation Dependencies.robolectric
 }
+

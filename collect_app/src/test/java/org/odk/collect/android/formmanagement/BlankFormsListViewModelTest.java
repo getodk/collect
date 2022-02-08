@@ -27,7 +27,7 @@ import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.projects.Project;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.testshared.android.LiveDataTester;
+import org.odk.collect.androidtest.LiveDataTester;
 
 @RunWith(AndroidJUnit4.class)
 public class BlankFormsListViewModelTest {

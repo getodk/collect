@@ -52,6 +52,7 @@ dependencies {
     kapt Dependencies.dagger_compiler
     implementation Dependencies.timber
 
+    testImplementation project(path: ':androidtest')
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.robolectric

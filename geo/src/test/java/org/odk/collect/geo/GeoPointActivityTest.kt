@@ -16,12 +16,12 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.androidtest.Extensions.isFinishing
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.location.Location
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
-import org.odk.collect.testshared.android.Extensions.isFinishing
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointActivityTest {

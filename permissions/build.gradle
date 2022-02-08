@@ -51,6 +51,7 @@ dependencies {
     implementation Dependencies.karumi_dexter
     implementation Dependencies.timber
 
+    testImplementation project(':androidtest')
     testImplementation project(':testshared')
     testImplementation project(':fragmentstest')
 

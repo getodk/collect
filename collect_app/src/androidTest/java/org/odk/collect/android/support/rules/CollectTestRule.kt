@@ -11,7 +11,7 @@ import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.ShortcutsPage
-import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import java.util.function.Consumer
 
 class CollectTestRule @JvmOverloads constructor(

@@ -370,6 +370,7 @@ dependencies {
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
 
+    testImplementation project(':androidtest')
     testImplementation(project(path: ':testshared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }

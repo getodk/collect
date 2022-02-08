@@ -21,10 +21,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.android.NestedScrollToAction.nestedScrollTo
 
 @RunWith(AndroidJUnit4::class)
 class GeoPointDialogFragmentTest {

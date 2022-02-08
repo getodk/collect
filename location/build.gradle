@@ -53,6 +53,7 @@ dependencies {
     implementation Dependencies.timber
     implementation Dependencies.androidx_appcompat
 
+    testImplementation project(':androidtest')
     testImplementation project(':testshared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_core

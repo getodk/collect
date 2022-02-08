@@ -1,4 +1,4 @@
-package org.odk.collect.testshared.android
+package org.odk.collect.androidtest
 
 import android.app.Activity
 import androidx.test.core.app.ActivityScenario

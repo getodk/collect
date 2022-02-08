@@ -19,11 +19,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.geo.support.FakeMapFragment;
-import org.odk.collect.testshared.android.ActivityScenarioLauncherRule;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)

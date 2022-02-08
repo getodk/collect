@@ -35,10 +35,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.location.tracker.LocationTracker;
-import org.odk.collect.testshared.android.ActivityScenarioLauncherRule;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)

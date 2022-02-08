@@ -31,13 +31,13 @@ import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.UUIDGenerator
-import org.odk.collect.testshared.android.ActivityScenarioLauncherRule
-import org.odk.collect.testshared.android.RecordedIntentsRule
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
