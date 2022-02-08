@@ -16,14 +16,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.testing.FragmentScenario;
 
 import org.joda.time.LocalDateTime;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.logic.DatePickerDetails;
-import org.odk.collect.android.support.TestActivityScenario;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.testshared.RobolectricHelpers;
+import org.robolectric.Robolectric;
+import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowDialog;
 
 public class DialogFragmentHelpers {
@@ -99,25 +101,26 @@ public class DialogFragmentHelpers {
         assertTrue(shadowOf(dialog).hasBeenDismissed());
     }
 
+    /**
+     * @deprecated should use {@link FragmentScenario#recreate()} instead of Robolectric for this
+     */
+    @Deprecated
     public static <T extends DialogFragment> void assertDialogRetainsDateOnScreenRotation(T dialogFragment, String date) {
-        TestActivityScenario<DialogFragmentTestActivity> activityScenario = TestActivityScenario
-                .launch(DialogFragmentTestActivity.class);
-        activityScenario.onActivity(activity -> {
-            dialogFragment.show(activity.getSupportFragmentManager(), "TAG");
-            RobolectricHelpers.runLooper();
-            AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
-            setDatePickerValue(dialog, 2020, 5, 12);
-        });
+        ActivityController<DialogFragmentTestActivity> activityController = Robolectric.buildActivity(DialogFragmentTestActivity.class);
+        activityController.setup();
 
-        activityScenario.recreate();
+        dialogFragment.show(activityController.get().getSupportFragmentManager(), "TAG");
+        RobolectricHelpers.runLooper();
+        AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
+        setDatePickerValue(dialog, 2020, 5, 12);
 
-        activityScenario.onActivity(activity -> {
-            T restoredFragment = (T) activity.getSupportFragmentManager().findFragmentByTag("TAG");
-            AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
+        activityController.recreate();
 
-            assertDatePickerValue(restoredDialog, 2020, 5, 12);
-            assertThat(((TextView) restoredDialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
-        });
+        T restoredFragment = (T) activityController.get().getSupportFragmentManager().findFragmentByTag("TAG");
+        AlertDialog restoredDialog = (AlertDialog) restoredFragment.getDialog();
+
+        assertDatePickerValue(restoredDialog, 2020, 5, 12);
+        assertThat(((TextView) restoredDialog.findViewById(R.id.date_gregorian)).getText().toString(), equalTo(date));
     }
 
     private static void setDatePickerValue(AlertDialog dialog, int year, int month, int day) {
