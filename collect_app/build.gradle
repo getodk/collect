@@ -390,6 +390,10 @@ dependencies {
     testImplementation Dependencies.androidx_test_core_ktx
     testImplementation Dependencies.kotlinx_coroutines_test
 
+    androidTestImplementation(project(':androidtest')) {
+        exclude group: 'org.robolectric' // Robolectric breaks things when running on device
+    }
+
     // Used to generate documentation screenshots.
     androidTestImplementation Dependencies.fastlane_screengrab
     androidTestImplementation Dependencies.mockito_android
