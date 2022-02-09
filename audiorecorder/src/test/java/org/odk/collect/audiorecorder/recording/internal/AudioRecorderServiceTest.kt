@@ -12,7 +12,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ui.ReturnToAppActivity
-import org.odk.collect.androidtest.ServiceScenario
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.AudioRecorderDependencyModule
 import org.odk.collect.audiorecorder.R
@@ -21,6 +20,7 @@ import org.odk.collect.audiorecorder.recorder.Recorder
 import org.odk.collect.audiorecorder.recording.AudioRecorderService
 import org.odk.collect.audiorecorder.support.FakeRecorder
 import org.odk.collect.audiorecorder.testsupport.RobolectricApplication
+import org.odk.collect.servicetest.ServiceScenario
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric.buildService
 import org.robolectric.RobolectricTestRunner
@@ -303,7 +303,7 @@ class AudioRecorderServiceTest {
     private fun startService(intent: Intent): ServiceScenario<AudioRecorderService> {
         return serviceInstance.let { instance ->
             if (instance == null) {
-                ServiceScenario.launch(AudioRecorderService::class.java, intent).also {
+                org.odk.collect.servicetest.ServiceScenario.launch(AudioRecorderService::class.java, intent).also {
                     serviceInstance = it
                 }
             } else {

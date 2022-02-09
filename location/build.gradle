@@ -55,6 +55,7 @@ dependencies {
 
     testImplementation project(':androidtest')
     testImplementation project(':testshared')
+    testImplementation project(':servicetest')
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_core
     testImplementation Dependencies.hamcrest

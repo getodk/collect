@@ -32,12 +32,7 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
-    implementation Dependencies.junit
-    implementation Dependencies.androidx_test_core_ktx
-    implementation Dependencies.androidx_lifecycle_livedata_ktx
     implementation Dependencies.androidx_lifecycle_runtime_ktx
-    implementation Dependencies.androidx_test_espresso_core
-    implementation Dependencies.androidx_appcompat
-    implementation Dependencies.androidx_test_espresso_intents
+    implementation Dependencies.robolectric
 }
 

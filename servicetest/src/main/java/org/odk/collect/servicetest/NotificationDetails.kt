@@ -1,4 +1,4 @@
-package org.odk.collect.androidtest
+package org.odk.collect.servicetest
 
 import android.app.Notification
 import android.content.Intent
