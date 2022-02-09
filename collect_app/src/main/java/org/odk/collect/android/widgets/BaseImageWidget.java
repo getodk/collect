@@ -42,7 +42,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.glide.ImageLoaderImpl;
 
 import java.io.File;
 
@@ -139,7 +139,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (f != null && f.exists()) {
                 imageView = createAnswerImageView(getContext());
                 answerLayout.addView(imageView);
-                ImageLoader.loadImage(imageView, f, ImageView.ScaleType.CENTER_INSIDE, new ImageLoader.ImageLoaderCallback() {
+                imageLoader.loadImage(imageView, f, ImageView.ScaleType.CENTER_INSIDE, new ImageLoaderImpl.ImageLoaderCallback() {
                     @Override
                     public void onLoadFailed() {
                         answerLayout.removeView(imageView);

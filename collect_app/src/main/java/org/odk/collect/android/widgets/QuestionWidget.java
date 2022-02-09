@@ -53,6 +53,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
+import org.odk.collect.glide.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
 
 import java.io.File;
@@ -110,6 +111,9 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Inject
     protected
     MediaUtils mediaUtils;
+
+    @Inject
+    ImageLoader imageLoader;
 
     public QuestionWidget(Context context, QuestionDetails questionDetails) {
         super(context);
@@ -179,7 +183,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         String playableAudioURI = getPlayableAudioURI(formEntryPrompt, referenceManager);
         try {
             if (imageURI != null) {
-                audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()));
+                audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), imageLoader);
             }
             if (bigImageURI != null) {
                 audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));

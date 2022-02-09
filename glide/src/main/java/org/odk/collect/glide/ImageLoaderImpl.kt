@@ -12,25 +12,24 @@ import com.bumptech.glide.request.target.Target
 import org.odk.collect.glide.svg.SvgSoftwareLayerSetter
 import java.io.File
 
-object ImageLoader {
+class ImageLoaderImpl : ImageLoader {
 
-    @JvmStatic
-    @JvmOverloads
-    fun ImageView.loadImage(
+    override fun loadImage(
+        imageView: ImageView,
         imageFile: File?,
         scaleType: ImageView.ScaleType,
-        requestListener: ImageLoaderCallback? = null
+        requestListener: ImageLoaderCallback?
     ) {
         if (imageFile == null) {
             return
         }
 
         val requestOptions = RequestOptions().apply {
-            setScaleType(scaleType)
+            imageView.scaleType = scaleType
         }
 
         if (imageFile.name != null && imageFile.name.endsWith("svg")) {
-            Glide.with(this)
+            Glide.with(imageView)
                 .`as`(PictureDrawable::class.java)
                 .listener(SvgSoftwareLayerSetter())
                 .load(imageFile)
@@ -57,9 +56,9 @@ object ImageLoader {
                     }
                 })
                 .apply(requestOptions)
-                .into(this)
+                .into(imageView)
         } else {
-            Glide.with(this)
+            Glide.with(imageView)
                 .load(imageFile)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -84,7 +83,7 @@ object ImageLoader {
                     }
                 })
                 .apply(requestOptions)
-                .into(this)
+                .into(imageView)
         }
     }
 
@@ -93,4 +92,13 @@ object ImageLoader {
 
         fun onLoadSucceeded()
     }
+}
+
+interface ImageLoader {
+    fun loadImage(
+        imageView: ImageView,
+        imageFile: File?,
+        scaleType: ImageView.ScaleType,
+        requestListener: ImageLoaderImpl.ImageLoaderCallback?
+    )
 }

@@ -21,7 +21,6 @@ import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.glide.ImageLoader;
 
 import java.io.File;
 
@@ -134,7 +133,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     private void displayImage() {
-        ImageLoader.loadImage(binding.imageView, answerFile, ImageView.ScaleType.FIT_CENTER);
+        imageLoader.loadImage(binding.imageView, answerFile, ImageView.ScaleType.FIT_CENTER, null);
         binding.imageView.setVisibility(VISIBLE);
     }
 }
