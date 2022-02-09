@@ -4,13 +4,15 @@ import android.app.Application
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.DATA_PROJECT_ID
+import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.Companion.DATA_PROJECT_ID
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
@@ -56,5 +58,10 @@ class AutoUpdateTaskSpecTest {
 
         task.get()
         verify(formUpdateChecker).downloadUpdates("projectId")
+    }
+
+    @Test
+    fun `numberOfRetries should not be limited`() {
+        assertThat(AutoUpdateTaskSpec().numberOfRetries, `is`(-1))
     }
 }

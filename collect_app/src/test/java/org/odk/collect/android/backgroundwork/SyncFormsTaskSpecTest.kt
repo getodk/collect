@@ -69,4 +69,9 @@ class SyncFormsTaskSpecTest {
         result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         assertThat(result, `is`(false))
     }
+
+    @Test
+    fun `numberOfRetries should be limited`() {
+        assertThat(SyncFormsTaskSpec().numberOfRetries, `is`(3))
+    }
 }
