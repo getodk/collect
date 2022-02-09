@@ -27,10 +27,7 @@ public class SyncFormsTaskSpec implements TaskSpec {
     public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {
         DaggerUtils.getComponent(context).inject(this);
 
-        return () -> {
-            formsUpdater.matchFormsWithServer(inputData.get(DATA_PROJECT_ID));
-            return true;
-        };
+        return () -> formsUpdater.matchFormsWithServer(inputData.get(DATA_PROJECT_ID));
     }
 
     @NotNull
