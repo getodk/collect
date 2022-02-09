@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,18 +42,13 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.glide.ImageLoader;
 
 import java.io.File;
 
 import timber.log.Timber;
 
 import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 
 public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 
@@ -145,28 +139,23 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (f != null && f.exists()) {
                 imageView = createAnswerImageView(getContext());
                 answerLayout.addView(imageView);
-                Glide.with(getContext())
-                        .load(f)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                answerLayout.removeView(imageView);
-                                imageView = null;
-                                errorTextView.setVisibility(View.VISIBLE);
-                                return false;
-                            }
+                ImageLoader.loadImage(imageView, f, ImageView.ScaleType.CENTER_INSIDE, new ImageLoader.ImageLoaderCallback() {
+                    @Override
+                    public void onLoadFailed() {
+                        answerLayout.removeView(imageView);
+                        imageView = null;
+                        errorTextView.setVisibility(View.VISIBLE);
+                    }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                imageView.setOnClickListener(v -> {
-                                    if (imageClickHandler != null) {
-                                        imageClickHandler.clickImage("viewImage");
-                                    }
-                                });
-                                return false;
+                    @Override
+                    public void onLoadSucceeded() {
+                        imageView.setOnClickListener(v -> {
+                            if (imageClickHandler != null) {
+                                imageClickHandler.clickImage("viewImage");
                             }
-                        })
-                        .into(imageView);
+                        });
+                    }
+                });
             }
         }
     }
