@@ -13,6 +13,8 @@ class SyncFormsTaskSpec : TaskSpec {
     @Inject
     lateinit var formsUpdater: FormsUpdater
 
+    override val numberOfRetries = 3
+
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {

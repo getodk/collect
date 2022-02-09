@@ -4,6 +4,7 @@ import android.content.Context
 import java.util.function.Supplier
 
 interface TaskSpec {
+    val numberOfRetries: Int
 
     /**
      * Should return the work to be carried out by the task. The return value of the work

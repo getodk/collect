@@ -38,6 +38,11 @@ public class AutoUpdateTaskSpec implements TaskSpec {
     @Inject
     FormsUpdater formsUpdater;
 
+    @Override
+    public int getNumberOfRetries() {
+        return -1;
+    }
+
     @NotNull
     @Override
     public Supplier<Boolean> getTask(@NotNull Context context, @NotNull Map<String, String> inputData) {

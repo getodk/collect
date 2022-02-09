@@ -54,6 +54,11 @@ public class AutoSendTaskSpec implements TaskSpec {
     @Inject
     InstanceAutoSender instanceAutoSender;
 
+    @Override
+    public int getNumberOfRetries() {
+        return -1;
+    }
+
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
      * to auto-send at the form level. If the app-level auto-send setting is disabled, send all
