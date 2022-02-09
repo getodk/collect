@@ -16,8 +16,10 @@ abstract class WorkerAdapter(
 
         return if (completed) {
             Result.success()
-        } else {
+        } else if (spec.numberOfRetries == -1 || runAttemptCount < spec.numberOfRetries) {
             Result.retry()
+        } else {
+            Result.failure()
         }
     }
 }
