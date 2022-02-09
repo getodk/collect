@@ -203,6 +203,11 @@ android {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
+
+            all {
+                minHeapSize = '512m'
+                maxHeapSize = project.properties['test.heap.max']
+            }
         }
     }
 
