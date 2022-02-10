@@ -592,7 +592,7 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+    public void missingFileMessage_shouldBeDisplayedIfExternalFileIsMissing() {
         String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         //TestCase55
@@ -607,13 +607,10 @@ public class FillBlankFormTest {
                 .copyForm("select_one_external.xml")
                 .startBlankForm("cascading select test")
                 .clickOnText("Texas")
-                .swipeToNextQuestion("-")
+                .swipeToNextQuestion("county")
                 .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion("-")
+                .swipeToNextQuestion("city")
                 .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion("-")
-                .swipeToNextQuestion("-")
-                .swipeToNextQuestion("-")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 

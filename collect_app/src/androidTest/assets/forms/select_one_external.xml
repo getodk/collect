@@ -1,412 +1,60 @@
-<?xml version="1.0"?>
-<h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <h:head>
     <h:title>cascading select test</h:title>
-    <model>
+    <model odk:xforms-version="1.0.0">
       <itext>
-        <translation lang="French">
-          <text id="static_instance-states-0">
-            <value>Le Texas</value>
-          </text>
-          <text id="static_instance-cities-2">
-            <value>Le brownsville</value>
-          </text>
-          <text id="static_instance-counties-4">
-            <value>Le King</value>
-          </text>
-          <text id="/select_one_external/county_internal:label">
-            <value>Pays internal</value>
-          </text>
-          <text id="/select_one_external/state_internal/texas:label">
-            <value>Le Texas</value>
-          </text>
-          <text id="static_instance-cities-5">
-            <value>La Redmond</value>
-          </text>
-          <text id="/select_one_external/state_internal/washington:label">
-            <value>La Washington</value>
-          </text>
-          <text id="static_instance-cities-6">
-            <value>Le Tacoma</value>
-          </text>
-          <text id="static_instance-counties-2">
-            <value>La Pierce</value>
-          </text>
-          <text id="static_instance-cities-7">
-            <value>La Puyallup</value>
-          </text>
-          <text id="/select_one_external/state_external/texas:label">
-            <value>Le Texas</value>
-          </text>
-          <text id="static_instance-counties-1">
-            <value>Le King</value>
-          </text>
-          <text id="/select_one_external/county_external:label">
-            <value>Pays external</value>
-          </text>
-          <text id="static_instance-counties-0">
-            <value>Le King</value>
-          </text>
-          <text id="static_instance-states-1">
-            <value>La Washington</value>
-          </text>
-          <text id="static_instance-counties-5">
-            <value>La Cameron</value>
-          </text>
-          <text id="/select_one_external/city_external:label">
-            <value>Ville external</value>
-          </text>
-          <text id="/select_one_external/state_internal:label">
-            <value>Le state internal</value>
-          </text>
-          <text id="static_instance-cities-0">
-            <value>Le Dumont</value>
-          </text>
-          <text id="/select_one_external/state_external/washington:label">
-            <value>La Washington</value>
-          </text>
-          <text id="static_instance-counties-3">
-            <value>La Pierce 1</value>
-          </text>
-          <text id="static_instance-cities-4">
-            <value>Le Seattle</value>
-          </text>
-          <text id="/select_one_external/city_internal:label">
-            <value>Ville internal</value>
-          </text>
-          <text id="static_instance-cities-1">
-            <value>La Finney</value>
-          </text>
-          <text id="static_instance-cities-3">
-            <value>La harlingen</value>
-          </text>
-          <text id="/select_one_external/state_external:label">
-            <value>Le state external</value>
-          </text>
-        </translation>
-        <translation default="true()" lang="default">
-          <text id="static_instance-states-0">
-            <value>Texas</value>
-          </text>
-          <text id="static_instance-cities-2">
-            <value>brownsville</value>
-          </text>
-          <text id="/select_one_external/county_internal:label">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_internal/texas:label">
-            <value>Texas</value>
-          </text>
-          <text id="static_instance-cities-5">
-            <value>Redmond</value>
-          </text>
-          <text id="/select_one_external/state_internal/washington:label">
-            <value>Washington</value>
-          </text>
-          <text id="static_instance-cities-6">
-            <value>Tacoma</value>
-          </text>
-          <text id="static_instance-counties-2">
-            <value>Pierce</value>
-          </text>
-          <text id="static_instance-counties-1">
-            <value>King</value>
-          </text>
-          <text id="static_instance-cities-7">
-            <value>Puyallup</value>
-          </text>
-          <text id="/select_one_external/state_external/texas:label">
-            <value>Texas</value>
-          </text>
-          <text id="static_instance-cities-3">
-            <value>harlingen</value>
-          </text>
-          <text id="/select_one_external/county_external:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-0">
-            <value>King</value>
-          </text>
-          <text id="static_instance-states-1">
-            <value>Washington</value>
-          </text>
-          <text id="static_instance-counties-5">
-            <value>Cameron</value>
-          </text>
-          <text id="/select_one_external/city_external:label">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_internal:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-4">
-            <value>King</value>
-          </text>
-          <text id="/select_one_external/state_external/washington:label">
-            <value>Washington</value>
-          </text>
-          <text id="static_instance-counties-3">
-            <value>Pierce 1</value>
-          </text>
-          <text id="static_instance-cities-4">
-            <value>Seattle</value>
-          </text>
-          <text id="/select_one_external/city_internal:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-1">
-            <value>Finney</value>
-          </text>
-          <text id="static_instance-cities-0">
-            <value>Dumont</value>
-          </text>
-          <text id="/select_one_external/state_external:label">
-            <value>-</value>
-          </text>
-        </translation>
         <translation lang="English">
-          <text id="static_instance-states-0">
-            <value>-</value>
+          <text id="/data/state:label">
+            <value>state</value>
           </text>
-          <text id="static_instance-cities-0">
-            <value>-</value>
+          <text id="/data/state/a1:label">
+            <value>Texas</value>
           </text>
-          <text id="static_instance-cities-2">
-            <value>-</value>
+          <text id="/data/state/a2:label">
+            <value>Washington</value>
           </text>
-          <text id="/select_one_external/county_internal:label">
-            <value>county internal</value>
+          <text id="/data/county:label">
+            <value>county</value>
           </text>
-          <text id="/select_one_external/state_internal/texas:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-5">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_internal/washington:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-6">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-2">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-7">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_external/texas:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-1">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/county_external:label">
-            <value>county external</value>
-          </text>
-          <text id="static_instance-counties-0">
-            <value>-</value>
-          </text>
-          <text id="static_instance-states-1">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-5">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/city_external:label">
-            <value>city external</value>
-          </text>
-          <text id="/select_one_external/state_internal:label">
-            <value>state internal</value>
-          </text>
-          <text id="static_instance-counties-4">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_external/washington:label">
-            <value>-</value>
-          </text>
-          <text id="static_instance-counties-3">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-4">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/city_internal:label">
-            <value>city internal</value>
-          </text>
-          <text id="static_instance-cities-1">
-            <value>-</value>
-          </text>
-          <text id="static_instance-cities-3">
-            <value>-</value>
-          </text>
-          <text id="/select_one_external/state_external:label">
-            <value>state external</value>
+          <text id="/data/city:label">
+            <value>city</value>
           </text>
         </translation>
       </itext>
       <instance>
-        <select_one_external id="cascading_select_test">
-          <state_external/>
-          <county_external/>
-          <city_external/>
-          <state_internal/>
-          <county_internal/>
-          <city_internal/>
+        <data id="cascading_select_test">
+          <state />
+          <county />
+          <city />
           <meta>
-            <instanceID/>
+            <instanceID />
           </meta>
-        </select_one_external>
+        </data>
       </instance>
-      <instance id="states">
-        <root>
-          <item>
-            <itextId>static_instance-states-0</itextId>
-            <name>texas</name>
-          </item>
-          <item>
-            <itextId>static_instance-states-1</itextId>
-            <name>washington</name>
-          </item>
-        </root>
-      </instance>
-      <instance id="cities">
-        <root>
-          <item>
-            <itextId>static_instance-cities-0</itextId>
-            <name>dumont</name>
-            <county>king</county>
-            <state>texas</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-1</itextId>
-            <name>finney</name>
-            <county>king</county>
-            <state>texas</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-2</itextId>
-            <name>brownsville</name>
-            <county>cameron</county>
-            <state>texas</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-3</itextId>
-            <name>harlingen</name>
-            <county>cameron</county>
-            <state>texas</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-4</itextId>
-            <name>seattle</name>
-            <county>king</county>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-5</itextId>
-            <name>redmond</name>
-            <county>king</county>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-6</itextId>
-            <name>tacoma</name>
-            <county>pierce</county>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-cities-7</itextId>
-            <name>puyallup</name>
-            <county>pierce</county>
-            <state>washington</state>
-          </item>
-        </root>
-      </instance>
-      <instance id="counties">
-        <root>
-          <item>
-            <itextId>static_instance-counties-0</itextId>
-            <name>king</name>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-counties-1</itextId>
-            <name>king_1</name>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-counties-2</itextId>
-            <name>pierce</name>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-counties-3</itextId>
-            <name>pierce_1</name>
-            <state>washington</state>
-          </item>
-          <item>
-            <itextId>static_instance-counties-4</itextId>
-            <name>king</name>
-            <state>texas</state>
-          </item>
-          <item>
-            <itextId>static_instance-counties-5</itextId>
-            <name>cameron</name>
-            <state>texas</state>
-          </item>
-        </root>
-      </instance>
-      <bind nodeset="/select_one_external/state_external" type="select1"/>
-      <bind nodeset="/select_one_external/county_external" type="string"/>
-      <bind nodeset="/select_one_external/city_external" type="string"/>
-      <bind nodeset="/select_one_external/state_internal" type="select1"/>
-      <bind nodeset="/select_one_external/county_internal" type="select1"/>
-      <bind nodeset="/select_one_external/city_internal" type="select1"/>
-      <bind calculate="concat('uuid:', uuid())" nodeset="/select_one_external/meta/instanceID" readonly="true()" type="string"/>
+      <bind nodeset="/data/state" type="string" />
+      <bind nodeset="/data/county" type="string" />
+      <bind nodeset="/data/city" type="string" />
+      <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
     </model>
   </h:head>
   <h:body>
-    <select1 ref="/select_one_external/state_external">
-      <label ref="jr:itext('/select_one_external/state_external:label')"/>
+    <select1 ref="/data/state">
+      <label ref="jr:itext('/data/state:label')" />
       <item>
-        <label ref="jr:itext('/select_one_external/state_external/texas:label')"/>
-        <value>texas</value>
+        <label ref="jr:itext('/data/state/a1:label')" />
+        <value>a1</value>
       </item>
       <item>
-        <label ref="jr:itext('/select_one_external/state_external/washington:label')"/>
-        <value>washington</value>
+        <label ref="jr:itext('/data/state/a2:label')" />
+        <value>a2</value>
       </item>
     </select1>
-    <input query="instance('counties')/root/item[state= /select_one_external/state_external ]" ref="/select_one_external/county_external">
-      <label ref="jr:itext('/select_one_external/county_external:label')"/>
+    <input query="instance('counties')/root/item[state= /data/state ]" ref="/data/county">
+      <label ref="jr:itext('/data/county:label')" />
     </input>
-    <input query="instance('cities')/root/item[state= /select_one_external/state_external  and county= /select_one_external/county_external ]" ref="/select_one_external/city_external">
-      <label ref="jr:itext('/select_one_external/city_external:label')"/>
+    <input query="instance('cities')/root/item[state= /data/state  and county= /data/county ]" ref="/data/city">
+      <label ref="jr:itext('/data/city:label')" />
     </input>
-    <select1 ref="/select_one_external/state_internal">
-      <label ref="jr:itext('/select_one_external/state_internal:label')"/>
-      <item>
-        <label ref="jr:itext('/select_one_external/state_internal/texas:label')"/>
-        <value>texas</value>
-      </item>
-      <item>
-        <label ref="jr:itext('/select_one_external/state_internal/washington:label')"/>
-        <value>washington</value>
-      </item>
-    </select1>
-    <select1 ref="/select_one_external/county_internal">
-      <label ref="jr:itext('/select_one_external/county_internal:label')"/>
-      <itemset nodeset="instance('counties')/root/item[state= /select_one_external/state_internal ]">
-        <value ref="name"/>
-        <label ref="jr:itext(itextId)"/>
-      </itemset>
-    </select1>
-    <select1 ref="/select_one_external/city_internal">
-      <label ref="jr:itext('/select_one_external/city_internal:label')"/>
-      <itemset nodeset="instance('cities')/root/item[state= /select_one_external/state_internal  and county= /select_one_external/county_internal ]">
-        <value ref="name"/>
-        <label ref="jr:itext(itextId)"/>
-      </itemset>
-    </select1>
   </h:body>
 </h:html>
