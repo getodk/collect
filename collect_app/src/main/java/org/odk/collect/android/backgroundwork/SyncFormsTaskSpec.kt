@@ -18,9 +18,12 @@ class SyncFormsTaskSpec : TaskSpec {
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
-            formsUpdater.matchFormsWithServer(
-                inputData[TaskSpec.DATA_PROJECT_ID]!!
-            )
+            val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
+            if (projectId != null) {
+                return@Supplier formsUpdater.matchFormsWithServer(projectId)
+            } else {
+                throw IllegalArgumentException("No project ID provided!")
+            }
         }
     }
 

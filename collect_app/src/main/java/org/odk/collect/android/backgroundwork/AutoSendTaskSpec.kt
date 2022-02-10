@@ -63,13 +63,17 @@ class AutoSendTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
-            val currentNetworkInfo = connectivityProvider.networkInfo
-            if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
-                !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
-            ) {
-                return@Supplier networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
+            if (projectId != null) {
+                val currentNetworkInfo = connectivityProvider.networkInfo
+                if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
+                    !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
+                ) {
+                    return@Supplier networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
+                }
+                instanceAutoSender.autoSendInstances(projectId)
+            } else {
+                throw IllegalArgumentException("No project ID provided!")
             }
-            instanceAutoSender.autoSendInstances(projectId)
         }
     }
 
