@@ -12,7 +12,7 @@ import com.bumptech.glide.request.target.Target
 import org.odk.collect.glide.svg.SvgSoftwareLayerSetter
 import java.io.File
 
-class ImageLoaderImpl : ImageLoader {
+class GlideImageLoader : ImageLoader {
 
     override fun loadImage(
         imageView: ImageView,
@@ -99,6 +99,6 @@ interface ImageLoader {
         imageView: ImageView,
         imageFile: File?,
         scaleType: ImageView.ScaleType,
-        requestListener: ImageLoaderImpl.ImageLoaderCallback?
+        requestListener: GlideImageLoader.ImageLoaderCallback?
     )
 }

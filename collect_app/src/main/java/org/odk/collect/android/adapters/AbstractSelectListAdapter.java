@@ -46,7 +46,7 @@ import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
-import org.odk.collect.glide.ImageLoaderImpl;
+import org.odk.collect.glide.GlideImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -240,7 +240,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
             String audioURI = getPlayableAudioURI(prompt, item, referenceManager);
             try {
                 if (imageURI != null) {
-                    audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), new ImageLoaderImpl());
+                    audioVideoImageTextLabel.setImage(new File(referenceManager.deriveReference(imageURI).getLocalURI()), new GlideImageLoader());
                 }
                 if (bigImageURI != null) {
                     audioVideoImageTextLabel.setBigImage(new File(referenceManager.deriveReference(bigImageURI).getLocalURI()));

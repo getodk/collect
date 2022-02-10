@@ -36,7 +36,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.glide.ImageLoaderImpl;
+import org.odk.collect.glide.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,7 +62,7 @@ public class SelectOneListAdapter extends AbstractSelectListAdapter implements C
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewHolder(noButtonsMode
-                ? new NoButtonsItem(context, !prompt.isReadOnly(), new ImageLoaderImpl())
+                ? new NoButtonsItem(context, !prompt.isReadOnly(), new GlideImageLoader())
                 : new AudioVideoImageTextLabel(context));
     }
 

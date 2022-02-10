@@ -131,7 +131,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.glide.ImageLoader;
-import org.odk.collect.glide.ImageLoaderImpl;
+import org.odk.collect.glide.GlideImageLoader;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.permissions.PermissionsChecker;
@@ -633,6 +633,6 @@ public class AppDependencyModule {
 
     @Provides
     public ImageLoader providesImageLoader() {
-        return new ImageLoaderImpl();
+        return new GlideImageLoader();
     }
 }
