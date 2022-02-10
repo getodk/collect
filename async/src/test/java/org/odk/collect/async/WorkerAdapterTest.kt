@@ -58,12 +58,12 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when task returns false should work retry if numberOfRetries is specified and is equal to runAttemptCount`() {
+    fun `when task returns false should work fail if numberOfRetries is specified and is equal to runAttemptCount`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(3)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
         whenever(spec.numberOfRetries).thenReturn(3)
 
-        assertThat(workerAdapter.doWork(), `is`(ListenableWorker.Result.retry()))
+        assertThat(workerAdapter.doWork(), `is`(ListenableWorker.Result.failure()))
     }
 
     @Test

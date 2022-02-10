@@ -20,7 +20,7 @@ abstract class WorkerAdapter(
 
         return if (completed) {
             Result.success()
-        } else if (spec.numberOfRetries == TaskSpec.UNLIMITED_NUMBER_OF_RETRIES || runAttemptCount <= spec.numberOfRetries) {
+        } else if (spec.numberOfRetries == TaskSpec.UNLIMITED_NUMBER_OF_RETRIES || runAttemptCount < spec.numberOfRetries) {
             Result.retry()
         } else {
             Result.failure()
