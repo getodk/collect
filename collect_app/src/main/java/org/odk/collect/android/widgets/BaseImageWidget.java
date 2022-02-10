@@ -42,7 +42,7 @@ import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.glide.GlideImageLoader;
+import org.odk.collect.imageloader.GlideImageLoader;
 
 import java.io.File;
 

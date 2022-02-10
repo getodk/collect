@@ -46,7 +46,7 @@ import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
-import org.odk.collect.glide.GlideImageLoader;
+import org.odk.collect.imageloader.GlideImageLoader;
 
 import java.io.File;
 import java.util.ArrayList;

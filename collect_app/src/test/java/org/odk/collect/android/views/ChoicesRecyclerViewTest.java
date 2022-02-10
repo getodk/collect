@@ -37,7 +37,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 

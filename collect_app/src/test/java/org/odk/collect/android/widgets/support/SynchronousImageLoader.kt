@@ -2,8 +2,8 @@ package org.odk.collect.android.widgets.support
 
 import android.graphics.BitmapFactory
 import android.widget.ImageView
-import org.odk.collect.glide.ImageLoader
-import org.odk.collect.glide.GlideImageLoader
+import org.odk.collect.imageloader.GlideImageLoader
+import org.odk.collect.imageloader.ImageLoader
 import java.io.File
 
 class SynchronousImageLoader : ImageLoader {

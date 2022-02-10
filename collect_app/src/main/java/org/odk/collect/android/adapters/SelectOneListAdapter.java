@@ -36,7 +36,7 @@ import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.glide.GlideImageLoader;
+import org.odk.collect.imageloader.GlideImageLoader;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -53,7 +53,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
 
 import java.io.File;

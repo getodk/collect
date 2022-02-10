@@ -20,7 +20,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 

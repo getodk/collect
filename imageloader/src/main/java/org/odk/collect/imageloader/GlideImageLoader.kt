@@ -1,4 +1,4 @@
-package org.odk.collect.glide
+package org.odk.collect.imageloader
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
@@ -9,7 +9,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import org.odk.collect.glide.svg.SvgSoftwareLayerSetter
+import org.odk.collect.imageloader.svg.SvgSoftwareLayerSetter
 import java.io.File
 
 class GlideImageLoader : ImageLoader {

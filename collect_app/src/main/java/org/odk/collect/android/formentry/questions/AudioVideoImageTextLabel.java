@@ -41,7 +41,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.audioclips.Clip;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 

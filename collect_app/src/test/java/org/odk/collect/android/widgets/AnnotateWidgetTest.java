@@ -28,7 +28,7 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.support.SynchronousImageLoader;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;

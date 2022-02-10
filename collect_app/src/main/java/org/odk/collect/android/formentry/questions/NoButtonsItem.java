@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import org.odk.collect.android.databinding.NoButtonsItemLayoutBinding;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 
