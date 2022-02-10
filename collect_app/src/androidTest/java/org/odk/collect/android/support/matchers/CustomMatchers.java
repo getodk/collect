@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.support;
+package org.odk.collect.android.support.matchers;
 
 import android.view.View;
-import android.widget.SeekBar;
-
-import androidx.test.espresso.matcher.BoundedMatcher;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -31,24 +28,6 @@ import org.hamcrest.TypeSafeMatcher;
 public final class CustomMatchers {
     private CustomMatchers() {
 
-    }
-
-    /**
-     * Matches a SeekBar with progress {@code expectedProgress}.
-     */
-    public static Matcher<View> withProgress(final int expectedProgress) {
-        return new BoundedMatcher<View, SeekBar>(SeekBar.class) {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("expected: ");
-                description.appendText(String.valueOf(expectedProgress));
-            }
-
-            @Override
-            public boolean matchesSafely(SeekBar seekBar) {
-                return seekBar.getProgress() == expectedProgress;
-            }
-        };
     }
 
     /**
