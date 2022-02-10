@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Intent;
@@ -37,10 +36,13 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
+import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
@@ -68,7 +70,7 @@ public class FormMapActivityTest {
     public void setUpActivity() {
         CollectHelpers.setupDemoProject();
 
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+        AppDependencyComponent component = CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public MapProvider providesMapProvider() {
                 MapProvider mapProvider = mock(MapProvider.class);
@@ -80,8 +82,9 @@ public class FormMapActivityTest {
         activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class);
         activity = (FormMapActivity) activityController.get();
 
-        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
+        InstancesRepository instancesRepository = component.instancesRepositoryProvider().get();
+        Arrays.stream(testInstances).forEach(instancesRepository::save);
+        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, instancesRepository);
         activity.viewModelFactory = new TestFactory(viewModel);
 
         activityController.setup();
@@ -380,4 +383,99 @@ public class FormMapActivityTest {
             return (T) viewModel;
         }
     }
+
+    private static Instance[] testInstances = {
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form1")
+                    .lastStatusChangeDate(1487782554846L)
+                    .formId("formId1")
+                    .formVersion("2019103101")
+                    .deletedDate(1487782554846L)
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.0]}")
+                    .status(Instance.STATUS_SUBMITTED).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form2")
+                    .lastStatusChangeDate(1488782558743L)
+                    .formId("formId1")
+                    .formVersion("2019103101")
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.1]}")
+                    .canEditWhenComplete(true)
+                    .status(Instance.STATUS_COMPLETE).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form3")
+                    .lastStatusChangeDate(1484582553254L)
+                    .formId("formId1")
+                    .formVersion("2019103102")
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[126.6, 10.1]}")
+                    .status(Instance.STATUS_INCOMPLETE).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form4")
+                    .lastStatusChangeDate(1488582557456L)
+                    .formId("formId1")
+                    .formVersion("2019103101")
+                    .status(Instance.STATUS_COMPLETE).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form5")
+                    .lastStatusChangeDate(1483582557438L)
+                    .formId("formId1")
+                    .formVersion("2019103106")
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.3]}")
+                    .canEditWhenComplete(true)
+                    .status(Instance.STATUS_SUBMISSION_FAILED).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form6")
+                    .lastStatusChangeDate(1482282559618L)
+                    .formId("formId1")
+                    .formVersion("2019103101")
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.7, 10.3]}")
+                    .canEditWhenComplete(true)
+                    .status(Instance.STATUS_SUBMITTED).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form7")
+                    .lastStatusChangeDate(1484782559836L)
+                    .formId("formId1")
+                    .formVersion("2019103101")
+                    .geometryType("Point")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
+                    .canEditWhenComplete(false)
+                    .status(Instance.STATUS_SUBMISSION_FAILED).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form8")
+                    .lastStatusChangeDate(1487982552254L)
+                    .formId("formId2")
+                    .formVersion("2019103101")
+                    .geometryType("Point")
+                    .geometry("Crazy stuff")
+                    .status(Instance.STATUS_COMPLETE).build(),
+
+            new Instance.Builder()
+                    .instanceFilePath("")
+                    .displayName("Form9")
+                    .lastStatusChangeDate(1484682557369L)
+                    .formId("formId2")
+                    .formVersion("2019103101")
+                    .geometryType("Crazy stuff")
+                    .geometry("{\"type\":\"Point\",\"coordinates\":[125.6, 10.4]}")
+                    .status(Instance.STATUS_COMPLETE).build(),
+    };
 }

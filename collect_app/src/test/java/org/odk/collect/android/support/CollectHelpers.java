@@ -58,12 +58,13 @@ public final class CollectHelpers {
         return localURI;
     }
 
-    public static void overrideAppDependencyModule(AppDependencyModule appDependencyModule) {
+    public static AppDependencyComponent overrideAppDependencyModule(AppDependencyModule appDependencyModule) {
         AppDependencyComponent testComponent = DaggerAppDependencyComponent.builder()
                 .application(ApplicationProvider.getApplicationContext())
                 .appDependencyModule(appDependencyModule)
                 .build();
         ((Collect) ApplicationProvider.getApplicationContext()).setComponent(testComponent);
+        return testComponent;
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
