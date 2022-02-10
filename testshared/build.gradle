@@ -40,6 +40,7 @@ dependencies {
     implementation Dependencies.androidx_recyclerview
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
+    implementation Dependencies.androidx_work_runtime
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.robolectric
     implementation Dependencies.junit

@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -43,6 +44,24 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
 
         val worker = spec.getWorkManagerAdapter()
         val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+            .addTag(tag)
+            .setInputData(workManagerInputData)
+            .setConstraints(constraints)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+    }
+
+    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, backoffPolicy: BackoffPolicy, backoffDelay: Long, inputData: Map<String, String>) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workManagerInputData = Data.Builder().putAll(inputData).build()
+
+        val worker = spec.getWorkManagerAdapter()
+        val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+            .setBackoffCriteria(backoffPolicy, backoffDelay, TimeUnit.MILLISECONDS)
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)

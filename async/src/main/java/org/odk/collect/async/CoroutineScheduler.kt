@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import androidx.work.BackoffPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -46,6 +47,10 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
     }
 
     override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, backoffPolicy: BackoffPolicy, backoffDelay: Long, inputData: Map<String, String>) {
         throw UnsupportedOperationException()
     }
 
