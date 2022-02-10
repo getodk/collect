@@ -333,7 +333,7 @@ public class FillBlankFormTest {
         for (int i = 1; i <= 3; i++) {
             FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToNextQuestion("random");
+            formEntryPage.swipeToNextQuestion("Your random once value:");
             secondQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }
@@ -351,7 +351,7 @@ public class FillBlankFormTest {
         for (int i = 1; i <= 3; i++) {
             FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random test");
             formEntryPage.inputText("3");
-            formEntryPage.swipeToNextQuestion("random test");
+            formEntryPage.swipeToNextQuestion("Your random number was");
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }

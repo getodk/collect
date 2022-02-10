@@ -11,6 +11,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.CustomMatchers.withIndex;
@@ -55,9 +56,25 @@ public class FormEntryPage extends Page<FormEntryPage> {
         flingLeft();
 
         if (isRequired) {
-            waitForText("* " + questionText);
+            assertQuestionText("* " + questionText);
         } else {
-            waitForText(questionText);
+            assertQuestionText(questionText);
+        }
+
+        return this;
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText) {
+        return swipeToPreviousQuestion(questionText, false);
+    }
+
+    public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
+        onView(withId(R.id.questionholder)).perform(swipeRight());
+
+        if (isRequired) {
+            assertQuestionText("* " + questionText);
+        } else {
+            assertQuestionText(questionText);
         }
 
         return this;
@@ -87,6 +104,10 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    private void assertQuestionText(String text) {
+        onView(withIndex(withId(R.id.text_label), 0)).check(matches(withText(containsString(text))));
+    }
+
     public FormEntryPage clickOptionsIcon() {
         tryAgainOnFail(() -> {
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
@@ -110,24 +131,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage assertNavigationButtonsAreHidden() {
         onView(withId(R.id.form_forward_button)).check(matches(not(isDisplayed())));
         onView(withId(R.id.form_back_button)).check(matches(not(isDisplayed())));
-        return this;
-    }
-
-    public FormEntryPage swipeToPreviousQuestion(String questionText) {
-        onView(withId(R.id.questionholder)).perform(swipeRight());
-        assertText(questionText);
-        return this;
-    }
-
-    public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
-        onView(withId(R.id.questionholder)).perform(swipeRight());
-
-        if (isRequired) {
-            assertText("* " + questionText);
-        } else {
-            assertText(questionText);
-        }
-
         return this;
     }
 

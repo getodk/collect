@@ -86,7 +86,6 @@ public class FillBlankFormWithRepeatGroupTest {
         rule.startAtMainMenu()
                 .copyForm("form1.xml")
                 .startBlankForm("form1")
-                .swipeToNextQuestion("Name this form")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
 
