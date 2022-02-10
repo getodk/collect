@@ -19,7 +19,7 @@ class SyncFormsTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
-            val notify = inputData[TaskSpec.LAST_UNIQUE_ATTEMPT].toBoolean()
+            val notify = inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION].toBoolean()
             if (projectId != null) {
                 return@Supplier formsUpdater.matchFormsWithServer(projectId, notify)
             } else {

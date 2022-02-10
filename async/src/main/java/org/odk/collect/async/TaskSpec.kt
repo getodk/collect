@@ -20,6 +20,12 @@ interface TaskSpec {
 
     companion object {
         const val DATA_PROJECT_ID = "projectId"
-        const val LAST_UNIQUE_ATTEMPT = "lastAttempt"
+
+        /**
+         * If a task specifies numberOfRetries all retries form one logical group. We want to know
+         * which task execution is the last one to for example notify a user only once instead of
+         * doing that after every single execution.
+         */
+        const val DATA_LAST_UNIQUE_EXECUTION = "lastUniqueExecution"
     }
 }

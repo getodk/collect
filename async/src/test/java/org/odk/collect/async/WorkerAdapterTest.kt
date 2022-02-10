@@ -76,7 +76,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when numberOfRetries is not specified should data contain LAST_UNIQUE_ATTEMPT equal true`() {
+    fun `when numberOfRetries is not specified should data contain DATA_LAST_UNIQUE_EXECUTION equal true`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.numberOfRetries).thenReturn(-1)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
@@ -88,14 +88,14 @@ class WorkerAdapterTest {
             eq(
                 mapOf(
                     TaskSpec.DATA_PROJECT_ID to "123",
-                    TaskSpec.LAST_UNIQUE_ATTEMPT to "true"
+                    TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "true"
                 )
             )
         )
     }
 
     @Test
-    fun `when numberOfRetries is specified and it is higher than runAttemptCount, should data contain LAST_UNIQUE_ATTEMPT equal false`() {
+    fun `when numberOfRetries is specified and it is higher than runAttemptCount, should data contain DATA_LAST_UNIQUE_EXECUTION equal false`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.numberOfRetries).thenReturn(3)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
@@ -107,14 +107,14 @@ class WorkerAdapterTest {
             eq(
                 mapOf(
                     TaskSpec.DATA_PROJECT_ID to "123",
-                    TaskSpec.LAST_UNIQUE_ATTEMPT to "false"
+                    TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "false"
                 )
             )
         )
     }
 
     @Test
-    fun `when numberOfRetries is specified and it is equal to runAttemptCount, should data contain LAST_UNIQUE_ATTEMPT equal true`() {
+    fun `when numberOfRetries is specified and it is equal to runAttemptCount, should data contain DATA_LAST_UNIQUE_EXECUTION equal true`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.numberOfRetries).thenReturn(1)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
@@ -126,7 +126,7 @@ class WorkerAdapterTest {
             eq(
                 mapOf(
                     TaskSpec.DATA_PROJECT_ID to "123",
-                    TaskSpec.LAST_UNIQUE_ATTEMPT to "true"
+                    TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "true"
                 )
             )
         )

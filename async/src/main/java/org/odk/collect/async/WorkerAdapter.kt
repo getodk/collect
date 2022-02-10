@@ -14,7 +14,7 @@ abstract class WorkerAdapter(
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
             .toMutableMap()
             .apply {
-                this[TaskSpec.LAST_UNIQUE_ATTEMPT] = (runAttemptCount >= spec.numberOfRetries).toString()
+                this[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = (runAttemptCount >= spec.numberOfRetries).toString()
             }
         val completed = spec.getTask(applicationContext, stringInputData).get()
 

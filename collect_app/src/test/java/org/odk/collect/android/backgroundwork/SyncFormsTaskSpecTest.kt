@@ -50,19 +50,19 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `when LAST_UNIQUE_ATTEMPT equals true getTask calls synchronize with proper data`() {
+    fun `when DATA_LAST_UNIQUE_EXECUTION equals true getTask calls synchronize with proper data`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.LAST_UNIQUE_ATTEMPT] = "true"
+        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         verify(formsUpdater).matchFormsWithServer("projectId", true)
     }
 
     @Test
-    fun `when LAST_UNIQUE_ATTEMPT equals false getTask calls synchronize with proper data`() {
+    fun `when DATA_LAST_UNIQUE_EXECUTION equals false getTask calls synchronize with proper data`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.LAST_UNIQUE_ATTEMPT] = "false"
+        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "false"
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         verify(formsUpdater).matchFormsWithServer("projectId", false)
     }
@@ -71,7 +71,7 @@ class SyncFormsTaskSpecTest {
     fun `getTask returns proper result value`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.LAST_UNIQUE_ATTEMPT] = "true"
+        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"
 
         whenever(formsUpdater.matchFormsWithServer("projectId", true)).thenReturn(true)
         var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
