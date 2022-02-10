@@ -5,6 +5,8 @@ import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFor
 
 import android.app.Application;
 
+import androidx.work.BackoffPolicy;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.TaskSpec;
@@ -65,7 +67,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
         inputData.put(TaskSpec.DATA_PROJECT_ID, projectId);
-        scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
+        scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, BackoffPolicy.EXPONENTIAL, 60_000, inputData);
     }
 
     @Override
