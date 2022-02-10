@@ -52,7 +52,10 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +69,7 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends CollectAbstractActivity {
+public class FormMapActivity extends LocalizedActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -87,6 +90,12 @@ public class FormMapActivity extends CollectAbstractActivity {
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private MapFragment map;
 
