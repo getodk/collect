@@ -101,17 +101,18 @@ class FormsUpdater(
                     syncStatusAppState.finishSync(projectId, null)
                     if (notify) {
                         notifier.onSync(null, projectId)
+                        AnalyticsUtils.logMatchExactlyCompleted(analytics, null)
                     }
                     null
                 } catch (e: FormSourceException) {
                     syncStatusAppState.finishSync(projectId, e)
                     if (notify) {
                         notifier.onSync(e, projectId)
+                        AnalyticsUtils.logMatchExactlyCompleted(analytics, e)
                     }
                     e
                 }
 
-                AnalyticsUtils.logMatchExactlyCompleted(analytics, exception)
                 exception == null
             } else {
                 false
