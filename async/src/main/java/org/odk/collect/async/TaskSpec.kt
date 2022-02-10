@@ -20,5 +20,6 @@ interface TaskSpec {
 
     companion object {
         const val DATA_PROJECT_ID = "projectId"
+        const val LAST_UNIQUE_ATTEMPT = "lastAttempt"
     }
 }
