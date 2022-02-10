@@ -43,7 +43,7 @@ class WorkerAdapterTest {
     @Test
     fun `when task returns false should work retry if numberOfRetries not specified`() {
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
-        whenever(spec.numberOfRetries).thenReturn(-1)
+        whenever(spec.numberOfRetries).thenReturn(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES)
 
         assertThat(workerAdapter.doWork(), `is`(ListenableWorker.Result.retry()))
     }
@@ -78,7 +78,7 @@ class WorkerAdapterTest {
     @Test
     fun `when numberOfRetries is not specified should data contain DATA_LAST_UNIQUE_EXECUTION equal true`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
-        whenever(spec.numberOfRetries).thenReturn(-1)
+        whenever(spec.numberOfRetries).thenReturn(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
 
         workerAdapter.doWork()

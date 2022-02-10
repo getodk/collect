@@ -27,5 +27,6 @@ interface TaskSpec {
          * doing that after every single execution.
          */
         const val DATA_LAST_UNIQUE_EXECUTION = "lastUniqueExecution"
+        const val UNLIMITED_NUMBER_OF_RETRIES = -1
     }
 }
