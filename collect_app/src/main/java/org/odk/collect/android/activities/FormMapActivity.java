@@ -38,6 +38,7 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFo
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
@@ -396,9 +397,8 @@ public class FormMapActivity extends LocalizedActivity {
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-            startActivity(canEdit
-                    ? getEditFormInstanceIntentFor(instanceId)
-                    : getViewOnlyFormInstanceIntentFor(instanceId));
+            new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get)
+                    .editInstance(this, instanceId);
         });
     }
 
