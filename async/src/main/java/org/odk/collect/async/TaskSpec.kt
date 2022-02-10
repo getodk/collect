@@ -17,4 +17,8 @@ interface TaskSpec {
      * WorkManager framework
      */
     fun getWorkManagerAdapter(): Class<out WorkerAdapter>
+
+    companion object {
+        const val DATA_PROJECT_ID = "projectId"
+    }
 }

@@ -22,6 +22,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
@@ -51,7 +52,7 @@ class SyncFormsTaskSpecTest {
     @Test
     fun `getTask calls synchronize with projectId`() {
         val inputData = HashMap<String, String>()
-        inputData[SyncFormsTaskSpec.DATA_PROJECT_ID] = "projectId"
+        inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         verify(formsUpdater).matchFormsWithServer("projectId")
     }
@@ -59,7 +60,7 @@ class SyncFormsTaskSpecTest {
     @Test
     fun `getTask returns proper result value`() {
         val inputData = HashMap<String, String>()
-        inputData[SyncFormsTaskSpec.DATA_PROJECT_ID] = "projectId"
+        inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
 
         whenever(formsUpdater.matchFormsWithServer("projectId")).thenReturn(true)
         var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()

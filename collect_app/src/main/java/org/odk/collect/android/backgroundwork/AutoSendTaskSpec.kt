@@ -62,7 +62,7 @@ class AutoSendTaskSpec : TaskSpec {
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
-            val projectId = inputData[DATA_PROJECT_ID]
+            val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
             val currentNetworkInfo = connectivityProvider.networkInfo
             if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
                 !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
@@ -114,8 +114,4 @@ class AutoSendTaskSpec : TaskSpec {
 
     class Adapter(context: Context, workerParams: WorkerParameters) :
         WorkerAdapter(AutoSendTaskSpec(), context, workerParams)
-
-    companion object {
-        const val DATA_PROJECT_ID = "projectId"
-    }
 }

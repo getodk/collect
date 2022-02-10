@@ -19,7 +19,7 @@ class SyncFormsTaskSpec : TaskSpec {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             formsUpdater.matchFormsWithServer(
-                inputData[DATA_PROJECT_ID]!!
+                inputData[TaskSpec.DATA_PROJECT_ID]!!
             )
         }
     }
@@ -30,8 +30,4 @@ class SyncFormsTaskSpec : TaskSpec {
 
     class Adapter(context: Context, workerParams: WorkerParameters) :
         WorkerAdapter(SyncFormsTaskSpec(), context, workerParams)
-
-    companion object {
-        const val DATA_PROJECT_ID = "projectId"
-    }
 }

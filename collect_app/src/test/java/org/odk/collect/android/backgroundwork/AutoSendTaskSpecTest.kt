@@ -22,6 +22,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -62,7 +63,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `passes project id`() {
-        val inputData = mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to projectId)
+        val inputData = mapOf(TaskSpec.DATA_PROJECT_ID to projectId)
         AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         verify(instanceAutoSender).autoSendInstances(projectId)
     }

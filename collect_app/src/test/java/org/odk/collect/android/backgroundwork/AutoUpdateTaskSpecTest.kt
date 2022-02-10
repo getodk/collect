@@ -12,7 +12,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec.Companion.DATA_PROJECT_ID
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
@@ -23,6 +22,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.async.TaskSpec
 import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
@@ -54,7 +54,7 @@ class AutoUpdateTaskSpecTest {
     @Test
     fun `calls checkForUpdates with project from tag`() {
         val autoUpdateTaskSpec = AutoUpdateTaskSpec()
-        val task = autoUpdateTaskSpec.getTask(context, mapOf(DATA_PROJECT_ID to "projectId"))
+        val task = autoUpdateTaskSpec.getTask(context, mapOf(TaskSpec.DATA_PROJECT_ID to "projectId"))
 
         task.get()
         verify(formUpdateChecker).downloadUpdates("projectId")
