@@ -62,7 +62,7 @@ class FormsUpdaterTest {
 
         updateManager = FormsUpdater(
             context = application,
-            notifier = mock(),
+            notifier = notifier,
             analytics = mock(),
             storagePathProvider = storagePathProvider,
             settingsProvider = settingsProvider,
@@ -154,6 +154,33 @@ class FormsUpdaterTest {
         updateManager.matchFormsWithServer(project.uuid)
         inOrder.verify(syncStatusAppState).startSync(project.uuid)
         inOrder.verify(syncStatusAppState).finishSync(project.uuid, null)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies when called with default notify value`() {
+        val project = setupProject()
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        updateManager.matchFormsWithServer(project.uuid)
+        verify(notifier).onSync(error, project.uuid)
+    }
+
+    @Test
+    fun `matchFormsWithServer() notifies when called with notify true`() {
+        val project = setupProject()
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        updateManager.matchFormsWithServer(project.uuid, true)
+        verify(notifier).onSync(error, project.uuid)
+    }
+
+    @Test
+    fun `matchFormsWithServer() does not notify when called with notify false`() {
+        val project = setupProject()
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        updateManager.matchFormsWithServer(project.uuid, false)
+        verifyNoInteractions(notifier)
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

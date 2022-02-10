@@ -3,6 +3,7 @@ package org.odk.collect.async
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.Data
 import androidx.work.ListenableWorker
 import androidx.work.WorkerParameters
 import org.hamcrest.CoreMatchers.`is`
@@ -11,7 +12,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.util.function.Supplier
 
@@ -20,11 +23,14 @@ class WorkerAdapterTest {
     private lateinit var workerAdapter: WorkerAdapter
     private val spec = mock<TaskSpec>()
     private val workerParameters = mock<WorkerParameters>()
+    private lateinit var data: Data
 
     @Before
     fun setup() {
-        workerAdapter = TestAdapter(spec, ApplicationProvider.getApplicationContext(), workerParameters)
-        whenever(workerAdapter.inputData).thenReturn(mock())
+        workerAdapter =
+            TestAdapter(spec, ApplicationProvider.getApplicationContext(), workerParameters)
+        data = Data(mapOf(TaskSpec.DATA_PROJECT_ID to "123"))
+        whenever(workerAdapter.inputData).thenReturn(data)
     }
 
     @Test
@@ -67,6 +73,63 @@ class WorkerAdapterTest {
         whenever(spec.numberOfRetries).thenReturn(3)
 
         assertThat(workerAdapter.doWork(), `is`(ListenableWorker.Result.failure()))
+    }
+
+    @Test
+    fun `when numberOfRetries is not specified should data contain LAST_UNIQUE_ATTEMPT equal true`() {
+        whenever(workerAdapter.runAttemptCount).thenReturn(1)
+        whenever(spec.numberOfRetries).thenReturn(-1)
+        whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
+
+        workerAdapter.doWork()
+
+        verify(spec).getTask(
+            any(),
+            eq(
+                mapOf(
+                    TaskSpec.DATA_PROJECT_ID to "123",
+                    TaskSpec.LAST_UNIQUE_ATTEMPT to "true"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `when numberOfRetries is specified and it is higher than runAttemptCount, should data contain LAST_UNIQUE_ATTEMPT equal false`() {
+        whenever(workerAdapter.runAttemptCount).thenReturn(1)
+        whenever(spec.numberOfRetries).thenReturn(3)
+        whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
+
+        workerAdapter.doWork()
+
+        verify(spec).getTask(
+            any(),
+            eq(
+                mapOf(
+                    TaskSpec.DATA_PROJECT_ID to "123",
+                    TaskSpec.LAST_UNIQUE_ATTEMPT to "false"
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `when numberOfRetries is specified and it is equal to runAttemptCount, should data contain LAST_UNIQUE_ATTEMPT equal true`() {
+        whenever(workerAdapter.runAttemptCount).thenReturn(1)
+        whenever(spec.numberOfRetries).thenReturn(1)
+        whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
+
+        workerAdapter.doWork()
+
+        verify(spec).getTask(
+            any(),
+            eq(
+                mapOf(
+                    TaskSpec.DATA_PROJECT_ID to "123",
+                    TaskSpec.LAST_UNIQUE_ATTEMPT to "true"
+                )
+            )
+        )
     }
 
     private class TestAdapter(spec: TaskSpec, context: Context, workerParams: WorkerParameters) :
