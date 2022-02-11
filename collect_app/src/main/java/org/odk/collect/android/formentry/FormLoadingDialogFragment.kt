@@ -16,14 +16,9 @@
 package org.odk.collect.android.formentry
 
 import android.content.Context
-import org.odk.collect.material.MaterialProgressDialogFragmentNew.title
-import org.odk.collect.material.MaterialProgressDialogFragmentNew.message
-import org.odk.collect.material.MaterialProgressDialogFragmentNew.negativeButtonTitle
-import org.odk.collect.material.MaterialProgressDialogFragmentNew.negativeButtonListener
-import org.odk.collect.material.MaterialProgressDialogFragmentNew
-import org.odk.collect.android.formentry.FormLoadingDialogFragment.FormLoadingDialogFragmentListener
-import org.odk.collect.android.R
 import android.content.DialogInterface
+import org.odk.collect.android.R
+import org.odk.collect.material.MaterialProgressDialogFragmentNew
 
 class FormLoadingDialogFragment : MaterialProgressDialogFragmentNew() {
     interface FormLoadingDialogFragmentListener {
@@ -36,17 +31,17 @@ class FormLoadingDialogFragment : MaterialProgressDialogFragmentNew() {
      * a ViewModel to cancel.
      */
     @Deprecated("")
-    private var listener: FormLoadingDialogFragmentListener? = null
+    private lateinit var listener: FormLoadingDialogFragmentListener
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        title = getString(R.string.loading_form)
-        message = getString(R.string.please_wait)
-        isCancelable = false
-        negativeButtonTitle = getString(R.string.cancel_loading_form)
-        negativeButtonListener =
-            DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int -> listener!!.onCancelFormLoading() }
         if (context is FormLoadingDialogFragmentListener) {
             listener = context
         }
+        title = getString(R.string.loading_form)
+        message = getString(R.string.please_wait)
+        canBeCanceled = false
+        negativeButtonTitle = getString(R.string.cancel_loading_form)
+        negativeButtonListener = DialogInterface.OnClickListener { _: DialogInterface?, _: Int -> listener.onCancelFormLoading() }
     }
 }
