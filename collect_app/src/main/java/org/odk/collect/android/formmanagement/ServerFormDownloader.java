@@ -100,7 +100,8 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName(), fd);
+                FormMediaDownloader mediaDownloader = new FormMediaDownloader(formsDirPath, formsRepository, formSource);
+                mediaDownloader.download(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName(), fd);
             }
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
@@ -255,54 +256,6 @@ public class ServerFormDownloader implements FormDownloader {
             return new FileResult(new File(form.getFormFilePath()), false);
         } else {
             return new FileResult(tempFormFile, true);
-        }
-    }
-
-    private void downloadMediaFiles(String tempMediaPath, OngoingWorkListener stateListener, List<MediaFile> files, File tempDir, String formFileName, ServerFormDetails fd) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException, InterruptedException {
-        File tempMediaDir = new File(tempMediaPath);
-        tempMediaDir.mkdir();
-
-        for (int i = 0; i < files.size(); i++) {
-            if (stateListener != null) {
-                stateListener.progressUpdate(i + 1);
-            }
-
-            MediaFile toDownload = files.get(i);
-
-            File tempMediaFile = new File(tempMediaDir, toDownload.getFilename());
-            String finalMediaPath = FileUtils.constructMediaPath(formsDirPath + File.separator + formFileName);
-            File finalMediaFile = new File(finalMediaPath, toDownload.getFilename());
-
-            if (!finalMediaFile.exists()) {
-                List<Form> allFormVersions = formsRepository.getAllByFormId(fd.getFormId());
-                Optional<File> existingFileInOtherVersion = allFormVersions.stream().map(form -> {
-                    return new File(form.getFormMediaPath(), toDownload.getFilename());
-                }).filter(file -> {
-                    String currentFileHash = Md5.getMd5Hash(file);
-                    String downloadFileHash = validateHash(toDownload.getHash());
-                    return file.exists() && currentFileHash.contentEquals(downloadFileHash);
-                }).findFirst();
-
-                if (existingFileInOtherVersion.isPresent()) {
-                    FileUtils.copyFile(existingFileInOtherVersion.get(), tempMediaFile);
-                } else {
-                    InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
-                    interuptablyWriteFile(mediaFile, tempMediaFile, tempDir, stateListener);
-                }
-            } else {
-                String currentFileHash = Md5.getMd5Hash(finalMediaFile);
-                String downloadFileHash = validateHash(toDownload.getHash());
-
-                if (currentFileHash != null && downloadFileHash != null && !currentFileHash.contentEquals(downloadFileHash)) {
-                    // if the hashes match, it's the same file otherwise replace it with the new one
-                    InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
-                    interuptablyWriteFile(mediaFile, tempMediaFile, tempDir, stateListener);
-                } else {
-                    // exists, and the hash is the same
-                    // no need to download it again
-                    Timber.i("Skipping media file fetch -- file hashes identical: %s", finalMediaFile.getAbsolutePath());
-                }
-            }
         }
     }
 
