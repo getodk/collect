@@ -58,7 +58,7 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -627,12 +627,11 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     private void createCancelDialog() {
         viewModel.setCancelDialogShowing(true);
-        MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
-        dialog.setTitle(getString(R.string.canceling));
-        dialog.setMessage(getString(R.string.please_wait));
-        dialog.setIcon(android.R.drawable.ic_dialog_info);
-        dialog.setCancelable(false);
-        DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class, getSupportFragmentManager());
+        new MaterialProgressDialogFragmentNew.Builder()
+                .title(getString(R.string.canceling))
+                .message(getString(R.string.please_wait))
+                .cancelable(false)
+                .show(getSupportFragmentManager());
     }
 
     @Override
@@ -682,7 +681,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
         cleanUpWebCredentials();
 
-        DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragmentNew.class, getSupportFragmentManager());
         viewModel.setCancelDialogShowing(false);
 
         if (viewModel.isDownloadOnlyMode()) {
