@@ -16,14 +16,14 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
  * that progress shouldn't block the user - this is pretty unrealistic for the app in it's current
  * state so having a reliable "Material" version of the Android progress dialog is useful.
  */
-open class MaterialProgressDialogFragmentNew private constructor(
-    private val title: String?,
-    private val message: String?,
-    private val cancelable: Boolean,
-    private val positiveButtonTitle: String?,
-    private val positiveButtonListener: DialogInterface.OnClickListener?,
-    private val negativeButtonTitle: String?,
-    private val negativeButtonListener: DialogInterface.OnClickListener?
+open class MaterialProgressDialogFragmentNew(
+    protected var title: String? = null,
+    protected var message: String? = null,
+    protected var canBeCanceled: Boolean = true,
+    protected var positiveButtonTitle: String? = null,
+    protected var positiveButtonListener: DialogInterface.OnClickListener? = null,
+    protected var negativeButtonTitle: String? = null,
+    protected var negativeButtonListener: DialogInterface.OnClickListener? = null
 ) : DialogFragment() {
 
     private lateinit var dialogView: View
@@ -31,7 +31,7 @@ open class MaterialProgressDialogFragmentNew private constructor(
     data class Builder(
         var title: String? = null,
         var message: String? = null,
-        var cancelable: Boolean = true,
+        var canBeCanceled: Boolean = true,
         var positiveButtonTitle: String? = null,
         var positiveButtonListener: DialogInterface.OnClickListener? = null,
         var negativeButtonTitle: String? = null,
@@ -39,7 +39,7 @@ open class MaterialProgressDialogFragmentNew private constructor(
     ) {
         fun title(title: String) = apply { this.title = title }
         fun message(message: String) = apply { this.message = message }
-        fun cancelable(cancelable: Boolean) = apply { this.cancelable = cancelable }
+        fun cancelable(canBeCanceled: Boolean) = apply { this.canBeCanceled = canBeCanceled }
         fun positiveButton(positiveButtonTitle: String, positiveButtonListener: DialogInterface.OnClickListener) = apply {
             this.positiveButtonTitle = positiveButtonTitle
             this.positiveButtonListener = positiveButtonListener
@@ -53,7 +53,7 @@ open class MaterialProgressDialogFragmentNew private constructor(
             val dialog = MaterialProgressDialogFragmentNew(
                 title,
                 message,
-                cancelable,
+                canBeCanceled,
                 positiveButtonTitle,
                 positiveButtonListener,
                 negativeButtonTitle,
@@ -72,7 +72,7 @@ open class MaterialProgressDialogFragmentNew private constructor(
         dialogView = requireActivity().layoutInflater.inflate(R.layout.progress_dialog, null, false).apply {
             (findViewById<View>(R.id.message) as TextView).text = message
         }
-        isCancelable = cancelable
+        isCancelable = canBeCanceled
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
