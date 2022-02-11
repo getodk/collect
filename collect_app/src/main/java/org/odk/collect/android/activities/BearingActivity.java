@@ -24,7 +24,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
-import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
 import java.util.Locale;
 
@@ -55,7 +55,7 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
 
         sensorManager.unregisterListener(this, accelerometer);
         sensorManager.unregisterListener(this, magnetometer);
-        DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class, getSupportFragmentManager());
+        DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragmentNew.class, getSupportFragmentManager());
     }
 
     @Override
@@ -84,14 +84,13 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                     }
                 };
 
-        MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
-        dialog.setCancelable(false);
-        dialog.setIcon(android.R.drawable.ic_dialog_info);
-        dialog.setTitle(getString(R.string.getting_bearing));
-        dialog.setMessage(getString(R.string.please_wait_long));
-        dialog.setPositiveButton(getString(R.string.accept_bearing), geopointButtonListener);
-        dialog.setNegativeButton(getString(R.string.cancel_location), geopointButtonListener);
-        DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class, getSupportFragmentManager());
+        new MaterialProgressDialogFragmentNew.Builder()
+                .title(getString(R.string.getting_bearing))
+                .message(getString(R.string.please_wait_long))
+                .positiveButton(getString(R.string.accept_bearing), geopointButtonListener)
+                .negativeButton(getString(R.string.cancel_location), geopointButtonListener)
+                .cancelable(false)
+                .show(getSupportFragmentManager());
     }
 
     private void returnBearing() {
@@ -157,11 +156,11 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                MaterialProgressDialogFragment existingDialog = (MaterialProgressDialogFragment) getSupportFragmentManager()
-                        .findFragmentByTag(MaterialProgressDialogFragment.class.getName());
+                MaterialProgressDialogFragmentNew existingDialog = (MaterialProgressDialogFragmentNew) getSupportFragmentManager()
+                        .findFragmentByTag(MaterialProgressDialogFragmentNew.class.getName());
 
                 if (existingDialog != null) {
-                    existingDialog.setMessage(getString(R.string.direction, dir)
+                    existingDialog.updateMessage(getString(R.string.direction, dir)
                             + "\n" + getString(R.string.bearing, degrees));
                 }
             }
