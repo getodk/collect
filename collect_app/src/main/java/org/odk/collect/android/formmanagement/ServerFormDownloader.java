@@ -14,7 +14,6 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.forms.MediaFile;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
 
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -100,8 +98,8 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                FormMediaDownloader mediaDownloader = new FormMediaDownloader(formsDirPath, formsRepository, formSource);
-                mediaDownloader.download(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName(), fd);
+                FormMediaDownloader mediaDownloader = new FormMediaDownloader(formsRepository, formSource);
+                mediaDownloader.download(fd, fd.getManifest().getMediaFiles(), tempMediaPath, tempDir, stateListener);
             }
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
