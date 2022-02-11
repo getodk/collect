@@ -15,7 +15,7 @@ class RefreshFormListDialogFragment : MaterialProgressDialogFragmentNew() {
         }
         title = getString(R.string.downloading_data)
         message = getString(R.string.please_wait)
-        isCancelable = false
+        canBeCanceled = false
         negativeButtonTitle = getString(R.string.cancel_loading_form)
         negativeButtonListener =
             DialogInterface.OnClickListener { _: DialogInterface?, _: Int ->

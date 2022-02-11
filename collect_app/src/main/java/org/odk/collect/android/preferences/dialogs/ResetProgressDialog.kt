@@ -11,6 +11,6 @@ class ResetProgressDialog : MaterialProgressDialogFragmentNew() {
 
         title = context.getLocalizedString(R.string.please_wait)
         message = context.getLocalizedString(R.string.reset_in_progress)
-        isCancelable = false
+        canBeCanceled = false
     }
 }
