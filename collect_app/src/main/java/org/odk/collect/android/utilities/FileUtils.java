@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.utilities;
 
-import static java.util.Arrays.asList;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+import static java.util.Arrays.asList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +37,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.async.OngoingWorkListener;
 import org.odk.collect.shared.strings.StringUtils;
 
 import java.io.File;
@@ -465,5 +466,102 @@ public final class FileUtils {
         boolean containsNonAscii = CharMatcher.ascii().matchesAllOf(filename);
         boolean containsPossiblyRestricted = CharMatcher.anyOf(possiblyRestricted).matchesAnyOf(possiblyRestricted);
         return "Problem with project name file. Contains @: " + containsAt + ", Contains non-ascii: " + containsNonAscii + ", Contains restricted: " + containsPossiblyRestricted;
+    }
+
+    /**
+     * Common routine to take a downloaded document save the contents in the file
+     * 'file'.
+     * <p>
+     * The file is saved into a temp folder and is moved to the final place if everything
+     * is okay, so that garbage is not left over on cancel.
+     */
+    public static void interuptablyWriteFile(InputStream inputStream, File destinationFile, File tempDir, OngoingWorkListener listener)
+            throws IOException, InterruptedException {
+
+        File tempFile = File.createTempFile(
+                destinationFile.getName(),
+                ".tempDownload",
+                tempDir
+        );
+
+        // WiFi network connections can be renegotiated during a large download sequence.
+        // This will cause intermittent download failures.  Silently retry once after each
+        // failure.  Only if there are two consecutive failures do we abort.
+        boolean success = false;
+        int attemptCount = 0;
+        final int maxAttemptCount = 2;
+        while (!success && ++attemptCount <= maxAttemptCount) {
+            // write connection to file
+            InputStream is = null;
+            OutputStream os = null;
+
+            try {
+                is = inputStream;
+                os = new FileOutputStream(tempFile);
+
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0 && (listener == null || !listener.isCancelled())) {
+                    os.write(buf, 0, len);
+                }
+                os.flush();
+                success = true;
+
+            } catch (Exception e) {
+                Timber.e(e.toString());
+                // silently retry unless this is the last attempt,
+                // in which case we rethrow the exception.
+
+                FileUtils.deleteAndReport(tempFile);
+
+                if (attemptCount == maxAttemptCount) {
+                    throw e;
+                }
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+                if (is != null) {
+                    try {
+                        // ensure stream is consumed...
+                        final long count = 1024L;
+                        while (is.skip(count) == count) {
+                            // skipping to the end of the http entity
+                        }
+                    } catch (Exception e) {
+                        // no-op
+                    }
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                        Timber.w(e);
+                    }
+                }
+            }
+
+            if (listener != null && listener.isCancelled()) {
+                FileUtils.deleteAndReport(tempFile);
+                throw new InterruptedException();
+            }
+        }
+
+        Timber.d("Completed downloading of %s. It will be moved to the proper path...", tempFile.getAbsolutePath());
+
+        FileUtils.deleteAndReport(destinationFile);
+
+        String errorMessage = FileUtils.copyFile(tempFile, destinationFile);
+
+        if (destinationFile.exists()) {
+            Timber.d("Copied %s over %s", tempFile.getAbsolutePath(), destinationFile.getAbsolutePath());
+            FileUtils.deleteAndReport(tempFile);
+        } else {
+            String msg = Collect.getInstance().getString(R.string.fs_file_copy_error,
+                    tempFile.getAbsolutePath(), destinationFile.getAbsolutePath(), errorMessage);
+            throw new RuntimeException(msg);
+        }
     }
 }
