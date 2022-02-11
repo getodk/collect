@@ -2322,7 +2322,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormLoadingDialogFragment dialog = getDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
         if (dialog != null) {
-            dialog.setMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
+            dialog.updateMessage(getString(R.string.please_wait) + "\n\n" + stepMessage);
         }
     }
 

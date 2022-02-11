@@ -18,11 +18,13 @@ package org.odk.collect.android.formentry;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
-import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
-public class FormLoadingDialogFragment extends MaterialProgressDialogFragment {
+public class FormLoadingDialogFragment extends MaterialProgressDialogFragmentNew {
 
     public interface FormLoadingDialogFragmentListener {
         void onCancelFormLoading();
@@ -37,28 +39,16 @@ public class FormLoadingDialogFragment extends MaterialProgressDialogFragment {
     private FormLoadingDialogFragmentListener listener;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         setTitle(getString(R.string.loading_form));
         setMessage(getString(R.string.please_wait));
         setCancelable(false);
-
+        setNegativeButtonTitle(getString(R.string.cancel_loading_form));
+        setNegativeButtonListener((dialogInterface, i) -> listener.onCancelFormLoading());
         if (context instanceof FormLoadingDialogFragmentListener) {
             listener = (FormLoadingDialogFragmentListener) context;
         }
-    }
-
-    @Override
-    protected String getCancelButtonText() {
-        return getString(R.string.cancel_loading_form);
-    }
-
-    @Override
-    protected OnCancelCallback getOnCancelCallback() {
-        return () -> {
-            listener.onCancelFormLoading();
-            return true;
-        };
     }
 }
