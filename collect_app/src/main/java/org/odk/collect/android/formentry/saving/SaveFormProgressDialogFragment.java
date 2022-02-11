@@ -6,27 +6,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.async.Scheduler;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
 import javax.inject.Inject;
 
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
 
-public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragment {
-
-    @Inject
-    Analytics analytics;
-
-    @Inject
-    Scheduler scheduler;
-
+public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragmentNew {
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
-
-    private FormSaveViewModel viewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -34,9 +23,9 @@ public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragme
         DaggerUtils.getComponent(context).inject(this);
 
         ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
-        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
+        FormSaveViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
 
-        setCancelable(false);
+        setCanBeCanceled(false);
         setTitle(getString(R.string.saving_form));
 
         viewModel.getSaveResult().observe(this, result -> {
@@ -46,10 +35,5 @@ public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragme
                 setMessage(getString(R.string.please_wait));
             }
         });
-    }
-
-    @Override
-    protected OnCancelCallback getOnCancelCallback() {
-        return viewModel;
     }
 }
