@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.odk.collect.async
 
-package org.odk.collect.android.listeners;
-
-public interface FormDownloaderListener {
-
-    void progressUpdate(String currentFile, String progress, String total);
-
-    boolean isTaskCancelled();
+/**
+ * Allows a client of some ongoing work to receive updates on progress and to provide a signal
+ * that the work should be cancelled.
+ */
+interface OngoingWorkListener {
+    fun progressUpdate(progress: Int)
+    val isCancelled: Boolean
 }

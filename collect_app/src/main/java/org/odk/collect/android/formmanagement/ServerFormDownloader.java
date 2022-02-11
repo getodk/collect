@@ -8,7 +8,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.async.OngoingWorkListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.forms.Form;
@@ -78,7 +78,7 @@ public class ServerFormDownloader implements FormDownloader {
         tempDir.mkdirs();
 
         try {
-            FormDownloaderListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
+            OngoingWorkListener stateListener = new ProgressReporterAndSupplierStateListener(progressReporter, isCancelled);
             processOneForm(form, stateListener, tempDir, formsDirPath, formMetadataParser);
         } catch (FormSourceException e) {
             throw new FormDownloadException.FormSourceError(e);
@@ -91,7 +91,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void processOneForm(ServerFormDetails fd, FormDownloaderListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
+    private void processOneForm(ServerFormDetails fd, OngoingWorkListener stateListener, File tempDir, String formsDirPath, FormMetadataParser formMetadataParser) throws FormDownloadException, FormSourceException {
         // use a temporary media path until everything is ok.
         String tempMediaPath = new File(tempDir, "media").getAbsolutePath();
         FileResult fileResult = null;
@@ -113,7 +113,7 @@ public class ServerFormDownloader implements FormDownloader {
             throw new FormDownloadException.DiskError();
         }
 
-        if (stateListener != null && stateListener.isTaskCancelled()) {
+        if (stateListener != null && stateListener.isCancelled()) {
             cleanUp(fileResult, tempMediaPath);
             throw new FormDownloadException.DownloadingInterrupted();
         }
@@ -133,7 +133,7 @@ public class ServerFormDownloader implements FormDownloader {
             }
         }
 
-        if (stateListener != null && stateListener.isTaskCancelled()) {
+        if (stateListener != null && stateListener.isCancelled()) {
             throw new FormDownloadException.DownloadingInterrupted();
         }
 
@@ -240,7 +240,7 @@ public class ServerFormDownloader implements FormDownloader {
      * Takes the formName and the URL and attempts to download the specified file. Returns a file
      * object representing the downloaded file.
      */
-    private FileResult downloadXform(String formName, String url, FormDownloaderListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterrupted {
+    private FileResult downloadXform(String formName, String url, OngoingWorkListener stateListener, File tempDir, String formsDirPath) throws FormSourceException, IOException, FormDownloadException.DownloadingInterrupted {
         InputStream xform = formSource.fetchForm(url);
 
         String fileName = getFormFileName(formName, formsDirPath);
@@ -268,7 +268,7 @@ public class ServerFormDownloader implements FormDownloader {
      * SurveyCTO: The file is saved into a temp folder and is moved to the final place if everything
      * is okay, so that garbage is not left over on cancel.
      */
-    private void writeFile(InputStream inputStream, File destinationFile, File tempDir, FormDownloaderListener stateListener)
+    private void writeFile(InputStream inputStream, File destinationFile, File tempDir, OngoingWorkListener stateListener)
             throws IOException, FormDownloadException.DownloadingInterrupted {
 
         File tempFile = File.createTempFile(
@@ -294,7 +294,7 @@ public class ServerFormDownloader implements FormDownloader {
 
                 byte[] buf = new byte[4096];
                 int len;
-                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isTaskCancelled())) {
+                while ((len = is.read(buf)) > 0 && (stateListener == null || !stateListener.isCancelled())) {
                     os.write(buf, 0, len);
                 }
                 os.flush();
@@ -336,7 +336,7 @@ public class ServerFormDownloader implements FormDownloader {
                 }
             }
 
-            if (stateListener != null && stateListener.isTaskCancelled()) {
+            if (stateListener != null && stateListener.isCancelled()) {
                 FileUtils.deleteAndReport(tempFile);
                 throw new FormDownloadException.DownloadingInterrupted();
             }
@@ -358,13 +358,13 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName, ServerFormDetails fd) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException {
+    private void downloadMediaFiles(String tempMediaPath, OngoingWorkListener stateListener, List<MediaFile> files, File tempDir, String formFileName, ServerFormDetails fd) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException {
         File tempMediaDir = new File(tempMediaPath);
         tempMediaDir.mkdir();
 
         for (int i = 0; i < files.size(); i++) {
             if (stateListener != null) {
-                stateListener.progressUpdate("", String.valueOf(i + 1), "");
+                stateListener.progressUpdate(i + 1);
             }
 
             MediaFile toDownload = files.get(i);
@@ -477,7 +477,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private static class ProgressReporterAndSupplierStateListener implements FormDownloaderListener {
+    private static class ProgressReporterAndSupplierStateListener implements OngoingWorkListener {
         private final ProgressReporter progressReporter;
         private final Supplier<Boolean> isCancelled;
 
@@ -487,14 +487,14 @@ public class ServerFormDownloader implements FormDownloader {
         }
 
         @Override
-        public void progressUpdate(String currentFile, String progress, String total) {
+        public void progressUpdate(int progress) {
             if (progressReporter != null) {
-                progressReporter.onDownloadingMediaFile(Integer.parseInt(progress));
+                progressReporter.onDownloadingMediaFile(progress);
             }
         }
 
         @Override
-        public boolean isTaskCancelled() {
+        public boolean isCancelled() {
             if (isCancelled != null) {
                 return isCancelled.get();
             } else {
