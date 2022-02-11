@@ -24,11 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
 import timber.log.Timber;
 
-public class GoogleSheetsUploaderProgressDialog extends MaterialProgressDialogFragment {
+public class GoogleSheetsUploaderProgressDialog extends MaterialProgressDialogFragmentNew {
     public static final String GOOGLE_SHEETS_UPLOADER_PROGRESS_DIALOG_TAG = "googleSheetsUploaderProgressDialogTag";
     private static final String MESSAGE = "message";
 
@@ -85,8 +85,9 @@ public class GoogleSheetsUploaderProgressDialog extends MaterialProgressDialogFr
         setTitle(getString(R.string.uploading_data));
         setTitle(getString(R.string.uploading_data));
         setMessage(getString(R.string.please_wait));
-        setCancelable(false);
-        setNegativeButton(getString(R.string.cancel), (dialog1, which) -> onSendingFormsCanceled.onSendingFormsCanceled());
+        setCanBeCanceled(false);
+        setNegativeButtonTitle(getString(R.string.cancel));
+        setNegativeButtonListener((dialogInterface, i) -> onSendingFormsCanceled.onSendingFormsCanceled());
         return super.onCreateDialog(savedInstanceState);
     }
 

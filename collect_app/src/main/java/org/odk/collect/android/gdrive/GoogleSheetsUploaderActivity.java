@@ -274,7 +274,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
         alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         GoogleSheetsUploaderProgressDialog progressDialog = getProgressDialog();
         if (progressDialog != null) {
-            progressDialog.setMessage(alertMsg);
+            progressDialog.updateMessage(alertMsg);
         }
     }
 
