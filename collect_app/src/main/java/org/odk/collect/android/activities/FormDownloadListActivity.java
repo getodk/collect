@@ -639,7 +639,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         RefreshFormListDialogFragment fragment = (RefreshFormListDialogFragment) getSupportFragmentManager().findFragmentByTag(RefreshFormListDialogFragment.class.getName());
 
         if (fragment != null) {
-            fragment.setMessage(getString(R.string.fetching_file, currentFile,
+            fragment.updateMessage(getString(R.string.fetching_file, currentFile,
                     String.valueOf(progress), String.valueOf(total)));
         }
     }

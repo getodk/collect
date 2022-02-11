@@ -1,15 +1,13 @@
 package org.odk.collect.android.formentry;
 
-import android.app.Dialog;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.material.MaterialProgressDialogFragmentNew;
 
-public class RefreshFormListDialogFragment extends MaterialProgressDialogFragment {
+public class RefreshFormListDialogFragment extends MaterialProgressDialogFragmentNew {
 
     protected RefreshFormListDialogFragmentListener listener;
 
@@ -23,25 +21,11 @@ public class RefreshFormListDialogFragment extends MaterialProgressDialogFragmen
         setTitle(getString(R.string.downloading_data));
         setMessage(getString(R.string.please_wait));
         setCancelable(false);
-    }
-
-    @Override
-    public void setupDialog(@NonNull Dialog dialog, int style) {
-        ((AlertDialog) dialog).setIcon(android.R.drawable.ic_dialog_info);
-    }
-
-    @Override
-    protected String getCancelButtonText() {
-        return getString(R.string.cancel_loading_form);
-    }
-
-    @Override
-    protected OnCancelCallback getOnCancelCallback() {
-        return () -> {
+        setNegativeButtonTitle(getString(R.string.cancel_loading_form));
+        setNegativeButtonListener((dialogInterface, i) -> {
             listener.onCancelFormLoading();
             dismiss();
-            return true;
-        };
+        });
     }
 
     public interface RefreshFormListDialogFragmentListener {
