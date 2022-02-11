@@ -1,5 +1,8 @@
 package org.odk.collect.android.formmanagement;
 
+import static org.apache.commons.io.FileUtils.deleteDirectory;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
@@ -23,15 +26,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import timber.log.Timber;
-
-import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 
 public class ServerFormDownloader implements FormDownloader {
 
@@ -102,7 +103,7 @@ public class ServerFormDownloader implements FormDownloader {
 
             // download media files if there are any
             if (fd.getManifest() != null && !fd.getManifest().getMediaFiles().isEmpty()) {
-                downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName());
+                downloadMediaFiles(tempMediaPath, stateListener, fd.getManifest().getMediaFiles(), tempDir, fileResult.file.getName(), fd);
             }
         } catch (FormDownloadException.DownloadingInterrupted e) {
             Timber.i(e);
@@ -357,7 +358,7 @@ public class ServerFormDownloader implements FormDownloader {
         }
     }
 
-    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException {
+    private void downloadMediaFiles(String tempMediaPath, FormDownloaderListener stateListener, List<MediaFile> files, File tempDir, String formFileName, ServerFormDetails fd) throws IOException, FormDownloadException.DownloadingInterrupted, FormSourceException {
         File tempMediaDir = new File(tempMediaPath);
         tempMediaDir.mkdir();
 
@@ -373,8 +374,21 @@ public class ServerFormDownloader implements FormDownloader {
             File finalMediaFile = new File(finalMediaPath, toDownload.getFilename());
 
             if (!finalMediaFile.exists()) {
-                InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
-                writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
+                List<Form> allFormVersions = formsRepository.getAllByFormId(fd.getFormId());
+                Optional<File> existingFileInOtherVersion = allFormVersions.stream().map(form -> {
+                    return new File(form.getFormMediaPath(), toDownload.getFilename());
+                }).filter(file -> {
+                    String currentFileHash = Md5.getMd5Hash(file);
+                    String downloadFileHash = validateHash(toDownload.getHash());
+                    return file.exists() && currentFileHash.contentEquals(downloadFileHash);
+                }).findFirst();
+
+                if (existingFileInOtherVersion.isPresent()) {
+                    FileUtils.copyFile(existingFileInOtherVersion.get(), tempMediaFile);
+                } else {
+                    InputStream mediaFile = formSource.fetchMediaFile(toDownload.getDownloadUrl());
+                    writeFile(mediaFile, tempMediaFile, tempDir, stateListener);
+                }
             } else {
                 String currentFileHash = Md5.getMd5Hash(finalMediaFile);
                 String downloadFileHash = validateHash(toDownload.getHash());

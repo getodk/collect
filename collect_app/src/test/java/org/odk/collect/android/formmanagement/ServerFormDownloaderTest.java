@@ -273,6 +273,54 @@ public class ServerFormDownloaderTest {
         verify(formSource, times(1)).fetchMediaFile("http://file2");
     }
 
+    @Test
+    public void whenFormHasMediaFiles_andIsFormToDownloadIsUpdate_downloadsFilesWithChangedHash() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents2"), "http://file2")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String xformUpdate = createXFormBody("id", "updated");
+        ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
+                "Form",
+                "http://downloadUpdatedUrl",
+                "id",
+                "updated",
+                Md5.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
+                false,
+                true,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents3"), "http://file2")
+                )));
+
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents3".getBytes()));
+        when(formSource.fetchForm("http://downloadUpdatedUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
+        downloader.downloadForm(serverFormDetailsUpdated, null, null);
+
+        Form form = formsRepository.getAllByFormIdAndVersion("id", "updated").get(0);
+        File mediaFile2 = new File(form.getFormMediaPath() + "/file2");
+        assertThat(mediaFile2.exists(), is(true));
+        assertThat(new String(read(mediaFile2)), is("contents3"));
+    }
+
     /**
      * Form parsing might need access to media files (external secondary instances) for example
      * so we need to make sure we've got those files in the right place before we parse.
