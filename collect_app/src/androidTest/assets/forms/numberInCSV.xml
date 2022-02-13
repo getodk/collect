@@ -78,7 +78,7 @@
             </group>
         </group>
         <input ref="/data/closemessage">
-            <hint>Thank you for taking the time to complete this form!</hint>
+            <label>Thank you for taking the time to complete this form!</label>
         </input>
     </h:body>
 </h:html>

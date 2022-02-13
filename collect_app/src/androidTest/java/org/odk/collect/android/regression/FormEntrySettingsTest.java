@@ -56,7 +56,7 @@ public class FormEntrySettingsTest {
                 .pressBack(new MainMenuPage())
                 .checkIfElementIsGone(R.id.review_data)
                 .startBlankForm("All widgets")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("String widget")
                 .closeSoftKeyboard()
                 .swipeToPreviousQuestion("String widget")
                 .pressBack(new ExitFormDialog("All widgets"))

@@ -43,10 +43,10 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.AdbFormLoadingUtils
-import org.odk.collect.android.support.CustomMatchers.withIndex
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
+import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.strings.localization.getLocalizedString

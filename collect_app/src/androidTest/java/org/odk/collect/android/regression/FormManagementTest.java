@@ -39,7 +39,6 @@ public class FormManagementTest {
                 .clickOnString(R.string.constraint_behavior_on_finalize)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new FormEntryPage("OnePageFormValid"))
-                .swipeToNextQuestion()
                 .swipeToEndScreen()
                 .clickSaveAndExitWithError("Response length must be between 5 and 15");
     }

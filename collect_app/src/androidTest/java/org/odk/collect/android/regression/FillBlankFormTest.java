@@ -24,6 +24,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
+import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.BlankFormSearchPage;
@@ -332,7 +333,7 @@ public class FillBlankFormTest {
         for (int i = 1; i <= 3; i++) {
             FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random");
             firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToNextQuestion();
+            formEntryPage.swipeToNextQuestion("Your random once value:");
             secondQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }
@@ -350,7 +351,7 @@ public class FillBlankFormTest {
         for (int i = 1; i <= 3; i++) {
             FormEntryPage formEntryPage = new MainMenuPage().startBlankForm("random test");
             formEntryPage.inputText("3");
-            formEntryPage.swipeToNextQuestion();
+            formEntryPage.swipeToNextQuestion("Your random number was");
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToEndScreen().clickSaveAndExit();
         }
@@ -591,7 +592,7 @@ public class FillBlankFormTest {
     }
 
     @Test
-    public void missingFileMessage_shouldBeDisplayedIfExternalFIleIsMissing() {
+    public void missingFileMessage_shouldBeDisplayedIfExternalFileIsMissing() {
         String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         //TestCase55
@@ -606,11 +607,10 @@ public class FillBlankFormTest {
                 .copyForm("select_one_external.xml")
                 .startBlankForm("cascading select test")
                 .clickOnText("Texas")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("county")
                 .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion()
+                .swipeToNextQuestion("city")
                 .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
-                .swipeToNextQuestion(3)
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
@@ -648,24 +648,24 @@ public class FillBlankFormTest {
         rule.startAtMainMenu()
                 .copyForm("nested-repeats-complex.xml")
                 .startBlankForm("nested-repeats-complex")
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
+                .swipeToNextQuestion("You will now be asked questions about your friends. When you see a dialog, tap \"Add\" until you have added all your friends.")
+                .swipeToNextQuestionWithRepeatGroup("Friends")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
                 .inputText("La")
-                .swipeToNextQuestion()
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
+                .swipeToNextQuestion("You will now be asked questions about La's pets. When you see a dialog, tap \"Add\" until you have added all of La's pets.")
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
                 .inputText("Le")
-                .swipeToNextQuestion()
-                .clickOnAddGroup()
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
                 .inputText("Be")
-                .swipeToNextQuestion()
-                .clickOnDoNotAddGroup()
-                .clickOnDoNotAddGroup()
-                .clickOnAddGroup()
+                .swipeToNextQuestionWithRepeatGroup("Pets")
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Friends"))
+                .clickOnDoNotAdd(new AddNewRepeatDialog("Enemies"))
+                .clickOnAdd(new FormEntryPage("nested-repeats-complex"))
                 .inputText("Bu")
-                .swipeToNextQuestion()
-                .clickOnDoNotAddGroup()
+                .swipeToNextQuestionWithRepeatGroup("Enemies")
+                .clickOnDoNotAdd(new FormEndPage("nested-repeats-complex"))
                 .clickGoToArrow()
                 .clickOnText("Friends")
                 .checkListSizeInHierarchy(1)
