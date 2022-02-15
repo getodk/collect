@@ -15,19 +15,34 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.geo.MapProvider
+import org.odk.collect.android.support.FakeClickableMapFragment
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.externalapp.ExternalAppUtils.getReturnIntent
 import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.maps.MapFragment
+import org.odk.collect.geo.maps.MapFragmentFactory
 
 @RunWith(AndroidJUnit4::class)
 class FormMapTest {
 
+    private val mapFragment = FakeClickableMapFragment()
+    private val testDependencies = object : TestDependencies() {
+        override fun providesMapFragmentFactory(mapProvider: MapProvider): MapFragmentFactory {
+            return object : MapFragmentFactory {
+                override fun createMapFragment(context: Context): MapFragment {
+                    return mapFragment
+                }
+            }
+        }
+    }
     private val rule = CollectTestRule()
 
     @get:Rule
-    var copyFormChain: RuleChain = TestRuleChain.chain()
+    var copyFormChain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION))
         .around(RecordedIntentsRule())
         .around(rule)
@@ -62,11 +77,13 @@ class FormMapTest {
             .clickFillBlankForm()
             .clickOnMapIconForForm("Single geopoint")
             .clickFillBlankFormButton("Single geopoint")
+
             .inputText("Foo")
             .swipeToNextQuestion("Location")
             .clickWidgetButton()
             .swipeToEndScreen()
             .clickSaveAndExitBackToMap()
+
             .assertText(
                 ApplicationProvider.getApplicationContext<Context>().resources.getString(
                     R.string.geometry_status,
@@ -74,6 +91,10 @@ class FormMapTest {
                     1
                 )
             )
+            .selectForm(mapFragment, 1)
+            .clickEditSavedForm("Single geopoint")
+            .clickOnQuestion("Name")
+            .assertText("Foo")
     }
 
     private fun stubGeopointIntent() {

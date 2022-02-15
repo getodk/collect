@@ -38,7 +38,6 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFo
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.formmanagement.FormNavigator;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -50,6 +49,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
@@ -79,7 +79,7 @@ public class FormMapActivity extends LocalizedActivity {
     private FormMapViewModel viewModel;
 
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -146,7 +146,7 @@ public class FormMapActivity extends LocalizedActivity {
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
 
-        MapFragment mapToAdd = mapProvider.createMapFragment(getApplicationContext());
+        MapFragment mapToAdd = mapFragmentFactory.createMapFragment(getApplicationContext());
 
         if (mapToAdd != null) {
             mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
