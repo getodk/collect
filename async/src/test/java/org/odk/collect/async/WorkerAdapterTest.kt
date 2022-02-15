@@ -43,7 +43,7 @@ class WorkerAdapterTest {
     @Test
     fun `when task returns false retries if maxRetries not specified`() {
         whenever(spec.getTask(any(), any(), any())).thenReturn(Supplier { false })
-        whenever(spec.maxRetries).thenReturn(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES)
+        whenever(spec.maxRetries).thenReturn(null)
 
         assertThat(workerAdapter.doWork(), `is`(ListenableWorker.Result.retry()))
     }
@@ -78,7 +78,7 @@ class WorkerAdapterTest {
     @Test
     fun `when maxRetries is not specified, task called with isLastUniqueExecution true`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
-        whenever(spec.maxRetries).thenReturn(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES)
+        whenever(spec.maxRetries).thenReturn(null)
         whenever(spec.getTask(any(), any(), any())).thenReturn(Supplier { true })
 
         workerAdapter.doWork()

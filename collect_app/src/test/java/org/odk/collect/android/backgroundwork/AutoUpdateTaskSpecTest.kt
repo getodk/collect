@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +23,6 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.async.TaskSpec
 import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
@@ -45,7 +45,7 @@ class AutoUpdateTaskSpecTest {
                 syncStatusAppState: SyncStatusAppState,
                 instancesRepositoryProvider: InstancesRepositoryProvider,
                 changeLockProvider: ChangeLockProvider
-            ): FormsUpdater? {
+            ): FormsUpdater {
                 return formUpdateChecker
             }
         })
@@ -62,6 +62,6 @@ class AutoUpdateTaskSpecTest {
 
     @Test
     fun `maxRetries should not be limited`() {
-        assertThat(AutoUpdateTaskSpec().maxRetries, `is`(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES))
+        assertThat(AutoUpdateTaskSpec().maxRetries, `is`(nullValue()))
     }
 }
