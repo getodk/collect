@@ -58,16 +58,6 @@ class FormMapTest {
     }
 
     @Test
-    fun clickingOnMapIcon_opensMapForForm() {
-        rule.startAtMainMenu()
-            .copyForm(SINGLE_GEOPOINT_FORM)
-            .copyForm(NO_GEOPOINT_FORM)
-            .clickFillBlankForm()
-            .clickOnMapIconForForm("Single geopoint")
-            .assertText("Single geopoint")
-    }
-
-    @Test
     fun fillingBlankForm_addsInstanceToMap() {
         stubGeopointIntent()
 
