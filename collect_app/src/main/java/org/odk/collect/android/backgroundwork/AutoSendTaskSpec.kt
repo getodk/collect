@@ -59,7 +59,7 @@ class AutoSendTaskSpec : TaskSpec {
      * If the network type doesn't match the auto-send settings, retry next time a connection is
      * available.
      */
-    override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
+    override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]

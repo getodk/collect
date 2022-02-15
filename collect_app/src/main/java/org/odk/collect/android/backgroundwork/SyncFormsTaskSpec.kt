@@ -15,13 +15,12 @@ class SyncFormsTaskSpec : TaskSpec {
 
     override val maxRetries = 3
 
-    override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
+    override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
-            val notify = inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION].toBoolean()
             if (projectId != null) {
-                formsUpdater.matchFormsWithServer(projectId, notify)
+                formsUpdater.matchFormsWithServer(projectId, isLastUniqueExecution)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

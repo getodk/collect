@@ -22,7 +22,6 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.async.TaskSpec
 import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
@@ -50,20 +49,18 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `when DATA_LAST_UNIQUE_EXECUTION equals true task calls synchronize with notify true`() {
+    fun `when isLastUniqueExecution equals true task calls synchronize with notify true`() {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"
-        SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
+        SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
         verify(formsUpdater).matchFormsWithServer("projectId", true)
     }
 
     @Test
-    fun `when DATA_LAST_UNIQUE_EXECUTION equals false task calls synchronize with notify false`() {
+    fun `when isLastUniqueExecution equals false task calls synchronize with notify false`() {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "false"
-        SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
+        SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
         verify(formsUpdater).matchFormsWithServer("projectId", false)
     }
 
@@ -71,14 +68,13 @@ class SyncFormsTaskSpecTest {
     fun `task returns result from FormUpdater`() {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
-        inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"
 
         whenever(formsUpdater.matchFormsWithServer("projectId", true)).thenReturn(true)
-        var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
+        var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
         assertThat(result, `is`(true))
 
         whenever(formsUpdater.matchFormsWithServer("projectId")).thenReturn(false)
-        result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
+        result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
         assertThat(result, `is`(false))
     }
 
