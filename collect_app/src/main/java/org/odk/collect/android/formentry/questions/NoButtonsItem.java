@@ -9,16 +9,18 @@ import android.widget.ImageView;
 
 import org.odk.collect.android.databinding.NoButtonsItemLayoutBinding;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 
 public class NoButtonsItem extends FrameLayout {
     NoButtonsItemLayoutBinding binding;
+    private final ImageLoader imageLoader;
 
-    public NoButtonsItem(Context context, boolean enabled) {
+    public NoButtonsItem(Context context, boolean enabled, ImageLoader imageLoader) {
         super(context);
         binding = NoButtonsItemLayoutBinding.inflate(LayoutInflater.from(context), this, true);
+        this.imageLoader = imageLoader;
 
         setLongClickable(true);
         setEnabled(enabled);
@@ -28,9 +30,9 @@ public class NoButtonsItem extends FrameLayout {
         if (imageFile != null && imageFile.exists()) {
             binding.imageView.setVisibility(View.VISIBLE);
             if (isInGridView) {
-                ImageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.FIT_CENTER);
+                imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.FIT_CENTER, null);
             } else {
-                ImageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE);
+                imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
             }
         } else {
             binding.label.setVisibility(View.VISIBLE);

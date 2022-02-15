@@ -249,7 +249,7 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
-    implementation project(':glide')
+    implementation project(':imageloader')
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
@@ -347,9 +347,6 @@ dependencies {
     implementation Dependencies.rxrelay
 
     implementation Dependencies.armen101_audio_recorder_view
-
-    // Glide
-    implementation Dependencies.glide
 
     implementation(Dependencies.mp4parser_muxer) {
         exclude group: 'org.hamcrest'

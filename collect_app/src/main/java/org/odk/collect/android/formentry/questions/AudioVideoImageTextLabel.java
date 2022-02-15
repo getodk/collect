@@ -41,7 +41,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.audioclips.Clip;
-import org.odk.collect.glide.ImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 
@@ -107,11 +107,11 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
         setupAudioButton(audioURI, audioHelper);
     }
 
-    public void setImage(@NonNull File imageFile) {
+    public void setImage(@NonNull File imageFile, ImageLoader imageLoader) {
         if (imageFile.exists()) {
             binding.imageView.layout(0, 0, 0, 0);
 
-            ImageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE);
+            imageLoader.loadImage(binding.imageView, imageFile, ImageView.ScaleType.CENTER_INSIDE, null);
             binding.imageView.setVisibility(VISIBLE);
             binding.imageView.setOnClickListener(this);
         } else {

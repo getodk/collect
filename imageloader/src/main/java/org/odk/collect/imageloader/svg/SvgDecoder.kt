@@ -1,4 +1,4 @@
-package org.odk.collect.glide.svg
+package org.odk.collect.imageloader.svg
 
 import com.bumptech.glide.load.Options
 import com.bumptech.glide.load.ResourceDecoder

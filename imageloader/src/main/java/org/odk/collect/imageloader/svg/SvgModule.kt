@@ -1,4 +1,4 @@
-package org.odk.collect.glide.svg
+package org.odk.collect.imageloader.svg
 
 import android.content.Context
 import android.graphics.drawable.PictureDrawable

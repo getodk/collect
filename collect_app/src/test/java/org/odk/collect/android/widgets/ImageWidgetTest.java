@@ -13,15 +13,19 @@ import androidx.core.util.Pair;
 import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
-import org.junit.Ignore;
+import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.support.SynchronousImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
@@ -34,7 +38,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.support.CollectHelpers.overrideReferenceManager;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -107,12 +110,22 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     }
 
     @Test
-    @Ignore
     public void whenPromptHasDefaultAnswer_doesNotShow() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
-        overrideReferenceManager(setupFakeReferenceManager(singletonList(
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
                 new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
-        )));
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
 
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
@@ -124,8 +137,14 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     }
 
     @Test
-    @Ignore
     public void whenPromptHasCurrentAnswer_showsInImageView() throws Exception {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
+
         String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
         currentFile = new File(imagePath);
 

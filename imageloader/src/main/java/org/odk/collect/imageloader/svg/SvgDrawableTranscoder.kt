@@ -1,4 +1,4 @@
-package org.odk.collect.glide.svg
+package org.odk.collect.imageloader.svg
 
 import android.graphics.drawable.PictureDrawable
 import com.bumptech.glide.load.Options

@@ -20,6 +20,7 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.imageloader.ImageLoader;
 
 import java.io.File;
 
@@ -106,7 +107,7 @@ public class AudioVideoImageTextLabelTest {
         when(imageFile.exists()).thenReturn(true);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
         audioVideoImageTextLabel.setTextView(new RadioButton(activity));
 
         assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
@@ -130,7 +131,7 @@ public class AudioVideoImageTextLabelTest {
         when(imageFile.exists()).thenReturn(true);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
         audioVideoImageTextLabel.setTextView(new CheckBox(activity));
 
         assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
@@ -150,7 +151,7 @@ public class AudioVideoImageTextLabelTest {
         when(imageFile.exists()).thenReturn(true);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
         audioVideoImageTextLabel.setTextView(new RadioButton(activity));
 
         assertThat(((RadioButton) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
@@ -178,7 +179,7 @@ public class AudioVideoImageTextLabelTest {
         when(imageFile.exists()).thenReturn(true);
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
         audioVideoImageTextLabel.setTextView(new CheckBox(activity));
 
         assertThat(((CheckBox) audioVideoImageTextLabel.getLabelTextView()).isChecked(), is(false));
@@ -205,7 +206,7 @@ public class AudioVideoImageTextLabelTest {
         File imageFile = new File("file://image.png");
 
         AudioVideoImageTextLabel audioVideoImageTextLabel = new AudioVideoImageTextLabel(activity);
-        audioVideoImageTextLabel.setImage(imageFile);
+        audioVideoImageTextLabel.setImage(imageFile, mock(ImageLoader.class));
 
         assertThat(audioVideoImageTextLabel.getMissingImage().getVisibility(), is(VISIBLE));
         assertThat(audioVideoImageTextLabel.getMissingImage().getText().toString(), is("File: file:/image.png is missing."));

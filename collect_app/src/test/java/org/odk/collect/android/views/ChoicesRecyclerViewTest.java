@@ -37,6 +37,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.android.controller.ActivityController;
 
@@ -377,7 +378,7 @@ public class ChoicesRecyclerViewTest {
         AudioVideoImageTextLabel view = (AudioVideoImageTextLabel) getChoiceView(0);
         File file = mock(File.class);
         when(file.exists()).thenReturn(true);
-        view.setImage(file);
+        view.setImage(file, mock(ImageLoader.class));
         view.setVideo(file);
         AudioHelper audioHelper = mock(AudioHelper.class);
         MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(false);
