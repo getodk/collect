@@ -16,15 +16,15 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
@@ -47,7 +47,7 @@ class FormNavigatorTest {
 
     @Test
     fun `editInstance starts FormEntryActivity with instance URI`() {
-        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true);
+        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
 
         navigator.editInstance(activity, 101)
 
@@ -59,7 +59,7 @@ class FormNavigatorTest {
 
     @Test
     fun `editInstance stars FormEntryActivity in view only mode when editing is disabled`() {
-        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, false);
+        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, false)
 
         navigator.editInstance(activity, 101)
 
@@ -71,7 +71,7 @@ class FormNavigatorTest {
 
     @Test
     fun `editInstance stars FormEntryActivity in view only mode when instance has been sent`() {
-        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true);
+        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
         val instance = instancesRepository.save(
             Instance.Builder()
                 .status(Instance.STATUS_SUBMITTED)
@@ -88,7 +88,7 @@ class FormNavigatorTest {
 
     @Test
     fun `editInstance stars FormEntryActivity in view only mode when instance has failed to send`() {
-        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true);
+        settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
         val instance = instancesRepository.save(
             Instance.Builder()
                 .status(Instance.STATUS_SUBMISSION_FAILED)

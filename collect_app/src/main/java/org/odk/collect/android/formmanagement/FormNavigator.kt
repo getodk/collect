@@ -4,13 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 
 class FormNavigator(
     private val currentProjectProvider: CurrentProjectProvider,
@@ -21,20 +21,22 @@ class FormNavigator(
     fun editInstance(activity: Activity, instanceId: Long) {
         val projectId = currentProjectProvider.getCurrentProject().uuid
         val uri = InstancesContract.getUri(projectId, instanceId)
-        activity.startActivity(Intent(activity, FormEntryActivity::class.java).also {
-            it.action = Intent.ACTION_EDIT
-            it.data = uri
+        activity.startActivity(
+            Intent(activity, FormEntryActivity::class.java).also {
+                it.action = Intent.ACTION_EDIT
+                it.data = uri
 
-            val editingDisabled =
-                !settingsProvider.getProtectedSettings().getBoolean(KEY_EDIT_SAVED)
-            val status = instancesRepositoryProvider().get(instanceId)?.status
+                val editingDisabled =
+                    !settingsProvider.getProtectedSettings().getBoolean(KEY_EDIT_SAVED)
+                val status = instancesRepositoryProvider().get(instanceId)?.status
 
-            if (editingDisabled ||
-                status == Instance.STATUS_SUBMITTED ||
-                status == Instance.STATUS_SUBMISSION_FAILED
-            ) {
-                it.putExtra(FORM_MODE, VIEW_SENT)
+                if (editingDisabled ||
+                    status == Instance.STATUS_SUBMITTED ||
+                    status == Instance.STATUS_SUBMISSION_FAILED
+                ) {
+                    it.putExtra(FORM_MODE, VIEW_SENT)
+                }
             }
-        })
+        )
     }
 }

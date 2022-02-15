@@ -37,13 +37,11 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -407,20 +405,6 @@ public class FormMapActivity extends LocalizedActivity {
         TextView infoText = findViewById(R.id.info);
         infoText.setVisibility(View.VISIBLE);
         infoText.setText(message);
-    }
-
-    private Intent getViewOnlyFormInstanceIntentFor(long instanceId) {
-        Intent intent = getEditFormInstanceIntentFor(instanceId);
-        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-        return intent;
-    }
-
-    private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
-        Intent intent = new Intent(this, FormEntryActivity.class);
-        intent.setAction(Intent.ACTION_EDIT);
-        intent.setData(uri);
-        return intent;
     }
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {
