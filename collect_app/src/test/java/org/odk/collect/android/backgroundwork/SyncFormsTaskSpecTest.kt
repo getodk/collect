@@ -83,7 +83,7 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `numberOfRetries should be limited`() {
-        assertThat(SyncFormsTaskSpec().numberOfRetries, `is`(3))
+    fun `maxRetries should be limited`() {
+        assertThat(SyncFormsTaskSpec().maxRetries, `is`(3))
     }
 }

@@ -14,13 +14,13 @@ abstract class WorkerAdapter(
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
             .toMutableMap()
             .apply {
-                this[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = (runAttemptCount >= spec.numberOfRetries).toString()
+                this[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = (runAttemptCount >= spec.maxRetries).toString()
             }
         val completed = spec.getTask(applicationContext, stringInputData).get()
 
         return if (completed) {
             Result.success()
-        } else if (spec.numberOfRetries == TaskSpec.UNLIMITED_NUMBER_OF_RETRIES || runAttemptCount < spec.numberOfRetries) {
+        } else if (spec.maxRetries == TaskSpec.UNLIMITED_NUMBER_OF_RETRIES || runAttemptCount < spec.maxRetries) {
             Result.retry()
         } else {
             Result.failure()

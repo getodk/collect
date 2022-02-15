@@ -28,7 +28,7 @@ class AutoUpdateTaskSpec : TaskSpec {
     @Inject
     lateinit var formsUpdater: FormsUpdater
 
-    override val numberOfRetries = TaskSpec.UNLIMITED_NUMBER_OF_RETRIES
+    override val maxRetries = TaskSpec.UNLIMITED_NUMBER_OF_RETRIES
 
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)

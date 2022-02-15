@@ -69,7 +69,7 @@ class AutoSendTaskSpecTest {
     }
 
     @Test
-    fun `numberOfRetries should not be limited`() {
-        assertThat(AutoSendTaskSpec().numberOfRetries, `is`(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES))
+    fun `maxRetries should not be limited`() {
+        assertThat(AutoSendTaskSpec().maxRetries, `is`(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES))
     }
 }

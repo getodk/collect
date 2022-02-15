@@ -4,7 +4,7 @@ import android.content.Context
 import java.util.function.Supplier
 
 interface TaskSpec {
-    val numberOfRetries: Int
+    val maxRetries: Int
 
     /**
      * Should return the work to be carried out by the task. The return value of the work
@@ -22,7 +22,7 @@ interface TaskSpec {
         const val DATA_PROJECT_ID = "projectId"
 
         /**
-         * If a task specifies numberOfRetries all retries form one logical group. We want to know
+         * If a task specifies maxRetries all retries form one logical group. We want to know
          * which task execution is the last one to for example notify a user only once instead of
          * doing that after every single execution.
          */
