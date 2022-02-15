@@ -29,7 +29,7 @@ class WorkerAdapterTest {
     fun setup() {
         workerAdapter =
             TestAdapter(spec, ApplicationProvider.getApplicationContext(), workerParameters)
-        data = Data(mapOf(TaskSpec.DATA_PROJECT_ID to "123"))
+        data = Data(emptyMap<String, String>())
         whenever(workerAdapter.inputData).thenReturn(data)
     }
 
@@ -87,7 +87,6 @@ class WorkerAdapterTest {
             any(),
             eq(
                 mapOf(
-                    TaskSpec.DATA_PROJECT_ID to "123",
                     TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "true"
                 )
             )
@@ -106,7 +105,6 @@ class WorkerAdapterTest {
             any(),
             eq(
                 mapOf(
-                    TaskSpec.DATA_PROJECT_ID to "123",
                     TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "false"
                 )
             )
@@ -125,7 +123,6 @@ class WorkerAdapterTest {
             any(),
             eq(
                 mapOf(
-                    TaskSpec.DATA_PROJECT_ID to "123",
                     TaskSpec.DATA_LAST_UNIQUE_EXECUTION to "true"
                 )
             )

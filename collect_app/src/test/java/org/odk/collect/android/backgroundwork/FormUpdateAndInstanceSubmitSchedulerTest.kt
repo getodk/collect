@@ -15,11 +15,14 @@ import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.MATCH_EXACTLY
 import org.odk.collect.android.preferences.utilities.FormUpdateMode.PREVIOUSLY_DOWNLOADED_ONLY
 import org.odk.collect.async.Scheduler
+<<<<<<< HEAD
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE
 import org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
 import org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL
+=======
+>>>>>>> Created TaskData to store consts for data that is not directly related to async module
 
 @RunWith(AndroidJUnit4::class)
 class FormUpdateAndInstanceSubmitSchedulerTest {
@@ -46,7 +49,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq("serverPollingJob:myProject"),
             any<AutoUpdateTaskSpec>(),
             eq(3600000),
-            eq(mapOf(TaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 
@@ -86,7 +89,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq(3600000),
             eq(BackoffPolicy.EXPONENTIAL),
             eq(60_000),
-            eq(mapOf(TaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 
@@ -98,7 +101,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<AutoSendTaskSpec>(),
-            eq(mapOf(TaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 

@@ -33,7 +33,7 @@ class AutoUpdateTaskSpec : TaskSpec {
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
-            val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
+            val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
                 formsUpdater.downloadUpdates(projectId)
                 return@Supplier true

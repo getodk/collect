@@ -19,8 +19,6 @@ interface TaskSpec {
     fun getWorkManagerAdapter(): Class<out WorkerAdapter>
 
     companion object {
-        const val DATA_PROJECT_ID = "projectId"
-
         /**
          * If a task specifies maxRetries all retries form one logical group. We want to know
          * which task execution is the last one to for example notify a user only once instead of

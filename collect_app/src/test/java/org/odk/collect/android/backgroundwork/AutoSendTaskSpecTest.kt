@@ -63,7 +63,7 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `passes project id`() {
-        val inputData = mapOf(TaskSpec.DATA_PROJECT_ID to projectId)
+        val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
         verify(instanceAutoSender).autoSendInstances(projectId)
     }

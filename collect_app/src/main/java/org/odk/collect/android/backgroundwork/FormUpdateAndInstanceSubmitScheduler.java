@@ -9,7 +9,6 @@ import androidx.work.BackoffPolicy;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.async.TaskSpec;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
@@ -60,13 +59,13 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     private void scheduleAutoUpdate(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(TaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
     }
 
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(TaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, BackoffPolicy.EXPONENTIAL, 60_000, inputData);
     }
 
@@ -79,7 +78,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @Override
     public void scheduleSubmit(String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(TaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData);
     }
 

@@ -18,7 +18,7 @@ class SyncFormsTaskSpec : TaskSpec {
     override fun getTask(context: Context, inputData: Map<String, String>): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
-            val projectId = inputData[TaskSpec.DATA_PROJECT_ID]
+            val projectId = inputData[TaskData.DATA_PROJECT_ID]
             val notify = inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION].toBoolean()
             if (projectId != null) {
                 formsUpdater.matchFormsWithServer(projectId, notify)
