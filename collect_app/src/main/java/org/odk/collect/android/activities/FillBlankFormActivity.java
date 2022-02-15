@@ -24,8 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -83,6 +84,11 @@ public class FillBlankFormActivity extends FormListActivity implements
     InstancesRepositoryProvider instancesRepositoryProvider;
 
     BlankFormListMenuDelegate menuDelegate;
+
+    ActivityResultLauncher<Intent> selectFormFromMap = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get)
+                .editInstance(this, result.getData().getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1));
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -203,20 +209,13 @@ public class FillBlankFormActivity extends FormListActivity implements
         permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
-                startActivityForResult(intent, 0);
+                selectFormFromMap.launch(intent);
             }
 
             @Override
             public void denied() {
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get)
-                .editInstance(this, data.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1));
     }
 
     @Override
