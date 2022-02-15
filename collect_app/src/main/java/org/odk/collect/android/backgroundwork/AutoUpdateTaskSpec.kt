@@ -36,7 +36,7 @@ class AutoUpdateTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
                 formsUpdater.downloadUpdates(projectId)
-                return@Supplier true
+                true
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

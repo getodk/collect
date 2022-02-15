@@ -68,7 +68,7 @@ class AutoSendTaskSpec : TaskSpec {
                 if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
                     !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
                 ) {
-                    return@Supplier networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
+                    networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
                 }
                 instanceAutoSender.autoSendInstances(projectId)
             } else {
