@@ -4,7 +4,7 @@ import android.content.Context
 import java.util.function.Supplier
 
 interface TaskSpec {
-    val maxRetries: Int
+    val maxRetries: Int?
 
     /**
      * Should return the work to be carried out by the task. The return value of the work
@@ -21,8 +21,4 @@ interface TaskSpec {
      * WorkManager framework
      */
     fun getWorkManagerAdapter(): Class<out WorkerAdapter>
-
-    companion object {
-        const val UNLIMITED_NUMBER_OF_RETRIES = -1
-    }
 }

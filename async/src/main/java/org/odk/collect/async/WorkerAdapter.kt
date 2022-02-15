@@ -12,14 +12,16 @@ abstract class WorkerAdapter(
 
     override fun doWork(): Result {
         val stringInputData = inputData.keyValueMap.mapValues { it.value.toString() }
-        val completed = spec.getTask(applicationContext, stringInputData, runAttemptCount >= spec.maxRetries).get()
+        val completed = spec.getTask(applicationContext, stringInputData, isLastUniqueExecution()).get()
 
         return if (completed) {
             Result.success()
-        } else if (spec.maxRetries == TaskSpec.UNLIMITED_NUMBER_OF_RETRIES || runAttemptCount < spec.maxRetries) {
+        } else if (spec.maxRetries == null || runAttemptCount < spec.maxRetries!!) {
             Result.retry()
         } else {
             Result.failure()
         }
     }
+
+    private fun isLastUniqueExecution() = spec.maxRetries?.let { runAttemptCount >= it } ?: true
 }

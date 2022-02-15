@@ -43,7 +43,7 @@ class AutoSendTaskSpec : TaskSpec {
     @Inject
     lateinit var instanceAutoSender: InstanceAutoSender
 
-    override val maxRetries = TaskSpec.UNLIMITED_NUMBER_OF_RETRIES
+    override val maxRetries: Int? = null
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
