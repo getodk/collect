@@ -50,7 +50,7 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `when DATA_LAST_UNIQUE_EXECUTION equals true getTask calls synchronize with proper data`() {
+    fun `when DATA_LAST_UNIQUE_EXECUTION equals true task calls synchronize with notify true`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
         inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"
@@ -59,7 +59,7 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `when DATA_LAST_UNIQUE_EXECUTION equals false getTask calls synchronize with proper data`() {
+    fun `when DATA_LAST_UNIQUE_EXECUTION equals false task calls synchronize with notify false`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
         inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "false"
@@ -68,7 +68,7 @@ class SyncFormsTaskSpecTest {
     }
 
     @Test
-    fun `getTask returns proper result value`() {
+    fun `task returns result from FormUpdater`() {
         val inputData = HashMap<String, String>()
         inputData[TaskSpec.DATA_PROJECT_ID] = "projectId"
         inputData[TaskSpec.DATA_LAST_UNIQUE_EXECUTION] = "true"

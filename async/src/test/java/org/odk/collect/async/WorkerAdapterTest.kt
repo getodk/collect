@@ -41,7 +41,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when task returns false should work retry if numberOfRetries not specified`() {
+    fun `when task returns false retries if numberOfRetries not specified`() {
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
         whenever(spec.numberOfRetries).thenReturn(TaskSpec.UNLIMITED_NUMBER_OF_RETRIES)
 
@@ -49,7 +49,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when task returns false should work retry if numberOfRetries is specified and is lower than runAttemptCount`() {
+    fun `when task returns false retries if numberOfRetries is specified and is lower than runAttemptCount`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
         whenever(spec.numberOfRetries).thenReturn(3)
@@ -58,7 +58,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when task returns false should work fail if numberOfRetries is specified and is equal to runAttemptCount`() {
+    fun `when task returns false fails if numberOfRetries is specified and is equal to runAttemptCount`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(3)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
         whenever(spec.numberOfRetries).thenReturn(3)
@@ -67,7 +67,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when task returns false should work fail if numberOfRetries is specified and is higher than runAttemptCount`() {
+    fun `when task returns false fails if numberOfRetries is specified and is higher than runAttemptCount`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(4)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { false })
         whenever(spec.numberOfRetries).thenReturn(3)
@@ -95,7 +95,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when numberOfRetries is specified and it is higher than runAttemptCount, should data contain DATA_LAST_UNIQUE_EXECUTION equal false`() {
+    fun `when numberOfRetries is specified and it is higher than runAttemptCount, data contains DATA_LAST_UNIQUE_EXECUTION equal false`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.numberOfRetries).thenReturn(3)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
@@ -114,7 +114,7 @@ class WorkerAdapterTest {
     }
 
     @Test
-    fun `when numberOfRetries is specified and it is equal to runAttemptCount, should data contain DATA_LAST_UNIQUE_EXECUTION equal true`() {
+    fun `when numberOfRetries is specified and it is equal to runAttemptCount, data contains DATA_LAST_UNIQUE_EXECUTION equal true`() {
         whenever(workerAdapter.runAttemptCount).thenReturn(1)
         whenever(spec.numberOfRetries).thenReturn(1)
         whenever(spec.getTask(any(), any())).thenReturn(Supplier { true })
