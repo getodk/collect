@@ -1,6 +1,5 @@
 package org.odk.collect.async
 
-import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -43,31 +42,16 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         val workManagerInputData = Data.Builder().putAll(inputData).build()
 
         val worker = spec.getWorkManagerAdapter()
-        val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+        val builder = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
-            .build()
 
-        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
-    }
+        if (spec.backoffPolicy != null && spec.backoffDelay != null) {
+            builder.setBackoffCriteria(spec.backoffPolicy!!, spec.backoffDelay!!, TimeUnit.MILLISECONDS)
+        }
 
-    override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, backoffPolicy: BackoffPolicy, backoffDelay: Long, inputData: Map<String, String>) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val workManagerInputData = Data.Builder().putAll(inputData).build()
-
-        val worker = spec.getWorkManagerAdapter()
-        val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
-            .setBackoffCriteria(backoffPolicy, backoffDelay, TimeUnit.MILLISECONDS)
-            .addTag(tag)
-            .setInputData(workManagerInputData)
-            .setConstraints(constraints)
-            .build()
-
-        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, builder.build())
     }
 
     override fun cancelDeferred(tag: String) {

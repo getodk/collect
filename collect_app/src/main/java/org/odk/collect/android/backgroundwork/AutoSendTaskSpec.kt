@@ -17,6 +17,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Environment
+import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
@@ -44,6 +45,8 @@ class AutoSendTaskSpec : TaskSpec {
     lateinit var instanceAutoSender: InstanceAutoSender
 
     override val maxRetries: Int? = null
+    override val backoffPolicy: BackoffPolicy? = null
+    override val backoffDelay: Long? = null
 
     /**
      * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not

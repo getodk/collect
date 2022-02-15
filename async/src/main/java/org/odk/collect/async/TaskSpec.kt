@@ -1,10 +1,13 @@
 package org.odk.collect.async
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import java.util.function.Supplier
 
 interface TaskSpec {
     val maxRetries: Int?
+    val backoffPolicy: BackoffPolicy?
+    val backoffDelay: Long?
 
     /**
      * Should return the work to be carried out by the task. The return value of the work

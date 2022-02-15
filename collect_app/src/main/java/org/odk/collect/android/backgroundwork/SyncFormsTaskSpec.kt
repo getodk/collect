@@ -1,6 +1,7 @@
 package org.odk.collect.android.backgroundwork
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.injection.DaggerUtils
@@ -14,6 +15,8 @@ class SyncFormsTaskSpec : TaskSpec {
     lateinit var formsUpdater: FormsUpdater
 
     override val maxRetries = 3
+    override val backoffPolicy = BackoffPolicy.EXPONENTIAL
+    override val backoffDelay: Long = 60_000
 
     override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)

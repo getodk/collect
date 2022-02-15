@@ -3,7 +3,6 @@ package org.odk.collect.android.backgroundwork
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.work.BackoffPolicy
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -87,8 +86,6 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq("match_exactly:myProject"),
             any<SyncFormsTaskSpec>(),
             eq(3600000),
-            eq(BackoffPolicy.EXPONENTIAL),
-            eq(60_000),
             eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
