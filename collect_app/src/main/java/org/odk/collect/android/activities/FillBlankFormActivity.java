@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -36,6 +37,7 @@ import org.odk.collect.android.database.forms.DatabaseFormColumns;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.formmanagement.BlankFormListMenuDelegate;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
+import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.network.NetworkStateProvider;
@@ -43,6 +45,7 @@ import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.FormSyncTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.views.ObviousProgressBar;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -75,6 +78,9 @@ public class FillBlankFormActivity extends FormListActivity implements
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
 
     BlankFormListMenuDelegate menuDelegate;
 
@@ -197,13 +203,20 @@ public class FillBlankFormActivity extends FormListActivity implements
         permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
             @Override
             public void granted() {
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
 
             @Override
             public void denied() {
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get)
+                .editInstance(this, data.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1));
     }
 
     @Override

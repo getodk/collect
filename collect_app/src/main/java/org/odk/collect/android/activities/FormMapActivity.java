@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,7 +38,6 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
@@ -74,6 +74,7 @@ public class FormMapActivity extends LocalizedActivity {
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     public static final String EXTRA_FORM_ID = "form_id";
+    public static final String EXTRA_SELECTED_ID = "selected_id";
     protected Bundle previousState;
 
     private FormMapViewModel viewModel;
@@ -395,8 +396,11 @@ public class FormMapActivity extends LocalizedActivity {
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-            new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get)
-                    .editInstance(this, instanceId);
+
+            Intent data = new Intent();
+            data.putExtra(EXTRA_SELECTED_ID, instanceId);
+            setResult(Activity.RESULT_OK, data);
+            finish();
         });
     }
 
