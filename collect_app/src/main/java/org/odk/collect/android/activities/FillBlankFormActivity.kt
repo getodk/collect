@@ -94,7 +94,7 @@ class FillBlankFormActivity :
 
         selectFormFromMap = registerForActivityResult(
             SelectFormFromMap(),
-            SelectFormFromMapCallback(
+            EditInstanceResultCallback(
                 this,
                 FormNavigator(
                     currentProjectProvider,
@@ -313,7 +313,7 @@ class FillBlankFormActivity :
     }
 }
 
-private class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
+class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
 
     override fun createIntent(context: Context, input: Long): Intent {
         return Intent(context, FormMapActivity::class.java).also {
@@ -322,16 +322,22 @@ private class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): Long? {
-        return intent?.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1)
+        return if (resultCode == Activity.RESULT_OK) {
+            intent?.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1)
+        } else {
+            null
+        }
     }
 }
 
-private class SelectFormFromMapCallback(
+class EditInstanceResultCallback(
     private val activity: Activity,
     private val formNavigator: FormNavigator
 ) : ActivityResultCallback<Long?> {
 
     override fun onActivityResult(result: Long?) {
-        formNavigator.editInstance(activity, result ?: -1)
+        if (result != null) {
+            formNavigator.editInstance(activity, result)
+        }
     }
 }
