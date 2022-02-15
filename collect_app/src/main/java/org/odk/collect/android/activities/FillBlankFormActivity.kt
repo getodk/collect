@@ -13,6 +13,8 @@
  */
 package org.odk.collect.android.activities
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.AsyncTask
@@ -22,8 +24,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -77,17 +80,9 @@ class FillBlankFormActivity :
     @Inject
     lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
 
-    var selectFormFromMap =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            val instanceId = result.data!!.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1)
-            FormNavigator(
-                currentProjectProvider,
-                settingsProvider,
-                instancesRepositoryProvider::get
-            ).editInstance(this, instanceId)
-        }
-
+    lateinit var selectFormFromMap: ActivityResultLauncher<Long>
     lateinit var menuDelegate: BlankFormListMenuDelegate
+
     private var formSyncTask: FormSyncTask? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +91,18 @@ class FillBlankFormActivity :
 
         setContentView(R.layout.form_chooser_list)
         title = getString(R.string.enter_data)
+
+        selectFormFromMap = registerForActivityResult(
+            SelectFormFromMap(),
+            SelectFormFromMapCallback(
+                this,
+                FormNavigator(
+                    currentProjectProvider,
+                    settingsProvider,
+                    instancesRepositoryProvider::get
+                )
+            )
+        )
 
         val blankFormsListViewModel = ViewModelProvider(this, blankFormsListViewModelFactory).get(
             BlankFormsListViewModel::class.java
@@ -202,14 +209,12 @@ class FillBlankFormActivity :
         }
     }
 
-    private fun onMapButtonClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val intent = Intent(this, FormMapActivity::class.java)
-        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
+    private fun onMapButtonClick(id: Long) {
         permissionsProvider.requestLocationPermissions(
             this,
             object : PermissionListener {
                 override fun granted() {
-                    selectFormFromMap.launch(intent)
+                    selectFormFromMap.launch(id)
                 }
 
                 override fun denied() {}
@@ -263,9 +268,6 @@ class FillBlankFormActivity :
             R.layout.form_chooser_list_item,
             { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                 onMapButtonClick(
-                    parent,
-                    view,
-                    position,
                     id
                 )
             },
@@ -308,5 +310,28 @@ class FillBlankFormActivity :
 
     companion object {
         private const val FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder"
+    }
+}
+
+private class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
+
+    override fun createIntent(context: Context, input: Long): Intent {
+        return Intent(context, FormMapActivity::class.java).also {
+            it.putExtra(FormMapActivity.EXTRA_FORM_ID, input)
+        }
+    }
+
+    override fun parseResult(resultCode: Int, intent: Intent?): Long? {
+        return intent?.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1)
+    }
+}
+
+private class SelectFormFromMapCallback(
+    private val activity: Activity,
+    private val formNavigator: FormNavigator
+) : ActivityResultCallback<Long?> {
+
+    override fun onActivityResult(result: Long?) {
+        formNavigator.editInstance(activity, result ?: -1)
     }
 }
