@@ -52,12 +52,8 @@ class FormMediaDownloader(
             File(form.formMediaPath, mediaFile.filename)
         }.firstOrNull { file: File ->
             val currentFileHash = getMd5Hash(file)
-            val downloadFileHash = validateHash(mediaFile.hash)
+            val downloadFileHash = mediaFile.hash
             file.exists() && currentFileHash.contentEquals(downloadFileHash)
         }
-    }
-
-    private fun validateHash(hash: String): String? {
-        return hash.ifEmpty { null }
     }
 }
