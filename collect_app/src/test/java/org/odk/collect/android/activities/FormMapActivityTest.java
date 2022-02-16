@@ -8,9 +8,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.robolectric.Shadows.shadowOf;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.material.chip.Chip;
@@ -30,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
@@ -38,7 +34,6 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
@@ -182,16 +177,6 @@ public class FormMapActivityTest {
         assertThat(map.getLatestZoomPoint().lat, is(10.3));
         assertThat(map.getLatestZoomPoint().lon, is(125.7));
         assertThat(map.getZoom(), is(7.0));
-    }
-
-    @Test
-    public void tappingOnNewInstanceButton_opensNewInstance() {
-        activity.findViewById(R.id.new_instance).performClick();
-
-        Intent actual = shadowOf((Collect) ApplicationProvider.getApplicationContext()).getNextStartedActivity();
-
-        assertThat(actual.getAction(), is(Intent.ACTION_EDIT));
-        assertThat(actual.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE), is(nullValue()));
     }
 
     @Ignore("Doesn't work with field-based dependency injection because we don't get an opportunity" +

@@ -220,11 +220,11 @@ public class FormMapActivity extends LocalizedActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
-            Intent intent = new Intent(this, FormEntryActivity.class);
-            intent.setAction(Intent.ACTION_EDIT);
-            intent.setData(formUri);
-            startActivity(intent);
+//            final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
+//            Intent intent = new Intent(this, FormEntryActivity.class);
+//            intent.setAction(Intent.ACTION_EDIT);
+//            intent.setData(formUri);
+//            startActivity(intent);
         });
 
         map.setGpsLocationEnabled(true);
