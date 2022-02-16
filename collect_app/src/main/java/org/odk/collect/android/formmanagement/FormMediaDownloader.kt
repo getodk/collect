@@ -57,7 +57,7 @@ class FormMediaDownloader(
         }
     }
 
-    private fun validateHash(hash: String?): String? {
-        return if (hash == null || hash.isEmpty()) null else hash
+    private fun validateHash(hash: String): String? {
+        return hash.ifEmpty { null }
     }
 }
