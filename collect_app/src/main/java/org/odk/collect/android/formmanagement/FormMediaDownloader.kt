@@ -23,22 +23,22 @@ class FormMediaDownloader(
         files: List<MediaFile>,
         tempMediaPath: String,
         tempDir: File,
-        stateListener: OngoingWorkListener?
+        stateListener: OngoingWorkListener
     ) {
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
-        for (i in files.indices) {
-            stateListener?.progressUpdate(i + 1)
+        files.forEachIndexed { i, mediaFile ->
+            stateListener.progressUpdate(i + 1)
 
-            val mediaFile = files[i]
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile)
-            if (existingFile != null) {
-                copyFile(existingFile, tempMediaFile)
-            } else {
-                val mediaFile = formSource.fetchMediaFile(mediaFile.downloadUrl)
-                interuptablyWriteFile(mediaFile, tempMediaFile, tempDir, stateListener)
+            searchForExistingMediaFile(formToDownload, mediaFile).let {
+                if (it != null) {
+                    copyFile(it, tempMediaFile)
+                } else {
+                    val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                    interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                }
             }
         }
     }
