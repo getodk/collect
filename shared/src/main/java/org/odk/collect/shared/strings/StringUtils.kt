@@ -1,7 +1,6 @@
 package org.odk.collect.shared.strings
 
 import com.vdurmont.emoji.EmojiParser
-import java.lang.StringBuilder
 
 object StringUtils {
 

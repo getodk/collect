@@ -1,5 +1,16 @@
 package org.odk.collect.android.activities;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
@@ -24,32 +35,21 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.formstest.InMemInstancesRepository;
+import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.activities.FormMapViewModelTest.testInstances;
-import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMapActivityTest {

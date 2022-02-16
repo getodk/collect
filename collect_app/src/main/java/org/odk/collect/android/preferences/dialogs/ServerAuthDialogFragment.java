@@ -14,9 +14,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
 

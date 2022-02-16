@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.source
 
 import androidx.preference.PreferenceDataStore
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 class SettingsStore(private val settings: Settings) : PreferenceDataStore() {
     override fun putString(key: String, value: String?) {

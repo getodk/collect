@@ -1,23 +1,22 @@
 package org.odk.collect.android.configure.qr;
 
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-
-import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.testshared.FakeScheduler;
-
-import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static java.util.Arrays.asList;
+
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
+import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.settings.Settings;
+import org.odk.collect.testshared.FakeScheduler;
 
 @RunWith(AndroidJUnit4.class)
 public class QRCodeViewModelTest {

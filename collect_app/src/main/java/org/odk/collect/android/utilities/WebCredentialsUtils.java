@@ -1,14 +1,15 @@
 package org.odk.collect.android.utilities;
 
 import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import java.net.URI;
 import java.util.HashMap;

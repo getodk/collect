@@ -1,16 +1,16 @@
 package org.odk.collect.android.formentry.backgroundlocation;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+
 import android.location.Location;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.shared.Settings;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.shared.settings.Settings;
 
 /**
  * Wrapper on resources needed by {@link BackgroundLocationManager} to make testing easier.

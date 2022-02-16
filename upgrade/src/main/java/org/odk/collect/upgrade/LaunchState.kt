@@ -1,6 +1,6 @@
 package org.odk.collect.upgrade
 
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 internal interface LaunchState {
     fun isUpgradedFirstLaunch(): Boolean

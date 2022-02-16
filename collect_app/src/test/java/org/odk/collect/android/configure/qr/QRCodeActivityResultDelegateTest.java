@@ -1,5 +1,14 @@
 package org.odk.collect.android.configure.qr;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHOTO;
+import static org.robolectric.Shadows.shadowOf;
+import static org.robolectric.shadows.ShadowToast.getTextOfLatestToast;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,10 +21,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.projects.Project;
+import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.robolectric.Robolectric;
 
 import java.io.ByteArrayInputStream;
@@ -24,19 +33,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.configure.qr.QRCodeMenuDelegate.SELECT_PHOTO;
-import static org.robolectric.Shadows.shadowOf;
-import static org.robolectric.shadows.ShadowToast.getTextOfLatestToast;
-
 @RunWith(AndroidJUnit4.class)
 public class QRCodeActivityResultDelegateTest {
     private final FakeQRDecoder fakeQRDecoder = new FakeQRDecoder();
-    private final SettingsImporter settingsImporter = mock(SettingsImporter.class);
+    private final ODKAppSettingsImporter settingsImporter = mock(ODKAppSettingsImporter.class);
     private final Project.Saved project = mock(Project.Saved.class);
     private Activity context;
 

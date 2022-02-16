@@ -14,6 +14,18 @@
 
 package org.odk.collect.android.preferences.screens;
 
+import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
+import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_AUTOSEND;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_GUIDANCE_HINT;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_IMAGE_SIZE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
+
 import android.content.Context;
 import android.os.Bundle;
 
@@ -28,22 +40,10 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_AUTOMATIC_UPDATE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_AUTOSEND;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_CONSTRAINT_BEHAVIOR;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_GUIDANCE_HINT;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_IMAGE_SIZE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.utilities.PreferencesUtils.displayDisabled;
 
 public class FormManagementPreferencesFragment extends BaseProjectPreferencesFragment {
 

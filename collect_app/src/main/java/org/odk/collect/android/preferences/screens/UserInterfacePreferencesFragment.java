@@ -14,6 +14,14 @@
 
 package org.odk.collect.android.preferences.screens;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_LANGUAGE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_THEME;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_SPLASH_PATH;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,14 +46,6 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static android.app.Activity.RESULT_CANCELED;
-import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_LANGUAGE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_APP_THEME;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_NAVIGATION;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SPLASH_PATH;
 
 public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFragment {
 

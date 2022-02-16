@@ -18,9 +18,7 @@ import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
@@ -28,7 +26,10 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
-import org.odk.collect.shared.Settings
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
+import org.odk.collect.shared.settings.Settings
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -76,13 +77,13 @@ class ProjectResetterTest {
         assertThat(
             getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_USERNAME),
             `is`(
-                ProjectKeys.defaults[ProjectKeys.KEY_USERNAME]
+                Defaults.unprotected[ProjectKeys.KEY_USERNAME]
             )
         )
         assertThat(
             getUnprotectedSettings(currentProjectId).getString(ProjectKeys.KEY_PASSWORD),
             `is`(
-                ProjectKeys.defaults[ProjectKeys.KEY_PASSWORD]
+                Defaults.unprotected[ProjectKeys.KEY_PASSWORD]
             )
         )
     }
@@ -116,7 +117,7 @@ class ProjectResetterTest {
         assertThat(
             getProtectedSettings(currentProjectId).getBoolean(ProtectedProjectKeys.KEY_VIEW_SENT),
             `is`(
-                ProtectedProjectKeys.defaults[ProtectedProjectKeys.KEY_VIEW_SENT]
+                Defaults.protected[ProtectedProjectKeys.KEY_VIEW_SENT]
             )
         )
     }

@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.preferences.keys.MetaKeys.CURRENT_PROJECT_ID
+import org.odk.collect.settings.keys.MetaKeys.CURRENT_PROJECT_ID
 
 @RunWith(AndroidJUnit4::class)
 class SharedPreferencesSettingsProviderTest {

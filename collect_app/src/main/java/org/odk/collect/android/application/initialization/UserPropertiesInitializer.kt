@@ -2,11 +2,12 @@ package org.odk.collect.android.application.initialization
 
 import android.content.Context
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.FormUpdateMode
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.preferences.Defaults
+import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
 class UserPropertiesInitializer(
     private val analytics: Analytics,
@@ -36,7 +37,7 @@ class UserPropertiesInitializer(
         val serverUrl = settings.getString(ProjectKeys.KEY_SERVER_URL)
         val formUpdateMode = settings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE)
 
-        val notUsingDefaultServer = serverUrl != ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL]
+        val notUsingDefaultServer = serverUrl != Defaults.unprotected[ProjectKeys.KEY_SERVER_URL]
         val notUsingMatchExactly = formUpdateMode != FormUpdateMode.MATCH_EXACTLY.getValue(context)
 
         return notUsingDefaultServer && notUsingMatchExactly
@@ -45,6 +46,6 @@ class UserPropertiesInitializer(
     private fun isNotUsingDefaultTheme(project: Project.Saved): Boolean {
         val settings = settingsProvider.getUnprotectedSettings(project.uuid)
         val theme = settings.getString(ProjectKeys.KEY_APP_THEME)
-        return theme != ProjectKeys.defaults[ProjectKeys.KEY_APP_THEME]
+        return theme != Defaults.unprotected[ProjectKeys.KEY_APP_THEME]
     }
 }

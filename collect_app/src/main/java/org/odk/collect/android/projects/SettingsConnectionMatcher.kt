@@ -2,10 +2,11 @@ package org.odk.collect.android.projects
 
 import org.json.JSONException
 import org.json.JSONObject
-import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
 
 class SettingsConnectionMatcher(
     private val projectsRepository: ProjectsRepository,
@@ -16,9 +17,9 @@ class SettingsConnectionMatcher(
         try {
             val jsonObject = JSONObject(settingsJson)
             val jsonSettings = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
-            val jsonProtocol = try { jsonSettings.get(ProjectKeys.KEY_PROTOCOL) } catch (e: JSONException) { ProjectKeys.defaults[ProjectKeys.KEY_PROTOCOL]!! }
+            val jsonProtocol = try { jsonSettings.get(ProjectKeys.KEY_PROTOCOL) } catch (e: JSONException) { Defaults.unprotected[ProjectKeys.KEY_PROTOCOL]!! }
 
-            val jsonUrl = try { jsonSettings.get(ProjectKeys.KEY_SERVER_URL) } catch (e: JSONException) { ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL]!! }
+            val jsonUrl = try { jsonSettings.get(ProjectKeys.KEY_SERVER_URL) } catch (e: JSONException) { Defaults.unprotected[ProjectKeys.KEY_SERVER_URL]!! }
             val jsonUsername = try { jsonSettings.get(ProjectKeys.KEY_USERNAME) } catch (e: JSONException) { "" }
 
             val jsonGoogleAccount = try { jsonSettings.get(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } catch (e: JSONException) { "" }

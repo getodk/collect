@@ -9,12 +9,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.MenuDelegate;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.SettingsProvider;
 
 import timber.log.Timber;
 

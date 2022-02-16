@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry.backgroundlocation;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,9 +10,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.shared.Settings;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+import org.odk.collect.shared.settings.Settings;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds

@@ -1,8 +1,8 @@
 package org.odk.collect.android.utilities;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.Locale;
 import java.util.TreeMap;

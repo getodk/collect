@@ -1,5 +1,8 @@
 package org.odk.collect.android.formmanagement;
 
+import static org.odk.collect.android.external.FormsContract.getUri;
+import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+
 import android.app.Application;
 import android.net.Uri;
 
@@ -14,15 +17,15 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.android.preferences.utilities.FormUpdateMode;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSourceException;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -31,9 +34,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.configure.SettingsUtils.getFormUpdateMode;
-import static org.odk.collect.android.external.FormsContract.getUri;
 
 public class BlankFormsListViewModel extends ViewModel {
 

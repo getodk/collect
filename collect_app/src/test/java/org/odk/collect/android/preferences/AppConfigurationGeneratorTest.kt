@@ -10,12 +10,12 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
-import org.odk.collect.android.configure.qr.AppConfigurationKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class AppConfigurationGeneratorTest {
@@ -36,57 +36,73 @@ class AppConfigurationGeneratorTest {
 
     @Before
     fun setup() {
-        appConfigurationGenerator = AppConfigurationGenerator(settingsProvider, currentProjectProvider)
+        appConfigurationGenerator =
+            AppConfigurationGenerator(settingsProvider, currentProjectProvider)
     }
 
     @Test
     fun `When admin password included, should be present in json`() {
-        val adminPrefs = mapOf<String, Any> (ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
+        val adminPrefs = mapOf<String, Any>(ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getProtectedSettings().saveAll(adminPrefs)
 
-        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(ProtectedProjectKeys.KEY_ADMIN_PW))
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(
+            listOf(
+                ProtectedProjectKeys.KEY_ADMIN_PW
+            )
+        )
         verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), adminPrefs, projectDetails)
     }
 
     @Test
     fun `When admin password excluded, should not be present in json`() {
-        val adminPrefs = mapOf<String, Any> (ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
+        val adminPrefs = mapOf<String, Any>(ProtectedProjectKeys.KEY_ADMIN_PW to "123456")
 
         settingsProvider.getProtectedSettings().saveAll(adminPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
+        verifyJsonContent(
+            jsonPrefs,
+            emptyMap<String, Any>(),
+            emptyMap<String, Any>(),
+            projectDetails
+        )
     }
 
     @Test
     fun `When user password included, should be present in json`() {
-        val generalPrefs = mapOf<String, Any> (ProjectKeys.KEY_PASSWORD to "123456")
+        val generalPrefs = mapOf<String, Any>(ProjectKeys.KEY_PASSWORD to "123456")
 
         settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
 
-        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson(listOf(ProjectKeys.KEY_PASSWORD))
+        val jsonPrefs =
+            appConfigurationGenerator.getAppConfigurationAsJson(listOf(ProjectKeys.KEY_PASSWORD))
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), projectDetails)
     }
 
     @Test
     fun `When user password excluded, should not be present in json`() {
-        val generalPrefs = mapOf<String, Any> (ProjectKeys.KEY_PASSWORD to "123456")
+        val generalPrefs = mapOf<String, Any>(ProjectKeys.KEY_PASSWORD to "123456")
 
         settingsProvider.getUnprotectedSettings().saveAll(generalPrefs)
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
+        verifyJsonContent(
+            jsonPrefs,
+            emptyMap<String, Any>(),
+            emptyMap<String, Any>(),
+            projectDetails
+        )
     }
 
     @Test
     fun `Only saved settings should be included in json`() {
-        val generalPrefs = mapOf<String, Any> (
+        val generalPrefs = mapOf<String, Any>(
             ProjectKeys.KEY_DELETE_AFTER_SEND to true,
             ProjectKeys.KEY_APP_THEME to "dark_theme"
         )
 
-        val adminPrefs = mapOf<String, Any> (
+        val adminPrefs = mapOf<String, Any>(
             ProtectedProjectKeys.KEY_GET_BLANK to false,
             ProtectedProjectKeys.KEY_DELETE_SAVED to false
         )
@@ -101,11 +117,11 @@ class AppConfigurationGeneratorTest {
 
     @Test
     fun `Saved but default settings should not be included in json`() {
-        val generalPrefs = ProjectKeys.defaults.filter {
+        val generalPrefs = Defaults.unprotected.filter {
             it.key == ProjectKeys.KEY_DELETE_AFTER_SEND || it.key == ProjectKeys.KEY_APP_THEME
         }
 
-        val adminPrefs = ProtectedProjectKeys.defaults.filter {
+        val adminPrefs = Defaults.protected.filter {
             it.key == ProtectedProjectKeys.KEY_GET_BLANK || it.key == ProtectedProjectKeys.KEY_DELETE_SAVED
         }
 
@@ -114,36 +130,51 @@ class AppConfigurationGeneratorTest {
 
         val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJson()
 
-        verifyJsonContent(jsonPrefs, emptyMap<String, Any>(), emptyMap<String, Any>(), projectDetails)
+        verifyJsonContent(
+            jsonPrefs,
+            emptyMap<String, Any>(),
+            emptyMap<String, Any>(),
+            projectDetails
+        )
     }
 
     @Test
     fun `When server details provided should getAppConfigurationAsJsonWithServerDetails() generate proper json`() {
-        val generalPrefs = mapOf<String, Any> (
+        val generalPrefs = mapOf<String, Any>(
             ProjectKeys.KEY_SERVER_URL to "https://my-server.com",
             ProjectKeys.KEY_USERNAME to "adam",
             ProjectKeys.KEY_PASSWORD to "1234"
         )
 
-        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails("https://my-server.com", "adam", "1234")
+        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
+            "https://my-server.com",
+            "adam",
+            "1234"
+        )
 
         verifyJsonContent(jsonPrefs, generalPrefs, emptyMap<String, Any>(), emptyMap())
     }
 
     @Test
     fun `When Google account provided, getAppConfigurationAsJsonWithGoogleDriveDetails generates expected json`() {
-        val expectedPrefs = mapOf<String, Any> (
+        val expectedPrefs = mapOf<String, Any>(
             ProjectKeys.KEY_SERVER_URL to "",
             ProjectKeys.KEY_PROTOCOL to ProjectKeys.PROTOCOL_GOOGLE_SHEETS,
             ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT to "foo@bar.baz"
         )
 
-        val jsonPrefs = appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails("foo@bar.baz")
+        val jsonPrefs =
+            appConfigurationGenerator.getAppConfigurationAsJsonWithGoogleDriveDetails("foo@bar.baz")
 
         verifyJsonContent(jsonPrefs, expectedPrefs, emptyMap<String, Any>(), emptyMap())
     }
 
-    private fun verifyJsonContent(jsonPrefsString: String, generalPrefs: Map<String, *>, adminPrefs: Map<String, *>, projectDetails: Map<String, String>) {
+    private fun verifyJsonContent(
+        jsonPrefsString: String,
+        generalPrefs: Map<String, *>,
+        adminPrefs: Map<String, *>,
+        projectDetails: Map<String, String>
+    ) {
         val jsonPrefs = JSONObject(jsonPrefsString)
         assertThat(jsonPrefs.length(), `is`(3))
         assertThat(jsonPrefs.has(AppConfigurationKeys.GENERAL), `is`(true))

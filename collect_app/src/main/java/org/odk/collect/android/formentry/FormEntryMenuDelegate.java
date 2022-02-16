@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -8,6 +10,8 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormHierarchyActivity;
@@ -15,18 +19,14 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {
 

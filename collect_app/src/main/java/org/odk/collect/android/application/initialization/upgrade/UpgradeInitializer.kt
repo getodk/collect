@@ -5,8 +5,8 @@ import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.upgrade.AppUpgrader
 
 class UpgradeInitializer(

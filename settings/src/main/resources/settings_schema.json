@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://getodk.com/settings.schema.json",
+  "title": "Settings",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "general": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "odk_default",
+            "google_sheets"
+          ]
+        },
+        "server_url": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "selected_google_account": {
+          "type": "string"
+        },
+        "google_sheets_url": {
+          "type": "string"
+        },
+        "appTheme": {
+          "type": "string",
+          "enum": [
+            "system",
+            "light_theme",
+            "dark_theme"
+          ]
+        },
+        "app_language": {
+          "type": "string"
+        },
+        "font_size": {
+          "type": "string",
+          "enum": [
+            "13",
+            "17",
+            "21",
+            "25",
+            "29"
+          ]
+        },
+        "navigation": {
+          "type": "string",
+          "enum": [
+            "swipe",
+            "buttons",
+            "swipe_buttons"
+          ]
+        },
+        "showSplash": {
+          "type": "boolean"
+        },
+        "splashPath": {
+          "type": "string"
+        },
+        "basemap_source": {
+          "type": "string",
+          "enum": [
+            "google",
+            "mapbox",
+            "osm",
+            "usgs",
+            "stamen",
+            "carto"
+          ]
+        },
+        "google_map_style": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "mapbox_map_style": {
+          "type": "string",
+          "enum": [
+            "mapbox://styles/mapbox/light-v10",
+            "mapbox://styles/mapbox/dark-v10",
+            "mapbox://styles/mapbox/satellite-v9",
+            "mapbox://styles/mapbox/satellite-streets-v11",
+            "mapbox://styles/mapbox/streets-v11",
+            "mapbox://styles/mapbox/outdoors-v11"
+          ]
+        },
+        "usgs_map_style": {
+          "type": "string",
+          "enum": [
+            "topographic",
+            "hybrid",
+            "satellite"
+          ]
+        },
+        "carto_map_style": {
+          "type": "string",
+          "enum": [
+            "positron",
+            "dark_matter"
+          ]
+        },
+        "reference_layer": {
+          "type": "string"
+        },
+        "form_update_mode": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "previously_downloaded",
+            "match_exactly"
+          ]
+        },
+        "periodic_form_updates_check": {
+          "type": "string",
+          "enum": [
+            "every_fifteen_minutes",
+            "every_one_hour",
+            "every_six_hours",
+            "every_24_hours"
+          ]
+        },
+        "automatic_update": {
+          "type": "boolean"
+        },
+        "hide_old_form_versions": {
+          "type": "boolean"
+        },
+        "autosend": {
+          "type": "string",
+          "enum": [
+            "off",
+            "wifi_only",
+            "cellular_only",
+            "wifi_and_cellular"
+          ]
+        },
+        "delete_send": {
+          "type": "boolean"
+        },
+        "default_completed": {
+          "type": "boolean"
+        },
+        "constraint_behavior": {
+          "type": "string",
+          "enum": [
+            "on_swipe",
+            "on_finalize"
+          ]
+        },
+        "high_resolution": {
+          "type": "boolean"
+        },
+        "image_size": {
+          "type": "string",
+          "enum": [
+            "original_image_size",
+            "small",
+            "very_small",
+            "medium",
+            "large"
+          ]
+        },
+        "guidance_hint": {
+          "type": "string",
+          "enum": [
+            "no",
+            "yes",
+            "yes_collapsed"
+          ]
+        },
+        "external_app_recording": {
+          "type": "boolean"
+        },
+        "instance_sync": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        },
+        "metadata_username": {
+          "type": "string"
+        },
+        "metadata_phonenumber": {
+          "type": "string"
+        },
+        "metadata_email": {
+          "type": "string"
+        },
+        "background_location": {
+          "type": "boolean"
+        },
+        "background_recording": {
+          "type": "boolean"
+        }
+      }
+    },
+    "admin": {
+      "type": "object",
+      "properties": {
+        "admin_pw": {
+          "type": "string"
+        },
+        "edit_saved": {
+          "type": "boolean"
+        },
+        "send_finalized": {
+          "type": "boolean"
+        },
+        "view_sent": {
+          "type": "boolean"
+        },
+        "get_blank": {
+          "type": "boolean"
+        },
+        "delete_saved": {
+          "type": "boolean"
+        },
+        "change_server": {
+          "type": "boolean"
+        },
+        "change_project_display": {
+          "type": "boolean"
+        },
+        "change_app_theme": {
+          "type": "boolean"
+        },
+        "change_app_language": {
+          "type": "boolean"
+        },
+        "change_font_size": {
+          "type": "boolean"
+        },
+        "change_navigation": {
+          "type": "boolean"
+        },
+        "show_splash_screen": {
+          "type": "boolean"
+        },
+        "maps": {
+          "type": "boolean"
+        },
+        "form_update_mode": {
+          "type": "boolean"
+        },
+        "periodic_form_updates_check": {
+          "type": "boolean"
+        },
+        "automatic_update": {
+          "type": "boolean"
+        },
+        "hide_old_form_versions": {
+          "type": "boolean"
+        },
+        "change_autosend": {
+          "type": "boolean"
+        },
+        "delete_after_send": {
+          "type": "boolean"
+        },
+        "default_to_finalized": {
+          "type": "boolean"
+        },
+        "change_constraint_behavior": {
+          "type": "boolean"
+        },
+        "high_resolution": {
+          "type": "boolean"
+        },
+        "image_size": {
+          "type": "boolean"
+        },
+        "guidance_hint": {
+          "type": "boolean"
+        },
+        "external_app_recording": {
+          "type": "boolean"
+        },
+        "instance_form_sync": {
+          "type": "boolean"
+        },
+        "change_form_metadata": {
+          "type": "boolean"
+        },
+        "analytics": {
+          "type": "boolean"
+        },
+        "moving_backwards": {
+          "type": "boolean"
+        },
+        "access_settings": {
+          "type": "boolean"
+        },
+        "change_language": {
+          "type": "boolean"
+        },
+        "jump_to": {
+          "type": "boolean"
+        },
+        "save_mid": {
+          "type": "boolean"
+        },
+        "save_as": {
+          "type": "boolean"
+        },
+        "mark_as_finalized": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "general",
+    "admin"
+  ]
+}

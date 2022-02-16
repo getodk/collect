@@ -7,9 +7,9 @@ import org.mockito.kotlin.only
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
 class AnalyticsInitializerTest {
 

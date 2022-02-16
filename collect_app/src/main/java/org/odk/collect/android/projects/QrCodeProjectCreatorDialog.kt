@@ -19,11 +19,9 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.configure.SettingsImporter
 import org.odk.collect.android.configure.qr.QRCodeDecoder
 import org.odk.collect.android.databinding.QrCodeProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
@@ -35,6 +33,8 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.SettingsProvider
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -74,7 +74,7 @@ class QrCodeProjectCreatorDialog :
     lateinit var qrCodeDecoder: QRCodeDecoder
 
     @Inject
-    lateinit var settingsImporter: SettingsImporter
+    lateinit var settingsImporter: ODKAppSettingsImporter
 
     @Inject
     lateinit var intentLauncher: IntentLauncher

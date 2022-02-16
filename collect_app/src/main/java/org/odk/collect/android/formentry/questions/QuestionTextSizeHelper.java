@@ -1,8 +1,8 @@
 package org.odk.collect.android.formentry.questions;
 
-import org.odk.collect.shared.Settings;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
+import org.odk.collect.shared.settings.Settings;
 
 public class QuestionTextSizeHelper {
 

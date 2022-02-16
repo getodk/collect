@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_RECORDING;
+
 import android.Manifest;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,7 +25,7 @@ import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
 import org.odk.collect.permissions.PermissionsChecker;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +33,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_RECORDING;
 
 public class BackgroundAudioViewModel extends ViewModel implements RequiresFormController {
 

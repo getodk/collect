@@ -1,19 +1,19 @@
 package org.odk.collect.android.application;
 
+import static org.odk.collect.android.analytics.AnalyticsUtils.logServerConfiguration;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_SERVER_URL;
+
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
-import org.odk.collect.android.configure.SettingsChangeHandler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-
-import static org.odk.collect.android.analytics.AnalyticsUtils.logServerConfiguration;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SERVER_URL;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.importing.SettingsChangeHandler;
 
 public class CollectSettingsChangeHandler implements SettingsChangeHandler {
 

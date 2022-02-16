@@ -1,5 +1,7 @@
 package org.odk.collect.android.fragments;
 
+import static org.odk.collect.settings.keys.MetaKeys.KEY_MAPBOX_INITIALIZED;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +17,10 @@ import com.mapbox.mapboxsdk.maps.Style;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
-
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_MAPBOX_INITIALIZED;
 
 public class MapBoxInitializationFragment extends Fragment {
 

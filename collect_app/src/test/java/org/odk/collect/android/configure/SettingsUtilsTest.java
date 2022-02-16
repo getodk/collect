@@ -1,5 +1,9 @@
 package org.odk.collect.android.configure;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import android.content.Context;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -7,13 +11,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.preferences.FormUpdateMode;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
-
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import org.odk.collect.android.preferences.utilities.FormUpdateMode;
+import org.odk.collect.android.preferences.utilities.SettingsUtils;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 @RunWith(AndroidJUnit4.class)
 public class SettingsUtilsTest {

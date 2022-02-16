@@ -42,7 +42,6 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.network.NetworkStateProvider;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
@@ -50,6 +49,7 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.IOException;
 import java.util.HashMap;

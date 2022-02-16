@@ -14,15 +14,20 @@
 
 package org.odk.collect.android.logic;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_EMAIL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_USERNAME;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_USERNAME;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
 import org.odk.collect.android.events.RxEventBus;
-import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +37,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_EMAIL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_USERNAME;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_USERNAME;
 
 /**
  * Returns device properties and metadata to JavaRosa

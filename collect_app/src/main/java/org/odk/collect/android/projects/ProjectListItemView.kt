@@ -5,9 +5,9 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
 import org.odk.collect.android.R
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.projects.Project
-import org.odk.collect.shared.Settings
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.Settings
 import java.net.URL
 
 class ProjectListItemView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {

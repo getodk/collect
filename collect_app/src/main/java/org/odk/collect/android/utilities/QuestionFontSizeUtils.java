@@ -1,9 +1,9 @@
 package org.odk.collect.android.utilities;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
 
 public final class QuestionFontSizeUtils {
     public static final int DEFAULT_FONT_SIZE = 21;

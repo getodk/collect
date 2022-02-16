@@ -13,15 +13,16 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.support.InMemSettingsProvider
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.testshared.BooleanChangeLock
 import java.io.File
@@ -235,11 +236,11 @@ class ProjectDeleterTest {
         assertThat(settingsProvider.getMetaSettings().getString(MetaKeys.KEY_INSTALL_ID), `is`("1234"))
 
         settingsProvider.getUnprotectedSettings("1").getAll().forEach { (key, value) ->
-            assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
+            assertThat(value, `is`(Defaults.protected[key]))
         }
 
         settingsProvider.getProtectedSettings("1").getAll().forEach { (key, value) ->
-            assertThat(value, `is`(ProtectedProjectKeys.defaults[key]))
+            assertThat(value, `is`(Defaults.protected[key]))
         }
 
         assertThat(settingsProvider.getUnprotectedSettings("2").getString(ProjectKeys.KEY_SERVER_URL), `is`("https://my-server.com"))

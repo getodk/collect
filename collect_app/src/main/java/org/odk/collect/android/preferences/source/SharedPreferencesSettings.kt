@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.source
 
 import android.content.SharedPreferences
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 import java.lang.ref.WeakReference
 import java.util.Collections
 

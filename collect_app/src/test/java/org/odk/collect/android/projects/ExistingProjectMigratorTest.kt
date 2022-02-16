@@ -11,9 +11,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.settings.keys.MetaKeys
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.TempFiles
 import java.io.File
 
@@ -50,7 +50,7 @@ class ExistingProjectMigratorTest {
         val project = projectsRepository.getAll()[0]
         assertThat(project.name, `is`("my-server.com"))
         assertThat(project.icon, `is`("M"))
-        assertThat(project.color, `is`("#53bdd4"))
+        assertThat(project.color, `is`("#53BDD4"))
     }
 
     @Test

@@ -6,7 +6,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.testshared.InMemSettings
+import org.odk.collect.shared.settings.InMemSettings
 
 class AppUpgraderTest {
 

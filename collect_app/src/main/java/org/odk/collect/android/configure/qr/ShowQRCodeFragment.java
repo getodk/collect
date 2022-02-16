@@ -12,6 +12,11 @@
 
 package org.odk.collect.android.configure.qr;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,24 +29,19 @@ import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ShowQrcodeFragmentBinding;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
 import javax.inject.Inject;
-
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PASSWORD;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ShowQRCodeFragment extends Fragment {
     ShowQrcodeFragmentBinding binding;

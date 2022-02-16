@@ -21,7 +21,6 @@ import org.odk.collect.android.configure.qr.AppConfigurationGenerator
 import org.odk.collect.android.databinding.ManualProjectCreatorDialogLayoutBinding
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.MATCHING_PROJECT
 import org.odk.collect.android.projects.DuplicateProjectConfirmationKeys.SETTINGS_JSON
 import org.odk.collect.android.utilities.SoftKeyboardController
@@ -32,6 +31,7 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 

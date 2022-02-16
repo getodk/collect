@@ -3,10 +3,10 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import androidx.preference.Preference
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.SettingsUtils
-import org.odk.collect.android.preferences.FormUpdateMode
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
+import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
+import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class MainMenuAccessPreferencesFragment : BaseAdminPreferencesFragment() {
 

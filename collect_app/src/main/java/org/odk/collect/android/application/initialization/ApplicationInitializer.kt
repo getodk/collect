@@ -19,8 +19,8 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.geo.MapboxUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.utilities.UserAgentProvider
 import org.osmdroid.config.Configuration
 import timber.log.Timber

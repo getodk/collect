@@ -1,17 +1,23 @@
 package org.odk.collect.android.configure.qr
 
 import org.json.JSONObject
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.AppConfigurationKeys
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class AppConfigurationGenerator(
     private val settingsProvider: SettingsProvider,
     private val currentProjectProvider: CurrentProjectProvider
 ) {
 
-    fun getAppConfigurationAsJsonWithServerDetails(url: String, username: String, password: String): String {
+    fun getAppConfigurationAsJsonWithServerDetails(
+        url: String,
+        username: String,
+        password: String
+    ): String {
         val generalSettings = JSONObject().apply {
             put(ProjectKeys.KEY_SERVER_URL, url)
             put(ProjectKeys.KEY_USERNAME, username)
@@ -51,7 +57,7 @@ class AppConfigurationGenerator(
         val generalPrefs = JSONObject()
 
         val generalSettings = settingsProvider.getUnprotectedSettings().getAll()
-        val defaultGeneralSettings: Map<String, *> = ProjectKeys.defaults
+        val defaultGeneralSettings: Map<String, *> = Defaults.unprotected
 
         for (key in defaultGeneralSettings.keys) {
             if (key == ProjectKeys.KEY_PASSWORD && !includedPasswordKeys.contains(ProjectKeys.KEY_PASSWORD)) {
@@ -69,17 +75,22 @@ class AppConfigurationGenerator(
         val adminPrefs = JSONObject()
 
         val adminSettings = settingsProvider.getProtectedSettings().getAll()
-        val defaultAdminSettings = ProtectedProjectKeys.defaults
+        val defaultAdminSettings = Defaults.protected
 
         for (key in ProtectedProjectKeys.allKeys()) {
-            if (key == ProtectedProjectKeys.KEY_ADMIN_PW && !includedPasswordKeys.contains(ProtectedProjectKeys.KEY_ADMIN_PW)) {
+            if (
+                key == ProtectedProjectKeys.KEY_ADMIN_PW &&
+                !includedPasswordKeys.contains(ProtectedProjectKeys.KEY_ADMIN_PW)
+            ) {
                 continue
             }
+
             val value = adminSettings[key]
             if (value != null && value != defaultAdminSettings[key]) {
                 adminPrefs.put(key, value)
             }
         }
+
         return adminPrefs
     }
 

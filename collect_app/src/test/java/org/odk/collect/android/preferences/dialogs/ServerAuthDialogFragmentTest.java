@@ -1,5 +1,8 @@
 package org.odk.collect.android.preferences.dialogs;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -10,13 +13,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.fragmentstest.DialogFragmentTest;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
 public class ServerAuthDialogFragmentTest {

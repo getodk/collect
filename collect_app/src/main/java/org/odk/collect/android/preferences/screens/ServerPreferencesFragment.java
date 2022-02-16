@@ -16,6 +16,12 @@
 
 package org.odk.collect.android.preferences.screens;
 
+import static android.app.Activity.RESULT_OK;
+import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
+import static org.odk.collect.android.utilities.DialogUtils.showDialog;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
+
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +34,8 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
@@ -38,25 +46,17 @@ import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.Validator;
-import org.odk.collect.permissions.PermissionListener;
 
 import java.io.ByteArrayInputStream;
 
 import javax.inject.Inject;
-
-import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PROTOCOL;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
-import static org.odk.collect.android.utilities.DialogUtils.showDialog;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
 

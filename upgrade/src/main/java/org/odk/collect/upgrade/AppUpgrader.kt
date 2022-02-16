@@ -1,7 +1,7 @@
 package org.odk.collect.upgrade
 
 import android.app.Application
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 
 class AppUpgrader internal constructor(
     private val settings: Settings,

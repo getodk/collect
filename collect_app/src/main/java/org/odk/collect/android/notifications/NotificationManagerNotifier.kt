@@ -12,10 +12,10 @@ import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotifi
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
-import org.odk.collect.android.preferences.keys.MetaKeys
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.strings.localization.getLocalizedString
 
 class NotificationManagerNotifier(

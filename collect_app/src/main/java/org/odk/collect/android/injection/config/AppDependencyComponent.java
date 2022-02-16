@@ -27,7 +27,6 @@ import org.odk.collect.android.audio.AudioRecordingErrorDialogFragment;
 import org.odk.collect.android.backgroundwork.AutoSendTaskSpec;
 import org.odk.collect.android.backgroundwork.AutoUpdateTaskSpec;
 import org.odk.collect.android.backgroundwork.SyncFormsTaskSpec;
-import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.qr.QRCodeScannerFragment;
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
@@ -77,7 +76,6 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
@@ -96,6 +94,8 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.settings.ODKAppSettingsImporter;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.inject.Singleton;
 
@@ -298,7 +298,7 @@ public interface AppDependencyComponent {
 
     ApplicationInitializer applicationInitializer();
 
-    SettingsImporter settingsImporter();
+    ODKAppSettingsImporter settingsImporter();
 
     ProjectsRepository projectsRepository();
 

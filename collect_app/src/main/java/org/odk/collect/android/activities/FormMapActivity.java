@@ -38,21 +38,21 @@ import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFo
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.external.InstancesContract;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

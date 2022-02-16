@@ -180,4 +180,22 @@ the specific language governing permissions and limitations under the License. -
         <item>@string/form_update_mode_previously_downloaded</item>
         <item>@string/form_update_mode_match_exactly</item>
     </string-array>
+    
+    <string-array name="project_colors">
+        <item>#EA4633</item>
+        <item>#E9527E</item>
+        <item>#9F50B0</item>
+        <item>#3F51B5</item>
+        <item>#2296F3</item>
+        <item>#53BDD4</item>
+        <item>#489789</item>
+        <item>#5DAF50</item>
+        <item>#8BC34A</item>
+        <item>#CDDC39</item>
+        <item>#FFEB3B</item>
+        <item>#F9C028</item>
+        <item>#F2972C</item>
+        <item>#795548</item>
+        <item>#9E9E9E</item>
+    </string-array>
 </resources>

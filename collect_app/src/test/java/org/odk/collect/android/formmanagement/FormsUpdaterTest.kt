@@ -22,7 +22,6 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
@@ -30,6 +29,7 @@ import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.testshared.BooleanChangeLock
 

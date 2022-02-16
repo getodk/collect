@@ -1,5 +1,13 @@
 package org.odk.collect.android.preferences.screens;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
+
 import android.app.Activity;
 import android.content.Context;
 
@@ -19,14 +27,6 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataPreferencesFragmentTest {

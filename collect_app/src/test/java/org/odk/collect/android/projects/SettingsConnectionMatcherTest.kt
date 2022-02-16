@@ -6,22 +6,27 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.support.InMemSettingsProvider
+import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 
 @RunWith(AndroidJUnit4::class)
 class SettingsConnectionMatcherTest {
     private val inMemProjectsRepository = InMemProjectsRepository()
     private val inMemSettingsProvider = InMemSettingsProvider()
-    private val settingsConnectionMatcher = SettingsConnectionMatcher(inMemProjectsRepository, inMemSettingsProvider)
+    private val settingsConnectionMatcher =
+        SettingsConnectionMatcher(inMemProjectsRepository, inMemSettingsProvider)
 
     @Test
     fun `returns null when no projects exist`() {
         val jsonSettings = getServerSettingsJson("https://example.com")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`(nullValue()))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`(nullValue())
+        )
     }
 
     @Test
@@ -29,18 +34,30 @@ class SettingsConnectionMatcherTest {
         createServerProject("a uuid", "https://example.com", "")
         val jsonSettings = getServerSettingsJson("https://example.com")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("a uuid")
+        )
     }
 
     @Test
     fun `returns a matching project uuid when a default project exists and a user tries to add another default project`() {
-        assertThat("Test assumes wrong default", ProjectKeys.defaults[ProjectKeys.KEY_PROTOCOL], `is`(ProjectKeys.PROTOCOL_SERVER))
+        assertThat(
+            "Test assumes wrong default",
+            Defaults.unprotected[ProjectKeys.KEY_PROTOCOL],
+            `is`(
+                ProjectKeys.PROTOCOL_SERVER
+            )
+        )
 
-        val defaultUrl = ProjectKeys.defaults[ProjectKeys.KEY_SERVER_URL] as String
+        val defaultUrl = Defaults.unprotected[ProjectKeys.KEY_SERVER_URL] as String
         createServerProject("a uuid", defaultUrl, "")
         val jsonSettings = getDefaultServerSettingsJson()
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("a uuid")
+        )
     }
 
     @Test
@@ -48,7 +65,10 @@ class SettingsConnectionMatcherTest {
         createServerProject("a uuid", "https://example.com", "")
         val jsonSettings = getServerSettingsJson("https://example.com", "foo")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`(nullValue()))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`(nullValue())
+        )
     }
 
     @Test
@@ -56,15 +76,22 @@ class SettingsConnectionMatcherTest {
         createServerProject("a uuid", "https://example.com", "foo")
         val jsonSettings = getServerSettingsJson("https://example.com", "foo")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("a uuid")
+        )
     }
 
     @Test
     fun `returns a matching project uuid when urls and usernames match and there are other settings that don't match`() {
         createServerProject("a uuid", "https://example.com", "foo")
-        val jsonSettings = "{ \"general\": { \"server_url\": \"https://example.com\", \"username\": \"foo\", \"password\": \"bar\" } }"
+        val jsonSettings =
+            "{ \"general\": { \"server_url\": \"https://example.com\", \"username\": \"foo\", \"password\": \"bar\" } }"
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("a uuid")
+        )
     }
 
     @Test
@@ -72,7 +99,10 @@ class SettingsConnectionMatcherTest {
         createGoogleDriveProject("a uuid", "foo@bar.baz")
         val jsonSettings = getGoogleDriveSettingsJson("baz@bar.quux")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`(nullValue()))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`(nullValue())
+        )
     }
 
     @Test
@@ -80,7 +110,10 @@ class SettingsConnectionMatcherTest {
         createGoogleDriveProject("a uuid", "foo@bar.baz")
         val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("a uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("a uuid")
+        )
     }
 
     @Test
@@ -89,7 +122,10 @@ class SettingsConnectionMatcherTest {
         createGoogleDriveProject("another uuid", "foo@bar.baz")
         val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("another uuid"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("another uuid")
+        )
     }
 
     @Test
@@ -101,7 +137,10 @@ class SettingsConnectionMatcherTest {
 
         val jsonSettings = getServerSettingsJson("https://foo.org", "foo")
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`("uuid 3"))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`("uuid 3")
+        )
     }
 
     @Test
@@ -109,7 +148,10 @@ class SettingsConnectionMatcherTest {
         createGoogleDriveProject("a uuid", "foo@bar.baz")
         val jsonSettings = getDefaultServerSettingsJson()
 
-        assertThat(settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings), `is`(nullValue()))
+        assertThat(
+            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
+            `is`(nullValue())
+        )
     }
 
     private fun createServerProject(projectId: String, url: String, username: String) {

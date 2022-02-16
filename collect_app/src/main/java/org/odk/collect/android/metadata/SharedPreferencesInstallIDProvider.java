@@ -1,8 +1,8 @@
 package org.odk.collect.android.metadata;
 
-import org.odk.collect.shared.Settings;
-
 import static org.odk.collect.shared.strings.RandomString.randomString;
+
+import org.odk.collect.shared.settings.Settings;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 

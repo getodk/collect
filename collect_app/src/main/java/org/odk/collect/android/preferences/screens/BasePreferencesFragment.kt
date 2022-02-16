@@ -8,12 +8,12 @@ import androidx.preference.DialogPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.SettingsChangeHandler
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.preferences.source.SettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.androidshared.utils.AppBarUtils
-import org.odk.collect.shared.Settings.OnSettingChangeListener
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsChangeHandler
+import org.odk.collect.shared.settings.Settings.OnSettingChangeListener
 import javax.inject.Inject
 
 abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingChangeListener {

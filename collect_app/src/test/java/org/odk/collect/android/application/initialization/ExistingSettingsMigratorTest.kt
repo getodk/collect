@@ -6,9 +6,10 @@ import org.hamcrest.Matchers.nullValue
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.support.InMemSettingsProvider
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.ODKAppSettingsMigrator
 
 class ExistingSettingsMigratorTest {
 
@@ -19,7 +20,7 @@ class ExistingSettingsMigratorTest {
         val project2 = projectsRepository.save(Project.New("2", "2", "#ffffff"))
 
         val settingsProvider = InMemSettingsProvider()
-        val settingsMigrator = mock<SettingsMigrator>()
+        val settingsMigrator = mock<ODKAppSettingsMigrator>()
         val existingSettingsMigrator =
             ExistingSettingsMigrator(projectsRepository, settingsProvider, settingsMigrator)
 

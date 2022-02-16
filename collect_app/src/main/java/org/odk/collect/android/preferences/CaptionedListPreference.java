@@ -16,7 +16,7 @@ import androidx.preference.ListPreference;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog;
-import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.List;
 import java.util.Objects;

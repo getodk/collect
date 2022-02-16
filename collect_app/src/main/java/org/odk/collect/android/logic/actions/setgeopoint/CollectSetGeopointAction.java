@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.logic.actions.setgeopoint;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
+
 import android.location.Location;
 
 import com.google.android.gms.location.LocationListener;
@@ -24,14 +26,12 @@ import org.javarosa.core.model.actions.setgeopoint.SetGeopointAction;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.android.location.client.MaxAccuracyWithinTimeoutLocationClientWrapper;
-import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.location.GoogleFusedLocationClient;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 /**
  * An Android-specific implementation of {@link SetGeopointAction}.

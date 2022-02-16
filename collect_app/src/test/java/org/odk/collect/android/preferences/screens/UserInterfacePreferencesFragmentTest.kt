@@ -14,11 +14,11 @@ import org.mockito.kotlin.mock
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
-import org.odk.collect.android.preferences.keys.ProjectKeys
-import org.odk.collect.android.preferences.keys.ProtectedProjectKeys
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
-import org.odk.collect.shared.Settings
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
+import org.odk.collect.shared.settings.Settings
 
 @RunWith(AndroidJUnit4::class)
 class UserInterfacePreferencesFragmentTest {

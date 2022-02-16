@@ -2,7 +2,7 @@ package org.odk.collect.projects
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken.getParameterized
-import org.odk.collect.shared.Settings
+import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.UUIDGenerator
 import java.util.function.Supplier
 

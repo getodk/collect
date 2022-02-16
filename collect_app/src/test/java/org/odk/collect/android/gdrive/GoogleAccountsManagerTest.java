@@ -1,20 +1,5 @@
 package org.odk.collect.android.gdrive;
 
-import android.accounts.Account;
-import android.content.Intent;
-
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.odk.collect.android.preferences.keys.ProjectKeys;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
-import org.odk.collect.android.utilities.ThemeUtils;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -26,7 +11,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
+import android.accounts.Account;
+import android.content.Intent;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 /**
  * @author Shobhit Agarwal

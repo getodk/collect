@@ -1,5 +1,8 @@
 package org.odk.collect.android.widgets.base;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.FormIndex;
@@ -12,14 +15,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-
 import org.odk.collect.android.TestSettingsProvider;
-import org.odk.collect.android.preferences.source.SettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public abstract class WidgetTest {

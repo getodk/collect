@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.odk.collect.testshared.InMemSettings
+import org.odk.collect.shared.settings.InMemSettings
 
 class VersionCodeLaunchStateTest {
 

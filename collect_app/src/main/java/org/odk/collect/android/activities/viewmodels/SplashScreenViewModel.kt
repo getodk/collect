@@ -3,11 +3,11 @@ package org.odk.collect.android.activities.viewmodels
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.android.preferences.keys.ProjectKeys
 import org.odk.collect.android.utilities.ImageFileUtils
 import org.odk.collect.android.utilities.ScreenUtils
 import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.shared.Settings
+import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.settings.Settings
 import java.io.File
 
 class SplashScreenViewModel(

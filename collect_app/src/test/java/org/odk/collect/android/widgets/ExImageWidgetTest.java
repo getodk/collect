@@ -1,5 +1,15 @@
 package org.odk.collect.android.widgets;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
+
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -22,16 +32,6 @@ import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_FONT_SIZE;
-import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 
 public class ExImageWidgetTest extends FileWidgetTest<ExImageWidget> {
     @Mock

@@ -1,5 +1,9 @@
 package org.odk.collect.android.configure.qr;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PASSWORD;
+import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
+import static java.util.Arrays.asList;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -12,15 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ImageFileUtils;
-import org.odk.collect.shared.Settings;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.shared.settings.Settings;
 
 import java.util.Collection;
-
-import static java.util.Arrays.asList;
-import static org.odk.collect.android.preferences.keys.ProtectedProjectKeys.KEY_ADMIN_PW;
-import static org.odk.collect.android.preferences.keys.ProjectKeys.KEY_PASSWORD;
 
 class QRCodeViewModel extends ViewModel {
 

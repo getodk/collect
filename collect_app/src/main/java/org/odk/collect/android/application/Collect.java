@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.application;
 
-import static org.odk.collect.android.preferences.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
+import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
 import android.app.Application;
 import android.content.Context;
@@ -35,7 +35,6 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
@@ -62,7 +61,8 @@ import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedApplication;
 

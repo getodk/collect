@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
 import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.shared.Settings;
+import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
 import java.util.Collection;

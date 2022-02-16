@@ -14,6 +14,14 @@
 
 package org.odk.collect.android.external;
 
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
+import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_ITEM_TYPE;
+import static org.odk.collect.android.external.InstancesContract.CONTENT_TYPE;
+import static org.odk.collect.android.external.InstancesContract.getUri;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,7 +38,6 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
-import org.odk.collect.android.preferences.source.SettingsProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -39,6 +46,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,14 +55,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromCurrentCursorPosition;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getInstanceFromValues;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromInstance;
-import static org.odk.collect.android.database.instances.DatabaseInstanceColumns._ID;
-import static org.odk.collect.android.external.InstancesContract.CONTENT_ITEM_TYPE;
-import static org.odk.collect.android.external.InstancesContract.CONTENT_TYPE;
-import static org.odk.collect.android.external.InstancesContract.getUri;
 
 public class InstanceProvider extends ContentProvider {
 
