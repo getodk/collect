@@ -26,7 +26,6 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
@@ -51,6 +50,8 @@ import org.odk.collect.android.utilities.MultiClickGuard.allowClick
 import org.odk.collect.android.views.ObviousProgressBar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.geo.SelectItemFromMap
+import org.odk.collect.geo.SelectionMapActivity
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
 import timber.log.Timber
@@ -316,7 +317,7 @@ class FillBlankFormActivity :
     }
 }
 
-class SelectFormFromMap : ActivityResultContract<Input, Long?>() {
+class SelectFormFromMap : SelectItemFromMap<Input>() {
 
     override fun createIntent(context: Context, input: Input): Intent {
         return Intent(context, FormMapActivity::class.java).also {
@@ -324,21 +325,13 @@ class SelectFormFromMap : ActivityResultContract<Input, Long?>() {
 
             it.putExtra(FormMapActivity.EXTRA_FORM_ID, formId)
             it.putExtra(
-                FormMapActivity.EXTRA_NEW_ITEM,
+                SelectionMapActivity.EXTRA_NEW_ITEM,
                 Intent(context, FormEntryActivity::class.java).also { intent ->
                     intent.action = Intent.ACTION_EDIT
                     intent.data =
                         FormsContract.getUri(projectId, formId)
                 }
             )
-        }
-    }
-
-    override fun parseResult(resultCode: Int, intent: Intent?): Long? {
-        return if (resultCode == Activity.RESULT_OK) {
-            intent?.getLongExtra(FormMapActivity.EXTRA_SELECTED_ID, -1)
-        } else {
-            null
         }
     }
 

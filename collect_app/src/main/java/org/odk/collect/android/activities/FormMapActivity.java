@@ -15,8 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -46,13 +44,13 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.geo.SelectionMapActivity;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
-import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,14 +64,12 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends LocalizedActivity {
+public class FormMapActivity extends SelectionMapActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     public static final String EXTRA_FORM_ID = "form_id";
-    public static final String EXTRA_SELECTED_ID = "selected_id";
-    public static final String EXTRA_NEW_ITEM = "new_item";
 
     protected Bundle previousState;
 
@@ -220,7 +216,7 @@ public class FormMapActivity extends LocalizedActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            startActivity(getIntent().getParcelableExtra(EXTRA_NEW_ITEM));
+            createNewItem();
         });
 
         map.setGpsLocationEnabled(true);
@@ -393,10 +389,7 @@ public class FormMapActivity extends LocalizedActivity {
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
 
-            Intent data = new Intent();
-            data.putExtra(EXTRA_SELECTED_ID, instanceId);
-            setResult(Activity.RESULT_OK, data);
-            finish();
+            returnItem(instanceId);
         });
     }
 
