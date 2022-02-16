@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.SelectFormFromMap.Input
 import org.odk.collect.android.adapters.FormListAdapter
 import org.odk.collect.android.dao.CursorLoaderFactory
 import org.odk.collect.android.database.forms.DatabaseFormColumns
@@ -80,7 +81,7 @@ class FillBlankFormActivity :
     @Inject
     lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
 
-    lateinit var selectFormFromMap: ActivityResultLauncher<Long>
+    lateinit var selectFormFromMap: ActivityResultLauncher<Input>
     lateinit var menuDelegate: BlankFormListMenuDelegate
 
     private var formSyncTask: FormSyncTask? = null
@@ -214,7 +215,9 @@ class FillBlankFormActivity :
             this,
             object : PermissionListener {
                 override fun granted() {
-                    selectFormFromMap.launch(id)
+                    selectFormFromMap.launch(
+                        Input(currentProjectProvider.getCurrentProject().uuid, id)
+                    )
                 }
 
                 override fun denied() {}
@@ -313,11 +316,21 @@ class FillBlankFormActivity :
     }
 }
 
-class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
+class SelectFormFromMap : ActivityResultContract<Input, Long?>() {
 
-    override fun createIntent(context: Context, input: Long): Intent {
+    override fun createIntent(context: Context, input: Input): Intent {
         return Intent(context, FormMapActivity::class.java).also {
-            it.putExtra(FormMapActivity.EXTRA_FORM_ID, input)
+            val (projectId, formId) = input
+
+            it.putExtra(FormMapActivity.EXTRA_FORM_ID, formId)
+            it.putExtra(
+                FormMapActivity.EXTRA_NEW_ITEM,
+                Intent(context, FormEntryActivity::class.java).also { intent ->
+                    intent.action = Intent.ACTION_EDIT
+                    intent.data =
+                        FormsContract.getUri(projectId, formId)
+                }
+            )
         }
     }
 
@@ -328,6 +341,8 @@ class SelectFormFromMap : ActivityResultContract<Long, Long?>() {
             null
         }
     }
+
+    data class Input(val projectId: String, val formId: Long)
 }
 
 class EditInstanceResultCallback(

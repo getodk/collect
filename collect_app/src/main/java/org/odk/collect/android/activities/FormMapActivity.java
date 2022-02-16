@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -36,7 +35,6 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
@@ -75,6 +73,8 @@ public class FormMapActivity extends LocalizedActivity {
 
     public static final String EXTRA_FORM_ID = "form_id";
     public static final String EXTRA_SELECTED_ID = "selected_id";
+    public static final String EXTRA_NEW_ITEM = "new_item";
+
     protected Bundle previousState;
 
     private FormMapViewModel viewModel;
@@ -220,11 +220,7 @@ public class FormMapActivity extends LocalizedActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-//            final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
-//            Intent intent = new Intent(this, FormEntryActivity.class);
-//            intent.setAction(Intent.ACTION_EDIT);
-//            intent.setData(formUri);
-//            startActivity(intent);
+            startActivity(getIntent().getParcelableExtra(EXTRA_NEW_ITEM));
         });
 
         map.setGpsLocationEnabled(true);
