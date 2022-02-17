@@ -1,6 +1,5 @@
 package org.odk.collect.testshared
 
-import androidx.work.BackoffPolicy
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
@@ -30,17 +29,6 @@ class FakeScheduler : Scheduler {
         repeatPeriod: Long,
         inputData: Map<String, String>
     ) {
-    }
-
-    override fun networkDeferred(
-        tag: String,
-        spec: TaskSpec,
-        repeatPeriod: Long,
-        backoffPolicy: BackoffPolicy,
-        backoffDelay: Long,
-        inputData: Map<String, String>
-    ) {
-        TODO("Not yet implemented")
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {

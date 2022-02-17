@@ -2,9 +2,7 @@ package org.odk.collect.android.support;
 
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.work.BackoffPolicy;
 import androidx.work.WorkManager;
 
 import org.jetbrains.annotations.NotNull;
@@ -71,12 +69,6 @@ public class TestScheduler implements Scheduler {
 
     @Override
     public void networkDeferred(@NotNull String tag, @NotNull TaskSpec spec, long repeatPeriod, @NotNull Map<String, String> inputData) {
-        cancelDeferred(tag);
-        deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod, inputData));
-    }
-
-    @Override
-    public void networkDeferred(@NonNull String tag, @NonNull TaskSpec spec, long repeatPeriod, @NonNull BackoffPolicy backoffPolicy, long backoffDelay, @NonNull Map<String, String> inputData) {
         cancelDeferred(tag);
         deferredTasks.add(new DeferredTask(tag, spec, repeatPeriod, inputData));
     }

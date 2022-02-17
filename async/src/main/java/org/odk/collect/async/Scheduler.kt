@@ -1,6 +1,5 @@
 package org.odk.collect.async
 
-import androidx.work.BackoffPolicy
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -52,27 +51,6 @@ interface Scheduler {
         tag: String,
         spec: TaskSpec,
         repeatPeriod: Long,
-        inputData: Map<String, String>
-    )
-
-    /**
-     * Schedule a task to run in the background repeatedly even if the app isn't running. The task
-     * will only be run when the network is available.
-     *
-     * @param tag used to identify this task in future. Previously scheduled tasks using the same
-     * tag will be replaced
-     * @param spec defines the task to be run
-     * @param repeatPeriod the period between each run of the task
-     * @param backoffPolicy the BackoffPolicy to use when increasing backoff time
-     * @param backoffDelay the time to wait before retrying the work
-     * @param inputData a map of input data that can be accessed by the task
-     */
-    fun networkDeferred(
-        tag: String,
-        spec: TaskSpec,
-        repeatPeriod: Long,
-        backoffPolicy: BackoffPolicy,
-        backoffDelay: Long,
         inputData: Map<String, String>
     )
 
