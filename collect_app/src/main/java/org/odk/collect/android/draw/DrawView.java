@@ -48,8 +48,6 @@ public class DrawView extends View {
     private float valueX;
     private float valueY;
 
-    private int currentColor = 0xFF000000;
-
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -65,7 +63,6 @@ public class DrawView extends View {
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setDither(true);
-        paint.setColor(currentColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeWidth(10);
@@ -73,7 +70,6 @@ public class DrawView extends View {
         pointPaint = new Paint();
         pointPaint.setAntiAlias(true);
         pointPaint.setDither(true);
-        pointPaint.setColor(currentColor);
         pointPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         pointPaint.setStrokeWidth(10);
     }
@@ -196,12 +192,7 @@ public class DrawView extends View {
     }
 
     public void setColor(int color) {
-        currentColor = color;
         paint.setColor(color);
         pointPaint.setColor(color);
-    }
-
-    public int getColor() {
-        return currentColor;
     }
 }
