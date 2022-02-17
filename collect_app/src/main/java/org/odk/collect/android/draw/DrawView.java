@@ -19,6 +19,7 @@ package org.odk.collect.android.draw;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
@@ -125,8 +126,11 @@ public class DrawView extends View {
     }
 
     public void drawSignLine() {
+        int originalColor = paint.getColor();
+        paint.setColor(Color.BLACK);
         canvas.drawLine(0, (int) (canvas.getHeight() * .7),
                 canvas.getWidth(), (int) (canvas.getHeight() * .7), paint);
+        paint.setColor(originalColor);
     }
 
     private void touch_move(float x, float y) {
