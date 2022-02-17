@@ -47,8 +47,10 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
 
-        if (spec.backoffPolicy != null && spec.backoffDelay != null) {
-            builder.setBackoffCriteria(spec.backoffPolicy!!, spec.backoffDelay!!, TimeUnit.MILLISECONDS)
+        spec.backoffPolicy?.let { backoffPolicy ->
+            spec.backoffDelay?.let { backoffDelay ->
+                builder.setBackoffCriteria(backoffPolicy, backoffDelay, TimeUnit.MILLISECONDS)
+            }
         }
 
         workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, builder.build())
