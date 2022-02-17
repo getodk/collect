@@ -13,7 +13,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.draw;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -38,13 +38,13 @@ import com.google.common.collect.ImmutableList;
 import com.rarepebble.colorpicker.ColorPickerView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
-import org.odk.collect.android.views.DrawView;
 
 import java.io.File;
 import java.io.FileNotFoundException;

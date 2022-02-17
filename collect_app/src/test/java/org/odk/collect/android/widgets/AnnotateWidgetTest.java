@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;

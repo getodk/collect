@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.views;
+package org.odk.collect.android.draw;
 
 import android.content.Context;
 import android.graphics.Bitmap;
