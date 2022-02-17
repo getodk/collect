@@ -2,6 +2,8 @@ package org.odk.collect.android.backgroundwork;
 
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.app.Application;
 
