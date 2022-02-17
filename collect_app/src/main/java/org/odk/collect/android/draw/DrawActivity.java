@@ -35,7 +35,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
-import com.rarepebble.colorpicker.ColorPickerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
@@ -45,6 +44,7 @@ import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -336,16 +336,7 @@ public class DrawActivity extends CollectAbstractActivity {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
 
-            final ColorPickerView picker = new ColorPickerView(this);
-            picker.setColor(drawView.getColor());
-            picker.showAlpha(false);
-            picker.showHex(false);
-
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-            builder
-                    .setView(picker)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
-                    .show();
+            DialogFragmentUtils.showIfNotShowing(PenColorPickerDialog.class, getSupportFragmentManager());
         }
     }
 }
