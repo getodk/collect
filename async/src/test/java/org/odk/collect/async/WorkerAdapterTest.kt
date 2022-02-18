@@ -31,8 +31,9 @@ class WorkerAdapterTest {
     fun setup() {
         spec = mock()
         worker = TestWorkerBuilder<TestWorker>(
-            ApplicationProvider.getApplicationContext(),
-            Executors.newSingleThreadExecutor()
+            context = ApplicationProvider.getApplicationContext(),
+            executor = Executors.newSingleThreadExecutor(),
+            runAttemptCount = 0 // without setting this explicitly attempts in tests are counted starting from 1 instead of 0 like in production code
         ).build()
     }
 
@@ -62,7 +63,7 @@ class WorkerAdapterTest {
     @Test
     fun `when task returns false, fails if maxRetries is specified and is equal to runAttemptCount`() {
         whenever(spec.getTask(any(), any(), any())).thenReturn(Supplier { false })
-        whenever(spec.maxRetries).thenReturn(1)
+        whenever(spec.maxRetries).thenReturn(0)
 
         assertThat(worker.doWork(), `is`(ListenableWorker.Result.failure()))
     }
@@ -97,7 +98,7 @@ class WorkerAdapterTest {
 
     @Test
     fun `when maxRetries is specified and it is equal to runAttemptCount, task called with isLastUniqueExecution true`() {
-        whenever(spec.maxRetries).thenReturn(1)
+        whenever(spec.maxRetries).thenReturn(0)
         whenever(spec.getTask(any(), any(), any())).thenReturn(Supplier { true })
 
         worker.doWork()
