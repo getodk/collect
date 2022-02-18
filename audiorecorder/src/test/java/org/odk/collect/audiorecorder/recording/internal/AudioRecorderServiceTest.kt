@@ -303,7 +303,7 @@ class AudioRecorderServiceTest {
     private fun startService(intent: Intent): ServiceScenario<AudioRecorderService> {
         return serviceInstance.let { instance ->
             if (instance == null) {
-                org.odk.collect.servicetest.ServiceScenario.launch(AudioRecorderService::class.java, intent).also {
+                ServiceScenario.launch(AudioRecorderService::class.java, intent).also {
                     serviceInstance = it
                 }
             } else {
