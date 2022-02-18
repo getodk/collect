@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.analytics.Analytics;
@@ -31,7 +32,7 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
-import org.odk.collect.fragmentstest.DialogFragmentTest;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.settings.SettingsProvider;
 import org.robolectric.annotation.Config;
@@ -48,6 +49,9 @@ public class AudioRecordingControllerFragmentTest {
     private MutableNonNullLiveData<Boolean> hasBackgroundRecording;
     private MutableNonNullLiveData<Boolean> isBackgroundRecordingEnabled;
     private ExternalWebPageHelper externalWebPageHelper;
+
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Before
     public void setup() throws IOException {
@@ -105,7 +109,7 @@ public class AudioRecordingControllerFragmentTest {
     public void updatesTimecode() {
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.timeCode.getText().toString(), equalTo("00:00"));
 
@@ -118,7 +122,7 @@ public class AudioRecordingControllerFragmentTest {
     public void updatesWaveform() {
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.volumeBar.getLatestAmplitude(), equalTo(0));
 
@@ -131,7 +135,7 @@ public class AudioRecordingControllerFragmentTest {
     public void clickingPause_pausesRecording() {
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             fragment.binding.pauseRecording.performClick();
             assertThat(audioRecorder.getCurrentSession().getValue().getPaused(), is(true));
@@ -143,7 +147,7 @@ public class AudioRecordingControllerFragmentTest {
         audioRecorder.start("session", Output.AAC);
         audioRecorder.pause();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             fragment.binding.pauseRecording.performClick();
             assertThat(audioRecorder.getCurrentSession().getValue().getPaused(), is(false));
@@ -155,7 +159,7 @@ public class AudioRecordingControllerFragmentTest {
         audioRecorder.start("session", Output.AAC);
         audioRecorder.pause();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
             assertThat(fragment.binding.pauseRecording.getContentDescription(), is(fragment.getString(R.string.resume_recording)));
@@ -167,7 +171,7 @@ public class AudioRecordingControllerFragmentTest {
         audioRecorder.start("session", Output.AAC);
         audioRecorder.pause();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
         });
@@ -179,7 +183,7 @@ public class AudioRecordingControllerFragmentTest {
         audioRecorder.pause();
         audioRecorder.resume();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(R.drawable.ic_pause_24dp));
             assertThat(fragment.binding.pauseRecording.getContentDescription(), is(fragment.getString(R.string.pause_recording)));
@@ -192,7 +196,7 @@ public class AudioRecordingControllerFragmentTest {
         audioRecorder.pause();
         audioRecorder.resume();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(R.drawable.ic_baseline_mic_24));
         });
@@ -203,7 +207,7 @@ public class AudioRecordingControllerFragmentTest {
     public void whenSDKOlderThan24_hidesPauseButton() {
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.GONE));
         });
@@ -214,7 +218,7 @@ public class AudioRecordingControllerFragmentTest {
     public void whenSDK24OrNewer_showsPauseButton() {
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.pauseRecording.getVisibility(), is(View.VISIBLE));
         });
@@ -225,7 +229,7 @@ public class AudioRecordingControllerFragmentTest {
         hasBackgroundRecording.setValue(true);
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.controls.getVisibility(), is(View.GONE));
         });
@@ -236,7 +240,7 @@ public class AudioRecordingControllerFragmentTest {
         hasBackgroundRecording.setValue(true);
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.help.getVisibility(), is(View.VISIBLE));
 
@@ -251,7 +255,7 @@ public class AudioRecordingControllerFragmentTest {
         hasBackgroundRecording.setValue(false);
         audioRecorder.start("session", Output.AAC);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.help.getVisibility(), is(View.GONE));
         });
@@ -259,7 +263,7 @@ public class AudioRecordingControllerFragmentTest {
 
     @Test
     public void whenThereIsAnErrorStartingRecording_showsErrorDialog() {
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
 
         audioRecorder.failOnStart();
         audioRecorder.start("blah", Output.AAC);
@@ -274,7 +278,7 @@ public class AudioRecordingControllerFragmentTest {
         hasBackgroundRecording.setValue(true);
         isBackgroundRecordingEnabled.setValue(false);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.VISIBLE));
             assertThat(fragment.binding.timeCode.getText(), is(fragment.getString(R.string.recording_disabled, "⋮")));
@@ -289,7 +293,7 @@ public class AudioRecordingControllerFragmentTest {
         hasBackgroundRecording.setValue(false);
         isBackgroundRecordingEnabled.setValue(false);
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
             assertThat(fragment.binding.getRoot().getVisibility(), is(View.GONE));
         });
@@ -301,7 +305,7 @@ public class AudioRecordingControllerFragmentTest {
         isBackgroundRecordingEnabled.setValue(true);
         audioRecorder.failOnStart();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
 
         audioRecorder.start("blah", Output.AAC_LOW);
         audioRecorder.cleanUp();
@@ -321,7 +325,7 @@ public class AudioRecordingControllerFragmentTest {
         isBackgroundRecordingEnabled.setValue(true);
         audioRecorder.failOnStart();
 
-        FragmentScenario<AudioRecordingControllerFragment> scenario = DialogFragmentTest.launchDialogFragment(AudioRecordingControllerFragment.class);
+        FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingControllerFragment.class);
 
         audioRecorder.start("blah", Output.AAC_LOW);
         audioRecorder.cleanUp();

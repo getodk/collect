@@ -1,0 +1,43 @@
+import dependencies.Dependencies
+import dependencies.Versions
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+apply from: '../config/quality.gradle'
+
+android {
+    compileSdkVersion Versions.android_compile_sdk
+
+    defaultConfig {
+        minSdkVersion Versions.android_min_sdk
+        targetSdkVersion Versions.android_target_sdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+dependencies {
+    coreLibraryDesugaring Dependencies.desugar
+
+    implementation Dependencies.junit
+    implementation Dependencies.androidx_test_core_ktx
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
+    implementation Dependencies.androidx_lifecycle_runtime_ktx
+    implementation Dependencies.androidx_test_espresso_core
+    implementation Dependencies.androidx_appcompat
+    implementation Dependencies.androidx_test_espresso_intents
+}
+

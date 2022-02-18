@@ -10,16 +10,20 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.fragmentstest.DialogFragmentTest;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioHelpDialogFragmentTest {
 
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+
     @Test
     public void hasOkButton() {
-        FragmentScenario<BackgroundAudioHelpDialogFragment> scenario = DialogFragmentTest.launchDialogFragment(BackgroundAudioHelpDialogFragment.class);
+        FragmentScenario<BackgroundAudioHelpDialogFragment> scenario = launcherRule.launchDialogFragment(BackgroundAudioHelpDialogFragment.class);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
             Button okButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);

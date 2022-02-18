@@ -12,6 +12,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -21,7 +22,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
-import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -36,6 +37,9 @@ class ChangeAdminPasswordDialogTest {
 
     @Inject
     lateinit var factory: ProjectPreferencesViewModel.Factory
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -56,7 +60,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             Espresso.onView(ViewMatchers.isRoot()).perform(ViewActions.pressBack())
@@ -66,7 +70,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on 'OK'`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
@@ -77,7 +81,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on 'CANCEL'`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, Matchers.`is`(true))
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
@@ -88,7 +92,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `Setting password and accepting updates the password in settings`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
@@ -100,7 +104,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `Setting password and canceling does not update the password in settings`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, "")
             it.binding.pwdField.setText("password")
@@ -112,7 +116,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `Setting password sets Unlocked state in view model`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             it.binding.pwdField.setText("password")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
@@ -124,7 +128,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `Removing password sets NotProtected state in view model`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             it.binding.pwdField.setText("")
             (it.dialog as AlertDialog?)!!.getButton(AlertDialog.BUTTON_POSITIVE).performClick()
@@ -136,7 +140,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `When screen is rotated password and checkbox value is retained`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             it.binding.pwdField.setText("password")
             it.binding.checkBox2.performClick()
@@ -148,7 +152,7 @@ class ChangeAdminPasswordDialogTest {
 
     @Test
     fun `'Show password' displays and hides password`() {
-        val scenario = DialogFragmentTest.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
+        val scenario = launcherRule.launchDialogFragment(ChangeAdminPasswordDialog::class.java)
         scenario.onFragment {
             it.binding.checkBox2.performClick()
             assertThat(it.binding.pwdField.inputType, `is`(InputType.TYPE_TEXT_VARIATION_PASSWORD))

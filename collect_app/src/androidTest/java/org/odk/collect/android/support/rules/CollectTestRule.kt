@@ -3,8 +3,6 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
-import androidx.test.core.app.ActivityScenario
-import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.odk.collect.android.activities.SplashScreenActivity
@@ -13,16 +11,17 @@ import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.android.support.pages.ShortcutsPage
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import java.util.function.Consumer
 
 class CollectTestRule @JvmOverloads constructor(
     private val useDemoProject: Boolean = true
-) : TestRule {
+) : ActivityScenarioLauncherRule() {
 
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
             override fun evaluate() {
-                ActivityScenario.launch(SplashScreenActivity::class.java)
+                launch(SplashScreenActivity::class.java)
 
                 val firstLaunchPage = FirstLaunchPage().assertOnPage()
 
@@ -46,12 +45,12 @@ class CollectTestRule @JvmOverloads constructor(
             .addProject()
 
     fun launchShortcuts(): ShortcutsPage {
-        val scenario = ActivityScenario.launch(AndroidShortcutsActivity::class.java)
+        val scenario = launch(AndroidShortcutsActivity::class.java)
         return ShortcutsPage(scenario).assertOnPage()
     }
 
     fun <T : Page<T>> launch(intent: Intent, destination: T): T {
-        ActivityScenario.launch<Activity>(intent)
+        launch<Activity>(intent)
         return destination.assertOnPage()
     }
 
@@ -60,7 +59,7 @@ class CollectTestRule @JvmOverloads constructor(
         destination: T,
         actions: Consumer<T>
     ): Instrumentation.ActivityResult {
-        val scenario = ActivityScenario.launch<Activity>(intent)
+        val scenario = launch<Activity>(intent)
         destination.assertOnPage()
         actions.accept(destination)
         return scenario.result

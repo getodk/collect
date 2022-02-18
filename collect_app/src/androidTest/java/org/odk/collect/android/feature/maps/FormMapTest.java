@@ -1,5 +1,8 @@
 package org.odk.collect.android.feature.maps;
 
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -17,11 +20,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
+import org.odk.collect.androidtest.RecordedIntentsRule;
 import org.odk.collect.geo.GeoUtils;
-import org.odk.collect.testshared.RecordedIntentsRule;
-
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 
 public class FormMapTest {
 

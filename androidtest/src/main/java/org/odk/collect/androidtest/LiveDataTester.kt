@@ -1,14 +1,13 @@
-package org.odk.collect.testshared
+package org.odk.collect.androidtest
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 
 class LiveDataTester {
 
     private val owner = FakeLifecycleOwner()
 
     fun <T> activate(liveData: LiveData<T>): LiveData<T> {
-        liveData.observe(owner, Observer { })
+        liveData.observe(owner) { }
         return liveData
     }
 

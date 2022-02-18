@@ -1,5 +1,12 @@
 package org.odk.collect.android.preferences;
 
+import static junit.framework.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.test.core.app.ApplicationProvider;
@@ -10,13 +17,6 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowToast;
-
-import static junit.framework.Assert.assertFalse;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(AndroidJUnit4.class)
 public class ServerPreferencesAdderTest {

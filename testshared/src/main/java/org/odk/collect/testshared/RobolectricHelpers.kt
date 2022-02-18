@@ -13,7 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.testshared.ServiceScenario.Companion.launch
+import org.odk.collect.servicetest.ServiceScenario
+import org.odk.collect.servicetest.ServiceScenario.Companion.launch
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowEnvironment

@@ -4,8 +4,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.After
 import org.junit.Test
+import org.odk.collect.androidtest.LiveDataTester
 import org.odk.collect.audiorecorder.recorder.Output
-import org.odk.collect.testshared.LiveDataTester
 import java.io.File
 import java.io.Serializable
 

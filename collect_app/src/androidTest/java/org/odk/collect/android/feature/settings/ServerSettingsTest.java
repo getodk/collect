@@ -1,5 +1,8 @@
 package org.odk.collect.android.feature.settings;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -8,15 +11,12 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
-import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.testshared.RecordedIntentsRule;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import org.odk.collect.android.support.pages.ProjectSettingsPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.androidtest.RecordedIntentsRule;
 
 @RunWith(AndroidJUnit4.class)
 public class ServerSettingsTest {

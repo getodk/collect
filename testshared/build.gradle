@@ -37,6 +37,8 @@ dependencies {
     implementation project(path: ':async')
     implementation project(path: ':shared')
     implementation project(path: ':androidshared')
+    implementation project(path: ':androidtest')
+    implementation project(path: ':servicetest')
     implementation Dependencies.androidx_recyclerview
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx

@@ -49,8 +49,8 @@ import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.android.support.matchers.RecyclerViewMatcher
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.strings.localization.getLocalizedString
-import org.odk.collect.testshared.NestedScrollToAction.nestedScrollTo
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

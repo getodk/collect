@@ -3,7 +3,6 @@ package org.odk.collect.android.activities
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -24,6 +23,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.rules.MainCoroutineScopeRule
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 
@@ -37,6 +37,9 @@ class SplashScreenActivityTest {
     private val splashScreenViewModel = mock<SplashScreenViewModel> {}
 
     private val currentProjectProvider = mock<CurrentProjectProvider> {}
+
+    @get:Rule
+    val launcherRule = ActivityScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -67,7 +70,7 @@ class SplashScreenActivityTest {
         whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
         whenever(splashScreenViewModel.doesLogoFileExist).thenReturn(false)
 
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        val scenario = launcherRule.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
             assertThat(activity.findViewById<View>(R.id.splash_default).visibility, `is`(View.VISIBLE))
             assertThat(activity.findViewById<View>(R.id.splash).visibility, `is`(View.GONE))
@@ -79,7 +82,7 @@ class SplashScreenActivityTest {
         whenever(splashScreenViewModel.shouldDisplaySplashScreen).thenReturn(true)
         whenever(splashScreenViewModel.doesLogoFileExist).thenReturn(true)
 
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        val scenario = launcherRule.launch(SplashScreenActivity::class.java)
         scenario.onActivity { activity: SplashScreenActivity ->
             assertThat(activity.findViewById<View>(R.id.splash_default).visibility, `is`(View.GONE))
             assertThat(activity.findViewById<View>(R.id.splash).visibility, `is`(View.VISIBLE))
@@ -94,7 +97,7 @@ class SplashScreenActivityTest {
 
         Intents.init()
 
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        val scenario = launcherRule.launch(SplashScreenActivity::class.java)
         advanceTimeBy(1000)
         assertThat(scenario.state, `is`(Lifecycle.State.RESUMED))
         assertThat(Intents.getIntents().isEmpty(), `is`(true))
@@ -110,7 +113,7 @@ class SplashScreenActivityTest {
         whenever(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(false)
 
         Intents.init()
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        val scenario = launcherRule.launch(SplashScreenActivity::class.java)
         assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
         Intents.intended(hasComponent(MainMenuActivity::class.java.name))
         Intents.release()
@@ -122,7 +125,7 @@ class SplashScreenActivityTest {
         whenever(splashScreenViewModel.shouldFirstLaunchScreenBeDisplayed).thenReturn(true)
 
         Intents.init()
-        val scenario = ActivityScenario.launch(SplashScreenActivity::class.java)
+        val scenario = launcherRule.launch(SplashScreenActivity::class.java)
         assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
         Intents.intended(hasComponent(FirstLaunchActivity::class.java.name))
         Intents.release()

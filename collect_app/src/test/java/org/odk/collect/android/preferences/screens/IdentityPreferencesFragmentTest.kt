@@ -1,6 +1,5 @@
 package org.odk.collect.android.preferences.screens
 
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.ViewModel
 import androidx.preference.CheckBoxPreference
 import androidx.preference.Preference
@@ -9,6 +8,7 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.Matchers.`is`
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -20,6 +20,7 @@ import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.AdminPasswordProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -35,6 +36,9 @@ class IdentityPreferencesFragmentTest {
     private val projectPreferencesViewModel = ProjectPreferencesViewModel(adminPasswordProvider)
 
     private val versionInformation = mock<VersionInformation>()
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -62,7 +66,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Form Metadata' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
@@ -73,7 +77,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
@@ -83,7 +87,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Form Metadata' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
@@ -94,7 +98,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
@@ -104,7 +108,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Form Metadata' option is enabled in protected settings should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(true))
         }
@@ -115,7 +119,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA, false)
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FORM_METADATA)!!.isVisible, `is`(false))
         }
@@ -125,7 +129,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Collect anonymous usage data' option is enabled in protected settings should be visible in Locked mode`() {
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
@@ -136,7 +140,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateLocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
@@ -146,7 +150,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Collect anonymous usage data' option is enabled in protected settings should be visible in Unlocked mode`() {
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
@@ -157,7 +161,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateUnlocked()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
@@ -167,7 +171,7 @@ class IdentityPreferencesFragmentTest {
     fun `If 'Collect anonymous usage data' option is enabled in protected settings should be visible in NotProtected mode`() {
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(true))
         }
@@ -178,7 +182,7 @@ class IdentityPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
         projectPreferencesViewModel.setStateNotProtected()
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_ANALYTICS)!!.isVisible, `is`(false))
         }
@@ -189,7 +193,7 @@ class IdentityPreferencesFragmentTest {
         generalSettings.save(ProjectKeys.KEY_ANALYTICS, true)
         whenever(versionInformation.isBeta).thenReturn(false)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
         }
@@ -200,7 +204,7 @@ class IdentityPreferencesFragmentTest {
         generalSettings.save(ProjectKeys.KEY_ANALYTICS, false)
         whenever(versionInformation.isBeta).thenReturn(false)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(false))
         }
@@ -210,7 +214,7 @@ class IdentityPreferencesFragmentTest {
     fun `'Collect anonymous usage data' option should be disabled in beta`() {
         whenever(versionInformation.isBeta).thenReturn(true)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isEnabled, `is`(false))
             assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isChecked, `is`(true))
@@ -221,7 +225,7 @@ class IdentityPreferencesFragmentTest {
     fun `'Collect anonymous usage data' option should be enabled if it's not beta`() {
         whenever(versionInformation.isBeta).thenReturn(false)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<CheckBoxPreference>(ProjectKeys.KEY_ANALYTICS)!!.isEnabled, `is`(true))
         }
@@ -231,7 +235,7 @@ class IdentityPreferencesFragmentTest {
     fun `Clicking on the 'Collect anonymous usage data' option should change its state`() {
         whenever(versionInformation.isBeta).thenReturn(false)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)
             assertThat(option!!.isChecked, `is`(true))
@@ -246,7 +250,7 @@ class IdentityPreferencesFragmentTest {
 
     @Test
     fun `Fragment recreation should not change the state of the 'Collect anonymous usage data' option`() {
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             val option = fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_ANALYTICS)
             assertThat(option!!.isChecked, `is`(true))
@@ -264,7 +268,7 @@ class IdentityPreferencesFragmentTest {
     fun `When all preferences in 'Usage data' category are hidden, the category should be hidden as well`() {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, false)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("usage_data")!!.isVisible, `is`(false))
         }
@@ -274,7 +278,7 @@ class IdentityPreferencesFragmentTest {
     fun `When al least one preference in 'Usage data' category is visible, the category should be visible as well`() {
         adminSettings.save(ProtectedProjectKeys.KEY_ANALYTICS, true)
 
-        val scenario = FragmentScenario.launch(IdentityPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(IdentityPreferencesFragment::class.java)
         scenario.onFragment { fragment: IdentityPreferencesFragment ->
             assertThat(fragment.findPreference<PreferenceCategory>("usage_data")!!.isVisible, `is`(true))
         }

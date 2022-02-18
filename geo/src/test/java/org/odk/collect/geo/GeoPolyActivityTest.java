@@ -31,9 +31,11 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.location.tracker.LocationTracker;
@@ -44,6 +46,9 @@ public class GeoPolyActivityTest {
 
     private final FakeMapFragment mapFragment = new FakeMapFragment();
     private final LocationTracker locationTracker = mock(LocationTracker.class);
+
+    @Rule
+    public ActivityScenarioLauncherRule launcherRule = new ActivityScenarioLauncherRule();
 
     @Before
     public void setUp() throws Exception {
@@ -78,7 +83,7 @@ public class GeoPolyActivityTest {
 
     @Test
     public void testLocationTrackerLifecycle() {
-        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
 
         // Stopping the activity should stop the location tracker
         scenario.moveToState(Lifecycle.State.DESTROYED);
@@ -87,7 +92,7 @@ public class GeoPolyActivityTest {
 
     @Test
     public void recordButton_should_beHiddenForAutomaticMode() {
-        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
 
         scenario.onActivity((activity -> {
             activity.updateRecordingMode(R.id.automatic_mode);
@@ -98,7 +103,7 @@ public class GeoPolyActivityTest {
 
     @Test
     public void recordButton_should_beVisibleForManualMode() {
-        ActivityScenario<GeoPolyActivity> scenario = ActivityScenario.launch(GeoPolyActivity.class);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
 
         scenario.onActivity((activity -> {
             activity.updateRecordingMode(R.id.manual_mode);
@@ -112,7 +117,7 @@ public class GeoPolyActivityTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, true);
-        ActivityScenario.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+        launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
             activity.updateRecordingMode(R.id.automatic_mode);
             activity.startInput();
             verify(locationTracker).start(true);
@@ -121,7 +126,7 @@ public class GeoPolyActivityTest {
         Mockito.reset(locationTracker); // Ignore previous calls
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
-        ActivityScenario.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+        launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
             activity.updateRecordingMode(R.id.automatic_mode);
             activity.startInput();
             verify(locationTracker).start(false);

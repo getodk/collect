@@ -16,8 +16,10 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
@@ -28,6 +30,9 @@ import org.robolectric.shadows.ShadowApplication;
 public class GeoPointMapActivityTest {
 
     private final FakeMapFragment mapFragment = new FakeMapFragment();
+
+    @Rule
+    public ActivityScenarioLauncherRule launcherRule = new ActivityScenarioLauncherRule();
 
     @Before
     public void setUp() throws Exception {
@@ -56,7 +61,7 @@ public class GeoPointMapActivityTest {
 
     @Test
     public void shouldReturnPointFromSecondLocationFix() {
-        ActivityScenario<GeoPointMapActivity> scenario = ActivityScenario.launch(GeoPointMapActivity.class);
+        ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launch(GeoPointMapActivity.class);
 
         // The very first fix is ignored.
         mapFragment.setLocationProvider("GPS");
@@ -86,7 +91,7 @@ public class GeoPointMapActivityTest {
 
     @Test
     public void mapFragmentRetainMockAccuracy_isFalse() {
-        ActivityScenario.launch(GeoPointMapActivity.class);
+        launcherRule.launch(GeoPointMapActivity.class);
         assertThat(mapFragment.isRetainMockAccuracy(), is(false));
     }
 
@@ -94,11 +99,11 @@ public class GeoPointMapActivityTest {
     public void passingRetainMockAccuracyExtra_showSetItOnLocationClient() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
-        ActivityScenario.launch(intent);
+        launcherRule.launch(intent);
         assertThat(mapFragment.isRetainMockAccuracy(), is(true));
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
-        ActivityScenario.launch(intent);
+        launcherRule.launch(intent);
         assertThat(mapFragment.isRetainMockAccuracy(), is(false));
     }
 }

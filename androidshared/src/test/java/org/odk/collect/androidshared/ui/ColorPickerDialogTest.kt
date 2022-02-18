@@ -13,19 +13,23 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.equalToIgnoringCase
 import org.hamcrest.Matchers.nullValue
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ColorPickerDialog
-import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class ColorPickerDialogTest {
 
-    val args = Bundle().apply {
+    private val args = Bundle().apply {
         putString(ColorPickerDialog.CURRENT_COLOR, "#cccccc")
         putString(ColorPickerDialog.CURRENT_ICON, "P")
     }
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
@@ -137,7 +141,7 @@ class ColorPickerDialogTest {
     }
 
     private fun launchFragment(): FragmentScenario<ColorPickerDialog> {
-        return DialogFragmentTest.launchDialogFragment(ColorPickerDialog::class.java, args)
+        return launcherRule.launchDialogFragment(ColorPickerDialog::class.java, args)
     }
 
     private fun assertCurrentColor(fragment: ColorPickerDialog, color: String) {

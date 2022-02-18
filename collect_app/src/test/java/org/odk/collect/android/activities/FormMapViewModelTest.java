@@ -1,5 +1,11 @@
 package org.odk.collect.android.activities;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.not;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,12 +19,6 @@ import org.odk.collect.formstest.InMemInstancesRepository;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.not;
 
 public class FormMapViewModelTest {
     @Rule public MockitoRule rule = MockitoJUnit.rule();

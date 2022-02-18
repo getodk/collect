@@ -1,5 +1,11 @@
 package org.odk.collect.android.widgets.viewmodels;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
@@ -15,13 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.utilities.DateTimeUtils;
-import org.odk.collect.testshared.LiveDataTester;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import org.odk.collect.androidtest.LiveDataTester;
 
 @RunWith(AndroidJUnit4.class)
 public class DateTimeViewModelTest {

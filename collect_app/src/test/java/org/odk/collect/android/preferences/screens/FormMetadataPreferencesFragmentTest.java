@@ -17,6 +17,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
@@ -24,6 +25,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -33,6 +35,9 @@ public class FormMetadataPreferencesFragmentTest {
 
     private final FakePhoneStatePermissionsProvider permissionsProvider = new FakePhoneStatePermissionsProvider();
     private final DeviceDetailsProvider deviceDetailsProvider = mock(DeviceDetailsProvider.class);
+
+    @Rule
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Before
     public void setup() {
@@ -52,7 +57,7 @@ public class FormMetadataPreferencesFragmentTest {
 
     @Test
     public void recreating_doesntRequestPermissionsAgain() {
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
         assertThat(permissionsProvider.timesRequested, equalTo(1));
 
         scenario.recreate();
@@ -63,7 +68,7 @@ public class FormMetadataPreferencesFragmentTest {
     public void recreating_whenPermissionsAcceptedPreviously_showsPermissionDependantPreferences() {
         when(deviceDetailsProvider.getDeviceId()).thenReturn("123456789");
 
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
@@ -77,7 +82,7 @@ public class FormMetadataPreferencesFragmentTest {
 
     @Test
     public void recreating_whenPermissionsGrantedPreviously_doesNotShowPermissionDependantPreferences() {
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.deny();
         scenario.recreate();
         verifyNoInteractions(deviceDetailsProvider);
@@ -88,7 +93,7 @@ public class FormMetadataPreferencesFragmentTest {
         when(deviceDetailsProvider.getLine1Number()).thenReturn(null);
         when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
 
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = FragmentScenario.launch(FormMetadataPreferencesFragment.class);
+        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
         permissionsProvider.grant();
         scenario.onFragment(fragment -> {
             String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);

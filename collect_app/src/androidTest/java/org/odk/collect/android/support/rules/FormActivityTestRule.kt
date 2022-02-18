@@ -3,9 +3,7 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.odk.collect.android.activities.FormEntryActivity
@@ -14,6 +12,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
 import java.io.IOException
@@ -22,7 +21,7 @@ class FormActivityTestRule @JvmOverloads constructor(
     private val formFilename: String,
     private val formName: String,
     private val mediaFilePaths: List<String>? = null
-) : TestRule {
+) : ActivityScenarioLauncherRule() {
 
     private var formEntryPage: FormEntryPage? = null
 
@@ -30,7 +29,7 @@ class FormActivityTestRule @JvmOverloads constructor(
         return object : Statement() {
             override fun evaluate() {
                 setUpProjectAndCopyForm()
-                ActivityScenario.launch<Activity>(activityIntent)
+                launch<Activity>(activityIntent)
                 formEntryPage = FormEntryPage(formName)
                 formEntryPage!!.assertOnPage()
                 base.evaluate()

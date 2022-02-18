@@ -49,13 +49,6 @@ configurations.all {
     transitive = true
 }
 
-subprojects {
-    tasks.withType(Test) {
-       minHeapSize = '512m'
-       maxHeapSize = project.properties['test.heap.max']
-    }
-}
-
 task checkAll(type: GradleBuild) {
     tasks = ['checkCode', 'checkTests']
 }

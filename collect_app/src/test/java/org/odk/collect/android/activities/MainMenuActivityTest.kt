@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -16,6 +15,7 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
@@ -32,6 +32,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -51,6 +52,9 @@ class MainMenuActivityTest {
     private val currentProjectViewModel = mock<CurrentProjectViewModel> {
         on { currentProject } doReturn MutableNonNullLiveData(project)
     }
+
+    @get:Rule
+    val launcherRule = ActivityScenarioLauncherRule()
 
     @Before
     fun setup() {
@@ -83,7 +87,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Activity title is current project name`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity {
             assertThat(it.title, `is`("Project"))
         }
@@ -91,7 +95,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Project icon for current project should be displayed`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val projectIcon = activity.findViewById<TextView>(R.id.project_icon_text)
 
@@ -105,7 +109,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Fill Blank Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.enter_data)
             assertThat(button.text, `is`(activity.getString(R.string.enter_data_button)))
@@ -114,7 +118,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Fill Blank Form button should start list of blank forms`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
@@ -128,7 +132,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Edit Saved Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.review_data)
             assertThat(button.text, `is`(activity.getString(R.string.review_data)))
@@ -137,7 +141,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Edit Saved Form button should start list of saved forms`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
@@ -152,7 +156,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Send Finalized Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.send_data)
             assertThat(button.text, `is`(activity.getString(R.string.send_data)))
@@ -161,7 +165,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Send Finalized Form button should start list of finalized forms`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
@@ -175,7 +179,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `View Sent Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.view_sent_forms)
             assertThat(button.text, `is`(activity.getString(R.string.view_sent_forms)))
@@ -184,7 +188,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `View Sent Form button should start list of sent forms`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
@@ -199,7 +203,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Get Blank Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.get_forms)
             assertThat(button.text, `is`(activity.getString(R.string.get_forms)))
@@ -208,7 +212,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Get Blank Form button should start list of forms to download`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
@@ -222,7 +226,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Delete Saved Form button should have proper text`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button: Button = activity.findViewById(R.id.manage_forms)
             assertThat(button.text, `is`(activity.getString(R.string.manage_files)))
@@ -231,7 +235,7 @@ class MainMenuActivityTest {
 
     @Test
     fun `Delete Saved Form button should start list of forms to delete`() {
-        val scenario = ActivityScenario.launch(MainMenuActivity::class.java)
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 

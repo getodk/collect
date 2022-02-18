@@ -16,11 +16,10 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.odk.collect.androidtest.LiveDataTester
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.LiveDataTester
 import java.io.File
 import java.io.IOException
-import java.util.ArrayList
 import java.util.function.Supplier
 
 class AudioClipViewModelTest {

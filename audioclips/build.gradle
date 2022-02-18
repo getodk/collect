@@ -41,6 +41,7 @@ dependencies {
     implementation Dependencies.androidx_lifecycle_viewmodel_ktx
     implementation Dependencies.androidx_lifecycle_livedata_ktx
 
+    testImplementation project(path: ':androidtest')
     testImplementation project(path: ':testshared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_core

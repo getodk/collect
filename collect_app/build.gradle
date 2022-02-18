@@ -203,6 +203,11 @@ android {
         unitTests {
             includeAndroidResources = true
             returnDefaultValues = true
+
+            all {
+                minHeapSize = '512m'
+                maxHeapSize = project.properties['test.heap.max']
+            }
         }
     }
 
@@ -370,6 +375,7 @@ dependencies {
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
 
+    testImplementation project(':androidtest')
     testImplementation(project(path: ':testshared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
@@ -388,6 +394,8 @@ dependencies {
     testImplementation Dependencies.androidx_test_espresso_intents
     testImplementation Dependencies.androidx_test_core_ktx
     testImplementation Dependencies.kotlinx_coroutines_test
+
+    androidTestImplementation project(':androidtest')
 
     // Used to generate documentation screenshots.
     androidTestImplementation Dependencies.fastlane_screengrab

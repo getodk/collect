@@ -1,12 +1,10 @@
-package org.odk.collect.testshared
+package org.odk.collect.servicetest
 
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.Lifecycle
-import androidx.test.core.app.ActivityScenario
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.android.controller.ServiceController
@@ -15,6 +13,8 @@ import java.util.function.Consumer
 /**
  * Mimics [ActivityScenario]/[FragmentScenario] to provide a way to test [Service] in a similar
  * manner. This should allow a [Service] to be tested without explicitly depending on Robolectric.
+ *
+ * This only works in Robolectric/local tests currently.
  */
 class ServiceScenario<T : Service?>(private val serviceController: ServiceController<T>) {
 

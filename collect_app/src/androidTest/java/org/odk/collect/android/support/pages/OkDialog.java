@@ -33,7 +33,6 @@ public class OkDialog extends Page<OkDialog> {
     }
 
     public <D extends Page<D>> D clickOK(D destination) {
-        clickOnId(android.R.id.button1);
-        return destination.assertOnPage();
+        return clickOnButtonInDialog(R.string.ok, destination);
     }
 }

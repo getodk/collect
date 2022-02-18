@@ -1,4 +1,4 @@
-package org.odk.collect.testshared
+package org.odk.collect.androidtest
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

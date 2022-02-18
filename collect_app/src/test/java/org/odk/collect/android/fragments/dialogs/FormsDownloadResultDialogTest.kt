@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -19,7 +20,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
-import org.odk.collect.fragmentstest.DialogFragmentTest
+import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
+import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows
 
@@ -27,6 +29,9 @@ import org.robolectric.Shadows
 class FormsDownloadResultDialogTest {
     private val resultItem = ServerFormDetails("Form 1", "", "1", "1", "", false, true, null)
     val listener = mock<FormsDownloadResultDialog.FormDownloadResultDialogListener>()
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
@@ -37,7 +42,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(it.isCancelable, `is`(true))
         }
@@ -52,7 +57,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
@@ -70,7 +75,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -89,7 +94,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).performClick()
@@ -107,7 +112,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).performClick()
@@ -124,13 +129,8 @@ class FormsDownloadResultDialogTest {
             hashMapOf<ServerFormDetails, String>()
         )
 
-        DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
-        DialogFragmentTest
-            .onViewInDialog(
-                withText(R.string.all_downloads_succeeded)
-            ).check(
-                matches(isDisplayed())
-            )
+        launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        onViewInDialog(withText(R.string.all_downloads_succeeded)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -142,7 +142,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility,
@@ -159,18 +159,13 @@ class FormsDownloadResultDialogTest {
             hashMapOf(resultItem to FormDownloadException.InvalidSubmission())
         )
 
-        DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
-        DialogFragmentTest
-            .onViewInDialog(
-                withText(
-                    ApplicationProvider.getApplicationContext<Collect>()
-                        .getString(R.string.some_downloads_failed, "1", "1")
-                )
-            ).check(
-                matches(
-                    isDisplayed()
-                )
+        launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+        onViewInDialog(
+            withText(
+                ApplicationProvider.getApplicationContext<Collect>()
+                    .getString(R.string.some_downloads_failed, "1", "1")
             )
+        ).check(matches(isDisplayed()))
     }
 
     @Test
@@ -182,7 +177,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).visibility,
@@ -207,7 +202,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             it.listener = listener
             assertThat(it.dialog!!.isShowing, `is`(true))
@@ -226,7 +221,7 @@ class FormsDownloadResultDialogTest {
         )
 
         val scenario =
-            DialogFragmentTest.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
+            launcherRule.launchDialogFragment(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
             assertThat(
