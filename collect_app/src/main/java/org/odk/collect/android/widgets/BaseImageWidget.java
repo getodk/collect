@@ -139,7 +139,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (f != null && f.exists()) {
                 imageView = createAnswerImageView(getContext());
                 answerLayout.addView(imageView);
-                imageLoader.loadImage(imageView, f, ImageView.ScaleType.CENTER_INSIDE, new GlideImageLoader.ImageLoaderCallback() {
+                imageLoader.loadImage(imageView, f, ImageView.ScaleType.FIT_CENTER, new GlideImageLoader.ImageLoaderCallback() {
                     @Override
                     public void onLoadFailed() {
                         answerLayout.removeView(imageView);
