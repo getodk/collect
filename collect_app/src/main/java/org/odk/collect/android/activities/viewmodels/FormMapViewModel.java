@@ -25,7 +25,6 @@ public class FormMapViewModel extends ViewModel {
      * The count of all filled instances of this form, including unmappable ones.
      */
     private int totalInstanceCount;
-    private int selectedSubmissionId = -1;
 
     /**
      * The filled instances of this form that can be mapped.
@@ -43,10 +42,6 @@ public class FormMapViewModel extends ViewModel {
         return form.getDisplayName();
     }
 
-    public long getFormId() {
-        return form.getDbId();
-    }
-
     /**
      * Returns the count of all filled instances of this form, including unmappable ones.
      */
@@ -61,14 +56,6 @@ public class FormMapViewModel extends ViewModel {
         // Ideally we could observe database changes instead of re-computing this every time.
         totalInstanceCount = instances.size();
         mappableFormInstances = getMappableFormInstances(instances);
-    }
-
-    public int getSelectedId() {
-        return selectedSubmissionId;
-    }
-
-    public void setSelectedId(int selectedSubmissionId) {
-        this.selectedSubmissionId = selectedSubmissionId;
     }
 
     /**

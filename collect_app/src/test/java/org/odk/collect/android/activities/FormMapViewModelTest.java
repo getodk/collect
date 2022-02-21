@@ -34,11 +34,6 @@ public class FormMapViewModelTest {
         assertThat(viewModel.getFormTitle(), is("Form with ID 1"));
     }
 
-    @Test public void getFormId_returnsFormDatabaseId() {
-        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
-        assertThat(viewModel.getFormId(), is(0L));
-    }
-
     @Test public void getTotalInstanceCount_returnsCountOfAllInstances() {
         FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         assertThat(viewModel.getTotalInstanceCount(), is(7));

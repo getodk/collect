@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 import org.odk.collect.strings.localization.LocalizedActivity
 
@@ -18,6 +20,8 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         const val EXTRA_SELECTED_ID = "selected_id"
         const val EXTRA_NEW_ITEM = "new_item"
     }
+
+    protected val viewModel: SelectionMapViewModel by viewModels()
 
     fun createNewItem() {
         startActivity(intent.getParcelableExtra(EXTRA_NEW_ITEM))
@@ -30,6 +34,28 @@ abstract class SelectionMapActivity : LocalizedActivity() {
 
         setResult(RESULT_OK, data)
         finish()
+    }
+}
+
+class SelectionMapViewModel : ViewModel() {
+
+    private var selectedItemId = -1
+    private var items = emptyList<MappableSelectItem>()
+
+    fun setItems(items: List<MappableSelectItem>) {
+        this.items = items
+    }
+
+    fun getItems(): List<MappableSelectItem> {
+        return items
+    }
+
+    fun getSelectedItemId(): Int {
+        return selectedItemId
+    }
+
+    fun setSelectedItemId(itemId: Int) {
+        selectedItemId = itemId
     }
 }
 
