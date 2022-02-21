@@ -98,13 +98,11 @@ public class FormMapActivity extends SelectionMapActivity {
     public BottomSheetBehavior summarySheetBehavior;
     private SelectionSummarySheet summarySheet;
 
-    /**
-     * Quick lookup of instance objects from map feature IDs.
-     */
-    private final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
+
+    private final Map<Integer, MappableSelectItem> items = new HashMap<>();
 
     /**
-     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
+     * Points to be mapped. Note: kept separately from {@link #items} so we can
      * quickly zoom to bounding box.
      */
     private final List<MapPoint> points = new ArrayList<>();
@@ -159,9 +157,10 @@ public class FormMapActivity extends SelectionMapActivity {
         summarySheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
-                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
-                    viewModel.setSelectedSubmissionId(-1);
+                int selectedSubmissionId = viewModel.getSelectedId();
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != -1) {
+                    map.setMarkerIcon(selectedSubmissionId, items.get(selectedSubmissionId).getSmallIcon());
+                    viewModel.setSelectedId(-1);
                 }
             }
 
@@ -237,8 +236,8 @@ public class FormMapActivity extends SelectionMapActivity {
         map.setClickListener(this::onClick);
         updateInstanceGeometry();
 
-        if (viewModel.getSelectedSubmissionId() != -1) {
-            onFeatureClicked(viewModel.getSelectedSubmissionId());
+        if (viewModel.getSelectedId() != -1) {
+            onFeatureClicked(viewModel.getSelectedId());
         }
     }
 
@@ -271,23 +270,18 @@ public class FormMapActivity extends SelectionMapActivity {
     private void updateMapFeatures() {
         points.clear();
         map.clearFeatures();
-        instancesByFeatureId.clear();
+        items.clear();
 
         List<MappableFormInstance> instances = viewModel.getMappableFormInstances();
         for (MappableFormInstance instance : instances) {
-            MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
+            MappableSelectItem item = convertItem(instance);
+            MapPoint point = new MapPoint(item.getLatitude(), item.getLongitude());
             int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
+            map.setMarkerIcon(featureId, featureId == viewModel.getSelectedId() ? item.getLargeIcon() : item.getSmallIcon());
 
-            updateSubmissionMarker(featureId, instance.getStatus(), featureId == viewModel.getSelectedSubmissionId());
-
-            instancesByFeatureId.put(featureId, instance);
+            items.put(featureId, item);
             points.add(point);
         }
-    }
-
-    private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
-        int drawableId = getDrawableIdForStatus(status, enlarged);
-        map.setMarkerIcon(featureId, drawableId);
     }
 
     /**
@@ -309,18 +303,20 @@ public class FormMapActivity extends SelectionMapActivity {
         if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId);
 
-            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-            if (mappableFormInstance != null) {
-                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
-                setUpSummarySheetDetails(mappableFormInstance);
+            MappableSelectItem item = items.get(featureId);
+            if (item != null) {
+                map.zoomToPoint(new MapPoint(item.getLatitude(), item.getLongitude()), map.getZoom(), true);
+                map.setMarkerIcon(featureId, item.getLargeIcon());
+                summarySheet.setItem(item);
+                summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
-            viewModel.setSelectedSubmissionId(featureId);
+
+            viewModel.setSelectedId(featureId);
         }
     }
 
     private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
-        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN;
+        return viewModel.getSelectedId() == newSubmissionId && summarySheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -346,7 +342,8 @@ public class FormMapActivity extends SelectionMapActivity {
         return R.drawable.ic_map_point;
     }
 
-    private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
+    @NonNull
+    private MappableSelectItem convertItem(MappableFormInstance mappableFormInstance) {
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
 
         String info = null;
@@ -375,8 +372,12 @@ public class FormMapActivity extends SelectionMapActivity {
                 break;
         }
 
-        summarySheet.setItem(new MappableSelectItem(
+        return new MappableSelectItem(
                 mappableFormInstance.getDatabaseId(),
+                mappableFormInstance.getLatitude(),
+                mappableFormInstance.getLongitude(),
+                getDrawableIdForStatus(mappableFormInstance.getStatus(), false),
+                getDrawableIdForStatus(mappableFormInstance.getStatus(), true),
                 mappableFormInstance.getInstanceName(),
                 new IconifiedText(
                         IconUtils.getSubmissionSummaryStatusIcon(mappableFormInstance.getStatus()),
@@ -384,19 +385,14 @@ public class FormMapActivity extends SelectionMapActivity {
                 ),
                 info,
                 action
-        ));
-
-        summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        );
     }
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {
-        if (viewModel.getSelectedSubmissionId() != -1 && viewModel.getSelectedSubmissionId() != newSubmissionId) {
-            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
+        int selectedSubmissionId = viewModel.getSelectedId();
+        if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
+            map.setMarkerIcon(selectedSubmissionId, items.get(selectedSubmissionId).getSmallIcon());
         }
-    }
-
-    private String getSubmissionStatusFor(int submissionId) {
-        return instancesByFeatureId.get(submissionId).getStatus();
     }
 
     /**

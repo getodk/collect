@@ -63,11 +63,11 @@ public class FormMapViewModel extends ViewModel {
         mappableFormInstances = getMappableFormInstances(instances);
     }
 
-    public int getSelectedSubmissionId() {
+    public int getSelectedId() {
         return selectedSubmissionId;
     }
 
-    public void setSelectedSubmissionId(int selectedSubmissionId) {
+    public void setSelectedId(int selectedSubmissionId) {
         this.selectedSubmissionId = selectedSubmissionId;
     }
 

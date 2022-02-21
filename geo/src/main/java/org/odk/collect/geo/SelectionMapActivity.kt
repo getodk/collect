@@ -46,6 +46,10 @@ abstract class SelectItemFromMap<T> : ActivityResultContract<T, Long?>() {
 
 data class MappableSelectItem(
     val id: Long,
+    val latitude: Double,
+    val longitude: Double,
+    val smallIcon: Int,
+    val largeIcon: Int,
     val name: String,
     val status: IconifiedText,
     val info: String?,
