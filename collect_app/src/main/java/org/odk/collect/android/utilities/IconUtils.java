@@ -52,17 +52,18 @@ public final class IconUtils {
         return bitmap;
     }
 
-    public static Drawable getSubmissionSummaryStatusIcon(Context context, String instanceStatus) {
+    public static int getSubmissionSummaryStatusIcon(String instanceStatus) {
         switch (instanceStatus) {
             case Instance.STATUS_INCOMPLETE:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_saved);
+                return R.drawable.form_state_saved;
             case Instance.STATUS_COMPLETE:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_finalized);
+                return R.drawable.form_state_finalized;
             case Instance.STATUS_SUBMITTED:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_submited);
+                return R.drawable.form_state_submited;
             case Instance.STATUS_SUBMISSION_FAILED:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_submission_failed);
+                return R.drawable.form_state_submission_failed;
         }
-        return null;
+
+        throw new IllegalArgumentException();
     }
 }

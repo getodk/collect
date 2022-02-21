@@ -259,29 +259,29 @@ public class FormMapActivityTest {
     }
 
     private void assertSubmissionSummaryContent(FormMapViewModel.MappableFormInstance mappableFormInstance) {
-        assertThat(((TextView) activity.findViewById(R.id.submission_name)).getText().toString(), is(mappableFormInstance.getInstanceName()));
+        assertThat(((TextView) activity.findViewById(R.id.name)).getText().toString(), is(mappableFormInstance.getInstanceName()));
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(activity, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
         assertThat(((TextView) activity.findViewById(R.id.status_text)).getText().toString(), is(instanceLastStatusChangeDate));
 
         switch (mappableFormInstance.getClickAction()) {
             case DELETED_TOAST:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.VISIBLE));
-                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+                assertThat(activity.findViewById(R.id.action).getVisibility(), is(View.GONE));
                 break;
             case NOT_VIEWABLE_TOAST:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.VISIBLE));
                 assertThat(((TextView) activity.findViewById(R.id.info)).getText().toString(), is(activity.getString(R.string.cannot_edit_completed_form)));
-                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.GONE));
+                assertThat(activity.findViewById(R.id.action).getVisibility(), is(View.GONE));
                 break;
             case OPEN_READ_ONLY:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
-                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
-                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.view_data)));
+                assertThat(activity.findViewById(R.id.action).getVisibility(), is(View.VISIBLE));
+                assertThat(((Chip) activity.findViewById(R.id.action)).getText(), is(activity.getString(R.string.view_data)));
                 break;
             case OPEN_EDIT:
                 assertThat(activity.findViewById(R.id.info).getVisibility(), is(View.GONE));
-                assertThat(activity.findViewById(R.id.openFormChip).getVisibility(), is(View.VISIBLE));
-                assertThat(((Chip) activity.findViewById(R.id.openFormChip)).getText(), is(activity.getString(R.string.review_data)));
+                assertThat(activity.findViewById(R.id.action).getVisibility(), is(View.VISIBLE));
+                assertThat(((Chip) activity.findViewById(R.id.action)).getText(), is(activity.getString(R.string.review_data)));
                 break;
         }
     }

@@ -18,17 +18,14 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
@@ -44,7 +41,10 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.geo.MappableSelectItem;
+import org.odk.collect.geo.MappableSelectItem.IconifiedText;
 import org.odk.collect.geo.SelectionMapActivity;
+import org.odk.collect.geo.SelectionSummarySheet;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
@@ -95,7 +95,8 @@ public class FormMapActivity extends SelectionMapActivity {
 
     private MapFragment map;
 
-    public BottomSheetBehavior summarySheet;
+    public BottomSheetBehavior summarySheetBehavior;
+    private SelectionSummarySheet summarySheet;
 
     /**
      * Quick lookup of instance objects from map feature IDs.
@@ -153,9 +154,9 @@ public class FormMapActivity extends SelectionMapActivity {
     }
 
     private void setUpSummarySheet() {
-        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        summarySheetBehavior = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
+        summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
@@ -167,6 +168,12 @@ public class FormMapActivity extends SelectionMapActivity {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
             }
+        });
+
+        summarySheet = findViewById(R.id.submission_summary);
+        summarySheet.setListener((id) -> {
+            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            returnItem(id);
         });
     }
 
@@ -194,8 +201,8 @@ public class FormMapActivity extends SelectionMapActivity {
 
     @Override
     public void onBackPressed() {
-        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        if (summarySheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         } else {
             super.onBackPressed();
         }
@@ -237,8 +244,8 @@ public class FormMapActivity extends SelectionMapActivity {
 
     @SuppressWarnings("PMD.UnusedFormalParameter")
     private void onClick(MapPoint mapPoint) {
-        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        if (summarySheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         }
     }
 
@@ -297,7 +304,7 @@ public class FormMapActivity extends SelectionMapActivity {
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
         if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId);
@@ -313,7 +320,7 @@ public class FormMapActivity extends SelectionMapActivity {
     }
 
     private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
-        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheet.getState() != BottomSheetBehavior.STATE_HIDDEN;
+        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN;
     }
 
     protected void restoreFromInstanceState(Bundle state) {
@@ -340,64 +347,46 @@ public class FormMapActivity extends SelectionMapActivity {
     }
 
     private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
-        setUpSubmissionSheetNameAndLastChangedDate(mappableFormInstance);
-        setUpSummarySheetIcon(mappableFormInstance.getStatus());
-        adjustSubmissionSheetBasedOnItsStatus(mappableFormInstance);
-
-        summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-    }
-
-    private void setUpSubmissionSheetNameAndLastChangedDate(MappableFormInstance mappableFormInstance) {
-        ((TextView) findViewById(R.id.submission_name)).setText(mappableFormInstance.getInstanceName());
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
-        ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
-    }
 
-    private void setUpSummarySheetIcon(String status) {
-        ImageView statusImage = findViewById(R.id.status_icon);
-        statusImage.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(this, status));
-        statusImage.setBackground(null);
-    }
-
-    private void adjustSubmissionSheetBasedOnItsStatus(MappableFormInstance mappableFormInstance) {
+        String info = null;
         switch (mappableFormInstance.getClickAction()) {
             case DELETED_TOAST:
                 String deletedTime = getString(R.string.deleted_on_date_at_time);
-                String disabledMessage = new SimpleDateFormat(deletedTime,
+                info = new SimpleDateFormat(deletedTime,
                         Locale.getDefault()).format(viewModel.getDeletedDateOf(mappableFormInstance.getDatabaseId()));
-                setUpInfoText(disabledMessage);
                 break;
             case NOT_VIEWABLE_TOAST:
-                setUpInfoText(getString(R.string.cannot_edit_completed_form));
+                info = getString(R.string.cannot_edit_completed_form);
                 break;
+        }
+
+        IconifiedText action = null;
+        switch (mappableFormInstance.getClickAction()) {
             case OPEN_READ_ONLY:
-                setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
+                action = new IconifiedText(R.drawable.ic_visibility, getString(R.string.view_data));
                 break;
             case OPEN_EDIT:
                 boolean canEditSaved = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
-                setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
+                action = new IconifiedText(
+                        canEditSaved ? R.drawable.ic_edit : R.drawable.ic_visibility,
+                        getString(canEditSaved ? R.string.review_data : R.string.view_data)
+                );
                 break;
         }
-    }
 
-    private void setUpOpenFormButton(boolean canEdit, long instanceId) {
-        findViewById(R.id.info).setVisibility(View.GONE);
-        Chip openFormButton = findViewById(R.id.openFormChip);
-        openFormButton.setVisibility(View.VISIBLE);
-        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_data);
-        openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
-        openFormButton.setOnClickListener(v -> {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        summarySheet.setItem(new MappableSelectItem(
+                mappableFormInstance.getDatabaseId(),
+                mappableFormInstance.getInstanceName(),
+                new IconifiedText(
+                        IconUtils.getSubmissionSummaryStatusIcon(mappableFormInstance.getStatus()),
+                        instanceLastStatusChangeDate
+                ),
+                info,
+                action
+        ));
 
-            returnItem(instanceId);
-        });
-    }
-
-    private void setUpInfoText(String message) {
-        findViewById(R.id.openFormChip).setVisibility(View.GONE);
-        TextView infoText = findViewById(R.id.info);
-        infoText.setVisibility(View.VISIBLE);
-        infoText.setText(message);
+        summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {

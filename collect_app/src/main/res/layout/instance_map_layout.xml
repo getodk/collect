@@ -90,8 +90,11 @@
         </ScrollView>
     </RelativeLayout>
 
-    <include
+    <org.odk.collect.geo.SelectionSummarySheet
         android:id="@+id/submission_summary"
-        layout="@layout/submission_summary_layout" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
