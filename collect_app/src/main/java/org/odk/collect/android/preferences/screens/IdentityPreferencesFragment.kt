@@ -21,8 +21,8 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.utilities.PreferencesUtils
-import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.settings.keys.ProjectKeys
 import javax.inject.Inject
 

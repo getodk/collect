@@ -36,8 +36,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import androidx.annotation.NonNull;
-import androidx.legacy.app.FragmentCompat;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -46,11 +44,14 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.legacy.app.FragmentCompat;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 import java.io.File;
 import java.io.IOException;

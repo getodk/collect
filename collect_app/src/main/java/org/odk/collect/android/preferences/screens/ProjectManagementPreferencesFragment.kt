@@ -18,8 +18,8 @@ import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
-import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import javax.inject.Inject
 
 class ProjectManagementPreferencesFragment :

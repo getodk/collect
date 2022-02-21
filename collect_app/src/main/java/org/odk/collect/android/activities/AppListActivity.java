@@ -43,8 +43,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

@@ -6,12 +6,12 @@
     android:paddingTop="@dimen/margin_small"
     android:paddingHorizontal="@dimen/margin_standard">
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/capture_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/capture_audio" />
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/choose_button"
         style="@style/Widget.Collect.Button.WidgetAnswer"
         android:text="@string/choose_sound" />

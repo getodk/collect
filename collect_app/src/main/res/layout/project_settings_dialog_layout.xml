@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline_start"
         app:layout_constraintTop_toBottomOf="@+id/close_icon" />
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/general_settings_button"
         style="@style/Widget.Collect.Button.OutlinedButton"
         android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
         app:layout_constraintBottom_toTopOf="@+id/add_project_button"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/add_project_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/guideline_start" />
 
-    <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+    <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/about_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

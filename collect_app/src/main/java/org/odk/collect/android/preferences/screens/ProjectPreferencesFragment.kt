@@ -29,9 +29,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectPreferencesViewModel
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment
 import org.odk.collect.android.preferences.dialogs.ChangeAdminPasswordDialog
-import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class ProjectPreferencesFragment :
     BaseProjectPreferencesFragment(),

@@ -1,9 +1,9 @@
-package org.odk.collect.android.views.multiclicksafe
+package org.odk.collect.androidshared.ui.multiclicksafe
 
 import android.content.Context
 import android.util.AttributeSet
 import com.google.android.material.textfield.TextInputEditText
-import org.odk.collect.android.utilities.MultiClickGuard.allowClick
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 
 class MultiClickSafeTextInputEditText : TextInputEditText {
     constructor(context: Context) : super(context)

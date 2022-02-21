@@ -3,7 +3,7 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import androidx.preference.Preference
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.MultiClickGuard
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class AccessControlPreferencesFragment :
     BaseAdminPreferencesFragment(),

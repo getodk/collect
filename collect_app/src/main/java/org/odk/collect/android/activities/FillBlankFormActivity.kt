@@ -46,10 +46,10 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.tasks.FormSyncTask
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.android.utilities.MultiClickGuard.allowClick
 import org.odk.collect.android.views.ObviousProgressBar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.geo.SelectItemFromMap
 import org.odk.collect.geo.SelectionMapActivity
 import org.odk.collect.permissions.PermissionListener

@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
-import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;

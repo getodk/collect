@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.androidshared.ui.multiclicksafe
 
 import android.os.SystemClock
 
