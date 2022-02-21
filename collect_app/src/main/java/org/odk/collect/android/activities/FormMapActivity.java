@@ -101,7 +101,7 @@ public class FormMapActivity extends SelectionMapActivity {
     /**
      * Quick lookup of instance objects from map feature IDs.
      */
-    final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
+    private final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
 
     /**
      * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
