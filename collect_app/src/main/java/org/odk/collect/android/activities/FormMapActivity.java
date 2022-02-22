@@ -140,7 +140,7 @@ public class FormMapActivity extends SelectionMapActivity {
         setUpSummarySheet();
 
         TextView titleView = findViewById(R.id.form_title);
-        titleView.setText(formMapViewModel.getFormTitle());
+        titleView.setText(getMapTitle());
 
         MapFragment mapToAdd = mapFragmentFactory.createMapFragment(getApplicationContext());
 
@@ -195,7 +195,7 @@ public class FormMapActivity extends SelectionMapActivity {
     @Override
     public void onResume() {
         super.onResume();
-        updateInstanceGeometry();
+        update();
     }
 
     @Override
@@ -234,7 +234,7 @@ public class FormMapActivity extends SelectionMapActivity {
 
         map.setFeatureClickListener(this::onFeatureClicked);
         map.setClickListener(this::onClick);
-        updateInstanceGeometry();
+        update();
 
         if (getViewModel().getSelectedItemId() != -1) {
             onFeatureClicked(getViewModel().getSelectedItemId());
@@ -248,12 +248,12 @@ public class FormMapActivity extends SelectionMapActivity {
         }
     }
 
-    private void updateInstanceGeometry() {
+    private void update() {
         if (map == null) {
             return;
         }
 
-        updateMapFeatures();
+        updateFeatures();
 
         if (!viewportInitialized && !points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false);
@@ -261,31 +261,20 @@ public class FormMapActivity extends SelectionMapActivity {
         }
 
         TextView statusView = findViewById(R.id.geometry_status);
-        statusView.setText(getString(R.string.geometry_status, formMapViewModel.getTotalInstanceCount(), points.size()));
+        statusView.setText(getString(R.string.geometry_status, getItemCount(), points.size()));
     }
 
     /**
      * Clears the existing features on the map and places features for the current form's instances.
      */
-    private void updateMapFeatures() {
+    private void updateFeatures() {
         points.clear();
         map.clearFeatures();
         itemsByFeatureId.clear();
 
-        List<MappableFormInstance> instances = formMapViewModel.getMappableFormInstances();
+        List<MappableSelectItem> items = getMappableItems();
 
-
-        List<MappableSelectItem> items = new ArrayList<>();
-        for (MappableFormInstance instance : instances) {
-            items.add(convertItem(instance));
-        }
-
-        getViewModel().setItems(items);
-        onItemsUpdated();
-    }
-
-    private void onItemsUpdated() {
-        for (MappableSelectItem item : getViewModel().getItems()) {
+        for (MappableSelectItem item : items) {
             MapPoint point = new MapPoint(item.getLatitude(), item.getLongitude());
             int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
             map.setMarkerIcon(featureId, featureId == getViewModel().getSelectedItemId() ? item.getLargeIcon() : item.getSmallIcon());
@@ -339,18 +328,34 @@ public class FormMapActivity extends SelectionMapActivity {
         }
     }
 
-    private static int getDrawableIdForStatus(String status, boolean enlarged) {
-        switch (status) {
-            case Instance.STATUS_INCOMPLETE:
-                return enlarged ? R.drawable.ic_room_form_state_incomplete_48dp : R.drawable.ic_room_form_state_incomplete_24dp;
-            case Instance.STATUS_COMPLETE:
-                return enlarged ? R.drawable.ic_room_form_state_complete_48dp : R.drawable.ic_room_form_state_complete_24dp;
-            case Instance.STATUS_SUBMITTED:
-                return enlarged ? R.drawable.ic_room_form_state_submitted_48dp : R.drawable.ic_room_form_state_submitted_24dp;
-            case Instance.STATUS_SUBMISSION_FAILED:
-                return enlarged ? R.drawable.ic_room_form_state_submission_failed_48dp : R.drawable.ic_room_form_state_submission_failed_24dp;
+    private void removeEnlargedMarkerIfExist(int newSubmissionId) {
+        int selectedSubmissionId = getViewModel().getSelectedItemId();
+        if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
+            map.setMarkerIcon(selectedSubmissionId, itemsByFeatureId.get(selectedSubmissionId).getSmallIcon());
         }
-        return R.drawable.ic_map_point;
+    }
+
+    @NonNull
+    @Override
+    protected String getMapTitle() {
+        return formMapViewModel.getFormTitle();
+    }
+
+    @Override
+    protected int getItemCount() {
+        return formMapViewModel.getTotalInstanceCount();
+    }
+
+    @NonNull
+    @Override
+    protected List<MappableSelectItem> getMappableItems() {
+        List<MappableFormInstance> instances = formMapViewModel.getMappableFormInstances();
+
+        List<MappableSelectItem> items = new ArrayList<>();
+        for (MappableFormInstance instance : instances) {
+            items.add(convertItem(instance));
+        }
+        return items;
     }
 
     @NonNull
@@ -399,11 +404,18 @@ public class FormMapActivity extends SelectionMapActivity {
         );
     }
 
-    private void removeEnlargedMarkerIfExist(int newSubmissionId) {
-        int selectedSubmissionId = getViewModel().getSelectedItemId();
-        if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
-            map.setMarkerIcon(selectedSubmissionId, itemsByFeatureId.get(selectedSubmissionId).getSmallIcon());
+    private static int getDrawableIdForStatus(String status, boolean enlarged) {
+        switch (status) {
+            case Instance.STATUS_INCOMPLETE:
+                return enlarged ? R.drawable.ic_room_form_state_incomplete_48dp : R.drawable.ic_room_form_state_incomplete_24dp;
+            case Instance.STATUS_COMPLETE:
+                return enlarged ? R.drawable.ic_room_form_state_complete_48dp : R.drawable.ic_room_form_state_complete_24dp;
+            case Instance.STATUS_SUBMITTED:
+                return enlarged ? R.drawable.ic_room_form_state_submitted_48dp : R.drawable.ic_room_form_state_submitted_24dp;
+            case Instance.STATUS_SUBMISSION_FAILED:
+                return enlarged ? R.drawable.ic_room_form_state_submission_failed_48dp : R.drawable.ic_room_form_state_submission_failed_24dp;
         }
+        return R.drawable.ic_map_point;
     }
 
     /**

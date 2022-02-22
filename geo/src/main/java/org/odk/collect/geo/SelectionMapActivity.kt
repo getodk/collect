@@ -35,20 +35,15 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         setResult(RESULT_OK, data)
         finish()
     }
+
+    protected abstract fun getMapTitle(): String
+    protected abstract fun getItemCount(): Int
+    protected abstract fun getMappableItems(): List<MappableSelectItem>
 }
 
 class SelectionMapViewModel : ViewModel() {
 
     private var selectedItemId = -1
-    private var items = emptyList<MappableSelectItem>()
-
-    fun setItems(items: List<MappableSelectItem>) {
-        this.items = items
-    }
-
-    fun getItems(): List<MappableSelectItem> {
-        return items
-    }
 
     fun getSelectedItemId(): Int {
         return selectedItemId
