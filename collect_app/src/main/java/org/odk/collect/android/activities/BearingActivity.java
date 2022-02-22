@@ -98,7 +98,6 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
         // back button doesn't cancel
         bearingDialog.setCancelable(false);
         bearingDialog.setIndeterminate(true);
-        bearingDialog.setIcon(android.R.drawable.ic_dialog_info);
         bearingDialog.setTitle(getString(R.string.getting_bearing));
         bearingDialog.setMessage(getString(R.string.please_wait_long));
         bearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,

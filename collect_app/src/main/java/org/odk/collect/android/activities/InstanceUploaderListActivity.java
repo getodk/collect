@@ -350,7 +350,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 getString(R.string.show_sent_and_unsent_forms)};
 
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
-                .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(getString(R.string.change_view))
                 .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {
                     dialog.cancel();

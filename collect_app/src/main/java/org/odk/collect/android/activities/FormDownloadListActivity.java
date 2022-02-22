@@ -608,7 +608,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         };
         alertDialog.setCancelable(false);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         viewModel.setAlertDialogMsg(message);
         viewModel.setAlertTitle(title);
         viewModel.setAlertShowing(true);
@@ -631,7 +630,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         cancelDialog = new DayNightProgressDialog(this);
         cancelDialog.setTitle(getString(R.string.canceling));
         cancelDialog.setMessage(getString(R.string.please_wait));
-        cancelDialog.setIcon(android.R.drawable.ic_dialog_info);
         cancelDialog.setIndeterminate(true);
         cancelDialog.setCancelable(false);
         viewModel.setCancelDialogShowing(true);
