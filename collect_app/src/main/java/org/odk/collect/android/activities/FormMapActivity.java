@@ -14,50 +14,34 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
-import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.MappableSelectItem;
 import org.odk.collect.geo.MappableSelectItem.IconifiedText;
 import org.odk.collect.geo.SelectionMapActivity;
-import org.odk.collect.geo.SelectionSummarySheet;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapFragmentFactory;
-import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -66,17 +50,7 @@ import javax.inject.Inject;
  */
 public class FormMapActivity extends SelectionMapActivity {
 
-    public static final String MAP_CENTER_KEY = "map_center";
-    public static final String MAP_ZOOM_KEY = "map_zoom";
-
     public static final String EXTRA_FORM_ID = "form_id";
-
-    protected Bundle previousState;
-
-    private FormMapViewModel formMapViewModel;
-
-    @Inject
-    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -85,47 +59,16 @@ public class FormMapActivity extends SelectionMapActivity {
     InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
-
-    @Inject
     SettingsProvider settingsProvider;
-
-    private MapFragment map;
-
-    public BottomSheetBehavior summarySheetBehavior;
-    private SelectionSummarySheet summarySheet;
-
-
-    private final Map<Integer, MappableSelectItem> itemsByFeatureId = new HashMap<>();
-
-    /**
-     * Points to be mapped. Note: kept separately from {@link #itemsByFeatureId} so we can
-     * quickly zoom to bounding box.
-     */
-    private final List<MapPoint> points = new ArrayList<>();
-
-    /**
-     * True if the map viewport has been initialized, false otherwise.
-     */
-    private boolean viewportInitialized;
 
     @VisibleForTesting
     public ViewModelProvider.Factory viewModelFactory;
+    private FormMapViewModel formMapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
-
         DaggerUtils.getComponent(this).inject(this);
-
-        if (!permissionsProvider.areLocationPermissionsGranted()) {
-            ToastUtils.showLongToast(this, R.string.not_granted_permission);
-            finish();
-        }
 
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
 
@@ -134,205 +77,7 @@ public class FormMapActivity extends SelectionMapActivity {
         }
 
         formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.instance_map_layout);
-        setUpSummarySheet();
-
-        TextView titleView = findViewById(R.id.form_title);
-        titleView.setText(getMapTitle());
-
-        MapFragment mapToAdd = mapFragmentFactory.createMapFragment(getApplicationContext());
-
-        if (mapToAdd != null) {
-            mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
-        } else {
-            finish(); // The configured map provider is not available
-        }
-    }
-
-    private void setUpSummarySheet() {
-        summarySheetBehavior = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        summarySheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                int selectedSubmissionId = getViewModel().getSelectedItemId();
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != -1) {
-                    map.setMarkerIcon(selectedSubmissionId, itemsByFeatureId.get(selectedSubmissionId).getSmallIcon());
-                    getViewModel().setSelectedItemId(-1);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-            }
-        });
-
-        summarySheet = findViewById(R.id.submission_summary);
-        summarySheet.setListener((id) -> {
-            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            returnItem(id);
-        });
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        if (map == null) {
-            // initMap() is called asynchronously, so map can be null if the activity
-            // is stopped (e.g. by screen rotation) before initMap() gets to run.
-            // In this case, preserve any provided instance state.
-            if (previousState != null) {
-                state.putAll(previousState);
-            }
-            return;
-        }
-        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
-        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        update();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (summarySheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @SuppressLint("MissingPermission") // Permission handled in Constructor
-    public void initMap(MapFragment newMapFragment) {
-        map = newMapFragment;
-
-        findViewById(R.id.zoom_to_location).setOnClickListener(v ->
-                map.zoomToPoint(map.getGpsLocation(), true));
-
-        findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
-                map.zoomToBoundingBox(points, 0.8, false));
-
-        findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
-        });
-
-        findViewById(R.id.new_instance).setOnClickListener(v -> {
-            createNewItem();
-        });
-
-        map.setGpsLocationEnabled(true);
-        map.setGpsLocationListener(this::onLocationChanged);
-
-        if (previousState != null) {
-            restoreFromInstanceState(previousState);
-        }
-
-        map.setFeatureClickListener(this::onFeatureClicked);
-        map.setClickListener(this::onClick);
-        update();
-
-        if (getViewModel().getSelectedItemId() != -1) {
-            onFeatureClicked(getViewModel().getSelectedItemId());
-        }
-    }
-
-    @SuppressWarnings("PMD.UnusedFormalParameter")
-    private void onClick(MapPoint mapPoint) {
-        if (summarySheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-    }
-
-    private void update() {
-        if (map == null) {
-            return;
-        }
-
-        updateFeatures();
-
-        if (!viewportInitialized && !points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false);
-            viewportInitialized = true;
-        }
-
-        TextView statusView = findViewById(R.id.geometry_status);
-        statusView.setText(getString(R.string.geometry_status, getItemCount(), points.size()));
-    }
-
-    /**
-     * Clears the existing features on the map and places features for the current form's instances.
-     */
-    private void updateFeatures() {
-        points.clear();
-        map.clearFeatures();
-        itemsByFeatureId.clear();
-
-        List<MappableSelectItem> items = getMappableItems();
-
-        for (MappableSelectItem item : items) {
-            MapPoint point = new MapPoint(item.getLatitude(), item.getLongitude());
-            int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
-            map.setMarkerIcon(featureId, featureId == getViewModel().getSelectedItemId() ? item.getLargeIcon() : item.getSmallIcon());
-
-            itemsByFeatureId.put(featureId, item);
-            points.add(point);
-        }
-    }
-
-    /**
-     * Zooms the map to the new location if the map viewport hasn't been initialized yet.
-     */
-    public void onLocationChanged(MapPoint point) {
-        if (!viewportInitialized) {
-            map.zoomToPoint(point, true);
-            viewportInitialized = true;
-        }
-    }
-
-    /**
-     * Reacts to a tap on a feature by showing a submission summary.
-     */
-    public void onFeatureClicked(int featureId) {
-        summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-
-        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
-            removeEnlargedMarkerIfExist(featureId);
-
-            MappableSelectItem item = itemsByFeatureId.get(featureId);
-            if (item != null) {
-                map.zoomToPoint(new MapPoint(item.getLatitude(), item.getLongitude()), map.getZoom(), true);
-                map.setMarkerIcon(featureId, item.getLargeIcon());
-                summarySheet.setItem(item);
-                summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-
-            getViewModel().setSelectedItemId(featureId);
-        }
-    }
-
-    private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
-        return getViewModel().getSelectedItemId() == newSubmissionId && summarySheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN;
-    }
-
-    protected void restoreFromInstanceState(Bundle state) {
-        MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
-        double mapZoom = state.getDouble(MAP_ZOOM_KEY);
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false);
-            viewportInitialized = true; // avoid recentering as soon as location is received
-        }
-    }
-
-    private void removeEnlargedMarkerIfExist(int newSubmissionId) {
-        int selectedSubmissionId = getViewModel().getSelectedItemId();
-        if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
-            map.setMarkerIcon(selectedSubmissionId, itemsByFeatureId.get(selectedSubmissionId).getSmallIcon());
-        }
+        init();
     }
 
     @NonNull

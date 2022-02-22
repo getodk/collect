@@ -93,6 +93,7 @@ import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.SettingsProvider;
@@ -325,4 +326,6 @@ public interface AppDependencyComponent {
     Scheduler scheduler();
 
     LocationClient locationClient();
+
+    PermissionsProvider permissionsProvider();
 }
