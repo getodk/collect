@@ -785,7 +785,6 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     protected void createErrorDialog(String errorMsg) {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
 
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setTitle(getString(R.string.error_occured));
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {

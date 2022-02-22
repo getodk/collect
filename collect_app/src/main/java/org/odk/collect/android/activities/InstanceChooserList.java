@@ -190,7 +190,6 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
 
     private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override

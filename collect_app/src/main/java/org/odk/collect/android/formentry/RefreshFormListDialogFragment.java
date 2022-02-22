@@ -1,10 +1,8 @@
 package org.odk.collect.android.formentry;
 
-import android.app.Dialog;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -23,11 +21,6 @@ public class RefreshFormListDialogFragment extends MaterialProgressDialogFragmen
         setTitle(getString(R.string.downloading_data));
         setMessage(getString(R.string.please_wait));
         setCancelable(false);
-    }
-
-    @Override
-    public void setupDialog(@NonNull Dialog dialog, int style) {
-        ((AlertDialog) dialog).setIcon(android.R.drawable.ic_dialog_info);
     }
 
     @Override

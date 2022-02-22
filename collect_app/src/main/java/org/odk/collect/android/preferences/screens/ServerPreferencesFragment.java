@@ -279,7 +279,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
 
             AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setIcon(android.R.drawable.ic_dialog_info)
                     .setTitle(R.string.missing_google_account_dialog_title)
                     .setMessage(R.string.missing_google_account_dialog_desc)
                     .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())

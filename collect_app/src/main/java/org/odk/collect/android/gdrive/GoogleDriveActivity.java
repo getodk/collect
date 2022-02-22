@@ -413,7 +413,6 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         };
         alertDialog.setCancelable(false);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
-        alertDialog.setIcon(android.R.drawable.ic_dialog_info);
         alertShowing = true;
         alertMsg = message;
         DialogUtils.showDialog(alertDialog, this);

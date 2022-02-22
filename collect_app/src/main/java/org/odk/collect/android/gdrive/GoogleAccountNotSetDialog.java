@@ -18,7 +18,6 @@ public final class GoogleAccountNotSetDialog {
 
     public static void show(Activity activity) {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(activity)
-                .setIcon(android.R.drawable.ic_dialog_info)
                 .setTitle(R.string.missing_google_account_dialog_title)
                 .setMessage(R.string.missing_google_account_dialog_desc)
                 .setOnCancelListener(dialog -> {
