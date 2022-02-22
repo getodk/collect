@@ -26,7 +26,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import org.odk.collect.android.R
@@ -106,9 +106,9 @@ class FillBlankFormActivity :
             )
         )
 
-        val blankFormsListViewModel = ViewModelProvider(this, blankFormsListViewModelFactory).get(
-            BlankFormsListViewModel::class.java
-        )
+        val blankFormsListViewModel: BlankFormsListViewModel by viewModels {
+            blankFormsListViewModelFactory
+        }
 
         blankFormsListViewModel.isSyncing.observe(this) { syncing ->
             val progressBar = findViewById<ObviousProgressBar>(R.id.progressBar)
@@ -164,10 +164,12 @@ class FillBlankFormActivity :
         formSyncTask = lastCustomNonConfigurationInstance as FormSyncTask?
         if (formSyncTask == null) {
             Timber.i("Starting new disk sync task")
-            formSyncTask = FormSyncTask()
-            formSyncTask!!.setDiskSyncListener(this)
-            formSyncTask!!.execute()
+            formSyncTask = FormSyncTask().also {
+                it.setDiskSyncListener(this)
+                it.execute()
+            }
         }
+
         sortingOptions = intArrayOf(
             R.string.sort_by_name_asc, R.string.sort_by_name_desc,
             R.string.sort_by_date_asc, R.string.sort_by_date_desc
@@ -192,19 +194,21 @@ class FillBlankFormActivity :
                 currentProjectProvider.getCurrentProject().uuid,
                 idFormsTable
             )
-            val action = intent.action
-            if (Intent.ACTION_PICK == action) {
+
+            if (Intent.ACTION_PICK == intent.action) {
                 // caller is waiting on a picked form
                 setResult(RESULT_OK, Intent().setData(formUri))
             } else {
                 // caller wants to view/edit a form, so launch formentryactivity
-                val intent = Intent(this, FormEntryActivity::class.java)
-                intent.action = Intent.ACTION_EDIT
-                intent.data = formUri
-                intent.putExtra(
-                    ApplicationConstants.BundleKeys.FORM_MODE,
-                    ApplicationConstants.FormModes.EDIT_SAVED
-                )
+                val intent = Intent(this, FormEntryActivity::class.java).also {
+                    it.action = Intent.ACTION_EDIT
+                    it.data = formUri
+                    it.putExtra(
+                        ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.EDIT_SAVED
+                    )
+                }
+
                 startActivity(intent)
             }
             finish()
@@ -228,18 +232,17 @@ class FillBlankFormActivity :
 
     override fun onResume() {
         super.onResume()
-        if (formSyncTask != null) {
-            formSyncTask!!.setDiskSyncListener(this)
-            if (formSyncTask!!.status == AsyncTask.Status.FINISHED) {
-                syncComplete(formSyncTask!!.statusMessage)
+
+        formSyncTask?.let {
+            it.setDiskSyncListener(this)
+            if (it.status == AsyncTask.Status.FINISHED) {
+                syncComplete(it.statusMessage)
             }
         }
     }
 
     override fun onPause() {
-        if (formSyncTask != null) {
-            formSyncTask!!.setDiskSyncListener(null)
-        }
+        formSyncTask?.setDiskSyncListener(null)
         super.onPause()
     }
 
