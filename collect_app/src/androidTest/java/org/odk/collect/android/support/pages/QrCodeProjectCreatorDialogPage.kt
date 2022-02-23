@@ -14,8 +14,7 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     }
 
     fun switchToManualMode(): ManualProjectCreatorDialogPage {
-        clickOnString(R.string.configure_manually)
-        return ManualProjectCreatorDialogPage().assertOnPage()
+        return clickOnButtonInDialog(R.string.configure_manually, ManualProjectCreatorDialogPage())
     }
 
     fun assertDuplicateDialogShown(): QrCodeProjectCreatorDialogPage {
