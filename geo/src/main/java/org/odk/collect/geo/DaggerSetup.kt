@@ -37,7 +37,7 @@ interface GeoDependencyComponent {
     fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
-    fun inject(selectionMapActivity: SelectionMapActivity)
+    fun inject(selectionMapFragment: SelectionMapFragment)
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker

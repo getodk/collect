@@ -18,10 +18,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.material.chip.Chip;
@@ -45,13 +42,11 @@ import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
-import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.shared.TempFiles;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -256,6 +251,17 @@ public class FormMapActivityTest {
         assertSubmissionSummaryContent(deleted.first.getDisplayName(), deleted.first.getStatus(), new Date(deleted.first.getLastStatusChangeDate()), DELETED_TOAST);
     }
 
+    @Test
+    public void recreating_maintainsZoom() {
+        map.zoomToPoint(new MapPoint(55d, 66d), 7, false);
+
+        activityController.recreate();
+
+        assertThat(map.getLatestZoomBoundingBox(), is(nullValue()));
+        assertThat(map.getCenter(), is(new MapPoint(55d, 66d)));
+        assertThat(map.getZoom(), is(7d));
+    }
+
     private void assertSubmissionSummaryContent(String instanceName, String status, Date lastStatusChangeDate, FormMapViewModel.ClickAction clickAction) {
         assertThat(((TextView) activity.findViewById(R.id.name)).getText().toString(), is(instanceName));
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(activity, status, lastStatusChangeDate);
@@ -284,22 +290,7 @@ public class FormMapActivityTest {
         }
     }
 
-    private static class TestFactory implements ViewModelProvider.Factory {
-
-        private final FormMapViewModel viewModel;
-
-        TestFactory(FormMapViewModel viewModel) {
-            this.viewModel = viewModel;
-        }
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) viewModel;
-        }
-    }
-
-    private Form testForm = FormUtils
+    private final Form testForm = FormUtils
             .buildForm("formId1", "2019103101", TempFiles.createTempDir().getAbsolutePath())
             .build();
 

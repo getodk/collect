@@ -14,20 +14,22 @@
 
 package org.odk.collect.android.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
+import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -36,9 +38,11 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.geo.MappableSelectItem;
 import org.odk.collect.geo.MappableSelectItem.IconifiedText;
-import org.odk.collect.geo.SelectionMapActivity;
+import org.odk.collect.geo.SelectionMapFragment;
+import org.odk.collect.geo.SelectionMapViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,10 +54,9 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends SelectionMapActivity {
+public class FormMapActivity extends LocalizedActivity {
 
     public static final String EXTRA_FORM_ID = "form_id";
-    public static final String EXTRA_PROJECT_ID = "project_id";
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -64,47 +67,71 @@ public class FormMapActivity extends SelectionMapActivity {
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
     @VisibleForTesting
     public ViewModelProvider.Factory viewModelFactory;
     private FormMapViewModel formMapViewModel;
+
+    private SelectionMapViewModel selectionMapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
+        setContentView(R.layout.form_map_activity);
 
-        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+        Form form = loadForm();
 
-        if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, instancesRepositoryProvider.get());
-        }
+        selectionMapViewModel = new ViewModelProvider(this).get(SelectionMapViewModel.class);
+        selectionMapViewModel.setMapTitle(form.getDisplayName());
 
-        formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
-        getSelectionMapViewModel().setMapTitle(form.getDisplayName());
+        FormNavigator formNavigator = new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get);
+
+        getSupportFragmentManager().setFragmentResultListener(SelectionMapFragment.REQUEST_SELECT_ITEM, this, (requestKey, result) -> {
+            if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
+                long instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM);
+                formNavigator.editInstance(this, instanceId);
+            } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
+                formNavigator.newInstance(this, form.getDbId());
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        List<MappableSelectItem> items = getItems();
+        selectionMapViewModel.setItems(getTotalInstanceCount(), items);
+    }
+
+    @Nullable
+    private Form loadForm() {
+        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+
+        if (viewModelFactory == null) { // tests set their factories directly
+            viewModelFactory = new FormMapViewModelFactory(form, instancesRepositoryProvider.get());
+        }
+
+        formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
+        return form;
+    }
+
+    @NonNull
+    private List<MappableSelectItem> getItems() {
         List<MappableFormInstance> instances = formMapViewModel.getMappableFormInstances();
         List<MappableSelectItem> items = new ArrayList<>();
         for (MappableFormInstance instance : instances) {
             items.add(convertItem(instance));
         }
 
-        getSelectionMapViewModel().setItems(formMapViewModel.getTotalInstanceCount(), items);
+        return items;
     }
 
-    @Override
-    protected void onNewItemClick() {
-        Intent intent = new Intent(this, FormEntryActivity.class);
-        intent.setAction(Intent.ACTION_EDIT);
-
-        String projectId = getIntent().getStringExtra(EXTRA_PROJECT_ID);
-        long formId = getIntent().getLongExtra(EXTRA_FORM_ID, -1);
-        intent.setData(FormsContract.getUri(projectId, formId));
-        startActivity(intent);
+    private int getTotalInstanceCount() {
+        return formMapViewModel.getTotalInstanceCount();
     }
 
     @NonNull
@@ -165,6 +192,14 @@ public class FormMapActivity extends SelectionMapActivity {
                 return enlarged ? R.drawable.ic_room_form_state_submission_failed_48dp : R.drawable.ic_room_form_state_submission_failed_24dp;
         }
         return R.drawable.ic_map_point;
+    }
+
+    public void onFeatureClicked(int featureId) {
+        Fragment fragment = getSupportFragmentManager().getFragments().stream().filter(fragment1 -> {
+            return fragment1.getClass() == SelectionMapFragment.class;
+        }).findFirst().get();
+
+        ((SelectionMapFragment) fragment).onFeatureClicked(featureId);
     }
 
     /**

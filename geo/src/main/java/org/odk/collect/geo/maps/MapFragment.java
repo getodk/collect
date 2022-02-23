@@ -19,7 +19,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -77,8 +77,8 @@ public interface MapFragment {
      * problem initializing the map.
      */
     void addTo(
-        @NonNull FragmentActivity activity, int containerId,
-        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
+            FragmentManager fragmentManager, int containerId,
+            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();

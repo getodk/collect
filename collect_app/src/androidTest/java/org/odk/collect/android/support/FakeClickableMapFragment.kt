@@ -3,7 +3,7 @@ package org.odk.collect.android.support
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapPoint
 
@@ -15,7 +15,7 @@ class FakeClickableMapFragment : MapFragment {
     override fun applyConfig(config: Bundle?) { }
 
     override fun addTo(
-        activity: FragmentActivity,
+        fragmentManager: FragmentManager,
         containerId: Int,
         readyListener: MapFragment.ReadyListener?,
         errorListener: MapFragment.ErrorListener?

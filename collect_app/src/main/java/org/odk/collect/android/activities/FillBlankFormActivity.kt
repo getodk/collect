@@ -13,8 +13,6 @@
  */
 package org.odk.collect.android.activities
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.os.AsyncTask
@@ -24,20 +22,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.viewModels
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.SelectFormFromMap.Input
 import org.odk.collect.android.adapters.FormListAdapter
 import org.odk.collect.android.dao.CursorLoaderFactory
 import org.odk.collect.android.database.forms.DatabaseFormColumns
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.BlankFormListMenuDelegate
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel
-import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.DiskSyncListener
 import org.odk.collect.android.network.NetworkStateProvider
@@ -50,8 +44,6 @@ import org.odk.collect.android.views.ObviousProgressBar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
-import org.odk.collect.geo.SelectItemFromMap
-import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
 import timber.log.Timber
 import javax.inject.Inject
@@ -81,7 +73,6 @@ class FillBlankFormActivity :
     @Inject
     lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
 
-    lateinit var selectFormFromMap: ActivityResultLauncher<Input>
     lateinit var menuDelegate: BlankFormListMenuDelegate
 
     private var formSyncTask: FormSyncTask? = null
@@ -92,18 +83,6 @@ class FillBlankFormActivity :
 
         setContentView(R.layout.form_chooser_list)
         title = getString(R.string.enter_data)
-
-        selectFormFromMap = registerForActivityResult(
-            SelectFormFromMap(),
-            EditInstanceResultCallback(
-                this,
-                FormNavigator(
-                    currentProjectProvider,
-                    settingsProvider,
-                    instancesRepositoryProvider::get
-                )
-            )
-        )
 
         val blankFormsListViewModel: BlankFormsListViewModel by viewModels {
             blankFormsListViewModelFactory
@@ -215,18 +194,11 @@ class FillBlankFormActivity :
     }
 
     private fun onMapButtonClick(id: Long) {
-        permissionsProvider.requestLocationPermissions(
-            this,
-            object : PermissionListener {
-                override fun granted() {
-                    selectFormFromMap.launch(
-                        Input(currentProjectProvider.getCurrentProject().uuid, id)
-                    )
-                }
+        val intent = Intent(this, FormMapActivity::class.java).also {
+            it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
+        }
 
-                override fun denied() {}
-            }
-        )
+        startActivity(intent)
     }
 
     override fun onResume() {
@@ -316,30 +288,5 @@ class FillBlankFormActivity :
 
     companion object {
         private const val FORM_CHOOSER_LIST_SORTING_ORDER = "formChooserListSortingOrder"
-    }
-}
-
-class SelectFormFromMap : SelectItemFromMap<Input>() {
-
-    override fun createIntent(context: Context, input: Input): Intent {
-        return Intent(context, FormMapActivity::class.java).also {
-            val (projectId, formId) = input
-            it.putExtra(FormMapActivity.EXTRA_PROJECT_ID, projectId)
-            it.putExtra(FormMapActivity.EXTRA_FORM_ID, formId)
-        }
-    }
-
-    data class Input(val projectId: String, val formId: Long)
-}
-
-class EditInstanceResultCallback(
-    private val activity: Activity,
-    private val formNavigator: FormNavigator
-) : ActivityResultCallback<Long?> {
-
-    override fun onActivityResult(result: Long?) {
-        if (result != null) {
-            formNavigator.editInstance(activity, result)
-        }
     }
 }

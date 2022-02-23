@@ -1,48 +1,48 @@
 package org.odk.collect.geo
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
+import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.viewModels
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragment.ReadyListener
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.geo.maps.MapPoint
 import org.odk.collect.permissions.PermissionsProvider
-import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-abstract class SelectionMapActivity : LocalizedActivity() {
+class SelectionMapFragment : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
 
     @Inject
-    lateinit var permissionsProvider: PermissionsProvider
-
     lateinit var referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 
-    protected val selectionMapViewModel: SelectionMapViewModel by viewModels()
+    @Inject
+    lateinit var permissionsProvider: PermissionsProvider
 
+    private val selectionMapViewModel: SelectionMapViewModel by activityViewModels()
+
+    private lateinit var binding: SelectionMapLayoutBinding
     private lateinit var map: MapFragment
-    private var previousState: Bundle? = null
     private var viewportInitialized = false
 
     private lateinit var summarySheetBehavior: BottomSheetBehavior<*>
@@ -56,108 +56,113 @@ abstract class SelectionMapActivity : LocalizedActivity() {
      */
     private val points: MutableList<MapPoint> = mutableListOf()
 
+    private var previousState: Bundle? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         previousState = savedInstanceState
+    }
 
-        val component = (application as GeoDependencyComponentProvider).geoDependencyComponent
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val component =
+            (context.applicationContext as GeoDependencyComponentProvider).geoDependencyComponent
         component.inject(this)
 
-        // Subclassing with Dagger is weird and makes the subclass need available bindings
-        referenceLayerSettingsNavigator = component.referenceLayerSettingsNavigator
-
-        if (permissionsProvider.areLocationPermissionsGranted()) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setContentView(R.layout.selection_map_layout)
-
-            selectionMapViewModel.getMapTitle().observe(this) {
-                val titleView = findViewById<TextView>(R.id.title)
-                titleView.text = it
-            }
-
-            val mapToAdd = mapFragmentFactory.createMapFragment(applicationContext)
-            if (mapToAdd != null) {
-                mapToAdd.addTo(
-                    this,
-                    R.id.map_container,
-                    ReadyListener { newMapFragment ->
-                        initMap(newMapFragment)
-                    },
-                    MapFragment.ErrorListener { finish() }
-                )
-            } else {
-                finish() // The configured map provider is not available
-            }
-
-            setUpSummarySheet()
-        } else {
-            ToastUtils.showLongToast(this, R.string.not_granted_permission)
-            finish()
-        }
-
-        selectionMapViewModel.getItemCount().observe(this) {
-            val statusView = findViewById<TextView>(R.id.geometry_status)
-            statusView.text = getString(R.string.geometry_status, it, points.size)
+        if (!permissionsProvider.areLocationPermissionsGranted()) {
+            ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
+            requireActivity().finish()
         }
     }
 
-    @SuppressLint("MissingSuperCall") // Super is being called. Bug in Android Studio?
-    override fun onSaveInstanceState(state: Bundle) {
-        super.onSaveInstanceState(state)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = SelectionMapLayoutBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        selectionMapViewModel.getMapTitle().observe(viewLifecycleOwner) {
+            binding.title.text = it
+        }
+
+        selectionMapViewModel.getItemCount().observe(viewLifecycleOwner) {
+            binding.geometryStatus.text = getString(R.string.geometry_status, it, points.size)
+        }
+
+        val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
+        if (mapToAdd != null) {
+            mapToAdd.addTo(
+                childFragmentManager,
+                R.id.map_container,
+                ReadyListener { newMapFragment ->
+                    initMap(newMapFragment)
+                },
+                MapFragment.ErrorListener { requireActivity().finish() }
+            )
+        } else {
+            requireActivity().finish() // The configured map provider is not available
+        }
+
+        setUpSummarySheet()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
 
         if (!::map.isInitialized) {
             // initMap() is called asynchronously, so map can be null if the activity
             // is stopped (e.g. by screen rotation) before initMap() gets to run.
             // In this case, preserve any provided instance state.
             if (previousState != null) {
-                state.putAll(previousState)
+                outState.putAll(previousState)
             }
+
             return
         }
 
-        state.putParcelable(MAP_CENTER_KEY, map.center)
-        state.putDouble(MAP_ZOOM_KEY, map.zoom)
+        outState.putParcelable(MAP_CENTER_KEY, map.center)
+        outState.putDouble(MAP_ZOOM_KEY, map.zoom)
     }
-
-    override fun onBackPressed() {
-        if (summarySheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    protected abstract fun onNewItemClick()
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
-    open fun initMap(newMapFragment: MapFragment) {
+    private fun initMap(newMapFragment: MapFragment) {
         map = newMapFragment
 
-        findViewById<View>(R.id.zoom_to_location).setOnClickListener {
+        binding.zoomToLocation.setOnClickListener {
             map.zoomToPoint(map.gpsLocation, true)
         }
 
-        findViewById<View>(R.id.zoom_to_bounds).setOnClickListener {
+        binding.zoomToBounds.setOnClickListener {
             map.zoomToBoundingBox(points, 0.8, false)
         }
 
-        findViewById<View>(R.id.layer_menu).setOnClickListener {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(this)
+        binding.layerMenu.setOnClickListener {
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity() as AppCompatActivity)
         }
 
-        findViewById<View>(R.id.new_instance).setOnClickListener {
-            onNewItemClick()
+        binding.newInstance.setOnClickListener {
+            parentFragmentManager.setFragmentResult(
+                REQUEST_SELECT_ITEM,
+                Bundle().also {
+                    it.putBoolean(RESULT_CREATE_NEW_ITEM, true)
+                }
+            )
         }
 
         map.setGpsLocationEnabled(true)
         map.setGpsLocationListener { point -> onLocationChanged(point) }
 
-        previousState?.let { restoreFromInstanceState(it) }
+        previousState?.let { restoreZoomFromPreviousState(it) }
 
         map.setFeatureClickListener { featureId -> onFeatureClicked(featureId) }
         map.setClickListener { onClick() }
 
-        selectionMapViewModel.getMappableItems().observe(this) {
+        selectionMapViewModel.getMappableItems().observe(viewLifecycleOwner) {
             update(it)
         }
 
@@ -166,10 +171,32 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         }
     }
 
+    private fun restoreZoomFromPreviousState(state: Bundle) {
+        val mapCenter: MapPoint? = state.getParcelable(MAP_CENTER_KEY)
+        val mapZoom = state.getDouble(MAP_ZOOM_KEY)
+
+        if (mapCenter != null) {
+            map.zoomToPoint(mapCenter, mapZoom, false)
+            viewportInitialized = true // avoid recentering as soon as location is received
+        }
+    }
+
     private fun setUpSummarySheet() {
-        summarySheet = findViewById(R.id.submission_summary)
+        summarySheet = binding.submissionSummary
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        val onBackPressedCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
@@ -179,6 +206,9 @@ abstract class SelectionMapActivity : LocalizedActivity() {
                         itemsByFeatureId[selectedSubmissionId]!!.smallIcon
                     )
                     selectionMapViewModel.setSelectedItemId(-1)
+                    onBackPressedCallback.isEnabled = false
+                } else {
+                    onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
                 }
             }
 
@@ -189,13 +219,12 @@ abstract class SelectionMapActivity : LocalizedActivity() {
             override fun selectionAction(id: Long) {
                 summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-                setResult(
-                    RESULT_OK,
-                    Intent().also {
-                        it.putExtra(EXTRA_SELECTED_ID, id)
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_SELECT_ITEM,
+                    Bundle().also {
+                        it.putLong(RESULT_SELECTED_ITEM, id)
                     }
                 )
-                finish()
             }
         }
     }
@@ -203,20 +232,10 @@ abstract class SelectionMapActivity : LocalizedActivity() {
     /**
      * Zooms the map to the new location if the map viewport hasn't been initialized yet.
      */
-    open fun onLocationChanged(point: MapPoint?) {
+    private fun onLocationChanged(point: MapPoint?) {
         if (!viewportInitialized) {
             map.zoomToPoint(point, true)
             viewportInitialized = true
-        }
-    }
-
-    protected open fun restoreFromInstanceState(state: Bundle) {
-        val mapCenter: MapPoint? = state.getParcelable(MAP_CENTER_KEY)
-        val mapZoom = state.getDouble(MAP_ZOOM_KEY)
-
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false)
-            viewportInitialized = true // avoid recentering as soon as location is received
         }
     }
 
@@ -293,10 +312,12 @@ abstract class SelectionMapActivity : LocalizedActivity() {
     }
 
     companion object {
-        const val EXTRA_SELECTED_ID = "selected_id"
+        const val REQUEST_SELECT_ITEM = "select_item"
+        const val RESULT_SELECTED_ITEM = "selected_item"
+        const val RESULT_CREATE_NEW_ITEM = "create_new_item"
 
-        private const val MAP_CENTER_KEY = "map_center"
-        private const val MAP_ZOOM_KEY = "map_zoom"
+        private val MAP_CENTER_KEY = "map_center"
+        private val MAP_ZOOM_KEY = "map_zoom"
     }
 }
 
@@ -337,17 +358,6 @@ class SelectionMapViewModel : ViewModel() {
     }
 }
 
-abstract class SelectItemFromMap<T> : ActivityResultContract<T, Long?>() {
-
-    override fun parseResult(resultCode: Int, intent: Intent?): Long? {
-        return if (resultCode == Activity.RESULT_OK) {
-            intent?.getLongExtra(SelectionMapActivity.EXTRA_SELECTED_ID, -1)
-        } else {
-            null
-        }
-    }
-}
-
 data class MappableSelectItem(
     val id: Long,
     val latitude: Double,
@@ -362,7 +372,7 @@ data class MappableSelectItem(
     data class IconifiedText(val icon: Int, val text: String)
 }
 
-class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
     val binding =
         SelectionSummarySheetLayoutBinding.inflate(LayoutInflater.from(context), this, true)
