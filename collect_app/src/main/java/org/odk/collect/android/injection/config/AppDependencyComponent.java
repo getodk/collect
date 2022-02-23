@@ -52,7 +52,6 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
@@ -92,6 +91,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
@@ -321,7 +321,7 @@ public interface AppDependencyComponent {
 
     ProjectResetter projectResetter();
 
-    MapProvider mapProvider();
+    MapFragmentFactory mapFragmentFactory();
 
     Scheduler scheduler();
 

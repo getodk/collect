@@ -283,7 +283,7 @@ public class Collect extends Application implements
                         @Provides
                         @Override
                         public MapFragmentFactory providesMapFragmentFactory() {
-                            return applicationComponent.mapProvider();
+                            return applicationComponent.mapFragmentFactory();
                         }
 
                         @NonNull

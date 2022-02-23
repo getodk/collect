@@ -14,6 +14,8 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
@@ -37,7 +39,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
 
     lateinit var referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 
-    protected val viewModel: SelectionMapViewModel by viewModels()
+    protected val selectionMapViewModel: SelectionMapViewModel by viewModels()
 
     private lateinit var map: MapFragment
     private var previousState: Bundle? = null
@@ -63,16 +65,15 @@ abstract class SelectionMapActivity : LocalizedActivity() {
 
         // Subclassing with Dagger is weird and makes the subclass need available bindings
         referenceLayerSettingsNavigator = component.referenceLayerSettingsNavigator
-    }
 
-    // Allow subclass to initialization before we set everything up
-    protected fun init() {
         if (permissionsProvider.areLocationPermissionsGranted()) {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setContentView(R.layout.selection_map_layout)
 
-            val titleView = findViewById<TextView>(R.id.title)
-            titleView.text = getMapTitle()
+            selectionMapViewModel.getMapTitle().observe(this) {
+                val titleView = findViewById<TextView>(R.id.title)
+                titleView.text = it
+            }
 
             val mapToAdd = mapFragmentFactory.createMapFragment(applicationContext)
             if (mapToAdd != null) {
@@ -92,6 +93,11 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         } else {
             ToastUtils.showLongToast(this, R.string.not_granted_permission)
             finish()
+        }
+
+        selectionMapViewModel.getItemCount().observe(this) {
+            val statusView = findViewById<TextView>(R.id.geometry_status)
+            statusView.text = getString(R.string.geometry_status, it, points.size)
         }
     }
 
@@ -113,11 +119,6 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         state.putDouble(MAP_ZOOM_KEY, map.zoom)
     }
 
-    override fun onResume() {
-        super.onResume()
-        update()
-    }
-
     override fun onBackPressed() {
         if (summarySheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
             summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
@@ -126,10 +127,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         }
     }
 
-    protected abstract fun getMapTitle(): String
-    protected abstract fun getItemCount(): Int
-    protected abstract fun getMappableItems(): List<MappableSelectItem>
-    protected abstract fun getNewItemIntent(): Intent
+    protected abstract fun onNewItemClick()
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     open fun initMap(newMapFragment: MapFragment) {
@@ -148,7 +146,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         }
 
         findViewById<View>(R.id.new_instance).setOnClickListener {
-            startActivity(getNewItemIntent())
+            onNewItemClick()
         }
 
         map.setGpsLocationEnabled(true)
@@ -159,10 +157,12 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         map.setFeatureClickListener { featureId -> onFeatureClicked(featureId) }
         map.setClickListener { onClick() }
 
-        update()
+        selectionMapViewModel.getMappableItems().observe(this) {
+            update(it)
+        }
 
-        if (viewModel.getSelectedItemId() != -1) {
-            onFeatureClicked(viewModel.getSelectedItemId())
+        if (selectionMapViewModel.getSelectedItemId() != -1) {
+            onFeatureClicked(selectionMapViewModel.getSelectedItemId())
         }
     }
 
@@ -172,13 +172,13 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val selectedSubmissionId = viewModel.getSelectedItemId()
+                val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
                 if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != -1) {
                     map.setMarkerIcon(
                         selectedSubmissionId,
                         itemsByFeatureId[selectedSubmissionId]!!.smallIcon
                     )
-                    viewModel.setSelectedItemId(-1)
+                    selectionMapViewModel.setSelectedItemId(-1)
                 }
             }
 
@@ -233,7 +233,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
                 summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
             }
 
-            viewModel.setSelectedItemId(featureId)
+            selectionMapViewModel.setSelectedItemId(featureId)
         }
     }
 
@@ -243,28 +243,25 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         }
     }
 
-    private fun update() {
+    private fun update(items: List<MappableSelectItem>) {
         if (map == null) {
             return
         }
 
-        updateFeatures()
+        updateFeatures(items)
 
         if (!viewportInitialized && !points.isEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }
-
-        val statusView = findViewById<TextView>(R.id.geometry_status)
-        statusView.text = getString(R.string.geometry_status, getItemCount(), points.size)
     }
 
     private fun isSummaryForGivenSubmissionDisplayed(newSubmissionId: Int): Boolean {
-        return viewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+        return selectionMapViewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun removeEnlargedMarkerIfExist(newSubmissionId: Int) {
-        val selectedSubmissionId = viewModel.getSelectedItemId()
+        val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
         if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
             map.setMarkerIcon(
                 selectedSubmissionId,
@@ -276,19 +273,18 @@ abstract class SelectionMapActivity : LocalizedActivity() {
     /**
      * Clears the existing features on the map and places features for the current form's instances.
      */
-    private fun updateFeatures() {
+    private fun updateFeatures(items: List<MappableSelectItem>) {
         points.clear()
         map.clearFeatures()
         itemsByFeatureId.clear()
 
-        val items = getMappableItems()
         for (item in items) {
             val point = MapPoint(item.latitude, item.longitude)
             val featureId = map.addMarker(point, false, MapFragment.BOTTOM)
 
             map.setMarkerIcon(
                 featureId,
-                if (featureId == viewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
+                if (featureId == selectionMapViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
             )
 
             itemsByFeatureId.put(featureId, item)
@@ -306,7 +302,14 @@ abstract class SelectionMapActivity : LocalizedActivity() {
 
 class SelectionMapViewModel : ViewModel() {
 
+    private var mapTitle = MutableLiveData<String>()
+    private var mappableItems = MutableLiveData<List<MappableSelectItem>>(emptyList())
+    private var itemCount = MutableLiveData(0)
     private var selectedItemId = -1
+
+    fun getMapTitle(): LiveData<String> {
+        return mapTitle
+    }
 
     fun getSelectedItemId(): Int {
         return selectedItemId
@@ -314,6 +317,23 @@ class SelectionMapViewModel : ViewModel() {
 
     fun setSelectedItemId(itemId: Int) {
         selectedItemId = itemId
+    }
+
+    fun getItemCount(): LiveData<Int> {
+        return itemCount
+    }
+
+    fun getMappableItems(): LiveData<List<MappableSelectItem>> {
+        return mappableItems
+    }
+
+    fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>) {
+        this.mappableItems.value = mappableItems
+        this.itemCount.value = itemCount
+    }
+
+    fun setMapTitle(title: String) {
+        this.mapTitle.value = title
     }
 }
 

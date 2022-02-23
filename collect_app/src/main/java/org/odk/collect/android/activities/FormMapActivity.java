@@ -80,42 +80,31 @@ public class FormMapActivity extends SelectionMapActivity {
         }
 
         formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
-        init();
-    }
-
-    @NonNull
-    @Override
-    protected String getMapTitle() {
-        return formMapViewModel.getFormTitle();
+        getSelectionMapViewModel().setMapTitle(formMapViewModel.getFormTitle());
     }
 
     @Override
-    protected int getItemCount() {
-        return formMapViewModel.getTotalInstanceCount();
-    }
+    protected void onResume() {
+        super.onResume();
 
-    @NonNull
-    @Override
-    protected List<MappableSelectItem> getMappableItems() {
         List<MappableFormInstance> instances = formMapViewModel.getMappableFormInstances();
-
         List<MappableSelectItem> items = new ArrayList<>();
         for (MappableFormInstance instance : instances) {
             items.add(convertItem(instance));
         }
-        return items;
+
+        getSelectionMapViewModel().setItems(formMapViewModel.getTotalInstanceCount(), items);
     }
 
-    @NonNull
     @Override
-    protected Intent getNewItemIntent() {
+    protected void onNewItemClick() {
         Intent intent = new Intent(this, FormEntryActivity.class);
         intent.setAction(Intent.ACTION_EDIT);
 
         String projectId = getIntent().getStringExtra(EXTRA_PROJECT_ID);
         long formId = getIntent().getLongExtra(EXTRA_FORM_ID, -1);
         intent.setData(FormsContract.getUri(projectId, formId));
-        return intent;
+        startActivity(intent);
     }
 
     @NonNull

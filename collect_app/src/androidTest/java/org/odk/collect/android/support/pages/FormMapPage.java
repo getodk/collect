@@ -5,9 +5,17 @@ import org.odk.collect.android.support.FakeClickableMapFragment;
 
 public class FormMapPage extends Page<FormMapPage> {
 
+    private final String formName;
+
+    public FormMapPage(String formName) {
+        this.formName = formName;
+    }
+
     @Override
     public FormMapPage assertOnPage() {
-        return checkIsIdDisplayed(R.id.geometry_status);
+        assertText(formName);
+        checkIsIdDisplayed(R.id.geometry_status);
+        return this;
     }
 
     public FormEntryPage clickFillBlankFormButton(String formName) {
@@ -19,7 +27,7 @@ public class FormMapPage extends Page<FormMapPage> {
         mapFragment.clickOnFeature(index);
 
         waitForText(getTranslatedString(R.string.review_data)); // Wait for animation to end
-        return this.assertOnPage();
+        return this;
     }
 
     public FormHierarchyPage clickEditSavedForm(String formName) {
