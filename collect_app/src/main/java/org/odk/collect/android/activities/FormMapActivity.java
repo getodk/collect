@@ -80,7 +80,7 @@ public class FormMapActivity extends SelectionMapActivity {
         }
 
         formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
-        getSelectionMapViewModel().setMapTitle(formMapViewModel.getFormTitle());
+        getSelectionMapViewModel().setMapTitle(form.getDisplayName());
     }
 
     @Override

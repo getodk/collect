@@ -38,10 +38,6 @@ public class FormMapViewModel extends ViewModel {
         this.form = form;
     }
 
-    public String getFormTitle() {
-        return form.getDisplayName();
-    }
-
     /**
      * Returns the count of all filled instances of this form, including unmappable ones.
      */

@@ -29,11 +29,6 @@ public class FormMapViewModelTest {
         testInstancesRepository = new InMemInstancesRepository(Arrays.asList(testInstances));
     }
 
-    @Test public void getFormTitle_returnsFormTitle() {
-        FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
-        assertThat(viewModel.getFormTitle(), is("Form with ID 1"));
-    }
-
     @Test public void getTotalInstanceCount_returnsCountOfAllInstances() {
         FormMapViewModel viewModel = new FormMapViewModel(TEST_FORM_1, testInstancesRepository);
         assertThat(viewModel.getTotalInstanceCount(), is(7));

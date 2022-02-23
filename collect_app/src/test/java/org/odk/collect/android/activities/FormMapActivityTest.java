@@ -13,6 +13,7 @@ import static org.odk.collect.android.activities.viewmodels.FormMapViewModel.Cli
 import static org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction.OPEN_EDIT;
 import static org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction.OPEN_READ_ONLY;
 
+import android.content.Intent;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
@@ -39,10 +40,14 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.shared.TempFiles;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
@@ -63,6 +68,8 @@ public class FormMapActivityTest {
             new MapPoint(10.3, 125.6), new MapPoint(10.3, 125.7),
             new MapPoint(10.4, 125.6));
     private final MapPoint currentLocation = new MapPoint(5, 5);
+    private InstancesRepository instancesRepository;
+    private Form form;
 
     @Before
     public void setUpActivity() {
@@ -77,14 +84,15 @@ public class FormMapActivityTest {
             }
         });
 
-        activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class);
-        activity = (FormMapActivity) activityController.get();
-
-        InstancesRepository instancesRepository = component.instancesRepositoryProvider().get();
+        FormsRepository formsRepository = component.formsRepositoryProvider().get();
+        instancesRepository = component.instancesRepositoryProvider().get();
+        form = formsRepository.save(testForm);
         Arrays.stream(testInstances).forEach(instancesRepository::save);
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, instancesRepository);
-        activity.viewModelFactory = new TestFactory(viewModel);
 
+        Intent intent = new Intent();
+        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
+        activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
+        activity = (FormMapActivity) activityController.get();
         activityController.setup();
     }
 
@@ -102,13 +110,10 @@ public class FormMapActivityTest {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
-        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class);
-        FormMapActivity activity = (FormMapActivity) controller.get();
-
-        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
-        activity.viewModelFactory = new TestFactory(viewModel);
-
+        instancesRepository.deleteAll();
+        Intent intent = new Intent();
+        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
+        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
         controller.setup();
 
         assertThat(map.getZoomCount(), is(0));
@@ -119,13 +124,10 @@ public class FormMapActivityTest {
         // The @Before block set up a map with points. Reset everything for this test.
         map.resetState();
 
-        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class);
-        FormMapActivity activity = (FormMapActivity) controller.get();
-
-        InMemInstancesRepository inMemInstancesRepository = new InMemInstancesRepository(new ArrayList<>());
-        FormMapViewModel viewModel = new FormMapViewModel(FormMapViewModelTest.TEST_FORM_1, inMemInstancesRepository);
-        activity.viewModelFactory = new TestFactory(viewModel);
-
+        instancesRepository.deleteAll();
+        Intent intent = new Intent();
+        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
+        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
         controller.setup();
 
         assertThat(map.getZoomCount(), is(0));
@@ -296,6 +298,10 @@ public class FormMapActivityTest {
             return (T) viewModel;
         }
     }
+
+    private Form testForm = FormUtils
+            .buildForm("formId1", "2019103101", TempFiles.createTempDir().getAbsolutePath())
+            .build();
 
     private static Instance[] testInstances = {
             new Instance.Builder()
