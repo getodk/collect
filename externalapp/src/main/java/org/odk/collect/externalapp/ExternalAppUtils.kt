@@ -13,10 +13,15 @@ object ExternalAppUtils {
 
     @JvmStatic
     fun returnSingleValue(activity: Activity, value: String) {
-        val intent = Intent()
-        intent.putExtra(VALUE_KEY, value)
-        activity.setResult(Activity.RESULT_OK, intent)
+        activity.setResult(Activity.RESULT_OK, getReturnIntent(value))
         activity.finish()
+    }
+
+    @JvmStatic
+    fun getReturnIntent(value: String): Intent {
+        return Intent().also {
+            it.putExtra(VALUE_KEY, value)
+        }
     }
 
     @JvmStatic

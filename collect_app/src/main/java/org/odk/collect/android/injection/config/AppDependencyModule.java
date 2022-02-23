@@ -122,8 +122,9 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
-import org.odk.collect.imageloader.ImageLoader;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.imageloader.GlideImageLoader;
+import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.permissions.PermissionsChecker;
@@ -620,6 +621,11 @@ public class AppDependencyModule {
     @Provides
     public MediaUtils providesMediaUtils(IntentLauncher intentLauncher) {
         return new MediaUtils(intentLauncher, new ContentUriProvider());
+    }
+
+    @Provides
+    public MapFragmentFactory providesMapFragmentFactory(MapProvider mapProvider) {
+        return mapProvider;
     }
 
     @Provides

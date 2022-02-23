@@ -15,8 +15,6 @@
 package org.odk.collect.android.activities;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -35,14 +33,10 @@ import com.google.android.material.chip.Chip;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
-import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.external.InstancesContract;
-import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -50,8 +44,12 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.geo.SelectionMapActivity;
 import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
 import java.text.SimpleDateFormat;
@@ -66,18 +64,19 @@ import javax.inject.Inject;
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends CollectAbstractActivity {
+public class FormMapActivity extends SelectionMapActivity {
 
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
 
     public static final String EXTRA_FORM_ID = "form_id";
+
     protected Bundle previousState;
 
     private FormMapViewModel viewModel;
 
     @Inject
-    MapProvider mapProvider;
+    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -87,6 +86,12 @@ public class FormMapActivity extends CollectAbstractActivity {
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private MapFragment map;
 
@@ -138,7 +143,7 @@ public class FormMapActivity extends CollectAbstractActivity {
         TextView titleView = findViewById(R.id.form_title);
         titleView.setText(viewModel.getFormTitle());
 
-        MapFragment mapToAdd = mapProvider.createMapFragment(getApplicationContext());
+        MapFragment mapToAdd = mapFragmentFactory.createMapFragment(getApplicationContext());
 
         if (mapToAdd != null) {
             mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
@@ -211,11 +216,7 @@ public class FormMapActivity extends CollectAbstractActivity {
         });
 
         findViewById(R.id.new_instance).setOnClickListener(v -> {
-            final Uri formUri = FormsContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), viewModel.getFormId());
-            Intent intent = new Intent(this, FormEntryActivity.class);
-            intent.setAction(Intent.ACTION_EDIT);
-            intent.setData(formUri);
-            startActivity(intent);
+            createNewItem();
         });
 
         map.setGpsLocationEnabled(true);
@@ -387,9 +388,8 @@ public class FormMapActivity extends CollectAbstractActivity {
         openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
         openFormButton.setOnClickListener(v -> {
             summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-            startActivity(canEdit
-                    ? getEditFormInstanceIntentFor(instanceId)
-                    : getViewOnlyFormInstanceIntentFor(instanceId));
+
+            returnItem(instanceId);
         });
     }
 
@@ -398,20 +398,6 @@ public class FormMapActivity extends CollectAbstractActivity {
         TextView infoText = findViewById(R.id.info);
         infoText.setVisibility(View.VISIBLE);
         infoText.setText(message);
-    }
-
-    private Intent getViewOnlyFormInstanceIntentFor(long instanceId) {
-        Intent intent = getEditFormInstanceIntentFor(instanceId);
-        intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
-        return intent;
-    }
-
-    private Intent getEditFormInstanceIntentFor(long instanceId) {
-        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
-        Intent intent = new Intent(this, FormEntryActivity.class);
-        intent.setAction(Intent.ACTION_EDIT);
-        intent.setData(uri);
-        return intent;
     }
 
     private void removeEnlargedMarkerIfExist(int newSubmissionId) {
