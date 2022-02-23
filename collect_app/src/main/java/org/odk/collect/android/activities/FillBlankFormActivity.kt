@@ -51,7 +51,6 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.geo.SelectItemFromMap
-import org.odk.collect.geo.SelectionMapActivity
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
 import timber.log.Timber
@@ -325,16 +324,8 @@ class SelectFormFromMap : SelectItemFromMap<Input>() {
     override fun createIntent(context: Context, input: Input): Intent {
         return Intent(context, FormMapActivity::class.java).also {
             val (projectId, formId) = input
-
+            it.putExtra(FormMapActivity.EXTRA_PROJECT_ID, projectId)
             it.putExtra(FormMapActivity.EXTRA_FORM_ID, formId)
-            it.putExtra(
-                SelectionMapActivity.EXTRA_NEW_ITEM,
-                Intent(context, FormEntryActivity::class.java).also { intent ->
-                    intent.action = Intent.ACTION_EDIT
-                    intent.data =
-                        FormsContract.getUri(projectId, formId)
-                }
-            )
         }
     }
 

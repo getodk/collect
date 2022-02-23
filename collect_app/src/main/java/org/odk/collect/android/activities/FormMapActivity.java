@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
@@ -51,6 +53,7 @@ import javax.inject.Inject;
 public class FormMapActivity extends SelectionMapActivity {
 
     public static final String EXTRA_FORM_ID = "form_id";
+    public static final String EXTRA_PROJECT_ID = "project_id";
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -101,6 +104,18 @@ public class FormMapActivity extends SelectionMapActivity {
             items.add(convertItem(instance));
         }
         return items;
+    }
+
+    @NonNull
+    @Override
+    protected Intent getNewItemIntent() {
+        Intent intent = new Intent(this, FormEntryActivity.class);
+        intent.setAction(Intent.ACTION_EDIT);
+
+        String projectId = getIntent().getStringExtra(EXTRA_PROJECT_ID);
+        long formId = getIntent().getLongExtra(EXTRA_FORM_ID, -1);
+        intent.setData(FormsContract.getUri(projectId, formId));
+        return intent;
     }
 
     @NonNull

@@ -129,6 +129,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
     protected abstract fun getMapTitle(): String
     protected abstract fun getItemCount(): Int
     protected abstract fun getMappableItems(): List<MappableSelectItem>
+    protected abstract fun getNewItemIntent(): Intent
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     open fun initMap(newMapFragment: MapFragment) {
@@ -147,7 +148,7 @@ abstract class SelectionMapActivity : LocalizedActivity() {
         }
 
         findViewById<View>(R.id.new_instance).setOnClickListener {
-            startActivity(intent.getParcelableExtra(EXTRA_NEW_ITEM))
+            startActivity(getNewItemIntent())
         }
 
         map.setGpsLocationEnabled(true)
@@ -297,7 +298,6 @@ abstract class SelectionMapActivity : LocalizedActivity() {
 
     companion object {
         const val EXTRA_SELECTED_ID = "selected_id"
-        const val EXTRA_NEW_ITEM = "new_item"
 
         private const val MAP_CENTER_KEY = "map_center"
         private const val MAP_ZOOM_KEY = "map_zoom"
