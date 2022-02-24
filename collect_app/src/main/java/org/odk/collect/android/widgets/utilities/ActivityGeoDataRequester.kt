@@ -52,12 +52,12 @@ class ActivityGeoDataRequester(
 
                         it.putFloat(
                             GeoPointActivity.EXTRA_ACCURACY_THRESHOLD,
-                            accuracyThreshold?.toFloat() ?: DEFAULT_ACCURACY_THRESHOLD,
+                            accuracyThreshold?.toFloatOrNull() ?: DEFAULT_ACCURACY_THRESHOLD,
                         )
 
                         it.putFloat(
                             GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD,
-                            unacceptableAccuracyThreshold?.toFloat()
+                            unacceptableAccuracyThreshold?.toFloatOrNull()
                                 ?: DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD,
                         )
 
