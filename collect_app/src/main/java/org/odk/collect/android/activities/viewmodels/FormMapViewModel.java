@@ -15,6 +15,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * This is only being used to perform logic for another ViewModel
+ * ({@link org.odk.collect.geo.SelectionMapViewModel}) so there is no reason for the code here
+ * to require a {@link ViewModel} implementation.
+ */
+@Deprecated
 public class FormMapViewModel extends ViewModel {
     /**
      * The form that is mapped.
