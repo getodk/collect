@@ -44,6 +44,7 @@ import org.odk.collect.android.views.ObviousProgressBar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
+import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.settings.keys.ProjectKeys
 import timber.log.Timber
 import javax.inject.Inject
@@ -194,11 +195,22 @@ class FillBlankFormActivity :
     }
 
     private fun onMapButtonClick(id: Long) {
-        val intent = Intent(this, FormMapActivity::class.java).also {
-            it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
-        }
+        permissionsProvider.requestLocationPermissions(
+            this,
+            object :
+                PermissionListener {
+                override fun granted() {
+                    val intent =
+                        Intent(this@FillBlankFormActivity, FormMapActivity::class.java).also {
+                            it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
+                        }
 
-        startActivity(intent)
+                    startActivity(intent)
+                }
+
+                override fun denied() {}
+            }
+        )
     }
 
     override fun onResume() {
