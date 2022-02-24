@@ -18,7 +18,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -70,8 +69,6 @@ public class FormMapActivity extends LocalizedActivity {
     @Inject
     CurrentProjectProvider currentProjectProvider;
 
-    @VisibleForTesting
-    public ViewModelProvider.Factory viewModelFactory;
     private FormMapViewModel formMapViewModel;
 
     private SelectionMapViewModel selectionMapViewModel;
@@ -110,11 +107,7 @@ public class FormMapActivity extends LocalizedActivity {
     @Nullable
     private Form loadForm() {
         Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
-
-        if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapViewModelFactory(form, instancesRepositoryProvider.get());
-        }
-
+        FormMapViewModelFactory viewModelFactory = new FormMapViewModelFactory(form, instancesRepositoryProvider.get());
         formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
         return form;
     }
