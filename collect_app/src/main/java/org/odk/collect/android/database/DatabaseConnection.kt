@@ -4,8 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
-import java.io.File
 import timber.log.Timber
+import java.io.File
 
 /**
  * Allows access to a database file. The actual underlying connection (an instance of
