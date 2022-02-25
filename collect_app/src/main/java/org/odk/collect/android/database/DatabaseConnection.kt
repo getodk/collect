@@ -28,7 +28,12 @@ open class DatabaseConnection(
         get() = dbHelper.readableDatabase
 
     private val dbHelper: SQLiteOpenHelper by lazy {
-        getOpenHelper(path + File.separator + name) {
+        val databasePath = path + File.separator + name
+        if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+            openHelpers.remove(databasePath)
+        }
+
+        openHelpers.getOrPut(databasePath) {
             DatabaseMigratorSQLiteOpenHelper(
                 AltDatabasePathContext(path, context),
                 name,
@@ -37,17 +42,6 @@ open class DatabaseConnection(
                 migrator
             )
         }
-    }
-
-    private fun getOpenHelper(
-        databasePath: String,
-        helperFactory: () -> SQLiteOpenHelper
-    ): SQLiteOpenHelper {
-        if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
-            openHelpers.remove(databasePath)
-        }
-
-        return openHelpers.getOrPut(databasePath, helperFactory)
     }
 
     companion object {
