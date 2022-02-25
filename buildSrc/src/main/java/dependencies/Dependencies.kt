@@ -17,7 +17,7 @@ object Dependencies {
     const val androidx_appcompat = "androidx.appcompat:appcompat:1.3.1"
     const val androidx_work_runtime = "androidx.work:work-runtime:2.5.0" // Upgrading will require compileSdk 31
     const val androidx_cardview = "androidx.cardview:cardview:1.0.0"
-    const val androidx_exinterface = "androidx.exifinterface:exifinterface:1.3.2" // Check if https://github.com/getodk/collect/issues/4819 no longer takes place before upgrading
+    const val androidx_exinterface = "androidx.exifinterface:exifinterface:1.3.1" // Check if https://github.com/getodk/collect/issues/4819 and https://github.com/getodk/collect/issues/5033 no longer takes place before upgrading
     const val androidx_multidex = "androidx.multidex:multidex:2.0.1"
     const val androidx_preference_ktx = "androidx.preference:preference-ktx:1.1.1"
     const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.androidx_fragment}"
