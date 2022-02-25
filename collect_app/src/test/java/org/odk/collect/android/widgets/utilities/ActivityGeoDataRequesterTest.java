@@ -147,6 +147,20 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
+    public void whenWidgetHasInvalidAccuracyValue_requestGeoPoint_launchesCorrectIntentWithDefaultThreshold() {
+        when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("blah");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_ACCURACY_THRESHOLD));
+    }
+
+    @Test
     public void whenWidgetHasUnacceptableAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, "unacceptableAccuracyThreshold")).thenReturn("20");
 
@@ -158,6 +172,20 @@ public class ActivityGeoDataRequesterTest {
 
         Bundle bundle = startedIntent.getExtras();
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(20.0f));
+    }
+
+    @Test
+    public void whenWidgetHasInvalidUnacceptableAccuracyValue_requestGeoPoint_launchesCorrectIntentWithDefaultThreshold() {
+        when(questionDef.getAdditionalAttribute(null, "unacceptableAccuracyThreshold")).thenReturn("blah");
+
+        activityGeoDataRequester.requestGeoPoint(prompt, answer.getDisplayText(), waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
     }
 
     @Test
