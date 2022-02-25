@@ -47,6 +47,10 @@ open class DatabaseConnection(
             databasePath: String,
             helperFactory: () -> SQLiteOpenHelper
         ): SQLiteOpenHelper {
+            if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+                openHelpers.remove(databasePath)
+            }
+
             return openHelpers.getOrPut(databasePath, helperFactory)
         }
 
