@@ -39,20 +39,20 @@ open class DatabaseConnection(
         }
     }
 
+    private fun getOpenHelper(
+        databasePath: String,
+        helperFactory: () -> SQLiteOpenHelper
+    ): SQLiteOpenHelper {
+        if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+            openHelpers.remove(databasePath)
+        }
+
+        return openHelpers.getOrPut(databasePath, helperFactory)
+    }
+
     companion object {
 
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()
-
-        private fun getOpenHelper(
-            databasePath: String,
-            helperFactory: () -> SQLiteOpenHelper
-        ): SQLiteOpenHelper {
-            if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
-                openHelpers.remove(databasePath)
-            }
-
-            return openHelpers.getOrPut(databasePath, helperFactory)
-        }
 
         @JvmStatic
         fun closeAll() {
