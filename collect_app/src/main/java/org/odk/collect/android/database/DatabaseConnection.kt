@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
+import java.io.File
 import timber.log.Timber
 
 /**
@@ -27,7 +28,7 @@ open class DatabaseConnection(
         get() = dbHelper.readableDatabase
 
     private val dbHelper: SQLiteOpenHelper by lazy {
-        getOpenHelper(path + name) {
+        getOpenHelper(path + File.separator + name) {
             DatabaseMigratorSQLiteOpenHelper(
                 AltDatabasePathContext(path, context),
                 name,
@@ -43,10 +44,10 @@ open class DatabaseConnection(
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()
 
         private fun getOpenHelper(
-            name: String,
+            databasePath: String,
             helperFactory: () -> SQLiteOpenHelper
         ): SQLiteOpenHelper {
-            return openHelpers.getOrPut(name, helperFactory)
+            return openHelpers.getOrPut(databasePath, helperFactory)
         }
 
         @JvmStatic
