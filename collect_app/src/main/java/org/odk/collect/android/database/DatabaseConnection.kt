@@ -27,22 +27,23 @@ open class DatabaseConnection(
     val readableDatabase: SQLiteDatabase
         get() = dbHelper.readableDatabase
 
-    private val dbHelper: SQLiteOpenHelper by lazy {
-        val databasePath = path + File.separator + name
-        if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
-            openHelpers.remove(databasePath)
-        }
+    private val dbHelper: SQLiteOpenHelper
+        get() {
+            val databasePath = path + File.separator + name
+            if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+                openHelpers.remove(databasePath)
+            }
 
-        openHelpers.getOrPut(databasePath) {
-            DatabaseMigratorSQLiteOpenHelper(
-                AltDatabasePathContext(path, context),
-                name,
-                null,
-                databaseVersion,
-                migrator
-            )
+            return openHelpers.getOrPut(databasePath) {
+                DatabaseMigratorSQLiteOpenHelper(
+                    AltDatabasePathContext(path, context),
+                    name,
+                    null,
+                    databaseVersion,
+                    migrator
+                )
+            }
         }
-    }
 
     companion object {
 
