@@ -19,7 +19,7 @@ import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.ProjectManagementPreferencesFragmentViewModel
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
-import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
+import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragment
 import org.odk.collect.android.preferences.dialogs.ResetProgressDialog
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
@@ -71,7 +71,7 @@ class ProjectManagementPreferencesFragment :
                 resetDialogPreference = preference
             }
             if (resetDialogPreference != null) {
-                val dialogFragment = ResetDialogPreferenceFragmentCompat.newInstance(preference.key)
+                val dialogFragment = ResetDialogPreferenceFragment.newInstance(preference.key)
                 dialogFragment.setOnResetClickListener(::onResetClick)
                 dialogFragment.setTargetFragment(this, 0)
                 dialogFragment.show(parentFragmentManager, null)

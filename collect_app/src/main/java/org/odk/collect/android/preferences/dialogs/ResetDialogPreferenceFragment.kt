@@ -20,7 +20,7 @@ import org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFE
 import org.odk.collect.async.Scheduler
 import javax.inject.Inject
 
-class ResetDialogPreferenceFragmentCompat :
+class ResetDialogPreferenceFragment :
     PreferenceDialogFragmentCompat(),
     CompoundButton.OnCheckedChangeListener {
 
@@ -45,19 +45,19 @@ class ResetDialogPreferenceFragmentCompat :
 
     public override fun onBindDialogView(view: View) {
         preferences = view.findViewById<AppCompatCheckBox>(R.id.preferences).apply {
-            setOnCheckedChangeListener(this@ResetDialogPreferenceFragmentCompat)
+            setOnCheckedChangeListener(this@ResetDialogPreferenceFragment)
         }
         instances = view.findViewById<AppCompatCheckBox>(R.id.instances).apply {
-            setOnCheckedChangeListener(this@ResetDialogPreferenceFragmentCompat)
+            setOnCheckedChangeListener(this@ResetDialogPreferenceFragment)
         }
         forms = view.findViewById<AppCompatCheckBox>(R.id.forms).apply {
-            setOnCheckedChangeListener(this@ResetDialogPreferenceFragmentCompat)
+            setOnCheckedChangeListener(this@ResetDialogPreferenceFragment)
         }
         layers = view.findViewById<AppCompatCheckBox>(R.id.layers).apply {
-            setOnCheckedChangeListener(this@ResetDialogPreferenceFragmentCompat)
+            setOnCheckedChangeListener(this@ResetDialogPreferenceFragment)
         }
         cache = view.findViewById<AppCompatCheckBox>(R.id.cache).apply {
-            setOnCheckedChangeListener(this@ResetDialogPreferenceFragmentCompat)
+            setOnCheckedChangeListener(this@ResetDialogPreferenceFragment)
         }
         super.onBindDialogView(view)
     }
@@ -138,8 +138,8 @@ class ResetDialogPreferenceFragmentCompat :
     }
 
     companion object {
-        fun newInstance(key: String): ResetDialogPreferenceFragmentCompat {
-            val fragment = ResetDialogPreferenceFragmentCompat()
+        fun newInstance(key: String): ResetDialogPreferenceFragment {
+            val fragment = ResetDialogPreferenceFragment()
             val bundle = Bundle(1)
             bundle.putString(ARG_KEY, key)
             fragment.arguments = bundle
