@@ -403,7 +403,6 @@
   <string name="form_updates_available">فارم اپ ڈیٹس دستیاب ہیں</string>
   <string name="newer_version_of_a_form_info">یہ اس فارم کی اپ ڈیٹ ہے جو آپ کے پاس ہے</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
-  <string name="failure">ناکامی </string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

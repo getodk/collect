@@ -513,7 +513,6 @@
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="show_details">Mostra dettagli</string>
   <string name="form_details">ID: %1$s Versione: %2$s</string>
-  <string name="failure">Errore</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

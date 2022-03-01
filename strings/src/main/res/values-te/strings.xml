@@ -475,7 +475,6 @@
   <string name="form_update_succeeded">ఫారం నవీకరణ విజయవంతమైంది</string>
   <string name="load_remote_form_error">ఫారం జాబితా విఫలమైంది</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
-  <string name="failure">వైఫల్యం</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

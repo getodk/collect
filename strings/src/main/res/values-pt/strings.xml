@@ -497,7 +497,6 @@ Escolher Imagem</string>
   <string name="form_update_succeeded">Sucesso na atualização do formulário</string>
   <string name="load_remote_form_error">Falha ao baixar a lista de formulários</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
-  <string name="failure">Falha</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

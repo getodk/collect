@@ -7,9 +7,7 @@ class FormUpdateDownloader {
     fun downloadUpdates(
         updatedForms: List<ServerFormDetails>,
         changeLock: ChangeLock,
-        formDownloader: FormDownloader,
-        successMessage: String,
-        failureMessage: String
+        formDownloader: FormDownloader
     ): Map<ServerFormDetails, FormDownloadException?> {
         val results = mutableMapOf<ServerFormDetails, FormDownloadException?>()
 

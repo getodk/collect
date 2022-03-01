@@ -2,7 +2,6 @@ package org.odk.collect.android.formmanagement
 
 import android.content.Context
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
@@ -17,7 +16,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.strings.localization.getLocalizedString
 import java.io.File
 import java.util.stream.Collectors
 
@@ -56,9 +54,7 @@ class FormsUpdater(
                     val results = formUpdateDownloader.downloadUpdates(
                         updatedForms,
                         sandbox.formsLock,
-                        formDownloader,
-                        context.getLocalizedString(R.string.success),
-                        context.getLocalizedString(R.string.failure)
+                        formDownloader
                     )
 
                     notifier.onUpdatesDownloaded(results, projectId)

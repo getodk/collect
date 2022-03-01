@@ -513,7 +513,6 @@
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="show_details">Yksityiskohdat</string>
   <string name="form_details">ID: %1$s Versio: %2$s</string>
-  <string name="failure">Epäonnistui</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

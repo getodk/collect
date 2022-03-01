@@ -519,7 +519,6 @@
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <string name="show_details">Zobrazit detaily</string>
   <string name="form_details">ID: %1$s Verze: %2$s</string>
-  <string name="failure">Selhání</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
