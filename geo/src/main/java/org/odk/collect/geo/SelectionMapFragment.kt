@@ -166,8 +166,8 @@ class SelectionMapFragment : Fragment() {
             update(it)
         }
 
-        if (selectionMapViewModel.getSelectedItemId() != -1) {
-            onFeatureClicked(selectionMapViewModel.getSelectedItemId())
+        selectionMapViewModel.getSelectedItemId()?.let {
+            onFeatureClicked(it)
         }
     }
 
@@ -200,7 +200,7 @@ class SelectionMapFragment : Fragment() {
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != -1) {
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != null) {
                     map.setMarkerIcon(
                         selectedSubmissionId,
                         itemsByFeatureId[selectedSubmissionId]!!.smallIcon
@@ -281,7 +281,7 @@ class SelectionMapFragment : Fragment() {
 
     private fun removeEnlargedMarkerIfExist(newSubmissionId: Int) {
         val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
-        if (selectedSubmissionId != -1 && selectedSubmissionId != newSubmissionId) {
+        if (selectedSubmissionId != null && selectedSubmissionId != newSubmissionId) {
             map.setMarkerIcon(
                 selectedSubmissionId,
                 itemsByFeatureId[selectedSubmissionId]!!.smallIcon
@@ -326,17 +326,17 @@ class SelectionMapViewModel : ViewModel() {
     private var mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
-    private var selectedItemId = -1
+    private var selectedItemId: Int? = null
 
     fun getMapTitle(): LiveData<String> {
         return mapTitle
     }
 
-    fun getSelectedItemId(): Int {
+    fun getSelectedItemId(): Int? {
         return selectedItemId
     }
 
-    fun setSelectedItemId(itemId: Int) {
+    fun setSelectedItemId(itemId: Int?) {
         selectedItemId = itemId
     }
 
