@@ -70,7 +70,7 @@ public class InstanceServerUploader extends InstanceUploader {
      * Returns a custom success message if one is provided by the server.
      */
     @Override
-    public String uploadOneSubmission(Instance instance, String urlString) throws UploadException {
+    public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
         Uri submissionUri = Uri.parse(urlString);
 
         long contentLength = 10000000L;
@@ -85,7 +85,7 @@ public class InstanceServerUploader extends InstanceUploader {
         } else {
             if (submissionUri.getHost() == null) {
                 submissionComplete(instance, false);
-                throw new UploadException(FAIL + "Host name may not be null");
+                throw new FormUploadException(FAIL + "Host name may not be null");
             }
 
             URI uri;
@@ -94,7 +94,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 submissionComplete(instance, false);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.url_error));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.url_error));
             }
 
             HttpHeadResult headResult;
@@ -114,13 +114,13 @@ public class InstanceServerUploader extends InstanceUploader {
 
             } catch (Exception e) {
                 submissionComplete(instance, false);
-                throw new UploadException(FAIL
+                throw new FormUploadException(FAIL
                         + (e.getMessage() != null ? e.getMessage() : e.toString()));
             }
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 submissionComplete(instance, false);
-                throw new UploadAuthRequestedException(getLocalizedString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
+                throw new FormUploadAuthRequestedException(getLocalizedString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received
@@ -141,20 +141,20 @@ public class InstanceServerUploader extends InstanceUploader {
                             // Don't follow a redirection attempt to a different host.
                             // We can't tell if this is a spoof or not.
                             submissionComplete(instance, false);
-                            throw new UploadException(FAIL
+                            throw new FormUploadException(FAIL
                                     + "Unexpected redirection attempt to a different host: "
                                     + newURI.toString());
                         }
                     } catch (Exception e) {
                         submissionComplete(instance, false);
-                        throw new UploadException(FAIL + urlString + " " + e.toString());
+                        throw new FormUploadException(FAIL + urlString + " " + e.toString());
                     }
                 }
             } else {
                 if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
                     submissionComplete(instance, false);
-                    throw new UploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
+                    throw new FormUploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
                             "submission endpoint? If you have a web proxy you may need to log in to " +
                             "your network.\n\nHEAD request result status code: " + headResult.getStatusCode());
                 }
@@ -176,14 +176,14 @@ public class InstanceServerUploader extends InstanceUploader {
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
             submissionComplete(instance, false);
-            throw new UploadException(FAIL + "instance XML file does not exist!");
+            throw new FormUploadException(FAIL + "instance XML file does not exist!");
         }
 
         List<File> files = getFilesInParentDirectory(instanceFile, submissionFile);
 
         // TODO: when can this happen? It used to cause the whole submission attempt to fail. Should it?
         if (files == null) {
-            throw new UploadException("Error reading files to upload");
+            throw new FormUploadException("Error reading files to upload");
         }
 
         HttpPostResult postResult;
@@ -199,20 +199,20 @@ public class InstanceServerUploader extends InstanceUploader {
             messageParser.setMessageResponse(postResult.getHttpResponse());
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
-                UploadException exception;
+                FormUploadException exception;
                 if (responseCode == HttpsURLConnection.HTTP_OK) {
-                    exception = new UploadException(FAIL + "Network login failure? Again?");
+                    exception = new FormUploadException(FAIL + "Network login failure? Again?");
                 } else if (responseCode == HttpsURLConnection.HTTP_UNAUTHORIZED) {
-                    exception = new UploadException(FAIL + postResult.getReasonPhrase()
+                    exception = new FormUploadException(FAIL + postResult.getReasonPhrase()
                             + " (" + responseCode + ") at " + urlString);
                 } else {
                     if (messageParser.isValid()) {
-                        exception = new UploadException(FAIL + messageParser.getMessageResponse());
+                        exception = new FormUploadException(FAIL + messageParser.getMessageResponse());
                     } else if (responseCode == HttpsURLConnection.HTTP_BAD_REQUEST) {
                         Timber.w(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
-                        exception = new UploadException("Failed to upload. Please make sure the form is configured to accept submissions on the server");
+                        exception = new FormUploadException("Failed to upload. Please make sure the form is configured to accept submissions on the server");
                     } else {
-                        exception = new UploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
+                        exception = new FormUploadException(FAIL + postResult.getReasonPhrase() + " (" + responseCode + ") at " + urlString);
                     }
 
                 }
@@ -222,7 +222,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
         } catch (Exception e) {
             submissionComplete(instance, false);
-            throw new UploadException(FAIL + "Generic Exception: "
+            throw new FormUploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
 

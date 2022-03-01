@@ -8,9 +8,9 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader
 import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.upload.InstanceServerUploader
 import org.odk.collect.android.upload.InstanceUploader
-import org.odk.collect.android.upload.UploadException
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceUploaderUtils
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -90,7 +90,7 @@ class InstanceSubmitter(
                 val action = if (isGoogleSheetsProtocol()) "HTTP-Sheets auto" else "HTTP auto"
                 val label = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
                 analytics.logEvent(AnalyticsEvents.SUBMISSION, action, label)
-            } catch (e: UploadException) {
+            } catch (e: FormUploadException) {
                 Timber.d(e)
                 anyFailure = true
                 resultMessagesByInstanceId[instance.dbId.toString()] = e.message

@@ -45,7 +45,7 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.upload.InstanceUploader;
-import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.upload.FormUploadException;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.UrlUtils;
@@ -87,10 +87,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     @Override
-    public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws UploadException {
+    public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws FormUploadException {
         File instanceFile = new File(instance.getInstanceFilePath());
         if (!instanceFile.exists()) {
-            throw new UploadException(FAIL + "instance XML file does not exist!");
+            throw new FormUploadException(FAIL + "instance XML file does not exist!");
         }
 
         // Get corresponding blank form and verify there is exactly 1
@@ -98,13 +98,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         try {
             if (forms.size() != 1) {
-                throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
             }
 
             Form form = forms.get(0);
             if (form.getBASE64RSAPublicKey() != null) {
                 submissionComplete(instance, false);
-                throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
             }
 
             String formFilePath = PathUtils.getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
@@ -120,12 +120,12 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 key = PropertyUtils.genUUID();
             }
             insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
-        } catch (UploadException e) {
+        } catch (FormUploadException e) {
             submissionComplete(instance, false);
             throw e;
         } catch (GoogleJsonResponseException e) {
             submissionComplete(instance, false);
-            throw new UploadException(getErrorMessageFromGoogleJsonResponseException(e));
+            throw new FormUploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
 
         submissionComplete(instance, true);
@@ -160,7 +160,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private void insertRows(Instance instance, TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
-            throws UploadException {
+            throws FormUploadException {
         insertRow(instance, element, parentKey, key, instanceFile, StringUtils.ellipsizeBeginning(sheetTitle));
 
         int repeatIndex = 0;
@@ -182,7 +182,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private void insertRow(Instance instance, TreeElement element, String parentKey, String key, File instanceFile, String sheetTitle)
-            throws UploadException {
+            throws FormUploadException {
         try {
             List<List<Object>> sheetCells = getSheetCells(sheetTitle);
             boolean newSheet = sheetCells == null || sheetCells.isEmpty();
@@ -217,9 +217,9 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                         new ValueRange().setValues(Collections.singletonList(prepareListOfValues(sheetCells.get(0), columnTitles, answers))));
             }
         } catch (GoogleJsonResponseException e) {
-            throw new UploadException(getErrorMessageFromGoogleJsonResponseException(e));
+            throw new FormUploadException(getErrorMessageFromGoogleJsonResponseException(e));
         } catch (IOException e) {
-            throw new UploadException(e);
+            throw new FormUploadException(e);
         }
     }
 
@@ -254,13 +254,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private String uploadMediaFile(Instance instance, String fileName) throws UploadException {
+    private String uploadMediaFile(Instance instance, String fileName) throws FormUploadException {
         File instanceFile = new File(instance.getInstanceFilePath());
         String filePath = instanceFile.getParentFile() + "/" + fileName;
         File toUpload = new File(filePath);
 
         if (!new File(filePath).exists()) {
-            throw new UploadException(Collect.getInstance()
+            throw new FormUploadException(Collect.getInstance()
                     .getString(R.string.media_upload_error, filePath));
         }
 
@@ -269,7 +269,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             folderId = driveHelper.createOrGetIDOfSubmissionsFolder();
         } catch (IOException | MultipleFoldersFoundException e) {
             Timber.e(e);
-            throw new UploadException(e);
+            throw new FormUploadException(e);
         }
 
         String uploadedFileId;
@@ -279,17 +279,17 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             uploadedFileId = driveHelper.uploadFileToDrive(filePath, folderId, toUpload);
         } catch (IOException e) {
             Timber.e(e, "Exception thrown while uploading the file to drive");
-            throw new UploadException(e);
+            throw new FormUploadException(e);
         }
 
         // checking if file was successfully uploaded
         if (uploadedFileId == null) {
-            throw new UploadException("Unable to upload the media files. Try again");
+            throw new FormUploadException("Unable to upload the media files. Try again");
         }
         return UPLOADED_MEDIA_URL + uploadedFileId;
     }
 
-    private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws UploadException {
+    private TreeElement getInstanceElement(String formFilePath, File instanceFile) throws FormUploadException {
         FormDef formDef;
 
         File formXml = new File(formFilePath);
@@ -299,7 +299,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             formDef = XFormUtils.getFormFromFormXml(formFilePath, lastSavedSrc);
             FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
         } catch (IOException | RuntimeException e) {
-            throw new UploadException(e);
+            throw new FormUploadException(e);
         }
         return formDef.getMainInstance().getRoot();
     }
@@ -313,7 +313,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void createSheetsIfNeeded(TreeElement element) throws UploadException {
+    private void createSheetsIfNeeded(TreeElement element) throws FormUploadException {
         Set<String> sheetTitles = getSheetTitles(element);
 
         try {
@@ -324,7 +324,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             spreadsheet = sheetsHelper.getSpreadsheet(spreadsheet.getSpreadsheetId());
         } catch (IOException e) {
-            throw new UploadException(e);
+            throw new FormUploadException(e);
         }
     }
 
@@ -340,7 +340,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     }
 
     private HashMap<String, String> getAnswers(Instance instance, TreeElement element, List<Object> columnTitles, File instanceFile, String parentKey, String key)
-            throws UploadException {
+            throws FormUploadException {
         HashMap<String, String> answers = new HashMap<>();
         for (TreeElement childElement : getChildElements(element, false)) {
             String elementTitle = getElementTitle(childElement);
@@ -459,10 +459,10 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void disallowMissingColumns(List<Object> columnHeaders, List<Object> columnTitles) throws UploadException {
+    private void disallowMissingColumns(List<Object> columnHeaders, List<Object> columnTitles) throws FormUploadException {
         for (Object columnTitle : columnTitles) {
             if (!columnHeaders.contains(columnTitle)) {
-                throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_missing_columns, columnTitle));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_missing_columns, columnTitle));
             }
         }
     }
@@ -555,7 +555,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         return false;
     }
 
-    private void setUpSpreadsheet(String urlString) throws UploadException, GoogleJsonResponseException {
+    private void setUpSpreadsheet(String urlString) throws FormUploadException, GoogleJsonResponseException {
         if (spreadsheet == null || spreadsheet.getSpreadsheetUrl() == null || !urlString.equals(spreadsheet.getSpreadsheetUrl())) {
             try {
                 spreadsheet = sheetsHelper.getSpreadsheet(UrlUtils.getSpreadsheetID(urlString));
@@ -565,14 +565,14 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 throw e;
             } catch (IOException | BadUrlException e) {
                 Timber.i(e);
-                throw new UploadException(e);
+                throw new FormUploadException(e);
             }
         }
     }
 
-    private void ensureNumberOfColumnsIsValid(int numberOfColumns) throws UploadException {
+    private void ensureNumberOfColumnsIsValid(int numberOfColumns) throws FormUploadException {
         if (numberOfColumns == 0) {
-            throw new UploadException(getLocalizedString(Collect.getInstance(), R.string.no_columns_to_upload));
+            throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.no_columns_to_upload));
         }
     }
 

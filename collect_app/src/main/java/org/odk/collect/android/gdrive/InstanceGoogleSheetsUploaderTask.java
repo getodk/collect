@@ -24,7 +24,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
-import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.upload.FormUploadException;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.forms.Form;
@@ -84,7 +84,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                     } else {
                         outcome.messagesByInstanceId.put(instance.getDbId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     }
-                } catch (UploadException e) {
+                } catch (FormUploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDbId().toString(),
                             e.getMessage());

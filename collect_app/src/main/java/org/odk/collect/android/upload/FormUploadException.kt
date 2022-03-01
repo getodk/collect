@@ -20,11 +20,11 @@ import java.lang.Exception
  * Thrown to indicate that a problem with submitting the current finalized form has occurred.
  *
  * Throwing an UploadException makes the submission attempt move on to the next finalized form to
- * send except in the case of an [UploadAuthRequestedException] thrown when the submission
+ * send except in the case of an [FormUploadAuthRequestedException] thrown when the submission
  * attempt was triggered manually by the user. In that case, the finalized form that resulted in the
  * exception will be re-tried after the user provides credentials.
  */
-open class UploadException : Exception {
+open class FormUploadException : Exception {
     constructor(message: String) : super(message)
     constructor(cause: Throwable) : super(cause)
 
@@ -39,7 +39,7 @@ open class UploadException : Exception {
  * This may lead to a re-try attempt if the upload was triggered manually by the user (as opposed to
  * auto-send).
  */
-class UploadAuthRequestedException(
+class FormUploadAuthRequestedException(
     message: String,
     /**
      * The URI for the server that requested authentication. This URI may not match the server
@@ -48,4 +48,4 @@ class UploadAuthRequestedException(
      * See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
      */
     val authRequestingServer: Uri
-) : UploadException(message)
+) : FormUploadException(message)
