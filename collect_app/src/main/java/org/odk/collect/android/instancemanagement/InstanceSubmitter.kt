@@ -1,7 +1,6 @@
 package org.odk.collect.android.instancemanagement
 
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.gdrive.GoogleAccountsManager
@@ -17,17 +16,14 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
-import org.odk.collect.strings.localization.getLocalizedString
 import timber.log.Timber
 
 class InstanceSubmitter(
     private val analytics: Analytics,
     private val formsRepository: FormsRepository,
-    private val instancesRepository: InstancesRepository,
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
@@ -35,13 +31,12 @@ class InstanceSubmitter(
 ) {
 
     @Throws(SubmitException::class)
-    fun submitInstances(toUpload: List<Instance>): Pair<Boolean, String> {
+    fun submitInstances(toUpload: List<Instance>): HashMap<Instance, FormUploadException?> {
         if (toUpload.isEmpty()) {
             throw SubmitException(SubmitException.Type.NOTHING_TO_SUBMIT)
         }
-        val resultMessagesByInstanceId: MutableMap<String, String> = HashMap()
+        val result = HashMap<Instance, FormUploadException?>()
         val deviceId = PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
-        var anyFailure = false
 
         val uploader: InstanceUploader = if (isGoogleSheetsProtocol()) {
             setUpGoogleSheetsUploader()
@@ -60,17 +55,14 @@ class InstanceSubmitter(
                         generalSettings.getString(ProjectKeys.KEY_GOOGLE_SHEETS_URL)
                     )
                     if (!InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile(destinationUrl)) {
-                        anyFailure = true
-                        resultMessagesByInstanceId[instance.dbId.toString()] =
-                            InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE
+                        result[instance] = FormUploadException(InstanceUploaderUtils.SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE)
                         continue
                     }
                 } else {
                     destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, null, null)
                 }
-                val customMessage = uploader.uploadOneSubmission(instance, destinationUrl)
-                resultMessagesByInstanceId[instance.dbId.toString()] =
-                    customMessage ?: Collect.getInstance().getLocalizedString(R.string.success)
+                uploader.uploadOneSubmission(instance, destinationUrl)
+                result[instance] = null
 
                 // If the submission was successful, delete the instance if either the app-level
                 // delete preference is set or the form definition requests auto-deletion.
@@ -92,16 +84,10 @@ class InstanceSubmitter(
                 analytics.logEvent(AnalyticsEvents.SUBMISSION, action, label)
             } catch (e: FormUploadException) {
                 Timber.d(e)
-                anyFailure = true
-                resultMessagesByInstanceId[instance.dbId.toString()] = e.message
+                result[instance] = e
             }
         }
-        return Pair(
-            anyFailure,
-            InstanceUploaderUtils.getUploadResultMessage(
-                instancesRepository, Collect.getInstance(), resultMessagesByInstanceId
-            )
-        )
+        return result
     }
 
     @Throws(SubmitException::class)
