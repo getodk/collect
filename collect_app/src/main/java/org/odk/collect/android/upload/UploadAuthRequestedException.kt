@@ -11,31 +11,22 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+package org.odk.collect.android.upload
 
-package org.odk.collect.android.upload;
-
-import android.net.Uri;
+import android.net.Uri
 
 /**
  * Thrown to indicate that the server an upload attempt was made to is requesting authentication.
  * This may lead to a re-try attempt if the upload was triggered manually by the user (as opposed to
  * auto-send).
  */
-public class UploadAuthRequestedException extends UploadException {
+class UploadAuthRequestedException(
+    message: String,
     /**
      * The URI for the server that requested authentication. This URI may not match the server
      * specified in the app settings or the blank form because there could have been a redirect.
      *
-     * See also {@link org.odk.collect.android.tasks.InstanceUploaderTask.Outcome}
+     * See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
      */
-    private final Uri authRequestingServer;
-
-    public UploadAuthRequestedException(String message, Uri authRequestingServer) {
-        super(message);
-        this.authRequestingServer = authRequestingServer;
-    }
-
-    public Uri getAuthRequestingServer() {
-        return authRequestingServer;
-    }
-}
+    val authRequestingServer: Uri
+) : UploadException(message)
