@@ -38,10 +38,7 @@ class ResetDialogPreferenceFragmentCompat :
 
     private lateinit var onResetClickListener: (List<Int>) -> Unit
 
-    private lateinit var _context: Context
-
     override fun onAttach(context: Context) {
-        _context = context
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
     }
