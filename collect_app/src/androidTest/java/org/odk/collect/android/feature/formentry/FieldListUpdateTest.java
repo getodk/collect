@@ -42,7 +42,6 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
@@ -55,7 +54,6 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
@@ -67,7 +65,7 @@ import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
-import org.odk.collect.android.support.rules.ResetStateRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
 import org.odk.collect.settings.keys.ProjectKeys;
 
@@ -79,16 +77,19 @@ import java.util.Random;
 import java.util.UUID;
 
 public class FieldListUpdateTest {
+
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(FIELD_LIST_TEST_FORM, "fieldlist-updates", Collections.singletonList("fruits.csv"));
+    public FormActivityTestRule rule = new FormActivityTestRule(
+            FIELD_LIST_TEST_FORM,
+            "fieldlist-updates",
+            Collections.singletonList("fruits.csv")
+    );
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RecordedIntentsRule())
-            .around(new ResetStateRule())
-            .around(activityTestRule);
+            .around(rule);
 
     @Test
     public void relevanceChangeAtEnd_ShouldToggleLastWidgetVisibility() {
@@ -138,19 +139,20 @@ public class FieldListUpdateTest {
 
     @Test
     public void longPress_ShouldClearAndUpdate() {
-        jumpToGroupWithText("Single relevance in middle");
-        onView(withText("Source3")).perform(click());
+        rule.startInFormEntry()
+                .clickGoToArrow()
+                .clickGoUpIcon()
+                .clickOnGroup("Single relevance in middle")
+                .clickOnQuestion("Source3")
+                .answerQuestion(0, "")
+                .assertTextDoesNotExist("Target3")
+                .answerQuestion(0, "A")
+                .assertText("Target3")
 
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText(""));
-        onView(withText("Target3")).check(doesNotExist());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).perform(replaceText("A"));
-        onView(withText("Target3")).check(matches(isDisplayed()));
-
-        onView(withText("Source3")).perform(longClick());
-        onView(withText(R.string.clear_answer)).perform(click());
-        onView(withText(R.string.discard_answer)).perform(click());
-        onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("")));
-        onView(withText("Target3")).check(doesNotExist());
+                .longPressOnView("Source3")
+                .removeResponse()
+                .assertTextDoesNotExist("A")
+                .assertTextDoesNotExist("Target3");
     }
 
     @Test

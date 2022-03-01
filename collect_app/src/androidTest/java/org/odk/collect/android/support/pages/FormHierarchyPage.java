@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.pages;
 
+import androidx.annotation.NonNull;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import org.odk.collect.android.R;
@@ -18,6 +19,7 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
         this.formName = formName;
     }
 
+    @NonNull
     @Override
     public FormHierarchyPage assertOnPage() {
         assertToolbarTitle(formName);
