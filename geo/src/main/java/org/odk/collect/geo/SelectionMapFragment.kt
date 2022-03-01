@@ -41,7 +41,6 @@ class SelectionMapFragment : Fragment() {
 
     private val selectionMapViewModel: SelectionMapViewModel by activityViewModels()
 
-    private lateinit var binding: SelectionMapLayoutBinding
     private lateinit var map: MapFragment
     private var viewportInitialized = false
 
@@ -81,11 +80,12 @@ class SelectionMapFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = SelectionMapLayoutBinding.inflate(inflater)
-        return binding.root
+        return SelectionMapLayoutBinding.inflate(inflater).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = SelectionMapLayoutBinding.bind(view)
+
         selectionMapViewModel.getMapTitle().observe(viewLifecycleOwner) {
             binding.title.text = it
         }
@@ -100,7 +100,7 @@ class SelectionMapFragment : Fragment() {
                 childFragmentManager,
                 R.id.map_container,
                 ReadyListener { newMapFragment ->
-                    initMap(newMapFragment)
+                    initMap(newMapFragment, binding)
                 },
                 MapFragment.ErrorListener { requireActivity().finish() }
             )
@@ -108,7 +108,7 @@ class SelectionMapFragment : Fragment() {
             requireActivity().finish() // The configured map provider is not available
         }
 
-        setUpSummarySheet()
+        setUpSummarySheet(binding)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -130,7 +130,7 @@ class SelectionMapFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission") // Permission handled in Constructor
-    private fun initMap(newMapFragment: MapFragment) {
+    private fun initMap(newMapFragment: MapFragment, binding: SelectionMapLayoutBinding) {
         map = newMapFragment
 
         binding.zoomToLocation.setOnClickListener {
@@ -181,7 +181,7 @@ class SelectionMapFragment : Fragment() {
         }
     }
 
-    private fun setUpSummarySheet() {
+    private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
         summarySheet = binding.submissionSummary
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
