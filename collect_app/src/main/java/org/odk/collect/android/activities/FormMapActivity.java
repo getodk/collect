@@ -30,7 +30,6 @@ import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
@@ -165,7 +164,7 @@ public class FormMapActivity extends LocalizedActivity {
                 getDrawableIdForStatus(mappableFormInstance.getStatus(), true),
                 mappableFormInstance.getInstanceName(),
                 new IconifiedText(
-                        IconUtils.getSubmissionSummaryStatusIcon(mappableFormInstance.getStatus()),
+                        getSubmissionSummaryStatusIcon(mappableFormInstance.getStatus()),
                         instanceLastStatusChangeDate
                 ),
                 info,
@@ -185,6 +184,21 @@ public class FormMapActivity extends LocalizedActivity {
                 return enlarged ? R.drawable.ic_room_form_state_submission_failed_48dp : R.drawable.ic_room_form_state_submission_failed_24dp;
         }
         return R.drawable.ic_map_point;
+    }
+
+    public static int getSubmissionSummaryStatusIcon(String instanceStatus) {
+        switch (instanceStatus) {
+            case Instance.STATUS_INCOMPLETE:
+                return R.drawable.form_state_saved;
+            case Instance.STATUS_COMPLETE:
+                return R.drawable.form_state_finalized;
+            case Instance.STATUS_SUBMITTED:
+                return R.drawable.form_state_submited;
+            case Instance.STATUS_SUBMISSION_FAILED:
+                return R.drawable.form_state_submission_failed;
+        }
+
+        throw new IllegalArgumentException();
     }
 
     public void onFeatureClicked(int featureId) {
