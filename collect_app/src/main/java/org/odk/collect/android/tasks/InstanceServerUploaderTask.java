@@ -89,7 +89,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 // retried.
             } catch (UploadException e) {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        e.getDisplayMessage());
+                        e.getMessage());
             }
         }
         

@@ -87,7 +87,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                 } catch (UploadException e) {
                     Timber.d(e);
                     outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                            e.getDisplayMessage());
+                            e.getMessage());
                 }
             }
         }

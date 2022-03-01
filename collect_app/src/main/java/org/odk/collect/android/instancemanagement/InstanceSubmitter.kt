@@ -93,7 +93,7 @@ class InstanceSubmitter(
             } catch (e: UploadException) {
                 Timber.d(e)
                 anyFailure = true
-                resultMessagesByInstanceId[instance.dbId.toString()] = e.displayMessage
+                resultMessagesByInstanceId[instance.dbId.toString()] = e.message
             }
         }
         return Pair(
