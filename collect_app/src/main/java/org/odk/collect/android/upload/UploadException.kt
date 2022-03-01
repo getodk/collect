@@ -13,6 +13,7 @@
  */
 package org.odk.collect.android.upload
 
+import android.net.Uri
 import java.lang.Exception
 
 /**
@@ -32,3 +33,19 @@ open class UploadException : Exception {
             ?: cause?.message
             ?: ""
 }
+
+/**
+ * Thrown to indicate that the server an upload attempt was made to is requesting authentication.
+ * This may lead to a re-try attempt if the upload was triggered manually by the user (as opposed to
+ * auto-send).
+ */
+class UploadAuthRequestedException(
+    message: String,
+    /**
+     * The URI for the server that requested authentication. This URI may not match the server
+     * specified in the app settings or the blank form because there could have been a redirect.
+     *
+     * See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
+     */
+    val authRequestingServer: Uri
+) : UploadException(message)
