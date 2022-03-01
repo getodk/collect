@@ -240,16 +240,16 @@ class SelectionMapFragment : Fragment() {
     }
 
     fun onFeatureClicked(featureId: Int) {
-        summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+        summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
 
-            val item = itemsByFeatureId.get(featureId)
+            val item = itemsByFeatureId[featureId]
             if (item != null) {
                 map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
-                summarySheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+                summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
             selectionMapViewModel.setSelectedItemId(featureId)
@@ -257,8 +257,8 @@ class SelectionMapFragment : Fragment() {
     }
 
     private fun onClick() {
-        if (summarySheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+        if (summarySheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+            summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -269,7 +269,7 @@ class SelectionMapFragment : Fragment() {
 
         updateFeatures(items)
 
-        if (!viewportInitialized && !points.isEmpty()) {
+        if (!viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }
@@ -306,7 +306,7 @@ class SelectionMapFragment : Fragment() {
                 if (featureId == selectionMapViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
             )
 
-            itemsByFeatureId.put(featureId, item)
+            itemsByFeatureId[featureId] = item
             points.add(point)
         }
     }
@@ -316,8 +316,8 @@ class SelectionMapFragment : Fragment() {
         const val RESULT_SELECTED_ITEM = "selected_item"
         const val RESULT_CREATE_NEW_ITEM = "create_new_item"
 
-        private val MAP_CENTER_KEY = "map_center"
-        private val MAP_ZOOM_KEY = "map_zoom"
+        private const val MAP_CENTER_KEY = "map_center"
+        private const val MAP_ZOOM_KEY = "map_zoom"
     }
 }
 
@@ -382,7 +382,9 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : F
     private var itemId: Long? = null
 
     init {
-        binding.action.setOnClickListener(::onActionClick)
+        binding.action.setOnClickListener {
+            itemId?.let { listener?.selectionAction(it) }
+        }
     }
 
     fun setItem(item: MappableSelectItem) {
@@ -404,10 +406,6 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : F
             binding.action.visibility = View.VISIBLE
             binding.info.visibility = View.GONE
         }
-    }
-
-    private fun onActionClick(view: View) {
-        itemId?.let { listener?.selectionAction(it) }
     }
 
     interface Listener {
