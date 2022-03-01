@@ -197,15 +197,16 @@ class FillBlankFormActivity :
     private fun onMapButtonClick(id: Long) {
         permissionsProvider.requestLocationPermissions(
             this,
-            object :
-                PermissionListener {
+            object : PermissionListener {
                 override fun granted() {
-                    val intent =
-                        Intent(this@FillBlankFormActivity, FormMapActivity::class.java).also {
+                    startActivity(
+                        Intent(
+                            this@FillBlankFormActivity,
+                            FormMapActivity::class.java
+                        ).also {
                             it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
                         }
-
-                    startActivity(intent)
+                    )
                 }
 
                 override fun denied() {}
