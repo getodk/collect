@@ -263,7 +263,7 @@ class SelectionMapFragment : Fragment() {
     }
 
     private fun update(items: List<MappableSelectItem>) {
-        if (map == null) {
+        if (!::map.isInitialized) {
             return
         }
 
