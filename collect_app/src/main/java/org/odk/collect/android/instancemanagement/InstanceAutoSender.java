@@ -3,7 +3,6 @@ package org.odk.collect.android.instancemanagement;
 import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeSent;
 
 import android.content.Context;
-import android.util.Pair;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
@@ -25,6 +24,8 @@ import org.odk.collect.shared.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.Pair;
 
 public class InstanceAutoSender {
 
@@ -65,7 +66,7 @@ public class InstanceAutoSender {
                 try {
                     List<Instance> toUpload = getInstancesToAutoSend(formsRepository, instancesRepository, generalSettings);
                     Pair<Boolean, String> results = instanceSubmitter.submitInstances(toUpload);
-                    notifier.onSubmission(results.first, results.second, projectId);
+                    notifier.onSubmission(results.getFirst(), results.getSecond(), projectId);
                 } catch (SubmitException e) {
                     switch (e.getType()) {
                         case GOOGLE_ACCOUNT_NOT_SET:
