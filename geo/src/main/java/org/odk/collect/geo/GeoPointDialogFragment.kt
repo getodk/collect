@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.androidshared.ui.OnBackPressedKeyListener
 import org.odk.collect.geo.GeoUtils.formatAccuracy
 import org.odk.collect.geo.databinding.GeopointDialogBinding
 import javax.inject.Inject
@@ -63,6 +64,7 @@ class GeoPointDialogFragment : DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
+            .setOnKeyListener(OnBackPressedKeyListener { listener?.onCancel() })
             .create()
 
         dialog.setOnShowListener {

@@ -3,6 +3,7 @@ package org.odk.collect.geo
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -156,6 +157,19 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
+    fun `pressing back calls listener`() {
+        val scenario = launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+
+        val listener = mock<GeoPointDialogFragment.Listener>()
+        scenario.onFragment {
+            it.listener = listener
+        }
+
+        Espresso.pressBack()
+        verify(listener).onCancel()
+    }
+
+    @Test
     fun `clicking save calls forceLocation() on view model`() {
         launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
@@ -165,7 +179,7 @@ class GeoPointDialogFragmentTest {
     }
 
     @Test
-    fun `dialog is cancellable`() {
+    fun `dialog is not cancellable`() {
         launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java).onFragment {
             assertThat(it.isCancelable, equalTo(false))
         }
