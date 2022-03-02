@@ -77,7 +77,8 @@ class FormsUpdater(
      * Downloads new forms, updates existing forms and deletes forms that are no longer part of
      * the project's form list.
      */
-    fun matchFormsWithServer(projectId: String): Boolean {
+    @JvmOverloads
+    fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
         val sandbox = getProjectSandbox(projectId)
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
@@ -98,15 +99,20 @@ class FormsUpdater(
                 val exception = try {
                     serverFormsSynchronizer.synchronize()
                     syncStatusAppState.finishSync(projectId, null)
-                    notifier.onSync(null, projectId)
+                    if (notify) {
+                        notifier.onSync(null, projectId)
+                        AnalyticsUtils.logMatchExactlyCompleted(analytics, null)
+                    }
                     null
                 } catch (e: FormSourceException) {
                     syncStatusAppState.finishSync(projectId, e)
-                    notifier.onSync(e, projectId)
+                    if (notify) {
+                        notifier.onSync(e, projectId)
+                        AnalyticsUtils.logMatchExactlyCompleted(analytics, e)
+                    }
                     e
                 }
 
-                AnalyticsUtils.logMatchExactlyCompleted(analytics, exception)
                 exception == null
             } else {
                 false

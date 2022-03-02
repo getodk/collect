@@ -42,13 +42,18 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
         val workManagerInputData = Data.Builder().putAll(inputData).build()
 
         val worker = spec.getWorkManagerAdapter()
-        val workRequest = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
+        val builder = PeriodicWorkRequest.Builder(worker, repeatPeriod, TimeUnit.MILLISECONDS)
             .addTag(tag)
             .setInputData(workManagerInputData)
             .setConstraints(constraints)
-            .build()
 
-        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, workRequest)
+        spec.backoffPolicy?.let { backoffPolicy ->
+            spec.backoffDelay?.let { backoffDelay ->
+                builder.setBackoffCriteria(backoffPolicy, backoffDelay, TimeUnit.MILLISECONDS)
+            }
+        }
+
+        workManager.enqueueUniquePeriodicWork(tag, ExistingPeriodicWorkPolicy.REPLACE, builder.build())
     }
 
     override fun cancelDeferred(tag: String) {

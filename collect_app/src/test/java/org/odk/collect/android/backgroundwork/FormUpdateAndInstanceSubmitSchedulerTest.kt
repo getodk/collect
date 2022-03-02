@@ -44,7 +44,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq("serverPollingJob:myProject"),
             any<AutoUpdateTaskSpec>(),
             eq(3600000),
-            eq(mapOf(AutoUpdateTaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 
@@ -82,7 +82,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
             eq("match_exactly:myProject"),
             any<SyncFormsTaskSpec>(),
             eq(3600000),
-            eq(mapOf(SyncFormsTaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 
@@ -94,7 +94,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         verify(scheduler).networkDeferred(
             eq("AutoSendWorker:myProject"),
             any<AutoSendTaskSpec>(),
-            eq(mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to "myProject"))
+            eq(mapOf(TaskData.DATA_PROJECT_ID to "myProject"))
         )
     }
 

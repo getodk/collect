@@ -3,6 +3,9 @@ package org.odk.collect.android.backgroundwork
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -60,8 +63,13 @@ class AutoSendTaskSpecTest {
 
     @Test
     fun `passes project id`() {
-        val inputData = mapOf(AutoSendTaskSpec.DATA_PROJECT_ID to projectId)
-        AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData).get()
+        val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
+        AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
         verify(instanceAutoSender).autoSendInstances(projectId)
+    }
+
+    @Test
+    fun `maxRetries should not be limited`() {
+        assertThat(AutoSendTaskSpec().maxRetries, `is`(nullValue()))
     }
 }

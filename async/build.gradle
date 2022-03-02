@@ -47,4 +47,8 @@ dependencies {
     implementation Dependencies.androidx_work_runtime
 
     testImplementation Dependencies.hamcrest
+    testImplementation Dependencies.robolectric
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.androidx_work_testing
+    testImplementation Dependencies.mockito_kotlin
 }

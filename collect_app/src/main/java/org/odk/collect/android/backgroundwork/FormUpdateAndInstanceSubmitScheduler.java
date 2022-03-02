@@ -59,13 +59,13 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
 
     private void scheduleAutoUpdate(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(AutoUpdateTaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getAutoUpdateTag(projectId), new AutoUpdateTaskSpec(), periodInMilliseconds, inputData);
     }
 
     private void scheduleMatchExactly(long periodInMilliseconds, String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(SyncFormsTaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getMatchExactlyTag(projectId), new SyncFormsTaskSpec(), periodInMilliseconds, inputData);
     }
 
@@ -78,7 +78,7 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @Override
     public void scheduleSubmit(String projectId) {
         HashMap<String, String> inputData = new HashMap<>();
-        inputData.put(AutoSendTaskSpec.DATA_PROJECT_ID, projectId);
+        inputData.put(TaskData.DATA_PROJECT_ID, projectId);
         scheduler.networkDeferred(getAutoSendTag(projectId), new AutoSendTaskSpec(), inputData);
     }
 
