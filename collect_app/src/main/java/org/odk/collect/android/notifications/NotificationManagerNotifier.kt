@@ -12,7 +12,9 @@ import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotifi
 import org.odk.collect.android.notifications.builders.FormUpdatesDownloadedNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSubmissionNotificationBuilder
 import org.odk.collect.android.notifications.builders.FormsSyncFailedNotificationBuilder
+import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
@@ -68,13 +70,12 @@ class NotificationManagerNotifier(
         }
     }
 
-    override fun onSubmission(failure: Boolean, message: String, projectId: String) {
+    override fun onSubmission(result: Map<Instance, FormUploadException?>, projectId: String) {
         notificationManager.notify(
             AUTO_SEND_RESULT_NOTIFICATION_ID,
             FormsSubmissionNotificationBuilder.build(
                 application,
-                failure,
-                message,
+                result,
                 getProjectName(projectId)
             )
         )
