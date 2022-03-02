@@ -82,21 +82,16 @@ class InstanceAutoSender(
         generalSettings: Settings
     ): List<Instance> {
         val isAutoSendAppSettingEnabled = generalSettings.getString(ProjectKeys.KEY_AUTOSEND) != "off"
-        val toUpload: MutableList<Instance> = ArrayList()
-        for (instance in instancesRepository.getAllByStatus(
+        return instancesRepository.getAllByStatus(
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
-        )) {
-            if (InstanceUploaderUtils.shouldFormBeSent(
-                    formsRepository,
-                    instance.formId,
-                    instance.formVersion,
-                    isAutoSendAppSettingEnabled
-                )
-            ) {
-                toUpload.add(instance)
-            }
+        ).filter {
+            InstanceUploaderUtils.shouldFormBeSent(
+                formsRepository,
+                it.formId,
+                it.formVersion,
+                isAutoSendAppSettingEnabled
+            )
         }
-        return toUpload
     }
 }
