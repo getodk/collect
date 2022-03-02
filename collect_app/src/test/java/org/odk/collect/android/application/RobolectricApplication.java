@@ -8,7 +8,7 @@ import androidx.work.Configuration;
 import androidx.work.WorkManager;
 
 import org.odk.collect.android.database.DatabaseConnection;
-import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowEnvironment;
 

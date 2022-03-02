@@ -50,9 +50,9 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.util.List;

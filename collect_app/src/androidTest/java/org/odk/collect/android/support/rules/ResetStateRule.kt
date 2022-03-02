@@ -12,10 +12,10 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.MultiClickGuard
 import org.odk.collect.android.views.DecoratedBarcodeView
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ToastUtils.recordToasts
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import java.io.File
 import java.io.IOException
 

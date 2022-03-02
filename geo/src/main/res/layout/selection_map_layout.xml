@@ -9,7 +9,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/form_title"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -31,10 +31,10 @@
             android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/form_title"
+            android:layout_below="@id/title"
             android:layout_above="@id/geometry_status" />
 
-        <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
+        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
             android:id="@+id/new_instance"
             style="@style/Widget.Geo.MapButton"
             android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/form_title"
+            android:layout_below="@+id/title"
             android:layout_marginBottom="100dp">
 
             <LinearLayout
@@ -57,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_location"
                     style="@style/Widget.Geo.MapButton"
                     android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                     app:srcCompat="@drawable/ic_my_location"
                     android:padding="15dp" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeImageButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_bounds"
                     style="@style/Widget.Geo.MapButton"
                     android:layout_width="wrap_content"
@@ -90,8 +90,11 @@
         </ScrollView>
     </RelativeLayout>
 
-    <include
+    <org.odk.collect.geo.SelectionSummarySheet
         android:id="@+id/submission_summary"
-        layout="@layout/submission_summary_layout" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

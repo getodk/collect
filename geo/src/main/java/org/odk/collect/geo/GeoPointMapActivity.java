@@ -141,7 +141,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         Context context = getApplicationContext();
         mapFragmentFactory.createMapFragment(context)
-            .addTo(this, R.id.map_container, this::initMap, this::finish);
+            .addTo(this.getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {

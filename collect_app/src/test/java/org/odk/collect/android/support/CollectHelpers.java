@@ -1,6 +1,7 @@
 package org.odk.collect.android.support;
 
 import android.app.Application;
+import android.content.Intent;
 
 import androidx.core.util.Pair;
 import androidx.fragment.app.FragmentActivity;
@@ -77,6 +78,13 @@ public final class CollectHelpers {
 
     public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz);
+        activity.get().setTheme(R.style.Theme_MaterialComponents);
+
+        return activity;
+    }
+
+    public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz, Intent intent) {
+        ActivityController<T> activity = Robolectric.buildActivity(clazz, intent);
         activity.get().setTheme(R.style.Theme_MaterialComponents);
 
         return activity;

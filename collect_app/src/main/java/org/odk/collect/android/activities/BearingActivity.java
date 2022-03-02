@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -25,6 +24,7 @@ import android.os.Bundle;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.externalapp.ExternalAppUtils;
 
 import java.util.Locale;
 
@@ -110,12 +110,10 @@ public class BearingActivity extends CollectAbstractActivity implements SensorEv
 
     private void returnBearing() {
         if (bearingDecimal != null) {
-            Intent i = new Intent();
-            i.putExtra(
-                    FormEntryActivity.ANSWER_KEY, bearingDecimal);
-            setResult(RESULT_OK, i);
+            ExternalAppUtils.returnSingleValue(this, bearingDecimal);
+        } else {
+            finish();
         }
-        finish();
     }
 
     @Override

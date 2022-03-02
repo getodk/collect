@@ -15,6 +15,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * This is only being used to perform logic for another ViewModel
+ * ({@link org.odk.collect.geo.SelectionMapViewModel}) so there is no reason for the code here
+ * to require a {@link ViewModel} implementation.
+ */
+@Deprecated
 public class FormMapViewModel extends ViewModel {
     /**
      * The form that is mapped.
@@ -25,7 +31,6 @@ public class FormMapViewModel extends ViewModel {
      * The count of all filled instances of this form, including unmappable ones.
      */
     private int totalInstanceCount;
-    private int selectedSubmissionId = -1;
 
     /**
      * The filled instances of this form that can be mapped.
@@ -37,14 +42,6 @@ public class FormMapViewModel extends ViewModel {
     public FormMapViewModel(Form form, InstancesRepository instancesRepository) {
         this.instancesRepository = instancesRepository;
         this.form = form;
-    }
-
-    public String getFormTitle() {
-        return form.getDisplayName();
-    }
-
-    public long getFormId() {
-        return form.getDbId();
     }
 
     /**
@@ -61,14 +58,6 @@ public class FormMapViewModel extends ViewModel {
         // Ideally we could observe database changes instead of re-computing this every time.
         totalInstanceCount = instances.size();
         mappableFormInstances = getMappableFormInstances(instances);
-    }
-
-    public int getSelectedSubmissionId() {
-        return selectedSubmissionId;
-    }
-
-    public void setSelectedSubmissionId(int selectedSubmissionId) {
-        this.selectedSubmissionId = selectedSubmissionId;
     }
 
     /**

@@ -153,7 +153,6 @@ import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -171,9 +170,11 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
@@ -219,12 +220,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private static final boolean EVALUATE_CONSTRAINTS = true;
     public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
-
-    /**
-     * Should use {@link org.odk.collect.android.externaldata.ExternalAppsUtils} instead
-     */
-    @Deprecated
-    public static final String ANSWER_KEY = "value"; // this value can not be changed because it is also used by external apps
 
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
@@ -874,7 +869,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_STRING_CAPTURE:
             case RequestCodes.EX_INT_CAPTURE:
             case RequestCodes.EX_DECIMAL_CAPTURE:
-                setWidgetData(intent.getExtras().get(ANSWER_KEY));
+                setWidgetData(ExternalAppUtils.getReturnedSingleValue(intent));
                 break;
         }
     }

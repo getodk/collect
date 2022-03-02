@@ -11,6 +11,7 @@ import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.permissions.PermissionsProvider
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -36,10 +37,12 @@ interface GeoDependencyComponent {
     fun inject(geoPolyActivity: GeoPolyActivity)
     fun inject(geoPointDialogFragment: GeoPointDialogFragment)
     fun inject(geoPointActivity: GeoPointActivity)
+    fun inject(selectionMapFragment: SelectionMapFragment)
 
     val scheduler: Scheduler
     val locationTracker: LocationTracker
     val satelliteInfoClient: SatelliteInfoClient
+    val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 }
 
 @Module
@@ -72,6 +75,11 @@ open class GeoDependencyModule {
 
     @Provides
     open fun providesSatelliteInfoClient(): SatelliteInfoClient {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesPermissionProvider(): PermissionsProvider {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 

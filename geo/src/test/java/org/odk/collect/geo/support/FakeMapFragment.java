@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
@@ -25,7 +25,7 @@ public class FakeMapFragment implements MapFragment {
     }
 
     @Override
-    public void addTo(@NonNull FragmentActivity activity, int containerId, @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+    public void addTo(FragmentManager fragmentManager, int containerId, @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         readyListener.onReady(this);
     }
 

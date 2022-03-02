@@ -56,6 +56,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.satellites.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -282,7 +283,7 @@ public class Collect extends Application implements
                         @Provides
                         @Override
                         public MapFragmentFactory providesMapFragmentFactory() {
-                            return applicationComponent.mapProvider();
+                            return applicationComponent.mapFragmentFactory();
                         }
 
                         @NonNull
@@ -308,6 +309,12 @@ public class Collect extends Application implements
                         public SatelliteInfoClient providesSatelliteInfoClient() {
                             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
                             return new GpsStatusSatelliteInfoClient(locationManager);
+                        }
+
+                        @NonNull
+                        @Override
+                        public PermissionsProvider providesPermissionProvider() {
+                            return applicationComponent.permissionsProvider();
                         }
                     })
                     .build();

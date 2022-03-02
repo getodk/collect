@@ -25,7 +25,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -110,13 +110,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(
-        @NonNull FragmentActivity activity, int containerId,
-        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+            FragmentManager fragmentManager, int containerId,
+            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
         // GoogleMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
-        activity.getSupportFragmentManager()
+        fragmentManager
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync((GoogleMap map) -> {
             if (map == null) {

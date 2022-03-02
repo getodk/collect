@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.mapbox.android.core.location.LocationEngine;
@@ -132,8 +132,8 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @VisibleForTesting public static boolean testMode;
 
     @Override public void addTo(
-        @NonNull FragmentActivity activity, int containerId,
-        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+            FragmentManager fragmentManager, int containerId,
+            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         Context context = getContext();
         mapReadyListener = readyListener;
         if (MapboxUtils.initMapbox() == null) {
@@ -157,7 +157,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         // the FragmentManager will have also re-created a copy of the previous
         // MapboxMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
-        activity.getSupportFragmentManager()
+        fragmentManager
             .beginTransaction().replace(containerId, this).commitNow();
         getMapAsync(map -> {
             this.map = map;  // signature of getMapAsync() ensures map is never null

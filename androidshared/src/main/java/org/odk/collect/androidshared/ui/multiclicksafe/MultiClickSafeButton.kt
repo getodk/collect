@@ -1,11 +1,11 @@
-package org.odk.collect.android.views.multiclicksafe
+package org.odk.collect.androidshared.ui.multiclicksafe
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.appcompat.widget.AppCompatImageButton
-import org.odk.collect.android.utilities.MultiClickGuard.allowClick
+import com.google.android.material.button.MaterialButton
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 
-class MultiClickSafeImageButton : AppCompatImageButton {
+class MultiClickSafeButton : MaterialButton {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(

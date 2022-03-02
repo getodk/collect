@@ -52,8 +52,8 @@ import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 import java.util.ArrayList;
 import java.util.List;

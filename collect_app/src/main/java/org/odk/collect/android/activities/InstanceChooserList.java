@@ -39,7 +39,7 @@ import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiClickGuard;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.forms.instances.Instance;
 
 import javax.inject.Inject;

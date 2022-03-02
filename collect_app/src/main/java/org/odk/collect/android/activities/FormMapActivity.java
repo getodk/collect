@@ -14,69 +14,47 @@
 
 package org.odk.collect.android.activities;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.chip.Chip;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance;
 import org.odk.collect.android.external.InstanceProvider;
+import org.odk.collect.android.formmanagement.FormNavigator;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.IconUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-import org.odk.collect.geo.SelectionMapActivity;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapFragmentFactory;
-import org.odk.collect.geo.maps.MapPoint;
-import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.geo.MappableSelectItem;
+import org.odk.collect.geo.MappableSelectItem.IconifiedText;
+import org.odk.collect.geo.SelectionMapFragment;
+import org.odk.collect.geo.SelectionMapViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 /**
  * Show a map with points representing saved instances of the selected form.
  */
-public class FormMapActivity extends SelectionMapActivity {
-
-    public static final String MAP_CENTER_KEY = "map_center";
-    public static final String MAP_ZOOM_KEY = "map_zoom";
+public class FormMapActivity extends LocalizedActivity {
 
     public static final String EXTRA_FORM_ID = "form_id";
-
-    protected Bundle previousState;
-
-    private FormMapViewModel viewModel;
-
-    @Inject
-    MapFragmentFactory mapFragmentFactory;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -85,244 +63,113 @@ public class FormMapActivity extends SelectionMapActivity {
     InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
-
-    @Inject
     SettingsProvider settingsProvider;
 
-    private MapFragment map;
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
-    public BottomSheetBehavior summarySheet;
+    private FormMapViewModel formMapViewModel;
 
-    /**
-     * Quick lookup of instance objects from map feature IDs.
-     */
-    final Map<Integer, MappableFormInstance> instancesByFeatureId = new HashMap<>();
-
-    /**
-     * Points to be mapped. Note: kept separately from {@link #instancesByFeatureId} so we can
-     * quickly zoom to bounding box.
-     */
-    private final List<MapPoint> points = new ArrayList<>();
-
-    /**
-     * True if the map viewport has been initialized, false otherwise.
-     */
-    private boolean viewportInitialized;
-
-    @VisibleForTesting
-    public ViewModelProvider.Factory viewModelFactory;
+    private SelectionMapViewModel selectionMapViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
-
         DaggerUtils.getComponent(this).inject(this);
+        setContentView(R.layout.form_map_activity);
 
-        if (!permissionsProvider.areLocationPermissionsGranted()) {
-            ToastUtils.showLongToast(this, R.string.not_granted_permission);
-            finish();
-        }
+        Form form = loadForm();
 
-        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+        selectionMapViewModel = new ViewModelProvider(this).get(SelectionMapViewModel.class);
+        selectionMapViewModel.setMapTitle(form.getDisplayName());
 
-        if (viewModelFactory == null) { // tests set their factories directly
-            viewModelFactory = new FormMapActivity.FormMapViewModelFactory(form, instancesRepositoryProvider.get());
-        }
+        FormNavigator formNavigator = new FormNavigator(currentProjectProvider, settingsProvider, instancesRepositoryProvider::get);
 
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.instance_map_layout);
-        setUpSummarySheet();
-
-        TextView titleView = findViewById(R.id.form_title);
-        titleView.setText(viewModel.getFormTitle());
-
-        MapFragment mapToAdd = mapFragmentFactory.createMapFragment(getApplicationContext());
-
-        if (mapToAdd != null) {
-            mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
-        } else {
-            finish(); // The configured map provider is not available
-        }
-    }
-
-    private void setUpSummarySheet() {
-        summarySheet = BottomSheetBehavior.from(findViewById(R.id.submission_summary));
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        summarySheet.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && viewModel.getSelectedSubmissionId() != -1) {
-                    updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
-                    viewModel.setSelectedSubmissionId(-1);
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+        getSupportFragmentManager().setFragmentResultListener(SelectionMapFragment.REQUEST_SELECT_ITEM, this, (requestKey, result) -> {
+            if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
+                long instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM);
+                formNavigator.editInstance(this, instanceId);
+            } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
+                formNavigator.newInstance(this, form.getDbId());
             }
         });
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        if (map == null) {
-            // initMap() is called asynchronously, so map can be null if the activity
-            // is stopped (e.g. by screen rotation) before initMap() gets to run.
-            // In this case, preserve any provided instance state.
-            if (previousState != null) {
-                state.putAll(previousState);
-            }
-            return;
-        }
-        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
-        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
-    }
-
-    @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-        updateInstanceGeometry();
+
+        List<MappableSelectItem> items = getItems();
+        selectionMapViewModel.setItems(getTotalInstanceCount(), items);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        } else {
-            super.onBackPressed();
-        }
+    @Nullable
+    private Form loadForm() {
+        Form form = formsRepositoryProvider.get().get(getIntent().getLongExtra(EXTRA_FORM_ID, -1));
+        FormMapViewModelFactory viewModelFactory = new FormMapViewModelFactory(form, instancesRepositoryProvider.get());
+        formMapViewModel = new ViewModelProvider(this, viewModelFactory).get(FormMapViewModel.class);
+        return form;
     }
 
-    @SuppressLint("MissingPermission") // Permission handled in Constructor
-    public void initMap(MapFragment newMapFragment) {
-        map = newMapFragment;
-
-        findViewById(R.id.zoom_to_location).setOnClickListener(v ->
-                map.zoomToPoint(map.getGpsLocation(), true));
-
-        findViewById(R.id.zoom_to_bounds).setOnClickListener(v ->
-                map.zoomToBoundingBox(points, 0.8, false));
-
-        findViewById(R.id.layer_menu).setOnClickListener(v -> {
-            MapsPreferencesFragment.showReferenceLayerDialog(this);
-        });
-
-        findViewById(R.id.new_instance).setOnClickListener(v -> {
-            createNewItem();
-        });
-
-        map.setGpsLocationEnabled(true);
-        map.setGpsLocationListener(this::onLocationChanged);
-
-        if (previousState != null) {
-            restoreFromInstanceState(previousState);
-        }
-
-        map.setFeatureClickListener(this::onFeatureClicked);
-        map.setClickListener(this::onClick);
-        updateInstanceGeometry();
-
-        if (viewModel.getSelectedSubmissionId() != -1) {
-            onFeatureClicked(viewModel.getSelectedSubmissionId());
-        }
-    }
-
-    @SuppressWarnings("PMD.UnusedFormalParameter")
-    private void onClick(MapPoint mapPoint) {
-        if (summarySheet.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-    }
-
-    private void updateInstanceGeometry() {
-        if (map == null) {
-            return;
-        }
-
-        updateMapFeatures();
-
-        if (!viewportInitialized && !points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false);
-            viewportInitialized = true;
-        }
-
-        TextView statusView = findViewById(R.id.geometry_status);
-        statusView.setText(getString(R.string.geometry_status, viewModel.getTotalInstanceCount(), points.size()));
-    }
-
-    /**
-     * Clears the existing features on the map and places features for the current form's instances.
-     */
-    private void updateMapFeatures() {
-        points.clear();
-        map.clearFeatures();
-        instancesByFeatureId.clear();
-
-        List<MappableFormInstance> instances = viewModel.getMappableFormInstances();
+    @NonNull
+    private List<MappableSelectItem> getItems() {
+        List<MappableFormInstance> instances = formMapViewModel.getMappableFormInstances();
+        List<MappableSelectItem> items = new ArrayList<>();
         for (MappableFormInstance instance : instances) {
-            MapPoint point = new MapPoint(instance.getLatitude(), instance.getLongitude());
-            int featureId = map.addMarker(point, false, MapFragment.BOTTOM);
-
-            updateSubmissionMarker(featureId, instance.getStatus(), featureId == viewModel.getSelectedSubmissionId());
-
-            instancesByFeatureId.put(featureId, instance);
-            points.add(point);
+            items.add(convertItem(instance));
         }
+
+        return items;
     }
 
-    private void updateSubmissionMarker(int featureId, String status, boolean enlarged) {
-        int drawableId = getDrawableIdForStatus(status, enlarged);
-        map.setMarkerIcon(featureId, drawableId);
+    private int getTotalInstanceCount() {
+        return formMapViewModel.getTotalInstanceCount();
     }
 
-    /**
-     * Zooms the map to the new location if the map viewport hasn't been initialized yet.
-     */
-    public void onLocationChanged(MapPoint point) {
-        if (!viewportInitialized) {
-            map.zoomToPoint(point, true);
-            viewportInitialized = true;
+    @NonNull
+    private MappableSelectItem convertItem(MappableFormInstance mappableFormInstance) {
+        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
+
+        String info = null;
+        switch (mappableFormInstance.getClickAction()) {
+            case DELETED_TOAST:
+                String deletedTime = getString(R.string.deleted_on_date_at_time);
+                info = new SimpleDateFormat(deletedTime,
+                        Locale.getDefault()).format(formMapViewModel.getDeletedDateOf(mappableFormInstance.getDatabaseId()));
+                break;
+            case NOT_VIEWABLE_TOAST:
+                info = getString(R.string.cannot_edit_completed_form);
+                break;
         }
-    }
 
-    /**
-     * Reacts to a tap on a feature by showing a submission summary.
-     */
-    public void onFeatureClicked(int featureId) {
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
-
-        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
-            removeEnlargedMarkerIfExist(featureId);
-
-            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-            if (mappableFormInstance != null) {
-                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
-                setUpSummarySheetDetails(mappableFormInstance);
-            }
-            viewModel.setSelectedSubmissionId(featureId);
+        IconifiedText action = null;
+        switch (mappableFormInstance.getClickAction()) {
+            case OPEN_READ_ONLY:
+                action = new IconifiedText(R.drawable.ic_visibility, getString(R.string.view_data));
+                break;
+            case OPEN_EDIT:
+                boolean canEditSaved = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
+                action = new IconifiedText(
+                        canEditSaved ? R.drawable.ic_edit : R.drawable.ic_visibility,
+                        getString(canEditSaved ? R.string.review_data : R.string.view_data)
+                );
+                break;
         }
-    }
 
-    private boolean isSummaryForGivenSubmissionDisplayed(int newSubmissionId) {
-        return viewModel.getSelectedSubmissionId() == newSubmissionId && summarySheet.getState() != BottomSheetBehavior.STATE_HIDDEN;
-    }
-
-    protected void restoreFromInstanceState(Bundle state) {
-        MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
-        double mapZoom = state.getDouble(MAP_ZOOM_KEY);
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false);
-            viewportInitialized = true; // avoid recentering as soon as location is received
-        }
+        return new MappableSelectItem(
+                mappableFormInstance.getDatabaseId(),
+                mappableFormInstance.getLatitude(),
+                mappableFormInstance.getLongitude(),
+                getDrawableIdForStatus(mappableFormInstance.getStatus(), false),
+                getDrawableIdForStatus(mappableFormInstance.getStatus(), true),
+                mappableFormInstance.getInstanceName(),
+                new IconifiedText(
+                        getSubmissionSummaryStatusIcon(mappableFormInstance.getStatus()),
+                        instanceLastStatusChangeDate
+                ),
+                info,
+                action
+        );
     }
 
     private static int getDrawableIdForStatus(String status, boolean enlarged) {
@@ -339,75 +186,27 @@ public class FormMapActivity extends SelectionMapActivity {
         return R.drawable.ic_map_point;
     }
 
-    private void setUpSummarySheetDetails(MappableFormInstance mappableFormInstance) {
-        setUpSubmissionSheetNameAndLastChangedDate(mappableFormInstance);
-        setUpSummarySheetIcon(mappableFormInstance.getStatus());
-        adjustSubmissionSheetBasedOnItsStatus(mappableFormInstance);
-
-        summarySheet.setState(BottomSheetBehavior.STATE_EXPANDED);
-    }
-
-    private void setUpSubmissionSheetNameAndLastChangedDate(MappableFormInstance mappableFormInstance) {
-        ((TextView) findViewById(R.id.submission_name)).setText(mappableFormInstance.getInstanceName());
-        String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(this, mappableFormInstance.getStatus(), mappableFormInstance.getLastStatusChangeDate());
-        ((TextView) findViewById(R.id.status_text)).setText(instanceLastStatusChangeDate);
-    }
-
-    private void setUpSummarySheetIcon(String status) {
-        ImageView statusImage = findViewById(R.id.status_icon);
-        statusImage.setImageDrawable(IconUtils.getSubmissionSummaryStatusIcon(this, status));
-        statusImage.setBackground(null);
-    }
-
-    private void adjustSubmissionSheetBasedOnItsStatus(MappableFormInstance mappableFormInstance) {
-        switch (mappableFormInstance.getClickAction()) {
-            case DELETED_TOAST:
-                String deletedTime = getString(R.string.deleted_on_date_at_time);
-                String disabledMessage = new SimpleDateFormat(deletedTime,
-                        Locale.getDefault()).format(viewModel.getDeletedDateOf(mappableFormInstance.getDatabaseId()));
-                setUpInfoText(disabledMessage);
-                break;
-            case NOT_VIEWABLE_TOAST:
-                setUpInfoText(getString(R.string.cannot_edit_completed_form));
-                break;
-            case OPEN_READ_ONLY:
-                setUpOpenFormButton(false, mappableFormInstance.getDatabaseId());
-                break;
-            case OPEN_EDIT:
-                boolean canEditSaved = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED);
-                setUpOpenFormButton(canEditSaved, mappableFormInstance.getDatabaseId());
-                break;
+    public static int getSubmissionSummaryStatusIcon(String instanceStatus) {
+        switch (instanceStatus) {
+            case Instance.STATUS_INCOMPLETE:
+                return R.drawable.form_state_saved;
+            case Instance.STATUS_COMPLETE:
+                return R.drawable.form_state_finalized;
+            case Instance.STATUS_SUBMITTED:
+                return R.drawable.form_state_submited;
+            case Instance.STATUS_SUBMISSION_FAILED:
+                return R.drawable.form_state_submission_failed;
         }
+
+        throw new IllegalArgumentException();
     }
 
-    private void setUpOpenFormButton(boolean canEdit, long instanceId) {
-        findViewById(R.id.info).setVisibility(View.GONE);
-        Chip openFormButton = findViewById(R.id.openFormChip);
-        openFormButton.setVisibility(View.VISIBLE);
-        openFormButton.setText(canEdit ? R.string.review_data : R.string.view_data);
-        openFormButton.setChipIcon(ContextCompat.getDrawable(this, canEdit ? R.drawable.ic_edit : R.drawable.ic_visibility));
-        openFormButton.setOnClickListener(v -> {
-            summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+    public void onFeatureClicked(int featureId) {
+        Fragment fragment = getSupportFragmentManager().getFragments().stream().filter(fragment1 -> {
+            return fragment1.getClass() == SelectionMapFragment.class;
+        }).findFirst().get();
 
-            returnItem(instanceId);
-        });
-    }
-
-    private void setUpInfoText(String message) {
-        findViewById(R.id.openFormChip).setVisibility(View.GONE);
-        TextView infoText = findViewById(R.id.info);
-        infoText.setVisibility(View.VISIBLE);
-        infoText.setText(message);
-    }
-
-    private void removeEnlargedMarkerIfExist(int newSubmissionId) {
-        if (viewModel.getSelectedSubmissionId() != -1 && viewModel.getSelectedSubmissionId() != newSubmissionId) {
-            updateSubmissionMarker(viewModel.getSelectedSubmissionId(), getSubmissionStatusFor(viewModel.getSelectedSubmissionId()), false);
-        }
-    }
-
-    private String getSubmissionStatusFor(int submissionId) {
-        return instancesByFeatureId.get(submissionId).getStatus();
+        ((SelectionMapFragment) fragment).onFeatureClicked(featureId);
     }
 
     /**

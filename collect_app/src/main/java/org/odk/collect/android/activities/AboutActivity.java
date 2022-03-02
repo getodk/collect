@@ -29,8 +29,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 import javax.inject.Inject;
 

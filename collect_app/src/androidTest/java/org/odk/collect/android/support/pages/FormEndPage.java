@@ -37,7 +37,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
-        return clickSaveAndExit(new FormMapPage());
+        return clickSaveAndExit(new FormMapPage(formName));
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {

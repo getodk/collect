@@ -57,6 +57,7 @@ dependencies {
     implementation Dependencies.play_services_location
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
+    implementation Dependencies.androidx_fragment_ktx
     implementation project(path: ':shared')
     implementation project(path: ':strings')
     implementation project(path: ':location')

@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -37,18 +39,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.imageloader.GlideImageLoader;
 
 import java.io.File;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
 
 public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 

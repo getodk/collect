@@ -21,10 +21,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
 
-import org.odk.collect.android.R;
-import org.odk.collect.forms.instances.Instance;
+import androidx.core.content.ContextCompat;
 
 public final class IconUtils {
 
@@ -50,19 +48,5 @@ public final class IconUtils {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
-    }
-
-    public static Drawable getSubmissionSummaryStatusIcon(Context context, String instanceStatus) {
-        switch (instanceStatus) {
-            case Instance.STATUS_INCOMPLETE:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_saved);
-            case Instance.STATUS_COMPLETE:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_finalized);
-            case Instance.STATUS_SUBMITTED:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_submited);
-            case Instance.STATUS_SUBMISSION_FAILED:
-                return ContextCompat.getDrawable(context, R.drawable.form_state_submission_failed);
-        }
-        return null;
     }
 }

@@ -38,7 +38,7 @@
                 android:paddingTop="@dimen/margin_small"
                 android:paddingBottom="@dimen/margin_standard">
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/enter_data"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"
@@ -50,7 +50,7 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/enter_data" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/review_data"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"
@@ -62,7 +62,7 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/review_data" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/send_data"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"
@@ -74,7 +74,7 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/send_data" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/view_sent_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"
@@ -86,7 +86,7 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     android:text="@string/view_sent_forms" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/get_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"
@@ -98,7 +98,7 @@
                     android:layout_marginEnd="@dimen/margin_standard"
                     tools:text="@string/get_forms" />
 
-                <org.odk.collect.android.views.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/manage_forms"
                     style="@style/Widget.Collect.Button.FullWidth"
                     android:backgroundTint="@color/surfaceButtonColor"

@@ -1,5 +1,8 @@
 package org.odk.collect.android.formentry.questions;
 
+import static android.view.View.GONE;
+import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.TypedValue;
@@ -16,13 +19,10 @@ import androidx.annotation.IdRes;
 import com.google.android.material.button.MaterialButton;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
-
-import static android.view.View.GONE;
-import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 public final class WidgetViewUtils {
 
