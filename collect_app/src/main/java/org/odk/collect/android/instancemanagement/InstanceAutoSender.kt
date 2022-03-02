@@ -33,7 +33,7 @@ class InstanceAutoSender(
     private val settingsProvider: SettingsProvider,
     private val instancesAppState: InstancesAppState
 ) {
-    fun autoSendInstances(projectId: String?): Boolean {
+    fun autoSendInstances(projectId: String): Boolean {
         val formsRepository = formsRepositoryProvider.get(projectId)
         val instancesRepository = instancesRepositoryProvider.get(projectId)
         val generalSettings = settingsProvider.getUnprotectedSettings(projectId)
@@ -45,7 +45,7 @@ class InstanceAutoSender(
             permissionsProvider,
             generalSettings
         )
-        return changeLockProvider.getInstanceLock(projectId!!).withLock { acquiredLock: Boolean ->
+        return changeLockProvider.getInstanceLock(projectId).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
                 val toUpload = getInstancesToAutoSend(
                     formsRepository,
