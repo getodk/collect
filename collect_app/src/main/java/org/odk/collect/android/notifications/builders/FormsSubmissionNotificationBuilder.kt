@@ -9,16 +9,21 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
+import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
+import org.odk.collect.android.utilities.FormsUploadResultInterpreter
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormsSubmissionNotificationBuilder {
 
-    fun build(application: Application, submissionFailed: Boolean, message: String, projectName: String): Notification {
-        val notifyIntent = if (submissionFailed) {
-            Intent(application, InstanceUploaderListActivity::class.java)
-        } else {
+    fun build(application: Application, result: Map<Instance, FormUploadException?>, projectName: String): Notification {
+        val allFormsUploadedSuccessfully = FormsUploadResultInterpreter.allFormsUploadedSuccessfully(result)
+
+        val notifyIntent = if (allFormsUploadedSuccessfully) {
             Intent(application, MainMenuActivity::class.java)
+        } else {
+            Intent(application, InstanceUploaderListActivity::class.java)
         }.apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
@@ -31,12 +36,16 @@ object FormsSubmissionNotificationBuilder {
         )
 
         val title =
-            if (submissionFailed) application.getLocalizedString(R.string.forms_upload_failed)
-            else application.getLocalizedString(R.string.forms_upload_succeeded)
+            if (allFormsUploadedSuccessfully) application.getLocalizedString(R.string.forms_upload_succeeded)
+            else application.getLocalizedString(R.string.forms_upload_failed)
 
         val content =
-            if (submissionFailed) message
-            else application.getLocalizedString(R.string.all_uploads_succeeded)
+            if (allFormsUploadedSuccessfully) application.getLocalizedString(R.string.all_uploads_succeeded)
+            else application.getLocalizedString(
+                R.string.some_uploads_failed,
+                FormsUploadResultInterpreter.getNumberOfFailures(result),
+                result.size
+            )
 
         return NotificationCompat.Builder(
             application,
