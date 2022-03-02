@@ -7,6 +7,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstanceUploaderUtils
@@ -46,27 +47,25 @@ class InstanceAutoSender(
         )
         return changeLockProvider.getInstanceLock(projectId!!).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
+                val toUpload = getInstancesToAutoSend(
+                    formsRepository,
+                    instancesRepository,
+                    generalSettings
+                )
                 try {
-                    val toUpload = getInstancesToAutoSend(
-                        formsRepository,
-                        instancesRepository,
-                        generalSettings
-                    )
-                    val (first, second) = instanceSubmitter.submitInstances(toUpload)
-                    notifier.onSubmission(first, second!!, projectId)
+                    val result: Map<Instance, FormUploadException?> = instanceSubmitter.submitInstances(toUpload)
+                    notifier.onSubmission(result, projectId)
                 } catch (e: SubmitException) {
-                    when (e.type) {
-                        SubmitException.Type.GOOGLE_ACCOUNT_NOT_SET -> notifier.onSubmission(
-                            true,
-                            context.getString(R.string.google_set_account),
-                            projectId
-                        )
-                        SubmitException.Type.GOOGLE_ACCOUNT_NOT_PERMITTED -> notifier.onSubmission(
-                            true,
-                            context.getString(R.string.odk_permissions_fail),
-                            projectId
-                        )
-                        SubmitException.Type.NOTHING_TO_SUBMIT -> {}
+                    if (e.type == SubmitException.Type.GOOGLE_ACCOUNT_NOT_SET) {
+                        val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
+                            FormUploadException(context.getString(R.string.google_set_account))
+                        }
+                        notifier.onSubmission(result, projectId)
+                    } else if (e.type == SubmitException.Type.GOOGLE_ACCOUNT_NOT_PERMITTED) {
+                        val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
+                            FormUploadException(context.getString(R.string.odk_permissions_fail))
+                        }
+                        notifier.onSubmission(result, projectId)
                     }
                 }
                 instancesAppState.update()
