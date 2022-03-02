@@ -19,11 +19,11 @@ object FormsDownloadResultInterpreter {
         )
     }
 
-    fun getNumberOfFailures(result: Map<ServerFormDetails, FormDownloadException?>, context: Context) = result.count {
+    fun getNumberOfFailures(result: Map<ServerFormDetails, FormDownloadException?>) = result.count {
         it.value != null
     }
 
-    fun allFormsDownloadedSuccessfully(result: Map<ServerFormDetails, FormDownloadException?>, context: Context) = result.values.all {
+    fun allFormsDownloadedSuccessfully(result: Map<ServerFormDetails, FormDownloadException?>) = result.values.all {
         it == null
     }
 }

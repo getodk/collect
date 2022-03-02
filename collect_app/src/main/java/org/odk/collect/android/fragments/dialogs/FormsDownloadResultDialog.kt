@@ -36,7 +36,7 @@ class FormsDownloadResultDialog : DialogFragment() {
                 listener?.onCloseDownloadingResult()
             }
 
-        if (!FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
+        if (!FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
             builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
                 val intent = Intent(context, ErrorActivity::class.java).apply {
                     putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, requireContext()) as Serializable)
@@ -50,10 +50,10 @@ class FormsDownloadResultDialog : DialogFragment() {
     }
 
     private fun getMessage(): String {
-        return if (FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, requireContext())) {
+        return if (FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
             getString(R.string.all_downloads_succeeded)
         } else {
-            getString(R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result, requireContext()).toString(), result.size.toString())
+            getString(R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result).toString(), result.size.toString())
         }
     }
 
