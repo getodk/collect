@@ -1,5 +1,25 @@
 package org.odk.collect.android.formmanagement;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
+import static org.odk.collect.android.utilities.FileUtils.read;
+import static org.odk.collect.formstest.FormUtils.buildForm;
+import static org.odk.collect.formstest.FormUtils.createXFormBody;
+import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
+import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
+
 import com.google.common.io.Files;
 
 import org.junit.Test;
@@ -22,25 +42,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import static java.util.Arrays.asList;
-import static java.util.Arrays.stream;
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
-import static org.odk.collect.android.utilities.FileUtils.read;
-import static org.odk.collect.formstest.FormUtils.buildForm;
-import static org.odk.collect.formstest.FormUtils.createXFormBody;
-import static org.odk.collect.shared.PathUtils.getAbsoluteFilePath;
 
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class ServerFormDownloaderTest {
@@ -225,6 +226,99 @@ public class ServerFormDownloaderTest {
         File mediaFile2 = new File(form.getFormMediaPath() + "/file2");
         assertThat(mediaFile2.exists(), is(true));
         assertThat(new String(read(mediaFile2)), is("contents2"));
+    }
+
+    @Test
+    public void whenFormHasMediaFiles_andIsFormToDownloadIsUpdate_doesNotRedownloadMediaFiles() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents2"), "http://file2")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String xformUpdate = createXFormBody("id", "updated");
+        ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
+                "Form",
+                "http://downloadUpdatedUrl",
+                "id",
+                "updated",
+                Md5.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
+                false,
+                true,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents2"), "http://file2")
+                )));
+
+        when(formSource.fetchForm("http://downloadUpdatedUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
+        downloader.downloadForm(serverFormDetailsUpdated, null, null);
+
+        verify(formSource, times(1)).fetchMediaFile("http://file1");
+        verify(formSource, times(1)).fetchMediaFile("http://file2");
+    }
+
+    @Test
+    public void whenFormHasMediaFiles_andIsFormToDownloadIsUpdate_downloadsFilesWithChangedHash() throws Exception {
+        String xform = createXFormBody("id", "version");
+        ServerFormDetails serverFormDetails = new ServerFormDetails(
+                "Form",
+                "http://downloadUrl",
+                "id",
+                "version",
+                Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
+                true,
+                false,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents2"), "http://file2")
+                )));
+
+        FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents2".getBytes()));
+
+        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
+        downloader.downloadForm(serverFormDetails, null, null);
+
+        String xformUpdate = createXFormBody("id", "updated");
+        ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
+                "Form",
+                "http://downloadUpdatedUrl",
+                "id",
+                "updated",
+                Md5.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
+                false,
+                true,
+                new ManifestFile("", asList(
+                        new MediaFile("file1", Md5.getMd5Hash("contents1"), "http://file1"),
+                        new MediaFile("file2", Md5.getMd5Hash("contents3"), "http://file2")
+                )));
+
+        when(formSource.fetchMediaFile("http://file2")).thenReturn(new ByteArrayInputStream("contents3".getBytes()));
+        when(formSource.fetchForm("http://downloadUpdatedUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
+        downloader.downloadForm(serverFormDetailsUpdated, null, null);
+
+        Form form = formsRepository.getAllByFormIdAndVersion("id", "updated").get(0);
+        File mediaFile2 = new File(form.getFormMediaPath() + "/file2");
+        assertThat(mediaFile2.exists(), is(true));
+        assertThat(new String(read(mediaFile2)), is("contents3"));
     }
 
     /**

@@ -36,4 +36,28 @@ class OpenRosaResponseParserImplTest {
         val formList = OpenRosaResponseParserImpl().parseFormList(doc)
         assertThat(formList!![0].hash, equalTo(null))
     }
+
+    @Test
+    fun `when media file hash is empty, parseManifest returns null`() {
+        val response = StringBuilder()
+            .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
+            .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
+            .appendLine("<mediaFile>")
+            .appendLine("<filename>badger.png</filename>")
+            .appendLine("<hash></hash>")
+            .appendLine("<downloadUrl>http://funk.appspot.com/binaryData?blobKey=%3A477e3</downloadUrl>")
+            .appendLine("</mediaFile>")
+            .appendLine("</manifest>")
+            .toString()
+
+        val doc = StringReader(response).use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+            Document().also { it.parse(parser) }
+        }
+
+        val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)
+        assertThat(mediaFiles, equalTo(null))
+    }
 }
