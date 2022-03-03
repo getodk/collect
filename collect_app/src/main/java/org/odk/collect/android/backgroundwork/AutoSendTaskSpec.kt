@@ -68,12 +68,12 @@ class AutoSendTaskSpec : TaskSpec {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
                 val currentNetworkInfo = connectivityProvider.networkInfo
-                if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
-                    !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
+                if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED &&
+                    (networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
                 ) {
-                    networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
+                    return@Supplier instanceAutoSender.autoSendInstances(projectId)
                 }
-                instanceAutoSender.autoSendInstances(projectId)
+                false
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }
