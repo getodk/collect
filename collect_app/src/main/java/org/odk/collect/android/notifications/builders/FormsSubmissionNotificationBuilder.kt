@@ -12,8 +12,10 @@ import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.FormsUploadResultInterpreter
+import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.localization.getLocalizedString
+import java.io.Serializable
 
 object FormsSubmissionNotificationBuilder {
 
@@ -30,6 +32,14 @@ object FormsSubmissionNotificationBuilder {
             setSubText(projectName)
             setSmallIcon(R.drawable.ic_notification_small)
             setAutoCancel(true)
+
+            if (!allFormsUploadedSuccessfully) {
+                addAction(
+                    R.drawable.ic_outline_info_small,
+                    application.getLocalizedString(R.string.show_details),
+                    getShowDetailsPendingIntent(application, result)
+                )
+            }
         }.build()
     }
 
@@ -66,6 +76,19 @@ object FormsSubmissionNotificationBuilder {
             application,
             RequestCodes.FORMS_UPLOADED_NOTIFICATION,
             notifyIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    private fun getShowDetailsPendingIntent(application: Application, result: Map<Instance, FormUploadException?>): PendingIntent {
+        val showDetailsIntent = Intent(application, ErrorActivity::class.java).apply {
+            putExtra(ErrorActivity.EXTRA_ERRORS, FormsUploadResultInterpreter.getFailures(result, application) as Serializable)
+        }
+
+        return PendingIntent.getActivity(
+            application,
+            RequestCodes.FORMS_UPLOADED_NOTIFICATION,
+            showDetailsIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
