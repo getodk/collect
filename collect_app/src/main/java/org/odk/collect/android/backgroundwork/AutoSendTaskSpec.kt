@@ -17,6 +17,8 @@ import android.content.Context
 import android.os.Environment
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
+import org.odk.collect.android.backgroundwork.autosend.FormLevelAutoSendChecker
+import org.odk.collect.android.backgroundwork.autosend.GeneralAutoSendChecker
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.network.NetworkStateProvider
@@ -26,8 +28,6 @@ import org.odk.collect.async.WorkerAdapter
 import org.odk.collect.settings.SettingsProvider
 import java.util.function.Supplier
 import javax.inject.Inject
-import org.odk.collect.android.backgroundwork.autosend.FormLevelAutoSendChecker
-import org.odk.collect.android.backgroundwork.autosend.GeneralAutoSendChecker
 
 class AutoSendTaskSpec : TaskSpec {
     @Inject
