@@ -14,7 +14,6 @@
 package org.odk.collect.android.backgroundwork
 
 import android.content.Context
-import android.os.Environment
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.backgroundwork.autosend.FormLevelAutoSendChecker
@@ -71,9 +70,7 @@ class AutoSendTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED &&
-                    (generalAutoSendChecker.isAutoSendEnabled(projectId) || formLevelAutoSendChecker.isAutoSendEnabled(projectId))
-                ) {
+                if (generalAutoSendChecker.isAutoSendEnabled(projectId) || formLevelAutoSendChecker.isAutoSendEnabled(projectId)) {
                     return@Supplier instanceAutoSender.autoSendInstances(projectId)
                 }
                 false
