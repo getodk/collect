@@ -18,8 +18,10 @@ public class FakeMapFragment implements MapFragment {
     private PointListener pointListener;
     private String locationProvider;
     private boolean retainMockAccuracy;
+    private MapPoint center;
+    private double zoom;
+    private Iterable<MapPoint> zoomBoundingBox;
 
-    @Override
     public void applyConfig(Bundle config) {
 
     }
@@ -32,32 +34,38 @@ public class FakeMapFragment implements MapFragment {
     @NonNull
     @Override
     public MapPoint getCenter() {
-        return null;
+        return center;
     }
 
     @Override
     public double getZoom() {
-        return 0;
+        return zoom;
     }
 
     @Override
     public void setCenter(@Nullable MapPoint center, boolean animate) {
-
+        this.center = center;
     }
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, boolean animate) {
-
+        this.center = center;
     }
 
     @Override
     public void zoomToPoint(@Nullable MapPoint center, double zoom, boolean animate) {
+        zoomBoundingBox = null;
 
+        this.center = center;
+        this.zoom = zoom;
     }
 
     @Override
     public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
+        center = null;
+        zoom = 0;
 
+        zoomBoundingBox = points;
     }
 
     @Override
@@ -170,5 +178,9 @@ public class FakeMapFragment implements MapFragment {
 
     public boolean isRetainMockAccuracy() {
         return retainMockAccuracy;
+    }
+
+    public Iterable<MapPoint> getZoomBoundingBox() {
+        return zoomBoundingBox;
     }
 }

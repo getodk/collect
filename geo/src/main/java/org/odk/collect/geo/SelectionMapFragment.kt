@@ -1,5 +1,6 @@
 package org.odk.collect.geo
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
@@ -25,7 +26,7 @@ import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragment.ReadyListener
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.geo.maps.MapPoint
-import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
 class SelectionMapFragment : Fragment() {
@@ -37,7 +38,7 @@ class SelectionMapFragment : Fragment() {
     lateinit var referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 
     @Inject
-    lateinit var permissionsProvider: PermissionsProvider
+    lateinit var permissionsChecker: PermissionsChecker
 
     private val selectionMapViewModel: SelectionMapViewModel by activityViewModels()
 
@@ -69,7 +70,11 @@ class SelectionMapFragment : Fragment() {
             (context.applicationContext as GeoDependencyComponentProvider).geoDependencyComponent
         component.inject(this)
 
-        if (!permissionsProvider.areLocationPermissionsGranted()) {
+        if (!permissionsChecker.isPermissionGranted(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        ) {
             ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
             requireActivity().finish()
         }
@@ -372,7 +377,8 @@ data class MappableSelectItem(
     data class IconifiedText(val icon: Int, val text: String)
 }
 
-internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
+internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs) {
 
     val binding =
         SelectionSummarySheetLayoutBinding.inflate(LayoutInflater.from(context), this, true)

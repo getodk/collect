@@ -251,17 +251,6 @@ public class FormMapActivityTest {
         assertSubmissionSummaryContent(deleted.first.getDisplayName(), deleted.first.getStatus(), new Date(deleted.first.getLastStatusChangeDate()), DELETED_TOAST);
     }
 
-    @Test
-    public void recreating_maintainsZoom() {
-        map.zoomToPoint(new MapPoint(55d, 66d), 7, false);
-
-        activityController.recreate();
-
-        assertThat(map.getLatestZoomBoundingBox(), is(nullValue()));
-        assertThat(map.getCenter(), is(new MapPoint(55d, 66d)));
-        assertThat(map.getZoom(), is(7d));
-    }
-
     private void assertSubmissionSummaryContent(String instanceName, String status, Date lastStatusChangeDate, FormMapViewModel.ClickAction clickAction) {
         assertThat(((TextView) activity.findViewById(R.id.name)).getText().toString(), is(instanceName));
         String instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(activity, status, lastStatusChangeDate);
