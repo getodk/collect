@@ -40,6 +40,8 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
+import org.odk.collect.android.backgroundwork.autosend.FormLevelAutoSendChecker;
+import org.odk.collect.android.backgroundwork.autosend.GeneralAutoSendChecker;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
@@ -631,5 +633,17 @@ public class AppDependencyModule {
     @Provides
     public ImageLoader providesImageLoader() {
         return new GlideImageLoader();
+    }
+
+    @Provides
+    @Singleton
+    public GeneralAutoSendChecker providesGeneralAutoSendChecker(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
+        return new GeneralAutoSendChecker(networkStateProvider, settingsProvider);
+    }
+
+    @Provides
+    @Singleton
+    public FormLevelAutoSendChecker providesFormLevelAutoSendChecker(FormsRepositoryProvider formsRepositoryProvider) {
+        return new FormLevelAutoSendChecker(formsRepositoryProvider);
     }
 }
