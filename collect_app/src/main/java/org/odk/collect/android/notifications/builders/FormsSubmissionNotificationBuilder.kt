@@ -20,6 +20,40 @@ object FormsSubmissionNotificationBuilder {
     fun build(application: Application, result: Map<Instance, FormUploadException?>, projectName: String): Notification {
         val allFormsUploadedSuccessfully = FormsUploadResultInterpreter.allFormsUploadedSuccessfully(result)
 
+        return NotificationCompat.Builder(
+            application,
+            NotificationManagerNotifier.COLLECT_NOTIFICATION_CHANNEL
+        ).apply {
+            setContentIntent(getNotificationPendingIntent(application, allFormsUploadedSuccessfully))
+            setContentTitle(getTitle(application, allFormsUploadedSuccessfully))
+            setContentText(getMessage(application, allFormsUploadedSuccessfully, result))
+            setSubText(projectName)
+            setSmallIcon(R.drawable.ic_notification_small)
+            setAutoCancel(true)
+        }.build()
+    }
+
+    private fun getTitle(application: Application, allFormsUploadedSuccessfully: Boolean): String {
+        return if (allFormsUploadedSuccessfully) {
+            application.getLocalizedString(R.string.forms_upload_succeeded)
+        } else {
+            application.getLocalizedString(R.string.forms_upload_failed)
+        }
+    }
+
+    private fun getMessage(application: Application, allFormsUploadedSuccessfully: Boolean, result: Map<Instance, FormUploadException?>): String {
+        return if (allFormsUploadedSuccessfully) {
+            application.getLocalizedString(R.string.all_uploads_succeeded)
+        } else {
+            application.getLocalizedString(
+                R.string.some_uploads_failed,
+                FormsUploadResultInterpreter.getNumberOfFailures(result),
+                result.size
+            )
+        }
+    }
+
+    private fun getNotificationPendingIntent(application: Application, allFormsUploadedSuccessfully: Boolean): PendingIntent {
         val notifyIntent = if (allFormsUploadedSuccessfully) {
             Intent(application, MainMenuActivity::class.java)
         } else {
@@ -28,35 +62,11 @@ object FormsSubmissionNotificationBuilder {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
 
-        val pendingNotify = PendingIntent.getActivity(
+        return PendingIntent.getActivity(
             application,
             RequestCodes.FORMS_UPLOADED_NOTIFICATION,
             notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-
-        val title =
-            if (allFormsUploadedSuccessfully) application.getLocalizedString(R.string.forms_upload_succeeded)
-            else application.getLocalizedString(R.string.forms_upload_failed)
-
-        val content =
-            if (allFormsUploadedSuccessfully) application.getLocalizedString(R.string.all_uploads_succeeded)
-            else application.getLocalizedString(
-                R.string.some_uploads_failed,
-                FormsUploadResultInterpreter.getNumberOfFailures(result),
-                result.size
-            )
-
-        return NotificationCompat.Builder(
-            application,
-            NotificationManagerNotifier.COLLECT_NOTIFICATION_CHANNEL
-        ).apply {
-            setContentIntent(pendingNotify)
-            setContentTitle(title)
-            setContentText(content)
-            setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notification_small)
-            setAutoCancel(true)
-        }.build()
     }
 }
