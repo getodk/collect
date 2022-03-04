@@ -28,7 +28,7 @@ class PenColorPickerViewModelTest {
     }
 
     @Test
-    fun `last used pen color should be saved in meta settings`() {
+    fun `setPenColor sets penColor`() {
         viewModel.setPenColor(Color.RED)
         assertThat(viewModel.penColor.value, `is`(Color.RED))
     }
