@@ -36,7 +36,7 @@ Please note that the `master` branch reflects ongoing development and is not pro
 ## Release cycle
 Releases can be requested by any community member and generally happen every 2 months.
 
-Before release we perform a "code freeze" (we stop merging pull requests) and then carry out regression testing. If any problems are found, the release is blocked until we can merge fixes. Once the process is complete, [@yanokwa](https://github.com/yanokwa) pushes the releases to the Play Store. The code is "unfrozen" after a short grace period to make hot fixing easier.
+Before release we perform a "code freeze" (we stop merging pull requests) and then carry out regression testing. If any problems are found, the release is blocked until we can merge fixes. Once the process is complete, [@lognaturel](https://github.com/lognaturel) pushes the releases to the Play Store following [these instructions](#creating-signed-releases-for-google-play-store). The code is "unfrozen" after a short grace period to make hot fixing easier.
 
 At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
 
@@ -233,22 +233,32 @@ This is encountered when Robolectric has problems downloading the jars it needs 
 ## Creating signed releases for Google Play Store
 Maintainers keep a folder with a clean checkout of the code and use [jenv.be](https://www.jenv.be) in that folder to ensure compilation with Java 11.
 
-Maintainers have a `local.properties` file in the root folder with the following:
-```
-sdk.dir=/path/to/android/sdk
-```
+### Release prerequisites:
 
-Maintainers have a `secrets.properties` file in the `collect_app` folder with the following:
-```
-// collect_app/secrets.properties
-RELEASE_STORE_FILE=/path/to/collect.keystore
-RELEASE_STORE_PASSWORD=secure-store-password
-RELEASE_KEY_ALIAS=key-alias
-RELEASE_KEY_PASSWORD=secure-alias-password
-```
+- a`local.properties` file in the root folder with the following:
+  ```
+  sdk.dir=/path/to/android/sdk
+  ```
 
-Maintainers also have a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+- the keystore file and passwords
 
-When ready to generate a build for the Play Store, maintainers tag the build by [adding a release](releases). Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
+- a `secrets.properties` file in the `collect_app` folder with the following:
+  ```
+  // collect_app/secrets.properties
+  RELEASE_STORE_FILE=/path/to/collect.keystore
+  RELEASE_STORE_PASSWORD=secure-store-password
+  RELEASE_KEY_ALIAS=key-alias
+  RELEASE_KEY_PASSWORD=secure-alias-password
+  ```
 
-To generate official signed releases, you'll need the keystore file, the keystore passwords, a configured `collect_app/secrets.properties` file, and a configured `collect_app/src/odkCollectRelease/google-services.json` file. Then run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
+- a `google-services.json` file in the `collect_app/src/odkCollectRelease` folder. The contents of the file are similar to the contents of `collect_app/src/google-services.json`.
+
+### Release checklist:
+- tag the build by [adding a release](https://github.com/getodk/collect/releases).
+    Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
+- run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
+- verify the apk size. If it has grown more than a few hundred kilobytes, discuss with the dev team.
+- verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
+- create and publish scheduled forum post with release description
+- write Play Store release notes, include link to forum post
+- upload to Play Store
