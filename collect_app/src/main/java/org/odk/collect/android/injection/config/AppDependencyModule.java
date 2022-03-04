@@ -635,7 +635,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public PenColorPickerViewModel.Factory providesDrawViewModelFactory(SettingsProvider settingsProvider) {
+    public PenColorPickerViewModel.Factory providesPenColorPickerViewModel(SettingsProvider settingsProvider) {
         return new PenColorPickerViewModel.Factory(settingsProvider.getMetaSettings());
     }
 }

@@ -4,7 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rarepebble.colorpicker.ColorPickerView
 import org.odk.collect.android.injection.DaggerUtils
@@ -15,12 +15,11 @@ class PenColorPickerDialog : DialogFragment() {
     @Inject
     lateinit var factory: PenColorPickerViewModel.Factory
 
-    lateinit var model: PenColorPickerViewModel
+    private val model: PenColorPickerViewModel by activityViewModels { factory }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
-        model = ViewModelProvider(requireActivity(), factory)[PenColorPickerViewModel::class.java]
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

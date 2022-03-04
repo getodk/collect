@@ -1,6 +1,7 @@
 package org.odk.collect.android.draw
 
 import android.graphics.Color
+import androidx.lifecycle.ViewModel
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -11,9 +12,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.shared.settings.Settings
 
 @RunWith(AndroidJUnit4::class)
 class PenColorPickerDialogTest {
@@ -31,14 +39,29 @@ class PenColorPickerDialogTest {
 
     @Test
     fun `pen color in view model should be set after clicking ok`() {
-        val scenario = launcherRule.launchDialogFragment(PenColorPickerDialog::class.java)
-        scenario.onFragment {
-            val testViewModel = mock<PenColorPickerViewModel>()
-            it.model = testViewModel
+        val viewModel = mock<PenColorPickerViewModel>().also {
+            whenever(it.penColor).thenReturn(MutableNonNullLiveData(Color.BLACK))
+        }
 
-            DialogFragmentTest.onViewInDialog(withText(R.string.ok)).perform(click())
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesPenColorPickerViewModel(settingsProvider: SettingsProvider): PenColorPickerViewModel.Factory {
+                return TestFactory(InMemSettingsProvider().getMetaSettings(), viewModel)
+            }
+        })
 
-            verify(testViewModel).setPenColor(Color.BLACK)
+        launcherRule.launchDialogFragment(PenColorPickerDialog::class.java)
+
+        DialogFragmentTest.onViewInDialog(withText(R.string.ok)).perform(click())
+
+        verify(viewModel).setPenColor(Color.BLACK)
+    }
+
+    private class TestFactory(
+        metaSettings: Settings,
+        private val viewModel: ViewModel
+    ) : PenColorPickerViewModel.Factory(metaSettings) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return viewModel as T
         }
     }
 }
