@@ -1,10 +1,6 @@
 package org.odk.collect.android.activities;
 
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -18,13 +14,11 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.fragment.app.Fragment;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.google.android.material.chip.Chip;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
@@ -35,7 +29,6 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TestMapFragment;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
@@ -44,7 +37,6 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.formstest.FormUtils;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.shared.TempFiles;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.android.controller.ActivityController;
 
 import java.util.Arrays;
@@ -53,7 +45,6 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMapActivityTest {
-    private ActivityController activityController;
     private FormMapActivity activity;
 
     private final TestMapFragment map = new TestMapFragment();
@@ -62,9 +53,6 @@ public class FormMapActivityTest {
             new MapPoint(10.1, 125.6), new MapPoint(10.1, 126.6),
             new MapPoint(10.3, 125.6), new MapPoint(10.3, 125.7),
             new MapPoint(10.4, 125.6));
-    private final MapPoint currentLocation = new MapPoint(5, 5);
-    private InstancesRepository instancesRepository;
-    private Form form;
 
     @Before
     public void setUpActivity() {
@@ -80,119 +68,15 @@ public class FormMapActivityTest {
         });
 
         FormsRepository formsRepository = component.formsRepositoryProvider().get();
-        instancesRepository = component.instancesRepositoryProvider().get();
-        form = formsRepository.save(testForm);
+        InstancesRepository instancesRepository = component.instancesRepositoryProvider().get();
+        Form form = formsRepository.save(testForm);
         Arrays.stream(testInstances).forEach(instancesRepository::save);
 
         Intent intent = new Intent();
         intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
-        activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
+        ActivityController activityController = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
         activity = (FormMapActivity) activityController.get();
         activityController.setup();
-    }
-
-    @Test
-    public void startingFormMap_zoomsToFitAllInstanceMarkers_ifThereAreInstanceMarkers() {
-        assertThat(map.getZoomCount(), is(1));
-        assertThat(map.getLatestZoomPoint(), is(nullValue()));
-        assertThat(map.getLatestZoomBoundingBox(), is(expectedPoints));
-        assertThat(map.getLatestScaleFactor(), is(0.8));
-        assertThat(map.wasLatestZoomCallAnimated(), is(false));
-    }
-
-    @Test
-    public void startingFormMap_doesNotZoom_ifThereAreNoInstanceMarkers_andLocationIsUnavailable() {
-        // The @Before block set up a map with points. Reset everything for this test.
-        map.resetState();
-
-        instancesRepository.deleteAll();
-        Intent intent = new Intent();
-        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
-        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
-        controller.setup();
-
-        assertThat(map.getZoomCount(), is(0));
-    }
-
-    @Test
-    public void locationChange_zoomsToCurrentLocation_ifTheViewportWasNotPreviouslyUpdated() {
-        // The @Before block set up a map with points. Reset everything for this test.
-        map.resetState();
-
-        instancesRepository.deleteAll();
-        Intent intent = new Intent();
-        intent.putExtra(FormMapActivity.EXTRA_FORM_ID, form.getDbId());
-        ActivityController controller = CollectHelpers.buildThemedActivity(FormMapActivity.class, intent);
-        controller.setup();
-
-        assertThat(map.getZoomCount(), is(0));
-
-        map.onLocationChanged(currentLocation);
-
-        assertThat(map.getZoomCount(), is(1));
-        assertThat(map.getLatestZoomPoint(), is(currentLocation));
-        assertThat(map.wasLatestZoomCallAnimated(), is(true));
-    }
-
-    @Test
-    public void tappingOnZoomToCurrentLocationButton_zoomsToCurrentLocationWithAnimation() {
-        activity.findViewById(R.id.zoom_to_location).performClick();
-
-        assertThat(map.getZoomCount(), is(2)); // once on initialization and once on click
-        assertThat(map.getLatestZoomPoint(), is(currentLocation));
-        assertThat(map.wasLatestZoomCallAnimated(), is(true));
-    }
-
-    @Test
-    public void tappingOnZoomToFitButton_zoomsToFitAllInstanceMarkersWithoutAnimation() {
-        activity.findViewById(R.id.zoom_to_bounds).performClick();
-
-        assertThat(map.getZoomCount(), is(2));
-        assertThat(map.getLatestZoomPoint(), is(nullValue()));
-        assertThat(map.getLatestZoomBoundingBox(), is(expectedPoints));
-        assertThat(map.getLatestScaleFactor(), is(0.8));
-        assertThat(map.wasLatestZoomCallAnimated(), is(false));
-    }
-
-    @Test
-    public void tappingOnLayerMenu_opensLayerDialog() {
-        List<Fragment> fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, not(hasItem(isA(MapsPreferencesFragment.class))));
-
-        activity.findViewById(R.id.layer_menu).performClick();
-
-        activity.getSupportFragmentManager().executePendingTransactions();
-        fragments = activity.getSupportFragmentManager().getFragments();
-        assertThat(fragments, hasItem(isA(MapsPreferencesFragment.class)));
-    }
-
-    @Test
-    public void tappingOnInstance_centersToThatInstanceAndKeepsTheSameZoom() {
-        MapPoint sent = new MapPoint(10.3, 125.7);
-        map.zoomToPoint(new MapPoint(7, 8), 7, false);
-
-        assertThat(map.getLatestZoomPoint().lat, is(7.0));
-        assertThat(map.getLatestZoomPoint().lon, is(8.0));
-        assertThat(map.getZoom(), is(7.0));
-
-        activity.onFeatureClicked(map.getFeatureIdFor(sent));
-
-        assertThat(map.getLatestZoomPoint().lat, is(10.3));
-        assertThat(map.getLatestZoomPoint().lon, is(125.7));
-        assertThat(map.getZoom(), is(7.0));
-    }
-
-    @Ignore("Doesn't work with field-based dependency injection because we don't get an opportunity" +
-            "to set test doubles before onCreate() is called after the orientation change")
-    @Test
-    public void centerAndZoomLevel_areRestoredAfterOrientationChange() {
-        map.zoomToPoint(new MapPoint(7, 7), 7, false);
-
-        RuntimeEnvironment.setQualifiers("+land");
-        activityController.configurationChange();
-
-        assertThat(map.getCenter(), is(new MapPoint(7, 7)));
-        assertThat(map.getZoom(), is(7));
     }
 
     // Note that there's a point with deleted status included. This shouldn't be possible in real

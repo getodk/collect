@@ -15,8 +15,8 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -191,7 +191,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
 
         /** Pops up the preference dialog that lets the user choose a reference layer.  */
         @JvmStatic
-        fun showReferenceLayerDialog(activity: AppCompatActivity) {
+        fun showReferenceLayerDialog(activity: FragmentActivity) {
             // Unfortunately, the Preference class is designed so that it is impossible
             // to just open a preference dialog without building a PreferenceFragment
             // and attaching it to an activity.  So, we instantiate a MapsPreference

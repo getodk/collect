@@ -105,4 +105,14 @@ open class GeoDependencyModule {
             }
         }
     }
+
+    @Provides
+    internal open fun providesSelectionMapViewMOdelFactory(): SelectionMapViewModelFactory {
+        return object : SelectionMapViewModelFactory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return SelectionMapViewModelImpl() as T
+            }
+        }
+    }
 }

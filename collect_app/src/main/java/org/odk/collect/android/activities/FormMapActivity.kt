@@ -58,6 +58,7 @@ class FormMapActivity : LocalizedActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    private lateinit var form: Form
     private lateinit var formMapViewModel: FormMapViewModel
     private lateinit var selectionMapViewModel: SelectionMapViewModel
 
@@ -66,12 +67,7 @@ class FormMapActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.form_map_activity)
 
-        val form = loadForm()
-
-        selectionMapViewModel = ViewModelProvider(this).get(
-            SelectionMapViewModel::class.java
-        )
-        selectionMapViewModel.setMapTitle(form.displayName)
+        form = loadForm()
 
         val formNavigator = FormNavigator(
             currentProjectProvider,
@@ -94,6 +90,11 @@ class FormMapActivity : LocalizedActivity() {
 
     override fun onResume() {
         super.onResume()
+        selectionMapViewModel = ViewModelProvider(this).get(
+            SelectionMapViewModel::class.java
+        )
+
+        selectionMapViewModel.setMapTitle(form.displayName)
         selectionMapViewModel.setItems(getTotalInstanceCount(), getItems())
     }
 

@@ -11,16 +11,22 @@ import androidx.fragment.app.FragmentManager;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapPoint;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import kotlin.Pair;
 
 public class FakeMapFragment implements MapFragment {
 
-    private PointListener pointListener;
+    private PointListener gpsLocationListener;
     private String locationProvider;
     private boolean retainMockAccuracy;
     private MapPoint center;
     private double zoom;
-    private Iterable<MapPoint> zoomBoundingBox;
+    private Pair<Iterable<MapPoint>, Float> zoomBoundingBox;
+    private MapPoint gpsLocation;
+    private FeatureListener featureClickListener;
+    private final List<MapPoint> markers = new ArrayList<>();
 
     public void applyConfig(Bundle config) {
 
@@ -65,12 +71,13 @@ public class FakeMapFragment implements MapFragment {
         center = null;
         zoom = 0;
 
-        zoomBoundingBox = points;
+        zoomBoundingBox = new Pair(points, scaleFactor);
     }
 
     @Override
     public int addMarker(MapPoint point, boolean draggable, String iconAnchor) {
-        return 0;
+        markers.add(point);
+        return markers.size() - 1;
     }
 
     @Override
@@ -126,7 +133,7 @@ public class FakeMapFragment implements MapFragment {
 
     @Override
     public void setFeatureClickListener(@Nullable FeatureListener listener) {
-
+        featureClickListener = listener;
     }
 
     @Override
@@ -142,7 +149,7 @@ public class FakeMapFragment implements MapFragment {
     @Nullable
     @Override
     public MapPoint getGpsLocation() {
-        return null;
+        return gpsLocation;
     }
 
     @Nullable
@@ -158,7 +165,7 @@ public class FakeMapFragment implements MapFragment {
 
     @Override
     public void setGpsLocationListener(@Nullable PointListener listener) {
-        this.pointListener = listener;
+        this.gpsLocationListener = listener;
     }
 
     @Override
@@ -167,8 +174,10 @@ public class FakeMapFragment implements MapFragment {
     }
 
     public void setLocation(MapPoint mapPoint) {
-        if (pointListener != null) {
-            pointListener.onPoint(mapPoint);
+        gpsLocation = mapPoint;
+
+        if (gpsLocationListener != null) {
+            gpsLocationListener.onPoint(mapPoint);
         }
     }
 
@@ -180,7 +189,11 @@ public class FakeMapFragment implements MapFragment {
         return retainMockAccuracy;
     }
 
-    public Iterable<MapPoint> getZoomBoundingBox() {
+    public Pair<Iterable<MapPoint>, Float> getZoomBoundingBox() {
         return zoomBoundingBox;
+    }
+
+    public void clickOnFeature(int index) {
+        featureClickListener.onFeature(index);
     }
 }
