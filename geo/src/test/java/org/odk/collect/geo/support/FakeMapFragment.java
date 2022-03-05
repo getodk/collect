@@ -118,7 +118,7 @@ public class FakeMapFragment implements MapFragment {
 
     @Override
     public void clearFeatures() {
-
+        markers.clear();
     }
 
     @Override
@@ -195,5 +195,9 @@ public class FakeMapFragment implements MapFragment {
 
     public void clickOnFeature(int index) {
         featureClickListener.onFeature(index);
+    }
+
+    public List<MapPoint> getMarkers() {
+        return markers;
     }
 }

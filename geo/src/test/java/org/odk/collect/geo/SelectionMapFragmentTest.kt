@@ -78,6 +78,22 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `updates markers when items update`() {
+        val items = listOf(
+            buildMappableSelectItem(0, 40.0, 44.0),
+            buildMappableSelectItem(1, 41.0, 45.0)
+        )
+        val itemsLiveData = MutableLiveData(items)
+        whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        assertThat(map.markers, equalTo(itemsLiveData.value!!.map { it.toMapPoint() }))
+
+        itemsLiveData.value = emptyList()
+        assertThat(map.markers, equalTo(emptyList()))
+    }
+
+    @Test
     fun `zooms to fit all items`() {
         val items = listOf(
             buildMappableSelectItem(0, 40.0, 44.0),
