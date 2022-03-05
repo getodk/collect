@@ -110,6 +110,10 @@ android {
             applicationId "org.smap.smapTask.android.assignfield"
             versionName "6.606-assignfield"
         }
+        assignfield2 {
+            applicationId "org.smap.smapTask.android.assignfield2"
+            versionName "6.606-assignfield2"
+        }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
             versionName "6.606-informEd"
@@ -117,6 +121,10 @@ android {
         stl {
             applicationId "org.smap.smapTask.android.stl"
             versionName "6.606-stl"
+        }
+        stl2 {
+            applicationId "org.smap.smapTask.android.stl2"
+            versionName "6.606-stl2"
         }
         ljs {
             applicationId "org.smap.smapTask.android.ljs"

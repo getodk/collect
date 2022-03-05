@@ -36,10 +36,14 @@ collect_app/tdh/
 collect_app/src/tdh/
 collect_app/assignfield/
 collect_app/src/assignfield/
+collect_app/assignfield2/
+collect_app/src/assignfield2/
 collect_app/informEd/
 collect_app/src/informEd/
 collect_app/stl/
 collect_app/src/stl/
+collect_app/stl2/
+collect_app/src/stl2/
 collect_app/ljs/
 collect_app/src/ljs/
 
