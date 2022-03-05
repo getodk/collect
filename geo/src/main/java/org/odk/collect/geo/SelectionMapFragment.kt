@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +44,8 @@ class SelectionMapFragment : Fragment() {
     @Inject
     internal lateinit var selectionMapViewModelFactory: SelectionMapViewModelFactory
     private val selectionMapViewModel by activityViewModels<SelectionMapViewModel> { selectionMapViewModelFactory }
+
+    private val selectionViewModel by viewModels<SelectionViewModel>()
 
     private lateinit var map: MapFragment
     private var viewportInitialized = false
@@ -173,7 +176,7 @@ class SelectionMapFragment : Fragment() {
             update(it)
         }
 
-        selectionMapViewModel.getSelectedItemId()?.let {
+        selectionViewModel.getSelectedItemId()?.let {
             onFeatureClicked(it)
         }
     }
@@ -206,13 +209,13 @@ class SelectionMapFragment : Fragment() {
 
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
+                val selectedSubmissionId = selectionViewModel.getSelectedItemId()
                 if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != null) {
                     map.setMarkerIcon(
                         selectedSubmissionId,
                         itemsByFeatureId[selectedSubmissionId]!!.smallIcon
                     )
-                    selectionMapViewModel.setSelectedItemId(-1)
+                    selectionViewModel.setSelectedItemId(-1)
                     onBackPressedCallback.isEnabled = false
                 } else {
                     onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
@@ -259,7 +262,7 @@ class SelectionMapFragment : Fragment() {
                 summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
-            selectionMapViewModel.setSelectedItemId(featureId)
+            selectionViewModel.setSelectedItemId(featureId)
         }
     }
 
@@ -283,11 +286,11 @@ class SelectionMapFragment : Fragment() {
     }
 
     private fun isSummaryForGivenSubmissionDisplayed(newSubmissionId: Int): Boolean {
-        return selectionMapViewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+        return selectionViewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun removeEnlargedMarkerIfExist(newSubmissionId: Int) {
-        val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
+        val selectedSubmissionId = selectionViewModel.getSelectedItemId()
         if (selectedSubmissionId != null && selectedSubmissionId != newSubmissionId) {
             map.setMarkerIcon(
                 selectedSubmissionId,
@@ -310,7 +313,7 @@ class SelectionMapFragment : Fragment() {
 
             map.setMarkerIcon(
                 featureId,
-                if (featureId == selectionMapViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
+                if (featureId == selectionViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
             )
 
             itemsByFeatureId[featureId] = item
@@ -328,12 +331,22 @@ class SelectionMapFragment : Fragment() {
     }
 }
 
+class SelectionViewModel : ViewModel() {
+
+    private var selectedItemId: Int? = null
+
+    fun getSelectedItemId(): Int? {
+        return selectedItemId
+    }
+
+    fun setSelectedItemId(itemId: Int?) {
+        selectedItemId = itemId
+    }
+}
+
 abstract class SelectionMapViewModel : ViewModel() {
     abstract fun setMapTitle(title: String)
     abstract fun getMapTitle(): LiveData<String>
-
-    abstract fun setSelectedItemId(itemId: Int?)
-    abstract fun getSelectedItemId(): Int?
 
     abstract fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>)
     abstract fun getItemCount(): LiveData<Int>
@@ -347,18 +360,9 @@ internal class SelectionMapViewModelImpl : SelectionMapViewModel() {
     private var mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
-    private var selectedItemId: Int? = null
 
     override fun getMapTitle(): LiveData<String> {
         return mapTitle
-    }
-
-    override fun getSelectedItemId(): Int? {
-        return selectedItemId
-    }
-
-    override fun setSelectedItemId(itemId: Int?) {
-        selectedItemId = itemId
     }
 
     override fun getItemCount(): LiveData<Int> {

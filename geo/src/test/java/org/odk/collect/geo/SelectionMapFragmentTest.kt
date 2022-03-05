@@ -37,7 +37,6 @@ class SelectionMapFragmentTest {
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemCount() } doReturn MutableLiveData(0)
         on { getMappableItems() } doReturn MutableLiveData(emptyList())
-        on { getSelectedItemId() } doReturn null
     }
 
     @Before
@@ -187,6 +186,61 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `tapping on item switches item marker to large icon`() {
+        val items = listOf(
+            buildMappableSelectItem(
+                0,
+                40.0,
+                44.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm
+            ),
+            buildMappableSelectItem(
+                1,
+                41.0,
+                45.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm
+            ),
+        )
+        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(1)
+        assertThat(map.markerIcons[0], equalTo(items[0].smallIcon))
+        assertThat(map.markerIcons[1], equalTo(items[1].largeIcon))
+    }
+
+    @Test
+    fun `tapping on item when another has been tapped switches the first one back to its small icon`() {
+        val items = listOf(
+            buildMappableSelectItem(
+                0,
+                40.0,
+                44.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm
+            ),
+            buildMappableSelectItem(
+                1,
+                41.0,
+                45.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm
+            ),
+        )
+        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(0)
+        map.clickOnFeature(1)
+        assertThat(map.markerIcons[0], equalTo(items[0].smallIcon))
+        assertThat(map.markerIcons[1], equalTo(items[1].largeIcon))
+    }
+
+    @Test
     fun `recreating maintains zoom`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.zoomToPoint(MapPoint(55.0, 66.0), 7.0, false)
@@ -201,16 +255,18 @@ class SelectionMapFragmentTest {
     private fun buildMappableSelectItem(
         id: Long,
         latitude: Double,
-        longitude: Double
+        longitude: Double,
+        smallIcon: Int = android.R.drawable.ic_lock_power_off,
+        largeIcon: Int = android.R.drawable.ic_lock_idle_charging
     ): MappableSelectItem {
         return MappableSelectItem(
             id,
             latitude,
             longitude,
-            android.R.drawable.ic_lock_power_off,
-            android.R.drawable.ic_lock_power_off,
+            smallIcon,
+            largeIcon,
             id.toString(),
-            MappableSelectItem.IconifiedText(android.R.drawable.ic_lock_power_off, "An item"),
+            MappableSelectItem.IconifiedText(android.R.drawable.ic_lock_idle_charging, "An item"),
             null,
             null
         )

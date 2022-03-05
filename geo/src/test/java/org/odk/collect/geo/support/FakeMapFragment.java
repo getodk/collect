@@ -27,6 +27,7 @@ public class FakeMapFragment implements MapFragment {
     private MapPoint gpsLocation;
     private FeatureListener featureClickListener;
     private final List<MapPoint> markers = new ArrayList<>();
+    private final List<Integer> markerIcons = new ArrayList<>();
 
     public void applyConfig(Bundle config) {
 
@@ -77,12 +78,13 @@ public class FakeMapFragment implements MapFragment {
     @Override
     public int addMarker(MapPoint point, boolean draggable, String iconAnchor) {
         markers.add(point);
+        markerIcons.add(null);
         return markers.size() - 1;
     }
 
     @Override
     public void setMarkerIcon(int featureId, int drawableId) {
-
+        markerIcons.set(featureId, drawableId);
     }
 
     @Override
@@ -119,6 +121,7 @@ public class FakeMapFragment implements MapFragment {
     @Override
     public void clearFeatures() {
         markers.clear();
+        markerIcons.clear();
     }
 
     @Override
@@ -199,5 +202,9 @@ public class FakeMapFragment implements MapFragment {
 
     public List<MapPoint> getMarkers() {
         return markers;
+    }
+
+    public List<Integer> getMarkerIcons() {
+        return markerIcons;
     }
 }
