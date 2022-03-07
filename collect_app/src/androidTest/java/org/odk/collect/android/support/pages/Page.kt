@@ -47,10 +47,10 @@ import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
-import org.odk.collect.android.support.matchers.RecyclerViewMatcher
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

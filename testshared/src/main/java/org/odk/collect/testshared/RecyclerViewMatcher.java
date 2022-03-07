@@ -1,4 +1,4 @@
-package org.odk.collect.android.support.matchers;
+package org.odk.collect.testshared;
 
 import android.content.res.Resources;
 import android.view.View;
