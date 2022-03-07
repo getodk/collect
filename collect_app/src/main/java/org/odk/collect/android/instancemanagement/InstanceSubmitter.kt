@@ -65,6 +65,7 @@ class InstanceSubmitter(
                 result[instance] = null
 
                 deleteInstance(instance)
+                logUploadedForm(instance)
             } catch (e: FormUploadException) {
                 Timber.d(e)
                 result[instance] = e
@@ -119,6 +120,9 @@ class InstanceSubmitter(
                 FormsRepositoryProvider(Collect.getInstance()).get()
             ).delete(instance.dbId)
         }
+    }
+
+    private fun logUploadedForm(instance: Instance) {
         val action = if (isGoogleSheetsProtocol()) "HTTP-Sheets auto" else "HTTP auto"
         val label = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
         analytics.logEvent(AnalyticsEvents.SUBMISSION, action, label)
