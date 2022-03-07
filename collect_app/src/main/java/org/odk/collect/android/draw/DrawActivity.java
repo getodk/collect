@@ -13,7 +13,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.draw;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -26,6 +26,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -35,21 +37,24 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.common.collect.ImmutableList;
-import com.rarepebble.colorpicker.ColorPickerView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
-import org.odk.collect.android.views.DrawView;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -82,6 +87,9 @@ public class DrawActivity extends CollectAbstractActivity {
     private String alertTitleString;
     private AlertDialog alertDialog;
 
+    @Inject
+    PenColorPickerViewModel.Factory factory;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -99,9 +107,13 @@ public class DrawActivity extends CollectAbstractActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.draw_layout);
+        DaggerUtils.getComponent(this).inject(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        PenColorPickerViewModel viewModel = new ViewModelProvider(this, factory).get(PenColorPickerViewModel.class);
+        viewModel.getPenColor().observe(this, penColor -> drawView.setColor(penColor));
 
         fabActions = findViewById(R.id.fab_actions);
         final FloatingActionButton fabSetColor = findViewById(R.id.fab_set_color);
@@ -336,16 +348,7 @@ public class DrawActivity extends CollectAbstractActivity {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
 
-            final ColorPickerView picker = new ColorPickerView(this);
-            picker.setColor(drawView.getColor());
-            picker.showAlpha(false);
-            picker.showHex(false);
-
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-            builder
-                    .setView(picker)
-                    .setPositiveButton(R.string.ok, (dialog, which) -> drawView.setColor(picker.getColor()))
-                    .show();
+            DialogFragmentUtils.showIfNotShowing(PenColorPickerDialog.class, getSupportFragmentManager());
         }
     }
 }

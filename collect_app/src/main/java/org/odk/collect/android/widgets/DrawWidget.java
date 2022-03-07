@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.Button;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;

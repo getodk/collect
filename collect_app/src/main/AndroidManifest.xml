@@ -103,7 +103,7 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.DrawActivity"
+            android:name=".draw.DrawActivity"
             android:screenOrientation="landscape" />
         <activity
             android:name=".gdrive.GoogleDriveActivity"

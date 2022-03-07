@@ -36,7 +36,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.QuestionMediaManager;

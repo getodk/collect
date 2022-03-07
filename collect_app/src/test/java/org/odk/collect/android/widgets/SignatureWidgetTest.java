@@ -15,7 +15,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.ReferenceManager;
 import org.junit.Test;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.DrawActivity;
+import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
