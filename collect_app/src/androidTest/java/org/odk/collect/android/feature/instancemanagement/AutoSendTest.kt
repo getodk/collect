@@ -6,7 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.FormsDownloadErrorPage
+import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -77,7 +77,7 @@ class AutoSendTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                FormsDownloadErrorPage()
+                ErrorPage()
             )
             .open()
             .clickNotification(

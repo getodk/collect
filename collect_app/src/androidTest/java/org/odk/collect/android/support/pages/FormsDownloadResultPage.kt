@@ -20,8 +20,8 @@ class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
         return this
     }
 
-    fun showDetails(): FormsDownloadErrorPage {
+    fun showDetails(): ErrorPage {
         onView(withText(getTranslatedString(R.string.show_details))).perform(click())
-        return FormsDownloadErrorPage().assertOnPage()
+        return ErrorPage().assertOnPage()
     }
 }

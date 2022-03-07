@@ -9,14 +9,14 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.odk.collect.android.R
 
-class FormsDownloadErrorPage : Page<FormsDownloadErrorPage>() {
+class ErrorPage : Page<ErrorPage>() {
 
-    override fun assertOnPage(): FormsDownloadErrorPage {
+    override fun assertOnPage(): ErrorPage {
         assertText(R.string.errors)
         return this
     }
 
-    fun assertError(errorMessage: String): FormsDownloadErrorPage {
+    fun assertError(errorMessage: String): ErrorPage {
         assertText(errorMessage)
         return this
     }
