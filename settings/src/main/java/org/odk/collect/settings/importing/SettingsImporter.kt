@@ -20,6 +20,7 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
+    @Throws(JSONException::class)
     fun fromJSON(json: String, project: Project.Saved): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
@@ -31,38 +32,34 @@ internal class SettingsImporter(
         generalSettings.clear()
         adminSettings.clear()
 
-        try {
-            val jsonObject = JSONObject(json)
+        val jsonObject = JSONObject(json)
 
-            // Import unprotected settings
-            val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
-            importToPrefs(general, generalSettings)
+        // Import unprotected settings
+        val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
+        importToPrefs(general, generalSettings)
 
-            // Import protected settings
-            val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
-            importToPrefs(admin, adminSettings)
+        // Import protected settings
+        val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
+        importToPrefs(admin, adminSettings)
 
-            // Import project details
-            val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
-                jsonObject.getJSONObject(AppConfigurationKeys.PROJECT)
-            } else {
-                JSONObject()
-            }
-
-            val connectionIdentifier = if (generalSettings.getString(ProjectKeys.KEY_PROTOCOL).equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-                generalSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
-            } else {
-                generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
-            }
-
-            importProjectDetails(
-                project,
-                projectDetails,
-                connectionIdentifier
-            )
-        } catch (ignored: JSONException) {
-            // Ignored
+        // Import project details
+        val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
+            jsonObject.getJSONObject(AppConfigurationKeys.PROJECT)
+        } else {
+            JSONObject()
         }
+
+        val connectionIdentifier = if (generalSettings.getString(ProjectKeys.KEY_PROTOCOL).equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
+            generalSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
+        } else {
+            generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
+        }
+
+        importProjectDetails(
+            project,
+            projectDetails,
+            connectionIdentifier
+        )
 
         settingsMigrator.migrate(generalSettings, adminSettings)
 
