@@ -54,25 +54,6 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
     open val isReadPhoneStatePermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
 
-    open fun requestReadStoragePermission(activity: Activity, action: PermissionListener) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    showAdditionalExplanation(
-                        activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action
-                    )
-                }
-            },
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-    }
-
     fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
@@ -329,7 +310,7 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
             contentResolver.query(uri, null, null, null, null)
                 .use { listener.granted() }
         } catch (e: SecurityException) {
-            requestReadStoragePermission(
+            requestPermissions(
                 activity,
                 object : PermissionListener {
                     override fun granted() {
@@ -337,9 +318,14 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                     }
 
                     override fun denied() {
-                        listener.denied()
+                        showAdditionalExplanation(
+                            activity, R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
+                            listener
+                        )
                     }
-                }
+                },
+                Manifest.permission.READ_EXTERNAL_STORAGE
             )
         } catch (e: Exception) {
             listener.denied()
