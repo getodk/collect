@@ -89,7 +89,7 @@ class ActivityGeoDataRequester(
         answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
-        permissionsProvider.requestLocationPermissions(
+        permissionsProvider.requestEnabledLocationPermissions(
             activity,
             object : PermissionListener {
                 override fun granted() {
@@ -121,7 +121,7 @@ class ActivityGeoDataRequester(
         answerText: String?,
         waitingForDataRegistry: WaitingForDataRegistry
     ) {
-        permissionsProvider.requestLocationPermissions(
+        permissionsProvider.requestEnabledLocationPermissions(
             activity,
             object : PermissionListener {
                 override fun granted() {

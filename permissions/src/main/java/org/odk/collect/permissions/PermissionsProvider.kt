@@ -95,35 +95,13 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
         )
     }
 
-    fun requestLocationPermissions(activity: Activity, action: PermissionListener) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    showAdditionalExplanation(
-                        activity,
-                        R.string.location_runtime_permissions_denied_title,
-                        R.string.location_runtime_permissions_denied_desc,
-                        R.drawable.ic_room_black_24dp,
-                        action
-                    )
-                }
-            },
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
-
     /**
      * Request location permissions and make sure Location is enabled at a system level. If the
      * latter is not true, show a dialog prompting the user to do so rather than
      * [PermissionListener.granted].
      */
     fun requestEnabledLocationPermissions(activity: Activity, action: PermissionListener) {
-        requestLocationPermissions(
+        requestPermissions(
             activity,
             object : PermissionListener {
                 override fun granted() {
@@ -149,9 +127,16 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                 }
 
                 override fun denied() {
-                    action.denied()
+                    showAdditionalExplanation(
+                        activity,
+                        R.string.location_runtime_permissions_denied_title,
+                        R.string.location_runtime_permissions_denied_desc,
+                        R.drawable.ic_room_black_24dp,
+                        action
+                    )
                 }
-            }
+            },
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
 
