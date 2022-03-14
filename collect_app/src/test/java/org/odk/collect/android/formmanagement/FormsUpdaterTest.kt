@@ -40,6 +40,7 @@ class FormsUpdaterTest {
     private val component = DaggerUtils.getComponent(application)
 
     private val formsRepositoryProvider = component.formsRepositoryProvider()
+    private val instancesRepositoryProvider = component.instancesRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
     private val syncStatusAppState = mock<SyncStatusAppState>()
@@ -69,7 +70,7 @@ class FormsUpdaterTest {
             formsRepositoryProvider = formsRepositoryProvider,
             formSourceProvider = formSourceProvider,
             syncStatusAppState = syncStatusAppState,
-            instancesRepositoryProvider = mock(),
+            instancesRepositoryProvider = instancesRepositoryProvider,
             changeLockProvider
         )
     }
