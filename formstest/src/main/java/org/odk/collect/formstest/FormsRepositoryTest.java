@@ -216,6 +216,25 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void save_whenFormHasIdAndVersionThatAlreadyExists_updatesExisting() {
+        FormsRepository formsRepository = buildSubject();
+
+        Form form1 = FormUtils.buildForm("id", "version", getFormFilesPath())
+                .displayName("original1")
+                .build();
+        Form form2 = FormUtils.buildForm("id", "version", getFormFilesPath())
+                .displayName("original2")
+                .build();
+
+        formsRepository.save(form1);
+        formsRepository.save(form2);
+
+        List<Form> forms = formsRepository.getAllByFormIdAndVersion("id", "version");
+        assertThat(forms.size(), is(1));
+        assertThat(forms.get(0).getDisplayName(), is("original2"));
+    }
+
+    @Test
     public void delete_deletesFiles() throws Exception {
         FormsRepository formsRepository = buildSubject();
         Form form = formsRepository.save(FormUtils.buildForm("id", "version", getFormFilesPath()).build());
