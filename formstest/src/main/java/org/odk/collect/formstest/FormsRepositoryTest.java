@@ -183,7 +183,7 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_whenFormHasId_updatesExisting() {
+    public void save_whenFormHasDbId_updatesExisting() {
         FormsRepository formsRepository = buildSubject();
         Form originalForm = formsRepository.save(FormUtils.buildForm("id", "version", getFormFilesPath())
                 .displayName("original")
@@ -197,7 +197,7 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_whenFormHasId_updatesHash() throws IOException {
+    public void save_whenFormHasDbId_updatesHash() throws IOException {
         FormsRepository formsRepository = buildSubject();
         Form originalForm = formsRepository.save(FormUtils.buildForm("id", "version", getFormFilesPath())
                 .displayName("original")
@@ -216,7 +216,7 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_whenFormHasIdAndVersionThatAlreadyExists_updatesExisting() {
+    public void save_whenFormHasNoDbIdButFormIdAndVersionThatAlreadyExists_updatesExisting() {
         FormsRepository formsRepository = buildSubject();
 
         Form form1 = FormUtils.buildForm("id", "version", getFormFilesPath())
