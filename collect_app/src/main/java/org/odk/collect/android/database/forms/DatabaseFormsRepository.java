@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.provider.BaseColumns;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.database.DatabaseConnection;
@@ -143,6 +144,14 @@ public class DatabaseFormsRepository implements FormsRepository {
             values.put(DELETED_DATE, 0L);
         } else {
             values.putNull(DELETED_DATE);
+        }
+
+        List<Form> formsWithSameIDAndVersion = getAllByFormIdAndVersion(form.getFormId(), form.getVersion());
+        if (!formsWithSameIDAndVersion.isEmpty()) {
+            Long existingFormDbId = formsWithSameIDAndVersion.get(0).getDbId();
+            values.put(BaseColumns._ID, existingFormDbId);
+            updateForm(existingFormDbId, values);
+            return get(existingFormDbId);
         }
 
         if (form.getDbId() == null) {
