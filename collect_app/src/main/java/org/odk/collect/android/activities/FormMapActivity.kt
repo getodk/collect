@@ -13,14 +13,12 @@
  */
 package org.odk.collect.android.activities
 
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import org.json.JSONException
+import org.json.JSONObject
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel.ClickAction
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel.MappableFormInstance
 import org.odk.collect.android.external.InstanceProvider
 import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
@@ -31,13 +29,14 @@ import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.MappableSelectItem.IconifiedText
 import org.odk.collect.geo.SelectionMapFragment
 import org.odk.collect.geo.SelectionMapViewModel
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
+import timber.log.Timber
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
@@ -59,7 +58,6 @@ class FormMapActivity : LocalizedActivity() {
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     private lateinit var form: Form
-    private lateinit var formMapViewModel: FormMapViewModel
     private lateinit var selectionMapViewModel: SelectionMapViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +65,7 @@ class FormMapActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.form_map_activity)
 
-        form = loadForm()
+        form = formsRepositoryProvider.get()[intent.getLongExtra(EXTRA_FORM_ID, -1)]!!
 
         val formNavigator = FormNavigator(
             currentProjectProvider,
@@ -95,76 +93,132 @@ class FormMapActivity : LocalizedActivity() {
         )
 
         selectionMapViewModel.setMapTitle(form.displayName)
-        selectionMapViewModel.setItems(formMapViewModel.totalInstanceCount, getItems())
+        val instances = instancesRepositoryProvider.get().getAllByFormId(form.formId)
+
+        val loader = FormMapInstancesLoader(this, instancesRepositoryProvider.get(), settingsProvider)
+        selectionMapViewModel.setItems(instances.size, loader.load(form.formId))
     }
 
-    private fun loadForm(): Form {
-        val form = formsRepositoryProvider.get()[intent.getLongExtra(EXTRA_FORM_ID, -1)]
-
-        val viewModelFactory = FormMapViewModelFactory(form!!, instancesRepositoryProvider.get())
-        formMapViewModel = ViewModelProvider(this, viewModelFactory)[FormMapViewModel::class.java]
-
-        return form
+    companion object {
+        const val EXTRA_FORM_ID = "form_id"
     }
+}
 
-    private fun getItems(): List<MappableSelectItem> {
-        val instances = formMapViewModel.mappableFormInstances
+private class FormMapInstancesLoader(
+    private val context: Context,
+    private val instancesRepository: InstancesRepository,
+    private val settingsProvider: SettingsProvider
+) {
+
+    fun load(formId: String): MutableList<MappableSelectItem> {
+        val instances = instancesRepository.getAllByFormId(formId)
         val items: MutableList<MappableSelectItem> = ArrayList()
+
         for (instance in instances) {
-            items.add(convertItem(instance))
+            if (instance.geometry != null && instance.geometryType == "Point") {
+                try {
+                    val geometry = JSONObject(instance.geometry)
+                    val coordinates = geometry.getJSONArray("coordinates")
+
+                    // In GeoJSON, longitude comes before latitude.
+                    val lon = coordinates.getDouble(0)
+                    val lat = coordinates.getDouble(1)
+
+                    items.add(convertItem(instance, lat, lon, context))
+                } catch (e: JSONException) {
+                    Timber.w("Invalid JSON in instances table: %s", instance.geometry)
+                }
+            }
         }
+
         return items
     }
 
-    private fun convertItem(mappableFormInstance: MappableFormInstance): MappableSelectItem {
+    private fun convertItem(
+        instance: Instance,
+        latitude: Double,
+        longitude: Double,
+        context: Context
+    ): MappableSelectItem {
         val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
-            this,
-            mappableFormInstance.status,
-            mappableFormInstance.lastStatusChangeDate
+            context,
+            instance.status,
+            Date(instance.lastStatusChangeDate)
         )
 
-        val info = when (mappableFormInstance.clickAction) {
-            ClickAction.DELETED_TOAST -> {
-                val deletedTime = getString(R.string.deleted_on_date_at_time)
+        val info = when {
+            instance.deletedDate != null -> {
+                val deletedTime = context.getString(R.string.deleted_on_date_at_time)
                 val dateFormat = SimpleDateFormat(
                     deletedTime,
                     Locale.getDefault()
                 )
 
-                dateFormat.format(formMapViewModel.getDeletedDateOf(mappableFormInstance.databaseId))
+                dateFormat.format(instance.deletedDate)
             }
 
-            ClickAction.NOT_VIEWABLE_TOAST -> getString(R.string.cannot_edit_completed_form)
+            !instance.canEditWhenComplete() && listOf(
+                Instance.STATUS_COMPLETE,
+                Instance.STATUS_SUBMISSION_FAILED,
+                Instance.STATUS_SUBMITTED
+            ).contains(instance.status) -> {
+                context.getString(R.string.cannot_edit_completed_form)
+            }
+
             else -> null
         }
 
-        val action = when (mappableFormInstance.clickAction) {
-            ClickAction.OPEN_READ_ONLY -> IconifiedText(
-                R.drawable.ic_visibility, getString(R.string.view_data)
-            )
+        val canEditSaved = settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 
-            ClickAction.OPEN_EDIT -> {
-                val canEditSaved = settingsProvider.getProtectedSettings()
-                    .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+        val editAction = MappableSelectItem.IconifiedText(
+            if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
+            context.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
+        )
 
-                IconifiedText(
-                    if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
-                    getString(if (canEditSaved) R.string.review_data else R.string.view_data)
-                )
+        val viewAction = MappableSelectItem.IconifiedText(
+            R.drawable.ic_visibility,
+            context.getString(R.string.view_data)
+        )
+
+        val action = if (instance.deletedDate != null) {
+            null
+        } else {
+            when (instance.status) {
+                Instance.STATUS_INCOMPLETE -> {
+                    editAction
+                }
+
+                Instance.STATUS_COMPLETE -> {
+                    if (instance.canEditWhenComplete()) {
+                        editAction
+                    } else {
+                        null
+                    }
+                }
+
+                Instance.STATUS_SUBMISSION_FAILED,
+                Instance.STATUS_SUBMITTED -> {
+                    if (instance.canEditWhenComplete()) {
+                        viewAction
+                    } else {
+                        null
+                    }
+                }
+
+                else -> throw IllegalArgumentException()
             }
-
-            else -> null
         }
 
         return MappableSelectItem(
-            mappableFormInstance.databaseId,
-            mappableFormInstance.latitude,
-            mappableFormInstance.longitude,
-            getDrawableIdForStatus(mappableFormInstance.status, false),
-            getDrawableIdForStatus(mappableFormInstance.status, true),
-            mappableFormInstance.instanceName,
-            IconifiedText(
-                getSubmissionSummaryStatusIcon(mappableFormInstance.status),
+            instance.dbId,
+            latitude,
+            longitude,
+            getDrawableIdForStatus(instance.status, false),
+            getDrawableIdForStatus(instance.status, true),
+            instance.displayName,
+            MappableSelectItem.IconifiedText(
+                getSubmissionSummaryStatusIcon(instance.status),
                 instanceLastStatusChangeDate
             ),
             info,
@@ -172,47 +226,25 @@ class FormMapActivity : LocalizedActivity() {
         )
     }
 
-    fun onFeatureClicked(featureId: Int) {
-        val fragment = supportFragmentManager.fragments.stream()
-            .filter { fragment1: Fragment -> fragment1.javaClass == SelectionMapFragment::class.java }
-            .findFirst().get()
-        (fragment as SelectionMapFragment).onFeatureClicked(featureId)
+    private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {
+        when (status) {
+            Instance.STATUS_INCOMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
+            Instance.STATUS_COMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
+            Instance.STATUS_SUBMITTED -> return if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
+            Instance.STATUS_SUBMISSION_FAILED -> return if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
+        }
+
+        return R.drawable.ic_map_point
     }
 
-    private inner class FormMapViewModelFactory(
-        private val form: Form,
-        private val instancesRepository: InstancesRepository
-    ) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FormMapViewModel(form, instancesRepository) as T
-        }
-    }
-
-    companion object {
-        const val EXTRA_FORM_ID = "form_id"
-
-        private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {
-            when (status) {
-                Instance.STATUS_INCOMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
-                Instance.STATUS_COMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
-                Instance.STATUS_SUBMITTED -> return if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
-                Instance.STATUS_SUBMISSION_FAILED -> return if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
-            }
-
-            return R.drawable.ic_map_point
+    private fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
+        when (instanceStatus) {
+            Instance.STATUS_INCOMPLETE -> return R.drawable.form_state_saved
+            Instance.STATUS_COMPLETE -> return R.drawable.form_state_finalized
+            Instance.STATUS_SUBMITTED -> return R.drawable.form_state_submited
+            Instance.STATUS_SUBMISSION_FAILED -> return R.drawable.form_state_submission_failed
         }
 
-        fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
-            when (instanceStatus) {
-                Instance.STATUS_INCOMPLETE -> return R.drawable.form_state_saved
-                Instance.STATUS_COMPLETE -> return R.drawable.form_state_finalized
-                Instance.STATUS_SUBMITTED -> return R.drawable.form_state_submited
-                Instance.STATUS_SUBMISSION_FAILED -> return R.drawable.form_state_submission_failed
-            }
-
-            throw IllegalArgumentException()
-        }
+        throw IllegalArgumentException()
     }
 }
