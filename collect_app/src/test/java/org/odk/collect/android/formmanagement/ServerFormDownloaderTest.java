@@ -121,7 +121,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_savesNewVersionAlongsideOldVersion() throws Exception {
+    public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_updateTheExistingOne() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -154,11 +154,9 @@ public class ServerFormDownloaderTest {
         downloader.downloadForm(serverFormDetailsUpdated, null, null);
 
         List<Form> allForms = formsRepository.getAllByFormIdAndVersion("id", "version");
-        assertThat(allForms.size(), is(2));
-        allForms.forEach(f -> {
-            File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), f.getFormFilePath()));
-            assertThat(formFile.exists(), is(true));
-        });
+        assertThat(allForms.size(), is(1));
+        File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), allForms.get(0).getFormFilePath()));
+        assertThat(formFile.exists(), is(true));
     }
 
     @Test
@@ -480,39 +478,6 @@ public class ServerFormDownloaderTest {
         downloader.downloadForm(serverFormDetails, null, null);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
     }
-
-    @Test
-    public void whenMultipleFormsWithSameFormIdVersionDeleted_reDownloadUnDeletesFormWithSameHash() throws Exception {
-        String xform = FormUtils.createXFormBody("deleted-form", "version", "A title");
-        Form form = buildForm("deleted-form", "version", getFormFilesPath(), xform)
-                .deleted(true)
-                .build();
-        formsRepository.save(form);
-
-        String xform2 = FormUtils.createXFormBody("deleted-form", "version", "A different title");
-        Form form2 = buildForm("deleted-form", "version", getFormFilesPath(), xform2)
-                .deleted(true)
-                .build();
-        formsRepository.save(form2);
-
-        ServerFormDetails serverFormDetails = new ServerFormDetails(
-                form2.getDisplayName(),
-                "http://downloadUrl",
-                form2.getFormId(),
-                form2.getVersion(),
-                Md5.getMd5Hash(new ByteArrayInputStream(xform2.getBytes())),
-                true,
-                false,
-                null);
-
-        FormSource formSource = mock(FormSource.class);
-        when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform2.getBytes()));
-
-        ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
-        downloader.downloadForm(serverFormDetails, null, null);
-        assertThat(formsRepository.get(1L).isDeleted(), is(true));
-        assertThat(formsRepository.get(2L).isDeleted(), is(false));
-    }
     //endregion
 
     //region Form update analytics
@@ -553,10 +518,6 @@ public class ServerFormDownloaderTest {
         String xform = FormUtils.createXFormBody("form", "version", "A title");
         Form form = buildForm("form", "version", getFormFilesPath(), xform).build();
         formsRepository.save(form);
-
-        String xform2 = FormUtils.createXFormBody("form2", "version", "A different title");
-        Form form2 = buildForm("form", "version", getFormFilesPath(), xform2).build();
-        formsRepository.save(form2);
 
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 form.getDisplayName(),
