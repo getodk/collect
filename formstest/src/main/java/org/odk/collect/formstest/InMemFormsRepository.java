@@ -100,6 +100,18 @@ public class InMemFormsRepository implements FormsRepository {
             builder.formMediaPath(TempFiles.getPathInTempDir());
         }
 
+        List<Form> formsWithSameIDAndVersion = getAllByFormIdAndVersion(form.getFormId(), form.getVersion());
+        if (!formsWithSameIDAndVersion.isEmpty()) {
+            forms.remove(formsWithSameIDAndVersion.get(0));
+
+            String formFilePath = form.getFormFilePath();
+            String hash = Md5.getMd5Hash(new File(formFilePath));
+            builder.md5Hash(hash);
+
+            forms.add(builder.build());
+            return form;
+        }
+
         if (form.getDbId() != null) {
             String formFilePath = form.getFormFilePath();
             String hash = Md5.getMd5Hash(new File(formFilePath));
