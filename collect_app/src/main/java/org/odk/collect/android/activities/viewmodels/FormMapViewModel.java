@@ -130,7 +130,7 @@ public class FormMapViewModel extends ViewModel {
         DELETED_TOAST, NOT_VIEWABLE_TOAST, OPEN_READ_ONLY, OPEN_EDIT, NONE
     }
 
-    public class MappableFormInstance {
+    public static class MappableFormInstance {
         private final long databaseId;
         private final Double latitude;
         private final Double longitude;
@@ -139,7 +139,7 @@ public class FormMapViewModel extends ViewModel {
         private final String status;
         private final ClickAction clickAction;
 
-        MappableFormInstance(long databaseId, Double latitude, Double longitude, String instanceName,
+        public MappableFormInstance(long databaseId, Double latitude, Double longitude, String instanceName,
                              Long lastStatusChangeDate, String status, ClickAction clickAction) {
             this.databaseId = databaseId;
             this.latitude = latitude;

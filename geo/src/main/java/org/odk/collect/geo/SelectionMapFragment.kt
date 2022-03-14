@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.geo.maps.MapFragment
@@ -346,7 +348,7 @@ abstract class SelectionMapViewModel : ViewModel() {
 
     abstract fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>)
     abstract fun getItemCount(): LiveData<Int>
-    abstract fun getMappableItems(): LiveData<List<MappableSelectItem>>
+    abstract fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
 }
 
 interface SelectionMapViewModelFactory : ViewModelProvider.Factory
@@ -354,7 +356,7 @@ interface SelectionMapViewModelFactory : ViewModelProvider.Factory
 internal class SelectionMapViewModelImpl : SelectionMapViewModel() {
 
     private var mapTitle = MutableLiveData<String>()
-    private var mappableItems = MutableLiveData<List<MappableSelectItem>>(emptyList())
+    private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
 
     override fun getMapTitle(): LiveData<String> {
@@ -365,7 +367,7 @@ internal class SelectionMapViewModelImpl : SelectionMapViewModel() {
         return itemCount
     }
 
-    override fun getMappableItems(): LiveData<List<MappableSelectItem>> {
+    override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
         return mappableItems
     }
 

@@ -95,7 +95,7 @@ class FormMapActivity : LocalizedActivity() {
         )
 
         selectionMapViewModel.setMapTitle(form.displayName)
-        selectionMapViewModel.setItems(getTotalInstanceCount(), getItems())
+        selectionMapViewModel.setItems(formMapViewModel.totalInstanceCount, getItems())
     }
 
     private fun loadForm(): Form {
@@ -115,8 +115,6 @@ class FormMapActivity : LocalizedActivity() {
         }
         return items
     }
-
-    private fun getTotalInstanceCount(): Int = formMapViewModel.totalInstanceCount
 
     private fun convertItem(mappableFormInstance: MappableFormInstance): MappableSelectItem {
         val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
@@ -139,6 +137,7 @@ class FormMapActivity : LocalizedActivity() {
             ClickAction.NOT_VIEWABLE_TOAST -> getString(R.string.cannot_edit_completed_form)
             else -> null
         }
+
         val action = when (mappableFormInstance.clickAction) {
             ClickAction.OPEN_READ_ONLY -> IconifiedText(
                 R.drawable.ic_visibility, getString(R.string.view_data)

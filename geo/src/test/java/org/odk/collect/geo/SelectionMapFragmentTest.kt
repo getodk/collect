@@ -23,6 +23,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
@@ -42,7 +43,7 @@ class SelectionMapFragmentTest {
     private val viewModel = mock<SelectionMapViewModel> {
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemCount() } doReturn MutableLiveData(0)
-        on { getMappableItems() } doReturn MutableLiveData(emptyList())
+        on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())
     }
 
     @Before
@@ -98,11 +99,11 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_charging
             )
         )
-        val itemsLiveData = MutableLiveData(items)
+        val itemsLiveData = MutableNonNullLiveData(items)
         whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        assertThat(map.markers, equalTo(itemsLiveData.value!!.map { it.toMapPoint() }))
+        assertThat(map.markers, equalTo(itemsLiveData.value.map { it.toMapPoint() }))
 
         itemsLiveData.value = emptyList()
         assertThat(map.markers, equalTo(emptyList()))
@@ -124,7 +125,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_charging
             )
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -135,7 +136,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `zooms to current location when there are no items`() {
-        whenever(viewModel.getMappableItems()).doReturn(MutableLiveData(emptyList()))
+        whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(null))
@@ -146,7 +147,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `does not zoom to current location when it changes`() {
-        whenever(viewModel.getMappableItems()).doReturn(MutableLiveData(emptyList()))
+        whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(null))
@@ -184,7 +185,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_charging
             )
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         onView(withId(R.id.zoom_to_bounds)).perform(click())
@@ -221,7 +222,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_charging
             )
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.zoomToPoint(MapPoint(55.0, 66.0), 2.0, false)
@@ -247,7 +248,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -272,7 +273,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -300,7 +301,7 @@ class SelectionMapFragmentTest {
                 name = "Blah2"
             ),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
