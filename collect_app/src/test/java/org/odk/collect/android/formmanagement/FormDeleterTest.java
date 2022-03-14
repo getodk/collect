@@ -14,7 +14,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
-
 public class FormDeleterTest {
 
     private final InMemFormsRepository formsRepository = new InMemFormsRepository();
@@ -103,30 +102,5 @@ public class FormDeleterTest {
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).isDeleted(), is(true));
-    }
-
-    @Test
-    public void whenFormIdAndVersionCombinationIsNotUnique_andInstanceExists_hardDeletesForm() {
-        Form formToDelete = formsRepository.save(new Form.Builder()
-                .formId("id")
-                .version("version")
-                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
-                .build());
-
-        instancesRepository.save(new Instance.Builder()
-                .formId("id")
-                .formVersion("version")
-                .build());
-
-        formsRepository.save(new Form.Builder()
-                .formId("id")
-                .version("version")
-                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
-                .build());
-
-        formDeleter.delete(formToDelete.getDbId());
-        List<Form> forms = formsRepository.getAll();
-        assertThat(forms.size(), is(1));
-        assertThat(forms.get(0).getDbId(), is(2L));
     }
 }
