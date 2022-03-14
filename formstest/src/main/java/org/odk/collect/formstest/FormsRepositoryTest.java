@@ -17,8 +17,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public abstract class FormsRepositoryTest {
 
@@ -40,24 +38,6 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void getLatestByFormIdAndVersion_whenMultipleExist_returnsLatest() {
-        Supplier<Long> mockClock = mock(Supplier.class);
-        when(mockClock.get()).thenReturn(2L, 3L, 1L);
-
-        FormsRepository formsRepository = buildSubject(mockClock);
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
-                .build());
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
-                .build());
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
-                .build());
-
-        Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
-        assertThat(form, notNullValue());
-        assertThat(form.getDbId(), is(2L));
-    }
-
-    @Test
     public void getAllByFormIdAndVersion_whenFormHasNullVersion_returnsAllMatchingForms() {
         FormsRepository formsRepository = buildSubject();
         formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath())
@@ -70,9 +50,8 @@ public abstract class FormsRepositoryTest {
                 .build());
 
         List<Form> forms = formsRepository.getAllByFormIdAndVersion("1", null);
-        assertThat(forms.size(), is(2));
+        assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getVersion(), is(nullValue()));
-        assertThat(forms.get(1).getVersion(), is(nullValue()));
     }
 
     @Test
@@ -296,12 +275,10 @@ public abstract class FormsRepositoryTest {
     public void deleteByMd5Hash_deletesFormsWithMatchingHash() {
         FormsRepository formsRepository = buildSubject();
         formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
-        formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
         formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
 
         List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
-        assertThat(id1Forms.size(), is(2));
-        assertThat(id1Forms.get(0).getMD5Hash(), is(id1Forms.get(1).getMD5Hash()));
+        assertThat(id1Forms.size(), is(1));
 
         formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
         assertThat(formsRepository.getAll().size(), is(1));
