@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Rule
@@ -238,6 +243,46 @@ class SelectionMapFragmentTest {
         map.clickOnFeature(1)
         assertThat(map.markerIcons[0], equalTo(items[0].smallIcon))
         assertThat(map.markerIcons[1], equalTo(items[1].largeIcon))
+    }
+
+    @Test
+    fun `tapping on item sets item on summary sheet`() {
+        val items = listOf(
+            buildMappableSelectItem(
+                0,
+                40.0,
+                44.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+
+                ),
+            buildMappableSelectItem(
+                1,
+                41.0,
+                45.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm
+            ),
+        )
+        whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(0)
+        onView(
+            allOf(
+                isDescendantOfA(withId(R.id.summary_sheet)),
+                withText("0")
+            )
+        ).check(matches(isDisplayed()))
+
+        map.clickOnFeature(1)
+        onView(
+            allOf(
+                isDescendantOfA(withId(R.id.summary_sheet)),
+                withText("1")
+            )
+        ).check(matches(isDisplayed()))
     }
 
     @Test

@@ -169,7 +169,7 @@ class SelectionMapFragment : Fragment() {
 
         previousState?.let { restoreZoomFromPreviousState(it) }
 
-        map.setFeatureClickListener { featureId -> onFeatureClicked(featureId) }
+        map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
         selectionMapViewModel.getMappableItems().observe(viewLifecycleOwner) {
@@ -192,7 +192,7 @@ class SelectionMapFragment : Fragment() {
     }
 
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
-        summarySheet = binding.submissionSummary
+        summarySheet = binding.summarySheet
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
