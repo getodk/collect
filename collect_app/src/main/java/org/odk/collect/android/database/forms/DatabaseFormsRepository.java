@@ -146,9 +146,9 @@ public class DatabaseFormsRepository implements FormsRepository {
             values.putNull(DELETED_DATE);
         }
 
-        List<Form> formsWithSameIDAndVersion = getAllByFormIdAndVersion(form.getFormId(), form.getVersion());
-        if (!formsWithSameIDAndVersion.isEmpty()) {
-            Long existingFormDbId = formsWithSameIDAndVersion.get(0).getDbId();
+        List<Form> formsWithSameIdAndVersion = getAllByFormIdAndVersion(form.getFormId(), form.getVersion());
+        if (!formsWithSameIdAndVersion.isEmpty()) {
+            Long existingFormDbId = formsWithSameIdAndVersion.get(0).getDbId();
             values.put(BaseColumns._ID, existingFormDbId);
             updateForm(existingFormDbId, values);
             return get(existingFormDbId);
