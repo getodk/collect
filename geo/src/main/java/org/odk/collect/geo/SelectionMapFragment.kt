@@ -4,13 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,7 +19,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
-import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragment.ReadyListener
 import org.odk.collect.geo.maps.MapFragmentFactory
@@ -395,46 +391,4 @@ data class MappableSelectItem(
     val action: IconifiedText?
 ) {
     data class IconifiedText(val icon: Int, val text: String)
-}
-
-internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
-    FrameLayout(context, attrs) {
-
-    val binding =
-        SelectionSummarySheetLayoutBinding.inflate(LayoutInflater.from(context), this, true)
-
-    var listener: Listener? = null
-
-    private var itemId: Long? = null
-
-    init {
-        binding.action.setOnClickListener {
-            itemId?.let { listener?.selectionAction(it) }
-        }
-    }
-
-    fun setItem(item: MappableSelectItem) {
-        itemId = item.id
-
-        binding.name.text = item.name
-
-        binding.statusIcon.setImageDrawable(ContextCompat.getDrawable(context, item.status.icon))
-        binding.statusIcon.background = null
-        binding.statusText.text = item.status.text
-
-        if (item.info != null) {
-            binding.info.text = item.info
-            binding.info.visibility = View.VISIBLE
-            binding.action.visibility = View.GONE
-        } else if (item.action != null) {
-            binding.action.text = item.action.text
-            binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
-            binding.action.visibility = View.VISIBLE
-            binding.info.visibility = View.GONE
-        }
-    }
-
-    interface Listener {
-        fun selectionAction(id: Long)
-    }
 }

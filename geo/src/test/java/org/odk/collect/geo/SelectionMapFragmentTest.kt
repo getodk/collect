@@ -28,6 +28,7 @@ import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.geo.maps.MapPoint
 import org.odk.collect.geo.support.FakeMapFragment
+import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.permissions.PermissionsChecker
 
 @RunWith(AndroidJUnit4::class)
@@ -84,8 +85,18 @@ class SelectionMapFragmentTest {
     @Test
     fun `updates markers when items update`() {
         val items = listOf(
-            buildMappableSelectItem(0, 40.0, 44.0),
-            buildMappableSelectItem(1, 41.0, 45.0)
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            )
         )
         val itemsLiveData = MutableLiveData(items)
         whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
@@ -100,8 +111,18 @@ class SelectionMapFragmentTest {
     @Test
     fun `zooms to fit all items`() {
         val items = listOf(
-            buildMappableSelectItem(0, 40.0, 44.0),
-            buildMappableSelectItem(1, 41.0, 45.0)
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            )
         )
         whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -150,8 +171,18 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping zoom to fit button zooms to fit all items`() {
         val items = listOf(
-            buildMappableSelectItem(0, 40.0, 44.0),
-            buildMappableSelectItem(1, 41.0, 45.0)
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            )
         )
         whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -177,8 +208,18 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item centers on that item with current zoom level`() {
         val items = listOf(
-            buildMappableSelectItem(0, 40.0, 44.0),
-            buildMappableSelectItem(1, 41.0, 45.0)
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            )
         )
         whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -193,17 +234,15 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item switches item marker to large icon`() {
         val items = listOf(
-            buildMappableSelectItem(
-                0,
-                40.0,
-                44.0,
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
-            buildMappableSelectItem(
-                1,
-                41.0,
-                45.0,
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
@@ -220,17 +259,15 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item when another has been tapped switches the first one back to its small icon`() {
         val items = listOf(
-            buildMappableSelectItem(
-                0,
-                40.0,
-                44.0,
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
-            buildMappableSelectItem(
-                1,
-                41.0,
-                45.0,
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
@@ -248,20 +285,19 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item sets item on summary sheet`() {
         val items = listOf(
-            buildMappableSelectItem(
-                0,
-                40.0,
-                44.0,
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm,
-
-                ),
-            buildMappableSelectItem(
-                1,
-                41.0,
-                45.0,
+                name = "Blah1"
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                name = "Blah2"
             ),
         )
         whenever(viewModel.getMappableItems()).thenReturn(MutableLiveData(items))
@@ -272,7 +308,7 @@ class SelectionMapFragmentTest {
         onView(
             allOf(
                 isDescendantOfA(withId(R.id.summary_sheet)),
-                withText("0")
+                withText("Blah1")
             )
         ).check(matches(isDisplayed()))
 
@@ -280,7 +316,7 @@ class SelectionMapFragmentTest {
         onView(
             allOf(
                 isDescendantOfA(withId(R.id.summary_sheet)),
-                withText("1")
+                withText("Blah2")
             )
         ).check(matches(isDisplayed()))
     }
@@ -295,26 +331,6 @@ class SelectionMapFragmentTest {
         assertThat(map.zoomBoundingBox, equalTo(null))
         assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
         assertThat(map.zoom, equalTo(7.0))
-    }
-
-    private fun buildMappableSelectItem(
-        id: Long,
-        latitude: Double,
-        longitude: Double,
-        smallIcon: Int = android.R.drawable.ic_lock_power_off,
-        largeIcon: Int = android.R.drawable.ic_lock_idle_charging
-    ): MappableSelectItem {
-        return MappableSelectItem(
-            id,
-            latitude,
-            longitude,
-            smallIcon,
-            largeIcon,
-            id.toString(),
-            MappableSelectItem.IconifiedText(android.R.drawable.ic_lock_idle_charging, "An item"),
-            null,
-            null
-        )
     }
 
     private fun MappableSelectItem.toMapPoint(): MapPoint {
