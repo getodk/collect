@@ -26,6 +26,10 @@ class FormMapViewModelTest {
 
     private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
+    private val settingsProvider = InMemSettingsProvider().also {
+        it.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
+    }
+
     private val application = ApplicationProvider.getApplicationContext<Application>()
 
     @Test
@@ -157,6 +161,51 @@ class FormMapViewModelTest {
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(R.string.review_data)
+            )
+        )
+        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+    }
+
+    @Test
+    fun `finalized instances with geometry when edit after save disabled have view action and no info`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+        val instance = instancesRepository.save(
+            InstanceUtils.buildInstance(
+                form.formId,
+                form.version,
+                TempFiles.createTempDir().absolutePath
+            )
+                .geometry("{ \"coordinates\": [1.0, 2.0] }")
+                .geometryType("Point")
+                .canEditWhenComplete(true)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+
+        val viewModel = createAndLoadViewModel(form)
+        val expectedItem = MappableSelectItem(
+            instance.dbId,
+            2.0,
+            1.0,
+            R.drawable.ic_room_form_state_complete_24dp,
+            R.drawable.ic_room_form_state_complete_48dp,
+            instance.displayName,
+            MappableSelectItem.IconifiedText(
+                R.drawable.form_state_finalized,
+                formatDate(
+                    R.string.finalized_on_date_at_time,
+                    instance.lastStatusChangeDate
+                )
+            ),
+            info = null,
+            action = MappableSelectItem.IconifiedText(
+                R.drawable.ic_visibility,
+                application.getString(R.string.view_data)
             )
         )
         assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
@@ -354,9 +403,6 @@ class FormMapViewModelTest {
     }
 
     private fun createAndLoadViewModel(form: Form): FormMapViewModel {
-        val settingsProvider = InMemSettingsProvider()
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
-
         val viewModel = FormMapViewModel(
             application.resources,
             form.dbId,
