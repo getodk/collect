@@ -26,6 +26,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -149,25 +150,29 @@ public class InstanceProvider extends ContentProvider {
     }
 
     public static String getDisplaySubtext(Context context, String state, Date date) {
+        return getDisplaySubtext(context.getResources(), state, date);
+    }
+
+    public static String getDisplaySubtext(Resources resources, String state, Date date) {
         try {
             if (state == null) {
-                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(resources.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (Instance.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(context.getString(R.string.saved_on_date_at_time),
+                return new SimpleDateFormat(resources.getString(R.string.saved_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (Instance.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(context.getString(R.string.finalized_on_date_at_time),
+                return new SimpleDateFormat(resources.getString(R.string.finalized_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (Instance.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(context.getString(R.string.sent_on_date_at_time),
+                return new SimpleDateFormat(resources.getString(R.string.sent_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else if (Instance.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
                 return new SimpleDateFormat(
-                        context.getString(R.string.sending_failed_on_date_at_time),
+                        resources.getString(R.string.sending_failed_on_date_at_time),
                         Locale.getDefault()).format(date);
             } else {
-                return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time),
+                return new SimpleDateFormat(resources.getString(R.string.added_on_date_at_time),
                         Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {

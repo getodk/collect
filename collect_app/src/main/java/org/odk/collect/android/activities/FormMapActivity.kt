@@ -13,8 +13,11 @@
  */
 package org.odk.collect.android.activities
 
-import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.json.JSONException
 import org.json.JSONObject
@@ -25,7 +28,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.forms.Form
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.geo.MappableSelectItem
@@ -57,18 +62,28 @@ class FormMapActivity : LocalizedActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
-    private val form: Form by lazy {
-        formsRepositoryProvider.get()[intent.getLongExtra(EXTRA_FORM_ID, -1)]!!
-    }
-
-    private val selectionMapViewModel: SelectionMapViewModel by lazy {
-        ViewModelProvider(this)[SelectionMapViewModel::class.java]
-    }
+    private lateinit var viewModel: FormMapViewModel
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.form_map_activity)
+
+        val formId = intent.getLongExtra(EXTRA_FORM_ID, -1)
+        viewModel = ViewModelProvider(
+            this,
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return FormMapViewModel(
+                        resources,
+                        formId,
+                        formsRepositoryProvider.get(),
+                        instancesRepositoryProvider.get(),
+                        settingsProvider
+                    ) as T
+                }
+            }
+        )[ARG_VIEW_MODEL_KEY, FormMapViewModel::class.java]
 
         val formNavigator = FormNavigator(
             currentProjectProvider,
@@ -84,35 +99,63 @@ class FormMapActivity : LocalizedActivity() {
                 val instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM)
                 formNavigator.editInstance(this, instanceId)
             } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
-                formNavigator.newInstance(this, form.dbId)
+                formNavigator.newInstance(this, formId)
             }
         }
+
+        supportFragmentManager.beginTransaction()
+            .add(
+                R.id.selection_map,
+                SelectionMapFragment::class.java,
+                Bundle().also {
+                    it.putString(SelectionMapFragment.ARG_VIEW_MODEL_KEY, ARG_VIEW_MODEL_KEY)
+                }
+            )
+            .commit()
     }
 
     override fun onResume() {
         super.onResume()
-
-        selectionMapViewModel.setMapTitle(form.displayName)
-
-        val loader =
-            FormMapInstancesLoader(this, instancesRepositoryProvider.get(), settingsProvider)
-        val (instancesCount, mappableItems) = loader.load(form.formId)
-        selectionMapViewModel.setItems(instancesCount, mappableItems)
+        viewModel.load()
     }
 
     companion object {
         const val EXTRA_FORM_ID = "form_id"
+        const val ARG_VIEW_MODEL_KEY = "form_map"
     }
 }
 
-private class FormMapInstancesLoader(
-    private val context: Context,
+private class FormMapViewModel(
+    private val resources: Resources,
+    formId: Long,
+    formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
-    private val settingsProvider: SettingsProvider
-) {
+    private val settingsProvider: SettingsProvider,
+) : SelectionMapViewModel() {
 
-    fun load(formId: String): Pair<Int, List<MappableSelectItem>> {
-        val instances = instancesRepository.getAllByFormId(formId)
+    private var mapTitle = MutableLiveData<String>()
+    private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
+    private var itemCount = MutableLiveData(0)
+    private val form = formsRepository.get(formId)!!
+
+    init {
+        mapTitle.value = form.displayName
+    }
+
+    override fun getMapTitle(): LiveData<String> {
+        return mapTitle
+    }
+
+    override fun getItemCount(): LiveData<Int> {
+        return itemCount
+    }
+
+    override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
+        return mappableItems
+    }
+
+    fun load() {
+        val instances = instancesRepository.getAllByFormId(form.formId)
         val items: MutableList<MappableSelectItem> = ArrayList()
 
         for (instance in instances) {
@@ -125,31 +168,32 @@ private class FormMapInstancesLoader(
                     val lon = coordinates.getDouble(0)
                     val lat = coordinates.getDouble(1)
 
-                    items.add(convertItem(instance, lat, lon, context))
+                    items.add(convertItem(instance, lat, lon, resources))
                 } catch (e: JSONException) {
                     Timber.w("Invalid JSON in instances table: %s", instance.geometry)
                 }
             }
         }
 
-        return Pair(instances.size, items)
+        mappableItems.value = items
+        itemCount.value = instances.size
     }
 
     private fun convertItem(
         instance: Instance,
         latitude: Double,
         longitude: Double,
-        context: Context
+        resources: Resources
     ): MappableSelectItem {
         val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
-            context,
+            resources,
             instance.status,
             Date(instance.lastStatusChangeDate)
         )
 
         val info = when {
             instance.deletedDate != null -> {
-                val deletedTime = context.getString(R.string.deleted_on_date_at_time)
+                val deletedTime = resources.getString(R.string.deleted_on_date_at_time)
                 val dateFormat = SimpleDateFormat(
                     deletedTime,
                     Locale.getDefault()
@@ -163,7 +207,7 @@ private class FormMapInstancesLoader(
                 Instance.STATUS_SUBMISSION_FAILED,
                 Instance.STATUS_SUBMITTED
             ).contains(instance.status) -> {
-                context.getString(R.string.cannot_edit_completed_form)
+                resources.getString(R.string.cannot_edit_completed_form)
             }
 
             else -> null
@@ -174,12 +218,12 @@ private class FormMapInstancesLoader(
 
         val editAction = MappableSelectItem.IconifiedText(
             if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
-            context.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
+            resources.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
         )
 
         val viewAction = MappableSelectItem.IconifiedText(
             R.drawable.ic_visibility,
-            context.getString(R.string.view_data)
+            resources.getString(R.string.view_data)
         )
 
         val action = if (instance.deletedDate != null) {

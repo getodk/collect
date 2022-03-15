@@ -8,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
@@ -28,7 +26,7 @@ import org.odk.collect.geo.maps.MapPoint
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
-class SelectionMapFragment : Fragment() {
+class SelectionMapFragment() : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -39,9 +37,7 @@ class SelectionMapFragment : Fragment() {
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
 
-    @Inject
-    internal lateinit var selectionMapViewModelFactory: SelectionMapViewModelFactory
-    private val selectionMapViewModel by activityViewModels<SelectionMapViewModel> { selectionMapViewModelFactory }
+    private lateinit var selectionMapViewModel: SelectionMapViewModel
 
     private val selectionViewModel by viewModels<SelectionViewModel>()
 
@@ -61,6 +57,11 @@ class SelectionMapFragment : Fragment() {
 
     private var previousState: Bundle? = null
 
+    @VisibleForTesting
+    internal constructor(selectionMapViewModel: SelectionMapViewModel) : this() {
+        this.selectionMapViewModel = selectionMapViewModel
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         previousState = savedInstanceState
@@ -72,6 +73,13 @@ class SelectionMapFragment : Fragment() {
         val component =
             (context.applicationContext as GeoDependencyComponentProvider).geoDependencyComponent
         component.inject(this)
+
+        if (!::selectionMapViewModel.isInitialized) {
+            selectionMapViewModel = ViewModelProvider(requireActivity())[
+                arguments?.getString(ARG_VIEW_MODEL_KEY)!!,
+                SelectionMapViewModel::class.java
+            ]
+        }
 
         if (!permissionsChecker.isPermissionGranted(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -320,6 +328,8 @@ class SelectionMapFragment : Fragment() {
     }
 
     companion object {
+        const val ARG_VIEW_MODEL_KEY = "view_model_key"
+
         const val REQUEST_SELECT_ITEM = "select_item"
         const val RESULT_SELECTED_ITEM = "selected_item"
         const val RESULT_CREATE_NEW_ITEM = "create_new_item"
@@ -343,42 +353,9 @@ class SelectionViewModel : ViewModel() {
 }
 
 abstract class SelectionMapViewModel : ViewModel() {
-    abstract fun setMapTitle(title: String)
     abstract fun getMapTitle(): LiveData<String>
-
-    abstract fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>)
     abstract fun getItemCount(): LiveData<Int>
     abstract fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
-}
-
-interface SelectionMapViewModelFactory : ViewModelProvider.Factory
-
-internal class SelectionMapViewModelImpl : SelectionMapViewModel() {
-
-    private var mapTitle = MutableLiveData<String>()
-    private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
-    private var itemCount = MutableLiveData(0)
-
-    override fun getMapTitle(): LiveData<String> {
-        return mapTitle
-    }
-
-    override fun getItemCount(): LiveData<Int> {
-        return itemCount
-    }
-
-    override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
-        return mappableItems
-    }
-
-    override fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>) {
-        this.mappableItems.value = mappableItems
-        this.itemCount.value = itemCount
-    }
-
-    override fun setMapTitle(title: String) {
-        this.mapTitle.value = title
-    }
 }
 
 data class MappableSelectItem(

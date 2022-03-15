@@ -1,8 +1,9 @@
 package org.odk.collect.geo
 
 import android.content.Context
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -35,9 +36,6 @@ import org.odk.collect.permissions.PermissionsChecker
 @RunWith(AndroidJUnit4::class)
 class SelectionMapFragmentTest {
 
-    @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule(R.style.Theme_MaterialComponents)
-
     private val map = FakeMapFragment()
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val viewModel = mock<SelectionMapViewModel> {
@@ -45,6 +43,16 @@ class SelectionMapFragmentTest {
         on { getItemCount() } doReturn MutableLiveData(0)
         on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())
     }
+
+    @get:Rule
+    val launcherRule = FragmentScenarioLauncherRule(
+        R.style.Theme_MaterialComponents,
+        object : FragmentFactory() {
+            override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+                return SelectionMapFragment(viewModel)
+            }
+        }
+    )
 
     @Before
     fun setup() {
@@ -71,15 +79,6 @@ class SelectionMapFragmentTest {
 
                 override fun providesReferenceLayerSettingsNavigator() =
                     referenceLayerSettingsNavigator
-
-                override fun providesSelectionMapViewMOdelFactory(): SelectionMapViewModelFactory {
-                    return object : SelectionMapViewModelFactory {
-                        @Suppress("UNCHECKED_CAST")
-                        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-                            return viewModel as T
-                        }
-                    }
-                }
             }).build()
     }
 

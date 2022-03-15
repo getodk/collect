@@ -16,6 +16,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.FormMapActivity.Companion.ARG_VIEW_MODEL_KEY
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
@@ -87,7 +88,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             assertThat(viewModel.getItemCount().value, equalTo(2))
         }
     }
@@ -120,7 +121,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             assertThat(viewModel.getMappableItems().value.size, equalTo(1))
 
             val expectedItem = MappableSelectItem(
@@ -164,7 +165,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             val expectedItem = MappableSelectItem(
                 instance.dbId,
                 2.0,
@@ -206,7 +207,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             val expectedItem = MappableSelectItem(
                 instance.dbId,
                 2.0,
@@ -245,7 +246,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             val expectedItem = MappableSelectItem(
                 instance.dbId,
                 2.0,
@@ -287,7 +288,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             val expectedItem = MappableSelectItem(
                 instance.dbId,
                 2.0,
@@ -345,7 +346,7 @@ class FormMapActivityTest {
 
         val scenario = launchActivity(form)
         scenario.onActivity {
-            val viewModel = ViewModelProvider(it)[SelectionMapViewModel::class.java]
+            val viewModel = ViewModelProvider(it)[ARG_VIEW_MODEL_KEY, SelectionMapViewModel::class.java]
             val items = viewModel.getMappableItems().value
 
             assertThat(items[0].action, equalTo(null))
