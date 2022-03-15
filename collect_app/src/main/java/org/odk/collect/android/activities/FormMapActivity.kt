@@ -57,15 +57,18 @@ class FormMapActivity : LocalizedActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
-    private lateinit var form: Form
-    private lateinit var selectionMapViewModel: SelectionMapViewModel
+    private val form: Form by lazy {
+        formsRepositoryProvider.get()[intent.getLongExtra(EXTRA_FORM_ID, -1)]!!
+    }
+
+    private val selectionMapViewModel: SelectionMapViewModel by lazy {
+        ViewModelProvider(this)[SelectionMapViewModel::class.java]
+    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.form_map_activity)
-
-        form = formsRepositoryProvider.get()[intent.getLongExtra(EXTRA_FORM_ID, -1)]!!
 
         val formNavigator = FormNavigator(
             currentProjectProvider,
@@ -88,15 +91,13 @@ class FormMapActivity : LocalizedActivity() {
 
     override fun onResume() {
         super.onResume()
-        selectionMapViewModel = ViewModelProvider(this).get(
-            SelectionMapViewModel::class.java
-        )
 
         selectionMapViewModel.setMapTitle(form.displayName)
-        val instances = instancesRepositoryProvider.get().getAllByFormId(form.formId)
 
-        val loader = FormMapInstancesLoader(this, instancesRepositoryProvider.get(), settingsProvider)
-        selectionMapViewModel.setItems(instances.size, loader.load(form.formId))
+        val loader =
+            FormMapInstancesLoader(this, instancesRepositoryProvider.get(), settingsProvider)
+        val (instancesCount, mappableItems) = loader.load(form.formId)
+        selectionMapViewModel.setItems(instancesCount, mappableItems)
     }
 
     companion object {
@@ -110,7 +111,7 @@ private class FormMapInstancesLoader(
     private val settingsProvider: SettingsProvider
 ) {
 
-    fun load(formId: String): MutableList<MappableSelectItem> {
+    fun load(formId: String): Pair<Int, List<MappableSelectItem>> {
         val instances = instancesRepository.getAllByFormId(formId)
         val items: MutableList<MappableSelectItem> = ArrayList()
 
@@ -131,7 +132,7 @@ private class FormMapInstancesLoader(
             }
         }
 
-        return items
+        return Pair(instances.size, items)
     }
 
     private fun convertItem(
