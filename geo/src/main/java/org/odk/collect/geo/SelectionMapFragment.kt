@@ -37,7 +37,15 @@ class SelectionMapFragment() : Fragment() {
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
 
-    private lateinit var selectionMapViewModel: SelectionMapViewModel
+    private var _selectionMapViewModel: SelectionMapViewModel? = null
+    private val selectionMapViewModel by lazy {
+        _selectionMapViewModel.let {
+            it ?: ViewModelProvider(requireActivity())[
+                arguments?.getString(ARG_VIEW_MODEL_KEY)!!,
+                SelectionMapViewModel::class.java
+            ]
+        }
+    }
 
     private val selectionViewModel by viewModels<SelectionViewModel>()
 
@@ -59,7 +67,7 @@ class SelectionMapFragment() : Fragment() {
 
     @VisibleForTesting
     internal constructor(selectionMapViewModel: SelectionMapViewModel) : this() {
-        this.selectionMapViewModel = selectionMapViewModel
+        this._selectionMapViewModel = selectionMapViewModel
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +81,6 @@ class SelectionMapFragment() : Fragment() {
         val component =
             (context.applicationContext as GeoDependencyComponentProvider).geoDependencyComponent
         component.inject(this)
-
-        if (!::selectionMapViewModel.isInitialized) {
-            selectionMapViewModel = ViewModelProvider(requireActivity())[
-                arguments?.getString(ARG_VIEW_MODEL_KEY)!!,
-                SelectionMapViewModel::class.java
-            ]
-        }
 
         if (!permissionsChecker.isPermissionGranted(
                 Manifest.permission.ACCESS_FINE_LOCATION,
