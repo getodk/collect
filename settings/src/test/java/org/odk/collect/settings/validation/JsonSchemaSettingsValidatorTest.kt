@@ -11,7 +11,7 @@ class JsonSchemaSettingsValidatorTest {
         val validator = JsonSchemaSettingsValidator {
             """
             {
-                "${'$'}schema": "https://json-schema.org/draft/2020-12/schema",
+                "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
                 "${'$'}id": "https://example.com/example.schema.json",
                 "title": "Schema",
                 "type": "object",
@@ -41,7 +41,7 @@ class JsonSchemaSettingsValidatorTest {
         val validator = JsonSchemaSettingsValidator {
             """
             {
-                "${'$'}schema": "https://json-schema.org/draft/2020-12/schema",
+                "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
                 "${'$'}id": "https://example.com/example.schema.json",
                 "title": "Schema",
                 "type": "object",
