@@ -222,7 +222,7 @@ class SelectionMapFragment() : Fragment() {
                         selectedSubmissionId,
                         itemsByFeatureId[selectedSubmissionId]!!.smallIcon
                     )
-                    selectionViewModel.setSelectedItemId(-1)
+                    selectionViewModel.setSelectedItemId(null)
                     onBackPressedCallback.isEnabled = false
                 } else {
                     onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
@@ -340,7 +340,7 @@ class SelectionMapFragment() : Fragment() {
     }
 }
 
-class SelectionViewModel : ViewModel() {
+internal class SelectionViewModel : ViewModel() {
 
     private var selectedItemId: Int? = null
 
