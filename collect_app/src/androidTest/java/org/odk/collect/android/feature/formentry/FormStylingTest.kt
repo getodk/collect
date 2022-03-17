@@ -195,4 +195,16 @@ class FormStylingTest {
             .assertHierarchyItem(0, "Note text", null)
             .assertHierarchyItem(3, "Rank widget", "1. One")
     }
+
+    @Test
+    fun groupNameTest() {
+        rule.startAtMainMenu()
+            .copyForm(FORM_FILE_NAME)
+            .startBlankForm(FORM_NAME)
+            .clickGoToArrow()
+            .clickOnGroup("selectOneQuestions")
+            .assertText("selectOneQuestions")
+            .clickOnQuestion("Select one widget")
+            .assertText("selectOneQuestions")
+    }
 }

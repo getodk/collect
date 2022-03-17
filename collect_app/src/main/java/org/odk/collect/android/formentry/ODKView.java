@@ -69,6 +69,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
@@ -338,9 +339,9 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * Add a TextView containing the hierarchy of groups to which the question belongs.
      */
     private void setGroupText(FormEntryCaption[] groups) {
-        String path = getGroupsPath(groups);
+        CharSequence path = getGroupsPath(groups);
 
-        if (!path.isEmpty()) {
+        if (path.length() > 0) {
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
@@ -355,7 +356,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * @see #getGroupsPath(FormEntryCaption[], boolean)
      */
     @NonNull
-    public static String getGroupsPath(FormEntryCaption[] groups) {
+    public static CharSequence getGroupsPath(FormEntryCaption[] groups) {
         return getGroupsPath(groups, false);
     }
 
@@ -367,7 +368,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
      * i.e. show `Friends` instead of `Friends > 1`.
      */
     @NonNull
-    public static String getGroupsPath(FormEntryCaption[] groups, boolean hideLastMultiplicity) {
+    public static CharSequence getGroupsPath(FormEntryCaption[] groups, boolean hideLastMultiplicity) {
         if (groups == null) {
             return "";
         }
@@ -389,7 +390,7 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
             index++;
         }
 
-        return TextUtils.join(" > ", segments);
+        return HtmlUtils.textToHtml(TextUtils.join(" > ", segments));
     }
 
     /**

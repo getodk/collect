@@ -55,7 +55,7 @@
             <hint ref="jr:itext('/data/q1:hint')" />
         </input>
         <group ref="/data/selectOneQuestions">
-            <label>selectOneQuestions</label>
+            <label>&lt;span style="color:blue"&gt;selectOneQuestions&lt;/span&gt;</label>
             <select1 ref="/data/selectOneQuestions/q2">
                 <label>Select one widget</label>
                 <item>
@@ -133,7 +133,7 @@
             </select1>
         </group>
         <group ref="/data/selectMultipleQuestions">
-            <label>selectMultipleQuestions</label>
+            <label>&lt;span style="color:blue"&gt;selectMultipleQuestions&lt;/span&gt;</label>
             <select ref="/data/selectMultipleQuestions/q7">
                 <label>Select multiple widget</label>
                 <item>
