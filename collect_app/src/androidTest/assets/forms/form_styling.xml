@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <h:head>
+        <h:title>Form styling</h:title>
+        <model odk:xforms-version="1.0.0">
+            <itext>
+                <translation default="true()" lang="default">
+                    <text id="/data/q1:hint">
+                        <value>&lt;span style="color:blue"&gt;Hint text&lt;/span&gt;</value>
+                        <value form="guidance">&lt;span style="color:blue"&gt;Guidance text&lt;/span&gt;</value>
+                    </text>
+                </translation>
+            </itext>
+            <instance>
+                <data id="form_styling">
+                    <q1 />
+                    <selectOneQuestions>
+                        <q2 />
+                        <q3>one</q3>
+                        <q4>one</q4>
+                        <q5 />
+                        <q6 />
+                    </selectOneQuestions>
+                    <selectMultipleQuestions>
+                        <q7 />
+                        <q8>one</q8>
+                        <q9>one</q9>
+                        <q10 />
+                        <q11 />
+                    </selectMultipleQuestions>
+                    <q12>three, two, one</q12>
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <bind nodeset="/data/q1" readonly="true()" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q2" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q3" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q4" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q5" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q6" type="string" />
+            <bind nodeset="/data/selectMultipleQuestions/q7" type="string" />
+            <bind nodeset="/data/selectMultipleQuestions/q8" type="string" />
+            <bind nodeset="/data/selectMultipleQuestions/q9" type="string" />
+            <bind nodeset="/data/selectMultipleQuestions/q10" type="string" />
+            <bind nodeset="/data/selectMultipleQuestions/q11" type="string" />
+            <bind nodeset="/data/q12" type="odk:rank" />
+            <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/q1">
+            <label>&lt;span style="color:blue"&gt;Note text&lt;/span&gt;</label>
+            <hint ref="jr:itext('/data/q1:hint')" />
+        </input>
+        <group ref="/data/selectOneQuestions">
+            <label>selectOneQuestions</label>
+            <select1 ref="/data/selectOneQuestions/q2">
+                <label>Select one widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
+            <select1 appearance="minimal" ref="/data/selectOneQuestions/q3">
+                <label>Select one minimal widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
+            <select1 appearance="Image-map" ref="/data/selectOneQuestions/q4">
+                <label>Select one image-map widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
+            <select1 appearance="label" ref="/data/selectOneQuestions/q5">
+                <label>Select one label widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
+            <select1 appearance="list" ref="/data/selectOneQuestions/q6">
+                <label>Select one list widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
+        </group>
+        <group ref="/data/selectMultipleQuestions">
+            <label>selectMultipleQuestions</label>
+            <select ref="/data/selectMultipleQuestions/q7">
+                <label>Select multiple widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select>
+            <select appearance="minimal" ref="/data/selectMultipleQuestions/q8">
+                <label>Select multiple minimal widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select>
+            <select appearance="Image-map" ref="/data/selectMultipleQuestions/q9">
+                <label>Select multiple image-map widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select>
+            <select appearance="label" ref="/data/selectMultipleQuestions/q10">
+                <label>Select multiple label widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select>
+            <select appearance="list" ref="/data/selectMultipleQuestions/q11">
+                <label>Select multiple list widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select>
+        </group>
+        <odk:rank ref="/data/q12">
+            <label>Rank widget</label>
+            <item>
+                <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                <value>one</value>
+            </item>
+            <item>
+                <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                <value>two</value>
+            </item>
+            <item>
+                <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                <value>three</value>
+            </item>
+        </odk:rank>
+    </h:body>
+</h:html>
