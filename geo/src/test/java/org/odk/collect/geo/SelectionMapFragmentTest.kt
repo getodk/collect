@@ -1,6 +1,7 @@
 package org.odk.collect.geo
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.MutableLiveData
@@ -339,14 +340,50 @@ class SelectionMapFragmentTest {
                 withText("Blah1")
             )
         ).check(matches(isDisplayed()))
+    }
 
-        map.clickOnFeature(1)
-        onView(
-            allOf(
-                isDescendantOfA(withId(R.id.summary_sheet)),
-                withText("Blah2")
-            )
-        ).check(matches(isDisplayed()))
+    @Test
+    fun `tapping on item returns item ID as result when SKIP_SUMMARY is true`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                name = "Blah1"
+            ),
+            Fixtures.actionMappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_idle_charging,
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                name = "Blah2"
+            ),
+        )
+        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            args = Bundle().also {
+                it.putBoolean(SelectionMapFragment.ARG_SKIP_SUMMARY, true)
+            }
+        )
+
+        var actualResult: Bundle? = null
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                SelectionMapFragment.REQUEST_SELECT_ITEM,
+                it
+            ) { _: String?, result: Bundle ->
+                actualResult = result
+            }
+        }
+
+        map.clickOnFeature(0)
+        assertThat(
+            actualResult!!.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM),
+            equalTo(items[0].id)
+        )
     }
 
     @Test

@@ -270,18 +270,27 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    fun onFeatureClicked(featureId: Int) {
+    private fun onFeatureClicked(featureId: Int) {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         if (!isSummaryForFeatureDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
 
             val item = itemsByFeatureId[featureId]
             if (item != null) {
-                map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
-                map.setMarkerIcon(featureId, item.largeIcon)
-                summarySheet.setItem(item)
-                summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                selectedFeatureViewModel.setSelectedFeatureId(featureId)
+                if (arguments?.getBoolean(ARG_SKIP_SUMMARY) != true) {
+                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    map.setMarkerIcon(featureId, item.largeIcon)
+                    summarySheet.setItem(item)
+                    summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    selectedFeatureViewModel.setSelectedFeatureId(featureId)
+                } else {
+                    parentFragmentManager.setFragmentResult(
+                        REQUEST_SELECT_ITEM,
+                        Bundle().also {
+                            it.putLong(RESULT_SELECTED_ITEM, item.id)
+                        }
+                    )
+                }
             }
         }
     }
@@ -343,6 +352,7 @@ class SelectionMapFragment() : Fragment() {
 
     companion object {
         const val ARG_VIEW_MODEL_KEY = "view_model_key"
+        const val ARG_SKIP_SUMMARY = "skip_summary"
 
         const val REQUEST_SELECT_ITEM = "select_item"
         const val RESULT_SELECTED_ITEM = "selected_item"
