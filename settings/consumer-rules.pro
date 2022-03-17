@@ -1,1 +1,1 @@
--keep class com.github.fge.jsonschema.keyword.validator.** { *; }
+-keep class com.networknt.schema.** { *; }
