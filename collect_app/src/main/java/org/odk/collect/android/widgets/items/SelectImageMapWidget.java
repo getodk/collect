@@ -19,7 +19,6 @@ package org.odk.collect.android.widgets.items;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.text.Html;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -258,9 +257,8 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
                     .append(getContext().getString(R.string.selected))
                     .append("</b> ");
             for (Selection selection : selections) {
-                String choiceName = getFormEntryPrompt().getSelectChoiceText(selection.choice);
-                CharSequence choiceDisplayName = HtmlUtils.textToHtml(choiceName);
-                stringBuilder.append(choiceDisplayName);
+                String answer = getFormEntryPrompt().getSelectChoiceText(selection.choice);
+                stringBuilder.append(answer);
                 if (selections.indexOf(selection) < selections.size() - 1) {
                     stringBuilder.append(", ");
                 }
@@ -268,7 +266,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
         }
 
         ((Activity) getContext()).runOnUiThread(() ->
-                binding.selectedElements.setText(Html.fromHtml(stringBuilder.toString())));
+                binding.selectedElements.setText(HtmlUtils.textToHtml(stringBuilder.toString())));
     }
 
     protected abstract void highlightSelections(WebView view);
