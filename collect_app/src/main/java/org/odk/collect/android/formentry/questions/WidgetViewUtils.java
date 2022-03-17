@@ -50,7 +50,7 @@ public final class WidgetViewUtils {
         return createAnswerTextView(context, "", answerFontSize);
     }
 
-    public static TextView createAnswerTextView(Context context, String text, int answerFontSize) {
+    public static TextView createAnswerTextView(Context context, CharSequence text, int answerFontSize) {
         TextView textView = new TextView(context);
 
         textView.setId(R.id.answer_text);
