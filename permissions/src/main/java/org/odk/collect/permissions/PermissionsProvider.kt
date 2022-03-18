@@ -101,7 +101,10 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                             }
                             .setNegativeButton(
                                 activity.getString(R.string.cancel)
-                            ) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                            ) { dialog: DialogInterface, _: Int ->
+                                action.denied()
+                                dialog.cancel()
+                            }
                             .create()
                             .show()
                     }
