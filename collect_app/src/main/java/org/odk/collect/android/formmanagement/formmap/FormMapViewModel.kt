@@ -168,14 +168,13 @@ class FormMapViewModel(
     }
 
     private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {
-        when (status) {
-            Instance.STATUS_INCOMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
-            Instance.STATUS_COMPLETE -> return if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
-            Instance.STATUS_SUBMITTED -> return if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
-            Instance.STATUS_SUBMISSION_FAILED -> return if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
+        return when (status) {
+            Instance.STATUS_INCOMPLETE -> if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
+            Instance.STATUS_COMPLETE -> if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
+            Instance.STATUS_SUBMITTED -> if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
+            Instance.STATUS_SUBMISSION_FAILED -> if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
+            else -> R.drawable.ic_map_point
         }
-
-        return R.drawable.ic_map_point
     }
 
     private fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
