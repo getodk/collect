@@ -1,52 +1,72 @@
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_large"
     android:background="?colorSurface"
-    android:orientation="vertical"
-    android:paddingHorizontal="@dimen/margin_standard"
-    android:paddingVertical="@dimen/margin_small"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:paddingBottom="@dimen/margin_standard">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/margin_standard" />
 
-        <TextView
-            android:id="@+id/name"
-            style="?textAppearanceHeadline6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?colorOnSurface" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="@dimen/margin_standard"
-            android:background="?colorPrimary" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_standard" />
 
-        <ImageButton
-            android:id="@+id/status_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_standard" />
 
-        <TextView
-            android:id="@+id/status_text"
-            style="?textAppearanceBody2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?colorOnSurface"
-            android:layout_marginStart="@dimen/margin_standard"
-            android:layout_gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/name"
+        style="?textAppearanceHeadline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?colorOnSurface"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top"
+        tools:text="Name" />
 
-    </LinearLayout>
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="?colorPrimary"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/name" />
+
+    <ImageButton
+        android:id="@+id/status_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <TextView
+        android:id="@+id/status_text"
+        style="?textAppearanceBody2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/margin_small"
+        android:textColor="?colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@id/status_icon"
+        app:layout_constraintStart_toEndOf="@id/status_icon"
+        app:layout_constraintTop_toTopOf="@id/status_icon"
+        tools:text="Status" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/action"
@@ -55,16 +75,23 @@
         android:layout_marginTop="@dimen/margin_small"
         android:textColor="@android:color/white"
         app:chipBackgroundColor="?colorSecondary"
+        app:chipEndPadding="@dimen/margin_small"
         app:iconStartPadding="@dimen/margin_small"
-        app:chipEndPadding="@dimen/margin_small"/>
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/status_icon"
+        tools:text="Action" />
 
     <TextView
         android:id="@+id/info"
         style="?textAppearanceBody2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?colorOnSurface"
+        android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/margin_small"
-        android:layout_gravity="center_vertical"/>
+        android:textColor="?colorOnSurface"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/status_icon"
+        tools:text="Info"
+        tools:visibility="gone" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
