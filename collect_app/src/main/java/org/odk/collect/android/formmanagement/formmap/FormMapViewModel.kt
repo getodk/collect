@@ -64,7 +64,7 @@ class FormMapViewModel(
                     val lon = coordinates.getDouble(0)
                     val lat = coordinates.getDouble(1)
 
-                    items.add(createItem(instance, lat, lon, resources))
+                    items.add(createItem(instance, lat, lon))
                 } catch (e: JSONException) {
                     Timber.w("Invalid JSON in instances table: %s", instance.geometry)
                 }
@@ -79,7 +79,6 @@ class FormMapViewModel(
         instance: Instance,
         latitude: Double,
         longitude: Double,
-        resources: Resources
     ): MappableSelectItem {
         val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
             resources,
