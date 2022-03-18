@@ -36,6 +36,8 @@ import org.odk.collect.permissions.PermissionsChecker
 @RunWith(AndroidJUnit4::class)
 class SelectionMapFragmentTest {
 
+    private val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
+
     private val map = FakeMapFragment()
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val viewModel = mock<SelectionMapViewModel> {
@@ -56,8 +58,6 @@ class SelectionMapFragmentTest {
 
     @Before
     fun setup() {
-        val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
-
         application.geoDependencyComponent = DaggerGeoDependencyComponent.builder()
             .application(application)
             .geoDependencyModule(object : GeoDependencyModule() {
@@ -106,6 +106,34 @@ class SelectionMapFragmentTest {
 
         itemsLiveData.value = emptyList()
         assertThat(map.getMarkers(), equalTo(emptyList()))
+    }
+
+    @Test
+    fun `updates item count when items update`() {
+        val items = listOf(
+            Fixtures.mappableSelectItem().copy(
+                id = 0,
+                latitude = 40.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            ),
+            Fixtures.mappableSelectItem().copy(
+                id = 1,
+                latitude = 41.0,
+                smallIcon = android.R.drawable.ic_lock_power_off,
+                largeIcon = android.R.drawable.ic_lock_idle_charging
+            )
+        )
+        val itemsLiveData = MutableNonNullLiveData(items)
+        whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        onView(withText(application.getString(R.string.geometry_status, 0, 2)))
+            .check(matches(isDisplayed()))
+
+        itemsLiveData.value = emptyList()
+        onView(withText(application.getString(R.string.geometry_status, 0, 0)))
+            .check(matches(isDisplayed()))
     }
 
     @Test

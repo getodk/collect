@@ -62,6 +62,7 @@ class SelectionMapFragment() : Fragment() {
      * quickly zoom to bounding box.
      */
     private val points: MutableList<MapPoint> = mutableListOf()
+    private var itemCount: Int = 0
 
     private var previousState: Bundle? = null
 
@@ -108,7 +109,8 @@ class SelectionMapFragment() : Fragment() {
         }
 
         selectionMapViewModel.getItemCount().observe(viewLifecycleOwner) {
-            binding.geometryStatus.text = getString(R.string.geometry_status, it, points.size)
+            itemCount = it
+            updateCounts(binding)
         }
 
         val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
@@ -180,12 +182,17 @@ class SelectionMapFragment() : Fragment() {
         map.setClickListener { onClick() }
 
         selectionMapViewModel.getMappableItems().observe(viewLifecycleOwner) {
-            update(it)
+            updateItems(it)
+            updateCounts(binding)
         }
 
         selectionViewModel.getSelectedItemId()?.let {
             onFeatureClicked(it)
         }
+    }
+
+    private fun updateCounts(binding: SelectionMapLayoutBinding) {
+        binding.geometryStatus.text = getString(R.string.geometry_status, itemCount, points.size)
     }
 
     private fun restoreZoomFromPreviousState(state: Bundle) {
@@ -279,7 +286,7 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    private fun update(items: List<MappableSelectItem>) {
+    private fun updateItems(items: List<MappableSelectItem>) {
         if (!::map.isInitialized) {
             return
         }
