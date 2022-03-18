@@ -86,72 +86,35 @@ class FormMapViewModel(
             Date(instance.lastStatusChangeDate)
         )
 
-        val info = when {
-            instance.deletedDate != null -> {
-                val deletedTime = resources.getString(R.string.deleted_on_date_at_time)
-                val dateFormat = SimpleDateFormat(
-                    deletedTime,
-                    Locale.getDefault()
-                )
+        return if (instance.deletedDate != null) {
+            val deletedTime = resources.getString(R.string.deleted_on_date_at_time)
+            val dateFormat = SimpleDateFormat(
+                deletedTime,
+                Locale.getDefault()
+            )
 
-                dateFormat.format(instance.deletedDate)
-            }
-
-            !instance.canEditWhenComplete() && listOf(
+            val info = dateFormat.format(instance.deletedDate)
+            MappableSelectItem.WithInfo(
+                instance.dbId,
+                latitude,
+                longitude,
+                getDrawableIdForStatus(instance.status, false),
+                getDrawableIdForStatus(instance.status, true),
+                instance.displayName,
+                MappableSelectItem.IconifiedText(
+                    getSubmissionSummaryStatusIcon(instance.status),
+                    instanceLastStatusChangeDate
+                ),
+                info
+            )
+        } else if (!instance.canEditWhenComplete() && listOf(
                 Instance.STATUS_COMPLETE,
                 Instance.STATUS_SUBMISSION_FAILED,
                 Instance.STATUS_SUBMITTED
-            ).contains(instance.status) -> {
-                resources.getString(R.string.cannot_edit_completed_form)
-            }
-
-            else -> null
-        }
-
-        val canEditSaved = settingsProvider.getProtectedSettings()
-            .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
-
-        val editAction = MappableSelectItem.IconifiedText(
-            if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
-            resources.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
-        )
-
-        val viewAction = MappableSelectItem.IconifiedText(
-            R.drawable.ic_visibility,
-            resources.getString(R.string.view_data)
-        )
-
-        val action = if (instance.deletedDate != null) {
-            null
-        } else {
-            when (instance.status) {
-                Instance.STATUS_INCOMPLETE -> {
-                    editAction
-                }
-
-                Instance.STATUS_COMPLETE -> {
-                    if (instance.canEditWhenComplete()) {
-                        editAction
-                    } else {
-                        null
-                    }
-                }
-
-                Instance.STATUS_SUBMISSION_FAILED,
-                Instance.STATUS_SUBMITTED -> {
-                    if (instance.canEditWhenComplete()) {
-                        viewAction
-                    } else {
-                        null
-                    }
-                }
-
-                else -> throw IllegalArgumentException()
-            }
-        }
-
-        if (info != null) {
-            return MappableSelectItem.WithInfo(
+            ).contains(instance.status)
+        ) {
+            val info = resources.getString(R.string.cannot_edit_completed_form)
+            MappableSelectItem.WithInfo(
                 instance.dbId,
                 latitude,
                 longitude,
@@ -165,7 +128,13 @@ class FormMapViewModel(
                 info
             )
         } else {
-            return MappableSelectItem.WithAction(
+            val action = when (instance.status) {
+                Instance.STATUS_INCOMPLETE -> createEditAction()
+                Instance.STATUS_COMPLETE -> createEditAction()
+                else -> createViewAction()
+            }
+
+            MappableSelectItem.WithAction(
                 instance.dbId,
                 latitude,
                 longitude,
@@ -176,9 +145,26 @@ class FormMapViewModel(
                     getSubmissionSummaryStatusIcon(instance.status),
                     instanceLastStatusChangeDate
                 ),
-                action!!
+                action
             )
         }
+    }
+
+    private fun createViewAction(): MappableSelectItem.IconifiedText {
+        return MappableSelectItem.IconifiedText(
+            R.drawable.ic_visibility,
+            resources.getString(R.string.view_data)
+        )
+    }
+
+    private fun createEditAction(): MappableSelectItem.IconifiedText {
+        val canEditSaved = settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+
+        return MappableSelectItem.IconifiedText(
+            if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
+            resources.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
+        )
     }
 
     private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {
