@@ -55,7 +55,7 @@ class FormMapViewModel(
         val items: MutableList<MappableSelectItem> = ArrayList()
 
         for (instance in instances) {
-            if (instance.geometry != null && instance.geometryType == "Point") {
+            if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
                 try {
                     val geometry = JSONObject(instance.geometry)
                     val coordinates = geometry.getJSONArray("coordinates")
