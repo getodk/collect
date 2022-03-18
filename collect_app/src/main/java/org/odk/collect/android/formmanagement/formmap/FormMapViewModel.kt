@@ -64,7 +64,7 @@ class FormMapViewModel(
                     val lon = coordinates.getDouble(0)
                     val lat = coordinates.getDouble(1)
 
-                    items.add(convertItem(instance, lat, lon, resources))
+                    items.add(createItem(instance, lat, lon, resources))
                 } catch (e: JSONException) {
                     Timber.w("Invalid JSON in instances table: %s", instance.geometry)
                 }
@@ -75,7 +75,7 @@ class FormMapViewModel(
         itemCount.value = instances.size
     }
 
-    private fun convertItem(
+    private fun createItem(
         instance: Instance,
         latitude: Double,
         longitude: Double,
