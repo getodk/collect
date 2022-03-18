@@ -31,6 +31,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
@@ -73,6 +74,9 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
     @Inject
     CurrentProjectProvider currentProjectProvider;
 
+    @Inject
+    ChangeLockProvider changeLockProvider;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -89,7 +93,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
 
         if (backgroundTasks == null) {
             backgroundTasks = new BackgroundTasks();
-            backgroundTasks.formSyncTask = new FormSyncTask();
+            backgroundTasks.formSyncTask = new FormSyncTask(changeLockProvider, currentProjectProvider.getCurrentProject().getUuid());
             backgroundTasks.formSyncTask.setDiskSyncListener(this);
             backgroundTasks.formSyncTask.execute((Void[]) null);
         }

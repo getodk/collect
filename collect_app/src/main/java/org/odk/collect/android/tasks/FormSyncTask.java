@@ -17,9 +17,9 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.external.FormsContract;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 
 /**
@@ -30,12 +30,25 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
  */
 public class FormSyncTask extends AsyncTask<Void, String, String> {
 
+    private final ChangeLockProvider changeLockProvider;
+    private final String projectId;
     private DiskSyncListener listener;
     private String statusMessage = "";
 
+    public FormSyncTask(ChangeLockProvider changeLockProvider, String projectId) {
+        this.changeLockProvider = changeLockProvider;
+        this.projectId = projectId;
+    }
+
     @Override
     protected String doInBackground(Void... params) {
-        return new FormsDirDiskFormsSynchronizer().synchronizeAndReturnError();
+        return changeLockProvider.getFormLock(projectId).withLock(acquiredLock -> {
+            if (acquiredLock) {
+                return new FormsDirDiskFormsSynchronizer().synchronizeAndReturnError();
+            } else {
+                return "";
+            }
+        });
     }
 
     public void setDiskSyncListener(DiskSyncListener listener) {
@@ -47,7 +60,6 @@ public class FormSyncTask extends AsyncTask<Void, String, String> {
         super.onPostExecute(result);
 
         // Make sure content observers (CursorLoaders for instance) are notified of change
-        String projectId = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider().getCurrentProject().getUuid();
         Collect.getInstance().getContentResolver().notifyChange(FormsContract.getUri(projectId), null);
 
         statusMessage = result;
