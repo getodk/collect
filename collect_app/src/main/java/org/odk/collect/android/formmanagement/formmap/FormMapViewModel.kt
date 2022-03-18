@@ -178,13 +178,11 @@ class FormMapViewModel(
     }
 
     private fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
-        when (instanceStatus) {
-            Instance.STATUS_INCOMPLETE -> return R.drawable.form_state_saved
-            Instance.STATUS_COMPLETE -> return R.drawable.form_state_finalized
-            Instance.STATUS_SUBMITTED -> return R.drawable.form_state_submited
-            Instance.STATUS_SUBMISSION_FAILED -> return R.drawable.form_state_submission_failed
+        return when (instanceStatus) {
+            Instance.STATUS_COMPLETE -> R.drawable.form_state_finalized
+            Instance.STATUS_SUBMITTED -> R.drawable.form_state_submited
+            Instance.STATUS_SUBMISSION_FAILED -> R.drawable.form_state_submission_failed
+            else -> R.drawable.form_state_saved
         }
-
-        throw IllegalArgumentException()
     }
 }
