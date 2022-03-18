@@ -39,6 +39,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -121,7 +122,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_savesNewVersionAlongsideOldVersion() throws Exception {
+    public void whenFormToDownloadIsUpdate_withSameFormIdAndVersion_replacePreExistingForm() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -131,13 +132,18 @@ public class ServerFormDownloaderTest {
                 Md5.getMd5Hash(new ByteArrayInputStream(xform.getBytes())),
                 true,
                 false,
-                null);
+                new ManifestFile("", Collections.singletonList(
+                        new MediaFile("file1", "hash-1", "http://file1")
+                )));
 
         FormSource formSource = mock(FormSource.class);
+        when(formSource.fetchMediaFile("http://file1")).thenReturn(new ByteArrayInputStream("contents1".getBytes()));
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xform.getBytes()));
 
         ServerFormDownloader downloader = new ServerFormDownloader(formSource, formsRepository, cacheDir, formsDir.getAbsolutePath(), new FormMetadataParser(), mock(Analytics.class));
         downloader.downloadForm(serverFormDetails, null, null);
+
+        List<Form> formsBeforeUpdate = formsRepository.getAllByFormIdAndVersion("id", "version");
 
         String xformUpdate = FormUtils.createXFormBody("id", "version", "A different title");
         ServerFormDetails serverFormDetailsUpdated = new ServerFormDetails(
@@ -148,17 +154,27 @@ public class ServerFormDownloaderTest {
                 Md5.getMd5Hash(new ByteArrayInputStream(xformUpdate.getBytes())),
                 true,
                 false,
-                null);
+                new ManifestFile("", Collections.singletonList(
+                        new MediaFile("file1", "hash-1", "http://file1")
+                )));
 
         when(formSource.fetchForm("http://downloadUrl")).thenReturn(new ByteArrayInputStream(xformUpdate.getBytes()));
         downloader.downloadForm(serverFormDetailsUpdated, null, null);
 
-        List<Form> allForms = formsRepository.getAllByFormIdAndVersion("id", "version");
-        assertThat(allForms.size(), is(2));
-        allForms.forEach(f -> {
-            File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), f.getFormFilePath()));
-            assertThat(formFile.exists(), is(true));
-        });
+        List<Form> formsAfterUpdate = formsRepository.getAllByFormIdAndVersion("id", "version");
+        assertThat(formsAfterUpdate.size(), is(1));
+
+        // Pre-existing forms should be deleted along with its files
+        File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), formsBeforeUpdate.get(0).getFormFilePath()));
+        assertThat(formFile.exists(), is(false));
+        File mediaFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), formsBeforeUpdate.get(0).getFormMediaPath()) + File.separator + "file1");
+        assertThat(mediaFile.exists(), is(false));
+
+        // New forms should be added
+        formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), formsAfterUpdate.get(0).getFormFilePath()));
+        assertThat(formFile.exists(), is(true));
+        mediaFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), formsAfterUpdate.get(0).getFormMediaPath()) + File.separator + "file1");
+        assertThat(mediaFile.exists(), is(true));
     }
 
     @Test
