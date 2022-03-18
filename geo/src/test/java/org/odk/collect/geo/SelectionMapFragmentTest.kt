@@ -102,10 +102,10 @@ class SelectionMapFragmentTest {
         whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        assertThat(map.markers, equalTo(itemsLiveData.value.map { it.toMapPoint() }))
+        assertThat(map.getMarkers(), equalTo(itemsLiveData.value.map { it.toMapPoint() }))
 
         itemsLiveData.value = emptyList()
-        assertThat(map.markers, equalTo(emptyList()))
+        assertThat(map.getMarkers(), equalTo(emptyList()))
     }
 
     @Test
@@ -128,9 +128,9 @@ class SelectionMapFragmentTest {
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
-        assertThat(map.center, equalTo(null))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
         val points = items.map { it.toMapPoint() }
-        assertThat(map.zoomBoundingBox, equalTo(Pair(points, 0.8)))
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }
 
     @Test
@@ -138,7 +138,7 @@ class SelectionMapFragmentTest {
         whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        assertThat(map.center, equalTo(null))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -149,7 +149,7 @@ class SelectionMapFragmentTest {
         whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        assertThat(map.center, equalTo(null))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -189,9 +189,9 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         onView(withId(R.id.zoom_to_bounds)).perform(click())
 
-        assertThat(map.center, equalTo(null))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
         val points = items.map { it.toMapPoint() }
-        assertThat(map.zoomBoundingBox, equalTo(Pair(points, 0.8)))
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }
 
     @Test
@@ -252,8 +252,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
         map.clickOnFeature(1)
-        assertThat(map.markerIcons[0], equalTo(items[0].smallIcon))
-        assertThat(map.markerIcons[1], equalTo(items[1].largeIcon))
+        assertThat(map.getMarkerIcons()[0], equalTo(items[0].smallIcon))
+        assertThat(map.getMarkerIcons()[1], equalTo(items[1].largeIcon))
     }
 
     @Test
@@ -278,8 +278,8 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(0)
         map.clickOnFeature(1)
-        assertThat(map.markerIcons[0], equalTo(items[0].smallIcon))
-        assertThat(map.markerIcons[1], equalTo(items[1].largeIcon))
+        assertThat(map.getMarkerIcons()[0], equalTo(items[0].smallIcon))
+        assertThat(map.getMarkerIcons()[1], equalTo(items[1].largeIcon))
     }
 
     @Test
@@ -328,7 +328,7 @@ class SelectionMapFragmentTest {
 
         scenario.recreate()
 
-        assertThat(map.zoomBoundingBox, equalTo(null))
+        assertThat(map.getZoomBoundingBox(), equalTo(null))
         assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
         assertThat(map.zoom, equalTo(7.0))
     }
