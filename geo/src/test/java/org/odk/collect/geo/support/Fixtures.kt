@@ -4,8 +4,8 @@ import android.R
 import org.odk.collect.geo.MappableSelectItem
 
 object Fixtures {
-    fun mappableSelectItem(): MappableSelectItem {
-        return MappableSelectItem(
+    fun actionMappableSelectItem(): MappableSelectItem.WithAction {
+        return MappableSelectItem.WithAction(
             0,
             0.0,
             0.0,
@@ -13,8 +13,20 @@ object Fixtures {
             R.drawable.ic_lock_idle_charging,
             "0",
             MappableSelectItem.IconifiedText(R.drawable.ic_lock_idle_charging, "An item"),
-            null,
-            null
+            MappableSelectItem.IconifiedText(R.drawable.ic_delete, "Action"),
+        )
+    }
+
+    fun infoMappableSelectItem(): MappableSelectItem.WithInfo {
+        return MappableSelectItem.WithInfo(
+            0,
+            0.0,
+            0.0,
+            R.drawable.ic_lock_power_off,
+            R.drawable.ic_lock_idle_charging,
+            "0",
+            MappableSelectItem.IconifiedText(R.drawable.ic_lock_idle_charging, "An item"),
+            "Info"
         )
     }
 }

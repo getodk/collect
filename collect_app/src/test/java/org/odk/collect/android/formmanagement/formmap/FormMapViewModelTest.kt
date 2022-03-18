@@ -100,7 +100,7 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         assertThat(viewModel.getMappableItems().value.size, equalTo(1))
 
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithAction(
             instanceWithPoint.dbId,
             2.0,
             1.0,
@@ -114,7 +114,6 @@ class FormMapViewModelTest {
                     instanceWithPoint.lastStatusChangeDate
                 )
             ),
-            info = null,
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(R.string.review_data)
@@ -143,7 +142,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithAction(
             instance.dbId,
             2.0,
             1.0,
@@ -157,7 +156,6 @@ class FormMapViewModelTest {
                     instance.lastStatusChangeDate
                 )
             ),
-            info = null,
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
                 application.getString(R.string.review_data)
@@ -188,7 +186,7 @@ class FormMapViewModelTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithAction(
             instance.dbId,
             2.0,
             1.0,
@@ -202,7 +200,6 @@ class FormMapViewModelTest {
                     instance.lastStatusChangeDate
                 )
             ),
-            info = null,
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(R.string.view_data)
@@ -231,7 +228,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithInfo(
             instance.dbId,
             2.0,
             1.0,
@@ -246,7 +243,6 @@ class FormMapViewModelTest {
                 )
             ),
             info = formatDate(R.string.deleted_on_date_at_time, 123L),
-            action = null
         )
         assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
     }
@@ -271,7 +267,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithAction(
             instance.dbId,
             2.0,
             1.0,
@@ -285,7 +281,6 @@ class FormMapViewModelTest {
                     instance.lastStatusChangeDate
                 )
             ),
-            info = null,
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(R.string.view_data)
@@ -314,7 +309,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        val expectedItem = MappableSelectItem(
+        val expectedItem = MappableSelectItem.WithAction(
             instance.dbId,
             2.0,
             1.0,
@@ -328,7 +323,6 @@ class FormMapViewModelTest {
                     instance.lastStatusChangeDate
                 )
             ),
-            info = null,
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
                 application.getString(R.string.view_data)
@@ -383,21 +377,18 @@ class FormMapViewModelTest {
         val viewModel = createAndLoadViewModel(form)
         val items = viewModel.getMappableItems().value
 
-        assertThat(items[0].action, equalTo(null))
         assertThat(
-            items[0].info,
+            (items[0] as MappableSelectItem.WithInfo).info,
             equalTo(application.getString(R.string.cannot_edit_completed_form))
         )
 
-        assertThat(items[1].action, equalTo(null))
         assertThat(
-            items[1].info,
+            (items[1] as MappableSelectItem.WithInfo).info,
             equalTo(application.getString(R.string.cannot_edit_completed_form))
         )
 
-        assertThat(items[2].action, equalTo(null))
         assertThat(
-            items[2].info,
+            (items[2] as MappableSelectItem.WithInfo).info,
             equalTo(application.getString(R.string.cannot_edit_completed_form))
         )
     }

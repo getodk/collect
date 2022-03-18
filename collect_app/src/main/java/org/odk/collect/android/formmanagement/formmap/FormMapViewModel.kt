@@ -150,20 +150,35 @@ class FormMapViewModel(
             }
         }
 
-        return MappableSelectItem(
-            instance.dbId,
-            latitude,
-            longitude,
-            getDrawableIdForStatus(instance.status, false),
-            getDrawableIdForStatus(instance.status, true),
-            instance.displayName,
-            MappableSelectItem.IconifiedText(
-                getSubmissionSummaryStatusIcon(instance.status),
-                instanceLastStatusChangeDate
-            ),
-            info,
-            action
-        )
+        if (info != null) {
+            return MappableSelectItem.WithInfo(
+                instance.dbId,
+                latitude,
+                longitude,
+                getDrawableIdForStatus(instance.status, false),
+                getDrawableIdForStatus(instance.status, true),
+                instance.displayName,
+                MappableSelectItem.IconifiedText(
+                    getSubmissionSummaryStatusIcon(instance.status),
+                    instanceLastStatusChangeDate
+                ),
+                info
+            )
+        } else {
+            return MappableSelectItem.WithAction(
+                instance.dbId,
+                latitude,
+                longitude,
+                getDrawableIdForStatus(instance.status, false),
+                getDrawableIdForStatus(instance.status, true),
+                instance.displayName,
+                MappableSelectItem.IconifiedText(
+                    getSubmissionSummaryStatusIcon(instance.status),
+                    instanceLastStatusChangeDate
+                ),
+                action!!
+            )
+        }
     }
 
     private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {

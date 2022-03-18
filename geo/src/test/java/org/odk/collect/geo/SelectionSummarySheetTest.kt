@@ -22,7 +22,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows name`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.mappableSelectItem().copy(
+            Fixtures.actionMappableSelectItem().copy(
                 name = "Cosmic Dread"
             )
         )
@@ -34,7 +34,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows status`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.mappableSelectItem().copy(
+            Fixtures.actionMappableSelectItem().copy(
                 status = MappableSelectItem.IconifiedText(
                     android.R.drawable.ic_btn_speak_now,
                     "Emotion"
@@ -51,7 +51,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows info and hides action when it is non-null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.mappableSelectItem().copy(
+            Fixtures.infoMappableSelectItem().copy(
                 info = "Don't even bother looking"
             )
         )
@@ -65,7 +65,7 @@ class SelectionSummarySheetTest {
     fun `setItem shows action and hides info when it is non-null`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
-            Fixtures.mappableSelectItem().copy(
+            Fixtures.actionMappableSelectItem().copy(
                 action = MappableSelectItem.IconifiedText(
                     android.R.drawable.ic_btn_speak_now,
                     "Come on in"

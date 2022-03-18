@@ -366,16 +366,37 @@ abstract class SelectionMapViewModel : ViewModel() {
     abstract fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
 }
 
-data class MappableSelectItem(
-    val id: Long,
-    val latitude: Double,
-    val longitude: Double,
-    val smallIcon: Int,
-    val largeIcon: Int,
-    val name: String,
-    val status: IconifiedText,
-    val info: String?,
-    val action: IconifiedText?
-) {
+sealed interface MappableSelectItem {
+
+    val id: Long
+    val latitude: Double
+    val longitude: Double
+    val smallIcon: Int
+    val largeIcon: Int
+    val name: String
+    val status: IconifiedText
+
+    data class WithInfo(
+        override val id: Long,
+        override val latitude: Double,
+        override val longitude: Double,
+        override val smallIcon: Int,
+        override val largeIcon: Int,
+        override val name: String,
+        override val status: IconifiedText,
+        val info: String,
+    ) : MappableSelectItem
+
+    data class WithAction(
+        override val id: Long,
+        override val latitude: Double,
+        override val longitude: Double,
+        override val smallIcon: Int,
+        override val largeIcon: Int,
+        override val name: String,
+        override val status: IconifiedText,
+        val action: IconifiedText
+    ) : MappableSelectItem
+
     data class IconifiedText(val icon: Int, val text: String)
 }

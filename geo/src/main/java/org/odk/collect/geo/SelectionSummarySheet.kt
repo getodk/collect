@@ -35,15 +35,19 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         binding.statusIcon.background = null
         binding.statusText.text = item.status.text
 
-        if (item.info != null) {
-            binding.info.text = item.info
-            binding.info.visibility = View.VISIBLE
-            binding.action.visibility = View.GONE
-        } else if (item.action != null) {
-            binding.action.text = item.action.text
-            binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
-            binding.action.visibility = View.VISIBLE
-            binding.info.visibility = View.GONE
+        when (item) {
+            is MappableSelectItem.WithAction -> {
+                binding.action.text = item.action.text
+                binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
+                binding.action.visibility = View.VISIBLE
+                binding.info.visibility = View.GONE
+            }
+
+            is MappableSelectItem.WithInfo -> {
+                binding.info.text = item.info
+                binding.info.visibility = View.VISIBLE
+                binding.action.visibility = View.GONE
+            }
         }
     }
 
