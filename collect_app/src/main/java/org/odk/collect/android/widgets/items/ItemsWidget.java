@@ -18,21 +18,10 @@ package org.odk.collect.android.widgets.items;
 
 import android.content.Context;
 
-import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.xpath.expr.XPathFuncExpr;
-import org.javarosa.xpath.parser.XPathSyntaxException;
-import org.odk.collect.android.R;
-import org.odk.collect.android.exception.ExternalDataException;
-import org.odk.collect.android.fastexternalitemset.ItemsetDao;
-import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.externaldata.ExternalDataUtil;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.fastexternalitemset.XPathParseTool;
 import org.odk.collect.android.widgets.QuestionWidget;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,48 +31,11 @@ import java.util.List;
  */
 public abstract class ItemsWidget extends QuestionWidget {
 
-    List<SelectChoice> items = new ArrayList<>();
+    List<SelectChoice> items;
 
-    public ItemsWidget(Context context, QuestionDetails prompt) {
-        super(context, prompt);
-        if (isFastExternalItemsetUsed()) {
-            readFastExternalItems();
-        } else if (isSearchPulldataItemsetUsed()) {
-            readSearchPulldataItems();
-        } else {
-            items = getFormEntryPrompt().getSelectChoices();
-        }
-    }
-
-    private boolean isFastExternalItemsetUsed() {
-        QuestionDef questionDef = getFormEntryPrompt().getQuestion();
-        return questionDef != null && questionDef.getAdditionalAttribute(null, "query") != null;
-    }
-
-    private boolean isSearchPulldataItemsetUsed() {
-        return ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint()) != null;
-    }
-
-    private void readFastExternalItems() {
-        try {
-            items = new ItemsetDao(new ItemsetDbAdapter()).getItems(getFormEntryPrompt(), new XPathParseTool());
-        } catch (FileNotFoundException e) {
-            showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
-        } catch (XPathSyntaxException e) {
-            showWarning(getContext().getString(R.string.parser_exception, e.getMessage()));
-        }
-    }
-
-    private void readSearchPulldataItems() {
-        // SurveyCTO-added support for dynamic select content (from .csv files)
-        XPathFuncExpr xpathFuncExpr = ExternalDataUtil.getSearchXPathExpression(getFormEntryPrompt().getAppearanceHint());
-        try {
-            items = ExternalDataUtil.populateExternalChoices(getFormEntryPrompt(), xpathFuncExpr);
-        } catch (FileNotFoundException e) {
-            showWarning(getContext().getString(R.string.file_missing, e.getMessage()));
-        } catch (ExternalDataException e) {
-            showWarning(e.getMessage());
-        }
+    public ItemsWidget(Context context, QuestionDetails questionDetails) {
+        super(context, questionDetails);
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
     }
 
     @Override
