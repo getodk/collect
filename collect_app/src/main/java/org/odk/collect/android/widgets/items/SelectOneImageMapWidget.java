@@ -18,8 +18,9 @@ package org.odk.collect.android.widgets.items;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.Nullable;
 import android.webkit.WebView;
+
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
@@ -78,5 +79,9 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
                 listener.advance();
             }
         });
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
     }
 }

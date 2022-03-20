@@ -32,14 +32,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ImageFileUtils;
+import org.odk.collect.android.widgets.QuestionWidget;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 
 import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
-public class LikertWidget extends ItemsWidget {
+public class LikertWidget extends QuestionWidget {
 
     LinearLayout view;
     private RadioButton checkedButton;
@@ -48,11 +50,14 @@ public class LikertWidget extends ItemsWidget {
     private final RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     private final RelativeLayout.LayoutParams radioButtonsParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     private final RelativeLayout.LayoutParams buttonViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private final List<SelectChoice> items;
 
     HashMap<RadioButton, String> buttonsToName;
 
     public LikertWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         setMainViewLayoutParameters();
         setStructures();
