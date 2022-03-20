@@ -437,6 +437,9 @@
     <!-- Action to save the contents of a full screen dialog -->
     <string name="save">Save</string>
 
+    <!-- Button text to select a place from a list presented on a map -->
+    <string name="select_place">Select place</string>
+
     <!--
     ##############################################
     # GEO

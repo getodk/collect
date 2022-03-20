@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.javarosa.core.reference.InvalidReferenceException;
@@ -157,7 +158,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      * rendering the widget. It is also passed the size to be used for question text.
      */
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, @NonNull int answerFontSize) {
         return null;
     }
 

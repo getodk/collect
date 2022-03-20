@@ -332,6 +332,7 @@
             <grid_widget_quickcompact2/>
             <select_one_image_map/>
             <likert_widget/>
+            <select_one_from_map_widget />
           </select_one_widgets>
           <select_multi_widgets>
             <select_multi_widget/>
@@ -415,6 +416,7 @@
       <bind nodeset="/data/select_one_widgets/grid_widget_quickcompact2" type="select1"/>
       <bind nodeset="/data/select_one_widgets/select_one_image_map" type="select1"/>
       <bind nodeset="/data/select_one_widgets/likert_widget" type="select1"/>
+      <bind nodeset="/data/select_one_widgets/select_one_from_map_widget" type="select1"/>
       <bind nodeset="/data/select_multi_widgets/select_multi_widget" type="select"/>
       <bind nodeset="/data/select_multi_widgets/select_multi_widget_autocomplete" type="select"/>
       <bind nodeset="/data/select_multi_widgets/grid_multi_widget_compact" type="select"/>
@@ -963,6 +965,18 @@
         <item>
           <label ref="jr:itext('/data/select_one_widgets/likert_widget/strongly_agree:label')"/>
           <value>strongly_agree</value>
+        </item>
+      </select1>
+      <select1 appearance="map" ref="/data/select_one_widgets/select_one_from_map_widget">
+        <label>Select one from map widget</label>
+        <hint>select_one type with map appearance</hint>
+        <item>
+          <label>A</label>
+          <value>a</value>
+        </item>
+        <item>
+          <label>B</label>
+          <value>b</value>
         </item>
       </select1>
     </group>

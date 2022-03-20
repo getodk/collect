@@ -23,6 +23,7 @@ import org.odk.collect.android.widgets.items.ListWidget;
 import org.odk.collect.android.widgets.items.SelectMultiImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectMultiMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectMultiWidget;
+import org.odk.collect.android.widgets.items.SelectOneFromMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
@@ -198,5 +199,16 @@ public class WidgetFactoryTest {
 
         widget = widgetFactory.createWidgetFromPrompt(prompt, null);
         assertThat(widget, instanceOf(SelectMultiWidget.class));
+    }
+
+    @Test
+    public void testCreatingSelectOneFromMapWidget() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(Constants.CONTROL_SELECT_ONE)
+                .withAppearance("map")
+                .build();
+
+        QuestionWidget widget = widgetFactory.createWidgetFromPrompt(prompt, null);
+        assertThat(widget, instanceOf(SelectOneFromMapWidget.class));
     }
 }
