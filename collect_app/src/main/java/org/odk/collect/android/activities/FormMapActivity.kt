@@ -69,7 +69,7 @@ class FormMapActivity : LocalizedActivity() {
         )[ARG_VIEW_MODEL_KEY, FormMapViewModel::class.java]
 
         val formNavigator = FormNavigator(
-            currentProjectProvider,
+            currentProjectProvider.getCurrentProject().uuid,
             settingsProvider,
             instancesRepositoryProvider::get
         )

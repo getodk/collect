@@ -14,13 +14,12 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 
 class FormNavigator(
-    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectId: String,
     private val settingsProvider: SettingsProvider,
     private val instancesRepositoryProvider: () -> InstancesRepository
 ) {
 
     fun editInstance(activity: Activity, instanceId: Long) {
-        val projectId = currentProjectProvider.getCurrentProject().uuid
         val uri = InstancesContract.getUri(projectId, instanceId)
         activity.startActivity(
             Intent(activity, FormEntryActivity::class.java).also {
@@ -42,7 +41,6 @@ class FormNavigator(
     }
 
     fun newInstance(activity: Activity, formId: Long) {
-        val projectId = currentProjectProvider.getCurrentProject().uuid
         activity.startActivity(
             Intent(activity, FormEntryActivity::class.java).also {
                 it.action = Intent.ACTION_EDIT
