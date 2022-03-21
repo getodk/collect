@@ -26,7 +26,7 @@ public class DrawWidgetTest {
     public void saveIgnoreDialog_ShouldUseBothOptions() {
         //TestCase1
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
@@ -50,7 +50,7 @@ public class DrawWidgetTest {
     public void setColor_ShouldSeeColorPicker() {
         //TestCase2
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
@@ -72,7 +72,7 @@ public class DrawWidgetTest {
     public void multiClickOnPlus_ShouldDisplayIcons() {
         //TestCase3
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")

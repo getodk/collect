@@ -133,6 +133,8 @@ public class AllWidgetsFormTest {
 
         testLikertWidget();
 
+        testSelectOneFromMapWidget();
+
         testMultiSelectWidget();
         testMultiSelectAutocompleteWidget();
 
@@ -149,6 +151,7 @@ public class AllWidgetsFormTest {
 
         testTriggerWidget();
     }
+
     //endregion
 
     //region Widget tests.
@@ -536,6 +539,10 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("likert-widget");
 
         onView(withText("Likert widget")).perform(swipeLeft());
+    }
+
+    public void testSelectOneFromMapWidget() {
+        onView(withText("Select one from map widget")).perform(swipeLeft());
     }
 
     public void testMultiSelectWidget() {

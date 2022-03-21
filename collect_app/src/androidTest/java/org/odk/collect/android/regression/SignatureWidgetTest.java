@@ -27,7 +27,7 @@ public class SignatureWidgetTest {
 
         //TestCase1
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
@@ -54,7 +54,7 @@ public class SignatureWidgetTest {
 
         //TestCase2
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickOnText("Image widgets")
