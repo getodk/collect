@@ -398,6 +398,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public boolean onMarkerClick(Marker marker) {
+        // Avoid calling listeners if location crosshair is clicked on.
+        if (marker == locationCrosshairs) {
+            return true;
+        }
+
         if (featureClickListener != null) { // FormMapActivity
             featureClickListener.onFeature(findFeature(marker));
         } else { // GeoWidget
