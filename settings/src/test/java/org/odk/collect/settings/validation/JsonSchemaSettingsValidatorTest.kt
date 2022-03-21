@@ -65,4 +65,28 @@ class JsonSchemaSettingsValidatorTest {
             equalTo(false)
         )
     }
+
+    @Test
+    fun `returns false when json is invalid`() {
+        val validator = JsonSchemaSettingsValidator {
+            """
+            {
+                "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
+                "${'$'}id": "https://example.com/example.schema.json",
+                "title": "Schema",
+                "type": "object",
+                "properties": {
+                    "foo": {
+                        "type": "boolean"
+                    }
+                }
+            }
+            """.byteInputStream()
+        }
+
+        assertThat(
+            validator.isValid("*"),
+            equalTo(false)
+        )
+    }
 }
