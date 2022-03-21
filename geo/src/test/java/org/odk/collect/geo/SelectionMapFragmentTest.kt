@@ -350,6 +350,13 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `ignores feature clicks for IDs that are not item features`() {
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.clickOnFeature(-1)
+        map.clickOnFeature(-2) // First click is fine but second could use the ID and crash
+    }
+
+    @Test
     fun `recreating maintains zoom`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.zoomToPoint(MapPoint(55.0, 66.0), 7.0, false)

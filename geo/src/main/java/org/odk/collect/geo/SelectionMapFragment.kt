@@ -54,7 +54,7 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    private val selectedItemViewModel by viewModels<SelectedItemViewModel>()
+    private val selectedFeatureViewModel by viewModels<SelectedFeatureViewModel>()
 
     private lateinit var map: MapFragment
     private var viewportInitialized = false
@@ -193,7 +193,7 @@ class SelectionMapFragment() : Fragment() {
             updateCounts(binding)
         }
 
-        selectedItemViewModel.getSelectedItemId()?.let {
+        selectedFeatureViewModel.getSelectedFeatureId()?.let {
             onFeatureClicked(it)
         }
     }
@@ -230,13 +230,13 @@ class SelectionMapFragment() : Fragment() {
 
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val selectedItemId = selectedItemViewModel.getSelectedItemId()
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedItemId != null) {
+                val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedFeatureId != null) {
                     map.setMarkerIcon(
-                        selectedItemId,
-                        itemsByFeatureId[selectedItemId]!!.smallIcon
+                        selectedFeatureId,
+                        itemsByFeatureId[selectedFeatureId]!!.smallIcon
                     )
-                    selectedItemViewModel.setSelectedItemId(null)
+                    selectedFeatureViewModel.setSelectedFeatureId(null)
                     onBackPressedCallback.isEnabled = false
                 } else {
                     onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
@@ -272,7 +272,7 @@ class SelectionMapFragment() : Fragment() {
 
     fun onFeatureClicked(featureId: Int) {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        if (!isSummaryForItemDisplayed(featureId)) {
+        if (!isSummaryForFeatureDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
 
             val item = itemsByFeatureId[featureId]
@@ -281,9 +281,8 @@ class SelectionMapFragment() : Fragment() {
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
                 summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                selectedFeatureViewModel.setSelectedFeatureId(featureId)
             }
-
-            selectedItemViewModel.setSelectedItemId(featureId)
         }
     }
 
@@ -306,16 +305,16 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    private fun isSummaryForItemDisplayed(itemId: Int): Boolean {
-        return selectedItemViewModel.getSelectedItemId() == itemId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+    private fun isSummaryForFeatureDisplayed(featureId: Int): Boolean {
+        return selectedFeatureViewModel.getSelectedFeatureId() == featureId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun removeEnlargedMarkerIfExist(itemId: Int) {
-        val selectedItemId = selectedItemViewModel.getSelectedItemId()
-        if (selectedItemId != null && selectedItemId != itemId) {
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedFeatureId != null && selectedFeatureId != itemId) {
             map.setMarkerIcon(
-                selectedItemId,
-                itemsByFeatureId[selectedItemId]!!.smallIcon
+                selectedFeatureId,
+                itemsByFeatureId[selectedFeatureId]!!.smallIcon
             )
         }
     }
@@ -334,7 +333,7 @@ class SelectionMapFragment() : Fragment() {
 
             map.setMarkerIcon(
                 featureId,
-                if (featureId == selectedItemViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
+                if (featureId == selectedFeatureViewModel.getSelectedFeatureId()) item.largeIcon else item.smallIcon
             )
 
             itemsByFeatureId[featureId] = item
@@ -354,16 +353,16 @@ class SelectionMapFragment() : Fragment() {
     }
 }
 
-internal class SelectedItemViewModel : ViewModel() {
+internal class SelectedFeatureViewModel : ViewModel() {
 
-    private var selectedItemId: Int? = null
+    private var selectedFeatureId: Int? = null
 
-    fun getSelectedItemId(): Int? {
-        return selectedItemId
+    fun getSelectedFeatureId(): Int? {
+        return selectedFeatureId
     }
 
-    fun setSelectedItemId(itemId: Int?) {
-        selectedItemId = itemId
+    fun setSelectedFeatureId(itemId: Int?) {
+        selectedFeatureId = itemId
     }
 }
 
