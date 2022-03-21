@@ -2,6 +2,7 @@ package org.odk.collect.geo
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +27,12 @@ import org.odk.collect.geo.maps.MapPoint
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
+/**
+ * Can be used to allow an item to be selected from a map. Items can be provided using an
+ * implementation of [SelectionMapViewModel]. [SelectionMapFragment] will load the implementation
+ * from the host [Activity]'s view models using the key passed as
+ * [SelectionMapFragment.ARG_VIEW_MODEL_KEY].
+ */
 class SelectionMapFragment() : Fragment() {
 
     @Inject
@@ -47,7 +54,7 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    private val selectionViewModel by viewModels<SelectionViewModel>()
+    private val selectedItemViewModel by viewModels<SelectedItemViewModel>()
 
     private lateinit var map: MapFragment
     private var viewportInitialized = false
@@ -186,7 +193,7 @@ class SelectionMapFragment() : Fragment() {
             updateCounts(binding)
         }
 
-        selectionViewModel.getSelectedItemId()?.let {
+        selectedItemViewModel.getSelectedItemId()?.let {
             onFeatureClicked(it)
         }
     }
@@ -223,13 +230,13 @@ class SelectionMapFragment() : Fragment() {
 
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val selectedSubmissionId = selectionViewModel.getSelectedItemId()
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != null) {
+                val selectedItemId = selectedItemViewModel.getSelectedItemId()
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedItemId != null) {
                     map.setMarkerIcon(
-                        selectedSubmissionId,
-                        itemsByFeatureId[selectedSubmissionId]!!.smallIcon
+                        selectedItemId,
+                        itemsByFeatureId[selectedItemId]!!.smallIcon
                     )
-                    selectionViewModel.setSelectedItemId(null)
+                    selectedItemViewModel.setSelectedItemId(null)
                     onBackPressedCallback.isEnabled = false
                 } else {
                     onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
@@ -265,7 +272,7 @@ class SelectionMapFragment() : Fragment() {
 
     fun onFeatureClicked(featureId: Int) {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
+        if (!isSummaryForItemDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
 
             val item = itemsByFeatureId[featureId]
@@ -276,7 +283,7 @@ class SelectionMapFragment() : Fragment() {
                 summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
 
-            selectionViewModel.setSelectedItemId(featureId)
+            selectedItemViewModel.setSelectedItemId(featureId)
         }
     }
 
@@ -299,16 +306,16 @@ class SelectionMapFragment() : Fragment() {
         }
     }
 
-    private fun isSummaryForGivenSubmissionDisplayed(newSubmissionId: Int): Boolean {
-        return selectionViewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+    private fun isSummaryForItemDisplayed(itemId: Int): Boolean {
+        return selectedItemViewModel.getSelectedItemId() == itemId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun removeEnlargedMarkerIfExist(newSubmissionId: Int) {
-        val selectedSubmissionId = selectionViewModel.getSelectedItemId()
-        if (selectedSubmissionId != null && selectedSubmissionId != newSubmissionId) {
+    private fun removeEnlargedMarkerIfExist(itemId: Int) {
+        val selectedItemId = selectedItemViewModel.getSelectedItemId()
+        if (selectedItemId != null && selectedItemId != itemId) {
             map.setMarkerIcon(
-                selectedSubmissionId,
-                itemsByFeatureId[selectedSubmissionId]!!.smallIcon
+                selectedItemId,
+                itemsByFeatureId[selectedItemId]!!.smallIcon
             )
         }
     }
@@ -327,7 +334,7 @@ class SelectionMapFragment() : Fragment() {
 
             map.setMarkerIcon(
                 featureId,
-                if (featureId == selectionViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
+                if (featureId == selectedItemViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
             )
 
             itemsByFeatureId[featureId] = item
@@ -347,7 +354,7 @@ class SelectionMapFragment() : Fragment() {
     }
 }
 
-internal class SelectionViewModel : ViewModel() {
+internal class SelectedItemViewModel : ViewModel() {
 
     private var selectedItemId: Int? = null
 
