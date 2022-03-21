@@ -4,12 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 
-class JsonSchemaSettingsValidatorTest {
-
-    @Test
-    fun `returns true when json is valid based on schema`() {
-        val validator = JsonSchemaSettingsValidator {
-            """
+private const val SCHEMA = """
             {
                 "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
                 "${'$'}id": "https://example.com/example.schema.json",
@@ -21,7 +16,14 @@ class JsonSchemaSettingsValidatorTest {
                     }
                 }
             }
-            """.byteInputStream()
+            """
+
+class JsonSchemaSettingsValidatorTest {
+
+    @Test
+    fun `returns true when json is valid based on schema`() {
+        val validator = JsonSchemaSettingsValidator {
+            SCHEMA.byteInputStream()
         }
 
         assertThat(
@@ -39,19 +41,7 @@ class JsonSchemaSettingsValidatorTest {
     @Test
     fun `returns false when json is invalid based on schema`() {
         val validator = JsonSchemaSettingsValidator {
-            """
-            {
-                "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
-                "${'$'}id": "https://example.com/example.schema.json",
-                "title": "Schema",
-                "type": "object",
-                "properties": {
-                    "foo": {
-                        "type": "boolean"
-                    }
-                }
-            }
-            """.byteInputStream()
+            SCHEMA.byteInputStream()
         }
 
         assertThat(
@@ -69,19 +59,7 @@ class JsonSchemaSettingsValidatorTest {
     @Test
     fun `returns false when json is invalid`() {
         val validator = JsonSchemaSettingsValidator {
-            """
-            {
-                "${'$'}schema": "https://json-schema.org/draft/2019-09/schema",
-                "${'$'}id": "https://example.com/example.schema.json",
-                "title": "Schema",
-                "type": "object",
-                "properties": {
-                    "foo": {
-                        "type": "boolean"
-                    }
-                }
-            }
-            """.byteInputStream()
+            SCHEMA.byteInputStream()
         }
 
         assertThat(
