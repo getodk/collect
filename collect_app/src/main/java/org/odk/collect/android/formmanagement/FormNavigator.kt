@@ -5,7 +5,6 @@ import android.content.Intent
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
 import org.odk.collect.forms.instances.Instance
