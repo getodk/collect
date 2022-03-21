@@ -28,7 +28,7 @@ class ODKAppSettingsImporterTest {
         )
         assertThat(result, equalTo(false))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
-        assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
 
     @Test
@@ -39,7 +39,7 @@ class ODKAppSettingsImporterTest {
         )
         assertThat(result, equalTo(false))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
-        assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
 
     @Test
