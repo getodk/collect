@@ -19,13 +19,12 @@ private const val SCHEMA = """
             """
 
 class JsonSchemaSettingsValidatorTest {
+    private val validator = JsonSchemaSettingsValidator {
+        SCHEMA.byteInputStream()
+    }
 
     @Test
     fun `returns true when json is valid based on schema`() {
-        val validator = JsonSchemaSettingsValidator {
-            SCHEMA.byteInputStream()
-        }
-
         assertThat(
             validator.isValid(
                 """
@@ -40,10 +39,6 @@ class JsonSchemaSettingsValidatorTest {
 
     @Test
     fun `returns false when json is invalid based on schema`() {
-        val validator = JsonSchemaSettingsValidator {
-            SCHEMA.byteInputStream()
-        }
-
         assertThat(
             validator.isValid(
                 """
@@ -58,10 +53,6 @@ class JsonSchemaSettingsValidatorTest {
 
     @Test
     fun `returns false when json is invalid`() {
-        val validator = JsonSchemaSettingsValidator {
-            SCHEMA.byteInputStream()
-        }
-
         assertThat(
             validator.isValid("*"),
             equalTo(false)
