@@ -25,7 +25,7 @@ public final class AuditUtils {
                     auditEventLogger.logEvent(AuditEvent.AuditEventType.QUESTION, question.getIndex(), true, answer, currentTime, null);
                 }
             } catch (RepeatsInFieldListException e) {
-                throw new RuntimeException(e.getMessage(), e);
+                // ignore
             }
         }
     }
