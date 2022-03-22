@@ -15,7 +15,6 @@ package org.odk.collect.android.activities
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
@@ -25,6 +24,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.geo.SelectionMapFragment
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -65,7 +65,9 @@ class FormMapActivity : LocalizedActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
-        supportFragmentManager.fragmentFactory = FragmentFactory(viewModel)
+        supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(SelectionMapFragment::class.java) { SelectionMapFragment(viewModel) }
+            .build()
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.form_map_activity)
@@ -87,26 +89,6 @@ class FormMapActivity : LocalizedActivity() {
                 formNavigator.newInstance(this, formId)
             }
         }
-
-        supportFragmentManager.beginTransaction()
-            .add(
-                R.id.selection_map,
-                SelectionMapFragment::class.java,
-                Bundle().also {
-                    it.putString(SelectionMapFragment.ARG_VIEW_MODEL_KEY, ARG_VIEW_MODEL_KEY)
-                }
-            )
-            .commit()
-    }
-
-    private class FragmentFactory(private val viewModel: FormMapViewModel) :
-        androidx.fragment.app.FragmentFactory() {
-        override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-            return when (loadFragmentClass(classLoader, className)) {
-                SelectionMapFragment::class.java -> SelectionMapFragment(viewModel)
-                else -> super.instantiate(classLoader, className)
-            }
-        }
     }
 
     override fun onResume() {
@@ -116,6 +98,5 @@ class FormMapActivity : LocalizedActivity() {
 
     companion object {
         const val EXTRA_FORM_ID = "form_id"
-        const val ARG_VIEW_MODEL_KEY = "form_map"
     }
 }
