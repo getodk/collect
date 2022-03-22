@@ -41,7 +41,7 @@ class SelectionMapFragmentTest {
 
     private val map = FakeMapFragment()
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
-    private val viewModel = mock<SelectionMapViewModel> {
+    private val viewModel = mock<SelectionMapData> {
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemCount() } doReturn MutableLiveData(0)
         on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())

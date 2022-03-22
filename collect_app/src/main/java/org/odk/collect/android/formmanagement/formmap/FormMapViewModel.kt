@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement.formmap
 import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
@@ -13,7 +14,7 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapViewModel
+import org.odk.collect.geo.SelectionMapData
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import timber.log.Timber
@@ -27,7 +28,7 @@ class FormMapViewModel(
     formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
     private val settingsProvider: SettingsProvider,
-) : SelectionMapViewModel() {
+) : ViewModel(), SelectionMapData {
 
     private var mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())

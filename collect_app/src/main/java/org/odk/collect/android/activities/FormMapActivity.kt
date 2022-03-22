@@ -14,6 +14,8 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
@@ -45,28 +47,28 @@ class FormMapActivity : LocalizedActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
-    private lateinit var viewModel: FormMapViewModel
+    private val formId by lazy { intent.getLongExtra(EXTRA_FORM_ID, -1) }
+    private val viewModel: FormMapViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return FormMapViewModel(
+                    resources,
+                    formId,
+                    formsRepositoryProvider.get(),
+                    instancesRepositoryProvider.get(),
+                    settingsProvider
+                ) as T
+            }
+        }
+    }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setContentView(R.layout.form_map_activity)
+        supportFragmentManager.fragmentFactory = FragmentFactory(viewModel)
 
-        val formId = intent.getLongExtra(EXTRA_FORM_ID, -1)
-        viewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return FormMapViewModel(
-                        resources,
-                        formId,
-                        formsRepositoryProvider.get(),
-                        instancesRepositoryProvider.get(),
-                        settingsProvider
-                    ) as T
-                }
-            }
-        )[ARG_VIEW_MODEL_KEY, FormMapViewModel::class.java]
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.form_map_activity)
 
         val formNavigator = FormNavigator(
             currentProjectProvider.getCurrentProject().uuid,
@@ -95,6 +97,16 @@ class FormMapActivity : LocalizedActivity() {
                 }
             )
             .commit()
+    }
+
+    private class FragmentFactory(private val viewModel: FormMapViewModel) :
+        androidx.fragment.app.FragmentFactory() {
+        override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+            return when (loadFragmentClass(classLoader, className)) {
+                SelectionMapFragment::class.java -> SelectionMapFragment(viewModel)
+                else -> super.instantiate(classLoader, className)
+            }
+        }
     }
 
     override fun onResume() {

@@ -2,19 +2,16 @@ package org.odk.collect.geo
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.livedata.NonNullLiveData
@@ -29,11 +26,9 @@ import javax.inject.Inject
 
 /**
  * Can be used to allow an item to be selected from a map. Items can be provided using an
- * implementation of [SelectionMapViewModel]. [SelectionMapFragment] will load the implementation
- * from the host [Activity]'s view models using the key passed as
- * [SelectionMapFragment.ARG_VIEW_MODEL_KEY].
+ * implementation of [SelectionMapData].
  */
-class SelectionMapFragment() : Fragment() {
+class SelectionMapFragment(private val selectionMapData: SelectionMapData) : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -43,16 +38,6 @@ class SelectionMapFragment() : Fragment() {
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
-
-    private var _selectionMapViewModel: SelectionMapViewModel? = null
-    private val selectionMapViewModel by lazy {
-        _selectionMapViewModel.let {
-            it ?: ViewModelProvider(requireActivity())[
-                arguments?.getString(ARG_VIEW_MODEL_KEY)!!,
-                SelectionMapViewModel::class.java
-            ]
-        }
-    }
 
     private val selectedFeatureViewModel by viewModels<SelectedFeatureViewModel>()
 
@@ -72,11 +57,6 @@ class SelectionMapFragment() : Fragment() {
     private var itemCount: Int = 0
 
     private var previousState: Bundle? = null
-
-    @VisibleForTesting
-    internal constructor(selectionMapViewModel: SelectionMapViewModel) : this() {
-        this._selectionMapViewModel = selectionMapViewModel
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,11 +91,11 @@ class SelectionMapFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = SelectionMapLayoutBinding.bind(view)
 
-        selectionMapViewModel.getMapTitle().observe(viewLifecycleOwner) {
+        selectionMapData.getMapTitle().observe(viewLifecycleOwner) {
             binding.title.text = it
         }
 
-        selectionMapViewModel.getItemCount().observe(viewLifecycleOwner) {
+        selectionMapData.getItemCount().observe(viewLifecycleOwner) {
             itemCount = it
             updateCounts(binding)
         }
@@ -188,7 +168,7 @@ class SelectionMapFragment() : Fragment() {
         map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
-        selectionMapViewModel.getMappableItems().observe(viewLifecycleOwner) {
+        selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
             updateItems(it)
             updateCounts(binding)
         }
@@ -376,10 +356,10 @@ internal class SelectedFeatureViewModel : ViewModel() {
     }
 }
 
-abstract class SelectionMapViewModel : ViewModel() {
-    abstract fun getMapTitle(): LiveData<String>
-    abstract fun getItemCount(): LiveData<Int>
-    abstract fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
+interface SelectionMapData {
+    fun getMapTitle(): LiveData<String>
+    fun getItemCount(): LiveData<Int>
+    fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
 }
 
 sealed interface MappableSelectItem {
