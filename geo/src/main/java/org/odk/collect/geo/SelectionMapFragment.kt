@@ -331,7 +331,6 @@ class SelectionMapFragment(private val selectionMapData: SelectionMapData) : Fra
     }
 
     companion object {
-        const val ARG_VIEW_MODEL_KEY = "view_model_key"
         const val ARG_SKIP_SUMMARY = "skip_summary"
 
         const val REQUEST_SELECT_ITEM = "select_item"
