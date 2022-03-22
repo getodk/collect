@@ -28,7 +28,7 @@ import javax.inject.Inject
  * Can be used to allow an item to be selected from a map. Items can be provided using an
  * implementation of [SelectionMapData].
  */
-class SelectionMapFragment(private val selectionMapData: SelectionMapData) : Fragment() {
+class SelectionMapFragment(val selectionMapData: SelectionMapData) : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory

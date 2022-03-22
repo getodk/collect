@@ -35,6 +35,11 @@ public class MockFormEntryPromptBuilder {
         withQuestion(mock(QuestionDef.class));
     }
 
+    public MockFormEntryPromptBuilder withLongText(String text) {
+        when(prompt.getLongText()).thenReturn(text);
+        return this;
+    }
+
     public MockFormEntryPromptBuilder withIndex(String index) {
         when(prompt.getIndex().toString()).thenReturn(index);
         return this;

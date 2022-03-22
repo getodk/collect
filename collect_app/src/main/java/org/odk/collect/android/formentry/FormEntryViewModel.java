@@ -12,6 +12,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
@@ -177,6 +178,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public NonNullLiveData<Boolean> hasBackgroundRecording() {
         return hasBackgroundRecording;
+    }
+
+    public FormEntryPrompt getQuestionPrompt(FormIndex formIndex) {
+        return formController.getQuestionPrompt(formIndex);
     }
 
     public static class Factory implements ViewModelProvider.Factory {
