@@ -465,8 +465,7 @@
   <string name="discard">Hylkää</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
-  <string name="geometry_status">Tallennettuja lomakkeita: %d (%d näytetty kartalla)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Tallennetun lomakkeen tarkastelu</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>

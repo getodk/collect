@@ -465,8 +465,7 @@
   <string name="discard">Abandoner changements</string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
-  <string name="geometry_status">Formulaires enregistrés %d (%d affichés sur la carte)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Voir Questionnaire Enregistré </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>

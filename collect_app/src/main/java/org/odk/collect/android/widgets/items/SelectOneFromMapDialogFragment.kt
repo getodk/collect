@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
 import org.javarosa.form.api.FormEntryPrompt
+import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
@@ -68,10 +69,37 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment() {
     }
 }
 
-private class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData {
+internal class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
-    private val itemCount = MutableLiveData(prompt.selectChoices.size)
+    private val itemCount = MutableLiveData<Int>()
+    private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
+
+    init {
+        val selectChoices = prompt.selectChoices
+        itemCount.value = selectChoices.size
+        items.value = selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
+            val geometry = selectChoice.getChild("geometry")
+
+            if (geometry != null) {
+                val latitude = geometry.split(" ")[0].toDouble()
+                val longitude = geometry.split(" ")[1].toDouble()
+
+                list + MappableSelectItem.WithInfo(
+                    index.toLong(),
+                    latitude,
+                    longitude,
+                    R.drawable.ic_map_marker_24dp,
+                    R.drawable.ic_map_marker_48dp,
+                    selectChoice.labelInnerText,
+                    MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
+                    ""
+                )
+            } else {
+                list
+            }
+        }
+    }
 
     override fun getMapTitle(): LiveData<String> {
         return mapTitle
@@ -86,6 +114,6 @@ private class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData {
     }
 
     override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
-        return MutableNonNullLiveData(emptyList())
+        return items
     }
 }

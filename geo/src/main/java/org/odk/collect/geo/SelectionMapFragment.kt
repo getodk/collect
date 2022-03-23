@@ -179,7 +179,7 @@ class SelectionMapFragment(val selectionMapData: SelectionMapData) : Fragment() 
     }
 
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
-        binding.geometryStatus.text = getString(R.string.geometry_status, selectionMapData.getItemType(), itemCount, points.size)
+        binding.geometryStatus.text = getString(R.string.select_item_count, selectionMapData.getItemType(), itemCount, points.size)
     }
 
     private fun restoreZoomFromPreviousState(state: Bundle) {

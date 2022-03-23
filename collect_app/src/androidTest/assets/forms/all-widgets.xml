@@ -357,6 +357,20 @@
           </meta>
         </data>
       </instance>
+      <instance id="places">
+        <root>
+          <item>
+            <geometry>46.5841618 7.0801379 0 0</geometry>
+            <label>A</label>
+            <name>a</name>
+          </item>
+          <item>
+            <geometry>35.880508260751576 76.51505715762721 0 0</geometry>
+            <label>B</label>
+            <name>b</name>
+          </item>
+        </root>
+      </instance>
       <bind nodeset="/data/intro" readonly="true()" type="string"/>
       <bind nodeset="/data/text_widgets/string_widget" type="string"/>
       <bind nodeset="/data/text_widgets/string_number_widget" type="string"/>
@@ -970,14 +984,10 @@
       <select1 appearance="map" ref="/data/select_one_widgets/select_one_from_map_widget">
         <label>Select one from map widget</label>
         <hint>select_one type with map appearance</hint>
-        <item>
-          <label>A</label>
-          <value>a</value>
-        </item>
-        <item>
-          <label>B</label>
-          <value>b</value>
-        </item>
+        <itemset nodeset="instance('places')/root/item[true()]">
+          <value ref="name" />
+          <label ref="label" />
+        </itemset>
       </select1>
     </group>
     <group ref="/data/select_multi_widgets">
