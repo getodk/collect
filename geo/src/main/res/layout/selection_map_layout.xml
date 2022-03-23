@@ -22,17 +22,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="#BF000000"
             android:gravity="start"
             android:padding="4dp"
-            android:background="#BF000000"
             android:textColor="#FFFFFF" />
 
         <FrameLayout
             android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/title"
-            android:layout_above="@id/geometry_status" />
+            android:layout_above="@id/geometry_status"
+            android:layout_below="@id/title" />
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
             android:id="@+id/new_instance"

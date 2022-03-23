@@ -5,7 +5,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.location.Location
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -75,8 +75,9 @@ class FormMapTest {
             .clickSaveAndExitBackToMap()
 
             .assertText(
-                ApplicationProvider.getApplicationContext<Context>().resources.getString(
+                getApplicationContext<Context>().resources.getString(
                     R.string.geometry_status,
+                    getApplicationContext<Context>().resources.getString(R.string.saved_forms),
                     1,
                     1
                 )

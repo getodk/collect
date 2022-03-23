@@ -77,6 +77,10 @@ private class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData {
         return mapTitle
     }
 
+    override fun getItemType(): String {
+        return "Choices"
+    }
+
     override fun getItemCount(): LiveData<Int> {
         return itemCount
     }

@@ -43,6 +43,10 @@ class FormMapViewModel(
         return mapTitle
     }
 
+    override fun getItemType(): String {
+        return resources.getString(R.string.saved_forms)
+    }
+
     override fun getItemCount(): LiveData<Int> {
         return itemCount
     }
