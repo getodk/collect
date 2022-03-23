@@ -76,7 +76,7 @@ class FormMapTest {
 
             .assertText(
                 getApplicationContext<Context>().resources.getString(
-                    R.string.geometry_status,
+                    R.string.select_item_count,
                     getApplicationContext<Context>().resources.getString(R.string.saved_forms),
                     1,
                     1

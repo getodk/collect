@@ -26,6 +26,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
@@ -111,11 +112,11 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        onView(withText(application.getString(R.string.geometry_status, "Things", 0, 2)))
+        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 2)))
             .check(matches(isDisplayed()))
 
         itemsLiveData.value = emptyList()
-        onView(withText(application.getString(R.string.geometry_status, "Things", 0, 0)))
+        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 0)))
             .check(matches(isDisplayed()))
     }
 
@@ -280,7 +281,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item returns item ID as result when SKIP_SUMMARY is true`() {
+    fun `tapping on item returns item ID as result when skipSummary is true`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0),
             Fixtures.actionMappableSelectItem().copy(id = 1),
@@ -289,9 +290,10 @@ class SelectionMapFragmentTest {
 
         val scenario = launcherRule.launchInContainer(
             SelectionMapFragment::class.java,
-            args = Bundle().also {
-                it.putBoolean(SelectionMapFragment.ARG_SKIP_SUMMARY, true)
-            }
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(data, skipSummary = true)
+                }.build()
         )
 
         var actualResult: Bundle? = null

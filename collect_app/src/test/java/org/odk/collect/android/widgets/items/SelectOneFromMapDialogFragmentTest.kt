@@ -124,6 +124,7 @@ class SelectOneFromMapDialogFragmentTest {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
+            assertThat(fragment.skipSummary, equalTo(true))
 
             val data = fragment.selectionMapData
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))

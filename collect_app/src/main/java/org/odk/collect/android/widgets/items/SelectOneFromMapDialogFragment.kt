@@ -38,7 +38,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment() {
             .forClass(SelectionMapFragment::class.java) {
                 val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
-                SelectionMapFragment(SelectChoicesMapData(prompt))
+                SelectionMapFragment(SelectChoicesMapData(prompt), skipSummary = true)
             }
             .build()
     }
