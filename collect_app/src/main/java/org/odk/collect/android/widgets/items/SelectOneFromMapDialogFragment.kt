@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
@@ -21,10 +23,11 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.geo.MappableSelectItem
 import org.odk.collect.geo.SelectionMapData
 import org.odk.collect.geo.SelectionMapFragment
+import org.odk.collect.geo.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
-class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment() {
+class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
 
     @Inject
     lateinit var formEntryViewModelFactory: FormEntryViewModel.Factory
@@ -41,6 +44,8 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment() {
                 SelectionMapFragment(SelectChoicesMapData(prompt), skipSummary = true)
             }
             .build()
+
+        childFragmentManager.setFragmentResultListener(REQUEST_SELECT_ITEM, this, this)
     }
 
     override fun onCreateView(
@@ -62,6 +67,15 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment() {
 
     override fun onCloseClicked() {
         // No toolbar so not relevant
+    }
+
+    override fun onFragmentResult(requestKey: String, result: Bundle) {
+        val selectedIndex = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM).toInt()
+        val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
+        val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
+        val selectedChoice = prompt.selectChoices[selectedIndex]
+        formEntryViewModel.answerQuestion(formIndex, SelectOneData(selectedChoice.selection()))
+        dismiss()
     }
 
     companion object {

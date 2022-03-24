@@ -21,11 +21,19 @@ class SelectChoicesMapDataTest {
             .withLongText("Which is your favourite place?")
             .withSelectChoices(
                 listOf(
-                    SelectChoice(null, "A", "a", false, TreeElement("").also { item ->
-                        item.addChild(TreeElement("geometry").also {
-                            it.value = StringData("12.0 -1.0 305 0")
-                        })
-                    }),
+                    SelectChoice(
+                        null,
+                        "A",
+                        "a",
+                        false,
+                        TreeElement("").also { item ->
+                            item.addChild(
+                                TreeElement("geometry").also {
+                                    it.value = StringData("12.0 -1.0 305 0")
+                                }
+                            )
+                        }
+                    ),
                     SelectChoice(null, "B", "b", false, TreeElement(""))
                 )
             )
