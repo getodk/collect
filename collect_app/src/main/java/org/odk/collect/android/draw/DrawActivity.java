@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -111,9 +112,6 @@ public class DrawActivity extends CollectAbstractActivity {
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        PenColorPickerViewModel viewModel = new ViewModelProvider(this, factory).get(PenColorPickerViewModel.class);
-        viewModel.getPenColor().observe(this, penColor -> drawView.setColor(penColor));
 
         fabActions = findViewById(R.id.fab_actions);
         final FloatingActionButton fabSetColor = findViewById(R.id.fab_set_color);
@@ -231,6 +229,15 @@ public class DrawActivity extends CollectAbstractActivity {
 
         drawView = findViewById(R.id.drawView);
         drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
+
+        PenColorPickerViewModel viewModel = new ViewModelProvider(this, factory).get(PenColorPickerViewModel.class);
+        viewModel.getPenColor().observe(this, penColor -> {
+            if (OPTION_SIGNATURE.equals(loadOption) && viewModel.isDefaultValue()) {
+                drawView.setColor(Color.BLACK);
+            } else {
+                drawView.setColor(penColor);
+            }
+        });
     }
 
     private void saveAndClose() {

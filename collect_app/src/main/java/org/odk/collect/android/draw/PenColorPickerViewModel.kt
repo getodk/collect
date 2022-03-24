@@ -18,10 +18,14 @@ class PenColorPickerViewModel(private val metaSettings: Settings) : ViewModel() 
             }
         }
 
+    var isDefaultValue = true
+        private set
+
     private val _penColor = MutableNonNullLiveData(lastUsedPenColor)
     val penColor: NonNullLiveData<Int> = _penColor
 
     fun setPenColor(color: Int) {
+        isDefaultValue = false
         metaSettings.save(MetaKeys.LAST_USED_PEN_COLOR, color)
         _penColor.value = color
     }
