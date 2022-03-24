@@ -41,12 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/form_subtitle"
         app:layout_constraintEnd_toEndOf="@+id/form_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
-        tools:text="Added on Thu, Jul 11, 2019 at 15:35"
-        tools:visibility="visible" />
+        tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/map_button"
