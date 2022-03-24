@@ -28,7 +28,11 @@ import javax.inject.Inject
  * Can be used to allow an item to be selected from a map. Items can be provided using an
  * implementation of [SelectionMapData].
  */
-class SelectionMapFragment(val selectionMapData: SelectionMapData, val skipSummary: Boolean = false) : Fragment() {
+class SelectionMapFragment(
+    val selectionMapData: SelectionMapData,
+    val skipSummary: Boolean = false,
+    val showNewItemButton: Boolean = true
+) : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -151,13 +155,17 @@ class SelectionMapFragment(val selectionMapData: SelectionMapData, val skipSumma
             referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity())
         }
 
-        binding.newInstance.setOnClickListener {
-            parentFragmentManager.setFragmentResult(
-                REQUEST_SELECT_ITEM,
-                Bundle().also {
-                    it.putBoolean(RESULT_CREATE_NEW_ITEM, true)
-                }
-            )
+        if (showNewItemButton) {
+            binding.newItem.setOnClickListener {
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_SELECT_ITEM,
+                    Bundle().also {
+                        it.putBoolean(RESULT_CREATE_NEW_ITEM, true)
+                    }
+                )
+            }
+        } else {
+            binding.newItem.visibility = View.GONE
         }
 
         map.setGpsLocationEnabled(true)
@@ -179,7 +187,12 @@ class SelectionMapFragment(val selectionMapData: SelectionMapData, val skipSumma
     }
 
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
-        binding.geometryStatus.text = getString(R.string.select_item_count, selectionMapData.getItemType(), itemCount, points.size)
+        binding.geometryStatus.text = getString(
+            R.string.select_item_count,
+            selectionMapData.getItemType(),
+            itemCount,
+            points.size
+        )
     }
 
     private fun restoreZoomFromPreviousState(state: Bundle) {

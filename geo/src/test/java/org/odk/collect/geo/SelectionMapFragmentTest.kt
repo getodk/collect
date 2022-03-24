@@ -11,12 +11,14 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -311,6 +313,19 @@ class SelectionMapFragmentTest {
             actualResult!!.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM),
             equalTo(items[0].id)
         )
+    }
+
+    @Test
+    fun `hides new item button when showNewItemButton is false`() {
+        launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(data, showNewItemButton = false)
+                }.build()
+        )
+
+        onView(withContentDescription(R.string.new_item)).check(matches(not(isDisplayed())))
     }
 
     @Test

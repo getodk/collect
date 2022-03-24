@@ -19,7 +19,7 @@ public class FormMapPage extends Page<FormMapPage> {
     }
 
     public FormEntryPage clickFillBlankFormButton(String formName) {
-        clickOnId(R.id.new_instance);
+        clickOnId(R.id.new_item);
         return new FormEntryPage(formName).assertOnPage();
     }
 
