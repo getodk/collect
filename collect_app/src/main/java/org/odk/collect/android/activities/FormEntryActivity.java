@@ -190,6 +190,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -467,9 +468,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formEntryViewModel = ViewModelProviders
-                .of(this, formEntryViewModelFactory)
+        formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
+
+        formEntryViewModel.setAnswerListener(this::onAnswer);
 
         formEntryViewModel.getError().observe(this, error -> {
             if (error instanceof FormEntryViewModel.NonFatal) {
@@ -905,6 +907,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("currentView returned null.");
         }
         return null;
+    }
+
+    private void onAnswer(FormIndex index, IAnswerData answer) {
+        ODKView currentViewIfODKView = getCurrentViewIfODKView();
+        if (currentViewIfODKView != null) {
+            Optional<QuestionWidget> widgetForIndex = currentViewIfODKView.getWidgets().stream()
+                    .filter((widget) -> widget.getFormEntryPrompt().getIndex().equals(index))
+                    .findFirst();
+
+            widgetForIndex.ifPresent(questionWidget -> {
+                ((WidgetDataReceiver) questionWidget).setData(answer);
+            });
+        }
     }
 
     public void setWidgetData(Object data) {

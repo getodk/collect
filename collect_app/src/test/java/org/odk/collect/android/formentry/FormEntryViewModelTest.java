@@ -1,9 +1,22 @@
 package org.odk.collect.android.formentry;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atMostOnce;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.formentry.FormEntryViewModel.NonFatal;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
@@ -16,17 +29,6 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
 import java.io.IOException;
 import java.util.function.Supplier;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.FormEntryViewModel.NonFatal;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -130,5 +132,30 @@ public class FormEntryViewModelTest {
         when(formController.getQuestionPrompt(formIndex)).thenReturn(prompt);
 
         assertThat(viewModel.getQuestionPrompt(formIndex), is(prompt));
+    }
+
+    @Test
+    public void answerQuestion_callsAnswerListener() {
+        FormEntryViewModel.AnswerListener answerListener = mock(FormEntryViewModel.AnswerListener.class);
+        viewModel.setAnswerListener(answerListener);
+
+        FormIndex index = new FormIndex(null, 1, 1, new TreeReference());
+        StringData answer = new StringData("42");
+        viewModel.answerQuestion(index, answer);
+        verify(answerListener).onAnswer(index, answer);
+    }
+
+    @Test
+    public void onCleared_removesAnswerListener() {
+        FormEntryViewModel.AnswerListener answerListener = mock(FormEntryViewModel.AnswerListener.class);
+        viewModel.setAnswerListener(answerListener);
+
+        viewModel.onCleared();
+
+        viewModel.answerQuestion(
+                new FormIndex(null, 1, 1, new TreeReference()),
+                new StringData("42")
+        );
+        verify(answerListener, never()).onAnswer(any(), any());
     }
 }

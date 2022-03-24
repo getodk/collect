@@ -11,6 +11,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +40,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     @Nullable
     private FormIndex jumpBackIndex;
+
+    @Nullable
+    private AnswerListener answerListener;
 
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock) {
@@ -184,6 +188,21 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return formController.getQuestionPrompt(formIndex);
     }
 
+    public void setAnswerListener(@Nullable AnswerListener answerListener) {
+        this.answerListener = answerListener;
+    }
+
+    public void answerQuestion(FormIndex index, IAnswerData answer) {
+        if (this.answerListener != null) {
+            this.answerListener.onAnswer(index, answer);
+        }
+    }
+
+    @Override
+    protected void onCleared() {
+        this.answerListener = null;
+    }
+
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Supplier<Long> clock;
@@ -234,5 +253,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         public int hashCode() {
             return Objects.hash(message);
         }
+    }
+
+    public interface AnswerListener {
+        void onAnswer(FormIndex index, IAnswerData answer);
     }
 }
