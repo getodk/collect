@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="88dp"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/image"
@@ -11,7 +12,6 @@
         android:layout_height="40dp"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/form_state_blank_circle" />
@@ -21,6 +21,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
         app:layout_constraintEnd_toStartOf="@+id/map_button"
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toTopOf="@+id/image"
@@ -31,6 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        android:layout_marginTop="@dimen/margin_extra_small"
         app:layout_constraintStart_toStartOf="@+id/form_title"
         app:layout_constraintEnd_toEndOf="@+id/form_title"
         app:layout_constraintTop_toBottomOf="@+id/form_title"
@@ -41,9 +44,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginBottom="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="@+id/form_subtitle"
         app:layout_constraintEnd_toEndOf="@+id/form_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
 
     <com.google.android.material.button.MaterialButton
@@ -63,7 +69,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/margin_standard"
-        android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
