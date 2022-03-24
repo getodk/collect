@@ -4,19 +4,23 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import javax.inject.Inject
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.strings.localization.LocalizedActivity
+import javax.inject.Inject
 
 class FormListActivity : LocalizedActivity() {
 
     @Inject
     lateinit var viewModelFactory: FormListViewModel.Factory
 
-    private val viewModel : FormListViewModel by viewModels { viewModelFactory }
+    @Inject
+    lateinit var networkStateProvider: NetworkStateProvider
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
+    private val viewModel: FormListViewModel by viewModels { viewModelFactory }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.activity_form_list)
