@@ -8,6 +8,7 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.data.SelectOneData
+import org.javarosa.core.model.data.helper.Selection
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.databinding.SelectOneFromMapWidgetAnswerBinding
 import org.odk.collect.android.formentry.questions.QuestionDetails
@@ -21,8 +22,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     QuestionWidget(context, questionDetails), WidgetDataReceiver {
 
     lateinit var binding: SelectOneFromMapWidgetAnswerBinding
-
-    private var answer: SelectOneData? = questionDetails.prompt.answerValue as? SelectOneData
+    private var answer: SelectOneData? = null
 
     override fun onCreateAnswerView(
         context: Context,
@@ -39,6 +39,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
             )
         }
 
+        updateAnswer(questionDetails.prompt.answerValue as? SelectOneData)
         return binding.root
     }
 
@@ -47,12 +48,17 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     }
 
     override fun clearAnswer() {
-        answer = null
+        updateAnswer(null)
     }
 
     override fun setOnLongClickListener(l: OnLongClickListener?) {}
 
     override fun setData(answer: Any?) {
-        this.answer = answer as SelectOneData
+        updateAnswer(answer as SelectOneData)
+    }
+
+    private fun updateAnswer(answer: SelectOneData?) {
+        this.answer = answer
+        binding.answer.text = (answer?.value as? Selection)?.choice?.labelInnerText
     }
 }

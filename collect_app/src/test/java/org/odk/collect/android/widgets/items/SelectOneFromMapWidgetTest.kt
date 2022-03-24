@@ -4,11 +4,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.core.model.data.helper.Selection
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
@@ -39,6 +41,21 @@ class SelectOneFromMapWidgetTest {
     }
 
     @Test
+    fun `shows answer`() {
+        val choices = listOf(
+            SelectChoice(null, "A", "a", false),
+            SelectChoice(null, "B", "b", false),
+        )
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .withAnswer(SelectOneData(choices[0].selection()))
+            .build()
+
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        assertThat(widget.binding.answer.text, equalTo("A"))
+    }
+
+    @Test
     fun `prompt answer is returned from getAnswer`() {
         val answer = SelectOneData(Selection(101))
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(answer)))
@@ -54,11 +71,43 @@ class SelectOneFromMapWidgetTest {
     }
 
     @Test
+    fun `clearAnswer updates shown answer`() {
+        val choices = listOf(
+            SelectChoice(null, "A", "a", false),
+            SelectChoice(null, "B", "b", false),
+        )
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .withAnswer(SelectOneData(choices[0].selection()))
+            .build()
+
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+
+        widget.clearAnswer()
+        assertThat(widget.binding.answer.text, equalTo(""))
+    }
+
+    @Test
     fun `setData sets answer`() {
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
 
         val answer = SelectOneData(Selection(101))
         widget.setData(answer)
         assertThat(widget.answer, equalTo(answer))
+    }
+
+    @Test
+    fun `setData updates shown answer`() {
+        val choices = listOf(
+            SelectChoice(null, "A", "a", false),
+            SelectChoice(null, "B", "b", false),
+        )
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .build()
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+
+        widget.setData(SelectOneData(choices[1].selection()))
+        assertThat(widget.binding.answer.text, equalTo("B"))
     }
 }
