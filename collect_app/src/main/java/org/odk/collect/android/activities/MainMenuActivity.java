@@ -104,6 +104,12 @@ public class MainMenuActivity extends CollectAbstractActivity {
             }
         });
 
+        Button enterDataButtonNew = findViewById(R.id.enter_data_new);
+        enterDataButtonNew.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), FillBlankFormActivity.class);
+            startActivity(i);
+        });
+
         // review data button. expects a result.
         reviewDataButton = findViewById(R.id.review_data);
         reviewDataButton.setText(getString(R.string.review_data_button));
