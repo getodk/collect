@@ -79,6 +79,12 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
             formListAdapter.filter(filterText)
         }
 
+        viewModel.isSyncingWithServer().observe(this) { syncing: Boolean ->
+            findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (syncing) View.VISIBLE
+                else View.GONE
+        }
+
         viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->
             if (authenticationRequired) {
                 DialogFragmentUtils.showIfNotShowing(
