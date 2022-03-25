@@ -17,6 +17,7 @@ import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -37,6 +38,7 @@ class FormListViewModel(
     private val scheduler: Scheduler,
     private val generalSettings: Settings,
     private val analytics: Analytics,
+    private val changeLockProvider: ChangeLockProvider,
     private val projectId: String
 ) : ViewModel() {
 
@@ -95,14 +97,16 @@ class FormListViewModel(
     }
 
     private fun syncWithStorage() {
-        viewModelScope.launch {
-            _showProgressBar.value = Consumable(true)
+        changeLockProvider.getFormLock(projectId).withLock {
+            viewModelScope.launch {
+                _showProgressBar.value = Consumable(true)
 
-            val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
-            loadFromDatabase()
-            _syncResult.value = Consumable(result)
+                val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
+                loadFromDatabase()
+                _syncResult.value = Consumable(result)
 
-            _showProgressBar.value = Consumable(false)
+                _showProgressBar.value = Consumable(false)
+            }
         }
     }
 
@@ -167,6 +171,7 @@ class FormListViewModel(
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
         private val analytics: Analytics,
+        private val changeLockProvider: ChangeLockProvider,
         private val projectId: String
     ) : ViewModelProvider.Factory {
 
@@ -179,6 +184,7 @@ class FormListViewModel(
                 scheduler,
                 generalSettings,
                 analytics,
+                changeLockProvider,
                 projectId
             ) as T
         }
