@@ -3,16 +3,10 @@ package org.odk.collect.android.formlist
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.odk.collect.android.R
-import org.odk.collect.android.adapters.SortDialogAdapter
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
@@ -96,33 +90,18 @@ class FormListMenuDelegate(
                 true
             }
             R.id.menu_sort -> {
-                showBottomSheetDialog()
+                SortingDialog(
+                    activity,
+                    viewModel.sortingOptions,
+                    viewModel.sortingOrder.value
+                ) { newSortingOrder ->
+                    viewModel.sortingOrder.value = newSortingOrder
+                }.show()
+
                 true
             }
             else -> false
         }
-    }
-
-    private fun showBottomSheetDialog() {
-        val bottomSheetDialog = BottomSheetDialog(activity)
-        val sheetView: View = activity.layoutInflater.inflate(R.layout.bottom_sheet, null)
-        val recyclerView: RecyclerView = sheetView.findViewById(R.id.recyclerView)
-
-        val adapter =
-            SortDialogAdapter(
-                activity, recyclerView, viewModel.sortingOptions, viewModel.sortingOrder.value
-            ) { holder, position ->
-                holder.updateItemColor(position)
-                viewModel.sortingOrder.value = position
-                bottomSheetDialog.dismiss()
-            }
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-        recyclerView.itemAnimator = DefaultItemAnimator()
-
-        bottomSheetDialog.setContentView(sheetView)
-        bottomSheetDialog.show()
     }
 
     init {
