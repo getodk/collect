@@ -91,7 +91,7 @@
     </RelativeLayout>
 
     <org.odk.collect.geo.SelectionSummarySheet
-        android:id="@+id/submission_summary"
+        android:id="@+id/summary_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_hideable="true"

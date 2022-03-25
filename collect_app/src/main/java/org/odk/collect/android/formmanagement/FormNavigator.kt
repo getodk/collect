@@ -5,7 +5,6 @@ import android.content.Intent
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
 import org.odk.collect.forms.instances.Instance
@@ -14,13 +13,12 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 
 class FormNavigator(
-    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectId: String,
     private val settingsProvider: SettingsProvider,
     private val instancesRepositoryProvider: () -> InstancesRepository
 ) {
 
     fun editInstance(activity: Activity, instanceId: Long) {
-        val projectId = currentProjectProvider.getCurrentProject().uuid
         val uri = InstancesContract.getUri(projectId, instanceId)
         activity.startActivity(
             Intent(activity, FormEntryActivity::class.java).also {
@@ -42,7 +40,6 @@ class FormNavigator(
     }
 
     fun newInstance(activity: Activity, formId: Long) {
-        val projectId = currentProjectProvider.getCurrentProject().uuid
         activity.startActivity(
             Intent(activity, FormEntryActivity::class.java).also {
                 it.action = Intent.ACTION_EDIT

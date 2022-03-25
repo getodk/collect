@@ -56,7 +56,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.satellites.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
-import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -313,8 +313,8 @@ public class Collect extends Application implements
 
                         @NonNull
                         @Override
-                        public PermissionsProvider providesPermissionProvider() {
-                            return applicationComponent.permissionsProvider();
+                        public PermissionsChecker providesPermissionChecker(@NonNull Context context) {
+                            return applicationComponent.permissionsChecker();
                         }
                     })
                     .build();

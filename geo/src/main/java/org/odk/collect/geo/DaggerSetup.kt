@@ -1,6 +1,7 @@
 package org.odk.collect.geo
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import dagger.BindsInstance
 import dagger.Component
@@ -11,7 +12,7 @@ import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
-import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Singleton
 
 interface GeoDependencyComponentProvider {
@@ -49,6 +50,11 @@ interface GeoDependencyComponent {
 open class GeoDependencyModule {
 
     @Provides
+    open fun context(application: Application): Context {
+        return application
+    }
+
+    @Provides
     open fun providesMapFragmentFactory(): MapFragmentFactory {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
@@ -79,7 +85,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesPermissionProvider(): PermissionsProvider {
+    open fun providesPermissionChecker(context: Context): PermissionsChecker {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 

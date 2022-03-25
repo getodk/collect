@@ -12,17 +12,13 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
-import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_EDIT_SAVED
 import org.robolectric.Robolectric
@@ -34,16 +30,10 @@ class FormNavigatorTest {
     val recordedIntentsRule = RecordedIntentsRule()
 
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
-    private val currentProjectProvider = mock<CurrentProjectProvider> {
-        on { getCurrentProject() } doReturn Project.Saved("projectId", "", "", "")
-    }
-
     private val settingsProvider = InMemSettingsProvider()
     private val instancesRepository = InMemInstancesRepository()
 
-    private val navigator = FormNavigator(currentProjectProvider, settingsProvider) {
-        instancesRepository
-    }
+    private val navigator = FormNavigator("projectId", settingsProvider) { instancesRepository }
 
     @Test
     fun `editInstance starts FormEntryActivity with instance URI`() {

@@ -95,6 +95,7 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.ODKAppSettingsImporter;
@@ -334,4 +335,6 @@ public interface AppDependencyComponent {
     LocationClient locationClient();
 
     PermissionsProvider permissionsProvider();
+
+    PermissionsChecker permissionsChecker();
 }

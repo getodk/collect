@@ -1,8 +1,8 @@
 package org.odk.collect.geo
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 
 interface ReferenceLayerSettingsNavigator {
 
-    fun navigateToReferenceLayerSettings(activity: AppCompatActivity)
+    fun navigateToReferenceLayerSettings(activity: FragmentActivity)
 }

@@ -6,7 +6,5 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/selection_map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="org.odk.collect.geo.SelectionMapFragment"/>
-
+        android:layout_height="match_parent" />
 </merge>

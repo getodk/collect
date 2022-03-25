@@ -20,7 +20,7 @@ object DialogFragmentTest {
      * attributes but also won't explode (like MaterialComponents themes do).
      *
      * This uses [FragmentScenario.launch] here instead of [FragmentScenario.launchInContainer] as
-     * per docs at https://developer.android.com/guide/fragments/test#dialog.
+     * per docs at [https://developer.android.com/guide/fragments/test#dialog](https://developer.android.com/guide/fragments/test#dialog).
      */
     internal fun <F : Fragment> launchDialogFragment(
         fragmentClass: Class<F>,

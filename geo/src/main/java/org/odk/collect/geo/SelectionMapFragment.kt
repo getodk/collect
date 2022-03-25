@@ -1,34 +1,39 @@
 package org.odk.collect.geo
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
-import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragment.ReadyListener
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.geo.maps.MapPoint
-import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
-class SelectionMapFragment : Fragment() {
+/**
+ * Can be used to allow an item to be selected from a map. Items can be provided using an
+ * implementation of [SelectionMapViewModel]. [SelectionMapFragment] will load the implementation
+ * from the host [Activity]'s view models using the key passed as
+ * [SelectionMapFragment.ARG_VIEW_MODEL_KEY].
+ */
+class SelectionMapFragment() : Fragment() {
 
     @Inject
     lateinit var mapFragmentFactory: MapFragmentFactory
@@ -37,9 +42,19 @@ class SelectionMapFragment : Fragment() {
     lateinit var referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator
 
     @Inject
-    lateinit var permissionsProvider: PermissionsProvider
+    lateinit var permissionsChecker: PermissionsChecker
 
-    private val selectionMapViewModel: SelectionMapViewModel by activityViewModels()
+    private var _selectionMapViewModel: SelectionMapViewModel? = null
+    private val selectionMapViewModel by lazy {
+        _selectionMapViewModel.let {
+            it ?: ViewModelProvider(requireActivity())[
+                arguments?.getString(ARG_VIEW_MODEL_KEY)!!,
+                SelectionMapViewModel::class.java
+            ]
+        }
+    }
+
+    private val selectedFeatureViewModel by viewModels<SelectedFeatureViewModel>()
 
     private lateinit var map: MapFragment
     private var viewportInitialized = false
@@ -54,8 +69,14 @@ class SelectionMapFragment : Fragment() {
      * quickly zoom to bounding box.
      */
     private val points: MutableList<MapPoint> = mutableListOf()
+    private var itemCount: Int = 0
 
     private var previousState: Bundle? = null
+
+    @VisibleForTesting
+    internal constructor(selectionMapViewModel: SelectionMapViewModel) : this() {
+        this._selectionMapViewModel = selectionMapViewModel
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +90,11 @@ class SelectionMapFragment : Fragment() {
             (context.applicationContext as GeoDependencyComponentProvider).geoDependencyComponent
         component.inject(this)
 
-        if (!permissionsProvider.areLocationPermissionsGranted()) {
+        if (!permissionsChecker.isPermissionGranted(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        ) {
             ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
             requireActivity().finish()
         }
@@ -91,7 +116,8 @@ class SelectionMapFragment : Fragment() {
         }
 
         selectionMapViewModel.getItemCount().observe(viewLifecycleOwner) {
-            binding.geometryStatus.text = getString(R.string.geometry_status, it, points.size)
+            itemCount = it
+            updateCounts(binding)
         }
 
         val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
@@ -142,7 +168,7 @@ class SelectionMapFragment : Fragment() {
         }
 
         binding.layerMenu.setOnClickListener {
-            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity() as AppCompatActivity)
+            referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity())
         }
 
         binding.newInstance.setOnClickListener {
@@ -159,16 +185,21 @@ class SelectionMapFragment : Fragment() {
 
         previousState?.let { restoreZoomFromPreviousState(it) }
 
-        map.setFeatureClickListener { featureId -> onFeatureClicked(featureId) }
+        map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
         selectionMapViewModel.getMappableItems().observe(viewLifecycleOwner) {
-            update(it)
+            updateItems(it)
+            updateCounts(binding)
         }
 
-        selectionMapViewModel.getSelectedItemId()?.let {
+        selectedFeatureViewModel.getSelectedFeatureId()?.let {
             onFeatureClicked(it)
         }
+    }
+
+    private fun updateCounts(binding: SelectionMapLayoutBinding) {
+        binding.geometryStatus.text = getString(R.string.geometry_status, itemCount, points.size)
     }
 
     private fun restoreZoomFromPreviousState(state: Bundle) {
@@ -182,7 +213,7 @@ class SelectionMapFragment : Fragment() {
     }
 
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
-        summarySheet = binding.submissionSummary
+        summarySheet = binding.summarySheet
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -199,13 +230,13 @@ class SelectionMapFragment : Fragment() {
 
         summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedSubmissionId != null) {
+                val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedFeatureId != null) {
                     map.setMarkerIcon(
-                        selectedSubmissionId,
-                        itemsByFeatureId[selectedSubmissionId]!!.smallIcon
+                        selectedFeatureId,
+                        itemsByFeatureId[selectedFeatureId]!!.smallIcon
                     )
-                    selectionMapViewModel.setSelectedItemId(-1)
+                    selectedFeatureViewModel.setSelectedFeatureId(null)
                     onBackPressedCallback.isEnabled = false
                 } else {
                     onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
@@ -241,7 +272,7 @@ class SelectionMapFragment : Fragment() {
 
     fun onFeatureClicked(featureId: Int) {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
+        if (!isSummaryForFeatureDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
 
             val item = itemsByFeatureId[featureId]
@@ -250,9 +281,8 @@ class SelectionMapFragment : Fragment() {
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
                 summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                selectedFeatureViewModel.setSelectedFeatureId(featureId)
             }
-
-            selectionMapViewModel.setSelectedItemId(featureId)
         }
     }
 
@@ -262,7 +292,7 @@ class SelectionMapFragment : Fragment() {
         }
     }
 
-    private fun update(items: List<MappableSelectItem>) {
+    private fun updateItems(items: List<MappableSelectItem>) {
         if (!::map.isInitialized) {
             return
         }
@@ -275,16 +305,16 @@ class SelectionMapFragment : Fragment() {
         }
     }
 
-    private fun isSummaryForGivenSubmissionDisplayed(newSubmissionId: Int): Boolean {
-        return selectionMapViewModel.getSelectedItemId() == newSubmissionId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+    private fun isSummaryForFeatureDisplayed(featureId: Int): Boolean {
+        return selectedFeatureViewModel.getSelectedFeatureId() == featureId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
-    private fun removeEnlargedMarkerIfExist(newSubmissionId: Int) {
-        val selectedSubmissionId = selectionMapViewModel.getSelectedItemId()
-        if (selectedSubmissionId != null && selectedSubmissionId != newSubmissionId) {
+    private fun removeEnlargedMarkerIfExist(itemId: Int) {
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedFeatureId != null && selectedFeatureId != itemId) {
             map.setMarkerIcon(
-                selectedSubmissionId,
-                itemsByFeatureId[selectedSubmissionId]!!.smallIcon
+                selectedFeatureId,
+                itemsByFeatureId[selectedFeatureId]!!.smallIcon
             )
         }
     }
@@ -303,7 +333,7 @@ class SelectionMapFragment : Fragment() {
 
             map.setMarkerIcon(
                 featureId,
-                if (featureId == selectionMapViewModel.getSelectedItemId()) item.largeIcon else item.smallIcon
+                if (featureId == selectedFeatureViewModel.getSelectedFeatureId()) item.largeIcon else item.smallIcon
             )
 
             itemsByFeatureId[featureId] = item
@@ -312,6 +342,8 @@ class SelectionMapFragment : Fragment() {
     }
 
     companion object {
+        const val ARG_VIEW_MODEL_KEY = "view_model_key"
+
         const val REQUEST_SELECT_ITEM = "select_item"
         const val RESULT_SELECTED_ITEM = "selected_item"
         const val RESULT_CREATE_NEW_ITEM = "create_new_item"
@@ -321,94 +353,56 @@ class SelectionMapFragment : Fragment() {
     }
 }
 
-class SelectionMapViewModel : ViewModel() {
+internal class SelectedFeatureViewModel : ViewModel() {
 
-    private var mapTitle = MutableLiveData<String>()
-    private var mappableItems = MutableLiveData<List<MappableSelectItem>>(emptyList())
-    private var itemCount = MutableLiveData(0)
-    private var selectedItemId: Int? = null
+    private var selectedFeatureId: Int? = null
 
-    fun getMapTitle(): LiveData<String> {
-        return mapTitle
+    fun getSelectedFeatureId(): Int? {
+        return selectedFeatureId
     }
 
-    fun getSelectedItemId(): Int? {
-        return selectedItemId
-    }
-
-    fun setSelectedItemId(itemId: Int?) {
-        selectedItemId = itemId
-    }
-
-    fun getItemCount(): LiveData<Int> {
-        return itemCount
-    }
-
-    fun getMappableItems(): LiveData<List<MappableSelectItem>> {
-        return mappableItems
-    }
-
-    fun setItems(itemCount: Int, mappableItems: List<MappableSelectItem>) {
-        this.mappableItems.value = mappableItems
-        this.itemCount.value = itemCount
-    }
-
-    fun setMapTitle(title: String) {
-        this.mapTitle.value = title
+    fun setSelectedFeatureId(itemId: Int?) {
+        selectedFeatureId = itemId
     }
 }
 
-data class MappableSelectItem(
-    val id: Long,
-    val latitude: Double,
-    val longitude: Double,
-    val smallIcon: Int,
-    val largeIcon: Int,
-    val name: String,
-    val status: IconifiedText,
-    val info: String?,
-    val action: IconifiedText?
-) {
+abstract class SelectionMapViewModel : ViewModel() {
+    abstract fun getMapTitle(): LiveData<String>
+    abstract fun getItemCount(): LiveData<Int>
+    abstract fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
+}
+
+sealed interface MappableSelectItem {
+
+    val id: Long
+    val latitude: Double
+    val longitude: Double
+    val smallIcon: Int
+    val largeIcon: Int
+    val name: String
+    val status: IconifiedText
+
+    data class WithInfo(
+        override val id: Long,
+        override val latitude: Double,
+        override val longitude: Double,
+        override val smallIcon: Int,
+        override val largeIcon: Int,
+        override val name: String,
+        override val status: IconifiedText,
+        val info: String,
+    ) : MappableSelectItem
+
+    data class WithAction(
+        override val id: Long,
+        override val latitude: Double,
+        override val longitude: Double,
+        override val smallIcon: Int,
+        override val largeIcon: Int,
+        override val name: String,
+        override val status: IconifiedText,
+        val action: IconifiedText
+    ) : MappableSelectItem
+
     data class IconifiedText(val icon: Int, val text: String)
-}
-
-internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
-
-    val binding =
-        SelectionSummarySheetLayoutBinding.inflate(LayoutInflater.from(context), this, true)
-
-    var listener: Listener? = null
-
-    private var itemId: Long? = null
-
-    init {
-        binding.action.setOnClickListener {
-            itemId?.let { listener?.selectionAction(it) }
-        }
-    }
-
-    fun setItem(item: MappableSelectItem) {
-        itemId = item.id
-
-        binding.name.text = item.name
-
-        binding.statusIcon.setImageDrawable(ContextCompat.getDrawable(context, item.status.icon))
-        binding.statusIcon.background = null
-        binding.statusText.text = item.status.text
-
-        if (item.info != null) {
-            binding.info.text = item.info
-            binding.info.visibility = View.VISIBLE
-            binding.action.visibility = View.GONE
-        } else if (item.action != null) {
-            binding.action.text = item.action.text
-            binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
-            binding.action.visibility = View.VISIBLE
-            binding.info.visibility = View.GONE
-        }
-    }
-
-    interface Listener {
-        fun selectionAction(id: Long)
-    }
 }
