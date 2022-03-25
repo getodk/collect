@@ -15,8 +15,10 @@ import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.network.NetworkStateProvider
+import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.SnackbarUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -75,6 +77,20 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         viewModel.filterText.observe(this) { filterText ->
             formListAdapter.filter(filterText)
+        }
+
+        viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->
+            if (authenticationRequired) {
+                DialogFragmentUtils.showIfNotShowing(
+                    ServerAuthDialogFragment::class.java,
+                    supportFragmentManager
+                )
+            } else {
+                DialogFragmentUtils.dismissDialog(
+                    ServerAuthDialogFragment::class.java,
+                    supportFragmentManager
+                )
+            }
         }
     }
 
