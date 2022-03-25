@@ -25,6 +25,8 @@ class FormListMenuDelegate(
     private var syncing = false
 
     override fun onCreateOptionsMenu(menuInflater: MenuInflater, menu: Menu) {
+        menuInflater.inflate(R.menu.list_menu, menu)
+
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(menuItem: MenuItem): Boolean {

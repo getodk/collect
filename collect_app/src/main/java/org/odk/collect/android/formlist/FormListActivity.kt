@@ -53,7 +53,6 @@ class FormListActivity : LocalizedActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.list_menu, menu)
         menuDelegate.onCreateOptionsMenu(menuInflater, menu)
         return true
     }
