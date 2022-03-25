@@ -55,6 +55,9 @@ class FormListViewModel(
         observeForever(sortingOrderObserver)
     }
 
+    private val _showProgressBar: MutableLiveData<Consumable<Boolean>> = MutableLiveData()
+    val showProgressBar: LiveData<Consumable<Boolean>> = _showProgressBar
+
     val sortingOptions = intArrayOf(
         R.string.sort_by_name_asc,
         R.string.sort_by_name_desc,
@@ -67,6 +70,8 @@ class FormListViewModel(
     }
 
     fun fetchForms() {
+        _showProgressBar.value = Consumable(true)
+
         _forms.value = Consumable(
             formsRepository
                 .all
@@ -82,13 +87,19 @@ class FormListViewModel(
                 }
                 .toList()
         )
+
+        _showProgressBar.value = Consumable(false)
     }
 
     private fun syncForms() {
         viewModelScope.launch {
+            _showProgressBar.value = Consumable(true)
+
             val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
             fetchForms()
             _syncResult.value = Consumable(result)
+
+            _showProgressBar.value = Consumable(false)
         }
     }
 

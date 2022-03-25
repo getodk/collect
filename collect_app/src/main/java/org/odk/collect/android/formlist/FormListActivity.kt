@@ -3,6 +3,8 @@ package org.odk.collect.android.formlist
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -40,8 +42,13 @@ class FormListActivity : LocalizedActivity() {
             layoutManager = LinearLayoutManager(context)
         }
 
+        viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
+            findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (shouldShowProgressBar.value) View.VISIBLE
+                else View.GONE
+        }
+
         viewModel.syncResult.observe(this) { result ->
-            // hideProgressBarAndAllow()
             SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
         }
 
