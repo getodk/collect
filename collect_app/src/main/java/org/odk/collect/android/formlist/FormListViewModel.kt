@@ -4,16 +4,19 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
@@ -36,6 +39,22 @@ class FormListViewModel(
 
     private val _forms: MutableLiveData<Consumable<List<FormListItem>>> = MutableLiveData()
     val forms: LiveData<Consumable<List<FormListItem>>> = _forms
+
+    val filterText = MutableNonNullLiveData("")
+
+    private val sortingOrderObserver = Observer<Int> { newSortingOrder ->
+        generalSettings.save("formChooserListSortingOrder", newSortingOrder)
+    }
+    val sortingOrder = MutableNonNullLiveData(generalSettings.getInt("formChooserListSortingOrder")).apply {
+        observeForever(sortingOrderObserver)
+    }
+
+    val sortingOptions = intArrayOf(
+        R.string.sort_by_name_asc,
+        R.string.sort_by_name_desc,
+        R.string.sort_by_date_asc,
+        R.string.sort_by_date_desc
+    )
 
     fun fetchForms() {
         _forms.value = Consumable(
@@ -126,5 +145,10 @@ class FormListViewModel(
                 projectId
             ) as T
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sortingOrder.removeObserver(sortingOrderObserver)
     }
 }
