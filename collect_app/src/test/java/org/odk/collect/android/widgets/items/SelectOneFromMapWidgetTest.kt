@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.items
 
+import androidx.lifecycle.ViewModel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -7,12 +8,19 @@ import org.hamcrest.Matchers.notNullValue
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.core.model.data.helper.Selection
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
@@ -21,21 +29,38 @@ import org.robolectric.Robolectric
 class SelectOneFromMapWidgetTest {
 
     private val activity = Robolectric.setupActivity(WidgetTestActivity::class.java)
+    private val formEntryViewModel = mock<FormEntryViewModel>()
+
+    @Before
+    fun setup() {
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesFormEntryViewModelFactory(analytics: Analytics?): FormEntryViewModel.Factory {
+                return object : FormEntryViewModel.Factory(System::currentTimeMillis) {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return formEntryViewModel as T
+                    }
+                }
+            }
+        })
+    }
 
     @Test
-    fun `clicking button opens SelectOneFromMapDialog`() {
+    fun `clicking button opens SelectOneFromMapDialogFragment`() {
         val prompt = promptWithAnswer(null)
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
 
-        val expectedDialog = getFragmentByClass(
+        val fragment = getFragmentByClass(
             activity.supportFragmentManager,
             SelectOneFromMapDialogFragment::class.java
         )
-        assertThat(expectedDialog, notNullValue())
+        assertThat(fragment, notNullValue())
         assertThat(
-            expectedDialog?.arguments?.getSerializable(ARG_FORM_INDEX),
+            fragment?.requireArguments()
+                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_FORM_INDEX),
             equalTo(prompt.index)
         )
     }
