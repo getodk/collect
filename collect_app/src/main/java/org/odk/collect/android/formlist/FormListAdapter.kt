@@ -11,7 +11,10 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class FormListAdapter(private val formItems: List<FormListItem>) : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
+class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
+    private var fullFormItemsList = emptyList<FormListItem>()
+    private var filteredFormItemsList = emptyList<FormListItem>()
+
     private lateinit var binding: FormListItemBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,30 +23,49 @@ class FormListAdapter(private val formItems: List<FormListItem>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        binding.apply {
-            val formItem = formItems[position]
+        holder.bind(filteredFormItemsList[position])
+    }
 
-            formTitle.text = formItem.formName
+    override fun getItemCount() = filteredFormItemsList.size
 
-            formSubtitle.text = binding.root.context.getString(R.string.version_number, formItem.formVersion)
-            formSubtitle.visibility = if (formItem.formVersion.isNotBlank()) View.VISIBLE else View.GONE
+    class ViewHolder(private val binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: FormListItem) {
+            binding.apply {
+                formTitle.text = item.formName
 
-            formSubtitle2.text = getSubtitle2Text(binding.root.context, formItem.dateOfCreation)
+                formSubtitle.text = binding.root.context.getString(R.string.version_number, item.formVersion)
+                formSubtitle.visibility = if (item.formVersion.isNotBlank()) View.VISIBLE else View.GONE
 
-            mapButton.visibility = if (formItem.geometryPath.isNotBlank()) View.VISIBLE else View.GONE
+                formSubtitle2.text = getSubtitle2Text(binding.root.context, item.dateOfCreation)
+
+                mapButton.visibility = if (item.geometryPath.isNotBlank()) View.VISIBLE else View.GONE
+            }
+        }
+
+        private fun getSubtitle2Text(context: Context, date: Long): String {
+            return try {
+                SimpleDateFormat(context.getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date)
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                ""
+            }
         }
     }
 
-    private fun getSubtitle2Text(context: Context, date: Long): String {
-        return try {
-            SimpleDateFormat(context.getString(R.string.added_on_date_at_time), Locale.getDefault()).format(date)
-        } catch (e: IllegalArgumentException) {
-            Timber.e(e)
-            ""
+    fun filter(filterText: String) {
+        filteredFormItemsList = if (filterText.isEmpty())
+            fullFormItemsList.toList()
+        else {
+            fullFormItemsList.filter {
+                it.formName.contains(filterText, true)
+            }
         }
+        notifyDataSetChanged()
     }
 
-    override fun getItemCount() = formItems.size
-
-    class ViewHolder(binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    fun setData(formItems: List<FormListItem>) {
+        this.fullFormItemsList = formItems.toList()
+        this.filteredFormItemsList = formItems.toList()
+        notifyDataSetChanged()
+    }
 }

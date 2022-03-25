@@ -34,11 +34,14 @@ class FormListActivity : LocalizedActivity() {
 
         menuDelegate = FormListMenuDelegate(this, viewModel, networkStateProvider)
 
+        val formListAdapter = FormListAdapter()
+        findViewById<RecyclerView>(R.id.formList).apply {
+            adapter = formListAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+
         viewModel.forms.observe(this) { forms ->
-            findViewById<RecyclerView>(R.id.formList).apply {
-                adapter = FormListAdapter(forms.value)
-                layoutManager = LinearLayoutManager(context)
-            }
+            formListAdapter.setData(forms.value)
         }
 
         viewModel.sortingOrder.observe(this) { sortingOrder ->
@@ -46,7 +49,7 @@ class FormListActivity : LocalizedActivity() {
         }
 
         viewModel.filterText.observe(this) { filterText ->
-            // update adapter
+            formListAdapter.filter(filterText)
         }
 
         viewModel.fetchForms()
