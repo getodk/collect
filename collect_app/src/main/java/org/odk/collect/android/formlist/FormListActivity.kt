@@ -63,8 +63,6 @@ class FormListActivity : LocalizedActivity() {
         viewModel.filterText.observe(this) { filterText ->
             formListAdapter.filter(filterText)
         }
-
-        viewModel.fetchForms()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

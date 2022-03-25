@@ -66,29 +66,32 @@ class FormListViewModel(
     )
 
     init {
+        fetchForms()
         syncForms()
     }
 
-    fun fetchForms() {
-        _showProgressBar.value = Consumable(true)
+    private fun fetchForms() {
+        viewModelScope.launch {
+            _showProgressBar.value = Consumable(true)
 
-        _forms.value = Consumable(
-            formsRepository
-                .all
-                .map { form ->
-                    FormListItem(
-                        formId = form.dbId,
-                        formName = form.displayName,
-                        formVersion = form.version ?: "",
-                        geometryPath = form.geometryXpath ?: "",
-                        dateOfCreation = form.date,
-                        dateOfLastUsage = 0
-                    )
-                }
-                .toList()
-        )
+            _forms.value = Consumable(
+                formsRepository
+                    .all
+                    .map { form ->
+                        FormListItem(
+                            formId = form.dbId,
+                            formName = form.displayName,
+                            formVersion = form.version ?: "",
+                            geometryPath = form.geometryXpath ?: "",
+                            dateOfCreation = form.date,
+                            dateOfLastUsage = 0
+                        )
+                    }
+                    .toList()
+            )
 
-        _showProgressBar.value = Consumable(false)
+            _showProgressBar.value = Consumable(false)
+        }
     }
 
     private fun syncForms() {
