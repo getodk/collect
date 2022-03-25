@@ -8,6 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -15,6 +17,7 @@ import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -37,6 +40,9 @@ class FormListViewModel(
     private val projectId: String
 ) : ViewModel() {
 
+    private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
+    val syncResult: LiveData<Consumable<String>> = _syncResult
+
     private val _forms: MutableLiveData<Consumable<List<FormListItem>>> = MutableLiveData()
     val forms: LiveData<Consumable<List<FormListItem>>> = _forms
 
@@ -56,6 +62,10 @@ class FormListViewModel(
         R.string.sort_by_date_desc
     )
 
+    init {
+        syncForms()
+    }
+
     fun fetchForms() {
         _forms.value = Consumable(
             formsRepository
@@ -72,6 +82,14 @@ class FormListViewModel(
                 }
                 .toList()
         )
+    }
+
+    private fun syncForms() {
+        viewModelScope.launch {
+            val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
+            fetchForms()
+            _syncResult.value = Consumable(result)
+        }
     }
 
     fun isMatchExactlyEnabled(): Boolean {

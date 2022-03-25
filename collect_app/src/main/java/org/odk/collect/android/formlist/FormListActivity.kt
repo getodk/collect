@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.network.NetworkStateProvider
+import org.odk.collect.android.utilities.SnackbarUtils
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -37,6 +38,11 @@ class FormListActivity : LocalizedActivity() {
         findViewById<RecyclerView>(R.id.formList).apply {
             adapter = formListAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+
+        viewModel.syncResult.observe(this) { result ->
+            // hideProgressBarAndAllow()
+            SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
         }
 
         viewModel.forms.observe(this) { forms ->
