@@ -45,7 +45,7 @@ class FormListActivity : LocalizedActivity() {
         }
 
         viewModel.sortingOrder.observe(this) { sortingOrder ->
-            // update adapter
+            formListAdapter.sort(sortingOrder)
         }
 
         viewModel.filterText.observe(this) { filterText ->

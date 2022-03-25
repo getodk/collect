@@ -63,6 +63,17 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun sort(sortingOrder: Int) {
+        filteredFormItemsList = when (sortingOrder) {
+            0 -> filteredFormItemsList.sortedBy { it.formName }
+            1 -> filteredFormItemsList.sortedByDescending { it.formName }
+            2 -> filteredFormItemsList.sortedBy { it.dateOfCreation }
+            3 -> filteredFormItemsList.sortedByDescending { it.dateOfCreation }
+            else -> { filteredFormItemsList }
+        }
+        notifyDataSetChanged()
+    }
+
     fun setData(formItems: List<FormListItem>) {
         this.fullFormItemsList = formItems.toList()
         this.filteredFormItemsList = formItems.toList()
