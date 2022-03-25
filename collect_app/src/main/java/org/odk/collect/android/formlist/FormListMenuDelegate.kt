@@ -15,6 +15,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.adapters.SortDialogAdapter
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.utilities.MenuDelegate
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class FormListMenuDelegate(
     private val activity: ComponentActivity,
@@ -69,6 +70,10 @@ class FormListMenuDelegate(
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (!MultiClickGuard.allowClick(javaClass.name)) {
+            return true
+        }
+
         return when (item.itemId) {
             R.id.menu_refresh -> {
                 if (networkStateProvider.isDeviceOnline) {

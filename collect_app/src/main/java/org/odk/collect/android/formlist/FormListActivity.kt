@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.network.NetworkStateProvider
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -66,10 +65,6 @@ class FormListActivity : LocalizedActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (!MultiClickGuard.allowClick(javaClass.name)) {
-            true
-        } else {
-            menuDelegate.onOptionsItemSelected(item)
-        }
+        return menuDelegate.onOptionsItemSelected(item)
     }
 }
