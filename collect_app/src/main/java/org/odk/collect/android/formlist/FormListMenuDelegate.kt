@@ -126,12 +126,12 @@ class FormListMenuDelegate(
     }
 
     init {
-        viewModel.isSyncing().observe(activity) { syncing: Boolean ->
+        viewModel.isSyncingWithServer().observe(activity) { syncing: Boolean ->
             this.syncing = syncing
             activity.invalidateOptionsMenu()
         }
 
-        viewModel.isOutOfSync().observe(activity) { outOfSync: Boolean ->
+        viewModel.isOutOfSyncWithServer().observe(activity) { outOfSync: Boolean ->
             this.outOfSync = outOfSync
             activity.invalidateOptionsMenu()
         }

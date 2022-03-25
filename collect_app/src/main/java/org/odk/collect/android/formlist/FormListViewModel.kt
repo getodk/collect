@@ -66,11 +66,11 @@ class FormListViewModel(
     )
 
     init {
-        fetchForms()
-        syncForms()
+        loadFromDatabase()
+        syncWithStorage()
     }
 
-    private fun fetchForms() {
+    private fun loadFromDatabase() {
         viewModelScope.launch {
             _showProgressBar.value = Consumable(true)
 
@@ -94,16 +94,26 @@ class FormListViewModel(
         }
     }
 
-    private fun syncForms() {
+    private fun syncWithStorage() {
         viewModelScope.launch {
             _showProgressBar.value = Consumable(true)
 
             val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
-            fetchForms()
+            loadFromDatabase()
             _syncResult.value = Consumable(result)
 
             _showProgressBar.value = Consumable(false)
         }
+    }
+
+    fun syncWithServer(): LiveData<Boolean> {
+        logManualSyncWithServer()
+        val result = MutableLiveData<Boolean>()
+        scheduler.immediate(
+            { formsUpdater.matchFormsWithServer(projectId) },
+            { value: Boolean -> result.setValue(value) }
+        )
+        return result
     }
 
     fun isMatchExactlyEnabled(): Boolean {
@@ -113,11 +123,11 @@ class FormListViewModel(
         ) == FormUpdateMode.MATCH_EXACTLY
     }
 
-    fun isSyncing(): LiveData<Boolean> {
+    fun isSyncingWithServer(): LiveData<Boolean> {
         return syncRepository.isSyncing(projectId)
     }
 
-    fun isOutOfSync(): LiveData<Boolean> {
+    fun isOutOfSyncWithServer(): LiveData<Boolean> {
         return Transformations.map(
             syncRepository.getSyncError(projectId)
         ) { obj: FormSourceException? ->
@@ -137,21 +147,16 @@ class FormListViewModel(
         }
     }
 
-    fun syncWithServer(): LiveData<Boolean> {
-        logManualSync()
-        val result = MutableLiveData<Boolean>()
-        scheduler.immediate(
-            { formsUpdater.matchFormsWithServer(projectId) },
-            { value: Boolean -> result.setValue(value) }
-        )
-        return result
-    }
-
-    private fun logManualSync() {
+    private fun logManualSyncWithServer() {
         val uri = Uri.parse(generalSettings.getString(ProjectKeys.KEY_SERVER_URL))
         val host = if (uri.host != null) uri.host else ""
         val urlHash = getMd5Hash(ByteArrayInputStream(host!!.toByteArray())) ?: ""
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sortingOrder.removeObserver(sortingOrderObserver)
     }
 
     class Factory(
@@ -177,10 +182,5 @@ class FormListViewModel(
                 projectId
             ) as T
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        sortingOrder.removeObserver(sortingOrderObserver)
     }
 }
