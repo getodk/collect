@@ -68,45 +68,43 @@ class FormListViewModel(
     )
 
     init {
-        loadFromDatabase()
-        syncWithStorage()
+        viewModelScope.launch {
+            loadFromDatabase()
+            syncWithStorage()
+        }
     }
 
     private fun loadFromDatabase() {
-        viewModelScope.launch {
-            _showProgressBar.value = Consumable(true)
+        _showProgressBar.value = Consumable(true)
 
-            _forms.value = Consumable(
-                formsRepository
-                    .all
-                    .map { form ->
-                        FormListItem(
-                            formId = form.dbId,
-                            formName = form.displayName,
-                            formVersion = form.version ?: "",
-                            geometryPath = form.geometryXpath ?: "",
-                            dateOfCreation = form.date,
-                            dateOfLastUsage = 0
-                        )
-                    }
-                    .toList()
-            )
+        _forms.value = Consumable(
+            formsRepository
+                .all
+                .map { form ->
+                    FormListItem(
+                        formId = form.dbId,
+                        formName = form.displayName,
+                        formVersion = form.version ?: "",
+                        geometryPath = form.geometryXpath ?: "",
+                        dateOfCreation = form.date,
+                        dateOfLastUsage = 0
+                    )
+                }
+                .toList()
+        )
 
-            _showProgressBar.value = Consumable(false)
-        }
+        _showProgressBar.value = Consumable(false)
     }
 
     private fun syncWithStorage() {
         changeLockProvider.getFormLock(projectId).withLock {
-            viewModelScope.launch {
-                _showProgressBar.value = Consumable(true)
+            _showProgressBar.value = Consumable(true)
 
-                val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
-                loadFromDatabase()
-                _syncResult.value = Consumable(result)
+            val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
+            loadFromDatabase()
+            _syncResult.value = Consumable(result)
 
-                _showProgressBar.value = Consumable(false)
-            }
+            _showProgressBar.value = Consumable(false)
         }
     }
 
