@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormListItemBinding
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -14,6 +15,7 @@ import java.util.Locale
 class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
     private var fullFormItemsList = emptyList<FormListItem>()
     private var filteredFormItemsList = emptyList<FormListItem>()
+    lateinit var listener: OnFormItemClickListener
 
     private lateinit var binding: FormListItemBinding
 
@@ -28,7 +30,7 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
 
     override fun getItemCount() = filteredFormItemsList.size
 
-    class ViewHolder(private val binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FormListItem) {
             binding.apply {
                 formTitle.text = item.formName
@@ -39,6 +41,18 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
                 formSubtitle2.text = getSubtitle2Text(binding.root.context, item.dateOfCreation)
 
                 mapButton.visibility = if (item.geometryPath.isNotBlank()) View.VISIBLE else View.GONE
+
+                root.setOnClickListener {
+                    if (MultiClickGuard.allowClick(javaClass.name)) {
+                        listener.onFormClick(item.databaseId)
+                    }
+                }
+
+                mapButton.setOnClickListener {
+                    if (MultiClickGuard.allowClick(javaClass.name)) {
+                        listener.onMapButtonClick(item.databaseId)
+                    }
+                }
             }
         }
 
@@ -79,4 +93,10 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
         this.filteredFormItemsList = formItems.toList()
         notifyDataSetChanged()
     }
+}
+
+interface OnFormItemClickListener {
+    fun onFormClick(id: Long)
+
+    fun onMapButtonClick(id: Long)
 }

@@ -1,6 +1,7 @@
 package org.odk.collect.android.formlist
 
 data class FormListItem(
+    val databaseId: Long,
     val formId: Long,
     val formName: String,
     val formVersion: String,

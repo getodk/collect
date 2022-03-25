@@ -1,5 +1,6 @@
 package org.odk.collect.android.formlist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,19 +10,28 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.activities.FormMapActivity
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.network.NetworkStateProvider
+import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.SnackbarUtils
+import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FormListActivity : LocalizedActivity() {
+class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     @Inject
     lateinit var viewModelFactory: FormListViewModel.Factory
 
     @Inject
     lateinit var networkStateProvider: NetworkStateProvider
+
+    @Inject
+    lateinit var permissionsProvider: PermissionsProvider
 
     private val viewModel: FormListViewModel by viewModels { viewModelFactory }
 
@@ -36,7 +46,10 @@ class FormListActivity : LocalizedActivity() {
 
         menuDelegate = FormListMenuDelegate(this, viewModel, networkStateProvider)
 
-        val formListAdapter = FormListAdapter()
+        val formListAdapter = FormListAdapter().apply {
+            listener = this@FormListActivity
+        }
+
         findViewById<RecyclerView>(R.id.formList).apply {
             adapter = formListAdapter
             layoutManager = LinearLayoutManager(context)
@@ -77,5 +90,48 @@ class FormListActivity : LocalizedActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return menuDelegate.onOptionsItemSelected(item)
+    }
+
+    override fun onFormClick(id: Long) {
+        // get uri to form
+        val formUri = FormsContract.getUri(viewModel.projectId, id)
+
+        if (Intent.ACTION_PICK == intent.action) {
+            // caller is waiting on a picked form
+            setResult(RESULT_OK, Intent().setData(formUri))
+        } else {
+            // caller wants to view/edit a form, so launch formentryactivity
+            Intent(this, FormEntryActivity::class.java).apply {
+                action = Intent.ACTION_EDIT
+                data = formUri
+                putExtra(
+                    ApplicationConstants.BundleKeys.FORM_MODE,
+                    ApplicationConstants.FormModes.EDIT_SAVED
+                )
+
+                startActivity(this)
+            }
+        }
+        finish()
+    }
+
+    override fun onMapButtonClick(id: Long) {
+        permissionsProvider.requestLocationPermissions(
+            this,
+            object : PermissionListener {
+                override fun granted() {
+                    startActivity(
+                        Intent(
+                            this@FormListActivity,
+                            FormMapActivity::class.java
+                        ).also {
+                            it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
+                        }
+                    )
+                }
+
+                override fun denied() {}
+            }
+        )
     }
 }

@@ -39,7 +39,7 @@ class FormListViewModel(
     private val generalSettings: Settings,
     private val analytics: Analytics,
     private val changeLockProvider: ChangeLockProvider,
-    private val projectId: String
+    val projectId: String
 ) : ViewModel() {
 
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
@@ -82,6 +82,7 @@ class FormListViewModel(
                 .all
                 .map { form ->
                     FormListItem(
+                        databaseId = form.dbId,
                         formId = form.dbId,
                         formName = form.displayName,
                         formVersion = form.version ?: "",
