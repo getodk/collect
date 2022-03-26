@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.items
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +18,9 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
@@ -26,6 +29,9 @@ import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
 
@@ -34,8 +40,14 @@ class SelectOneFromMapWidgetTest {
 
     private val activityController = Robolectric.buildActivity(WidgetTestActivity::class.java)
     private val formEntryViewModel = mock<FormEntryViewModel>()
+
     private val permissionsProvider = FakePermissionsProvider().also {
         it.setPermissionGranted(true)
+    }
+
+    private val settingsProvider = InMemSettingsProvider().also {
+        it.getUnprotectedSettings().save(ProjectKeys.KEY_FONT_SIZE, "12")
+        it.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString())
     }
 
     @Before
@@ -52,7 +64,20 @@ class SelectOneFromMapWidgetTest {
 
             override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker): PermissionsProvider =
                 permissionsProvider
+
+            override fun providesSettingsProvider(context: Context): SettingsProvider =
+                settingsProvider
         })
+    }
+
+    @Test
+    fun `button uses app font size`() {
+        val settings = settingsProvider.getUnprotectedSettings()
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        assertThat(
+            widget.binding.button.textSize,
+            equalTo(QuestionTextSizeHelper(settings).headline6)
+        )
     }
 
     @Test
@@ -109,6 +134,16 @@ class SelectOneFromMapWidgetTest {
 
         val widget = SelectOneFromMapWidget(activityController.get(), QuestionDetails(prompt))
         assertThat(widget.binding.answer.text, equalTo("A"))
+    }
+
+    @Test
+    fun `answer uses app font size`() {
+        val settings = settingsProvider.getUnprotectedSettings()
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        assertThat(
+            widget.binding.answer.textSize,
+            equalTo(QuestionTextSizeHelper(settings).headline6)
+        )
     }
 
     @Test

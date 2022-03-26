@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +34,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     ): View {
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 
+        binding.button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize.toFloat())
         binding.button.setOnClickListener {
             permissionsProvider.requestEnabledLocationPermissions(
                 context as Activity,
@@ -50,7 +52,9 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
             )
         }
 
+        binding.answer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize.toFloat())
         updateAnswer(questionDetails.prompt.answerValue as? SelectOneData)
+
         return binding.root
     }
 
