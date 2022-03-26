@@ -114,7 +114,10 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                     R.drawable.ic_map_marker_48dp,
                     prompt.getSelectChoiceText(selectChoice),
                     MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
-                    MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, "Select")
+                    MappableSelectItem.IconifiedText(
+                        R.drawable.ic_save,
+                        resources.getString(R.string.select_item)
+                    )
                 )
             } else {
                 list

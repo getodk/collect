@@ -1,9 +1,11 @@
 package org.odk.collect.android.widgets.items
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -86,6 +88,8 @@ class SelectOneFromMapDialogFragmentTest {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
     }
 
+    private val application = ApplicationProvider.getApplicationContext<Application>()
+
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
 
@@ -154,8 +158,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "A",
                             MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
                             MappableSelectItem.IconifiedText(
-                                R.drawable.ic_map_marker_24dp,
-                                "Select"
+                                R.drawable.ic_save, application.getString(R.string.select_item)
                             )
                         ),
                         MappableSelectItem.WithAction(
@@ -167,8 +170,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "B",
                             MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
                             MappableSelectItem.IconifiedText(
-                                R.drawable.ic_map_marker_24dp,
-                                "Select"
+                                R.drawable.ic_save, application.getString(R.string.select_item)
                             )
                         )
                     )

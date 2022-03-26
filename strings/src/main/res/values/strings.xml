@@ -581,6 +581,7 @@
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="geotrace_view_change_location">View or Change GeoTrace</string>
     <string name="select_item_count">%s: %d (%d shown on map)</string>
+    <string name="select_item">Select</string>
     <string name="new_item">New item</string>
     <!-- Name of an action button -->
     <string name="view_data">View Saved Form</string>
