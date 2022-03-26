@@ -18,6 +18,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -44,7 +45,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
                     SelectChoicesMapData(resources, prompt),
-                    skipSummary = true,
+                    skipSummary = Appearances.hasAppearance(prompt, "quick"),
                     showNewItemButton = false
                 )
             }
@@ -88,7 +89,8 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
     }
 }
 
-internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) : SelectionMapData {
+internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) :
+    SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableLiveData<Int>()
@@ -104,15 +106,15 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                 val latitude = geometry.split(" ")[0].toDouble()
                 val longitude = geometry.split(" ")[1].toDouble()
 
-                list + MappableSelectItem.WithInfo(
+                list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
                     longitude,
                     R.drawable.ic_map_marker_24dp,
                     R.drawable.ic_map_marker_48dp,
                     prompt.getSelectChoiceText(selectChoice),
-                    MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                    ""
+                    MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
+                    MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, "Select")
                 )
             } else {
                 list

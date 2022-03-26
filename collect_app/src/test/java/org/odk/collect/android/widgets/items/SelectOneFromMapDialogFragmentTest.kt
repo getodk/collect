@@ -20,6 +20,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
@@ -134,7 +135,7 @@ class SelectOneFromMapDialogFragmentTest {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
-            assertThat(fragment.skipSummary, equalTo(true))
+            assertThat(fragment.skipSummary, equalTo(false))
             assertThat(fragment.showNewItemButton, equalTo(false))
 
             val data = fragment.selectionMapData
@@ -144,29 +145,54 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableSelectItem.WithInfo(
+                        MappableSelectItem.WithAction(
                             0,
                             selectChoices[0].getChild("geometry").split(" ")[0].toDouble(),
                             selectChoices[0].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "A",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                            ""
+                            MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
+                            MappableSelectItem.IconifiedText(
+                                R.drawable.ic_map_marker_24dp,
+                                "Select"
+                            )
                         ),
-                        MappableSelectItem.WithInfo(
+                        MappableSelectItem.WithAction(
                             1,
                             selectChoices[1].getChild("geometry").split(" ")[0].toDouble(),
                             selectChoices[1].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "B",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                            ""
+                            MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
+                            MappableSelectItem.IconifiedText(
+                                R.drawable.ic_map_marker_24dp,
+                                "Select"
+                            )
                         )
                     )
                 )
             )
+        }
+    }
+
+    @Test
+    fun `contains SelectionMapFragment with correct data for quick appearance`() {
+        val prompt = MockFormEntryPromptBuilder()
+            .withAppearance("map quick")
+            .build()
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
+
+        launcherRule.launchDialogFragment(
+            SelectOneFromMapDialogFragment::class.java,
+            Bundle().also {
+                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+            }
+        ).onFragment {
+            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            assertThat(fragment.skipSummary, equalTo(true))
         }
     }
 
