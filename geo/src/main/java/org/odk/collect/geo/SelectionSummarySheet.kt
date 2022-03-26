@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 
 internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
@@ -31,9 +32,18 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
 
         binding.name.text = item.name
 
-        binding.statusIcon.setImageDrawable(ContextCompat.getDrawable(context, item.status.icon))
-        binding.statusIcon.background = null
-        binding.statusText.text = item.status.text
+        binding.properties.removeAllViews()
+        item.properties.forEach {
+            val property = PropertyBinding.bind(
+                LayoutInflater.from(context).inflate(R.layout.property, binding.properties, false)
+            )
+
+            property.text.text = it.text
+            property.icon.setImageDrawable(ContextCompat.getDrawable(context, it.icon))
+            property.icon.background = null
+
+            binding.properties.addView(property.root)
+        }
 
         when (item) {
             is MappableSelectItem.WithAction -> {

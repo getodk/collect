@@ -8,6 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.support.Fixtures
 import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
 
@@ -31,20 +32,68 @@ class SelectionSummarySheetTest {
     }
 
     @Test
-    fun `setItem shows status`() {
+    fun `setItem shows properties`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(
             Fixtures.actionMappableSelectItem().copy(
-                status = MappableSelectItem.IconifiedText(
-                    android.R.drawable.ic_btn_speak_now,
-                    "Emotion"
+                properties = listOf(
+                    MappableSelectItem.IconifiedText(
+                        android.R.drawable.ic_btn_speak_now,
+                        "Emotion"
+                    ),
+                    MappableSelectItem.IconifiedText(
+                        android.R.drawable.ic_dialog_info,
+                        "Mystery"
+                    )
                 )
             )
         )
 
-        assertThat(selectionSummarySheet.binding.statusText.text, equalTo("Emotion"))
-        val iconDrawable = selectionSummarySheet.binding.statusIcon.drawable
-        assertThat(getCreatedFromResId(iconDrawable), equalTo(android.R.drawable.ic_btn_speak_now))
+        val firstProperty =
+            PropertyBinding.bind(selectionSummarySheet.binding.properties.getChildAt(0))
+        assertThat(firstProperty.text.text, equalTo("Emotion"))
+        val firstIcon = firstProperty.icon.drawable
+        assertThat(getCreatedFromResId(firstIcon), equalTo(android.R.drawable.ic_btn_speak_now))
+
+        val secondProperty =
+            PropertyBinding.bind(selectionSummarySheet.binding.properties.getChildAt(1))
+        assertThat(secondProperty.text.text, equalTo("Mystery"))
+        val secondIcon = secondProperty.icon.drawable
+        assertThat(getCreatedFromResId(secondIcon), equalTo(android.R.drawable.ic_dialog_info))
+    }
+
+    @Test
+    fun `properties reset between items`() {
+        val selectionSummarySheet = SelectionSummarySheet(application)
+        selectionSummarySheet.setItem(
+            Fixtures.actionMappableSelectItem().copy(
+                properties = listOf(
+                    MappableSelectItem.IconifiedText(
+                        android.R.drawable.ic_btn_speak_now,
+                        "Emotion"
+                    )
+                )
+            )
+        )
+
+        selectionSummarySheet.setItem(
+            Fixtures.actionMappableSelectItem().copy(
+                properties = listOf(
+                    MappableSelectItem.IconifiedText(
+                        android.R.drawable.ic_dialog_info,
+                        "Mystery"
+                    )
+                )
+            )
+        )
+
+        assertThat(selectionSummarySheet.binding.properties.childCount, equalTo(1))
+
+        val property =
+            PropertyBinding.bind(selectionSummarySheet.binding.properties.getChildAt(0))
+        assertThat(property.text.text, equalTo("Mystery"))
+        val firstIcon = property.icon.drawable
+        assertThat(getCreatedFromResId(firstIcon), equalTo(android.R.drawable.ic_dialog_info))
     }
 
     @Test

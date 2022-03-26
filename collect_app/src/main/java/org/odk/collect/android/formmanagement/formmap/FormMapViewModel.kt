@@ -106,9 +106,11 @@ class FormMapViewModel(
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                MappableSelectItem.IconifiedText(
-                    getSubmissionSummaryStatusIcon(instance.status),
-                    instanceLastStatusChangeDate
+                listOf(
+                    MappableSelectItem.IconifiedText(
+                        getSubmissionSummaryStatusIcon(instance.status),
+                        instanceLastStatusChangeDate
+                    )
                 ),
                 info
             )
@@ -126,9 +128,11 @@ class FormMapViewModel(
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                MappableSelectItem.IconifiedText(
-                    getSubmissionSummaryStatusIcon(instance.status),
-                    instanceLastStatusChangeDate
+                listOf(
+                    MappableSelectItem.IconifiedText(
+                        getSubmissionSummaryStatusIcon(instance.status),
+                        instanceLastStatusChangeDate
+                    )
                 ),
                 info
             )
@@ -146,9 +150,11 @@ class FormMapViewModel(
                 getDrawableIdForStatus(instance.status, false),
                 getDrawableIdForStatus(instance.status, true),
                 instance.displayName,
-                MappableSelectItem.IconifiedText(
-                    getSubmissionSummaryStatusIcon(instance.status),
-                    instanceLastStatusChangeDate
+                listOf(
+                    MappableSelectItem.IconifiedText(
+                        getSubmissionSummaryStatusIcon(instance.status),
+                        instanceLastStatusChangeDate
+                    )
                 ),
                 action
             )

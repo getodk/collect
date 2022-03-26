@@ -156,7 +156,7 @@ class SelectOneFromMapDialogFragmentTest {
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "A",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
+                            emptyList(),
                             MappableSelectItem.IconifiedText(
                                 R.drawable.ic_save, application.getString(R.string.select_item)
                             )
@@ -168,7 +168,7 @@ class SelectOneFromMapDialogFragmentTest {
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "B",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_visibility, ""),
+                            emptyList(),
                             MappableSelectItem.IconifiedText(
                                 R.drawable.ic_save, application.getString(R.string.select_item)
                             )

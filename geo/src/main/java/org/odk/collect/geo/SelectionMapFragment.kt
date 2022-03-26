@@ -381,7 +381,7 @@ sealed interface MappableSelectItem {
     val smallIcon: Int
     val largeIcon: Int
     val name: String
-    val status: IconifiedText
+    val properties: List<IconifiedText>
 
     data class WithInfo(
         override val id: Long,
@@ -390,7 +390,7 @@ sealed interface MappableSelectItem {
         override val smallIcon: Int,
         override val largeIcon: Int,
         override val name: String,
-        override val status: IconifiedText,
+        override val properties: List<IconifiedText>,
         val info: String,
     ) : MappableSelectItem
 
@@ -401,7 +401,7 @@ sealed interface MappableSelectItem {
         override val smallIcon: Int,
         override val largeIcon: Int,
         override val name: String,
-        override val status: IconifiedText,
+        override val properties: List<IconifiedText>,
         val action: IconifiedText
     ) : MappableSelectItem
 
