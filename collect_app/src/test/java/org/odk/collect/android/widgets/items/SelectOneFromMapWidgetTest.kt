@@ -5,6 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.core.model.data.helper.Selection
@@ -15,6 +16,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -22,6 +24,8 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
 
@@ -30,6 +34,9 @@ class SelectOneFromMapWidgetTest {
 
     private val activity = Robolectric.setupActivity(WidgetTestActivity::class.java)
     private val formEntryViewModel = mock<FormEntryViewModel>()
+    private val permissionsProvider = FakePermissionsProvider().also {
+        it.setPermissionGranted(true)
+    }
 
     @Before
     fun setup() {
@@ -42,6 +49,9 @@ class SelectOneFromMapWidgetTest {
                     }
                 }
             }
+
+            override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker): PermissionsProvider =
+                permissionsProvider
         })
     }
 
@@ -63,6 +73,20 @@ class SelectOneFromMapWidgetTest {
                 ?.getSerializable(SelectOneFromMapDialogFragment.ARG_FORM_INDEX),
             equalTo(prompt.index)
         )
+    }
+
+    @Test
+    fun `clicking button when location permissions denined does nothing`() {
+        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+
+        permissionsProvider.setPermissionGranted(false)
+        widget.binding.button.performClick()
+
+        val fragment = getFragmentByClass(
+            activity.supportFragmentManager,
+            SelectOneFromMapDialogFragment::class.java
+        )
+        assertThat(fragment, nullValue())
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.items
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.permissions.PermissionListener
 
 @SuppressLint("ViewConstructor")
 class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails) :
@@ -32,10 +34,21 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 
         binding.button.setOnClickListener {
-            DialogFragmentUtils.showIfNotShowing(
-                SelectOneFromMapDialogFragment::class.java,
-                Bundle().also { it.putSerializable(ARG_FORM_INDEX, prompt.index) },
-                (context as FragmentActivity).supportFragmentManager
+            permissionsProvider.requestLocationPermissions(
+                context as Activity,
+                object : PermissionListener {
+                    override fun granted() {
+                        DialogFragmentUtils.showIfNotShowing(
+                            SelectOneFromMapDialogFragment::class.java,
+                            Bundle().also { it.putSerializable(ARG_FORM_INDEX, prompt.index) },
+                            (context as FragmentActivity).supportFragmentManager
+                        )
+                    }
+
+                    override fun denied() {
+                        // Ignored
+                    }
+                }
             )
         }
 
