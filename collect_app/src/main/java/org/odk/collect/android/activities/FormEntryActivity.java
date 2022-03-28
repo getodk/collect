@@ -2475,7 +2475,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         displayUIFor(backgroundLocationViewModel.activityDisplayed());
 
         if (backgroundLocationViewModel.isBackgroundLocationPermissionsCheckNeeded()) {
-            permissionsProvider.requestLocationPermissions(this, new PermissionListener() {
+            permissionsProvider.requestEnabledLocationPermissions(this, new PermissionListener() {
                 @Override
                 public void granted() {
                     displayUIFor(backgroundLocationViewModel.locationPermissionsGranted());

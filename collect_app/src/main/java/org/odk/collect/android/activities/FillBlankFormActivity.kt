@@ -195,7 +195,7 @@ class FillBlankFormActivity :
     }
 
     private fun onMapButtonClick(id: Long) {
-        permissionsProvider.requestLocationPermissions(
+        permissionsProvider.requestEnabledLocationPermissions(
             this,
             object : PermissionListener {
                 override fun granted() {

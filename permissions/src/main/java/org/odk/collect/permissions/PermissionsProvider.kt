@@ -54,25 +54,6 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
     open val isReadPhoneStatePermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
 
-    open fun requestReadStoragePermission(activity: Activity, action: PermissionListener) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    showAdditionalExplanation(
-                        activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action
-                    )
-                }
-            },
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-    }
-
     fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
@@ -95,35 +76,13 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
         )
     }
 
-    fun requestLocationPermissions(activity: Activity, action: PermissionListener) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    showAdditionalExplanation(
-                        activity,
-                        R.string.location_runtime_permissions_denied_title,
-                        R.string.location_runtime_permissions_denied_desc,
-                        R.drawable.ic_room_black_24dp,
-                        action
-                    )
-                }
-            },
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-    }
-
     /**
      * Request location permissions and make sure Location is enabled at a system level. If the
      * latter is not true, show a dialog prompting the user to do so rather than
      * [PermissionListener.granted].
      */
     fun requestEnabledLocationPermissions(activity: Activity, action: PermissionListener) {
-        requestLocationPermissions(
+        requestPermissions(
             activity,
             object : PermissionListener {
                 override fun granted() {
@@ -142,16 +101,26 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                             }
                             .setNegativeButton(
                                 activity.getString(R.string.cancel)
-                            ) { dialog: DialogInterface, _: Int -> dialog.cancel() }
+                            ) { dialog: DialogInterface, _: Int ->
+                                action.denied()
+                                dialog.cancel()
+                            }
                             .create()
                             .show()
                     }
                 }
 
                 override fun denied() {
-                    action.denied()
+                    showAdditionalExplanation(
+                        activity,
+                        R.string.location_runtime_permissions_denied_title,
+                        R.string.location_runtime_permissions_denied_desc,
+                        R.drawable.ic_room_black_24dp,
+                        action
+                    )
                 }
-            }
+            },
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
 
@@ -344,7 +313,7 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
             contentResolver.query(uri, null, null, null, null)
                 .use { listener.granted() }
         } catch (e: SecurityException) {
-            requestReadStoragePermission(
+            requestPermissions(
                 activity,
                 object : PermissionListener {
                     override fun granted() {
@@ -352,9 +321,14 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                     }
 
                     override fun denied() {
-                        listener.denied()
+                        showAdditionalExplanation(
+                            activity, R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
+                            listener
+                        )
                     }
-                }
+                },
+                Manifest.permission.READ_EXTERNAL_STORAGE
             )
         } catch (e: Exception) {
             listener.denied()
