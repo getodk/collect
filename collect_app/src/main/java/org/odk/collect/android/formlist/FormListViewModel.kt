@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
@@ -59,13 +58,6 @@ class FormListViewModel(
 
     private val _showProgressBar: MutableLiveData<Consumable<Boolean>> = MutableLiveData()
     val showProgressBar: LiveData<Consumable<Boolean>> = _showProgressBar
-
-    val sortingOptions = intArrayOf(
-        R.string.sort_by_name_asc,
-        R.string.sort_by_name_desc,
-        R.string.sort_by_date_asc,
-        R.string.sort_by_date_desc
-    )
 
     init {
         viewModelScope.launch {

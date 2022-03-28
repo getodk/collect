@@ -92,7 +92,12 @@ class FormListMenuDelegate(
             R.id.menu_sort -> {
                 SortingDialog(
                     activity,
-                    viewModel.sortingOptions,
+                    intArrayOf(
+                        R.string.sort_by_name_asc,
+                        R.string.sort_by_name_desc,
+                        R.string.sort_by_date_asc,
+                        R.string.sort_by_date_desc
+                    ),
                     viewModel.sortingOrder.value
                 ) { newSortingOrder ->
                     viewModel.sortingOrder.value = newSortingOrder
