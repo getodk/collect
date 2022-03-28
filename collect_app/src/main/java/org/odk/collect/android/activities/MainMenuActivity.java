@@ -93,22 +93,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         initToolbar();
 
-        // enter data button. expects a result.
-        Button enterDataButton = findViewById(R.id.enter_data);
-        enterDataButton.setText(getString(R.string.enter_data_button));
-        enterDataButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),
-                        FillBlankFormActivity.class);
-                startActivity(i);
-            }
-        });
-
-        Button enterDataButtonNew = findViewById(R.id.enter_data_new);
+        Button enterDataButtonNew = findViewById(R.id.enter_data);
         enterDataButtonNew.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), FormListActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(this, FormListActivity.class);
+            startActivity(intent);
         });
 
         // review data button. expects a result.
