@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.external;
 
+import static org.odk.collect.android.external.FormsContract.getUri;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -27,9 +29,10 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
-import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
-import org.odk.collect.android.formmanagement.BlankFormsListViewModel.BlankForm;
+import org.odk.collect.android.formlist.FormListItem;
+import org.odk.collect.android.formlist.FormListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.settings.SettingsProvider;
 
 import java.util.List;
@@ -45,25 +48,26 @@ import javax.inject.Inject;
 public class AndroidShortcutsActivity extends AppCompatActivity {
 
     @Inject
-    BlankFormsListViewModel.Factory blankFormsListViewModelFactory;
+    FormListViewModel.Factory viewModelFactory;
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         DaggerUtils.getComponent(this).inject(this);
-        BlankFormsListViewModel blankFormsListViewModel = new ViewModelProvider(this, blankFormsListViewModelFactory).get(BlankFormsListViewModel.class);
-        List<BlankForm> forms = blankFormsListViewModel.getForms();
-
-        showFormListDialog(forms);
+        FormListViewModel formListViewModel = new ViewModelProvider(this, viewModelFactory).get(FormListViewModel.class);
+        formListViewModel.getForms().observe(this, forms -> showFormListDialog(forms.getValue()));
     }
 
-    private void showFormListDialog(List<BlankForm> forms) {
+    private void showFormListDialog(List<FormListItem> forms) {
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.select_odk_shortcut)
-                .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
+                .setItems(forms.stream().map(FormListItem::getFormName).toArray(String[]::new), (dialog, item) -> {
                     AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getUnprotectedSettings());
 
                     Intent intent = getShortcutIntent(forms, item);
@@ -79,13 +83,13 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
     }
 
     @NotNull
-    private Intent getShortcutIntent(List<BlankForm> forms, int item) {
+    private Intent getShortcutIntent(List<FormListItem> forms, int item) {
         Intent shortcutIntent = new Intent(Intent.ACTION_EDIT);
-        shortcutIntent.setData(forms.get(item).getContentUri());
+        shortcutIntent.setData(getUri(currentProjectProvider.getCurrentProject().getUuid(), forms.get(item).getDatabaseId()));
 
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, forms.get(item).getName());
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, forms.get(item).getFormName());
         Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.drawable.notes);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
         return intent;

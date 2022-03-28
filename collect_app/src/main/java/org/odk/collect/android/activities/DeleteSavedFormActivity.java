@@ -26,7 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.DeleteFormsTabsAdapter;
-import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
+import org.odk.collect.android.formlist.FormListViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.utils.AppBarUtils;
 
@@ -35,14 +35,14 @@ import javax.inject.Inject;
 public class DeleteSavedFormActivity extends CollectAbstractActivity {
 
     @Inject
-    BlankFormsListViewModel.Factory viewModelFactory;
-    BlankFormsListViewModel viewModel;
+    FormListViewModel.Factory viewModelFactory;
+    FormListViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(BlankFormsListViewModel.class);
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(FormListViewModel.class);
 
         setContentView(R.layout.tabs_layout);
         AppBarUtils.setupAppBarLayout(this, getString(R.string.manage_files));
