@@ -1,6 +1,7 @@
 package org.odk.collect.android.widgets.items
 
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,7 +43,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
-                    SelectChoicesMapData(prompt),
+                    SelectChoicesMapData(resources, prompt),
                     skipSummary = true,
                     showNewItemButton = false
                 )
@@ -87,7 +88,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
     }
 }
 
-internal class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData {
+internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) : SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableLiveData<Int>()
@@ -124,7 +125,7 @@ internal class SelectChoicesMapData(prompt: FormEntryPrompt) : SelectionMapData 
     }
 
     override fun getItemType(): String {
-        return "Choices"
+        return resources.getString(R.string.choices)
     }
 
     override fun getItemCount(): LiveData<Int> {

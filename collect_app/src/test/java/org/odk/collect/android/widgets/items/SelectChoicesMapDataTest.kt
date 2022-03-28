@@ -8,6 +8,7 @@ import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.mock
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 
 class SelectChoicesMapDataTest {
@@ -39,7 +40,7 @@ class SelectChoicesMapDataTest {
             )
             .build()
 
-        val data = SelectChoicesMapData(prompt)
+        val data = SelectChoicesMapData(mock(), prompt)
         assertThat(data.getItemCount().value, equalTo(2))
         assertThat(data.getMappableItems().value.size, equalTo(1))
         assertThat(data.getMappableItems().value[0].name, equalTo("A"))
