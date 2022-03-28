@@ -10,4 +10,9 @@
         android:id="@+id/formList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/empty_list_message"
+        style="@style/Widget.Collect.TextView.Empty"
+        android:text="@string/no_items_display_forms"/>
 </LinearLayout>

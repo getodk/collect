@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,6 +69,8 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
         }
 
         viewModel.forms.observe(this) { forms ->
+            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.value.isEmpty()) View.GONE else View.VISIBLE
+            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.value.isEmpty()) View.VISIBLE else View.GONE
             formListAdapter.setData(forms.value)
         }
 
