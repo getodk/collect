@@ -45,9 +45,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
                         )
                     }
 
-                    override fun denied() {
-                        // Ignored
-                    }
+                    override fun denied() = Unit
                 }
             )
         }
