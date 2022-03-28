@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import android.app.Application
 import android.graphics.drawable.ColorDrawable
@@ -9,6 +9,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.geo.R
 
 @RunWith(AndroidJUnit4::class)
 class AccuracyStatusViewTest {

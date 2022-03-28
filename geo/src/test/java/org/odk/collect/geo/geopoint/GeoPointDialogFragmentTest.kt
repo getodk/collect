@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +25,10 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.geo.DaggerGeoDependencyComponent
+import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.R
+import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.strings.localization.getLocalizedString
 
 @RunWith(AndroidJUnit4::class)

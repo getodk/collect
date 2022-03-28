@@ -1,7 +1,7 @@
 package org.odk.collect.geo.support
 
 import android.R
-import org.odk.collect.geo.MappableSelectItem
+import org.odk.collect.geo.selection.MappableSelectItem
 
 object Fixtures {
     fun actionMappableSelectItem(): MappableSelectItem.WithAction {

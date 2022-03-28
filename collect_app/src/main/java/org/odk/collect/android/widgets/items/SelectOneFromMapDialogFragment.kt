@@ -22,10 +22,10 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapData
-import org.odk.collect.geo.SelectionMapFragment
-import org.odk.collect.geo.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.SelectionMapData
+import org.odk.collect.geo.selection.SelectionMapFragment
+import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 

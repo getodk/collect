@@ -13,8 +13,8 @@ import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapData
+import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import timber.log.Timber

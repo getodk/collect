@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.geo;
+package org.odk.collect.geo.geopoint;
 
 import static org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY;
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
@@ -33,6 +33,10 @@ import androidx.annotation.VisibleForTesting;
 
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.geo.GeoUtils;
+import org.odk.collect.geo.R;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragment;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;

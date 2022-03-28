@@ -73,7 +73,11 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `button uses app font size`() {
         val settings = settingsProvider.getUnprotectedSettings()
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(null))
+        )
+
         assertThat(
             widget.binding.button.textSize,
             equalTo(QuestionTextSizeHelper(settings).headline6)
@@ -139,7 +143,11 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `answer uses app font size`() {
         val settings = settingsProvider.getUnprotectedSettings()
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(null))
+        )
+
         assertThat(
             widget.binding.answer.textSize,
             equalTo(QuestionTextSizeHelper(settings).headline6)

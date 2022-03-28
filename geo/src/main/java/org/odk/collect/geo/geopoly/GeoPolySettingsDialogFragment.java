@@ -1,4 +1,4 @@
-package org.odk.collect.geo;
+package org.odk.collect.geo.geopoly;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.odk.collect.geo.R;
 
 public class GeoPolySettingsDialogFragment extends DialogFragment {
 

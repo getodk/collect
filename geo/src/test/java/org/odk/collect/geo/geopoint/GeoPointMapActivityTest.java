@@ -1,4 +1,4 @@
-package org.odk.collect.geo;
+package org.odk.collect.geo.geopoint;
 
 import static android.app.Activity.RESULT_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,9 +21,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.geo.DaggerGeoDependencyComponent;
+import org.odk.collect.geo.GeoDependencyModule;
+import org.odk.collect.geo.R;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.geo.support.FakeMapFragment;
+import org.odk.collect.geo.support.RobolectricApplication;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)

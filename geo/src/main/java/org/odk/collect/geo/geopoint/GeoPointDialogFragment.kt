@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import android.app.Dialog
 import android.content.Context
@@ -10,7 +10,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.androidshared.ui.OnBackPressedKeyListener
+import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.formatAccuracy
+import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopointDialogBinding
 import javax.inject.Inject
 

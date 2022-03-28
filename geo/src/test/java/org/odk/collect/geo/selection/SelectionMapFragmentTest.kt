@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.selection
 
 import android.content.Context
 import android.os.Bundle
@@ -30,11 +30,16 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.geo.DaggerGeoDependencyComponent
+import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.R
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
 import org.odk.collect.geo.maps.MapPoint
 import org.odk.collect.geo.support.FakeMapFragment
 import org.odk.collect.geo.support.Fixtures
+import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.permissions.PermissionsChecker
 
 @RunWith(AndroidJUnit4::class)

@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.hamcrest.MatcherAssert.assertThat

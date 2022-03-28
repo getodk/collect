@@ -33,11 +33,11 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapFragment
-import org.odk.collect.geo.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.SelectionMapFragment
+import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapDialogFragmentTest {

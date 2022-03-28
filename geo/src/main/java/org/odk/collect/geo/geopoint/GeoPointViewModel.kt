@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

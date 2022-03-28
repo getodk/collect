@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.geopoint
 
 import android.app.Activity
 import android.app.Application
@@ -20,6 +20,10 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.Extensions.isFinishing
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
+import org.odk.collect.geo.DaggerGeoDependencyComponent
+import org.odk.collect.geo.GeoDependencyModule
+import org.odk.collect.geo.GeoUtils
+import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.location.Location
 import org.odk.collect.testshared.FakeScheduler
 

@@ -1,4 +1,4 @@
-package org.odk.collect.geo;
+package org.odk.collect.geo.geopoly;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.odk.collect.geo.R;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 

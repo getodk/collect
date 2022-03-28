@@ -97,7 +97,7 @@ class FormMapTest {
         val intent = getReturnIntent(GeoUtils.formatLocationResultString(location))
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, intent)
 
-        intending(hasComponent("org.odk.collect.geo.GeoPointActivity"))
+        intending(hasComponent("org.odk.collect.geo.geopoint.GeoPointActivity"))
             .respondWith(result)
     }
 

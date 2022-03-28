@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.selection
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
 

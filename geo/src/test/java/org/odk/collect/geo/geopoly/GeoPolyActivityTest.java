@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.geo;
+package org.odk.collect.geo.geopoly;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -36,8 +36,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
+import org.odk.collect.geo.Constants;
+import org.odk.collect.geo.DaggerGeoDependencyComponent;
+import org.odk.collect.geo.GeoDependencyModule;
+import org.odk.collect.geo.R;
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.geo.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
+import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.robolectric.shadows.ShadowApplication;
 

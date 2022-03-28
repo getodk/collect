@@ -1,4 +1,4 @@
-package org.odk.collect.geo
+package org.odk.collect.geo.selection
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -16,6 +16,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.geo.GeoDependencyComponentProvider
+import org.odk.collect.geo.R
+import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragment.ReadyListener

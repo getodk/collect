@@ -25,7 +25,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.geo.SelectionMapFragment
+import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
