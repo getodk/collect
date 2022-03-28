@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager
-import org.odk.collect.geo.maps.MapFragment
-import org.odk.collect.geo.maps.MapPoint
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapPoint
 
 class FakeClickableMapFragment : MapFragment {
 

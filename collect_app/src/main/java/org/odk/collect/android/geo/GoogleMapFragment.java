@@ -52,8 +52,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapPoint;
 import org.odk.collect.location.LocationClient;
 
 import java.io.File;

@@ -41,7 +41,7 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
-import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.location.tracker.LocationTracker;

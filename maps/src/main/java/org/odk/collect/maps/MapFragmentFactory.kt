@@ -1,4 +1,4 @@
-package org.odk.collect.geo.maps
+package org.odk.collect.maps
 
 import android.content.Context
 

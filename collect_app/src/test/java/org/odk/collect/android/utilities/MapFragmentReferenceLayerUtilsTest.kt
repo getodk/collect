@@ -7,7 +7,7 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.geo.DirectoryReferenceLayerRepository
-import org.odk.collect.geo.maps.MapFragment
+import org.odk.collect.maps.MapFragment
 import org.odk.collect.shared.TempFiles.createTempDir
 import java.io.File
 

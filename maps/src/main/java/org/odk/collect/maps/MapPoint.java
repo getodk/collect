@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.geo.maps;
+package org.odk.collect.maps;
 
 import android.os.Parcel;
 import android.os.Parcelable;

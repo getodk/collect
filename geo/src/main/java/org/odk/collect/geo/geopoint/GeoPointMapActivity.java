@@ -37,9 +37,9 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapFragmentFactory;
-import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapPoint;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;

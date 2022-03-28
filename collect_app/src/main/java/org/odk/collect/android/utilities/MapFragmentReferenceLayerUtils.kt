@@ -2,7 +2,7 @@ package org.odk.collect.android.utilities
 
 import android.os.Bundle
 import org.odk.collect.android.geo.ReferenceLayerRepository
-import org.odk.collect.geo.maps.MapFragment
+import org.odk.collect.maps.MapFragment
 import java.io.File
 
 object MapFragmentReferenceLayerUtils {

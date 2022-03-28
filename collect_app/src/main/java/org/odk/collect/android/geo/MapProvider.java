@@ -24,8 +24,8 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.Map;
