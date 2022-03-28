@@ -34,7 +34,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 
         binding.button.setOnClickListener {
-            permissionsProvider.requestLocationPermissions(
+            permissionsProvider.requestEnabledLocationPermissions(
                 context as Activity,
                 object : PermissionListener {
                     override fun granted() {
