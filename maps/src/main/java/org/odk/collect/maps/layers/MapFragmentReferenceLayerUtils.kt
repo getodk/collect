@@ -1,7 +1,6 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.maps.layers
 
 import android.os.Bundle
-import org.odk.collect.android.geo.ReferenceLayerRepository
 import org.odk.collect.maps.MapFragment
 import java.io.File
 

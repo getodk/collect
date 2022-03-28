@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo
+package org.odk.collect.maps.layers
 
 import org.odk.collect.shared.PathUtils
 import org.odk.collect.shared.files.DirectoryUtils.listFilesRecursively

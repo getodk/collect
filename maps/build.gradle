@@ -50,7 +50,12 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
+    implementation project(':shared')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_fragment
     implementation Dependencies.androidx_annotations
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.hamcrest
+    testImplementation Dependencies.robolectric
 }

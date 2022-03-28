@@ -8,8 +8,8 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.geo.DirectoryReferenceLayerRepository
 import org.odk.collect.android.preferences.CaptionedListPreference
+import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository
 import org.odk.collect.shared.TempFiles
 
 @RunWith(AndroidJUnit4::class)

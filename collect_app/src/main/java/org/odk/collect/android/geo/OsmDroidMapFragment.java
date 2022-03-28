@@ -41,12 +41,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.IconUtils;
-import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
-import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapPoint;
+import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
+import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -198,7 +198,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
         myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
-        Bitmap crosshairs = IconUtils.getBitmap(getActivity(), R.drawable.ic_crosshairs);
+        Bitmap crosshairs = ContextUtils.getBitmap(requireActivity(), R.drawable.ic_crosshairs);
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
         myLocationOverlay.setPersonHotspot(crosshairs.getWidth() / 2.0f, crosshairs.getHeight() / 2.0f);
 
@@ -767,7 +767,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setColor(new ThemeUtils(context).getColorOnSurface());
+            paint.setColor(ContextUtils.getThemeAttributeValue(context, R.attr.colorOnSurface));
             paint.setTextSize(FONT_SIZE_DP *
                 context.getResources().getDisplayMetrics().density);
             paint.setTextAlign(Paint.Align.RIGHT);

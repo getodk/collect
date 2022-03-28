@@ -63,9 +63,10 @@ import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
-import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 
 import java.io.File;
 import java.io.IOException;

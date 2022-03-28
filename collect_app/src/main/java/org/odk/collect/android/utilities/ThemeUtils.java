@@ -35,6 +35,12 @@ import org.odk.collect.settings.keys.ProjectKeys;
 
 import javax.inject.Inject;
 
+/**
+ * @deprecated Use
+ * {@link org.odk.collect.androidshared.system.ContextUtils#getThemeAttributeValue(Context, int)}
+ * intead.
+ */
+@Deprecated
 public final class ThemeUtils {
 
     @Inject

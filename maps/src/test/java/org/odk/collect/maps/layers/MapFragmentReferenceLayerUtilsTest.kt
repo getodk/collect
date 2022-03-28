@@ -1,17 +1,16 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.maps.layers
 
 import android.os.Bundle
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.geo.DirectoryReferenceLayerRepository
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.shared.TempFiles.createTempDir
+import org.robolectric.RobolectricTestRunner
 import java.io.File
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MapFragmentReferenceLayerUtilsTest {
 
     @Test
@@ -43,7 +42,8 @@ class MapFragmentReferenceLayerUtilsTest {
     @Test
     fun whenOfflineLayerFileExist_should_getReferenceLayerFileReturnThatFile() {
         val layersPath = createTempDir().absolutePath
-        FileUtils.write(File(layersPath, "blah"), byteArrayOf())
+        File(layersPath, "blah").writeBytes(byteArrayOf())
+
         val config = Bundle()
         config.putString(MapFragment.KEY_REFERENCE_LAYER, "blah")
 
