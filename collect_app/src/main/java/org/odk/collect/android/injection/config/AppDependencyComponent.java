@@ -7,7 +7,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
-import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -216,8 +215,6 @@ public interface AppDependencyComponent {
     void inject(ProjectPreferencesActivity projectPreferencesActivity);
 
     void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
-
-    void inject(FillBlankFormActivity fillBlankFormActivity);
 
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 

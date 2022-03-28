@@ -24,6 +24,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.formlist.FormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -124,7 +125,7 @@ class MainMenuActivityTest {
 
             val button: Button = activity.findViewById(R.id.enter_data)
             button.performClick()
-            assertThat(Intents.getIntents()[0], hasComponent(FillBlankFormActivity::class.java.name))
+            assertThat(Intents.getIntents()[0], hasComponent(FormListActivity::class.java.name))
 
             Intents.release()
         }

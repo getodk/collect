@@ -127,9 +127,6 @@ the specific language governing permissions and limitations under the License.
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity
-            android:name=".activities.FillBlankFormActivity"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".formlist.FormListActivity"
             android:launchMode="singleTop" />
         <activity android:name=".activities.FormDownloadListActivity" />
@@ -245,7 +242,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormChooserList"
-            android:targetActivity=".activities.FillBlankFormActivity"
+            android:targetActivity=".formlist.FormListActivity"
             android:exported="true"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
