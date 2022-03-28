@@ -40,7 +40,12 @@ import javax.inject.Singleton;
  *
  * This needs to be used as a singleton for maps to work (Google Maps appears as blank otherwise)
  * but it's not clear if that's intentional or not.
+ *
+ * @deprecated this currently blocks creating modules for different {@link MapFragment}
+ * implementations as they all rely on {@link MapProvider}. This class should be reworked to allow
+ * that reorg to go ahead.
  */
+@Deprecated
 @Singleton
 public class MapProvider implements MapFragmentFactory {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
