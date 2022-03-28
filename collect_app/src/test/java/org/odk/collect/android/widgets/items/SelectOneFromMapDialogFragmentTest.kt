@@ -31,6 +31,7 @@ import org.odk.collect.android.geo.MapProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.selection.MappableSelectItem
@@ -182,7 +183,7 @@ class SelectOneFromMapDialogFragmentTest {
     @Test
     fun `contains SelectionMapFragment with correct data for quick appearance`() {
         val prompt = MockFormEntryPromptBuilder()
-            .withAppearance("map quick")
+            .withAppearance("${Appearances.MAP} ${Appearances.QUICK}")
             .build()
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
 

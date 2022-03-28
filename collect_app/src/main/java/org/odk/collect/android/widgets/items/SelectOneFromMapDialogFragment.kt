@@ -45,7 +45,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
                     SelectChoicesMapData(resources, prompt),
-                    skipSummary = Appearances.hasAppearance(prompt, "quick"),
+                    skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false
                 )
             }
