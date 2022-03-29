@@ -60,18 +60,20 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
             findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (shouldShowProgressBar.value) View.VISIBLE
+                if (shouldShowProgressBar) View.VISIBLE
                 else View.GONE
         }
 
         viewModel.syncResult.observe(this) { result ->
-            SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
+            if (!result.isConsumed()) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
+            }
         }
 
         viewModel.forms.observe(this) { forms ->
-            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.value.isEmpty()) View.GONE else View.VISIBLE
-            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.value.isEmpty()) View.VISIBLE else View.GONE
-            formListAdapter.setData(forms.value)
+            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
+            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
+            formListAdapter.setData(forms)
         }
 
         viewModel.sortingOrder.observe(this) { sortingOrder ->

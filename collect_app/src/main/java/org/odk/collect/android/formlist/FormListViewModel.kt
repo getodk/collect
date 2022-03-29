@@ -45,8 +45,8 @@ class FormListViewModel(
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
 
-    private val _forms: MutableLiveData<Consumable<List<FormListItem>>> = MutableLiveData()
-    val forms: LiveData<Consumable<List<FormListItem>>> = _forms
+    private val _forms: MutableLiveData<List<FormListItem>> = MutableLiveData()
+    val forms: LiveData<List<FormListItem>> = _forms
 
     val filterText = MutableNonNullLiveData("")
 
@@ -57,8 +57,8 @@ class FormListViewModel(
         observeForever(sortingOrderObserver)
     }
 
-    private val _showProgressBar: MutableLiveData<Consumable<Boolean>> = MutableLiveData()
-    val showProgressBar: LiveData<Consumable<Boolean>> = _showProgressBar
+    private val _showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
+    val showProgressBar: LiveData<Boolean> = _showProgressBar
 
     init {
         viewModelScope.launch {
@@ -68,38 +68,36 @@ class FormListViewModel(
     }
 
     private fun loadFromDatabase() {
-        _showProgressBar.value = Consumable(true)
+        _showProgressBar.value = true
 
-        _forms.value = Consumable(
-            formsRepository
-                .all
-                .map { form ->
-                    FormListItem(
-                        databaseId = form.dbId,
-                        formId = form.dbId,
-                        formName = form.displayName,
-                        formVersion = form.version ?: "",
-                        geometryPath = form.geometryXpath ?: "",
-                        dateOfCreation = form.date,
-                        dateOfLastUsage = 0,
-                        contentUri = FormsContract.getUri(projectId, form.dbId)
-                    )
-                }
-                .toList()
-        )
+        _forms.value = formsRepository
+            .all
+            .map { form ->
+                FormListItem(
+                    databaseId = form.dbId,
+                    formId = form.dbId,
+                    formName = form.displayName,
+                    formVersion = form.version ?: "",
+                    geometryPath = form.geometryXpath ?: "",
+                    dateOfCreation = form.date,
+                    dateOfLastUsage = 0,
+                    contentUri = FormsContract.getUri(projectId, form.dbId)
+                )
+            }
+            .toList()
 
-        _showProgressBar.value = Consumable(false)
+        _showProgressBar.value = false
     }
 
     private fun syncWithStorage() {
         changeLockProvider.getFormLock(projectId).withLock {
-            _showProgressBar.value = Consumable(true)
+            _showProgressBar.value = true
 
             val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
             loadFromDatabase()
             _syncResult.value = Consumable(result)
 
-            _showProgressBar.value = Consumable(false)
+            _showProgressBar.value = false
         }
     }
 
