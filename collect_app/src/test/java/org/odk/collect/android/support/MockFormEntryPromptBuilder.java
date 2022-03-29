@@ -10,8 +10,10 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
@@ -30,6 +32,7 @@ public class MockFormEntryPromptBuilder {
         when(prompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(prompt.getIndex().toString()).thenReturn("0, 0");
         when(prompt.getFormElement()).thenReturn(mock(IFormElement.class));
+        when(prompt.getSelectChoiceText(null)).thenThrow(new NullPointerException());
 
         // Make sure we have a non-null question
         withQuestion(mock(QuestionDef.class));
@@ -123,6 +126,15 @@ public class MockFormEntryPromptBuilder {
         treeElement.setValue(new StringData(value));
 
         when(prompt.getBindAttributes()).thenReturn(asList(treeElement));
+
+        return this;
+    }
+
+    @NotNull
+    public MockFormEntryPromptBuilder withSelectChoiceText(@NotNull Map<SelectChoice, String> choiceToText) {
+        for (Map.Entry<SelectChoice, String> entry : choiceToText.entrySet()) {
+            when(prompt.getSelectChoiceText(entry.getKey())).thenReturn(entry.getValue());
+        }
 
         return this;
     }

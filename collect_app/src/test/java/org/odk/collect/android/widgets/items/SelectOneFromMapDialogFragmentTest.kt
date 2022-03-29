@@ -42,7 +42,7 @@ class SelectOneFromMapDialogFragmentTest {
     private val selectChoices = listOf(
         SelectChoice(
             null,
-            "A",
+            null,
             "a",
             false,
             TreeElement("").also { item ->
@@ -55,7 +55,7 @@ class SelectOneFromMapDialogFragmentTest {
         ),
         SelectChoice(
             null,
-            "B",
+            null,
             "b",
             false,
             TreeElement("").also { item ->
@@ -72,6 +72,12 @@ class SelectOneFromMapDialogFragmentTest {
         .withLongText("Which is your favourite place?")
         .withSelectChoices(
             selectChoices
+        )
+        .withSelectChoiceText(
+            mapOf(
+                selectChoices[0] to "A",
+                selectChoices[1] to "B"
+            )
         )
         .build()
 
@@ -144,7 +150,7 @@ class SelectOneFromMapDialogFragmentTest {
                             selectChoices[0].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
-                            selectChoices[0].labelInnerText,
+                            "A",
                             MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
                             ""
                         ),
@@ -154,7 +160,7 @@ class SelectOneFromMapDialogFragmentTest {
                             selectChoices[1].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
-                            selectChoices[1].labelInnerText,
+                            "B",
                             MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
                             ""
                         )

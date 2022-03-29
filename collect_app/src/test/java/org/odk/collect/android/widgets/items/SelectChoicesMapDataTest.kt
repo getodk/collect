@@ -18,24 +18,32 @@ class SelectChoicesMapDataTest {
 
     @Test
     fun `choices without geometry are not included in mappable items`() {
+        val choices = listOf(
+            SelectChoice(
+                null,
+                "A",
+                "a",
+                false,
+                TreeElement("").also { item ->
+                    item.addChild(
+                        TreeElement("geometry").also {
+                            it.value = StringData("12.0 -1.0 305 0")
+                        }
+                    )
+                }
+            ),
+            SelectChoice(null, "B", "b", false, TreeElement(""))
+        )
+
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
             .withSelectChoices(
-                listOf(
-                    SelectChoice(
-                        null,
-                        "A",
-                        "a",
-                        false,
-                        TreeElement("").also { item ->
-                            item.addChild(
-                                TreeElement("geometry").also {
-                                    it.value = StringData("12.0 -1.0 305 0")
-                                }
-                            )
-                        }
-                    ),
-                    SelectChoice(null, "B", "b", false, TreeElement(""))
+                choices
+            )
+            .withSelectChoiceText(
+                mapOf(
+                    choices[0] to "A",
+                    choices[1] to "B"
                 )
             )
             .build()

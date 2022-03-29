@@ -70,6 +70,12 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
 
     private fun updateAnswer(answer: SelectOneData?) {
         this.answer = answer
-        binding.answer.text = (answer?.value as? Selection)?.choice?.labelInnerText
+
+        binding.answer.text = if (answer != null) {
+            val choice = (answer.value as Selection).choice
+            formEntryPrompt.getSelectChoiceText(choice)
+        } else {
+            ""
+        }
     }
 }

@@ -6,9 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
 import org.hamcrest.Matchers.nullValue
-import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
-import org.javarosa.core.model.data.helper.Selection
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,6 +21,8 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
+import org.odk.collect.android.widgets.support.FormFixtures.copy
+import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -76,7 +76,7 @@ class SelectOneFromMapWidgetTest {
     }
 
     @Test
-    fun `clicking button when location permissions denined does nothing`() {
+    fun `clicking button when location permissions denied does nothing`() {
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
 
         permissionsProvider.setPermissionGranted(false)
@@ -92,11 +92,14 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `shows answer`() {
         val choices = listOf(
-            SelectChoice(null, "A", "a", false),
-            SelectChoice(null, "B", "b", false),
+            selectChoice().copy("a"),
+            selectChoice().copy("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
+            .withSelectChoiceText(
+                mapOf(choices[0] to "A", choices[1] to "B")
+            )
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
@@ -106,14 +109,16 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `prompt answer is returned from getAnswer`() {
-        val answer = SelectOneData(Selection(101))
+        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val answer = SelectOneData(selectChoice.selection())
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(answer)))
         assertThat(widget.answer, equalTo(answer))
     }
 
     @Test
     fun `clearAnswer removes answer`() {
-        val answer = SelectOneData(Selection(101))
+        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val answer = SelectOneData(selectChoice.selection())
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(answer)))
         widget.clearAnswer()
         assertThat(widget.answer, equalTo(null))
@@ -122,11 +127,14 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `clearAnswer updates shown answer`() {
         val choices = listOf(
-            SelectChoice(null, "A", "a", false),
-            SelectChoice(null, "B", "b", false),
+            selectChoice().copy("a"),
+            selectChoice().copy("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
+            .withSelectChoiceText(
+                mapOf(choices[0] to "A", choices[1] to "B")
+            )
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
@@ -140,7 +148,8 @@ class SelectOneFromMapWidgetTest {
     fun `setData sets answer`() {
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
 
-        val answer = SelectOneData(Selection(101))
+        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val answer = SelectOneData(selectChoice.selection())
         widget.setData(answer)
         assertThat(widget.answer, equalTo(answer))
     }
@@ -148,11 +157,14 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `setData updates shown answer`() {
         val choices = listOf(
-            SelectChoice(null, "A", "a", false),
-            SelectChoice(null, "B", "b", false),
+            selectChoice().copy("a"),
+            selectChoice().copy("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
+            .withSelectChoiceText(
+                mapOf(choices[0] to "A", choices[1] to "B")
+            )
             .build()
         val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
 

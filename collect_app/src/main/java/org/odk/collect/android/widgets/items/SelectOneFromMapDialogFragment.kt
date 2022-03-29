@@ -110,7 +110,7 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                     longitude,
                     R.drawable.ic_map_marker_24dp,
                     R.drawable.ic_map_marker_48dp,
-                    selectChoice.labelInnerText,
+                    prompt.getSelectChoiceText(selectChoice),
                     MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
                     ""
                 )
