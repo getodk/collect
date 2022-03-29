@@ -62,14 +62,14 @@ class FormListViewModel(
 
     init {
         viewModelScope.launch {
+            _showProgressBar.value = true
             loadFromDatabase()
             syncWithStorage()
+            _showProgressBar.value = false
         }
     }
 
     private fun loadFromDatabase() {
-        _showProgressBar.value = true
-
         _forms.value = formsRepository
             .all
             .map { form ->
@@ -85,19 +85,13 @@ class FormListViewModel(
                 )
             }
             .toList()
-
-        _showProgressBar.value = false
     }
 
     private fun syncWithStorage() {
         changeLockProvider.getFormLock(projectId).withLock {
-            _showProgressBar.value = true
-
             val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
             loadFromDatabase()
             _syncResult.value = Consumable(result)
-
-            _showProgressBar.value = false
         }
     }
 
