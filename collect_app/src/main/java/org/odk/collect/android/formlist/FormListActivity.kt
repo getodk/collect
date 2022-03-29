@@ -1,6 +1,7 @@
 package org.odk.collect.android.formlist
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.activities.FormMapActivity
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
@@ -117,10 +117,7 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
         return menuDelegate.onOptionsItemSelected(item)
     }
 
-    override fun onFormClick(id: Long) {
-        // get uri to form
-        val formUri = FormsContract.getUri(viewModel.projectId, id)
-
+    override fun onFormClick(formUri: Uri) {
         if (Intent.ACTION_PICK == intent.action) {
             // caller is waiting on a picked form
             setResult(RESULT_OK, Intent().setData(formUri))

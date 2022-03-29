@@ -12,6 +12,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -38,7 +39,7 @@ class FormListViewModel(
     private val generalSettings: Settings,
     private val analytics: Analytics,
     private val changeLockProvider: ChangeLockProvider,
-    val projectId: String
+    private val projectId: String
 ) : ViewModel() {
 
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
@@ -80,7 +81,8 @@ class FormListViewModel(
                         formVersion = form.version ?: "",
                         geometryPath = form.geometryXpath ?: "",
                         dateOfCreation = form.date,
-                        dateOfLastUsage = 0
+                        dateOfLastUsage = 0,
+                        contentUri = FormsContract.getUri(projectId, form.dbId)
                     )
                 }
                 .toList()

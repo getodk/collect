@@ -1,6 +1,7 @@
 package org.odk.collect.android.formlist
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +45,7 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
 
                 root.setOnClickListener {
                     if (MultiClickGuard.allowClick(javaClass.name)) {
-                        listener.onFormClick(item.databaseId)
+                        listener.onFormClick(item.contentUri)
                     }
                 }
 
@@ -96,7 +97,7 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
 }
 
 interface OnFormItemClickListener {
-    fun onFormClick(id: Long)
+    fun onFormClick(formUri: Uri)
 
     fun onMapButtonClick(id: Long)
 }

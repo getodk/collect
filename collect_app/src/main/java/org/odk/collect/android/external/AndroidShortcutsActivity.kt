@@ -26,7 +26,6 @@ import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.formlist.FormListItem
 import org.odk.collect.android.formlist.FormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.settings.SettingsProvider
 import javax.inject.Inject
 
@@ -39,9 +38,6 @@ class AndroidShortcutsActivity : AppCompatActivity() {
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
-
-    @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
 
     private val viewModel: FormListViewModel by viewModels { viewModelFactory }
 
@@ -78,10 +74,7 @@ class AndroidShortcutsActivity : AppCompatActivity() {
 
     private fun getShortcutIntent(forms: List<FormListItem>, item: Int): Intent {
         val shortcutIntent = Intent(Intent.ACTION_EDIT).apply {
-            data = FormsContract.getUri(
-                currentProjectProvider.getCurrentProject().uuid,
-                forms[item].databaseId
-            )
+            data = forms[item].contentUri
         }
 
         return Intent().apply {
