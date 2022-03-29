@@ -120,7 +120,7 @@ If you have finished testing a pull request, please use a template from [Testing
 You can customize the heap size that is used for compiling and running tests. Increasing these will most likely speed up compilation and tests on your local machine. The default values are specified in the project's `gradle.properties` and this can be overriden by your user level `gradle.properties` (found in your `GRADLE_USER_HOME` directory). An example `gradle.properties` that would give you a heap size of 4GB (rather than the default 1GB) would look like:
 
 ```
-org.gradle.jvmargs=-Xmx4096
+org.gradle.jvmargs=-Xmx4096m
 ```
 
 ## Testing a form without a server
