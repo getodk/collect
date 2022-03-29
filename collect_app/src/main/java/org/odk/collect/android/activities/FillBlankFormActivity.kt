@@ -39,6 +39,7 @@ import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.tasks.FormSyncTask
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.views.ObviousProgressBar
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.dismissDialog
@@ -73,6 +74,9 @@ class FillBlankFormActivity :
 
     @Inject
     lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
+
+    @Inject
+    lateinit var changeLockProvider: ChangeLockProvider
 
     lateinit var menuDelegate: BlankFormListMenuDelegate
 
@@ -143,7 +147,7 @@ class FillBlankFormActivity :
         formSyncTask = lastCustomNonConfigurationInstance as FormSyncTask?
         if (formSyncTask == null) {
             Timber.i("Starting new disk sync task")
-            formSyncTask = FormSyncTask().also {
+            formSyncTask = FormSyncTask(changeLockProvider, currentProjectProvider.getCurrentProject().uuid).also {
                 it.setDiskSyncListener(this)
                 it.execute()
             }

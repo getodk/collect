@@ -20,6 +20,7 @@ import org.odk.collect.shared.strings.Validator;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,6 +53,7 @@ public class ServerFormDownloader implements FormDownloader {
     @Override
     public void downloadForm(ServerFormDetails form, @Nullable ProgressReporter progressReporter, @Nullable Supplier<Boolean> isCancelled) throws FormDownloadException {
         Form formOnDevice;
+        List<Form> preExistingFormsWithSameIdAndVersion = new ArrayList<>();
         try {
             formOnDevice = formsRepository.getOneByMd5Hash(validateHash(form.getHash()));
         } catch (IllegalArgumentException e) {
@@ -63,8 +65,8 @@ public class ServerFormDownloader implements FormDownloader {
                 formsRepository.restore(formOnDevice.getDbId());
             }
         } else {
-            List<Form> allSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
-            if (!allSameFormIdVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
+            preExistingFormsWithSameIdAndVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
+            if (!preExistingFormsWithSameIdAndVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
                 analytics.logEventWithParam(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, "form", AnalyticsUtils.getFormHash(form.getFormId(), form.getFormName()));
             }
         }
@@ -80,6 +82,9 @@ public class ServerFormDownloader implements FormDownloader {
         } finally {
             try {
                 deleteDirectory(tempDir);
+                for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
+                    formsRepository.delete(formToDelete.getDbId());
+                }
             } catch (IOException ignored) {
                 // ignored
             }
