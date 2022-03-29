@@ -32,7 +32,7 @@ import org.robolectric.Robolectric
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapWidgetTest {
 
-    private val activity = Robolectric.setupActivity(WidgetTestActivity::class.java)
+    private val activityController = Robolectric.buildActivity(WidgetTestActivity::class.java)
     private val formEntryViewModel = mock<FormEntryViewModel>()
     private val permissionsProvider = FakePermissionsProvider().also {
         it.setPermissionGranted(true)
@@ -58,13 +58,14 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `clicking button opens SelectOneFromMapDialogFragment`() {
         val prompt = promptWithAnswer(null)
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        val widget =
+            SelectOneFromMapWidget(activityController.setup().get(), QuestionDetails(prompt))
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
 
         val fragment = getFragmentByClass(
-            activity.supportFragmentManager,
+            activityController.get().supportFragmentManager,
             SelectOneFromMapDialogFragment::class.java
         )
         assertThat(fragment, notNullValue())
@@ -77,13 +78,16 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `clicking button when location permissions denied does nothing`() {
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(null))
+        )
 
         permissionsProvider.setPermissionGranted(false)
         widget.binding.button.performClick()
 
         val fragment = getFragmentByClass(
-            activity.supportFragmentManager,
+            activityController.get().supportFragmentManager,
             SelectOneFromMapDialogFragment::class.java
         )
         assertThat(fragment, nullValue())
@@ -103,7 +107,7 @@ class SelectOneFromMapWidgetTest {
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        val widget = SelectOneFromMapWidget(activityController.get(), QuestionDetails(prompt))
         assertThat(widget.binding.answer.text, equalTo("A"))
     }
 
@@ -111,7 +115,11 @@ class SelectOneFromMapWidgetTest {
     fun `prompt answer is returned from getAnswer`() {
         val selectChoice = selectChoice().copy(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(answer)))
+
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(answer))
+        )
         assertThat(widget.answer, equalTo(answer))
     }
 
@@ -119,7 +127,11 @@ class SelectOneFromMapWidgetTest {
     fun `clearAnswer removes answer`() {
         val selectChoice = selectChoice().copy(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(answer)))
+
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(answer))
+        )
         widget.clearAnswer()
         assertThat(widget.answer, equalTo(null))
     }
@@ -138,7 +150,7 @@ class SelectOneFromMapWidgetTest {
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        val widget = SelectOneFromMapWidget(activityController.get(), QuestionDetails(prompt))
 
         widget.clearAnswer()
         assertThat(widget.binding.answer.text, equalTo(""))
@@ -146,7 +158,10 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `setData sets answer`() {
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(promptWithAnswer(null)))
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(null))
+        )
 
         val selectChoice = selectChoice().copy(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
@@ -166,7 +181,7 @@ class SelectOneFromMapWidgetTest {
                 mapOf(choices[0] to "A", choices[1] to "B")
             )
             .build()
-        val widget = SelectOneFromMapWidget(activity, QuestionDetails(prompt))
+        val widget = SelectOneFromMapWidget(activityController.get(), QuestionDetails(prompt))
 
         widget.setData(SelectOneData(choices[1].selection()))
         assertThat(widget.binding.answer.text, equalTo("B"))
