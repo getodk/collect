@@ -1,5 +1,9 @@
 package org.odk.collect.android.support;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static java.util.Arrays.asList;
+
 import androidx.core.util.Pair;
 
 import org.javarosa.core.model.FormIndex;
@@ -15,20 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class MockFormEntryPromptBuilder {
 
     private final FormEntryPrompt prompt;
 
     public MockFormEntryPromptBuilder() {
-        this(mock(FormEntryPrompt.class));
-    }
+        this.prompt = mock(FormEntryPrompt.class);
 
-    public MockFormEntryPromptBuilder(FormEntryPrompt prompt) {
-        this.prompt = prompt;
         when(prompt.getIndex()).thenReturn(mock(FormIndex.class));
         when(prompt.getIndex().toString()).thenReturn("0, 0");
         when(prompt.getFormElement()).thenReturn(mock(IFormElement.class));
@@ -36,6 +33,10 @@ public class MockFormEntryPromptBuilder {
 
         // Make sure we have a non-null question
         withQuestion(mock(QuestionDef.class));
+    }
+
+    public MockFormEntryPromptBuilder(FormEntryPrompt prompt) {
+        this.prompt = prompt;
     }
 
     public MockFormEntryPromptBuilder withLongText(String text) {
