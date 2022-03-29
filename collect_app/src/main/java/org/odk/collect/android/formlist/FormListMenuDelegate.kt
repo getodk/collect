@@ -3,12 +3,12 @@ package org.odk.collect.android.formlist
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
 import org.odk.collect.android.R
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.utilities.MenuDelegate
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class FormListMenuDelegate(
@@ -73,19 +73,11 @@ class FormListMenuDelegate(
                 if (networkStateProvider.isDeviceOnline) {
                     viewModel.syncWithServer().observe(activity) { success: Boolean ->
                         if (success) {
-                            Toast.makeText(
-                                activity,
-                                activity.getString(R.string.form_update_succeeded),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            ToastUtils.showShortToast(activity, R.string.form_update_succeeded)
                         }
                     }
                 } else {
-                    Toast.makeText(
-                        activity,
-                        R.string.no_connection,
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    ToastUtils.showShortToast(activity, R.string.no_connection)
                 }
                 true
             }
