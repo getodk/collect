@@ -90,7 +90,7 @@ class FormListMenuDelegate(
                 true
             }
             R.id.menu_sort -> {
-                SortingDialog(
+                ListSortingDialog(
                     activity,
                     intArrayOf(
                         R.string.sort_by_name_asc,
