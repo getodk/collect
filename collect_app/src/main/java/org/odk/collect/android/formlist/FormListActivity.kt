@@ -146,16 +146,13 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
             object : PermissionListener {
                 override fun granted() {
                     startActivity(
-                        Intent(
-                            this@FormListActivity,
-                            FormMapActivity::class.java
-                        ).also {
+                        Intent(this@FormListActivity, FormMapActivity::class.java).also {
                             it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
                         }
                     )
                 }
 
-                override fun denied() {}
+                override fun denied() = Unit
             }
         )
     }
