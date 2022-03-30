@@ -11,10 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
-import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
-import org.javarosa.core.model.data.StringData
-import org.javarosa.core.model.instance.TreeElement
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,8 +30,11 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
@@ -44,31 +44,13 @@ import org.odk.collect.maps.MapFragmentFactory
 class SelectOneFromMapDialogFragmentTest {
 
     private val selectChoices = listOf(
-        SelectChoice(
-            null,
-            "a",
-            false,
-            TreeElement("").also { item ->
-                item.addChild(
-                    TreeElement("geometry").also {
-                        it.value = StringData("12.0 -1.0 305 0")
-                    }
-                )
-            },
-            ""
+        selectChoice(
+            value = "a",
+            item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
         ),
-        SelectChoice(
-            null,
-            "b",
-            false,
-            TreeElement("").also { item ->
-                item.addChild(
-                    TreeElement("geometry").also {
-                        it.value = StringData("13.0 -1.0 305 0")
-                    }
-                )
-            },
-            ""
+        selectChoice(
+            value = "b",
+            item = treeElement(children = listOf(treeElement("geometry", "13.0 -1.0 305 0")))
         )
     )
 
@@ -158,7 +140,7 @@ class SelectOneFromMapDialogFragmentTest {
                             R.drawable.ic_map_marker_48dp,
                             "A",
                             emptyList(),
-                            MappableSelectItem.IconifiedText(
+                            IconifiedText(
                                 R.drawable.ic_save, application.getString(R.string.select_item)
                             )
                         ),
@@ -170,8 +152,9 @@ class SelectOneFromMapDialogFragmentTest {
                             R.drawable.ic_map_marker_48dp,
                             "B",
                             emptyList(),
-                            MappableSelectItem.IconifiedText(
-                                R.drawable.ic_save, application.getString(R.string.select_item)
+                            IconifiedText(
+                                R.drawable.ic_save,
+                                application.getString(R.string.select_item)
                             )
                         )
                     )

@@ -24,7 +24,6 @@ import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.widgets.support.FormFixtures.copy
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.permissions.PermissionsChecker
@@ -125,8 +124,8 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `shows answer`() {
         val choices = listOf(
-            selectChoice().copy("a"),
-            selectChoice().copy("b")
+            selectChoice("a"),
+            selectChoice("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
@@ -156,7 +155,7 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `prompt answer is returned from getAnswer`() {
-        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val selectChoice = selectChoice(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
 
         val widget = SelectOneFromMapWidget(
@@ -168,7 +167,7 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `clearAnswer removes answer`() {
-        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val selectChoice = selectChoice(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
 
         val widget = SelectOneFromMapWidget(
@@ -182,8 +181,8 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `clearAnswer updates shown answer`() {
         val choices = listOf(
-            selectChoice().copy("a"),
-            selectChoice().copy("b")
+            selectChoice("a"),
+            selectChoice("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
@@ -206,7 +205,7 @@ class SelectOneFromMapWidgetTest {
             QuestionDetails(promptWithAnswer(null))
         )
 
-        val selectChoice = selectChoice().copy(value = "a", index = 101)
+        val selectChoice = selectChoice(value = "a", index = 101)
         val answer = SelectOneData(selectChoice.selection())
         widget.setData(answer)
         assertThat(widget.answer, equalTo(answer))
@@ -215,8 +214,8 @@ class SelectOneFromMapWidgetTest {
     @Test
     fun `setData updates shown answer`() {
         val choices = listOf(
-            selectChoice().copy("a"),
-            selectChoice().copy("b")
+            selectChoice("a"),
+            selectChoice("b")
         )
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
