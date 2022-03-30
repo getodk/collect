@@ -64,6 +64,25 @@ class SelectionSummarySheetTest {
     }
 
     @Test
+    fun `properties without icons have hidden icon view`() {
+        val selectionSummarySheet = SelectionSummarySheet(application)
+        selectionSummarySheet.setItem(
+            Fixtures.actionMappableSelectItem().copy(
+                properties = listOf(
+                    MappableSelectItem.IconifiedText(
+                        null,
+                        "Emotion"
+                    )
+                )
+            )
+        )
+
+        val property = PropertyBinding.bind(selectionSummarySheet.binding.properties.getChildAt(0))
+        assertThat(property.text.text, equalTo("Emotion"))
+        assertThat(property.icon.visibility, equalTo(View.GONE))
+    }
+
+    @Test
     fun `properties reset between items`() {
         val selectionSummarySheet = SelectionSummarySheet(application)
         selectionSummarySheet.setItem(

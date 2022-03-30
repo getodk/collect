@@ -40,8 +40,13 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
             )
 
             property.text.text = it.text
-            property.icon.setImageDrawable(ContextCompat.getDrawable(context, it.icon))
-            property.icon.background = null
+
+            if (it.icon != null) {
+                property.icon.setImageDrawable(ContextCompat.getDrawable(context, it.icon))
+                property.icon.background = null
+            } else {
+                property.icon.visibility = View.GONE
+            }
 
             binding.properties.addView(property.root)
         }
@@ -49,7 +54,11 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         when (item) {
             is MappableSelectItem.WithAction -> {
                 binding.action.text = item.action.text
-                binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
+
+                if (item.action.icon != null) {
+                    binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
+                }
+
                 binding.action.visibility = View.VISIBLE
                 binding.info.visibility = View.GONE
             }

@@ -408,5 +408,5 @@ sealed interface MappableSelectItem {
         val action: IconifiedText
     ) : MappableSelectItem
 
-    data class IconifiedText(val icon: Int, val text: String)
+    data class IconifiedText(val icon: Int?, val text: String)
 }
