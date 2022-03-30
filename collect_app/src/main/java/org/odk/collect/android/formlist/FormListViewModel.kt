@@ -38,6 +38,7 @@ class FormListViewModel(
     private val generalSettings: Settings,
     private val analytics: Analytics,
     private val changeLockProvider: ChangeLockProvider,
+    private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
     private val projectId: String
 ) : ViewModel() {
 
@@ -96,10 +97,12 @@ class FormListViewModel(
     }
 
     private fun syncWithStorage() {
-        changeLockProvider.getFormLock(projectId).withLock {
-            val result = FormsDirDiskFormsSynchronizer().synchronizeAndReturnError()
-            loadFromDatabase()
-            _syncResult.value = Consumable(result)
+        changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
+            if (acquiredLock) {
+                val result = formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
+                loadFromDatabase()
+                _syncResult.value = Consumable(result)
+            }
         }
     }
 
@@ -172,6 +175,7 @@ class FormListViewModel(
         private val generalSettings: Settings,
         private val analytics: Analytics,
         private val changeLockProvider: ChangeLockProvider,
+        private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
         private val projectId: String
     ) : ViewModelProvider.Factory {
 
@@ -185,6 +189,7 @@ class FormListViewModel(
                 generalSettings,
                 analytics,
                 changeLockProvider,
+                formsDirDiskFormsSynchronizer,
                 projectId
             ) as T
         }
