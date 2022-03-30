@@ -9,9 +9,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
@@ -40,6 +37,10 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     private val viewModel: FormListViewModel by viewModels { viewModelFactory }
 
+    private val adapter: FormListAdapter = FormListAdapter().apply {
+        listener = this@FormListActivity
+    }
+
     private lateinit var menuDelegate: FormListMenuDelegate
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,55 +52,9 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         menuDelegate = FormListMenuDelegate(this, viewModel, networkStateProvider)
 
-        val formListAdapter = FormListAdapter().apply {
-            listener = this@FormListActivity
-        }
+        findViewById<RecyclerView>(R.id.formList).adapter = adapter
 
-        findViewById<RecyclerView>(R.id.formList).apply {
-            adapter = formListAdapter
-            layoutManager = LinearLayoutManager(context)
-            val itemDecoration = DividerItemDecoration(this@FormListActivity, DividerItemDecoration.VERTICAL)
-            itemDecoration.setDrawable(ContextCompat.getDrawable(this@FormListActivity, R.drawable.list_item_divider)!!)
-            addItemDecoration(itemDecoration)
-        }
-
-        viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
-            findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (shouldShowProgressBar) View.VISIBLE
-                else View.GONE
-        }
-
-        viewModel.syncResult.observe(this) { result ->
-            if (!result.isConsumed()) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
-            }
-        }
-
-        viewModel.formsToDisplay.observe(this) { forms ->
-            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
-            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
-            formListAdapter.setData(forms)
-        }
-
-        viewModel.isSyncingWithServer().observe(this) { syncing: Boolean ->
-            findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (syncing) View.VISIBLE
-                else View.GONE
-        }
-
-        viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->
-            if (authenticationRequired) {
-                DialogFragmentUtils.showIfNotShowing(
-                    ServerAuthDialogFragment::class.java,
-                    supportFragmentManager
-                )
-            } else {
-                DialogFragmentUtils.dismissDialog(
-                    ServerAuthDialogFragment::class.java,
-                    supportFragmentManager
-                )
-            }
-        }
+        initObservers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -151,5 +106,45 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
                 override fun denied() = Unit
             }
         )
+    }
+
+    private fun initObservers() {
+        viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
+            findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (shouldShowProgressBar) View.VISIBLE
+                else View.GONE
+        }
+
+        viewModel.syncResult.observe(this) { result ->
+            if (!result.isConsumed()) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
+            }
+        }
+
+        viewModel.formsToDisplay.observe(this) { forms ->
+            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
+            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
+            adapter.setData(forms)
+        }
+
+        viewModel.isSyncingWithServer().observe(this) { syncing: Boolean ->
+            findViewById<ProgressBar>(R.id.progressBar).visibility =
+                if (syncing) View.VISIBLE
+                else View.GONE
+        }
+
+        viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->
+            if (authenticationRequired) {
+                DialogFragmentUtils.showIfNotShowing(
+                    ServerAuthDialogFragment::class.java,
+                    supportFragmentManager
+                )
+            } else {
+                DialogFragmentUtils.dismissDialog(
+                    ServerAuthDialogFragment::class.java,
+                    supportFragmentManager
+                )
+            }
+        }
     }
 }
