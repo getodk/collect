@@ -70,18 +70,10 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
             }
         }
 
-        viewModel.forms.observe(this) { forms ->
+        viewModel.formsToDisplay.observe(this) { forms ->
             findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
             findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
             formListAdapter.setData(forms)
-        }
-
-        viewModel.sortingOrder.observe(this) { sortingOrder ->
-            formListAdapter.sort(sortingOrder)
-        }
-
-        viewModel.filterText.observe(this) { filterText ->
-            formListAdapter.filter(filterText)
         }
 
         viewModel.isSyncingWithServer().observe(this) { syncing: Boolean ->

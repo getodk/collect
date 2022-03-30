@@ -45,7 +45,7 @@ class AndroidShortcutsActivity : AppCompatActivity() {
         super.onCreate(bundle)
         DaggerUtils.getComponent(this).inject(this)
 
-        viewModel.forms.observe(this) { forms -> showFormListDialog(forms) }
+        viewModel.formsToDisplay.observe(this) { forms -> showFormListDialog(forms) }
     }
 
     private fun showFormListDialog(forms: List<FormListItem>) {

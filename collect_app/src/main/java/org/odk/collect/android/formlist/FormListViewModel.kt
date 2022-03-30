@@ -4,7 +4,6 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -42,23 +41,30 @@ class FormListViewModel(
     private val projectId: String
 ) : ViewModel() {
 
+    private val _allForms: MutableNonNullLiveData<List<FormListItem>> = MutableNonNullLiveData(emptyList())
+    private val _formsToDisplay: MutableLiveData<List<FormListItem>> = MutableLiveData()
+    val formsToDisplay: LiveData<List<FormListItem>> = _formsToDisplay
+
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
 
-    private val _forms: MutableLiveData<List<FormListItem>> = MutableLiveData()
-    val forms: LiveData<List<FormListItem>> = _forms
-
-    val filterText = MutableNonNullLiveData("")
-
-    private val sortingOrderObserver = Observer<Int> { newSortingOrder ->
-        generalSettings.save("formChooserListSortingOrder", newSortingOrder)
-    }
-    val sortingOrder = MutableNonNullLiveData(generalSettings.getInt("formChooserListSortingOrder")).apply {
-        observeForever(sortingOrderObserver)
-    }
-
     private val _showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
     val showProgressBar: LiveData<Boolean> = _showProgressBar
+
+    var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
+        get() { return generalSettings.getInt("formChooserListSortingOrder") }
+
+        set(value) {
+            field = value
+            generalSettings.save("formChooserListSortingOrder", value)
+            sortAndFilter()
+        }
+
+    var filterText: String = ""
+        set(value) {
+            field = value
+            sortAndFilter()
+        }
 
     init {
         viewModelScope.launch {
@@ -70,7 +76,7 @@ class FormListViewModel(
     }
 
     private fun loadFromDatabase() {
-        _forms.value = formsRepository
+        _allForms.value = formsRepository
             .all
             .map { form ->
                 FormListItem(
@@ -85,6 +91,8 @@ class FormListViewModel(
                 )
             }
             .toList()
+
+        sortAndFilter()
     }
 
     private fun syncWithStorage() {
@@ -143,9 +151,16 @@ class FormListViewModel(
         analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC, "Manual", urlHash)
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        sortingOrder.removeObserver(sortingOrderObserver)
+    private fun sortAndFilter() {
+        _formsToDisplay.value = when (sortingOrder) {
+            0 -> _allForms.value.sortedBy { it.formName }
+            1 -> _allForms.value.sortedByDescending { it.formName }
+            2 -> _allForms.value.sortedBy { it.dateOfCreation }
+            3 -> _allForms.value.sortedByDescending { it.dateOfCreation }
+            else -> { _allForms.value }
+        }.filter {
+            filterText.isBlank() || it.formName.contains(filterText, true)
+        }
     }
 
     class Factory(

@@ -44,11 +44,12 @@ class FormListMenuDelegate(
                     override fun onQueryTextSubmit(query: String) = false
 
                     override fun onQueryTextChange(newText: String): Boolean {
-                        viewModel.filterText.value = newText
+                        viewModel.filterText = newText
                         return false
                     }
                 })
             }
+            viewModel.filterText = ""
         }
     }
 
@@ -90,9 +91,9 @@ class FormListMenuDelegate(
                         R.string.sort_by_date_asc,
                         R.string.sort_by_date_desc
                     ),
-                    viewModel.sortingOrder.value
+                    viewModel.sortingOrder
                 ) { newSortingOrder ->
-                    viewModel.sortingOrder.value = newSortingOrder
+                    viewModel.sortingOrder = newSortingOrder
                 }.show()
 
                 true

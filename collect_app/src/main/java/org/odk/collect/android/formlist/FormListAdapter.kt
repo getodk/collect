@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
-    private var fullFormItemsList = emptyList<FormListItem>()
-    private var filteredFormItemsList = emptyList<FormListItem>()
+    private var formItems = emptyList<FormListItem>()
     lateinit var listener: OnFormItemClickListener
 
     private lateinit var binding: FormListItemBinding
@@ -26,10 +25,10 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(filteredFormItemsList[position])
+        holder.bind(formItems[position])
     }
 
-    override fun getItemCount() = filteredFormItemsList.size
+    override fun getItemCount() = formItems.size
 
     inner class ViewHolder(private val binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FormListItem) {
@@ -67,31 +66,8 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
         }
     }
 
-    fun filter(filterText: String) {
-        filteredFormItemsList = if (filterText.isEmpty())
-            fullFormItemsList.toList()
-        else {
-            fullFormItemsList.filter {
-                it.formName.contains(filterText, true)
-            }
-        }
-        notifyDataSetChanged()
-    }
-
-    fun sort(sortingOrder: Int) {
-        filteredFormItemsList = when (sortingOrder) {
-            0 -> filteredFormItemsList.sortedBy { it.formName }
-            1 -> filteredFormItemsList.sortedByDescending { it.formName }
-            2 -> filteredFormItemsList.sortedBy { it.dateOfCreation }
-            3 -> filteredFormItemsList.sortedByDescending { it.dateOfCreation }
-            else -> { filteredFormItemsList }
-        }
-        notifyDataSetChanged()
-    }
-
     fun setData(formItems: List<FormListItem>) {
-        this.fullFormItemsList = formItems.toList()
-        this.filteredFormItemsList = formItems.toList()
+        this.formItems = formItems.toList()
         notifyDataSetChanged()
     }
 }

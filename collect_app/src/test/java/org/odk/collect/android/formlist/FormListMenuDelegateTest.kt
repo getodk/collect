@@ -22,7 +22,6 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.robolectric.Shadows
 import org.robolectric.fakes.RoboMenuItem
 import org.robolectric.shadows.ShadowDialog
@@ -138,8 +137,6 @@ class FormListMenuDelegateTest {
 
     @Test
     fun `clicking sort displays sorting dialog`() {
-        whenever(viewModel.sortingOrder).thenReturn(MutableNonNullLiveData(0))
-
         val menuDelegate = createMenuDelegate()
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_sort))
 
@@ -148,8 +145,6 @@ class FormListMenuDelegateTest {
 
     @Test
     fun `changing search text should set filterText in viewModel`() {
-        whenever(viewModel.filterText).thenReturn(MutableNonNullLiveData(""))
-
         val menu = createdMenu()
         val menuDelegate = createMenuDelegate()
 
@@ -159,7 +154,7 @@ class FormListMenuDelegateTest {
         val searchView = (menu.findItem(R.id.menu_filter).actionView as SearchView).findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text)
         searchView.setText("abc")
 
-        assertThat(viewModel.filterText.value, `is`("abc"))
+        verify(viewModel).filterText = "abc"
     }
 
     @Test
@@ -197,6 +192,18 @@ class FormListMenuDelegateTest {
         menu.findItem(R.id.menu_filter).collapseActionView()
 
         assertThat(menu.findItem(R.id.menu_refresh).isVisible, `is`(false))
+    }
+
+    @Test
+    fun `filterText should be cleared when menu is created`() {
+        whenever(viewModel.isMatchExactlyEnabled()).thenReturn(false)
+
+        val menu = createdMenu()
+        val menuDelegate = createMenuDelegate()
+
+        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
+
+        verify(viewModel).filterText = ""
     }
 
     private fun createMenuDelegate(): FormListMenuDelegate {
