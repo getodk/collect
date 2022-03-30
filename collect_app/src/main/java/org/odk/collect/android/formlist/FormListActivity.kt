@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
@@ -56,6 +58,9 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
         findViewById<RecyclerView>(R.id.formList).apply {
             adapter = formListAdapter
             layoutManager = LinearLayoutManager(context)
+            val itemDecoration = DividerItemDecoration(this@FormListActivity, DividerItemDecoration.VERTICAL)
+            itemDecoration.setDrawable(ContextCompat.getDrawable(this@FormListActivity, R.drawable.list_item_divider)!!)
+            addItemDecoration(itemDecoration)
         }
 
         viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
