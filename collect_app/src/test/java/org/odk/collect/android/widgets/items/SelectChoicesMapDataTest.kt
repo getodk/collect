@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
 
 @RunWith(AndroidJUnit4::class)
 class SelectChoicesMapDataTest {
@@ -34,15 +35,8 @@ class SelectChoicesMapDataTest {
 
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
-            .withSelectChoices(
-                choices
-            )
-            .withSelectChoiceText(
-                mapOf(
-                    choices[0] to "A",
-                    choices[1] to "B"
-                )
-            )
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
@@ -50,5 +44,33 @@ class SelectChoicesMapDataTest {
         assertThat(data.getItemCount().value, equalTo(2))
         assertThat(data.getMappableItems().value.size, equalTo(1))
         assertThat(data.getMappableItems().value[0].name, equalTo("A"))
+    }
+
+    @Test
+    fun `additional children are returned as properties`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "12.0 -1.0 305 0"),
+                        treeElement("property", "blah")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val resources = ApplicationProvider.getApplicationContext<Application>().resources
+        val data = SelectChoicesMapData(resources, prompt)
+
+        val properties = data.getMappableItems().value[0].properties
+        assertThat(properties.size, equalTo(1))
+        assertThat(properties[0], equalTo(IconifiedText(null, "property: blah")))
     }
 }

@@ -13,6 +13,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.SelectOneData
+import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
@@ -106,6 +107,12 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                 val latitude = geometry.split(" ")[0].toDouble()
                 val longitude = geometry.split(" ")[1].toDouble()
 
+                val properties = selectChoice.additionalChildren.filter {
+                    it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
+                }.map {
+                    MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
+                }
+
                 list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
@@ -113,7 +120,7 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                     R.drawable.ic_map_marker_24dp,
                     R.drawable.ic_map_marker_48dp,
                     prompt.getSelectChoiceText(selectChoice),
-                    emptyList(),
+                    properties,
                     MappableSelectItem.IconifiedText(
                         R.drawable.ic_save,
                         resources.getString(R.string.select_item)

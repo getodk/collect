@@ -11,7 +11,7 @@ object FormFixtures {
         index: Int = 0,
         item: TreeElement? = null
     ): SelectChoice {
-        return SelectChoice(null, value, false, item, "").also { it.index = index }
+        return SelectChoice(null, value, false, item, "label").also { it.index = index }
     }
 
     fun treeElement(

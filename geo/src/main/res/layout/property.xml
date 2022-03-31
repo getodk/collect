@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:showIn="@layout/selection_summary_sheet_layout">
+    android:minHeight="46dp"
+    android:paddingVertical="8dp">
 
     <ImageButton
         android:id="@+id/icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,12 +20,12 @@
         style="?textAppearanceBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/margin_small"
         android:textColor="?colorOnSurface"
-        app:layout_constraintBottom_toBottomOf="@id/icon"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="@id/icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="0dp"
         tools:text="Status" />
-    
+
 </androidx.constraintlayout.widget.ConstraintLayout>
