@@ -31,11 +31,11 @@ class InstanceSubmitter(
 ) {
 
     @Throws(SubmitException::class)
-    fun submitInstances(toUpload: List<Instance>): HashMap<Instance, FormUploadException?> {
+    fun submitInstances(toUpload: List<Instance>): Map<Instance, FormUploadException?> {
         if (toUpload.isEmpty()) {
             throw SubmitException(SubmitException.Type.NOTHING_TO_SUBMIT)
         }
-        val result = HashMap<Instance, FormUploadException?>()
+        val result = mutableMapOf<Instance, FormUploadException?>()
         val deviceId = PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
 
         val uploader: InstanceUploader = if (isGoogleSheetsProtocol()) {
