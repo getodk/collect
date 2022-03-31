@@ -33,9 +33,13 @@ open class DatabaseConnection(
             if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
                 /**
                  * Ideally we should close the database here as well but it was causing crashes in
-                 * our tests as DB connections seem to be getting used after being closed.
+                 * our tests as DB connections seem to be getting used after being closed. These
+                 * "removed" helpers will be closed in [closeAll] rather than when they are
+                 * replaced.
                  */
-                openHelpers.remove(databasePath)
+                openHelpers.remove(databasePath)?.let {
+                    toClose.add(it)
+                }
             }
 
             return openHelpers.getOrPut(databasePath) {
@@ -52,11 +56,15 @@ open class DatabaseConnection(
     companion object {
 
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()
+        private val toClose = mutableListOf<SQLiteOpenHelper>()
 
         @JvmStatic
         fun closeAll() {
             openHelpers.forEach { (_, openHelper) -> openHelper.close() }
             openHelpers.clear()
+
+            toClose.forEach(SQLiteOpenHelper::close)
+            toClose.clear()
         }
     }
 }
