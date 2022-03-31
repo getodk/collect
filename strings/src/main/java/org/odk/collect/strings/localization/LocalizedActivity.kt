@@ -27,7 +27,11 @@ open class LocalizedActivity : AppCompatActivity() {
             }
         }
 
-        val locale = (applicationContext as LocalizedApplication).locale
+        val locale = when (applicationContext) {
+            is LocalizedApplication -> (applicationContext as LocalizedApplication).locale
+            else -> if (Build.VERSION.SDK_INT >= 24) config.locales[0] else config.locale
+        }
+
         config.setLocale(locale)
         config.setLayoutDirection(locale)
         return config
