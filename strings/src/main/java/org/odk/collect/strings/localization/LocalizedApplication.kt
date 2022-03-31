@@ -2,6 +2,7 @@ package org.odk.collect.strings.localization
 
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Build
 import java.util.Locale
 
 interface LocalizedApplication {
@@ -10,22 +11,19 @@ interface LocalizedApplication {
 }
 
 fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any): String {
-    return when (applicationContext) {
-        is LocalizedApplication -> {
-            val localizedApplication = applicationContext as LocalizedApplication
+    val locale = when (applicationContext) {
+        is LocalizedApplication -> (applicationContext as LocalizedApplication).locale
 
-            val newConfig = Configuration(resources.configuration).apply {
-                setLocale(localizedApplication.locale)
-            }
-
-            val localizedContext = createConfigurationContext(newConfig)
-            localizedContext.resources.getString(stringId, *formatArgs)
-        }
-
-        else -> {
-            // Don't explode if the application doesn't implement LocalizedApplication. Useful
-            // when testing modules in isolation
-            getString(stringId, formatArgs)
-        }
+        // Don't explode if the application doesn't implement LocalizedApplication. Useful
+        // when testing modules in isolation
+        else -> if (Build.VERSION.SDK_INT >= 24) resources.configuration.locales[0] else resources.configuration.locale
     }
+
+    val newConfig = Configuration(resources.configuration).apply {
+        setLocale(locale)
+    }
+
+    return createConfigurationContext(newConfig)
+        .resources
+        .getString(stringId, *formatArgs)
 }
