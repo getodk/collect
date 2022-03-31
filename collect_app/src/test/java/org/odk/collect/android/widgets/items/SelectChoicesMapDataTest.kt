@@ -6,13 +6,12 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.javarosa.core.model.SelectChoice
-import org.javarosa.core.model.data.StringData
-import org.javarosa.core.model.instance.TreeElement
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 
 @RunWith(AndroidJUnit4::class)
 class SelectChoicesMapDataTest {
@@ -23,20 +22,14 @@ class SelectChoicesMapDataTest {
     @Test
     fun `choices without geometry are not included in mappable items`() {
         val choices = listOf(
-            SelectChoice(
-                null,
-                "a",
-                false,
-                TreeElement("").also { item ->
-                    item.addChild(
-                        TreeElement("geometry").also {
-                            it.value = StringData("12.0 -1.0 305 0")
-                        }
-                    )
-                },
-                ""
+            selectChoice(
+                value = "a",
+                item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
             ),
-            SelectChoice(null, "b", false, TreeElement(""), "")
+            selectChoice(
+                value = "b",
+                item = treeElement(children = emptyList())
+            )
         )
 
         val prompt = MockFormEntryPromptBuilder()
