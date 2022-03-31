@@ -490,18 +490,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     /**
-     * {@link MyLocationNewOverlay#disableMyLocation()} and
-     * {@link MyLocationNewOverlay#disableMyLocation()} will explode if there are
-     * called after {@link MyLocationNewOverlay#onDetach(MapView)} which can be called before
-     * {@link OsmDroidMapFragment#onPause()} (when contained within a DialogFragment that is being
-     * dismissed).
+     * <a href="https://github.com/osmdroid/osmdroid/issues/1783">
+     * https://github.com/osmdroid/osmdroid/issues/1783
+     * </a>
      **/
     private void safelyDisableOverlayLocationFollowing() {
-        try {
+        if (map.isAttachedToWindow()) {
             myLocationOverlay.disableFollowLocation();
             myLocationOverlay.disableMyLocation();
-        } catch (NullPointerException ignored) {
-            // Ignored
         }
     }
 
