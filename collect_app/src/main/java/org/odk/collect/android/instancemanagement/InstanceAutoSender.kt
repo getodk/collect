@@ -56,16 +56,22 @@ class InstanceAutoSender(
                     val result: Map<Instance, FormUploadException?> = instanceSubmitter.submitInstances(toUpload)
                     notifier.onSubmission(result, projectId)
                 } catch (e: SubmitException) {
-                    if (e.type == SubmitException.Type.GOOGLE_ACCOUNT_NOT_SET) {
-                        val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
-                            FormUploadException(context.getString(R.string.google_set_account))
+                    when (e.type) {
+                        SubmitException.Type.GOOGLE_ACCOUNT_NOT_SET -> {
+                            val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
+                                FormUploadException(context.getString(R.string.google_set_account))
+                            }
+                            notifier.onSubmission(result, projectId)
                         }
-                        notifier.onSubmission(result, projectId)
-                    } else if (e.type == SubmitException.Type.GOOGLE_ACCOUNT_NOT_PERMITTED) {
-                        val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
-                            FormUploadException(context.getString(R.string.odk_permissions_fail))
+                        SubmitException.Type.GOOGLE_ACCOUNT_NOT_PERMITTED -> {
+                            val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
+                                FormUploadException(context.getString(R.string.odk_permissions_fail))
+                            }
+                            notifier.onSubmission(result, projectId)
                         }
-                        notifier.onSubmission(result, projectId)
+                        SubmitException.Type.NOTHING_TO_SUBMIT -> {
+                            // do nothing
+                        }
                     }
                 }
                 instancesAppState.update()
