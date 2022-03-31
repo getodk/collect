@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
 import timber.log.Timber
+import java.io.File
 
 /**
  * Allows access to a database file. The actual underlying connection (an instance of
@@ -26,33 +27,44 @@ open class DatabaseConnection(
     val readableDatabase: SQLiteDatabase
         get() = dbHelper.readableDatabase
 
-    private val dbHelper: SQLiteOpenHelper by lazy {
-        getOpenHelper(path + name) {
-            DatabaseMigratorSQLiteOpenHelper(
-                AltDatabasePathContext(path, context),
-                name,
-                null,
-                databaseVersion,
-                migrator
-            )
+    private val dbHelper: SQLiteOpenHelper
+        get() {
+            val databasePath = path + File.separator + name
+            if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+                /**
+                 * Ideally we should close the database here as well but it was causing crashes in
+                 * our tests as DB connections seem to be getting used after being closed. These
+                 * "removed" helpers will be closed in [closeAll] rather than when they are
+                 * replaced.
+                 */
+                openHelpers.remove(databasePath)?.let {
+                    toClose.add(it)
+                }
+            }
+
+            return openHelpers.getOrPut(databasePath) {
+                DatabaseMigratorSQLiteOpenHelper(
+                    AltDatabasePathContext(path, context),
+                    name,
+                    null,
+                    databaseVersion,
+                    migrator
+                )
+            }
         }
-    }
 
     companion object {
 
         private val openHelpers = mutableMapOf<String, SQLiteOpenHelper>()
-
-        private fun getOpenHelper(
-            name: String,
-            helperFactory: () -> SQLiteOpenHelper
-        ): SQLiteOpenHelper {
-            return openHelpers.getOrPut(name, helperFactory)
-        }
+        private val toClose = mutableListOf<SQLiteOpenHelper>()
 
         @JvmStatic
         fun closeAll() {
             openHelpers.forEach { (_, openHelper) -> openHelper.close() }
             openHelpers.clear()
+
+            toClose.forEach(SQLiteOpenHelper::close)
+            toClose.clear()
         }
     }
 }
