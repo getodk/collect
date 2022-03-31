@@ -38,14 +38,12 @@ open class FormUploadException : Exception {
  * Thrown to indicate that the server an upload attempt was made to is requesting authentication.
  * This may lead to a re-try attempt if the upload was triggered manually by the user (as opposed to
  * auto-send).
+ *
+ * @param authRequestingServer The URI for the server that requested authentication. This URI may
+ * not match the server specified in the app settings or the blank form because there could have
+ * been a redirect. See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
  */
 class FormUploadAuthRequestedException(
     message: String,
-    /**
-     * The URI for the server that requested authentication. This URI may not match the server
-     * specified in the app settings or the blank form because there could have been a redirect.
-     *
-     * See also [org.odk.collect.android.tasks.InstanceUploaderTask.Outcome]
-     */
     val authRequestingServer: Uri
 ) : FormUploadException(message)
