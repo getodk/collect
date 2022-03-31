@@ -11,14 +11,19 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.TestSettingsProvider
+import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.ProjectDependencyProvider
+import org.odk.collect.android.formmanagement.ProjectDependencyProviderFactory
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -32,6 +37,8 @@ import org.odk.collect.testshared.RobolectricHelpers
 class AutoSendTaskSpecTest {
 
     private val instanceAutoSender = mock<InstanceAutoSender>()
+    private val projectDependencyProvider = mock<ProjectDependencyProvider>()
+    private val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
 
     private lateinit var projectId: String
 
@@ -39,19 +46,26 @@ class AutoSendTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesInstanceAutoSender(
-                context: Context,
-                changeLockProvider: ChangeLockProvider?,
-                notifier: Notifier,
-                analytics: Analytics,
-                formsRepositoryProvider: FormsRepositoryProvider,
-                instancesRepositoryProvider: InstancesRepositoryProvider,
-                googleAccountsManager: GoogleAccountsManager,
-                googleApiProvider: GoogleApiProvider,
-                permissionsProvider: PermissionsProvider,
-                settingsProvider: SettingsProvider,
-                instancesAppState: InstancesAppState
+                context: Context?,
+                notifier: Notifier?,
+                analytics: Analytics?,
+                googleAccountsManager: GoogleAccountsManager?,
+                googleApiProvider: GoogleApiProvider?,
+                permissionsProvider: PermissionsProvider?,
+                instancesAppState: InstancesAppState?
             ): InstanceAutoSender {
                 return instanceAutoSender
+            }
+
+            override fun providesProjectDependencyProviderFactory(
+                settingsProvider: SettingsProvider?,
+                formsRepositoryProvider: FormsRepositoryProvider?,
+                instancesRepositoryProvider: InstancesRepositoryProvider?,
+                storagePathProvider: StoragePathProvider?,
+                changeLockProvider: ChangeLockProvider?,
+                formSourceProvider: FormSourceProvider?
+            ): ProjectDependencyProviderFactory {
+                return projectDependencyProviderFactory
             }
         })
 
@@ -59,13 +73,15 @@ class AutoSendTaskSpecTest {
         projectId = CollectHelpers.setupDemoProject()
         TestSettingsProvider.getUnprotectedSettings(projectId)
             .save(ProjectKeys.KEY_AUTOSEND, "wifi_and_cellular")
+
+        whenever(projectDependencyProviderFactory.create(projectId)).thenReturn(projectDependencyProvider)
     }
 
     @Test
-    fun `passes project id`() {
+    fun `passes projectDependencyProvider with proper project id`() {
         val inputData = mapOf(TaskData.DATA_PROJECT_ID to projectId)
         AutoSendTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
-        verify(instanceAutoSender).autoSendInstances(projectId)
+        verify(instanceAutoSender).autoSendInstances(projectDependencyProvider)
     }
 
     @Test

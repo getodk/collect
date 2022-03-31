@@ -7,14 +7,8 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.FormSourceException
-import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import java.util.stream.Collectors
@@ -23,13 +17,8 @@ class FormsUpdater(
     private val context: Context,
     private val notifier: Notifier,
     private val analytics: Analytics,
-    private val storagePathProvider: StoragePathProvider,
-    private val settingsProvider: SettingsProvider,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val formSourceProvider: FormSourceProvider,
     private val syncStatusAppState: SyncStatusAppState,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val changeLockProvider: ChangeLockProvider
+    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory
 ) {
 
     /**
@@ -37,7 +26,7 @@ class FormsUpdater(
      * disabled the user will just be notified that there are updates available.
      */
     fun downloadUpdates(projectId: String) {
-        val sandbox = getProjectSandbox(projectId)
+        val sandbox = projectDependencyProviderFactory.create(projectId)
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
@@ -75,7 +64,7 @@ class FormsUpdater(
      */
     @JvmOverloads
     fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
-        val sandbox = getProjectSandbox(projectId)
+        val sandbox = projectDependencyProviderFactory.create(projectId)
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
@@ -115,69 +104,36 @@ class FormsUpdater(
             }
         }
     }
-
-    private fun getProjectSandbox(projectId: String) = ProjectSandbox(
-        projectId,
-        settingsProvider,
-        formsRepositoryProvider,
-        instancesRepositoryProvider,
-        storagePathProvider,
-        changeLockProvider,
-        formSourceProvider
-    )
-}
-
-/**
- * Provides all the basic/building block dependencies needed when performing logic inside a
- * project.
- */
-private class ProjectSandbox(
-    private val projectId: String,
-    private val settingsProvider: SettingsProvider,
-    private val formsRepositoryProvider: FormsRepositoryProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val storagePathProvider: StoragePathProvider,
-    private val changeLockProvider: ChangeLockProvider,
-    private val formSourceProvider: FormSourceProvider
-) {
-
-    val generalSettings by lazy { settingsProvider.getUnprotectedSettings(projectId) }
-    val formsRepository by lazy { formsRepositoryProvider.get(projectId) }
-    val instancesRepository by lazy { instancesRepositoryProvider.get(projectId) }
-    val formSource by lazy { formSourceProvider.get(projectId) }
-    val formsLock by lazy { changeLockProvider.getFormLock(projectId) }
-    val formsDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId) }
-    val cacheDir by lazy { storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId) }
 }
 
 private fun formDownloader(
-    projectSandbox: ProjectSandbox,
+    projectDependencyProvider: ProjectDependencyProvider,
     analytics: Analytics
 ): ServerFormDownloader {
     return ServerFormDownloader(
-        projectSandbox.formSource,
-        projectSandbox.formsRepository,
-        File(projectSandbox.cacheDir),
-        projectSandbox.formsDir,
+        projectDependencyProvider.formSource,
+        projectDependencyProvider.formsRepository,
+        File(projectDependencyProvider.cacheDir),
+        projectDependencyProvider.formsDir,
         FormMetadataParser(),
         analytics
     )
 }
 
 private fun serverFormsDetailsFetcher(
-    projectSandbox: ProjectSandbox,
+    projectDependencyProvider: ProjectDependencyProvider,
     diskFormsSynchronizer: FormsDirDiskFormsSynchronizer
 ): ServerFormsDetailsFetcher {
     return ServerFormsDetailsFetcher(
-        projectSandbox.formsRepository,
-        projectSandbox.formSource,
+        projectDependencyProvider.formsRepository,
+        projectDependencyProvider.formSource,
         diskFormsSynchronizer
     )
 }
 
-private fun diskFormsSynchronizer(projectSandbox: ProjectSandbox): FormsDirDiskFormsSynchronizer {
+private fun diskFormsSynchronizer(projectDependencyProvider: ProjectDependencyProvider): FormsDirDiskFormsSynchronizer {
     return FormsDirDiskFormsSynchronizer(
-        projectSandbox.formsRepository,
-        projectSandbox.formsDir
+        projectDependencyProvider.formsRepository,
+        projectDependencyProvider.formsDir
     )
 }
