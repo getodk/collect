@@ -31,6 +31,10 @@ open class DatabaseConnection(
         get() {
             val databasePath = path + File.separator + name
             if (openHelpers.containsKey(databasePath) && !File(databasePath).exists()) {
+                /**
+                 * Ideally we should close the database here as well but it was causing crashes in
+                 * our tests as DB connections seem to be getting used after being closed.
+                 */
                 openHelpers.remove(databasePath)
             }
 
