@@ -42,7 +42,6 @@ class SelectOneFromMapDialogFragmentTest {
     private val selectChoices = listOf(
         SelectChoice(
             null,
-            null,
             "a",
             false,
             TreeElement("").also { item ->
@@ -51,10 +50,10 @@ class SelectOneFromMapDialogFragmentTest {
                         it.value = StringData("12.0 -1.0 305 0")
                     }
                 )
-            }
+            },
+            ""
         ),
         SelectChoice(
-            null,
             null,
             "b",
             false,
@@ -64,7 +63,8 @@ class SelectOneFromMapDialogFragmentTest {
                         it.value = StringData("13.0 -1.0 305 0")
                     }
                 )
-            }
+            },
+            ""
         )
     )
 
