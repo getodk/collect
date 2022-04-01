@@ -22,6 +22,8 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.projects.ProjectDependencyProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem

@@ -14,10 +14,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.ProjectDependencyProviderFactory
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)

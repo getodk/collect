@@ -16,13 +16,13 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.InstancesAppState
-import org.odk.collect.android.formmanagement.ProjectDependencyProvider
-import org.odk.collect.android.formmanagement.ProjectDependencyProviderFactory
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.projects.ProjectDependencyProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ChangeLockProvider

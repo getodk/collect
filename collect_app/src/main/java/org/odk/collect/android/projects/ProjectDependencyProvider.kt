@@ -1,5 +1,6 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.projects
 
+import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider

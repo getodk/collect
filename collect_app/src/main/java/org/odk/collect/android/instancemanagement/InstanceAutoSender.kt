@@ -4,10 +4,10 @@ import android.content.Context
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.InstancesAppState
-import org.odk.collect.android.formmanagement.ProjectDependencyProvider
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.InstanceUploaderUtils
 import org.odk.collect.forms.FormsRepository

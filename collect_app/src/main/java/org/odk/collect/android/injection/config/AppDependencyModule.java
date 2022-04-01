@@ -59,7 +59,7 @@ import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.formmanagement.ProjectDependencyProviderFactory;
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
