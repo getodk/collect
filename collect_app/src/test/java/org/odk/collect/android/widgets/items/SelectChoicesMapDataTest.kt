@@ -21,7 +21,6 @@ class SelectChoicesMapDataTest {
         val choices = listOf(
             SelectChoice(
                 null,
-                "A",
                 "a",
                 false,
                 TreeElement("").also { item ->
@@ -30,9 +29,10 @@ class SelectChoicesMapDataTest {
                             it.value = StringData("12.0 -1.0 305 0")
                         }
                     )
-                }
+                },
+                ""
             ),
-            SelectChoice(null, "B", "b", false, TreeElement(""))
+            SelectChoice(null, "b", false, TreeElement(""), "")
         )
 
         val prompt = MockFormEntryPromptBuilder()
