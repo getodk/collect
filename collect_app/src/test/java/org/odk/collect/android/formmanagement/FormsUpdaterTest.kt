@@ -66,8 +66,15 @@ class FormsUpdaterTest {
 
         val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
 
-        val projectDependencyProvider = mock<ProjectDependencyProvider>()
-        whenever(projectDependencyProvider.formSourceProvider).thenReturn(formSourceProvider)
+        val projectDependencyProvider = ProjectDependencyProvider(
+            project.uuid,
+            settingsProvider,
+            formsRepositoryProvider,
+            mock(),
+            storagePathProvider,
+            changeLockProvider,
+            formSourceProvider
+        )
 
         val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
         whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyProvider)
@@ -77,7 +84,7 @@ class FormsUpdaterTest {
             notifier = notifier,
             analytics = mock(),
             syncStatusAppState = syncStatusAppState,
-            projectDependencyProviderFactory = mock()
+            projectDependencyProviderFactory = projectDependencyProviderFactory
         )
     }
 
