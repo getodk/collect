@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.geo;
 
+import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -213,7 +216,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
         myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
-        Bitmap crosshairs = ContextUtils.getBitmap(requireActivity(), R.drawable.ic_crosshairs);
+        Drawable drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_crosshairs);
+        Bitmap crosshairs = toBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), null);
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
         myLocationOverlay.setPersonHotspot(crosshairs.getWidth() / 2.0f, crosshairs.getHeight() / 2.0f);
 
