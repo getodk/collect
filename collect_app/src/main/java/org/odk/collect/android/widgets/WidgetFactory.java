@@ -43,6 +43,7 @@ import org.odk.collect.android.widgets.items.RankingWidget;
 import org.odk.collect.android.widgets.items.SelectMultiImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectMultiMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectMultiWidget;
+import org.odk.collect.android.widgets.items.SelectOneFromMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneImageMapWidget;
 import org.odk.collect.android.widgets.items.SelectOneMinimalWidget;
 import org.odk.collect.android.widgets.items.SelectOneWidget;
@@ -300,6 +301,8 @@ public class WidgetFactory {
             questionWidget = new LabelWidget(activity, questionDetails);
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick);
+        } else if (appearance.contains(Appearances.MAP)) {
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails);
         } else {
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick);
         }

@@ -471,8 +471,7 @@
   <string name="discard">Vyřadit</string>
   <string name="geoshape_view_change_location">Zobrazit nebo změnit GeoShape</string>
   <string name="geotrace_view_change_location">Zobrazit nebo změnit GeoTrace</string>
-  <string name="geometry_status">Uložené formuláře:%d (%d zobrazené na mapě)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Zobrazit uložený formulář</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Sledování polohy</string>

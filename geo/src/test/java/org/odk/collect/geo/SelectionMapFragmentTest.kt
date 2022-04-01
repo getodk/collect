@@ -1,6 +1,7 @@
 package org.odk.collect.geo
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.MutableLiveData
@@ -10,12 +11,14 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,6 +28,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.maps.MapFragment
 import org.odk.collect.geo.maps.MapFragmentFactory
@@ -40,8 +44,9 @@ class SelectionMapFragmentTest {
 
     private val map = FakeMapFragment()
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
-    private val viewModel = mock<SelectionMapViewModel> {
+    private val data = mock<SelectionMapData> {
         on { getMapTitle() } doReturn MutableLiveData("")
+        on { getItemType() } doReturn "Things"
         on { getItemCount() } doReturn MutableLiveData(0)
         on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())
     }
@@ -51,7 +56,7 @@ class SelectionMapFragmentTest {
         R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-                return SelectionMapFragment(viewModel)
+                return SelectionMapFragment(data)
             }
         }
     )
@@ -85,21 +90,11 @@ class SelectionMapFragmentTest {
     @Test
     fun `updates markers when items update`() {
         val items: List<MappableSelectItem> = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            )
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
         val itemsLiveData = MutableNonNullLiveData(items)
-        whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.getMarkers(), equalTo(itemsLiveData.value.map { it.toMapPoint() }))
@@ -111,48 +106,30 @@ class SelectionMapFragmentTest {
     @Test
     fun `updates item count when items update`() {
         val items: List<MappableSelectItem> = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            )
+            Fixtures.actionMappableSelectItem().copy(id = 0),
+            Fixtures.actionMappableSelectItem().copy(id = 1)
         )
+
         val itemsLiveData = MutableNonNullLiveData(items)
-        whenever(viewModel.getMappableItems()).thenReturn(itemsLiveData)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        onView(withText(application.getString(R.string.geometry_status, 0, 2)))
+        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 2)))
             .check(matches(isDisplayed()))
 
         itemsLiveData.value = emptyList()
-        onView(withText(application.getString(R.string.geometry_status, 0, 0)))
+        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 0)))
             .check(matches(isDisplayed()))
     }
 
     @Test
     fun `zooms to fit all items`() {
         val items = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            )
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -163,7 +140,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `zooms to current location when there are no items`() {
-        whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
+        whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
@@ -174,7 +151,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `does not zoom to current location when it changes`() {
-        whenever(viewModel.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
+        whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
@@ -199,20 +176,10 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping zoom to fit button zooms to fit all items`() {
         val items = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            )
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         onView(withId(R.id.zoom_to_bounds)).perform(click())
@@ -236,20 +203,10 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item centers on that item with current zoom level`() {
         val items = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_power_off,
-                largeIcon = android.R.drawable.ic_lock_idle_charging
-            )
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.zoomToPoint(MapPoint(55.0, 66.0), 2.0, false)
@@ -264,18 +221,16 @@ class SelectionMapFragmentTest {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
-                latitude = 40.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
             Fixtures.actionMappableSelectItem().copy(
                 id = 1,
-                latitude = 41.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -289,18 +244,16 @@ class SelectionMapFragmentTest {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
-                latitude = 40.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
             Fixtures.actionMappableSelectItem().copy(
                 id = 1,
-                latitude = 41.0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -313,22 +266,10 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping on item sets item on summary sheet`() {
         val items = listOf(
-            Fixtures.actionMappableSelectItem().copy(
-                id = 0,
-                latitude = 40.0,
-                smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm,
-                name = "Blah1"
-            ),
-            Fixtures.actionMappableSelectItem().copy(
-                id = 1,
-                latitude = 41.0,
-                smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm,
-                name = "Blah2"
-            ),
+            Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1"),
+            Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2"),
         )
-        whenever(viewModel.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
@@ -339,14 +280,52 @@ class SelectionMapFragmentTest {
                 withText("Blah1")
             )
         ).check(matches(isDisplayed()))
+    }
 
-        map.clickOnFeature(1)
-        onView(
-            allOf(
-                isDescendantOfA(withId(R.id.summary_sheet)),
-                withText("Blah2")
-            )
-        ).check(matches(isDisplayed()))
+    @Test
+    fun `tapping on item returns item ID as result when skipSummary is true`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0),
+            Fixtures.actionMappableSelectItem().copy(id = 1),
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(data, skipSummary = true)
+                }.build()
+        )
+
+        var actualResult: Bundle? = null
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                SelectionMapFragment.REQUEST_SELECT_ITEM,
+                it
+            ) { _: String?, result: Bundle ->
+                actualResult = result
+            }
+        }
+
+        map.clickOnFeature(0)
+        assertThat(
+            actualResult!!.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM),
+            equalTo(items[0].id)
+        )
+    }
+
+    @Test
+    fun `hides new item button when showNewItemButton is false`() {
+        launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(data, showNewItemButton = false)
+                }.build()
+        )
+
+        onView(withContentDescription(R.string.new_item)).check(matches(not(isDisplayed())))
     }
 
     @Test

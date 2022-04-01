@@ -1,5 +1,7 @@
 package org.odk.collect.android.widgets.items;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 
@@ -12,15 +14,13 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectOneMinimalDialog;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
-import org.odk.collect.android.utilities.SelectOneWidgetUtils;
-import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.util.List;
-
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
 @SuppressLint("ViewConstructor")
 public class SelectOneMinimalWidget extends SelectMinimalWidget {
@@ -96,5 +96,9 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
         return selectedItem == null
                 ? null
                 : selectedItem.getValue();
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
     }
 }

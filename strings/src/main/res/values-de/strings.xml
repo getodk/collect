@@ -465,8 +465,7 @@
   <string name="discard">Verwerfen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
-  <string name="geometry_status">Gespeicherte Formulare: %d (%d auf der Karte angezeigt) </string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Gespeichertes Formular anzeigen</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Standortverlauf</string>

@@ -28,17 +28,23 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
     @JvmOverloads
     fun <F : Fragment> launchInContainer(
         fragmentClass: Class<F>,
+        args: Bundle? = null,
         @StyleRes themResId: Int? = defaultThemeResId,
         factory: FragmentFactory? = defaultFactory
     ): FragmentScenario<F> {
         val scenario = if (themResId != null) {
             FragmentScenario.launchInContainer(
                 fragmentClass,
+                fragmentArgs = args,
                 themeResId = themResId,
                 factory = factory
             )
         } else {
-            FragmentScenario.launchInContainer(fragmentClass, factory = factory)
+            FragmentScenario.launchInContainer(
+                fragmentClass,
+                fragmentArgs = args,
+                factory = factory
+            )
         }
 
         return scenario.also {
