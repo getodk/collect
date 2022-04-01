@@ -54,8 +54,7 @@ class NotificationDrawer {
         destination: D
     ): NotificationDrawer {
         val device = waitForNotification(appName)
-        val actionElement = device.findObject(By.text(actionText))
-        assertThat(actionElement.text, `is`(actionText))
+        val actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
         actionElement.click()
         device.wait(Until.hasObject(By.textStartsWith(actionText)), 2000L)
         destination.assertOnPage()
