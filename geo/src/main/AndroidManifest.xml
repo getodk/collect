@@ -4,15 +4,15 @@
 
     <application>
         <activity
-            android:name=".GeoPointMapActivity"
+            android:name=".geopoint.GeoPointMapActivity"
             android:theme="@style/Theme.MaterialComponents" />
 
         <activity
-            android:name=".GeoPolyActivity"
+            android:name=".geopoly.GeoPolyActivity"
             android:theme="@style/Theme.MaterialComponents" />
 
         <activity
-            android:name=".GeoPointActivity"
+            android:name=".geopoint.GeoPointActivity"
             android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>

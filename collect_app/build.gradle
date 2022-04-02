@@ -269,6 +269,7 @@ dependencies {
         exclude group: 'joda-time'
     }
     implementation project(':externalapp')
+    implementation project(':maps')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support

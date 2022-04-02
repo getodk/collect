@@ -8,10 +8,17 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import org.odk.collect.async.Scheduler
-import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.geo.geopoint.GeoPointActivity
+import org.odk.collect.geo.geopoint.GeoPointDialogFragment
+import org.odk.collect.geo.geopoint.GeoPointMapActivity
+import org.odk.collect.geo.geopoint.GeoPointViewModelFactory
+import org.odk.collect.geo.geopoint.LocationTrackerGeoPointViewModel
+import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
 import org.odk.collect.location.tracker.LocationTracker
+import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Singleton
 

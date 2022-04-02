@@ -37,9 +37,9 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
-import org.odk.collect.geo.GeoPointActivity;
-import org.odk.collect.geo.GeoPointMapActivity;
-import org.odk.collect.geo.GeoPolyActivity;
+import org.odk.collect.geo.geopoint.GeoPointActivity;
+import org.odk.collect.geo.geopoint.GeoPointMapActivity;
+import org.odk.collect.geo.geopoly.GeoPolyActivity;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 

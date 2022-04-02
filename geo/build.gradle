@@ -66,6 +66,7 @@ dependencies {
     implementation project(path: ':async')
     implementation project(path: ':analytics')
     implementation project(path: ':permissions')
+    implementation project(path: ':maps')
 
     debugImplementation project(path: ':fragmentstest')
     testImplementation project(path: ':androidtest')

@@ -23,8 +23,8 @@ import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.externalapp.ExternalAppUtils.getReturnIntent
 import org.odk.collect.geo.GeoUtils
-import org.odk.collect.geo.maps.MapFragment
-import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragmentFactory
 
 @RunWith(AndroidJUnit4::class)
 class FormMapTest {
@@ -97,7 +97,7 @@ class FormMapTest {
         val intent = getReturnIntent(GeoUtils.formatLocationResultString(location))
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, intent)
 
-        intending(hasComponent("org.odk.collect.geo.GeoPointActivity"))
+        intending(hasComponent("org.odk.collect.geo.geopoint.GeoPointActivity"))
             .respondWith(result)
     }
 

@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapPoint;
 
 import java.util.HashMap;
 import java.util.List;

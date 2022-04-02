@@ -2,11 +2,11 @@ package org.odk.collect.geo.support
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentManager
-import org.odk.collect.geo.maps.MapFragment
-import org.odk.collect.geo.maps.MapFragment.FeatureListener
-import org.odk.collect.geo.maps.MapFragment.PointListener
-import org.odk.collect.geo.maps.MapFragment.ReadyListener
-import org.odk.collect.geo.maps.MapPoint
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragment.FeatureListener
+import org.odk.collect.maps.MapFragment.PointListener
+import org.odk.collect.maps.MapFragment.ReadyListener
+import org.odk.collect.maps.MapPoint
 
 class FakeMapFragment : MapFragment {
 

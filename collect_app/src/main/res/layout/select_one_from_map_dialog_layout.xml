@@ -7,6 +7,6 @@
         android:id="@+id/selection_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="org.odk.collect.geo.SelectionMapFragment"/>
+        android:name="org.odk.collect.geo.selection.SelectionMapFragment"/>
 
 </FrameLayout>

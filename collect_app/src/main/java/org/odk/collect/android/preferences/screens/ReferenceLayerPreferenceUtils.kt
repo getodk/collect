@@ -4,12 +4,11 @@ import android.content.Context
 import org.odk.collect.android.R
 import org.odk.collect.android.geo.MapConfigurator
 import org.odk.collect.android.geo.MapProvider
-import org.odk.collect.android.geo.ReferenceLayer
-import org.odk.collect.android.geo.ReferenceLayerRepository
 import org.odk.collect.android.preferences.CaptionedListPreference
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.maps.layers.ReferenceLayer
+import org.odk.collect.maps.layers.ReferenceLayerRepository
 import java.io.File
-import java.util.ArrayList
 import java.util.Collections
 
 object ReferenceLayerPreferenceUtils {

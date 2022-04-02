@@ -11,9 +11,9 @@ import org.odk.collect.android.widgets.interfaces.GeoDataRequester
 import org.odk.collect.geo.Constants.EXTRA_DRAGGABLE_ONLY
 import org.odk.collect.geo.Constants.EXTRA_READ_ONLY
 import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
-import org.odk.collect.geo.GeoPointActivity
-import org.odk.collect.geo.GeoPointMapActivity
-import org.odk.collect.geo.GeoPolyActivity
+import org.odk.collect.geo.geopoint.GeoPointActivity
+import org.odk.collect.geo.geopoint.GeoPointMapActivity
+import org.odk.collect.geo.geopoly.GeoPolyActivity
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import java.lang.Boolean.parseBoolean

@@ -91,7 +91,7 @@
         </ScrollView>
     </RelativeLayout>
 
-    <org.odk.collect.geo.SelectionSummarySheet
+    <org.odk.collect.geo.selection.SelectionSummarySheet
         android:id="@+id/summary_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

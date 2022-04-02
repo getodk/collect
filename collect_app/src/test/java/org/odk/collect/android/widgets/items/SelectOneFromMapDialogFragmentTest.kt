@@ -1,18 +1,17 @@
 package org.odk.collect.android.widgets.items
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
-import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
-import org.javarosa.core.model.data.StringData
-import org.javarosa.core.model.instance.TreeElement
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -20,6 +19,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
@@ -28,43 +28,29 @@ import org.odk.collect.android.geo.MapProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
+import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapFragment
-import org.odk.collect.geo.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
-import org.odk.collect.geo.maps.MapFragment
-import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
+import org.odk.collect.geo.selection.SelectionMapFragment
+import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragmentFactory
 
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapDialogFragmentTest {
 
     private val selectChoices = listOf(
-        SelectChoice(
-            null,
-            "a",
-            false,
-            TreeElement("").also { item ->
-                item.addChild(
-                    TreeElement("geometry").also {
-                        it.value = StringData("12.0 -1.0 305 0")
-                    }
-                )
-            },
-            ""
+        selectChoice(
+            value = "a",
+            item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
         ),
-        SelectChoice(
-            null,
-            "b",
-            false,
-            TreeElement("").also { item ->
-                item.addChild(
-                    TreeElement("geometry").also {
-                        it.value = StringData("13.0 -1.0 305 0")
-                    }
-                )
-            },
-            ""
+        selectChoice(
+            value = "b",
+            item = treeElement(children = listOf(treeElement("geometry", "13.0 -1.0 305 0")))
         )
     )
 
@@ -84,6 +70,8 @@ class SelectOneFromMapDialogFragmentTest {
     private val formEntryViewModel = mock<FormEntryViewModel> {
         on { getQuestionPrompt(prompt.index) } doReturn prompt
     }
+
+    private val application = ApplicationProvider.getApplicationContext<Application>()
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
@@ -134,7 +122,7 @@ class SelectOneFromMapDialogFragmentTest {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
-            assertThat(fragment.skipSummary, equalTo(true))
+            assertThat(fragment.skipSummary, equalTo(false))
             assertThat(fragment.showNewItemButton, equalTo(false))
 
             val data = fragment.selectionMapData
@@ -144,29 +132,53 @@ class SelectOneFromMapDialogFragmentTest {
                 data.getMappableItems().value,
                 equalTo(
                     listOf(
-                        MappableSelectItem.WithInfo(
+                        MappableSelectItem.WithAction(
                             0,
                             selectChoices[0].getChild("geometry").split(" ")[0].toDouble(),
                             selectChoices[0].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "A",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                            ""
+                            emptyList(),
+                            IconifiedText(
+                                R.drawable.ic_save, application.getString(R.string.select_item)
+                            )
                         ),
-                        MappableSelectItem.WithInfo(
+                        MappableSelectItem.WithAction(
                             1,
                             selectChoices[1].getChild("geometry").split(" ")[0].toDouble(),
                             selectChoices[1].getChild("geometry").split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "B",
-                            MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                            ""
+                            emptyList(),
+                            IconifiedText(
+                                R.drawable.ic_save,
+                                application.getString(R.string.select_item)
+                            )
                         )
                     )
                 )
             )
+        }
+    }
+
+    @Test
+    fun `contains SelectionMapFragment with correct data for quick appearance`() {
+        val prompt = MockFormEntryPromptBuilder()
+            .withAppearance("${Appearances.MAP} ${Appearances.QUICK}")
+            .build()
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
+
+        launcherRule.launchDialogFragment(
+            SelectOneFromMapDialogFragment::class.java,
+            Bundle().also {
+                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+            }
+        ).onFragment {
+            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            assertThat(fragment.skipSummary, equalTo(true))
         }
     }
 

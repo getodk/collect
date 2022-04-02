@@ -13,18 +13,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.data.SelectOneData
+import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.geo.MappableSelectItem
-import org.odk.collect.geo.SelectionMapData
-import org.odk.collect.geo.SelectionMapFragment
-import org.odk.collect.geo.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.geo.selection.MappableSelectItem
+import org.odk.collect.geo.selection.SelectionMapData
+import org.odk.collect.geo.selection.SelectionMapFragment
+import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
@@ -44,7 +46,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
                     SelectChoicesMapData(resources, prompt),
-                    skipSummary = true,
+                    skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false
                 )
             }
@@ -88,7 +90,8 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
     }
 }
 
-internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) : SelectionMapData {
+internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) :
+    SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableLiveData<Int>()
@@ -104,15 +107,24 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
                 val latitude = geometry.split(" ")[0].toDouble()
                 val longitude = geometry.split(" ")[1].toDouble()
 
-                list + MappableSelectItem.WithInfo(
+                val properties = selectChoice.additionalChildren.filter {
+                    it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
+                }.map {
+                    MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
+                }
+
+                list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
                     longitude,
                     R.drawable.ic_map_marker_24dp,
                     R.drawable.ic_map_marker_48dp,
                     prompt.getSelectChoiceText(selectChoice),
-                    MappableSelectItem.IconifiedText(R.drawable.ic_map_marker_24dp, ""),
-                    ""
+                    properties,
+                    MappableSelectItem.IconifiedText(
+                        R.drawable.ic_save,
+                        resources.getString(R.string.select_item)
+                    )
                 )
             } else {
                 list

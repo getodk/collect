@@ -47,38 +47,26 @@
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
-    <ImageButton
-        android:id="@+id/status_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="@dimen/margin_small"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/properties"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/divider" />
-
-    <TextView
-        android:id="@+id/status_text"
-        style="?textAppearanceBody2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="@dimen/margin_small"
-        android:textColor="?colorOnSurface"
-        app:layout_constraintBottom_toBottomOf="@id/status_icon"
-        app:layout_constraintStart_toEndOf="@id/status_icon"
-        app:layout_constraintTop_toTopOf="@id/status_icon"
-        tools:text="Status" />
 
     <com.google.android.material.chip.Chip
         android:id="@+id/action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:textColor="@android:color/white"
+        android:textColor="?colorOnPrimary"
         app:chipBackgroundColor="?colorSecondary"
         app:chipEndPadding="@dimen/margin_small"
+        app:chipIconTint="?colorOnPrimary"
         app:iconStartPadding="@dimen/margin_small"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/status_icon"
+        app:layout_constraintTop_toBottomOf="@id/properties"
         tools:text="Action" />
 
     <TextView
@@ -87,10 +75,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/margin_small"
         android:textColor="?colorOnSurface"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/status_icon"
+        app:layout_constraintTop_toBottomOf="@id/properties"
         tools:text="Info"
         tools:visibility="gone" />
 

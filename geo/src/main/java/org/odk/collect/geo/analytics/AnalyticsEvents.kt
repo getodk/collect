@@ -1,6 +1,6 @@
 package org.odk.collect.geo.analytics
 
-object AnalyticsEvents {
+internal object AnalyticsEvents {
 
     /**
      * Compare different ways of saving geopoints: are users saving without looking at accuracy,
