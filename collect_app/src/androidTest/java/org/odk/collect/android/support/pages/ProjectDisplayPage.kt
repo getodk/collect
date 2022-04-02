@@ -1,11 +1,8 @@
 package org.odk.collect.android.support.pages
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import org.hamcrest.core.StringEndsWith
 import org.odk.collect.android.R
 
 class ProjectDisplayPage : Page<ProjectDisplayPage>() {
@@ -21,10 +18,9 @@ class ProjectDisplayPage : Page<ProjectDisplayPage>() {
         return this
     }
 
-    fun setProjectIcon(projectIcon: String?): ProjectDisplayPage {
+    fun setProjectIcon(projectIcon: String): ProjectDisplayPage {
         clickOnString(R.string.project_icon)
-        onView(ViewMatchers.withClassName(StringEndsWith.endsWith("EditText"))).perform(replaceText(""))
-        onView(ViewMatchers.withClassName(StringEndsWith.endsWith("EditText"))).perform(ViewActions.typeText(projectIcon))
+        inputText(projectIcon)
         clickOKOnDialog()
         return this
     }
