@@ -48,7 +48,21 @@ class NotificationDrawer {
         return this
     }
 
-    fun <D : Page<D>?> clickNotification(
+    fun <D : Page<D>> clickAction(
+        appName: String,
+        actionText: String,
+        destination: D
+    ): NotificationDrawer {
+        val device = waitForNotification(appName)
+        val actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
+        actionElement.click()
+        device.wait(Until.hasObject(By.textStartsWith(actionText)), 2000L)
+        destination.assertOnPage()
+        isOpen = false
+        return this
+    }
+
+    fun <D : Page<D>> clickNotification(
         appName: String,
         title: String,
         expectedTextOnClick: String?,
@@ -60,7 +74,7 @@ class NotificationDrawer {
         titleElement.click()
         device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L)
         isOpen = false
-        return destination!!.assertOnPage()
+        return destination.assertOnPage()
     }
 
     fun pressBack() {

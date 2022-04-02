@@ -22,6 +22,7 @@ import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.network.NetworkStateProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
@@ -43,6 +44,9 @@ class AutoSendTaskSpec : TaskSpec {
 
     @Inject
     lateinit var instanceAutoSender: InstanceAutoSender
+
+    @Inject
+    lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
 
     override val maxRetries: Int? = null
     override val backoffPolicy: BackoffPolicy? = null
@@ -73,7 +77,7 @@ class AutoSendTaskSpec : TaskSpec {
                 ) {
                     networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
                 }
-                instanceAutoSender.autoSendInstances(projectId)
+                instanceAutoSender.autoSendInstances(projectDependencyProviderFactory.create(projectId))
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

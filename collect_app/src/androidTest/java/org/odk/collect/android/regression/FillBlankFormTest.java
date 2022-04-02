@@ -6,7 +6,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotSame;
 import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
-import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 

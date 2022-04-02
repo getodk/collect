@@ -514,7 +514,6 @@
   <string name="form_update_succeeded">نجاح تحديث الإستمارة</string>
   <string name="load_remote_form_error">خطأ في تنزيل قائمة الإستمارة</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
-  <string name="failure">فشل</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->

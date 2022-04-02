@@ -12,17 +12,12 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
-import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.support.CollectHelpers
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
 class SyncFormsTaskSpecTest {
@@ -31,17 +26,12 @@ class SyncFormsTaskSpecTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesFormUpdateChecker(
+            override fun providesFormsUpdater(
                 context: Context,
                 notifier: Notifier,
                 analytics: Analytics,
-                storagePathProvider: StoragePathProvider,
-                settingsProvider: SettingsProvider,
-                formsRepositoryProvider: FormsRepositoryProvider,
-                formSourceProvider: FormSourceProvider,
                 syncStatusAppState: SyncStatusAppState,
-                instancesRepositoryProvider: InstancesRepositoryProvider,
-                changeLockProvider: ChangeLockProvider
+                projectDependencyProviderFactory: ProjectDependencyProviderFactory
             ): FormsUpdater {
                 return formsUpdater
             }

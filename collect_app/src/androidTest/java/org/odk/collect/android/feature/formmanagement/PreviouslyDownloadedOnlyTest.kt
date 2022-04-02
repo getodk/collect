@@ -14,8 +14,8 @@ import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.support.AdbFormLoadingUtils
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FillBlankFormPage
-import org.odk.collect.android.support.pages.FormsDownloadErrorPage
 import org.odk.collect.android.support.pages.GetBlankFormPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -137,7 +137,7 @@ class PreviouslyDownloadedOnlyTest {
                 "ODK Collect",
                 "Forms download failed",
                 "1 of 1 downloads failed!",
-                FormsDownloadErrorPage()
+                ErrorPage()
             )
     }
 

@@ -50,7 +50,7 @@ public abstract class InstanceUploader {
      * Updates the database status for the instance.
      */
     @Nullable
-    public abstract String uploadOneSubmission(Instance instance, String destinationUrl) throws UploadException;
+    public abstract String uploadOneSubmission(Instance instance, String destinationUrl) throws FormUploadException;
 
     @NonNull
     public abstract String getUrlToSubmitTo(Instance currentInstance, String deviceId, String overrideURL, String urlFromSettings);

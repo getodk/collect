@@ -4,7 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.support.matchers.RecyclerViewMatcher;
+import org.odk.collect.testshared.RecyclerViewMatcher;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;

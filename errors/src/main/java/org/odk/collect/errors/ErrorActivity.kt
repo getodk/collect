@@ -1,10 +1,10 @@
 package org.odk.collect.errors
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.strings.localization.LocalizedActivity
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -16,7 +16,9 @@ class ErrorActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_error)
-        setupAppBarLayout(this, getLocalizedString(R.string.errors))
+        title = getLocalizedString(R.string.errors)
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 

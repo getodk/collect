@@ -19,7 +19,7 @@ import java.io.Serializable
 object FormUpdatesDownloadedNotificationBuilder {
 
     fun build(application: Application, result: Map<ServerFormDetails, FormDownloadException?>, projectName: String): Notification {
-        val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result, application)
+        val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
 
         val intent = if (allFormsDownloadedSuccessfully) {
             Intent(application, FillBlankFormActivity::class.java).apply {
@@ -46,7 +46,7 @@ object FormUpdatesDownloadedNotificationBuilder {
             if (allFormsDownloadedSuccessfully) application.getLocalizedString(R.string.all_downloads_succeeded)
             else application.getLocalizedString(
                 R.string.some_downloads_failed,
-                FormsDownloadResultInterpreter.getNumberOfFailures(result, application),
+                FormsDownloadResultInterpreter.getNumberOfFailures(result),
                 result.size
             )
 

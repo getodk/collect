@@ -3,6 +3,8 @@
     package="org.odk.collect.errors">
 
     <application>
-        <activity android:name=".ErrorActivity" />
+        <activity
+            android:name=".ErrorActivity"
+            android:theme="@style/Theme.MaterialComponents" />
     </application>
 </manifest>

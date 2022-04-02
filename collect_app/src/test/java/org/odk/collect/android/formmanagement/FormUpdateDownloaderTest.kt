@@ -29,9 +29,7 @@ class FormUpdateDownloaderTest {
         FormUpdateDownloader().downloadUpdates(
             listOf(serverForm),
             changeLock,
-            formDownloader,
-            "success",
-            "failure"
+            formDownloader
         )
 
         verify(formDownloader, never()).downloadForm(any(), any(), any())
@@ -61,9 +59,7 @@ class FormUpdateDownloaderTest {
         val results = FormUpdateDownloader().downloadUpdates(
             serverForms,
             changeLock,
-            formDownloader,
-            "success",
-            "failure"
+            formDownloader
         )
 
         assertThat(results.size, `is`(1))

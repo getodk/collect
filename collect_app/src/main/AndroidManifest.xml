@@ -143,6 +143,10 @@ the specific language governing permissions and limitations under the License.
             android:name="org.odk.collect.geo.geopoly.GeoPolyActivity"
             android:theme="@style/Theme.Collect"
             tools:replace="android:theme" />
+        <activity
+            android:name="org.odk.collect.errors.ErrorActivity"
+            android:theme="@style/Theme.Collect"
+            tools:replace="android:theme" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
         <activity

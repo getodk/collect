@@ -18,7 +18,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.android.support.matchers.DrawableMatcher.withImageDrawable;
-import static org.odk.collect.android.support.matchers.RecyclerViewMatcher.withRecyclerView;
+import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
 
 //Issue NODK-234
 @RunWith(AndroidJUnit4.class)

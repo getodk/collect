@@ -1,30 +1,28 @@
 package org.odk.collect.errors
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.odk.collect.errors.databinding.ErrorItemBinding
 
 class ErrorAdapter(private val errors: List<ErrorItem>) : RecyclerView.Adapter<ErrorAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.title)
-        val secondaryText: TextView = view.findViewById(R.id.secondary_text)
-        val supportingText: TextView = view.findViewById(R.id.supporting_text)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.error_item, parent, false)
-
-        return ViewHolder(view)
+        val binding = ErrorItemBinding.inflate(LayoutInflater.from(parent.context))
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.title.text = errors[position].title
-        holder.secondaryText.text = errors[position].secondaryText
-        holder.supportingText.text = errors[position].supportingText
+        with(holder) {
+            with(errors[position]) {
+                binding.title.text = this.title
+                binding.secondaryText.text = this.secondaryText
+                binding.supportingText.text = this.supportingText
+            }
+        }
     }
 
     override fun getItemCount() = errors.size
+
+    inner class ViewHolder(val binding: ErrorItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

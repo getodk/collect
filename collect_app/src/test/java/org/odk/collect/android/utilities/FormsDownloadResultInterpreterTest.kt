@@ -44,21 +44,21 @@ class FormsDownloadResultInterpreterTest {
 
     @Test
     fun `When all forms downloaded successfully getNumberOfFailures() should return zero`() {
-        assertThat(FormsDownloadResultInterpreter.getNumberOfFailures(resultWithoutErrors, context), `is`(0))
+        assertThat(FormsDownloadResultInterpreter.getNumberOfFailures(resultWithoutErrors), `is`(0))
     }
 
     @Test
     fun `When not all forms downloaded successfully getNumberOfFailures() should return number of failures`() {
-        assertThat(FormsDownloadResultInterpreter.getNumberOfFailures(resultWithOneError, context), `is`(1))
+        assertThat(FormsDownloadResultInterpreter.getNumberOfFailures(resultWithOneError), `is`(1))
     }
 
     @Test
     fun `When all forms downloaded successfully allFormsDownloadedSuccessfully() should return true`() {
-        assertThat(FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(resultWithoutErrors, context), `is`(true))
+        assertThat(FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(resultWithoutErrors), `is`(true))
     }
 
     @Test
     fun `When not all forms downloaded successfully allFormsDownloadedSuccessfully() should return false`() {
-        assertThat(FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(resultWithOneError, context), `is`(false))
+        assertThat(FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(resultWithOneError), `is`(false))
     }
 }

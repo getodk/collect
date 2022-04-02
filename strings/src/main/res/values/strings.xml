@@ -629,6 +629,7 @@
     <string name="forms_upload_succeeded">Forms upload succeeded</string>
     <string name="forms_upload_failed">Forms upload failed</string>
     <string name="all_uploads_succeeded">All uploads succeeded!</string>
+    <string name="some_uploads_failed">%1$s of %2$s uploads failed!</string>
 
     <!--
     ##############################################
@@ -658,9 +659,7 @@
     <string name="all_downloads_succeeded">All downloads succeeded!</string>
     <string name="some_downloads_failed">%1$s of %2$s downloads failed!</string>
     <!-- Part of form download dialog. Clicking it displays additional information about a form that failed -->
-    <string name="show_details">Show details</string>
     <string name="form_details">ID: %1$s Version: %2$s</string>
-    <string name="failure">Failure</string>
 
     <!--
     ##############################################
@@ -1142,6 +1141,7 @@
     # Errors
     ##############################################
     -->
+    <string name="show_details">Show details</string>
     <string name="errors">Errors</string>
 
     <!--

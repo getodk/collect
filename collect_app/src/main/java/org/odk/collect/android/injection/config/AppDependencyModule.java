@@ -59,6 +59,7 @@ import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -531,13 +532,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsUpdater providesFormUpdateChecker(Context context, Notifier notifier, Analytics analytics, StoragePathProvider storagePathProvider, SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, SyncStatusAppState syncStatusAppState, InstancesRepositoryProvider instancesRepositoryProvider, ChangeLockProvider changeLockProvider) {
-        return new FormsUpdater(context, notifier, analytics, storagePathProvider, settingsProvider, formsRepositoryProvider, formSourceProvider, syncStatusAppState, instancesRepositoryProvider, changeLockProvider);
+    public FormsUpdater providesFormsUpdater(Context context, Notifier notifier, Analytics analytics, SyncStatusAppState syncStatusAppState, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
+        return new FormsUpdater(context, notifier, analytics, syncStatusAppState, projectDependencyProviderFactory);
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(Context context, ChangeLockProvider changeLockProvider, Notifier notifier, Analytics analytics, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, SettingsProvider settingsProvider, InstancesAppState instancesAppState) {
-        return new InstanceAutoSender(context, changeLockProvider, notifier, analytics, formsRepositoryProvider, instancesRepositoryProvider, googleAccountsManager, googleApiProvider, permissionsProvider, settingsProvider, instancesAppState);
+    public InstanceAutoSender providesInstanceAutoSender(Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
+        return new InstanceAutoSender(context, notifier, analytics, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
     }
 
     @Provides
@@ -637,5 +638,10 @@ public class AppDependencyModule {
     @Provides
     public PenColorPickerViewModel.Factory providesPenColorPickerViewModel(SettingsProvider settingsProvider) {
         return new PenColorPickerViewModel.Factory(settingsProvider.getMetaSettings());
+    }
+
+    @Provides
+    public ProjectDependencyProviderFactory providesProjectDependencyProviderFactory(SettingsProvider settingsProvider, FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, StoragePathProvider storagePathProvider, ChangeLockProvider changeLockProvider, FormSourceProvider formSourceProvider) {
+        return new ProjectDependencyProviderFactory(settingsProvider, formsRepositoryProvider, instancesRepositoryProvider, storagePathProvider, changeLockProvider, formSourceProvider);
     }
 }

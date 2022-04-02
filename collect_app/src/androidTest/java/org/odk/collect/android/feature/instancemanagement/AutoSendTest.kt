@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -73,10 +74,16 @@ class AutoSendTest {
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed")
+            .clickAction(
+                "ODK Collect",
+                "Show details",
+                ErrorPage()
+            )
+            .open()
             .clickNotification(
                 "ODK Collect",
                 "Forms upload failed",
-                "Forms upload failed",
+                "1 of 1 uploads failed!",
                 SendFinalizedFormPage()
             )
     }

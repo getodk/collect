@@ -22,6 +22,8 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
+import org.odk.collect.android.projects.ProjectDependencyProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.forms.FormListItem
@@ -56,28 +58,38 @@ class FormsUpdaterTest {
 
     private lateinit var updateManager: FormsUpdater
 
+    private lateinit var project: Project.Saved
+
     @Before
     fun setup() {
+        project = setupProject()
+
         val formSourceProvider = mock<FormSourceProvider> { on { get(any()) } doReturn formSource }
+
+        val projectDependencyProvider = ProjectDependencyProvider(
+            project.uuid,
+            settingsProvider,
+            formsRepositoryProvider,
+            mock(),
+            storagePathProvider,
+            changeLockProvider,
+            formSourceProvider
+        )
+
+        val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
+        whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyProvider)
 
         updateManager = FormsUpdater(
             context = application,
             notifier = notifier,
             analytics = mock(),
-            storagePathProvider = storagePathProvider,
-            settingsProvider = settingsProvider,
-            formsRepositoryProvider = formsRepositoryProvider,
-            formSourceProvider = formSourceProvider,
             syncStatusAppState = syncStatusAppState,
-            instancesRepositoryProvider = mock(),
-            changeLockProvider
+            projectDependencyProviderFactory = projectDependencyProviderFactory
         )
     }
 
     @Test
     fun `downloadUpdates() notifies Forms content resolver`() {
-        val project = setupProject()
-
         val contentObserver = mock<ContentObserver>()
         application.contentResolver.registerContentObserver(
             FormsContract.getUri(project.uuid),
@@ -92,7 +104,6 @@ class FormsUpdaterTest {
 
     @Test
     fun `downloadUpdates() downloads updates when auto download is enabled`() {
-        val project = setupProject()
         addFormLocally(project, "formId", "1")
 
         val updatedXForm = FormUtils.createXFormBody("formId", "2")
@@ -110,8 +121,6 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() does nothing when change lock is locked`() {
-        val project = setupProject()
-
         val changeLock = BooleanChangeLock()
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
@@ -129,8 +138,6 @@ class FormsUpdaterTest {
      */
     @Test
     fun `matchFormsWithServer() returns false when change lock is locked`() {
-        val project = setupProject()
-
         val changeLock = BooleanChangeLock()
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
@@ -140,16 +147,12 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() returns false when there is an error communicating with the server`() {
-        val project = setupProject()
-
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
         assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
     }
 
     @Test
     fun `matchFormsWithServer() updates sync state`() {
-        val project = setupProject()
-
         val inOrder = inOrder(syncStatusAppState)
         updateManager.matchFormsWithServer(project.uuid)
         inOrder.verify(syncStatusAppState).startSync(project.uuid)
@@ -158,7 +161,6 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() notifies when called with default notify value`() {
-        val project = setupProject()
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
         updateManager.matchFormsWithServer(project.uuid)
@@ -167,7 +169,6 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() notifies when called with notify true`() {
-        val project = setupProject()
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
         updateManager.matchFormsWithServer(project.uuid, true)
@@ -176,7 +177,6 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() does not notify when called with notify false`() {
-        val project = setupProject()
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
         updateManager.matchFormsWithServer(project.uuid, false)

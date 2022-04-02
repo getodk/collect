@@ -21,8 +21,8 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.upload.InstanceServerUploader;
-import org.odk.collect.android.upload.UploadAuthRequestedException;
-import org.odk.collect.android.upload.UploadException;
+import org.odk.collect.android.upload.FormUploadAuthRequestedException;
+import org.odk.collect.android.upload.FormUploadException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.util.HashMap;
@@ -82,14 +82,14 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                         customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), R.string.success));
 
                 analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
-            } catch (UploadAuthRequestedException e) {
+            } catch (FormUploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to
                 // retry. Items present in the map are considered already attempted and won't be
                 // retried.
-            } catch (UploadException e) {
+            } catch (FormUploadException e) {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        e.getDisplayMessage());
+                        e.getMessage());
             }
         }
         
