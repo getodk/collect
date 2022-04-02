@@ -3,7 +3,7 @@ package org.odk.collect.geo;
 import android.content.Context;
 import android.location.Location;
 
-import org.odk.collect.geo.maps.MapPoint;
+import org.odk.collect.maps.MapPoint;
 import org.odk.collect.shared.strings.StringUtils;
 
 import java.text.DecimalFormat;

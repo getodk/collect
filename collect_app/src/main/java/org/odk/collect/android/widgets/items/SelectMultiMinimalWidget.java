@@ -94,4 +94,8 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
             binding.answer.setText(HtmlUtils.textToHtml(builder.toString()));
         }
     }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
 }

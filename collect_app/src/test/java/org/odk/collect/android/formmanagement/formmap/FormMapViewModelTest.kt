@@ -14,7 +14,7 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.formstest.InstanceUtils
-import org.odk.collect.geo.MappableSelectItem
+import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
@@ -107,11 +107,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instanceWithPoint.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_saved,
-                formatDate(
-                    R.string.saved_on_date_at_time,
-                    instanceWithPoint.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_saved,
+                    formatDate(
+                        R.string.saved_on_date_at_time,
+                        instanceWithPoint.lastStatusChangeDate
+                    )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
@@ -149,11 +151,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_finalized,
-                formatDate(
-                    R.string.finalized_on_date_at_time,
-                    instance.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_finalized,
+                    formatDate(
+                        R.string.finalized_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
@@ -193,11 +197,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_complete_24dp,
             R.drawable.ic_room_form_state_complete_48dp,
             instance.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_finalized,
-                formatDate(
-                    R.string.finalized_on_date_at_time,
-                    instance.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_finalized,
+                    formatDate(
+                        R.string.finalized_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
@@ -235,11 +241,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_incomplete_24dp,
             R.drawable.ic_room_form_state_incomplete_48dp,
             instance.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_saved,
-                formatDate(
-                    R.string.saved_on_date_at_time,
-                    instance.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_saved,
+                    formatDate(
+                        R.string.saved_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
                 )
             ),
             info = formatDate(R.string.deleted_on_date_at_time, 123L),
@@ -274,11 +282,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_submitted_24dp,
             R.drawable.ic_room_form_state_submitted_48dp,
             instance.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_submited,
-                formatDate(
-                    R.string.sent_on_date_at_time,
-                    instance.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_submited,
+                    formatDate(
+                        R.string.sent_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
@@ -316,11 +326,13 @@ class FormMapViewModelTest {
             R.drawable.ic_room_form_state_submission_failed_24dp,
             R.drawable.ic_room_form_state_submission_failed_48dp,
             instance.displayName,
-            MappableSelectItem.IconifiedText(
-                R.drawable.form_state_submission_failed,
-                formatDate(
-                    R.string.sending_failed_on_date_at_time,
-                    instance.lastStatusChangeDate
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.form_state_submission_failed,
+                    formatDate(
+                        R.string.sending_failed_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
                 )
             ),
             action = MappableSelectItem.IconifiedText(

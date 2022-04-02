@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.geo.maps.MapFragment;
+import org.odk.collect.maps.MapFragment;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;

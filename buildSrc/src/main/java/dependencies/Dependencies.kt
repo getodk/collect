@@ -3,6 +3,7 @@ package dependencies
 object Dependencies {
     const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
     const val androidx_startup = "androidx.startup:startup-runtime:1.1.0"
+    const val androidx_annotations = "androidx.annotation:annotation:1.3.0"
     const val androidx_activity_ktx = "androidx.activity:activity-ktx:1.4.0"
     const val androidx_legacy_support = "androidx.legacy:legacy-support-v13:1.0.0"
     const val androidx_lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"

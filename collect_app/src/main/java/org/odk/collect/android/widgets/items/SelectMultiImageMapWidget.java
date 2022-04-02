@@ -55,4 +55,8 @@ public class SelectMultiImageMapWidget extends SelectImageMapWidget {
     public IAnswerData getAnswer() {
         return selections.size() == 0 ? null : new SelectMultiData(selections);
     }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
 }

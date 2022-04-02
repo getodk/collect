@@ -52,7 +52,7 @@ public class FillBlankFormTest {
     public void subtext_ShouldDisplayAdditionalInformation() {
         //TestCase2
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .clickFillBlankForm()
                 .checkIsFormSubtextDisplayed();
 
@@ -62,7 +62,7 @@ public class FillBlankFormTest {
     public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
         //TestCase6 , TestCase9
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .pressBack(new ExitFormDialog("All widgets"))
                 .assertText(R.string.keep_changes)
@@ -87,7 +87,7 @@ public class FillBlankFormTest {
     public void navigationButtons_ShouldBeVisibleWhenAreSetInTheMiddleOfForm() {
         //TestCase16
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .swipeToNextQuestion("String widget")
                 .clickOptionsIcon()
@@ -629,7 +629,7 @@ public class FillBlankFormTest {
     public void changedName_shouldNotDisappearAfterScreenRotation() {
         //TestCase13
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()

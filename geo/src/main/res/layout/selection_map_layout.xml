@@ -12,9 +12,9 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#BF000000"
             android:gravity="start"
             android:padding="4dp"
-            android:background="#BF000000"
             android:textColor="#FFFFFF" />
 
         <TextView
@@ -22,34 +22,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="#BF000000"
             android:gravity="start"
             android:padding="4dp"
-            android:background="#BF000000"
             android:textColor="#FFFFFF" />
 
         <FrameLayout
             android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/title"
-            android:layout_above="@id/geometry_status" />
+            android:layout_above="@id/geometry_status"
+            android:layout_below="@id/title" />
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
-            android:id="@+id/new_instance"
+            android:id="@+id/new_item"
             style="@style/Widget.Geo.MapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_alignParentEnd="true"
             android:layout_above="@id/geometry_status"
-            app:srcCompat="@drawable/ic_note_add"
-            android:padding="15dp" />
+            android:layout_alignParentEnd="true"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/new_item"
+            android:padding="15dp"
+            app:srcCompat="@drawable/ic_note_add" />
 
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_below="@+id/title"
+            android:layout_alignParentEnd="true"
             android:layout_marginBottom="100dp">
 
             <LinearLayout
@@ -64,8 +65,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_my_location"
-                    android:padding="15dp" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_my_location" />
 
                 <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
                     android:id="@+id/zoom_to_bounds"
@@ -74,8 +75,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_crop_frame"
-                    android:padding="15dp" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_crop_frame" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/layer_menu"
@@ -84,17 +85,17 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_layers"
-                    android:padding="15dp" />
+                    android:padding="15dp"
+                    app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 
-    <org.odk.collect.geo.SelectionSummarySheet
+    <org.odk.collect.geo.selection.SelectionSummarySheet
         android:id="@+id/summary_sheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:behavior_hideable="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"/>
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

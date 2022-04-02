@@ -332,6 +332,7 @@
             <grid_widget_quickcompact2/>
             <select_one_image_map/>
             <likert_widget/>
+            <select_one_from_map_widget />
           </select_one_widgets>
           <select_multi_widgets>
             <select_multi_widget/>
@@ -355,6 +356,20 @@
             <instanceID/>
           </meta>
         </data>
+      </instance>
+      <instance id="places">
+        <root>
+          <item>
+            <geometry>46.5841618 7.0801379 0 0</geometry>
+            <label>A</label>
+            <name>a</name>
+          </item>
+          <item>
+            <geometry>35.880508260751576 76.51505715762721 0 0</geometry>
+            <label>B</label>
+            <name>b</name>
+          </item>
+        </root>
       </instance>
       <bind nodeset="/data/intro" readonly="true()" type="string"/>
       <bind nodeset="/data/text_widgets/string_widget" type="string"/>
@@ -415,6 +430,7 @@
       <bind nodeset="/data/select_one_widgets/grid_widget_quickcompact2" type="select1"/>
       <bind nodeset="/data/select_one_widgets/select_one_image_map" type="select1"/>
       <bind nodeset="/data/select_one_widgets/likert_widget" type="select1"/>
+      <bind nodeset="/data/select_one_widgets/select_one_from_map_widget" type="select1"/>
       <bind nodeset="/data/select_multi_widgets/select_multi_widget" type="select"/>
       <bind nodeset="/data/select_multi_widgets/select_multi_widget_autocomplete" type="select"/>
       <bind nodeset="/data/select_multi_widgets/grid_multi_widget_compact" type="select"/>
@@ -964,6 +980,14 @@
           <label ref="jr:itext('/data/select_one_widgets/likert_widget/strongly_agree:label')"/>
           <value>strongly_agree</value>
         </item>
+      </select1>
+      <select1 appearance="map" ref="/data/select_one_widgets/select_one_from_map_widget">
+        <label>Select one from map widget</label>
+        <hint>select_one type with map appearance</hint>
+        <itemset nodeset="instance('places')/root/item[true()]">
+          <value ref="name" />
+          <label ref="label" />
+        </itemset>
       </select1>
     </group>
     <group ref="/data/select_multi_widgets">

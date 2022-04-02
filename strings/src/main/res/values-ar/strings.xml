@@ -474,8 +474,7 @@
   <string name="discard">تجاهل</string>
   <string name="geoshape_view_change_location">عرض أو تغيير المضلع</string>
   <string name="geotrace_view_change_location">عرض أو تغيير المسار</string>
-  <string name="geometry_status">الاستمارات المحفوظة: %d (%d يظهر على الخريطة)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">عرض الإستمارات المحفوظة</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

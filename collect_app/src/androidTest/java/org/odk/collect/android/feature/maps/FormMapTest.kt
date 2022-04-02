@@ -5,7 +5,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
 import android.location.Location
-import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -23,8 +23,8 @@ import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.externalapp.ExternalAppUtils.getReturnIntent
 import org.odk.collect.geo.GeoUtils
-import org.odk.collect.geo.maps.MapFragment
-import org.odk.collect.geo.maps.MapFragmentFactory
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragmentFactory
 
 @RunWith(AndroidJUnit4::class)
 class FormMapTest {
@@ -75,8 +75,9 @@ class FormMapTest {
             .clickSaveAndExitBackToMap()
 
             .assertText(
-                ApplicationProvider.getApplicationContext<Context>().resources.getString(
-                    R.string.geometry_status,
+                getApplicationContext<Context>().resources.getString(
+                    R.string.select_item_count,
+                    getApplicationContext<Context>().resources.getString(R.string.saved_forms),
                     1,
                     1
                 )
@@ -96,7 +97,7 @@ class FormMapTest {
         val intent = getReturnIntent(GeoUtils.formatLocationResultString(location))
         val result = Instrumentation.ActivityResult(Activity.RESULT_OK, intent)
 
-        intending(hasComponent("org.odk.collect.geo.GeoPointActivity"))
+        intending(hasComponent("org.odk.collect.geo.geopoint.GeoPointActivity"))
             .respondWith(result)
     }
 

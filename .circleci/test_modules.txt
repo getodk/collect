@@ -11,3 +11,4 @@ geo:testDebug
 upgrade:testDebug
 permissions:testDebug
 settings:testDebug
+maps:testDebug

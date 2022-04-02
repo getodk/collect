@@ -463,8 +463,7 @@
   <string name="discard">Kuraho cg Jugunya.</string>
   <string name="geoshape_view_change_location">Garagaza cg Uhindure imiterere yahantu.</string>
   <string name="geotrace_view_change_location">Garagaza cg Uhindure ikimenyetso ndangahantu.</string>
-  <string name="geometry_status">Bika neza ibyanditswe: %d (bigaragara ku ikarita %d)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

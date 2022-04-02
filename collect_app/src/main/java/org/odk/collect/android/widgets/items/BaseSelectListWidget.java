@@ -17,18 +17,25 @@ import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 
-public abstract class BaseSelectListWidget extends ItemsWidget implements MultiChoiceWidget, SelectItemClickListener {
+import java.util.List;
+
+public abstract class BaseSelectListWidget extends QuestionWidget implements MultiChoiceWidget, SelectItemClickListener {
 
     SelectListWidgetAnswerBinding binding;
     protected AbstractSelectListAdapter recyclerViewAdapter;
 
+    final List<SelectChoice> items;
+
     public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+
         logAnalytics(questionDetails);
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), Appearances.isFlexAppearance(getQuestionDetails().getPrompt()));
         if (Appearances.isAutocomplete(getQuestionDetails().getPrompt())) {

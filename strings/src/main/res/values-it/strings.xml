@@ -465,8 +465,7 @@
   <string name="discard">Annulla</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
-  <string name="geometry_status">Formulari salvati:%d (%d mostrati sulla mappa)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Visualizza modulo salvato</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Tracciamento della posizione</string>

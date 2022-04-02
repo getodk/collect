@@ -42,7 +42,7 @@ public class ResetApplicationTest {
     public void savedAndBlankForms_shouldBeReset() {
         //TestCase1,4
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
@@ -152,7 +152,7 @@ public class ResetApplicationTest {
                 .clickOnDefaultToFinalized()
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()

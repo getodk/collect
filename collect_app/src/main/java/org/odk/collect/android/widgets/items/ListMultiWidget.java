@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatCheckBox;
 
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
@@ -41,6 +42,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ImageFileUtils;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
@@ -62,14 +64,17 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class ListMultiWidget extends ItemsWidget implements MultiChoiceWidget {
+public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget {
 
     final ArrayList<CheckBox> checkBoxes;
     private final boolean displayLabel;
+    private final List<SelectChoice> items;
 
     @SuppressWarnings("unchecked")
     public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
         super(context, questionDetails);
+
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         checkBoxes = new ArrayList<>();
         this.displayLabel = displayLabel;

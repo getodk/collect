@@ -456,8 +456,7 @@ Escolher Imagem</string>
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Visualizar ou Modificar GeoShape</string>
   <string name="geotrace_view_change_location">Visualizar ou Modificar GeoTrace</string>
-  <string name="geometry_status">Formulários salvos: %d (%d exibidos no mapa)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Ver formulário salvo</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

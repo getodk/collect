@@ -459,8 +459,7 @@
   <string name="discard">破棄</string>
   <string name="geoshape_view_change_location">GeoShape を表示または変更</string>
   <string name="geotrace_view_change_location">GeoTrace を表示または変更</string>
-  <string name="geometry_status">保存したフォーム: %d (%d 地図上に表示)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">保存済のフォームを表示</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->

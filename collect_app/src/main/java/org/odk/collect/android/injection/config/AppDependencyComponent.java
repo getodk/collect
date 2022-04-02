@@ -92,8 +92,9 @@ import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.geo.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -291,6 +292,8 @@ public interface AppDependencyComponent {
     void inject(MapsPreferencesFragment mapsPreferencesFragment);
 
     void inject(FormsDownloadResultDialog formsDownloadResultDialog);
+
+    void inject(SelectOneFromMapDialogFragment selectOneFromMapDialogFragment);
 
     void inject(DrawActivity drawActivity);
 

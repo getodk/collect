@@ -137,4 +137,8 @@ public class SelectOneWidget extends BaseSelectListWidget {
     public void setListener(AdvanceToNextListener listener) {
         this.listener = listener;
     }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+    }
 }

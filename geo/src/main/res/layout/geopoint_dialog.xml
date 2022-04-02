@@ -37,7 +37,7 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_end="@dimen/margin_standard" />
 
-        <org.odk.collect.geo.AccuracyStatusView
+        <org.odk.collect.geo.geopoint.AccuracyStatusView
             android:id="@+id/accuracy_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

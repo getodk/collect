@@ -24,7 +24,7 @@ public class FormEntrySettingsTest {
     @Test
     public void movingBackwards_shouldBeTurnedOn() {
         rule.startAtMainMenu()
-                .copyForm("All_widgets.xml")
+                .copyForm("all-widgets.xml")
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()

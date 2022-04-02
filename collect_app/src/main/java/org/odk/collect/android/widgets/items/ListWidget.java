@@ -45,10 +45,12 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -63,7 +65,7 @@ import timber.log.Timber;
  * @author Jeff Beorse (jeff@beorse.net)
  */
 @SuppressLint("ViewConstructor")
-public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnCheckedChangeListener {
+public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnCheckedChangeListener {
 
     @Nullable
     private AdvanceToNextListener listener;
@@ -72,9 +74,12 @@ public class ListWidget extends ItemsWidget implements MultiChoiceWidget, OnChec
 
     ArrayList<RadioButton> buttons;
     private final boolean displayLabel;
+    private final List<SelectChoice> items;
 
     public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
         super(context, questionDetails);
+
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         this.autoAdvance = autoAdvance;
         this.displayLabel = displayLabel;

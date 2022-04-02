@@ -49,12 +49,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.MapFragmentReferenceLayerUtils;
-import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.geo.maps.MapFragment;
-import org.odk.collect.geo.maps.MapPoint;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
+import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -567,7 +568,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             );
         }
         if (accuracyCircle == null) {
-            int stroke = new ThemeUtils(requireContext()).getColorPrimaryDark();
+            int stroke = ContextUtils.getThemeAttributeValue(requireContext(), R.attr.colorPrimaryDark);
             int fill = getResources().getColor(R.color.color_primary_low_emphasis);
             accuracyCircle = map.addCircle(new CircleOptions()
                 .center(loc)

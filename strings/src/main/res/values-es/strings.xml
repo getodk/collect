@@ -465,8 +465,7 @@
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
   <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
-  <string name="geometry_status">Form. Guardados: %d (%d se muestran en el mapa)</string>
-  <!--Name of an action button-->
+    <!--Name of an action button-->
   <string name="view_data">Ver formulario guardado</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Seguimiento de ubicación</string>
