@@ -31,6 +31,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.TestCoroutineDispatchers
 
 @RunWith(AndroidJUnit4::class)
 class FormListViewModelTest {
@@ -149,7 +150,8 @@ class FormListViewModelTest {
             analytics,
             changeLockProvider,
             formsDirDiskFormsSynchronizer,
-            projectId
+            projectId,
+            TestCoroutineDispatchers()
         )
 
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")

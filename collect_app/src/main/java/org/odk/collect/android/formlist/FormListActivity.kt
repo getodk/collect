@@ -109,9 +109,9 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
     }
 
     private fun initObservers() {
-        viewModel.showProgressBar.observe(this) { shouldShowProgressBar ->
+        viewModel.backgroundTasksCounter.observe(this) { numberOfActiveBackgroundTasks ->
             findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (shouldShowProgressBar) View.VISIBLE
+                if (numberOfActiveBackgroundTasks > 0) View.VISIBLE
                 else View.GONE
         }
 
@@ -125,12 +125,6 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
             findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
             findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
             adapter.setData(forms)
-        }
-
-        viewModel.isSyncingWithServer().observe(this) { syncing: Boolean ->
-            findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (syncing) View.VISIBLE
-                else View.GONE
         }
 
         viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->

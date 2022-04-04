@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.external.FormsContract
@@ -20,6 +21,9 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.utils.CoroutineDispatchersProvider
+import org.odk.collect.androidshared.utils.DefaultCoroutineDispatchers
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
@@ -39,7 +43,8 @@ class FormListViewModel(
     private val analytics: Analytics,
     private val changeLockProvider: ChangeLockProvider,
     private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
-    private val projectId: String
+    private val projectId: String,
+    private val coroutineDispatchersProvider: CoroutineDispatchersProvider = DefaultCoroutineDispatchers()
 ) : ViewModel() {
 
     private val _allForms: MutableNonNullLiveData<List<FormListItem>> = MutableNonNullLiveData(emptyList())
@@ -49,8 +54,8 @@ class FormListViewModel(
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
 
-    private val _showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
-    val showProgressBar: LiveData<Boolean> = _showProgressBar
+    private val _backgroundTasksCounter = MutableNonNullLiveData(0)
+    val backgroundTasksCounter: NonNullLiveData<Int> = _backgroundTasksCounter
 
     var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
         get() { return generalSettings.getInt("formChooserListSortingOrder") }
@@ -73,53 +78,60 @@ class FormListViewModel(
         }
 
     init {
-        viewModelScope.launch {
-            _showProgressBar.value = true
-            loadFromDatabase()
-            syncWithStorage()
-            _showProgressBar.value = false
-        }
+        loadFromDatabase()
+        syncWithStorage()
     }
 
     private fun loadFromDatabase() {
-        val newListOfForms = formsRepository
-            .all
-            .filter {
-                !it.isDeleted
-            }.map { form ->
-                FormListItem(
-                    databaseId = form.dbId,
-                    formId = form.formId,
-                    formName = form.displayName,
-                    formVersion = form.version ?: "",
-                    geometryPath = form.geometryXpath ?: "",
-                    dateOfCreation = form.date,
-                    dateOfLastUsage = 0,
-                    contentUri = FormsContract.getUri(projectId, form.dbId)
-                )
-            }.toList()
+        _backgroundTasksCounter.value++
+        viewModelScope.launch(coroutineDispatchersProvider.io) {
+            var newListOfForms = formsRepository
+                .all
+                .filter {
+                    !it.isDeleted
+                }.map { form ->
+                    FormListItem(
+                        databaseId = form.dbId,
+                        formId = form.formId,
+                        formName = form.displayName,
+                        formVersion = form.version ?: "",
+                        geometryPath = form.geometryXpath ?: "",
+                        dateOfCreation = form.date,
+                        dateOfLastUsage = 0,
+                        contentUri = FormsContract.getUri(projectId, form.dbId)
+                    )
+                }
 
-        _allForms.value = if (shouldHideOldFormVersions) {
-            newListOfForms.groupBy {
-                it.formId
-            }.map { (_, itemsWithSameId) ->
-                itemsWithSameId.sortedBy {
-                    it.formVersion
-                }.last()
+            if (shouldHideOldFormVersions) {
+                newListOfForms = newListOfForms.groupBy {
+                    it.formId
+                }.map { (_, itemsWithSameId) ->
+                    itemsWithSameId.sortedBy {
+                        it.formVersion
+                    }.last()
+                }
             }
-        } else {
-            newListOfForms
-        }
 
-        sortAndFilter()
+            withContext(coroutineDispatchersProvider.main) {
+                _allForms.value = newListOfForms.toList()
+                sortAndFilter()
+                _backgroundTasksCounter.value--
+            }
+        }
     }
 
     private fun syncWithStorage() {
         changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
-                val result = formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
-                loadFromDatabase()
-                _syncResult.value = Consumable(result)
+                _backgroundTasksCounter.value++
+                viewModelScope.launch(coroutineDispatchersProvider.io) {
+                    val result = formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
+                    withContext(coroutineDispatchersProvider.main) {
+                        loadFromDatabase()
+                        _syncResult.value = Consumable(result)
+                        _backgroundTasksCounter.value--
+                    }
+                }
             }
         }
     }
@@ -131,7 +143,7 @@ class FormListViewModel(
             { formsUpdater.matchFormsWithServer(projectId) },
             { value: Boolean ->
                 loadFromDatabase()
-                result.setValue(value)
+                result.value = value
             }
         )
         return result
@@ -145,7 +157,16 @@ class FormListViewModel(
     }
 
     fun isSyncingWithServer(): LiveData<Boolean> {
-        return syncRepository.isSyncing(projectId)
+        return Transformations.map(
+            syncRepository.isSyncing(projectId)
+        ) { isSyncing ->
+            if (isSyncing) {
+                _backgroundTasksCounter.value++
+            } else {
+                _backgroundTasksCounter.value--
+            }
+            isSyncing
+        }
     }
 
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
