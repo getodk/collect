@@ -129,7 +129,10 @@ class FormListViewModel(
         val result = MutableLiveData<Boolean>()
         scheduler.immediate(
             { formsUpdater.matchFormsWithServer(projectId) },
-            { value: Boolean -> result.setValue(value) }
+            { value: Boolean ->
+                loadFromDatabase()
+                result.setValue(value)
+            }
         )
         return result
     }
