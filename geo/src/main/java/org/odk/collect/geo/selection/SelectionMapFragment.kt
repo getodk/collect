@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.R
@@ -88,22 +87,13 @@ class SelectionMapFragment(
             requireActivity().finish()
         }
 
-        selectionMapData.isLoading().observe(this) {
-            if (it) {
-                val dialog = MaterialProgressDialogFragment().also { dialog ->
-                    dialog.message = getString(R.string.loading)
-                }
-
-                DialogFragmentUtils.showIfNotShowing(
-                    dialog,
-                    MaterialProgressDialogFragment::class.java,
-                    childFragmentManager
-                )
-            } else {
-                DialogFragmentUtils.dismissDialog(
-                    MaterialProgressDialogFragment::class.java,
-                    childFragmentManager
-                )
+        MaterialProgressDialogFragment.showOn(
+            this,
+            selectionMapData.isLoading(),
+            childFragmentManager
+        ) {
+            MaterialProgressDialogFragment().also { dialog ->
+                dialog.message = getString(R.string.loading)
             }
         }
     }

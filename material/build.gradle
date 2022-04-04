@@ -23,6 +23,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -35,6 +36,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring Dependencies.desugar
+
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.android_material
     implementation Dependencies.androidx_fragment

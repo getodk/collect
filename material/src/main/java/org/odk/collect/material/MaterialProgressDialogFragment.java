@@ -1,5 +1,7 @@
 package org.odk.collect.material;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,12 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-
-import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 /**
  * Provides a reusable progress dialog implemented with {@link MaterialAlertDialogBuilder}. Progress
@@ -133,5 +139,16 @@ public class MaterialProgressDialogFragment extends DialogFragment {
 
     public View getDialogView() {
         return dialogView;
+    }
+
+    public static void showOn(LifecycleOwner lifecycleOwner, NonNullLiveData<Boolean> liveData, FragmentManager fragmentManager, Supplier<MaterialProgressDialogFragment> supplier) {
+        liveData.observe(lifecycleOwner, isLoading -> {
+            if (isLoading) {
+                MaterialProgressDialogFragment dialog = supplier.get();
+                DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class.getName(), fragmentManager);
+            } else {
+                DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class.getName(), fragmentManager);
+            }
+        });
     }
 }
