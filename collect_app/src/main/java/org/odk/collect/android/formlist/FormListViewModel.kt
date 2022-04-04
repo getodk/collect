@@ -79,7 +79,9 @@ class FormListViewModel(
     private fun loadFromDatabase() {
         _allForms.value = formsRepository
             .all
-            .map { form ->
+            .filter {
+                !it.isDeleted
+            }.map { form ->
                 FormListItem(
                     databaseId = form.dbId,
                     formId = form.dbId,
@@ -90,8 +92,7 @@ class FormListViewModel(
                     dateOfLastUsage = 0,
                     contentUri = FormsContract.getUri(projectId, form.dbId)
                 )
-            }
-            .toList()
+            }.toList()
 
         sortAndFilter()
     }

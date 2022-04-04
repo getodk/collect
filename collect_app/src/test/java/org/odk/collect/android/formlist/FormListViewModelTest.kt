@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import junit.framework.TestCase.assertFalse
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -60,10 +61,21 @@ class FormListViewModelTest {
         .formFilePath(FormUtils.createXFormFile("2x", "1").absolutePath)
         .build()
 
+    private val form4 = Form.Builder()
+        .dbId(4)
+        .formId("4")
+        .version("1")
+        .displayName("Form 4")
+        .date(3)
+        .deleted(true)
+        .formFilePath(FormUtils.createXFormFile("4", "1").absolutePath)
+        .build()
+
     private val formsRepository = InMemFormsRepository().apply {
         save(form1)
         save(form2)
         save(form3)
+        save(form4)
     }
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val syncRepository: SyncStatusAppState = mock()
@@ -109,6 +121,17 @@ class FormListViewModelTest {
         dateOfCreation = form3.date,
         dateOfLastUsage = 0,
         contentUri = FormsContract.getUri(projectId, form3.dbId)
+    )
+
+    private val formListItem4 = FormListItem(
+        databaseId = form4.dbId,
+        formId = form4.dbId,
+        formName = form4.displayName,
+        formVersion = form4.version ?: "",
+        geometryPath = form4.geometryXpath ?: "",
+        dateOfCreation = form4.date,
+        dateOfLastUsage = 0,
+        contentUri = FormsContract.getUri(projectId, form4.dbId)
     )
 
     @Before
@@ -233,6 +256,12 @@ class FormListViewModelTest {
         assertThat(firstForm, `is`(formListItem2))
         assertThat(secondForm, `is`(formListItem1))
         assertThat(thirdForm, `is`(formListItem3))
+    }
+
+    @Test
+    fun `deleted forms should be ignored`() {
+        assertThat(viewModel.formsToDisplay.value!!.size, `is`(3))
+        assertFalse(viewModel.formsToDisplay.value!!.contains(formListItem4))
     }
 
     @Test
