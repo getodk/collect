@@ -84,7 +84,7 @@ class FormListViewModel(
             }.map { form ->
                 FormListItem(
                     databaseId = form.dbId,
-                    formId = form.dbId,
+                    formId = form.formId,
                     formName = form.displayName,
                     formVersion = form.version ?: "",
                     geometryPath = form.geometryXpath ?: "",

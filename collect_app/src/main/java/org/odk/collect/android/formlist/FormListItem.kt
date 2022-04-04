@@ -4,7 +4,7 @@ import android.net.Uri
 
 data class FormListItem(
     val databaseId: Long,
-    val formId: Long,
+    val formId: String,
     val formName: String,
     val formVersion: String,
     val geometryPath: String,

@@ -92,7 +92,7 @@ class FormListViewModelTest {
 
     private val formListItem1 = FormListItem(
         databaseId = form1.dbId,
-        formId = form1.dbId,
+        formId = form1.formId,
         formName = form1.displayName,
         formVersion = form1.version ?: "",
         geometryPath = form1.geometryXpath ?: "",
@@ -103,7 +103,7 @@ class FormListViewModelTest {
 
     private val formListItem2 = FormListItem(
         databaseId = form2.dbId,
-        formId = form2.dbId,
+        formId = form2.formId,
         formName = form2.displayName,
         formVersion = form2.version ?: "",
         geometryPath = form2.geometryXpath ?: "",
@@ -114,7 +114,7 @@ class FormListViewModelTest {
 
     private val formListItem3 = FormListItem(
         databaseId = form3.dbId,
-        formId = form3.dbId,
+        formId = form3.formId,
         formName = form3.displayName,
         formVersion = form3.version ?: "",
         geometryPath = form3.geometryXpath ?: "",
@@ -125,7 +125,7 @@ class FormListViewModelTest {
 
     private val formListItem4 = FormListItem(
         databaseId = form4.dbId,
-        formId = form4.dbId,
+        formId = form4.formId,
         formName = form4.displayName,
         formVersion = form4.version ?: "",
         geometryPath = form4.geometryXpath ?: "",
