@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
 import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
@@ -23,6 +24,7 @@ import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
@@ -31,6 +33,9 @@ import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
 class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
+
+    @Inject
+    lateinit var scheduler: Scheduler
 
     @Inject
     lateinit var formEntryViewModelFactory: FormEntryViewModel.Factory
@@ -45,7 +50,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
-                    SelectChoicesMapData(resources, prompt),
+                    SelectChoicesMapData(resources, scheduler, prompt),
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false
                 )
@@ -90,17 +95,42 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
     }
 }
 
-internal class SelectChoicesMapData(private val resources: Resources, prompt: FormEntryPrompt) :
+internal class SelectChoicesMapData(
+    private val resources: Resources,
+    scheduler: Scheduler,
+    prompt: FormEntryPrompt
+) :
     SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableLiveData<Int>()
     private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
+    private val isLoading = MutableNonNullLiveData(true)
 
     init {
-        val selectChoices = prompt.selectChoices
-        itemCount.value = selectChoices.size
-        items.value = selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
+        isLoading.value = true
+
+        scheduler.immediate(
+            background = {
+                val selectChoices = prompt.selectChoices
+                val itemCount = selectChoices.size
+                val items: List<MappableSelectItem> = loadItemsFromChoices(selectChoices, prompt)
+
+                Pair(itemCount, items)
+            },
+            foreground = {
+                itemCount.value = it.first
+                items.value = it.second
+                isLoading.value = false
+            }
+        )
+    }
+
+    private fun loadItemsFromChoices(
+        selectChoices: MutableList<SelectChoice>,
+        prompt: FormEntryPrompt
+    ): List<MappableSelectItem> {
+        return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild("geometry")
 
             if (geometry != null) {
@@ -133,7 +163,7 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
-        return MutableNonNullLiveData(false)
+        return isLoading
     }
 
     override fun getMapTitle(): LiveData<String> {
