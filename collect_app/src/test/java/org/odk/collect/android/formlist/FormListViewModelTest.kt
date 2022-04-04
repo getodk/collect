@@ -220,9 +220,10 @@ class FormListViewModelTest {
         val liveData = MutableLiveData(true)
         whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
 
-        assertThat(viewModel.isSyncingWithServer().value, `is`(true))
+        val isSyncing = LiveDataTester().activate(viewModel.isSyncingWithServer())
+        assertThat(isSyncing.value, `is`(true))
         liveData.value = false
-        assertThat(viewModel.isSyncingWithServer().value, `is`(false))
+        assertThat(isSyncing.value, `is`(false))
     }
 
     @Test

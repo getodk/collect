@@ -2,7 +2,6 @@ package org.odk.collect.testshared
 
 import android.content.res.Resources
 import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -42,52 +41,6 @@ class RecyclerViewMatcher private constructor(private val recyclerViewId: Int) {
                     } else {
                         return false
                     }
-                }
-                return if (targetViewId == -1) {
-                    view === childView
-                } else {
-                    val targetView = childView!!.findViewById<View>(targetViewId)
-                    view === targetView
-                }
-            }
-        }
-    }
-
-    fun atElementWithText(
-        textView: Int,
-        expectedText: String,
-        targetViewId: Int
-    ): Matcher<View> {
-        return object : TypeSafeMatcher<View>() {
-            var resources: Resources? = null
-            var childView: View? = null
-
-            override fun describeTo(description: Description) {
-                var idDescription = recyclerViewId.toString()
-                if (resources != null) {
-                    idDescription = try {
-                        resources!!.getResourceName(recyclerViewId)
-                    } catch (e: Resources.NotFoundException) {
-                        String.format("%s (resource name not found)", recyclerViewId)
-                    }
-                }
-                description.appendText("RecyclerView with id: $idDescription and text: $expectedText")
-            }
-
-            public override fun matchesSafely(view: View): Boolean {
-                resources = view.resources
-                val recyclerView: RecyclerView = view.rootView.findViewById(recyclerViewId)
-                if (recyclerView.id == recyclerViewId) {
-                    var viewHolder: RecyclerView.ViewHolder?
-                    for (i in 0 until recyclerView.adapter!!.itemCount) {
-                        viewHolder = recyclerView.findViewHolderForAdapterPosition(i)
-                        if ((viewHolder!!.itemView.findViewById<View>(textView) as TextView).text.toString() == expectedText) {
-                            childView = viewHolder.itemView
-                            break
-                        }
-                    }
-                } else {
-                    return false
                 }
                 return if (targetViewId == -1) {
                     view === childView

@@ -3,14 +3,20 @@ package org.odk.collect.android.support.pages;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
+import static org.odk.collect.testshared.ViewActions.clickOnViewChild;
+
+import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
@@ -44,28 +50,31 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage checkIsFormSubtextDisplayed() {
-        onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
-        return this;
+        return WaitFor.waitFor(() -> {
+            assertTextNotDisplayed(R.string.no_items_display_forms);
+            onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
+            return this;
+        });
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
-        onView(withRecyclerView(R.id.formList)
-                .atElementWithText(R.id.form_title, formName, R.id.map_button))
-                .check(matches(isDisplayed()));
+        onView(withId(R.id.formList))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
+                .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
-        onView(withRecyclerView(R.id.formList)
-                .atElementWithText(R.id.form_title, formName, R.id.map_button))
-                .check(matches(not(isDisplayed())));
+        onView(withId(R.id.formList))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
+                .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
-        onView(withRecyclerView(R.id.formList)
-                .atElementWithText(R.id.form_title, formName, R.id.map_button))
-                .perform(click());
+        onView(withId(R.id.formList))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), clickOnViewChild(R.id.map_button)));
+
         return new FormMapPage(formName).assertOnPage();
     }
 
@@ -76,9 +85,8 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     private void clickOnFormButton(String formName) {
         assertFormExists(formName);
-        onView(withRecyclerView(R.id.formList)
-                .atElementWithText(R.id.form_title, formName, R.id.form_title))
-                .perform(click());
+        onView(withId(R.id.formList))
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), click()));
     }
 
     public FormEndPage clickOnEmptyForm(String formName) {
@@ -105,9 +113,9 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return WaitFor.waitFor(() -> {
             assertTextNotDisplayed(R.string.no_items_display_forms);
-            onView(withRecyclerView(R.id.formList)
-                    .atElementWithText(R.id.form_title, formName, R.id.form_title))
-                    .check(matches(isDisplayed()));
+
+            onView(withId(R.id.formList))
+                    .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()));
             return this;
         });
     }
