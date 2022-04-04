@@ -37,7 +37,7 @@ class FormMapViewModel(
     private var itemCount = MutableLiveData(0)
     private val form = formsRepository.get(formId)!!
 
-    private val isLoading = MutableLiveData(false)
+    private val isLoading = MutableNonNullLiveData(false)
 
     init {
         mapTitle.value = form.displayName
@@ -59,7 +59,7 @@ class FormMapViewModel(
         return mappableItems
     }
 
-    fun isLoading(): LiveData<Boolean> {
+    override fun isLoading(): NonNullLiveData<Boolean> {
         return isLoading
     }
 

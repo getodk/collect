@@ -132,6 +132,10 @@ internal class SelectChoicesMapData(private val resources: Resources, prompt: Fo
         }
     }
 
+    override fun isLoading(): NonNullLiveData<Boolean> {
+        return MutableNonNullLiveData(false)
+    }
+
     override fun getMapTitle(): LiveData<String> {
         return mapTitle
     }

@@ -24,11 +24,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.SelectionMapFragment
-import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -96,23 +94,6 @@ class FormMapActivity : LocalizedActivity() {
                 formNavigator.newInstance(this, formId)
             }
         }
-
-        viewModel.isLoading().observe(this) {
-            if (it) {
-                DialogFragmentUtils.showIfNotShowing(
-                    MaterialProgressDialogFragment().also { dialog ->
-                        dialog.message = "Loading..."
-                    },
-                    TAG_LOADING_PROGRESS_DIALOG,
-                    supportFragmentManager
-                )
-            } else {
-                DialogFragmentUtils.dismissDialog(
-                    TAG_LOADING_PROGRESS_DIALOG,
-                    supportFragmentManager
-                )
-            }
-        }
     }
 
     override fun onResume() {
@@ -122,6 +103,5 @@ class FormMapActivity : LocalizedActivity() {
 
     companion object {
         const val EXTRA_FORM_ID = "form_id"
-        private const val TAG_LOADING_PROGRESS_DIALOG = "loading_progress_dialog"
     }
 }

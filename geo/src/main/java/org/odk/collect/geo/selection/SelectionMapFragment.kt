@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.R
@@ -24,6 +25,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
@@ -84,6 +86,25 @@ class SelectionMapFragment(
         ) {
             ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
             requireActivity().finish()
+        }
+
+        selectionMapData.isLoading().observe(this) {
+            if (it) {
+                val dialog = MaterialProgressDialogFragment().also { dialog ->
+                    dialog.message = "Loading..."
+                }
+
+                DialogFragmentUtils.showIfNotShowing(
+                    dialog,
+                    MaterialProgressDialogFragment::class.java,
+                    childFragmentManager
+                )
+            } else {
+                DialogFragmentUtils.dismissDialog(
+                    MaterialProgressDialogFragment::class.java,
+                    childFragmentManager
+                )
+            }
         }
     }
 
@@ -370,6 +391,7 @@ internal class SelectedFeatureViewModel : ViewModel() {
 }
 
 interface SelectionMapData {
+    fun isLoading(): NonNullLiveData<Boolean>
     fun getMapTitle(): LiveData<String>
     fun getItemType(): String
     fun getItemCount(): LiveData<Int>
