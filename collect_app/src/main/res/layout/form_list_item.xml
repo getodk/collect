@@ -46,8 +46,8 @@
         android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
         android:layout_marginTop="@dimen/margin_extra_small"
         android:layout_marginBottom="@dimen/margin_standard"
-        app:layout_constraintStart_toStartOf="@+id/form_subtitle"
-        app:layout_constraintEnd_toEndOf="@+id/form_subtitle"
+        app:layout_constraintStart_toStartOf="@+id/form_title"
+        app:layout_constraintEnd_toEndOf="@+id/form_title"
         app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
