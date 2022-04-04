@@ -407,8 +407,32 @@ class FormMapViewModelTest {
         )
     }
 
+    @Test
+    fun `is loading is true while forms and instances are being fetched`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+
+        val viewModel = createViewModel(form)
+        assertThat(viewModel.isLoading().value, equalTo(false))
+
+        viewModel.load()
+        assertThat(viewModel.isLoading().value, equalTo(true))
+
+        scheduler.runBackground()
+        assertThat(viewModel.isLoading().value, equalTo(false))
+    }
+
     private fun createAndLoadViewModel(form: Form): FormMapViewModel {
-        val viewModel = FormMapViewModel(
+        val viewModel = createViewModel(form)
+        viewModel.load()
+        scheduler.runBackground()
+        return viewModel
+    }
+
+    private fun createViewModel(form: Form): FormMapViewModel {
+        return FormMapViewModel(
             application.resources,
             form.dbId,
             formsRepository,
@@ -416,8 +440,6 @@ class FormMapViewModelTest {
             settingsProvider,
             scheduler
         )
-        viewModel.load()
-        return viewModel
     }
 
     private fun formatDate(string: Int, date: Long): String {
