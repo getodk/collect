@@ -11,6 +11,7 @@ import org.odk.collect.android.external.InstanceProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -25,23 +26,19 @@ import java.util.Locale
 
 class FormMapViewModel(
     private val resources: Resources,
-    formId: Long,
-    formsRepository: FormsRepository,
+    private val formId: Long,
+    private val formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
     private val settingsProvider: SettingsProvider,
     private val scheduler: Scheduler
 ) : ViewModel(), SelectionMapData {
 
-    private var mapTitle = MutableLiveData<String>()
+    private var _form: Form? = null
+
+    private val mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
-    private val form = formsRepository.get(formId)!!
-
     private val isLoading = MutableNonNullLiveData(false)
-
-    init {
-        mapTitle.value = form.displayName
-    }
 
     override fun getMapTitle(): LiveData<String> {
         return mapTitle
@@ -68,6 +65,7 @@ class FormMapViewModel(
 
         scheduler.immediate(
             background = {
+                val form = _form ?: formsRepository.get(formId)!!.also { _form = it }
                 val instances = instancesRepository.getAllByFormId(form.formId)
                 val items = mutableListOf<MappableSelectItem>()
 
@@ -88,11 +86,12 @@ class FormMapViewModel(
                     }
                 }
 
-                Pair(items, instances.size)
+                Triple(form.displayName, items, instances.size)
             },
             foreground = {
-                mappableItems.value = it.first
-                itemCount.value = it.second
+                mapTitle.value = it.first
+                mappableItems.value = it.second
+                itemCount.value = it.third
                 isLoading.value = false
             }
         )
