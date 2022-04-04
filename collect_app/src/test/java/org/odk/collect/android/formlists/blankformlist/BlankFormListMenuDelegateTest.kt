@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.view.Menu
 import androidx.appcompat.view.SupportMenuInflater
@@ -20,6 +20,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.formlists.FormListSortingDialog
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.robolectric.Shadows
@@ -28,10 +29,10 @@ import org.robolectric.shadows.ShadowDialog
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
-class FormListMenuDelegateTest {
+class BlankFormListMenuDelegateTest {
     private lateinit var activity: FragmentActivity
 
-    private val viewModel: FormListViewModel = mock()
+    private val viewModel: BlankFormListViewModel = mock()
     private val networkStateProvider: NetworkStateProvider = mock()
 
     private val menuInflater: SupportMenuInflater
@@ -140,7 +141,7 @@ class FormListMenuDelegateTest {
         val menuDelegate = createMenuDelegate()
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_sort))
 
-        assertThat(ShadowDialog.getLatestDialog(), instanceOf(ListSortingDialog::class.java))
+        assertThat(ShadowDialog.getLatestDialog(), instanceOf(FormListSortingDialog::class.java))
     }
 
     @Test
@@ -206,13 +207,13 @@ class FormListMenuDelegateTest {
         verify(viewModel).filterText = ""
     }
 
-    private fun createMenuDelegate(): FormListMenuDelegate {
-        return FormListMenuDelegate(activity, viewModel, networkStateProvider)
+    private fun createMenuDelegate(): BlankFormListMenuDelegate {
+        return BlankFormListMenuDelegate(activity, viewModel, networkStateProvider)
     }
 
     private fun createdMenu(): Menu {
         val menu: SupportMenu = MenuBuilder(activity)
-        menuInflater.inflate(R.menu.list_menu, menu)
+        menuInflater.inflate(R.menu.form_list_menu, menu)
         return menu
     }
 }

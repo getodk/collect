@@ -23,8 +23,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.analytics.AnalyticsUtils
-import org.odk.collect.android.formlist.FormListItem
-import org.odk.collect.android.formlist.FormListViewModel
+import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
+import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.settings.SettingsProvider
 import javax.inject.Inject
@@ -34,12 +34,12 @@ import javax.inject.Inject
  */
 class AndroidShortcutsActivity : AppCompatActivity() {
     @Inject
-    lateinit var viewModelFactory: FormListViewModel.Factory
+    lateinit var viewModelFactory: BlankFormListViewModel.Factory
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
-    private val viewModel: FormListViewModel by viewModels { viewModelFactory }
+    private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
     public override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
@@ -48,11 +48,11 @@ class AndroidShortcutsActivity : AppCompatActivity() {
         viewModel.formsToDisplay.observe(this) { forms -> showFormListDialog(forms) }
     }
 
-    private fun showFormListDialog(forms: List<FormListItem>) {
+    private fun showFormListDialog(blankFormListItems: List<BlankFormListItem>) {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.select_odk_shortcut)
             .setItems(
-                forms
+                blankFormListItems
                     .map { it.formName }
                     .toTypedArray()
             ) { _: DialogInterface?, item: Int ->
@@ -60,7 +60,7 @@ class AndroidShortcutsActivity : AppCompatActivity() {
                     AnalyticsEvents.CREATE_SHORTCUT,
                     settingsProvider.getUnprotectedSettings()
                 )
-                val intent = getShortcutIntent(forms, item)
+                val intent = getShortcutIntent(blankFormListItems, item)
                 setResult(RESULT_OK, intent)
                 finish()
             }
@@ -72,7 +72,7 @@ class AndroidShortcutsActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun getShortcutIntent(forms: List<FormListItem>, item: Int): Intent {
+    private fun getShortcutIntent(forms: List<BlankFormListItem>, item: Int): Intent {
         val shortcutIntent = Intent(Intent.ACTION_EDIT).apply {
             data = forms[item].contentUri
         }

@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.formlist.FormListActivity
+import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.NotificationManagerNotifier
@@ -22,7 +22,7 @@ object FormUpdatesDownloadedNotificationBuilder {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
 
         val intent = if (allFormsDownloadedSuccessfully) {
-            Intent(application, FormListActivity::class.java).apply {
+            Intent(application, BlankFormListActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
         } else {

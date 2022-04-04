@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
@@ -34,7 +34,7 @@ import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.TestCoroutineDispatchers
 
 @RunWith(AndroidJUnit4::class)
-class FormListViewModelTest {
+class BlankFormListViewModelTest {
     private val form1 = Form.Builder()
         .dbId(1)
         .formId("2")
@@ -89,9 +89,9 @@ class FormListViewModelTest {
     private val projectId = "projectId"
 
     private val changeLock = BooleanChangeLock()
-    private lateinit var viewModel: FormListViewModel
+    private lateinit var viewModel: BlankFormListViewModel
 
-    private val formListItem1 = FormListItem(
+    private val formListItem1 = BlankFormListItem(
         databaseId = form1.dbId,
         formId = form1.formId,
         formName = form1.displayName,
@@ -102,7 +102,7 @@ class FormListViewModelTest {
         contentUri = FormsContract.getUri(projectId, form1.dbId)
     )
 
-    private val formListItem2 = FormListItem(
+    private val formListItem2 = BlankFormListItem(
         databaseId = form2.dbId,
         formId = form2.formId,
         formName = form2.displayName,
@@ -113,7 +113,7 @@ class FormListViewModelTest {
         contentUri = FormsContract.getUri(projectId, form2.dbId)
     )
 
-    private val formListItem3 = FormListItem(
+    private val formListItem3 = BlankFormListItem(
         databaseId = form3.dbId,
         formId = form3.formId,
         formName = form3.displayName,
@@ -124,7 +124,7 @@ class FormListViewModelTest {
         contentUri = FormsContract.getUri(projectId, form3.dbId)
     )
 
-    private val formListItem4 = FormListItem(
+    private val formListItem4 = BlankFormListItem(
         databaseId = form4.dbId,
         formId = form4.formId,
         formName = form4.displayName,
@@ -140,7 +140,7 @@ class FormListViewModelTest {
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
         whenever(formsDirDiskFormsSynchronizer.synchronizeAndReturnError()).thenReturn("Result text")
 
-        viewModel = FormListViewModel(
+        viewModel = BlankFormListViewModel(
             formsRepository,
             context,
             syncRepository,
@@ -172,7 +172,7 @@ class FormListViewModelTest {
         changeLock.lock()
         val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer = mock()
 
-        FormListViewModel(
+        BlankFormListViewModel(
             formsRepository,
             context,
             syncRepository,

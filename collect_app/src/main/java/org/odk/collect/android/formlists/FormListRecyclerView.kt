@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 
-class ListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
+class FormListRecyclerView(context: Context, attrs: AttributeSet?) : RecyclerView(context, attrs) {
 
     constructor(context: Context) : this(context, null)
 

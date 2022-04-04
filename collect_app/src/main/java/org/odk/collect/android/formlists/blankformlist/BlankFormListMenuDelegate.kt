@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.view.Menu
 import android.view.MenuInflater
@@ -6,21 +6,22 @@ import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
 import org.odk.collect.android.R
+import org.odk.collect.android.formlists.FormListSortingDialog
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
-class FormListMenuDelegate(
+class BlankFormListMenuDelegate(
     private val activity: ComponentActivity,
-    private val viewModel: FormListViewModel,
+    private val viewModel: BlankFormListViewModel,
     private val networkStateProvider: NetworkStateProvider
 ) : MenuDelegate {
     private var outOfSync = false
     private var syncing = false
 
     override fun onCreateOptionsMenu(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.list_menu, menu)
+        menuInflater.inflate(R.menu.form_list_menu, menu)
 
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -83,7 +84,7 @@ class FormListMenuDelegate(
                 true
             }
             R.id.menu_sort -> {
-                ListSortingDialog(
+                FormListSortingDialog(
                     activity,
                     intArrayOf(
                         R.string.sort_by_name_asc,

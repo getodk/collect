@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.app.Application
 import android.net.Uri
@@ -33,7 +33,7 @@ import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.ByteArrayInputStream
 
-class FormListViewModel(
+class BlankFormListViewModel(
     private val formsRepository: FormsRepository,
     private val application: Application,
     private val syncRepository: SyncStatusAppState,
@@ -47,9 +47,9 @@ class FormListViewModel(
     private val coroutineDispatchersProvider: CoroutineDispatchersProvider = DefaultCoroutineDispatchers()
 ) : ViewModel() {
 
-    private val _allForms: MutableNonNullLiveData<List<FormListItem>> = MutableNonNullLiveData(emptyList())
-    private val _formsToDisplay: MutableLiveData<List<FormListItem>> = MutableLiveData()
-    val formsToDisplay: LiveData<List<FormListItem>> = _formsToDisplay
+    private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
+    private val _formsToDisplay: MutableLiveData<List<BlankFormListItem>> = MutableLiveData()
+    val formsToDisplay: LiveData<List<BlankFormListItem>> = _formsToDisplay
 
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
@@ -90,7 +90,7 @@ class FormListViewModel(
                 .filter {
                     !it.isDeleted
                 }.map { form ->
-                    FormListItem(
+                    BlankFormListItem(
                         databaseId = form.dbId,
                         formId = form.formId,
                         formName = form.displayName,
@@ -222,7 +222,7 @@ class FormListViewModel(
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FormListViewModel(
+            return BlankFormListViewModel(
                 formsRepository,
                 application,
                 syncRepository,

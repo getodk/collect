@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
-import org.odk.collect.android.formlist.FormListActivity;
+import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.ProjectIconView;
@@ -95,7 +95,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         Button enterDataButtonNew = findViewById(R.id.enter_data);
         enterDataButtonNew.setOnClickListener(v -> {
-            Intent intent = new Intent(this, FormListActivity.class);
+            Intent intent = new Intent(this, BlankFormListActivity.class);
             startActivity(intent);
         });
 

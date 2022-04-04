@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists
 
 import android.content.Context
 import android.os.Bundle
@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.odk.collect.android.R
 import org.odk.collect.android.adapters.SortDialogAdapter
 
-class ListSortingDialog(
+class FormListSortingDialog(
     context: Context,
     private val options: IntArray,
     private val selectedOption: Int,

@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.content.Intent
 import android.net.Uri
@@ -24,10 +24,10 @@ import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
+class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     @Inject
-    lateinit var viewModelFactory: FormListViewModel.Factory
+    lateinit var viewModelFactory: BlankFormListViewModel.Factory
 
     @Inject
     lateinit var networkStateProvider: NetworkStateProvider
@@ -35,22 +35,22 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
-    private val viewModel: FormListViewModel by viewModels { viewModelFactory }
+    private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
     private val adapter: FormListAdapter = FormListAdapter().apply {
-        listener = this@FormListActivity
+        listener = this@BlankFormListActivity
     }
 
-    private lateinit var menuDelegate: FormListMenuDelegate
+    private lateinit var menuDelegate: BlankFormListMenuDelegate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-        setContentView(R.layout.activity_form_list)
+        setContentView(R.layout.activity_blank_form_list)
         title = getString(R.string.enter_data)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        menuDelegate = FormListMenuDelegate(this, viewModel, networkStateProvider)
+        menuDelegate = BlankFormListMenuDelegate(this, viewModel, networkStateProvider)
 
         findViewById<RecyclerView>(R.id.formList).adapter = adapter
 
@@ -97,7 +97,7 @@ class FormListActivity : LocalizedActivity(), OnFormItemClickListener {
             object : PermissionListener {
                 override fun granted() {
                     startActivity(
-                        Intent(this@FormListActivity, FormMapActivity::class.java).also {
+                        Intent(this@BlankFormListActivity, FormMapActivity::class.java).also {
                             it.putExtra(FormMapActivity.EXTRA_FORM_ID, id)
                         }
                     )

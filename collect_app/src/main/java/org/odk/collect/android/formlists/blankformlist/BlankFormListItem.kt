@@ -1,8 +1,8 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.net.Uri
 
-data class FormListItem(
+data class BlankFormListItem(
     val databaseId: Long,
     val formId: String,
     val formName: String,

@@ -22,16 +22,16 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.R
 import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
-import org.odk.collect.android.formlist.FormListViewModel
+import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import javax.inject.Inject
 
 class DeleteSavedFormActivity : CollectAbstractActivity() {
     @Inject
-    lateinit var viewModelFactory: FormListViewModel.Factory
+    lateinit var viewModelFactory: BlankFormListViewModel.Factory
 
-    private val viewModel: FormListViewModel by viewModels { viewModelFactory }
+    private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: TabsLayoutBinding
 

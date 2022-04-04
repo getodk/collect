@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlist
+package org.odk.collect.android.formlists.blankformlist
 
 import android.net.Uri
 import android.view.LayoutInflater
@@ -6,18 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.databinding.FormListItemBinding
+import org.odk.collect.android.databinding.BlankFormListItemBinding
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
-    private var formItems = emptyList<FormListItem>()
+    private var formItems = emptyList<BlankFormListItem>()
     lateinit var listener: OnFormItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = FormListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = BlankFormListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -55,10 +55,10 @@ class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
 
     override fun getItemCount() = formItems.size
 
-    inner class ViewHolder(val binding: FormListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: BlankFormListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
-    fun setData(formItems: List<FormListItem>) {
-        this.formItems = formItems.toList()
+    fun setData(blankFormItems: List<BlankFormListItem>) {
+        this.formItems = blankFormItems.toList()
         notifyDataSetChanged()
     }
 }

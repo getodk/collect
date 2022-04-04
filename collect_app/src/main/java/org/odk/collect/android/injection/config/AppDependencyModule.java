@@ -53,7 +53,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
-import org.odk.collect.android.formlist.FormListViewModel;
+import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
@@ -635,7 +635,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormListViewModel.Factory providesFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, Application application, SyncStatusAppState syncStatusAppState, FormsUpdater formsUpdater, Scheduler scheduler, SettingsProvider settingsProvider, Analytics analytics, ChangeLockProvider changeLockProvider, CurrentProjectProvider currentProjectProvider) {
-        return new FormListViewModel.Factory(formsRepositoryProvider.get(), application, syncStatusAppState, formsUpdater, scheduler, settingsProvider.getUnprotectedSettings(), analytics, changeLockProvider, new FormsDirDiskFormsSynchronizer(), currentProjectProvider.getCurrentProject().getUuid());
+    public BlankFormListViewModel.Factory providesFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, Application application, SyncStatusAppState syncStatusAppState, FormsUpdater formsUpdater, Scheduler scheduler, SettingsProvider settingsProvider, Analytics analytics, ChangeLockProvider changeLockProvider, CurrentProjectProvider currentProjectProvider) {
+        return new BlankFormListViewModel.Factory(formsRepositoryProvider.get(), application, syncStatusAppState, formsUpdater, scheduler, settingsProvider.getUnprotectedSettings(), analytics, changeLockProvider, new FormsDirDiskFormsSynchronizer(), currentProjectProvider.getCurrentProject().getUuid());
     }
 }
