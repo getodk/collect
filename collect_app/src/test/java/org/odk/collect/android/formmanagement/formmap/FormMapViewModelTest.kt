@@ -18,6 +18,7 @@ import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.testshared.FakeScheduler
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,6 +32,7 @@ class FormMapViewModelTest {
     }
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
+    private val scheduler = FakeScheduler()
 
     @Test
     fun `returns count based on form instances`() {
@@ -411,7 +413,8 @@ class FormMapViewModelTest {
             form.dbId,
             formsRepository,
             instancesRepository,
-            settingsProvider
+            settingsProvider,
+            scheduler
         )
         viewModel.load()
         return viewModel

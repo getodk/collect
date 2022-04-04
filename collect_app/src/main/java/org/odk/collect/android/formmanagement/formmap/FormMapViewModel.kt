@@ -10,6 +10,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.external.InstanceProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -28,12 +29,15 @@ class FormMapViewModel(
     formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
     private val settingsProvider: SettingsProvider,
+    private val scheduler: Scheduler
 ) : ViewModel(), SelectionMapData {
 
     private var mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
     private val form = formsRepository.get(formId)!!
+
+    private val isLoading = MutableLiveData(false)
 
     init {
         mapTitle.value = form.displayName
@@ -55,29 +59,43 @@ class FormMapViewModel(
         return mappableItems
     }
 
+    fun isLoading(): LiveData<Boolean> {
+        return isLoading
+    }
+
     fun load() {
-        val instances = instancesRepository.getAllByFormId(form.formId)
-        val items: MutableList<MappableSelectItem> = ArrayList()
+        isLoading.value = true
 
-        for (instance in instances) {
-            if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
-                try {
-                    val geometry = JSONObject(instance.geometry)
-                    val coordinates = geometry.getJSONArray("coordinates")
+        scheduler.immediate(
+            background = {
+                val instances = instancesRepository.getAllByFormId(form.formId)
+                val items = mutableListOf<MappableSelectItem>()
 
-                    // In GeoJSON, longitude comes before latitude.
-                    val lon = coordinates.getDouble(0)
-                    val lat = coordinates.getDouble(1)
+                for (instance in instances) {
+                    if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
+                        try {
+                            val geometry = JSONObject(instance.geometry)
+                            val coordinates = geometry.getJSONArray("coordinates")
 
-                    items.add(createItem(instance, lat, lon))
-                } catch (e: JSONException) {
-                    Timber.w("Invalid JSON in instances table: %s", instance.geometry)
+                            // In GeoJSON, longitude comes before latitude.
+                            val lon = coordinates.getDouble(0)
+                            val lat = coordinates.getDouble(1)
+
+                            items.add(createItem(instance, lat, lon))
+                        } catch (e: JSONException) {
+                            Timber.w("Invalid JSON in instances table: %s", instance.geometry)
+                        }
+                    }
                 }
-            }
-        }
 
-        mappableItems.value = items
-        itemCount.value = instances.size
+                Pair(items, instances.size)
+            },
+            foreground = {
+                mappableItems.value = it.first
+                itemCount.value = it.second
+                isLoading.value = false
+            }
+        )
     }
 
     private fun createItem(
