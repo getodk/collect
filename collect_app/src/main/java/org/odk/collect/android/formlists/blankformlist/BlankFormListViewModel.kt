@@ -20,8 +20,8 @@ import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.data.Consumable
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.utils.CoroutineDispatchersProvider
 import org.odk.collect.androidshared.utils.DefaultCoroutineDispatchers
 import org.odk.collect.async.Scheduler
@@ -54,8 +54,15 @@ class BlankFormListViewModel(
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
 
-    private val _backgroundTasksCounter = MutableNonNullLiveData(0)
-    val backgroundTasksCounter: NonNullLiveData<Int> = _backgroundTasksCounter
+    private val isFormLoadingRunning = MutableNonNullLiveData(false)
+    private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
+    private val isSyncingWithServerRunning = MutableNonNullLiveData(false)
+
+    val backgroundTasksObserver: LiveData<Triple<Boolean, Boolean, Boolean>> = LiveDataUtils.zip3(
+        isFormLoadingRunning,
+        isSyncingWithStorageRunning,
+        isSyncingWithServerRunning,
+    )
 
     var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
         get() { return generalSettings.getInt("formChooserListSortingOrder") }
@@ -83,7 +90,7 @@ class BlankFormListViewModel(
     }
 
     private fun loadFromDatabase() {
-        _backgroundTasksCounter.value++
+        isFormLoadingRunning.value = true
         viewModelScope.launch(coroutineDispatchersProvider.io) {
             var newListOfForms = formsRepository
                 .all
@@ -115,7 +122,7 @@ class BlankFormListViewModel(
             withContext(coroutineDispatchersProvider.main) {
                 _allForms.value = newListOfForms.toList()
                 sortAndFilter()
-                _backgroundTasksCounter.value--
+                isFormLoadingRunning.value = false
             }
         }
     }
@@ -123,13 +130,13 @@ class BlankFormListViewModel(
     private fun syncWithStorage() {
         changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
-                _backgroundTasksCounter.value++
+                isSyncingWithStorageRunning.value = true
                 viewModelScope.launch(coroutineDispatchersProvider.io) {
                     val result = formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
                     withContext(coroutineDispatchersProvider.main) {
                         loadFromDatabase()
                         _syncResult.value = Consumable(result)
-                        _backgroundTasksCounter.value--
+                        isSyncingWithStorageRunning.value = false
                     }
                 }
             }
@@ -160,11 +167,7 @@ class BlankFormListViewModel(
         return Transformations.map(
             syncRepository.isSyncing(projectId)
         ) { isSyncing ->
-            if (isSyncing) {
-                _backgroundTasksCounter.value++
-            } else {
-                _backgroundTasksCounter.value--
-            }
+            isSyncingWithServerRunning.value = isSyncing
             isSyncing
         }
     }

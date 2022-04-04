@@ -109,9 +109,9 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
     }
 
     private fun initObservers() {
-        viewModel.backgroundTasksCounter.observe(this) { numberOfActiveBackgroundTasks ->
+        viewModel.backgroundTasksObserver.observe(this) {
             findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (numberOfActiveBackgroundTasks > 0) View.VISIBLE
+                if (it.first || it.second || it.third) View.VISIBLE
                 else View.GONE
         }
 
