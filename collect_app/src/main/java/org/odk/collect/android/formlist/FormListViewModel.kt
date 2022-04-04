@@ -67,6 +67,11 @@ class FormListViewModel(
             sortAndFilter()
         }
 
+    private val shouldHideOldFormVersions: Boolean
+        get() {
+            return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
+        }
+
     init {
         viewModelScope.launch {
             _showProgressBar.value = true
@@ -77,7 +82,7 @@ class FormListViewModel(
     }
 
     private fun loadFromDatabase() {
-        _allForms.value = formsRepository
+        val newListOfForms = formsRepository
             .all
             .filter {
                 !it.isDeleted
@@ -93,6 +98,18 @@ class FormListViewModel(
                     contentUri = FormsContract.getUri(projectId, form.dbId)
                 )
             }.toList()
+
+        _allForms.value = if (shouldHideOldFormVersions) {
+            newListOfForms.groupBy {
+                it.formId
+            }.map { (_, itemsWithSameId) ->
+                itemsWithSameId.sortedBy {
+                    it.formVersion
+                }.last()
+            }
+        } else {
+            newListOfForms
+        }
 
         sortAndFilter()
     }

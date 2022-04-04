@@ -1,7 +1,6 @@
 package org.odk.collect.android.feature.formmanagement;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.filters.Suppress;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
-@Suppress
 @RunWith(AndroidJUnit4.class)
 public class HideOldVersionsTest {
 
