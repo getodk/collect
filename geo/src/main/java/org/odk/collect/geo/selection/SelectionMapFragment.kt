@@ -91,7 +91,7 @@ class SelectionMapFragment(
         selectionMapData.isLoading().observe(this) {
             if (it) {
                 val dialog = MaterialProgressDialogFragment().also { dialog ->
-                    dialog.message = "Loading..."
+                    dialog.message = getString(R.string.loading)
                 }
 
                 DialogFragmentUtils.showIfNotShowing(

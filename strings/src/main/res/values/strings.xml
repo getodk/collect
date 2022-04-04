@@ -1071,6 +1071,8 @@
     <string name="select_odk_shortcut">Select ODK Shortcut</string>
     <string name="background_audio_help">This form records the audio from your device\'s microphone.\n\nYou can use the volume indicator to make sure the microphone is close enough to the sound you need to record.\n\nTo stop the recording please exit this form.\n\nFor more information please contact the person who asked you to collect data.</string>
 
+    <string name="loading">Loading…</string>
+
     <!--
      ##############################################
      # Projects
