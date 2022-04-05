@@ -14,6 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
+import org.javarosa.core.model.data.helper.Selection
 import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
@@ -143,6 +144,9 @@ internal class SelectChoicesMapData(
                     MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
                 }
 
+                val selected =
+                    selectChoice.index == (prompt.answerValue?.value as? Selection)?.index
+
                 list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
@@ -154,7 +158,8 @@ internal class SelectChoicesMapData(
                     MappableSelectItem.IconifiedText(
                         R.drawable.ic_save,
                         resources.getString(R.string.select_item)
-                    )
+                    ),
+                    selected
                 )
             } else {
                 list

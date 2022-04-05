@@ -326,6 +326,19 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `centers on already selected item and does not move when location changes`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.setLocation(MapPoint(1.0, 2.0))
+        assertThat(map.center, equalTo(items[1].toMapPoint()))
+    }
+
+    @Test
     fun `hides new item button when showNewItemButton is false`() {
         launcherRule.launchInContainer(
             SelectionMapFragment::class.java,

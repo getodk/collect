@@ -114,6 +114,10 @@ class FakeMapFragment : MapFragment {
     override fun runOnGpsLocationReady(listener: ReadyListener) {}
     override fun setGpsLocationListener(listener: PointListener?) {
         gpsLocationListener = listener
+
+        gpsLocation?.let {
+            listener?.onPoint(it)
+        }
     }
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {

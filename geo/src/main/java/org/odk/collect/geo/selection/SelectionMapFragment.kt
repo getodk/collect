@@ -315,7 +315,12 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
-        if (!viewportInitialized && points.isNotEmpty()) {
+        val selectedFeatureId =
+            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+        if (selectedFeatureId != null) {
+            onFeatureClicked(selectedFeatureId)
+            viewportInitialized = true
+        } else if (!viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }
@@ -397,6 +402,7 @@ sealed interface MappableSelectItem {
     val largeIcon: Int
     val name: String
     val properties: List<IconifiedText>
+    val selected: Boolean
 
     data class WithInfo(
         override val id: Long,
@@ -407,6 +413,7 @@ sealed interface MappableSelectItem {
         override val name: String,
         override val properties: List<IconifiedText>,
         val info: String,
+        override val selected: Boolean = false,
     ) : MappableSelectItem
 
     data class WithAction(
@@ -417,7 +424,8 @@ sealed interface MappableSelectItem {
         override val largeIcon: Int,
         override val name: String,
         override val properties: List<IconifiedText>,
-        val action: IconifiedText
+        val action: IconifiedText,
+        override val selected: Boolean = false
     ) : MappableSelectItem
 
     data class IconifiedText(val icon: Int?, val text: String)
