@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.javarosa.core.model.data.SelectOneData
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,7 +43,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
         scheduler.runBackground()
 
         assertThat(data.getItemCount().value, equalTo(2))
@@ -73,40 +72,12 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
         scheduler.runBackground()
 
         val properties = data.getMappableItems().value[0].properties
         assertThat(properties.size, equalTo(1))
         assertThat(properties[0], equalTo(IconifiedText(null, "property: blah")))
-    }
-
-    @Test
-    fun `selected choice has selected set to true`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(children = listOf(treeElement("geometry", "12.0 -1.0 305 0")))
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withAnswer(SelectOneData(choices[0].selection()))
-            .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
-            .build()
-
-        val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt)
-        scheduler.runBackground()
-
-        assertThat(data.getMappableItems().value[0].selected, equalTo(true))
-        assertThat(data.getMappableItems().value[1].selected, equalTo(false))
     }
 
     @Test
@@ -117,7 +88,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
         assertThat(data.isLoading().value, equalTo(true))
 
         scheduler.runBackground()

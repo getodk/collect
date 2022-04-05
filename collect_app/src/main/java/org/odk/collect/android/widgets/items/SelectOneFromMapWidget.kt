@@ -17,6 +17,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.permissions.PermissionListener
 
@@ -42,7 +43,12 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
                     override fun granted() {
                         DialogFragmentUtils.showIfNotShowing(
                             SelectOneFromMapDialogFragment::class.java,
-                            Bundle().also { it.putSerializable(ARG_FORM_INDEX, prompt.index) },
+                            Bundle().also {
+                                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+                                (answer?.value as? Selection)?.index?.let { index ->
+                                    it.putInt(ARG_SELECTED_INDEX, index)
+                                }
+                            },
                             (context as FragmentActivity).supportFragmentManager
                         )
                     }

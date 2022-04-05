@@ -14,7 +14,6 @@ import androidx.lifecycle.MutableLiveData
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
-import org.javarosa.core.model.data.helper.Selection
 import org.javarosa.core.model.instance.geojson.GeojsonFeature
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
@@ -49,9 +48,10 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(SelectionMapFragment::class.java) {
                 val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
+                val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
                 val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
-                    SelectChoicesMapData(resources, scheduler, prompt),
+                    SelectChoicesMapData(resources, scheduler, prompt, selectedIndex),
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false
                 )
@@ -93,13 +93,15 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
 
     companion object {
         const val ARG_FORM_INDEX = "form_index"
+        const val ARG_SELECTED_INDEX = "selected_index"
     }
 }
 
 internal class SelectChoicesMapData(
     private val resources: Resources,
     scheduler: Scheduler,
-    prompt: FormEntryPrompt
+    prompt: FormEntryPrompt,
+    private val selectedIndex: Int?
 ) :
     SelectionMapData {
 
@@ -144,9 +146,6 @@ internal class SelectChoicesMapData(
                     MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
                 }
 
-                val selected =
-                    selectChoice.index == (prompt.answerValue?.value as? Selection)?.index
-
                 list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
@@ -159,7 +158,7 @@ internal class SelectChoicesMapData(
                         R.drawable.ic_save,
                         resources.getString(R.string.select_item)
                     ),
-                    selected
+                    selectChoice.index == selectedIndex
                 )
             } else {
                 list

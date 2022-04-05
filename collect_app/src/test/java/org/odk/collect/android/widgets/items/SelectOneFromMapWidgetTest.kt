@@ -228,4 +228,36 @@ class SelectOneFromMapWidgetTest {
         widget.setData(SelectOneData(choices[1].selection()))
         assertThat(widget.binding.answer.text, equalTo("B"))
     }
+
+    @Test
+    fun `setData answer is passed to SelectOneFromMapDialogFragment`() {
+        val choices = listOf(
+            selectChoice("a"),
+            selectChoice("b")
+        )
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .withSelectChoiceText(
+                mapOf(choices[0] to "A", choices[1] to "B")
+            )
+            .build()
+
+        val widget =
+            SelectOneFromMapWidget(activityController.setup().get(), QuestionDetails(prompt))
+        widget.setData(SelectOneData(choices[1].selection()))
+
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
+        widget.binding.button.performClick()
+
+        val fragment = getFragmentByClass(
+            activityController.get().supportFragmentManager,
+            SelectOneFromMapDialogFragment::class.java
+        )
+        assertThat(fragment, notNullValue())
+        assertThat(
+            fragment?.requireArguments()
+                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_SELECTED_INDEX),
+            equalTo(choices[1].index)
+        )
+    }
 }
