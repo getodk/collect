@@ -13,8 +13,10 @@ import org.odk.collect.android.utilities.WebCredentialsUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -45,7 +47,8 @@ public class SmapChangeOrganisationTask extends AsyncTask<String, Void, String> 
 
         int timeout = 1000;
 
-        String changeUrl = server + "/api/v1/users/organisation/" + orgName;
+        String changeUrl = server + "/api/v1/users/organisation/" + android.net.Uri.encode(orgName, "UTF-8");
+       
         InputStream is = null;
         String status = null;
         try {
