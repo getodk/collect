@@ -70,12 +70,14 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
 
     override fun clearAnswer() {
         updateAnswer(null)
+        widgetValueChanged()
     }
 
     override fun setOnLongClickListener(l: OnLongClickListener?) {}
 
     override fun setData(answer: Any?) {
         updateAnswer(answer as SelectOneData)
+        widgetValueChanged()
     }
 
     private fun updateAnswer(answer: SelectOneData?) {
