@@ -1,6 +1,5 @@
 package org.odk.collect.settings.importing
 
-import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -20,7 +19,6 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    @Throws(JSONException::class)
     fun fromJSON(json: String, project: Project.Saved): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false

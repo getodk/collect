@@ -1,6 +1,5 @@
 package org.odk.collect.settings
 
-import org.json.JSONException
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl
@@ -29,10 +28,6 @@ class ODKAppSettingsImporter(
     )
 
     fun fromJSON(json: String, project: Project.Saved): Boolean {
-        return try {
-            settingsImporter.fromJSON(json, project)
-        } catch (e: JSONException) {
-            false
-        }
+        return settingsImporter.fromJSON(json, project)
     }
 }
