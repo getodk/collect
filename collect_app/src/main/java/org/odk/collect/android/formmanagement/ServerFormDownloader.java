@@ -1,12 +1,9 @@
 package org.odk.collect.android.formmanagement;
 
 import static org.apache.commons.io.FileUtils.deleteDirectory;
-import static org.odk.collect.android.analytics.AnalyticsEvents.DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
 import org.odk.collect.async.OngoingWorkListener;
@@ -38,16 +35,12 @@ public class ServerFormDownloader implements FormDownloader {
     private final String formsDirPath;
     private final FormMetadataParser formMetadataParser;
 
-    private final Analytics analytics;
-
-    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser, Analytics analytics) {
+    public ServerFormDownloader(FormSource formSource, FormsRepository formsRepository, File cacheDir, String formsDirPath, FormMetadataParser formMetadataParser) {
         this.formSource = formSource;
         this.cacheDir = cacheDir;
         this.formsDirPath = formsDirPath;
         this.formsRepository = formsRepository;
         this.formMetadataParser = formMetadataParser;
-
-        this.analytics = analytics;
     }
 
     @Override
@@ -66,9 +59,6 @@ public class ServerFormDownloader implements FormDownloader {
             }
         } else {
             preExistingFormsWithSameIdAndVersion = formsRepository.getAllByFormIdAndVersion(form.getFormId(), form.getFormVersion());
-            if (!preExistingFormsWithSameIdAndVersion.isEmpty() && !form.getDownloadUrl().contains("/draft.xml")) {
-                analytics.logEventWithParam(DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH, "form", AnalyticsUtils.getFormHash(form.getFormId(), form.getFormName()));
-            }
         }
 
         File tempDir = new File(cacheDir, "download-" + UUID.randomUUID().toString());

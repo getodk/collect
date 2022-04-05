@@ -49,13 +49,6 @@ public final class AnalyticsEvents {
     public static final String SAVE_INCOMPLETE = "WidgetAttribute";
 
     /**
-     * Track attempts to download a form with the same formid/version but different contents as one
-     * already on the device. We know this happens in the case of Central drafts but it should
-     * otherwise be rare.
-     */
-    public static final String DOWNLOAD_SAME_FORMID_VERSION_DIFFERENT_HASH = "DownloadSameFormidVersionDifferentHash";
-
-    /**
      * Used to measure how popular the refresh button on Fill Blank Forms is. The button
      * only displays when Match Exactly is enabled. Right now the action passed is "Manual". This
      * means that we could extend the event to track auto or other syncs in the future.
