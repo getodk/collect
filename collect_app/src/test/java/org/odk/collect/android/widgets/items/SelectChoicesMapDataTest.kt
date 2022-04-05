@@ -43,7 +43,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
         scheduler.runBackground()
 
         assertThat(data.getItemCount().value, equalTo(2))
@@ -72,7 +72,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
         scheduler.runBackground()
 
         val properties = data.getMappableItems().value[0].properties
@@ -88,7 +88,7 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, scheduler, prompt, -1)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
         assertThat(data.isLoading().value, equalTo(true))
 
         scheduler.runBackground()
