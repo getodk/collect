@@ -19,7 +19,7 @@ class ODKAppSettingsImporter(
     private val settingsImporter = SettingsImporter(
         settingsProvider,
         ODKAppSettingsMigrator(settingsProvider.getMetaSettings()),
-        JsonSchemaSettingsValidator { javaClass.getResourceAsStream("/settings_schema.json")!! },
+        JsonSchemaSettingsValidator { javaClass.getResourceAsStream("/client-settings.schema.json")!! },
         generalDefaults,
         adminDefaults,
         settingsChangedHandler,
