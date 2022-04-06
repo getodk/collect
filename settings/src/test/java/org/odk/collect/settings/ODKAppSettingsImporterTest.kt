@@ -28,7 +28,7 @@ class ODKAppSettingsImporterTest {
         )
         assertThat(result, equalTo(false))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
-        assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
 
     @Test
@@ -39,6 +39,17 @@ class ODKAppSettingsImporterTest {
         )
         assertThat(result, equalTo(false))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
+    }
+
+    @Test
+    fun `rejects invalid JSON`() {
+        val result = settingsImporter.fromJSON(
+            "{\"general\":{*},\"admin\":{}}",
+            projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
+        )
+        assertThat(result, equalTo(false))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
 }

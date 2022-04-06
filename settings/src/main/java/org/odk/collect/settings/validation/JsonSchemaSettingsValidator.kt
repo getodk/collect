@@ -1,5 +1,6 @@
 package org.odk.collect.settings.validation
 
+import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
@@ -10,11 +11,15 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
     SettingsValidator {
 
     override fun isValid(json: String): Boolean {
-        return schemaProvider().use { schemaStream ->
-            val schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
-            val schema = schemaFactory.getSchema(schemaStream)
-            val errors = schema.validate(ObjectMapper().readTree(json))
-            errors.isEmpty()
+        return try {
+            schemaProvider().use { schemaStream ->
+                val schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
+                val schema = schemaFactory.getSchema(schemaStream)
+                val errors = schema.validate(ObjectMapper().readTree(json))
+                errors.isEmpty()
+            }
+        } catch (e: JsonParseException) {
+            false
         }
     }
 }
