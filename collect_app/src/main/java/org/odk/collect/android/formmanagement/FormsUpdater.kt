@@ -32,7 +32,7 @@ class FormsUpdater(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox, analytics)
+        val formDownloader = formDownloader(sandbox)
 
         try {
             val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
@@ -70,7 +70,7 @@ class FormsUpdater(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox, analytics)
+        val formDownloader = formDownloader(sandbox)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
             serverFormsDetailsFetcher,
@@ -108,17 +108,13 @@ class FormsUpdater(
     }
 }
 
-private fun formDownloader(
-    projectDependencyProvider: ProjectDependencyProvider,
-    analytics: Analytics
-): ServerFormDownloader {
+private fun formDownloader(projectDependencyProvider: ProjectDependencyProvider): ServerFormDownloader {
     return ServerFormDownloader(
         projectDependencyProvider.formSource,
         projectDependencyProvider.formsRepository,
         File(projectDependencyProvider.cacheDir),
         projectDependencyProvider.formsDir,
-        FormMetadataParser(),
-        analytics
+        FormMetadataParser()
     )
 }
 
