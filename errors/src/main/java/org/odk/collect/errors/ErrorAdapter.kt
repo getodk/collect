@@ -8,7 +8,7 @@ import org.odk.collect.errors.databinding.ErrorItemBinding
 class ErrorAdapter(private val errors: List<ErrorItem>) : RecyclerView.Adapter<ErrorAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ErrorItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ErrorItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
