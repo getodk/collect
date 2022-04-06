@@ -30,6 +30,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
+import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
@@ -160,6 +161,26 @@ class SelectOneFromMapDialogFragmentTest {
                     )
                 )
             )
+        }
+    }
+
+    @Test
+    fun `contains SelectionMapFragment with correct data with selected index`() {
+        launcherRule.launchDialogFragment(
+            SelectOneFromMapDialogFragment::class.java,
+            Bundle().also {
+                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+                it.putSerializable(ARG_SELECTED_INDEX, selectChoices[1].index)
+            }
+        ).onFragment {
+            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+            assertThat(fragment, notNullValue())
+            assertThat(fragment.skipSummary, equalTo(false))
+            assertThat(fragment.showNewItemButton, equalTo(false))
+
+            val data = fragment.selectionMapData
+            assertThat(data.getMappableItems().value[1].selected, equalTo(true))
         }
     }
 

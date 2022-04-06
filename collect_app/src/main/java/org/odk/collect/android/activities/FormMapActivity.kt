@@ -25,6 +25,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -47,6 +48,9 @@ class FormMapActivity : LocalizedActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var scheduler: Scheduler
+
     private val formId by lazy { intent.getLongExtra(EXTRA_FORM_ID, -1) }
     private val viewModel: FormMapViewModel by viewModels {
         object : ViewModelProvider.Factory {
@@ -57,7 +61,8 @@ class FormMapActivity : LocalizedActivity() {
                     formId,
                     formsRepositoryProvider.get(),
                     instancesRepositoryProvider.get(),
-                    settingsProvider
+                    settingsProvider,
+                    scheduler
                 ) as T
             }
         }

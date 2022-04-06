@@ -11,7 +11,8 @@ object TestRuleChain {
     @JvmOverloads
     fun chain(testDependencies: TestDependencies = TestDependencies()): RuleChain =
         RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
+            .outerRule(RetryOnDeviceErrorRule())
+            .around(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(DisableDeviceAnimationsRule())
             .around(ResetStateRule(testDependencies))
             .around(IdlingResourceRule(testDependencies.idlingResources))

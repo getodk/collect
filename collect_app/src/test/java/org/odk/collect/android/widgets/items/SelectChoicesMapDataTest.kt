@@ -13,9 +13,12 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
+import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class SelectChoicesMapDataTest {
+
+    private val scheduler = FakeScheduler()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -40,7 +43,9 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, prompt)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        scheduler.runBackground()
+
         assertThat(data.getItemCount().value, equalTo(2))
         assertThat(data.getMappableItems().value.size, equalTo(1))
         assertThat(data.getMappableItems().value[0].name, equalTo("A"))
@@ -67,10 +72,26 @@ class SelectChoicesMapDataTest {
             .build()
 
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
-        val data = SelectChoicesMapData(resources, prompt)
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        scheduler.runBackground()
 
         val properties = data.getMappableItems().value[0].properties
         assertThat(properties.size, equalTo(1))
         assertThat(properties[0], equalTo(IconifiedText(null, "property: blah")))
+    }
+
+    @Test
+    fun `isLoading is true when items are being loaded from choices`() {
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(emptyList())
+            .withSelectChoiceText(emptyMap())
+            .build()
+
+        val resources = ApplicationProvider.getApplicationContext<Application>().resources
+        val data = SelectChoicesMapData(resources, scheduler, prompt, null)
+        assertThat(data.isLoading().value, equalTo(true))
+
+        scheduler.runBackground()
+        assertThat(data.isLoading().value, equalTo(false))
     }
 }

@@ -24,6 +24,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
 
@@ -84,6 +85,16 @@ class SelectionMapFragment(
         ) {
             ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
             requireActivity().finish()
+        }
+
+        MaterialProgressDialogFragment.showOn(
+            this,
+            selectionMapData.isLoading(),
+            childFragmentManager
+        ) {
+            MaterialProgressDialogFragment().also { dialog ->
+                dialog.message = getString(R.string.loading)
+            }
         }
     }
 
@@ -304,7 +315,12 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
-        if (!viewportInitialized && points.isNotEmpty()) {
+        val selectedFeatureId =
+            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+        if (selectedFeatureId != null) {
+            onFeatureClicked(selectedFeatureId)
+            viewportInitialized = true
+        } else if (!viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }
@@ -370,6 +386,7 @@ internal class SelectedFeatureViewModel : ViewModel() {
 }
 
 interface SelectionMapData {
+    fun isLoading(): NonNullLiveData<Boolean>
     fun getMapTitle(): LiveData<String>
     fun getItemType(): String
     fun getItemCount(): LiveData<Int>
@@ -385,6 +402,7 @@ sealed interface MappableSelectItem {
     val largeIcon: Int
     val name: String
     val properties: List<IconifiedText>
+    val selected: Boolean
 
     data class WithInfo(
         override val id: Long,
@@ -395,6 +413,7 @@ sealed interface MappableSelectItem {
         override val name: String,
         override val properties: List<IconifiedText>,
         val info: String,
+        override val selected: Boolean = false,
     ) : MappableSelectItem
 
     data class WithAction(
@@ -405,7 +424,8 @@ sealed interface MappableSelectItem {
         override val largeIcon: Int,
         override val name: String,
         override val properties: List<IconifiedText>,
-        val action: IconifiedText
+        val action: IconifiedText,
+        override val selected: Boolean = false
     ) : MappableSelectItem
 
     data class IconifiedText(val icon: Int?, val text: String)

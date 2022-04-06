@@ -13,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.fakes.FakePermissionsProvider
@@ -25,6 +26,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -123,15 +125,10 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `shows answer`() {
-        val choices = listOf(
-            selectChoice("a"),
-            selectChoice("b")
-        )
+        val choices = listOf(selectChoice("a"), selectChoice("b"))
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
-            .withSelectChoiceText(
-                mapOf(choices[0] to "A", choices[1] to "B")
-            )
+            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
@@ -155,7 +152,7 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `prompt answer is returned from getAnswer`() {
-        val selectChoice = selectChoice(value = "a", index = 101)
+        val selectChoice = selectChoice(value = "a")
         val answer = SelectOneData(selectChoice.selection())
 
         val widget = SelectOneFromMapWidget(
@@ -167,7 +164,7 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `clearAnswer removes answer`() {
-        val selectChoice = selectChoice(value = "a", index = 101)
+        val selectChoice = selectChoice(value = "a")
         val answer = SelectOneData(selectChoice.selection())
 
         val widget = SelectOneFromMapWidget(
@@ -179,16 +176,26 @@ class SelectOneFromMapWidgetTest {
     }
 
     @Test
-    fun `clearAnswer updates shown answer`() {
-        val choices = listOf(
-            selectChoice("a"),
-            selectChoice("b")
+    fun `clearAnswer calls value changed listener`() {
+        val selectChoice = selectChoice(value = "a")
+        val answer = SelectOneData(selectChoice.selection())
+
+        val widget = SelectOneFromMapWidget(
+            activityController.get(),
+            QuestionDetails(promptWithAnswer(answer))
         )
+
+        val mockValueChangedListener = mockValueChangedListener(widget)
+        widget.clearAnswer()
+        verify(mockValueChangedListener).widgetValueChanged(widget)
+    }
+
+    @Test
+    fun `clearAnswer updates shown answer`() {
+        val choices = listOf(selectChoice("a"), selectChoice("b"))
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
-            .withSelectChoiceText(
-                mapOf(choices[0] to "A", choices[1] to "B")
-            )
+            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
             .withAnswer(SelectOneData(choices[0].selection()))
             .build()
 
@@ -213,10 +220,7 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `setData updates shown answer`() {
-        val choices = listOf(
-            selectChoice("a"),
-            selectChoice("b")
-        )
+        val choices = listOf(selectChoice("a"), selectChoice("b"))
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
             .withSelectChoiceText(
@@ -227,5 +231,47 @@ class SelectOneFromMapWidgetTest {
 
         widget.setData(SelectOneData(choices[1].selection()))
         assertThat(widget.binding.answer.text, equalTo("B"))
+    }
+
+    @Test
+    fun `setData calls value change listener`() {
+        val choices = listOf(selectChoice("a"))
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val widget = SelectOneFromMapWidget(activityController.get(), QuestionDetails(prompt))
+
+        val mockValueChangedListener = mockValueChangedListener(widget)
+        widget.setData(SelectOneData(choices[0].selection()))
+        verify(mockValueChangedListener).widgetValueChanged(widget)
+    }
+
+    @Test
+    fun `setData answer is passed to SelectOneFromMapDialogFragment`() {
+        val choices = listOf(selectChoice("a"), selectChoice("b"))
+        val prompt = MockFormEntryPromptBuilder()
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A", choices[1] to "B"))
+            .build()
+
+        val widget =
+            SelectOneFromMapWidget(activityController.setup().get(), QuestionDetails(prompt))
+        widget.setData(SelectOneData(choices[1].selection()))
+
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
+        widget.binding.button.performClick()
+
+        val fragment = getFragmentByClass(
+            activityController.get().supportFragmentManager,
+            SelectOneFromMapDialogFragment::class.java
+        )
+        assertThat(fragment, notNullValue())
+        assertThat(
+            fragment?.requireArguments()
+                ?.getSerializable(SelectOneFromMapDialogFragment.ARG_SELECTED_INDEX),
+            equalTo(choices[1].index)
+        )
     }
 }

@@ -19,6 +19,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.notNullValue
+import org.hamcrest.Matchers.nullValue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +42,9 @@ import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 
 @RunWith(AndroidJUnit4::class)
 class SelectionMapFragmentTest {
@@ -50,6 +54,7 @@ class SelectionMapFragmentTest {
     private val map = FakeMapFragment()
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val data = mock<SelectionMapData> {
+        on { isLoading() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemType() } doReturn "Things"
         on { getItemCount() } doReturn MutableLiveData(0)
@@ -321,6 +326,19 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `centers on already selected item and does not move when location changes`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.setLocation(MapPoint(1.0, 2.0))
+        assertThat(map.center, equalTo(items[1].toMapPoint()))
+    }
+
+    @Test
     fun `hides new item button when showNewItemButton is false`() {
         launcherRule.launchInContainer(
             SelectionMapFragment::class.java,
@@ -350,6 +368,23 @@ class SelectionMapFragmentTest {
         assertThat(map.getZoomBoundingBox(), equalTo(null))
         assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
         assertThat(map.zoom, equalTo(7.0))
+    }
+
+    @Test
+    fun `shows progress dialog when loading`() {
+        val loadingLiveData = MutableNonNullLiveData(false)
+        whenever(data.isLoading()).thenReturn(loadingLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java).onFragment {
+            val dialogClass = MaterialProgressDialogFragment::class.java
+            assertThat(getFragmentByClass(it.childFragmentManager, dialogClass), nullValue())
+
+            loadingLiveData.value = true
+            assertThat(getFragmentByClass(it.childFragmentManager, dialogClass), notNullValue())
+
+            loadingLiveData.value = false
+            assertThat(getFragmentByClass(it.childFragmentManager, dialogClass), nullValue())
+        }
     }
 
     private fun MappableSelectItem.toMapPoint(): MapPoint {

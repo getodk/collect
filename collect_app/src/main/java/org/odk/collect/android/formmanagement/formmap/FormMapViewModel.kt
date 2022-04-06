@@ -10,6 +10,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.external.InstanceProvider
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -24,20 +26,19 @@ import java.util.Locale
 
 class FormMapViewModel(
     private val resources: Resources,
-    formId: Long,
-    formsRepository: FormsRepository,
+    private val formId: Long,
+    private val formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
     private val settingsProvider: SettingsProvider,
+    private val scheduler: Scheduler
 ) : ViewModel(), SelectionMapData {
 
-    private var mapTitle = MutableLiveData<String>()
+    private var _form: Form? = null
+
+    private val mapTitle = MutableLiveData<String>()
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableLiveData(0)
-    private val form = formsRepository.get(formId)!!
-
-    init {
-        mapTitle.value = form.displayName
-    }
+    private val isLoading = MutableNonNullLiveData(false)
 
     override fun getMapTitle(): LiveData<String> {
         return mapTitle
@@ -55,29 +56,45 @@ class FormMapViewModel(
         return mappableItems
     }
 
+    override fun isLoading(): NonNullLiveData<Boolean> {
+        return isLoading
+    }
+
     fun load() {
-        val instances = instancesRepository.getAllByFormId(form.formId)
-        val items: MutableList<MappableSelectItem> = ArrayList()
+        isLoading.value = true
 
-        for (instance in instances) {
-            if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
-                try {
-                    val geometry = JSONObject(instance.geometry)
-                    val coordinates = geometry.getJSONArray("coordinates")
+        scheduler.immediate(
+            background = {
+                val form = _form ?: formsRepository.get(formId)!!.also { _form = it }
+                val instances = instancesRepository.getAllByFormId(form.formId)
+                val items = mutableListOf<MappableSelectItem>()
 
-                    // In GeoJSON, longitude comes before latitude.
-                    val lon = coordinates.getDouble(0)
-                    val lat = coordinates.getDouble(1)
+                for (instance in instances) {
+                    if (instance.geometry != null && instance.geometryType == Instance.GEOMETRY_TYPE_POINT) {
+                        try {
+                            val geometry = JSONObject(instance.geometry)
+                            val coordinates = geometry.getJSONArray("coordinates")
 
-                    items.add(createItem(instance, lat, lon))
-                } catch (e: JSONException) {
-                    Timber.w("Invalid JSON in instances table: %s", instance.geometry)
+                            // In GeoJSON, longitude comes before latitude.
+                            val lon = coordinates.getDouble(0)
+                            val lat = coordinates.getDouble(1)
+
+                            items.add(createItem(instance, lat, lon))
+                        } catch (e: JSONException) {
+                            Timber.w("Invalid JSON in instances table: %s", instance.geometry)
+                        }
+                    }
                 }
-            }
-        }
 
-        mappableItems.value = items
-        itemCount.value = instances.size
+                Triple(form.displayName, items, instances.size)
+            },
+            foreground = {
+                mapTitle.value = it.first
+                mappableItems.value = it.second
+                itemCount.value = it.third
+                isLoading.value = false
+            }
+        )
     }
 
     private fun createItem(
