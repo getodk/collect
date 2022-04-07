@@ -7,6 +7,7 @@ import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.odk.collect.android.support.WaitFor.waitFor
+import org.odk.collect.projects.Project
 
 class NotificationDrawer {
     private var isOpen = false
@@ -29,7 +30,7 @@ class NotificationDrawer {
         appName: String,
         title: String,
         body: String? = null,
-        subtext: String? = null
+        subtext: String = Project.DEMO_PROJECT_NAME
     ): NotificationDrawer {
         val device = waitForNotification(appName)
 
@@ -41,10 +42,9 @@ class NotificationDrawer {
             assertThat(bodyElement.text, `is`(body))
         }
 
-        subtext?.let {
-            val subtextElement = device.findObject(By.text(subtext))
-            assertThat(subtextElement.text, `is`(subtext))
-        }
+        val subtextElement = device.findObject(By.text(subtext))
+        assertThat(subtextElement.text, `is`(subtext))
+
         return this
     }
 
