@@ -30,8 +30,7 @@ import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock
-import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.TestCoroutineDispatchers
+import org.odk.collect.testshared.TestScheduler
 
 @RunWith(AndroidJUnit4::class)
 class BlankFormListViewModelTest {
@@ -81,7 +80,7 @@ class BlankFormListViewModelTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val syncRepository: SyncStatusAppState = mock()
     private val formsUpdater: FormsUpdater = mock()
-    private val scheduler = FakeScheduler()
+    private val scheduler = TestScheduler()
     private val generalSettings = InMemSettings()
     private val analytics: Analytics = mock()
     private val changeLockProvider: ChangeLockProvider = mock()
@@ -150,8 +149,7 @@ class BlankFormListViewModelTest {
             analytics,
             changeLockProvider,
             formsDirDiskFormsSynchronizer,
-            projectId,
-            TestCoroutineDispatchers()
+            projectId
         )
 
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
@@ -192,7 +190,6 @@ class BlankFormListViewModelTest {
     fun `syncWithServer when task finishes sets result to true`() {
         doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.runBackground()
         assertThat(result.value, `is`(true))
     }
 
@@ -200,7 +197,6 @@ class BlankFormListViewModelTest {
     fun `syncWithServer when there is an error sets result to false`() {
         doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.runBackground()
         assertThat(result.value, `is`(false))
     }
 
