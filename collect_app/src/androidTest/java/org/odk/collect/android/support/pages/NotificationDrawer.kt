@@ -56,7 +56,6 @@ class NotificationDrawer {
         val device = waitForNotification(appName)
         val actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
         actionElement.click()
-        device.wait(Until.hasObject(By.textStartsWith(actionText)), 2000L)
         destination.assertOnPage()
         isOpen = false
         return this
@@ -72,7 +71,6 @@ class NotificationDrawer {
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement.text, `is`(title))
         titleElement.click()
-        device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L)
         isOpen = false
         return destination.assertOnPage()
     }
