@@ -66,7 +66,6 @@ class PreviouslyDownloadedOnlyTest {
             .clickNotification(
                 "ODK Collect",
                 "Form updates available",
-                "Form updates available",
                 GetBlankFormPage()
             )
     }
@@ -100,7 +99,6 @@ class PreviouslyDownloadedOnlyTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms download succeeded",
-                "All downloads succeeded!",
                 FillBlankFormPage()
             )
     }
@@ -136,7 +134,6 @@ class PreviouslyDownloadedOnlyTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms download failed",
-                "1 of 1 downloads failed!",
                 ErrorPage()
             )
     }

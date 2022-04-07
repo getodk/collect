@@ -64,7 +64,6 @@ class NotificationDrawer {
     fun <D : Page<D>> clickNotification(
         appName: String,
         title: String,
-        expectedTextOnClick: String?,
         destination: D
     ): D {
         val device = waitForNotification(appName)
