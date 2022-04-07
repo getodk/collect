@@ -1,6 +1,7 @@
 package org.odk.collect.android.support.pages;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -12,8 +13,10 @@ public class GetBlankFormPage extends Page<GetBlankFormPage> {
 
     @Override
     public GetBlankFormPage assertOnPage() {
-        onView(withText(getTranslatedString(R.string.get_forms))).check(matches(isDisplayed()));
-        return this;
+        return WaitFor.waitFor(() -> {
+            onView(withText(getTranslatedString(R.string.get_forms))).check(matches(isDisplayed()));
+            return this;
+        });
     }
 
     public FormsDownloadResultPage clickGetSelected() {

@@ -28,8 +28,10 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     @Override
     public FillBlankFormPage assertOnPage() {
-        assertToolbarTitle(R.string.enter_data);
-        return this;
+        return WaitFor.waitFor(() -> {
+            assertToolbarTitle(R.string.enter_data);
+            return this;
+        });
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {

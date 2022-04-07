@@ -8,12 +8,18 @@ import androidx.test.espresso.matcher.ViewMatchers.withParent
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.odk.collect.android.R
+import org.odk.collect.android.support.WaitFor.waitFor
+import java.util.concurrent.Callable
 
 class ErrorPage : Page<ErrorPage>() {
 
     override fun assertOnPage(): ErrorPage {
-        assertText(R.string.errors)
-        return this
+        return waitFor(
+            Callable {
+                assertText(R.string.errors)
+                this
+            }
+        )
     }
 
     fun assertError(errorMessage: String): ErrorPage {
