@@ -194,10 +194,6 @@ class SelectionMapFragment(
             updateItems(it)
             updateCounts(binding)
         }
-
-        selectedFeatureViewModel.getSelectedFeatureId()?.let {
-            onFeatureClicked(it)
-        }
     }
 
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
@@ -353,6 +349,9 @@ class SelectionMapFragment(
             val featureId = map.addMarker(point, false, MapFragment.BOTTOM, item.smallIcon)
             itemsByFeatureId[featureId] = item
             points.add(point)
+        }
+        selectedFeatureViewModel.getSelectedFeatureId()?.let {
+            onFeatureClicked(it)
         }
     }
 
