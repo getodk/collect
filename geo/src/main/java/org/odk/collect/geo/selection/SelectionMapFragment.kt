@@ -350,13 +350,7 @@ class SelectionMapFragment(
 
         for (item in items) {
             val point = MapPoint(item.latitude, item.longitude)
-            val featureId = map.addMarker(point, false, MapFragment.BOTTOM)
-
-            map.setMarkerIcon(
-                featureId,
-                if (featureId == selectedFeatureViewModel.getSelectedFeatureId()) item.largeIcon else item.smallIcon
-            )
-
+            val featureId = map.addMarker(point, false, MapFragment.BOTTOM, item.smallIcon)
             itemsByFeatureId[featureId] = item
             points.add(point)
         }

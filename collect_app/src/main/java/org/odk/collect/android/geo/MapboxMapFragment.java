@@ -356,9 +356,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
     }
 
-    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable, iconAnchor));
+        features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable, iconAnchor, iconDrawableId));
         return featureId;
     }
 
@@ -516,10 +516,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new LatLng(point.lat, point.lon);
     }
 
-    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
-            .withIconImage(addIconImage(R.drawable.ic_map_point))
+            .withIconImage(addIconImage(iconDrawableId))
             .withIconSize(1f)
             .withSymbolSortKey(10f)
             .withDraggable(draggable)
@@ -775,11 +775,11 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private MapPoint point;
         private Symbol symbol;
 
-        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+        MarkerFeature(int featureId, SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
-            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor);
+            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor, iconDrawableId);
             symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
         }
@@ -856,7 +856,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.closedPolygon = closedPolygon;
             for (MapPoint point : points) {
                 this.points.add(point);
-                this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
+                this.symbols.add(createSymbol(symbolManager, point, true, CENTER, R.drawable.ic_map_point));
             }
             line = lineManager.create(new LineOptions()
                 .withLineColor(ColorUtils.colorToRgbaString(requireContext().getResources().getColor(R.color.mapLineColor)))
@@ -892,7 +892,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 return;
             }
             points.add(point);
-            symbols.add(createSymbol(symbolManager, point, true, CENTER));
+            symbols.add(createSymbol(symbolManager, point, true, CENTER, R.drawable.ic_map_point));
             updateLine();
         }
 
