@@ -259,6 +259,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         if (tileServer != null) {
             tileServer.destroy();
         }
+        MapsMarkerCache.clearCache();
         super.onDestroy();
     }
 
@@ -689,8 +690,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         String imageId = "icon-" + drawableId;
         map.getStyle(style -> {
             if (style.getImage(imageId) == null) {
-                Drawable icon = ContextCompat.getDrawable(getContext(), drawableId);
-                style.addImage(imageId, icon);
+                style.addImage(imageId, MapsMarkerCache.getMarkerBitmap(drawableId, getContext()));
             }
         });
         return imageId;
