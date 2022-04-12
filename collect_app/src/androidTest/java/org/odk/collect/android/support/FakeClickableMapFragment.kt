@@ -48,6 +48,9 @@ class FakeClickableMapFragment : MapFragment {
         return id
     }
 
+    override fun displayMarkers() {
+    }
+
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {}
 
     override fun getMarkerPoint(featureId: Int): MapPoint {

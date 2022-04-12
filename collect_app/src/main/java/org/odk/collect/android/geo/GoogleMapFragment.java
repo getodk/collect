@@ -260,8 +260,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, point, draggable, iconAnchor, iconDrawableId));
+        features.put(featureId, new MarkerFeature(point, draggable, iconAnchor, iconDrawableId));
         return featureId;
+    }
+
+    @Override public void displayMarkers() {
+        for (Map.Entry<Integer, MapFeature> entry : features.entrySet()) {
+            MarkerFeature markerFeature = (MarkerFeature) entry.getValue();
+            Marker marker = map.addMarker(markerFeature.markerOptions);
+            markerFeature.setMarker(marker);
+        }
     }
 
     @Override public void setMarkerIcon(int featureId, int drawableId) {
@@ -682,10 +690,20 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private class MarkerFeature implements MapFeature {
+        private final MarkerOptions markerOptions;
         private Marker marker;
 
-        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
-            marker = createMarker(map, point, draggable, iconAnchor, iconDrawableId);
+        MarkerFeature(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
+            markerOptions = new MarkerOptions()
+                    .position(toLatLng(point))
+                    .snippet(point.alt + ";" + point.sd)
+                    .draggable(draggable)
+                    .icon(getBitmapDescriptor(iconDrawableId))
+                    .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor));
+        }
+
+        public void setMarker(Marker marker) {
+            this.marker = marker;
         }
 
         public void setIcon(int drawableId) {

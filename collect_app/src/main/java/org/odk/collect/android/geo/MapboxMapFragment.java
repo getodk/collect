@@ -69,7 +69,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,7 +112,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private MapPoint lastLocationFix;
 
     private int nextFeatureId = 1;
-    private final Map<Integer, MapFeature> features = new HashMap<>();
+    private final Map<Integer, MapFeature> features = new LinkedHashMap<>();
     private SymbolManager symbolManager;
     private LineManager lineManager;
     private boolean isDragging;
@@ -359,6 +359,23 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         int featureId = nextFeatureId++;
         features.put(featureId, new MarkerFeature(featureId, symbolManager, point, draggable, iconAnchor, iconDrawableId));
         return featureId;
+    }
+
+    @Override public void displayMarkers() {
+        List<SymbolOptions> symbolOptions = new ArrayList<>();
+
+        for (Map.Entry<Integer, MapFeature> entry : features.entrySet()) {
+            MarkerFeature markerFeature = (MarkerFeature) entry.getValue();
+            symbolOptions.add(markerFeature.symbolOptions);
+        }
+
+        List<Symbol> symbols = symbolManager.create(symbolOptions);
+
+        for (Map.Entry<Integer, MapFeature> entry : features.entrySet()) {
+            MarkerFeature markerFeature = (MarkerFeature) entry.getValue();
+            Symbol symbol = symbols.get(markerFeature.featureId - 1);
+            markerFeature.setSymbol(symbol);
+        }
     }
 
     @Override public void setMarkerIcon(int featureId, int drawableId) {
@@ -770,6 +787,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final SymbolManager symbolManager;
         private final ClickListener clickListener = new ClickListener();
         private final DragListener dragListener = new DragListener();
+        private final SymbolOptions symbolOptions;
         private MapPoint point;
         private Symbol symbol;
 
@@ -777,9 +795,20 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
-            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor, iconDrawableId);
+            this.symbolOptions = new SymbolOptions()
+                    .withLatLng(toLatLng(point))
+                    .withIconImage(addIconImage(iconDrawableId))
+                    .withIconSize(1f)
+                    .withSymbolSortKey(10f)
+                    .withDraggable(draggable)
+                    .withTextOpacity(0f)
+                    .withIconAnchor(getIconAnchorValue(iconAnchor));
             symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
+        }
+
+        public void setSymbol(Symbol symbol) {
+            this.symbol = symbol;
         }
 
         public void setIcon(int drawableId) {

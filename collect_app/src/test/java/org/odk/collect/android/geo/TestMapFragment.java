@@ -134,6 +134,10 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
+    public void displayMarkers() {
+    }
+
+    @Override
     public void setMarkerIcon(int featureId, int drawableId) {
 
     }

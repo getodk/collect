@@ -72,6 +72,9 @@ class FakeMapFragment : MapFragment {
         return markers.size - 1
     }
 
+    override fun displayMarkers() {
+    }
+
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {
         markerIcons[featureId] = drawableId
     }

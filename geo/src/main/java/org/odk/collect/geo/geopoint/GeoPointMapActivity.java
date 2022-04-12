@@ -404,6 +404,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
         featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, R.drawable.ic_map_point);
+        map.displayMarkers();
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }

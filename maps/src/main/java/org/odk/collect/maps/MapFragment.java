@@ -125,6 +125,8 @@ public interface MapFragment {
      */
     int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId);
 
+    void displayMarkers();
+
     /** Sets the icon for a marker. */
     void setMarkerIcon(int featureId, int drawableId);
 

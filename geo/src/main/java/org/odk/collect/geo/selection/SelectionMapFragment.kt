@@ -350,6 +350,7 @@ class SelectionMapFragment(
             itemsByFeatureId[featureId] = item
             points.add(point)
         }
+        map.displayMarkers()
         selectedFeatureViewModel.getSelectedFeatureId()?.let {
             onFeatureClicked(it)
         }

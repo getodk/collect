@@ -323,6 +323,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return featureId;
     }
 
+    @Override public void displayMarkers() {
+        List<Marker> markers = new ArrayList<>();
+
+        for (Map.Entry<Integer, MapFeature> entry : features.entrySet()) {
+            MarkerFeature markerFeature = (MarkerFeature) entry.getValue();
+            markers.add(markerFeature.marker);
+        }
+
+        map.getOverlays().addAll(markers);
+    }
+
     @Override
     public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
@@ -644,7 +655,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 }
             }
         });
+        return marker;
+    }
 
+    private Marker createMarkerAndDisplay(MapView map, MapPoint point, MapFeature feature, @IconAnchor String iconAnchor, int iconDrawableId) {
+        Marker marker = createMarker(map, point, feature, iconAnchor, iconDrawableId);
         map.getOverlays().add(marker);
         return marker;
     }
@@ -794,7 +809,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, this, CENTER, R.drawable.ic_map_point));
+                markers.add(createMarkerAndDisplay(map, point, this, CENTER, R.drawable.ic_map_point));
             }
             update();
         }
@@ -836,7 +851,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(createMarker(map, point, this, CENTER, R.drawable.ic_map_point));
+            markers.add(createMarkerAndDisplay(map, point, this, CENTER, R.drawable.ic_map_point));
             update();
         }
 
