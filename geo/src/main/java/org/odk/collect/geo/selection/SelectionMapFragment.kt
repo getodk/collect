@@ -184,9 +184,6 @@ class SelectionMapFragment(
         }
 
         map.setGpsLocationEnabled(true)
-        map.setGpsLocationListener { point -> onLocationChanged(point) }
-
-        previousState?.let { restoreZoomFromPreviousState(it) }
 
         map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
@@ -194,10 +191,8 @@ class SelectionMapFragment(
         selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
             updateItems(it)
             updateCounts(binding)
-        }
 
-        selectedFeatureViewModel.getSelectedFeatureId()?.let {
-            onFeatureClicked(it)
+            initializeViewport()
         }
     }
 
@@ -210,14 +205,37 @@ class SelectionMapFragment(
         )
     }
 
-    private fun restoreZoomFromPreviousState(state: Bundle) {
+    private fun initializeViewport() {
+        previousState?.let {
+            if (restoreZoomFromPreviousState(it)) {
+                viewportInitialized = true
+            }
+        }
+
+        if (!viewportInitialized) {
+            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()?.let {
+                onFeatureClicked(it)
+                viewportInitialized = true
+            }
+        }
+
+        if (!viewportInitialized && zoomToFeatureBoundingBoxOnLoad && points.isNotEmpty()) {
+            map.zoomToBoundingBox(points, 0.8, false)
+            viewportInitialized = true
+        }
+
+        map.setGpsLocationListener { point -> onLocationChanged(point) }
+    }
+
+    private fun restoreZoomFromPreviousState(state: Bundle): Boolean {
         val mapCenter: MapPoint? = state.getParcelable(MAP_CENTER_KEY)
         val mapZoom = state.getDouble(MAP_ZOOM_KEY)
 
         if (mapCenter != null) {
             map.zoomToPoint(mapCenter, mapZoom, false)
-            viewportInitialized = true // avoid recentering as soon as location is received
+            return true
         }
+        return false
     }
 
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
@@ -314,37 +332,6 @@ class SelectionMapFragment(
             return
         }
 
-        updateFeatures(items)
-
-        val selectedFeatureId =
-            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
-        if (selectedFeatureId != null) {
-            onFeatureClicked(selectedFeatureId)
-            viewportInitialized = true
-        } else if (zoomToFeatureBoundingBoxOnLoad && !viewportInitialized && points.isNotEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false)
-            viewportInitialized = true
-        }
-    }
-
-    private fun isSummaryForFeatureDisplayed(featureId: Int): Boolean {
-        return selectedFeatureViewModel.getSelectedFeatureId() == featureId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
-    }
-
-    private fun removeEnlargedMarkerIfExist(itemId: Int) {
-        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-        if (selectedFeatureId != null && selectedFeatureId != itemId) {
-            map.setMarkerIcon(
-                selectedFeatureId,
-                itemsByFeatureId[selectedFeatureId]!!.smallIcon
-            )
-        }
-    }
-
-    /**
-     * Clears the existing features on the map and places features for the current form's instances.
-     */
-    private fun updateFeatures(items: List<MappableSelectItem>) {
         points.clear()
         map.clearFeatures()
         itemsByFeatureId.clear()
@@ -360,6 +347,20 @@ class SelectionMapFragment(
 
             itemsByFeatureId[featureId] = item
             points.add(point)
+        }
+    }
+
+    private fun isSummaryForFeatureDisplayed(featureId: Int): Boolean {
+        return selectedFeatureViewModel.getSelectedFeatureId() == featureId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    private fun removeEnlargedMarkerIfExist(itemId: Int) {
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedFeatureId != null && selectedFeatureId != itemId) {
+            map.setMarkerIcon(
+                selectedFeatureId,
+                itemsByFeatureId[selectedFeatureId]!!.smallIcon
+            )
         }
     }
 

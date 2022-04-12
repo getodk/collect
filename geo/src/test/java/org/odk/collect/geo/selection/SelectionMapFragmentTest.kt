@@ -149,6 +149,23 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `zooms to fit all items when device location is previously set`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
+        )
+
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        map.setLocation(MapPoint(1.0, 2.0))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        val points = items.map { it.toMapPoint() }
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
+    }
+
+    @Test
     fun `zooms to current location when zoomToFeatureBoundingBoxOnLoad is false`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
