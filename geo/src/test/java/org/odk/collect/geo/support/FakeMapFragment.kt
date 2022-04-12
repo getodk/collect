@@ -68,6 +68,7 @@ class FakeMapFragment : MapFragment {
     override fun addMarker(point: MapPoint, draggable: Boolean, iconAnchor: String, iconDrawableId: Int): Int {
         markers.add(point)
         markerIcons.add(null)
+        markerIcons[markers.size - 1] = iconDrawableId
         return markers.size - 1
     }
 
