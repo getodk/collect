@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
+import com.networknt.schema.ValidatorTypeCode
 import org.odk.collect.settings.importing.SettingsValidator
 import java.io.InputStream
 
@@ -16,7 +17,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
                 val schemaFactory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V201909)
                 val schema = schemaFactory.getSchema(schemaStream)
                 val errors = schema.validate(ObjectMapper().readTree(json))
-                errors.isEmpty()
+                errors.none { it.type != ValidatorTypeCode.ENUM.value }
             }
         } catch (e: JsonParseException) {
             false

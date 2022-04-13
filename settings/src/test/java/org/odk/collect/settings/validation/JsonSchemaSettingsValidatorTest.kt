@@ -15,7 +15,7 @@ class JsonSchemaSettingsValidatorTest {
             validator.isValid(
                 """
                 {
-                    "foo": false
+                    "foo": "option1"
                 }
                 """
             ),
@@ -33,7 +33,7 @@ class JsonSchemaSettingsValidatorTest {
             validator.isValid(
                 """
                 {
-                    "foo": "bar"
+                    "foo": false
                 }
                 """
             ),
@@ -52,6 +52,24 @@ class JsonSchemaSettingsValidatorTest {
             equalTo(false)
         )
     }
+
+    @Test
+    fun `returns true when json contains values different than those specified in a corresponding enum`() {
+        val validator = JsonSchemaSettingsValidator {
+            SCHEMA.byteInputStream()
+        }
+
+        assertThat(
+            validator.isValid(
+                """
+                {
+                    "foo": "option3"
+                }
+                """
+            ),
+            equalTo(true)
+        )
+    }
 }
 
 private const val SCHEMA = """
@@ -62,7 +80,11 @@ private const val SCHEMA = """
                 "type": "object",
                 "properties": {
                     "foo": {
-                        "type": "boolean"
+                        "type": "string",
+                        "enum": [
+                            "option1",
+                            "option2"
+                        ]
                     }
                 }
             }
