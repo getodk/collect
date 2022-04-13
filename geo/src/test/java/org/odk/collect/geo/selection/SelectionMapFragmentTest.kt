@@ -383,6 +383,23 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `recreating with initial selection maintains new selection`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem()
+                .copy(id = 0, latitude = 40.0, name = "Point1", selected = true),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, name = "Point2")
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(1)
+        scenario.recreate()
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point2")))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
     fun `shows progress dialog when loading`() {
         val loadingLiveData = MutableNonNullLiveData(false)
         whenever(data.isLoading()).thenReturn(loadingLiveData)
