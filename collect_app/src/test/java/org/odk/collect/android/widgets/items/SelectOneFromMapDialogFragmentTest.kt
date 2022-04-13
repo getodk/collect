@@ -135,8 +135,8 @@ class SelectOneFromMapDialogFragmentTest {
                     listOf(
                         MappableSelectItem.WithAction(
                             0,
-                            selectChoices[0].getChild("geometry").split(" ")[0].toDouble(),
-                            selectChoices[0].getChild("geometry").split(" ")[1].toDouble(),
+                            selectChoices[0].getChild("geometry")!!.split(" ")[0].toDouble(),
+                            selectChoices[0].getChild("geometry")!!.split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "A",
@@ -147,8 +147,8 @@ class SelectOneFromMapDialogFragmentTest {
                         ),
                         MappableSelectItem.WithAction(
                             1,
-                            selectChoices[1].getChild("geometry").split(" ")[0].toDouble(),
-                            selectChoices[1].getChild("geometry").split(" ")[1].toDouble(),
+                            selectChoices[1].getChild("geometry")!!.split(" ")[0].toDouble(),
+                            selectChoices[1].getChild("geometry")!!.split(" ")[1].toDouble(),
                             R.drawable.ic_map_marker_24dp,
                             R.drawable.ic_map_marker_48dp,
                             "B",
