@@ -55,6 +55,7 @@ class SelectionMapFragment(
 
     private lateinit var summarySheetBehavior: BottomSheetBehavior<*>
     private lateinit var summarySheet: SelectionSummarySheet
+    private lateinit var bottomSheetCallback: BottomSheetCallback
 
     private val itemsByFeatureId: MutableMap<Int, MappableSelectItem> = mutableMapOf()
 
@@ -154,6 +155,11 @@ class SelectionMapFragment(
         outState.putDouble(MAP_ZOOM_KEY, map.zoom)
     }
 
+    override fun onDestroy() {
+        summarySheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
+        super.onDestroy()
+    }
+
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     private fun initMap(newMapFragment: MapFragment, binding: SelectionMapLayoutBinding) {
         map = newMapFragment
@@ -236,7 +242,7 @@ class SelectionMapFragment(
             onBackPressedCallback
         )
 
-        summarySheetBehavior.addBottomSheetCallback(object : BottomSheetCallback() {
+        bottomSheetCallback = object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
                 if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedFeatureId != null) {
@@ -252,7 +258,8 @@ class SelectionMapFragment(
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
+        }
+        summarySheetBehavior.addBottomSheetCallback(bottomSheetCallback)
 
         summarySheet.listener = object : SelectionSummarySheet.Listener {
             override fun selectionAction(id: Long) {
