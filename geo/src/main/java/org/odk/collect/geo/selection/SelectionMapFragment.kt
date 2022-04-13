@@ -36,7 +36,7 @@ class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
     val skipSummary: Boolean = false,
     val showNewItemButton: Boolean = true,
-    val zoomToFeatureBoundingBoxOnLoad: Boolean = true
+    val zoomToFitItems: Boolean = true
 ) : Fragment() {
 
     @Inject
@@ -321,7 +321,7 @@ class SelectionMapFragment(
         if (selectedFeatureId != null) {
             onFeatureClicked(selectedFeatureId)
             viewportInitialized = true
-        } else if (zoomToFeatureBoundingBoxOnLoad && !viewportInitialized && points.isNotEmpty()) {
+        } else if (zoomToFitItems && !viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }

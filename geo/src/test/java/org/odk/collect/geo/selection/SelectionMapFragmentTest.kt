@@ -149,7 +149,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `zooms to current location when zoomToFeatureBoundingBoxOnLoad is false`() {
+    fun `zooms to current location when zoomToFitItems is false`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
@@ -160,7 +160,7 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, zoomToFeatureBoundingBoxOnLoad = false)
+                    SelectionMapFragment(data, zoomToFitItems = false)
                 }.build()
         )
 
