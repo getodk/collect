@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import java.util.concurrent.Callable;
 
 public class FormHierarchyPage extends Page<FormHierarchyPage> {
 
@@ -22,6 +25,12 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     @NonNull
     @Override
     public FormHierarchyPage assertOnPage() {
+        // Make sure we wait for loading to finish
+        WaitFor.waitFor((Callable<Void>) () -> {
+            assertTextDoesNotExist(R.string.loading_form);
+            return null;
+        });
+
         assertToolbarTitle(formName);
         assertText(R.string.jump_to_beginning);
         assertText(R.string.jump_to_end);

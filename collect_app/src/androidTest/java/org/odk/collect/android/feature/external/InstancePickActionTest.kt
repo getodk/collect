@@ -34,7 +34,7 @@ class InstancePickActionTest {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = InstancesContract.CONTENT_TYPE
         val result = rule.launchForResult(intent, EditSavedFormPage()) {
-            it.clickOnForm("One Question")
+            it.clickOnFormClosingApp("One Question")
         }
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
