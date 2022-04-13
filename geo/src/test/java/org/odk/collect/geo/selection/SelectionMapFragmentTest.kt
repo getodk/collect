@@ -149,6 +149,28 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `zooms to current location when zoomToFitItems is false`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(data, zoomToFitItems = false)
+                }.build()
+        )
+
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+
+        map.setLocation(MapPoint(1.0, 2.0))
+        assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+    }
+
+    @Test
     fun `zooms to current location when there are no items`() {
         whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 

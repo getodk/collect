@@ -53,7 +53,8 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 SelectionMapFragment(
                     SelectChoicesMapData(resources, scheduler, prompt, selectedIndex),
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
-                    showNewItemButton = false
+                    showNewItemButton = false,
+                    zoomToFitItems = false
                 )
             }
             .build()
