@@ -56,7 +56,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public OkDialog clickOnFormWithDialog(String instanceName) {
-        clickOnForm(instanceName);
+        scrollToAndClickOnForm(instanceName);
         return new OkDialog().assertOnPage();
     }
 
@@ -67,12 +67,17 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     public FormHierarchyPage clickOnForm(String formName, String instanceName) {
         scrollToAndClickOnForm(instanceName);
-        return new FormHierarchyPage(formName);
+        return new FormHierarchyPage(formName).assertOnPage();
     }
 
     public FormHierarchyPage clickOnForm(String formName) {
         scrollToAndClickOnForm(formName);
-        return new FormHierarchyPage(formName);
+        return new FormHierarchyPage(formName).assertOnPage();
+    }
+
+    public AppClosedPage clickOnFormClosingApp(String formName) {
+        scrollToAndClickOnForm(formName);
+        return new AppClosedPage().assertOnPage();
     }
 
     private void scrollToAndClickOnForm(String formName) {
