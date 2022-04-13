@@ -311,8 +311,9 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
-        val selectedFeatureId =
-            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+            ?: itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+
         if (selectedFeatureId != null) {
             onFeatureClicked(selectedFeatureId)
             viewportInitialized = true
@@ -349,10 +350,6 @@ class SelectionMapFragment(
             val featureId = map.addMarker(point, false, MapFragment.BOTTOM, item.smallIcon)
             itemsByFeatureId[featureId] = item
             points.add(point)
-        }
-
-        selectedFeatureViewModel.getSelectedFeatureId()?.let {
-            onFeatureClicked(it)
         }
     }
 
