@@ -21,6 +21,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.projects.Project
 
 class PreviouslyDownloadedOnlyTest {
     private val testDependencies = TestDependencies()
@@ -50,7 +51,7 @@ class PreviouslyDownloadedOnlyTest {
         testDependencies.scheduler.runDeferredTasks()
 
         notificationDrawerRule.open()
-            .assertNotification("ODK Collect", "Form updates available")
+            .assertNotification("ODK Collect", "Form updates available", Project.DEMO_PROJECT_NAME)
             .clearAll()
 
         testDependencies.server.addForm(
@@ -62,7 +63,7 @@ class PreviouslyDownloadedOnlyTest {
         testDependencies.scheduler.runDeferredTasks()
 
         notificationDrawerRule.open()
-            .assertNotification("ODK Collect", "Form updates available")
+            .assertNotification("ODK Collect", "Form updates available", Project.DEMO_PROJECT_NAME)
             .clickNotification(
                 "ODK Collect",
                 "Form updates available",
