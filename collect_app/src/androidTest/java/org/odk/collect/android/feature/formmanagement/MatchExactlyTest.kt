@@ -67,11 +67,10 @@ class MatchExactlyTest {
 
         notificationDrawerRule
             .open()
-            .assertNotification("ODK Collect", "Form update failed")
+            .assertNotification("ODK Collect", "Form update failed", "The server https://server.example.com returned status code 500. If you keep having this problem, report it to the person who asked you to collect data.")
             .clickNotification(
                 "ODK Collect",
                 "Form update failed",
-                "The server https://server.example.com returned status code 500. If you keep having this problem, report it to the person who asked you to collect data.",
                 FillBlankFormPage()
             ).pressBack(MainMenuPage()) // Check we return to Fill Blank Form, not open a new one
     }

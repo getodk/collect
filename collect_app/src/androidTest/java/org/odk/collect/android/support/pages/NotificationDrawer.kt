@@ -28,8 +28,8 @@ class NotificationDrawer {
     fun assertNotification(
         appName: String,
         title: String,
-        body: String? = null,
-        subtext: String? = null
+        subtext: String,
+        body: String? = null
     ): NotificationDrawer {
         val device = waitForNotification(appName)
 
@@ -41,10 +41,9 @@ class NotificationDrawer {
             assertThat(bodyElement.text, `is`(body))
         }
 
-        subtext?.let {
-            val subtextElement = device.findObject(By.text(subtext))
-            assertThat(subtextElement.text, `is`(subtext))
-        }
+        val subtextElement = device.findObject(By.text(subtext))
+        assertThat(subtextElement.text, `is`(subtext))
+
         return this
     }
 
@@ -52,29 +51,31 @@ class NotificationDrawer {
         appName: String,
         actionText: String,
         destination: D
-    ): NotificationDrawer {
+    ): D {
         val device = waitForNotification(appName)
         val actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
         actionElement.click()
-        device.wait(Until.hasObject(By.textStartsWith(actionText)), 2000L)
-        destination.assertOnPage()
         isOpen = false
-        return this
+
+        return waitFor {
+            destination.assertOnPage()
+        }
     }
 
     fun <D : Page<D>> clickNotification(
         appName: String,
         title: String,
-        expectedTextOnClick: String?,
         destination: D
     ): D {
         val device = waitForNotification(appName)
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement.text, `is`(title))
         titleElement.click()
-        device.wait(Until.hasObject(By.textStartsWith(expectedTextOnClick)), 2000L)
         isOpen = false
-        return destination.assertOnPage()
+
+        return waitFor {
+            destination.assertOnPage()
+        }
     }
 
     fun pressBack() {

@@ -6,11 +6,10 @@ import org.apache.commons.io.FileUtils
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.odk.collect.android.TestSettingsProvider.getSettingsProvider
 import org.odk.collect.android.database.DatabaseConnection.Companion.closeAll
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
 import org.odk.collect.androidshared.data.getState
@@ -24,19 +23,20 @@ private class ResetStateStatement(
     private val appDependencyModule: AppDependencyModule? = null
 ) : Statement() {
 
-    private val settingsProvider = getSettingsProvider()
-
     override fun evaluate() {
         val application = ApplicationProvider.getApplicationContext<Application>()
-        resetDagger()
-        clearPrefs()
-        clearDisk()
+        val oldComponent = DaggerUtils.getComponent(application)
+
+        clearPrefs(oldComponent)
+        clearDisk(oldComponent)
         clearAppState(application)
         setTestState()
-        val component = DaggerUtils.getComponent(application.applicationContext)
+
+        val newComponent =
+            CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
 
         // Reinitialize any application state with new deps/state
-        component.applicationInitializer().initialize()
+        newComponent.applicationInitializer().initialize()
         base.evaluate()
     }
 
@@ -50,22 +50,17 @@ private class ResetStateStatement(
         recordToasts = true
     }
 
-    private fun clearDisk() {
+    private fun clearDisk(component: AppDependencyComponent) {
         try {
-            val storagePathProvider = StoragePathProvider()
-            FileUtils.deleteDirectory(File(storagePathProvider.odkRootDirPath))
+            FileUtils.deleteDirectory(File(component.storagePathProvider().odkRootDirPath))
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
         closeAll()
     }
 
-    private fun resetDagger() {
-        CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
-    }
-
-    private fun clearPrefs() {
-        settingsProvider.clearAll()
+    private fun clearPrefs(component: AppDependencyComponent) {
+        component.settingsProvider().clearAll()
     }
 }
 
