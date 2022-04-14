@@ -8,22 +8,33 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 
 class PermissionsProviderTest {
+
     private var permissionsChecker = mock<PermissionsChecker>()
     private var activity = mock<Activity>()
     private var uri = mock<Uri>()
     private var contentResolver = mock<ContentResolver>()
     private var permissionListener = mock<PermissionListener>()
+    private val permissionsApi = mock<PermissionsAPI> {
+        on { requestPermissions(any(), any(), any()) } doAnswer {
+            (it.getArgument(1) as PermissionListener).granted()
+        }
+    }
+
     private lateinit var permissionsProvider: PermissionsProvider
 
     @Before
     fun setup() {
-        permissionsProvider = spy(PermissionsProvider(permissionsChecker))
+        permissionsProvider = spy(PermissionsProvider(permissionsChecker, permissionsApi))
     }
 
     @Test
@@ -149,5 +160,39 @@ class PermissionsProviderTest {
             permissionListener
         )
         verify(permissionListener).denied()
+    }
+
+    @Test
+    fun `granted listener is not called when Activity is finishing`() {
+        whenever(permissionsApi.requestPermissions(any(), any(), any())).doAnswer {
+            (it.getArgument(1) as PermissionListener).granted()
+        }
+
+        whenever(activity.isFinishing).doReturn(true)
+
+        permissionsProvider.requestPermissions(
+            activity,
+            permissionListener,
+            Manifest.permission.READ_PHONE_STATE
+        )
+
+        verifyNoInteractions(permissionListener)
+    }
+
+    @Test
+    fun `denied listener is not called when Activity is finishing`() {
+        whenever(permissionsApi.requestPermissions(any(), any(), any())).doAnswer {
+            (it.getArgument(1) as PermissionListener).denied()
+        }
+
+        whenever(activity.isFinishing).doReturn(true)
+
+        permissionsProvider.requestPermissions(
+            activity,
+            permissionListener,
+            Manifest.permission.READ_PHONE_STATE
+        )
+
+        verifyNoInteractions(permissionListener)
     }
 }

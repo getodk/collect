@@ -30,7 +30,11 @@ import timber.log.Timber
  * area so that classes don't have to deal with this responsibility; they just receive a callback
  * that tells them if they have been granted the permission they requested.
  */
-open class PermissionsProvider(private val permissionsChecker: PermissionsChecker) {
+open class PermissionsProvider(
+    private val permissionsChecker: PermissionsChecker,
+    private val permissionsApi: PermissionsAPI = DexterPermissionsAPI
+) {
+
     val isCameraPermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)
 
@@ -220,7 +224,98 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
         )
     }
 
-    protected open fun requestPermissions(
+    open fun requestPermissions(
+        activity: Activity,
+        listener: PermissionListener,
+        vararg permissions: String
+    ) {
+        val safePermissionsListener = object : PermissionListener {
+            override fun granted() {
+                if (!activity.isFinishing) {
+                    listener.granted()
+                }
+            }
+
+            override fun denied() {
+                if (!activity.isFinishing) {
+                    listener.denied()
+                }
+            }
+        }
+
+        permissionsApi.requestPermissions(activity, safePermissionsListener, *permissions)
+    }
+
+    protected open fun showAdditionalExplanation(
+        activity: Activity,
+        title: Int,
+        message: Int,
+        drawable: Int,
+        action: PermissionListener
+    ) {
+        action.denied()
+        val args = Bundle()
+        args.putInt(PermissionDeniedDialog.TITLE, title)
+        args.putInt(PermissionDeniedDialog.MESSAGE, message)
+        args.putInt(PermissionDeniedDialog.ICON, drawable)
+        showIfNotShowing(
+            PermissionDeniedDialog::class.java,
+            args,
+            (activity as AppCompatActivity).supportFragmentManager
+        )
+    }
+
+    fun requestReadUriPermission(
+        activity: Activity,
+        uri: Uri,
+        contentResolver: ContentResolver,
+        listener: PermissionListener
+    ) {
+        try {
+            contentResolver.query(uri, null, null, null, null)
+                .use { listener.granted() }
+        } catch (e: SecurityException) {
+            requestPermissions(
+                activity,
+                object : PermissionListener {
+                    override fun granted() {
+                        listener.granted()
+                    }
+
+                    override fun denied() {
+                        showAdditionalExplanation(
+                            activity, R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
+                            listener
+                        )
+                    }
+                },
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        } catch (e: Exception) {
+            listener.denied()
+        } catch (e: Error) {
+            listener.denied()
+        }
+    }
+
+    private fun isLocationEnabled(activity: Activity): Boolean {
+        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return LocationManagerCompat.isLocationEnabled(locationManager)
+    }
+}
+
+interface PermissionsAPI {
+    fun requestPermissions(
+        activity: Activity,
+        listener: PermissionListener,
+        vararg permissions: String
+    )
+}
+
+object DexterPermissionsAPI : PermissionsAPI {
+
+    override fun requestPermissions(
         activity: Activity,
         listener: PermissionListener,
         vararg permissions: String
@@ -282,63 +377,5 @@ open class PermissionsProvider(private val permissionsChecker: PermissionsChecke
                     token.continuePermissionRequest()
                 }
             })
-    }
-
-    protected open fun showAdditionalExplanation(
-        activity: Activity,
-        title: Int,
-        message: Int,
-        drawable: Int,
-        action: PermissionListener
-    ) {
-        action.denied()
-        val args = Bundle()
-        args.putInt(PermissionDeniedDialog.TITLE, title)
-        args.putInt(PermissionDeniedDialog.MESSAGE, message)
-        args.putInt(PermissionDeniedDialog.ICON, drawable)
-        showIfNotShowing(
-            PermissionDeniedDialog::class.java,
-            args,
-            (activity as AppCompatActivity).supportFragmentManager
-        )
-    }
-
-    fun requestReadUriPermission(
-        activity: Activity,
-        uri: Uri,
-        contentResolver: ContentResolver,
-        listener: PermissionListener
-    ) {
-        try {
-            contentResolver.query(uri, null, null, null, null)
-                .use { listener.granted() }
-        } catch (e: SecurityException) {
-            requestPermissions(
-                activity,
-                object : PermissionListener {
-                    override fun granted() {
-                        listener.granted()
-                    }
-
-                    override fun denied() {
-                        showAdditionalExplanation(
-                            activity, R.string.storage_runtime_permission_denied_title,
-                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
-                            listener
-                        )
-                    }
-                },
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            )
-        } catch (e: Exception) {
-            listener.denied()
-        } catch (e: Error) {
-            listener.denied()
-        }
-    }
-
-    private fun isLocationEnabled(activity: Activity): Boolean {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return LocationManagerCompat.isLocationEnabled(locationManager)
     }
 }
