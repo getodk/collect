@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
@@ -19,25 +17,19 @@ class CollectTestRule @JvmOverloads constructor(
     private val useDemoProject: Boolean = true
 ) : ActivityScenarioLauncherRule() {
 
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            override fun evaluate() {
-                launch(SplashScreenActivity::class.java)
+    override fun before() {
+        super.before()
 
-                val firstLaunchPage = launch(
-                    Intent(
-                        ApplicationProvider.getApplicationContext(),
-                        SplashScreenActivity::class.java
-                    ),
-                    FirstLaunchPage()
-                ).assertOnPage()
+        val firstLaunchPage = launch(
+            Intent(
+                ApplicationProvider.getApplicationContext(),
+                SplashScreenActivity::class.java
+            ),
+            FirstLaunchPage()
+        ).assertOnPage()
 
-                if (useDemoProject) {
-                    firstLaunchPage.clickTryCollect()
-                }
-
-                base.evaluate()
-            }
+        if (useDemoProject) {
+            firstLaunchPage.clickTryCollect()
         }
     }
 
