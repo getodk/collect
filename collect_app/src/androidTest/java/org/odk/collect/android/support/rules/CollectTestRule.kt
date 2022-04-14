@@ -1,16 +1,13 @@
 package org.odk.collect.android.support.rules
 
 import android.app.Activity
-import android.app.Application
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.NoMatchingViewException
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.external.AndroidShortcutsActivity
-import org.odk.collect.android.injection.DaggerUtils.getComponent
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
@@ -27,25 +24,13 @@ class CollectTestRule @JvmOverloads constructor(
             override fun evaluate() {
                 launch(SplashScreenActivity::class.java)
 
-                val firstLaunchPage = FirstLaunchPage()
-
-                /**
-                 * We've seen some failures here that look like they could be to do with our
-                 * state not being reset properly. Here we catch a view assertion and throw
-                 * a specific exception if that looks like it's the case to help debugging.
-                 */
-                try {
-                    firstLaunchPage.assertOnPage()
-                } catch (e: NoMatchingViewException) {
-                    val application = ApplicationProvider.getApplicationContext<Application>()
-                    val projectsRepository = getComponent(application).projectsRepository()
-
-                    if (projectsRepository.getAll().isNotEmpty()) {
-                        throw IllegalStateException("Projects not reset properly!")
-                    } else {
-                        throw e
-                    }
-                }
+                val firstLaunchPage = launch(
+                    Intent(
+                        ApplicationProvider.getApplicationContext(),
+                        SplashScreenActivity::class.java
+                    ),
+                    FirstLaunchPage()
+                ).assertOnPage()
 
                 if (useDemoProject) {
                     firstLaunchPage.clickTryCollect()
