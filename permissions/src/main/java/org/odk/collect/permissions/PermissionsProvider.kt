@@ -30,10 +30,18 @@ import timber.log.Timber
  * area so that classes don't have to deal with this responsibility; they just receive a callback
  * that tells them if they have been granted the permission they requested.
  */
-open class PermissionsProvider(
+open class PermissionsProvider internal constructor(
     private val permissionsChecker: PermissionsChecker,
-    private val requestPermissionsApi: RequestPermissionsAPI = DexterRequestPermissionsAPI
+    private val requestPermissionsApi: RequestPermissionsAPI
 ) {
+
+    /**
+     * Public facing constructor that doesn't expose [RequestPermissionsAPI]
+     */
+    constructor(permissionsChecker: PermissionsChecker) : this(
+        permissionsChecker,
+        DexterRequestPermissionsAPI
+    )
 
     val isCameraPermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)
@@ -305,7 +313,7 @@ open class PermissionsProvider(
     }
 }
 
-interface RequestPermissionsAPI {
+internal interface RequestPermissionsAPI {
     fun requestPermissions(
         activity: Activity,
         listener: PermissionListener,
@@ -313,7 +321,7 @@ interface RequestPermissionsAPI {
     )
 }
 
-object DexterRequestPermissionsAPI : RequestPermissionsAPI {
+internal object DexterRequestPermissionsAPI : RequestPermissionsAPI {
 
     override fun requestPermissions(
         activity: Activity,
