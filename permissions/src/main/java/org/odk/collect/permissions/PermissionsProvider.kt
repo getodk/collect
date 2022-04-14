@@ -32,7 +32,7 @@ import timber.log.Timber
  */
 open class PermissionsProvider(
     private val permissionsChecker: PermissionsChecker,
-    private val permissionsApi: PermissionsAPI = DexterPermissionsAPI
+    private val requestPermissionsApi: RequestPermissionsAPI = DexterRequestPermissionsAPI
 ) {
 
     val isCameraPermissionGranted: Boolean
@@ -243,7 +243,7 @@ open class PermissionsProvider(
             }
         }
 
-        permissionsApi.requestPermissions(activity, safePermissionsListener, *permissions)
+        requestPermissionsApi.requestPermissions(activity, safePermissionsListener, *permissions)
     }
 
     protected open fun showAdditionalExplanation(
@@ -305,7 +305,7 @@ open class PermissionsProvider(
     }
 }
 
-interface PermissionsAPI {
+interface RequestPermissionsAPI {
     fun requestPermissions(
         activity: Activity,
         listener: PermissionListener,
@@ -313,7 +313,7 @@ interface PermissionsAPI {
     )
 }
 
-object DexterPermissionsAPI : PermissionsAPI {
+object DexterRequestPermissionsAPI : RequestPermissionsAPI {
 
     override fun requestPermissions(
         activity: Activity,

@@ -12,7 +12,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
@@ -24,7 +23,7 @@ class PermissionsProviderTest {
     private var uri = mock<Uri>()
     private var contentResolver = mock<ContentResolver>()
     private var permissionListener = mock<PermissionListener>()
-    private val permissionsApi = mock<PermissionsAPI> {
+    private val permissionsApi = mock<RequestPermissionsAPI> {
         on { requestPermissions(any(), any(), any()) } doAnswer {
             (it.getArgument(1) as PermissionListener).granted()
         }
@@ -34,7 +33,7 @@ class PermissionsProviderTest {
 
     @Before
     fun setup() {
-        permissionsProvider = spy(PermissionsProvider(permissionsChecker, permissionsApi))
+        permissionsProvider = PermissionsProvider(permissionsChecker, permissionsApi)
     }
 
     @Test
@@ -46,9 +45,8 @@ class PermissionsProviderTest {
 
     @Test
     fun `When camera permission not granted should isCameraPermissionGranted() return false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)).thenReturn(
-            false
-        )
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA))
+            .thenReturn(false)
 
         assertThat(permissionsProvider.isCameraPermissionGranted, `is`(false))
     }
