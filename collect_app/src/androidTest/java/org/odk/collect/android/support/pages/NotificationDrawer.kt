@@ -52,13 +52,15 @@ class NotificationDrawer {
         appName: String,
         actionText: String,
         destination: D
-    ): NotificationDrawer {
+    ): D {
         val device = waitForNotification(appName)
         val actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
         actionElement.click()
-        destination.assertOnPage()
         isOpen = false
-        return this
+
+        return waitFor {
+            destination.assertOnPage()
+        }
     }
 
     fun <D : Page<D>> clickNotification(
@@ -71,7 +73,10 @@ class NotificationDrawer {
         assertThat(titleElement.text, `is`(title))
         titleElement.click()
         isOpen = false
-        return destination.assertOnPage()
+
+        return waitFor {
+            destination.assertOnPage()
+        }
     }
 
     fun pressBack() {

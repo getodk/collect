@@ -78,6 +78,8 @@ class AutoSendTest {
                 "Show details",
                 ErrorPage()
             )
+
+        notificationDrawerRule
             .open()
             .clickNotification(
                 "ODK Collect",

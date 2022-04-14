@@ -1,13 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import android.database.Cursor;
-
-import androidx.test.espresso.matcher.CursorMatchers;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.forms.DatabaseFormColumns;
-import org.odk.collect.android.support.WaitFor;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -24,14 +16,20 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
+import android.database.Cursor;
+
+import androidx.test.espresso.matcher.CursorMatchers;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
+import org.odk.collect.android.support.WaitFor;
+
 public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     @Override
     public FillBlankFormPage assertOnPage() {
-        return WaitFor.waitFor(() -> {
-            assertToolbarTitle(R.string.enter_data);
-            return this;
-        });
+        assertToolbarTitle(R.string.enter_data);
+        return this;
     }
 
     public IdentifyUserPromptPage clickOnFormWithIdentityPrompt(String formName) {

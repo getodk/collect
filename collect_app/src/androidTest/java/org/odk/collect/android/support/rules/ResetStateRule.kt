@@ -34,7 +34,7 @@ private class ResetStateStatement(
 
         val newComponent =
             CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
-        
+
         // Reinitialize any application state with new deps/state
         newComponent.applicationInitializer().initialize()
         base.evaluate()
