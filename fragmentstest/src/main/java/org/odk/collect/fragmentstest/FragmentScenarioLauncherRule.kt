@@ -5,6 +5,7 @@ import androidx.annotation.StyleRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
+import androidx.lifecycle.Lifecycle
 import org.junit.rules.ExternalResource
 
 /**
@@ -30,20 +31,23 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
         fragmentClass: Class<F>,
         args: Bundle? = null,
         @StyleRes themResId: Int? = defaultThemeResId,
-        factory: FragmentFactory? = defaultFactory
+        factory: FragmentFactory? = defaultFactory,
+        initialState: Lifecycle.State = Lifecycle.State.RESUMED
     ): FragmentScenario<F> {
         val scenario = if (themResId != null) {
             FragmentScenario.launchInContainer(
                 fragmentClass,
                 fragmentArgs = args,
                 themeResId = themResId,
-                factory = factory
+                factory = factory,
+                initialState = initialState
             )
         } else {
             FragmentScenario.launchInContainer(
                 fragmentClass,
                 fragmentArgs = args,
-                factory = factory
+                factory = factory,
+                initialState = initialState
             )
         }
 

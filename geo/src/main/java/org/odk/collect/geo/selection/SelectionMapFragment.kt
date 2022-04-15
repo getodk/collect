@@ -156,7 +156,10 @@ class SelectionMapFragment(
     }
 
     override fun onDestroy() {
-        summarySheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
+        if (this::summarySheetBehavior.isInitialized) {
+            summarySheetBehavior.removeBottomSheetCallback(bottomSheetCallback)
+        }
+
         super.onDestroy()
     }
 
