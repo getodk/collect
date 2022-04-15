@@ -22,10 +22,14 @@ class ErrorActivity : LocalizedActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         findViewById<Toolbar>(R.id.toolbar).setNavigationOnClickListener { finish() }
 
-        val failures = intent.getSerializableExtra(EXTRA_ERRORS) as List<ErrorItem>
-        findViewById<RecyclerView>(R.id.errors).apply {
-            adapter = ErrorAdapter(failures)
-            layoutManager = LinearLayoutManager(context)
+        val failures = intent.getSerializableExtra(EXTRA_ERRORS) as? List<ErrorItem>
+        if (failures != null) {
+            findViewById<RecyclerView>(R.id.errors).apply {
+                adapter = ErrorAdapter(failures)
+                layoutManager = LinearLayoutManager(context)
+            }
+        } else {
+            finish()
         }
     }
 }

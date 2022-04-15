@@ -1,12 +1,15 @@
 package org.odk.collect.errors
 
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,5 +57,13 @@ class ErrorActivityTest {
 
         onView(withRecyclerView(R.id.errors).atPositionOnView(1, R.id.supporting_text))
             .check(matches(withText("Supporting text 2")))
+    }
+
+    @Test
+    fun `finishes when passed no errors`() {
+        val intent = Intent(ApplicationProvider.getApplicationContext(), ErrorActivity::class.java)
+
+        val scenario = launcherRule.launch<ErrorActivity>(intent)
+        assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
     }
 }
