@@ -5,6 +5,6 @@
     <application>
         <activity
             android:name=".ErrorActivity"
-            android:theme="@style/Theme.MaterialComponents" />
+            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
     </application>
 </manifest>
