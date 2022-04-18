@@ -30,6 +30,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
+import org.odk.collect.android.widgets.items.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
@@ -43,6 +44,7 @@ import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELE
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapDialogFragmentTest {
@@ -251,7 +253,7 @@ class SelectOneFromMapDialogFragmentTest {
     }
 
     @Test
-    fun `dismisses when there is invalid geometry`() {
+    fun `show error and dismisses when there is invalid geometry`() {
         val selectChoices = listOf(
             selectChoice(
                 value = "a",
@@ -281,6 +283,16 @@ class SelectOneFromMapDialogFragmentTest {
         ).onFragment {
             scheduler.runBackground()
             assertThat(it.isVisible, equalTo(false))
+
+            val dialog = RobolectricHelpers.getFragmentByClass(
+                it.parentFragmentManager,
+                MaterialAlertDialogFragment::class.java
+            )
+
+            assertThat(
+                dialog?.arguments?.getString(ARG_MESSAGE),
+                equalTo(application.getString(R.string.invalid_geometry))
+            )
         }
     }
 }
