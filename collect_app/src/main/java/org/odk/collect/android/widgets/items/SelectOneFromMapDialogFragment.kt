@@ -107,7 +107,7 @@ internal class SelectChoicesMapData(
     SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
-    private val itemCount = MutableLiveData<Int>()
+    private val itemCount = MutableNonNullLiveData(0)
     private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
     private val isLoading = MutableNonNullLiveData(true)
 
@@ -171,7 +171,7 @@ internal class SelectChoicesMapData(
         return isLoading
     }
 
-    override fun getMapTitle(): LiveData<String> {
+    override fun getMapTitle(): LiveData<String?> {
         return mapTitle
     }
 
@@ -179,7 +179,7 @@ internal class SelectChoicesMapData(
         return resources.getString(R.string.choices)
     }
 
-    override fun getItemCount(): LiveData<Int> {
+    override fun getItemCount(): NonNullLiveData<Int> {
         return itemCount
     }
 
