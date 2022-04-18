@@ -291,7 +291,7 @@ class SelectOneFromMapDialogFragmentTest {
 
             assertThat(
                 dialog?.arguments?.getString(ARG_MESSAGE),
-                equalTo(application.getString(R.string.invalid_geometry))
+                equalTo(application.getString(R.string.invalid_geometry, "A", "WRONG"))
             )
         }
     }

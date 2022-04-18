@@ -26,6 +26,8 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
+import org.odk.collect.android.widgets.items.Result.Companion.toError
+import org.odk.collect.android.widgets.items.Result.Companion.toSuccess
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -57,10 +59,16 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
         val selectionMapData = SelectChoicesMapData(resources, scheduler, prompt, selectedIndex)
 
         selectionMapData.hasInvalidGeometry().observe(this) {
-            if (it) {
+            if (it != null) {
                 DialogFragmentUtils.showIfNotShowing(
                     MaterialAlertDialogFragment::class.java,
-                    bundleOf(ARG_MESSAGE to getString(R.string.invalid_geometry)),
+                    bundleOf(
+                        ARG_MESSAGE to getString(
+                            R.string.invalid_geometry,
+                            it.label,
+                            it.geometry
+                        )
+                    ),
                     parentFragmentManager
                 )
 
@@ -123,38 +131,32 @@ internal class SelectChoicesMapData(
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
     private val selectedIndex: Int?
-) :
-    SelectionMapData {
+) : SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableNonNullLiveData(0)
     private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
     private val isLoading = MutableNonNullLiveData(true)
-    private val invalidGeometry = MutableNonNullLiveData(false)
+    private val invalidGeometry = MutableLiveData<InvalidGeometry?>(null)
 
     init {
         isLoading.value = true
 
         scheduler.immediate(
             background = {
-                val selectChoices = prompt.selectChoices
-                val itemCount = selectChoices.size
-
-                try {
-                    val items: List<MappableSelectItem> =
-                        loadItemsFromChoices(selectChoices, prompt)
-                    Pair(itemCount, items)
-                } catch (e: NumberFormatException) {
-                    null
-                }
+                loadItemsFromChoices(prompt.selectChoices, prompt)
             },
             foreground = {
-                if (it != null) {
-                    itemCount.value = it.first
-                    items.value = it.second
-                    isLoading.value = false
-                } else {
-                    invalidGeometry.value = true
+                when (it) {
+                    is Result.Success -> {
+                        itemCount.value = prompt.selectChoices.size
+                        items.value = it.value
+                        isLoading.value = false
+                    }
+
+                    is Result.Error -> {
+                        invalidGeometry.value = it.value
+                    }
                 }
             }
         )
@@ -163,13 +165,21 @@ internal class SelectChoicesMapData(
     private fun loadItemsFromChoices(
         selectChoices: MutableList<SelectChoice>,
         prompt: FormEntryPrompt
-    ): List<MappableSelectItem> {
-        return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
+    ): Result<List<MappableSelectItem>, InvalidGeometry> {
+        return selectChoices.foldIndexed(emptyList<MappableSelectItem>()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild("geometry")
 
             if (geometry != null) {
-                val latitude = geometry.split(" ")[0].toDouble()
-                val longitude = geometry.split(" ")[1].toDouble()
+                val latitude: Double
+                val longitude: Double
+
+                try {
+                    latitude = geometry.split(" ")[0].toDouble()
+                    longitude = geometry.split(" ")[1].toDouble()
+                } catch (e: NumberFormatException) {
+                    return InvalidGeometry(prompt.getSelectChoiceText(selectChoice), geometry)
+                        .toError()
+                }
 
                 val properties = selectChoice.additionalChildren.filter {
                     it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
@@ -194,7 +204,7 @@ internal class SelectChoicesMapData(
             } else {
                 list
             }
-        }
+        }.toSuccess()
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
@@ -217,9 +227,11 @@ internal class SelectChoicesMapData(
         return items
     }
 
-    fun hasInvalidGeometry(): NonNullLiveData<Boolean> {
+    fun hasInvalidGeometry(): LiveData<InvalidGeometry?> {
         return invalidGeometry
     }
+
+    data class InvalidGeometry(val label: String, val geometry: String)
 }
 
 class MaterialAlertDialogFragment : DialogFragment() {
@@ -232,5 +244,20 @@ class MaterialAlertDialogFragment : DialogFragment() {
 
     companion object {
         const val ARG_MESSAGE = "arg_message"
+    }
+}
+
+sealed interface Result<S, E> {
+    data class Success<S, E>(val value: S) : Result<S, E>
+    data class Error<S, E>(val value: E) : Result<S, E>
+
+    companion object {
+        fun <S, E> S.toSuccess(): Success<S, E> {
+            return Success(this)
+        }
+
+        fun <S, E> E.toError(): Error<S, E> {
+            return Error(this)
+        }
     }
 }
