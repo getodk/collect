@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -407,6 +408,16 @@ class SelectionMapFragmentTest {
             loadingLiveData.value = false
             assertThat(getFragmentByClass(it.childFragmentManager, dialogClass), nullValue())
         }
+    }
+
+    @Test
+    fun `onDestroy works if the view was never created`() {
+        val scenario = launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            initialState = Lifecycle.State.CREATED // `onCreateView` is called at `RESUMED`
+        )
+
+        scenario.moveToState(Lifecycle.State.DESTROYED)
     }
 
     private fun MappableSelectItem.toMapPoint(): MapPoint {
