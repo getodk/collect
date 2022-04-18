@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.WorkManager
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.notNullValue
@@ -33,6 +34,7 @@ import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Comp
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
@@ -40,6 +42,7 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapDialogFragmentTest {
@@ -73,6 +76,7 @@ class SelectOneFromMapDialogFragmentTest {
     }
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
+    private val scheduler = FakeScheduler()
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule()
@@ -96,17 +100,25 @@ class SelectOneFromMapDialogFragmentTest {
                     }
                 }
             }
+
+            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+                return scheduler
+            }
         })
     }
 
     @Test
     fun `pressing back dismisses dialog`() {
-        launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launchDialogFragment(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
             }
-        ).onFragment {
+        )
+
+        scheduler.runBackground()
+
+        scenario.onFragment {
             Espresso.pressBack()
             assertThat(it.isVisible, equalTo(false))
         }
@@ -114,12 +126,16 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `contains SelectionMapFragment with correct data`() {
-        launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launchDialogFragment(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
             }
-        ).onFragment {
+        )
+
+        scheduler.runBackground()
+
+        scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
@@ -166,13 +182,17 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `contains SelectionMapFragment with correct data with selected index`() {
-        launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launchDialogFragment(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
                 it.putSerializable(ARG_SELECTED_INDEX, selectChoices[1].index)
             }
-        ).onFragment {
+        )
+
+        scheduler.runBackground()
+
+        scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment, notNullValue())
@@ -191,12 +211,16 @@ class SelectOneFromMapDialogFragmentTest {
             .build()
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
 
-        launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launchDialogFragment(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
             }
-        ).onFragment {
+        )
+
+        scheduler.runBackground()
+
+        scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
             assertThat(fragment.skipSummary, equalTo(true))
@@ -205,12 +229,16 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `selecting a choice on the map answers question and dismisses`() {
-        launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launchDialogFragment(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
             }
-        ).onFragment {
+        )
+
+        scheduler.runBackground()
+
+        scenario.onFragment {
             val result = bundleOf(SelectionMapFragment.RESULT_SELECTED_ITEM to 1L)
             it.childFragmentManager.setFragmentResult(REQUEST_SELECT_ITEM, result)
             assertThat(it.isVisible, equalTo(false))
@@ -220,5 +248,39 @@ class SelectOneFromMapDialogFragmentTest {
             prompt.index,
             SelectOneData(selectChoices[1].selection())
         )
+    }
+
+    @Test
+    fun `dismisses when there is invalid geometry`() {
+        val selectChoices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(children = listOf(treeElement("geometry", "WRONG")))
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(
+                selectChoices
+            )
+            .withSelectChoiceText(
+                mapOf(
+                    selectChoices[0] to "A"
+                )
+            )
+            .build()
+
+        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
+
+        launcherRule.launchDialogFragment(
+            SelectOneFromMapDialogFragment::class.java,
+            Bundle().also {
+                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+            }
+        ).onFragment {
+            scheduler.runBackground()
+            assertThat(it.isVisible, equalTo(false))
+        }
     }
 }

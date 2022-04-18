@@ -45,13 +45,21 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
 
+        val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
+        val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
+        val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
+        val selectionMapData = SelectChoicesMapData(resources, scheduler, prompt, selectedIndex)
+
+        selectionMapData.hasInvalidGeometry().observe(this) {
+            if (it) {
+                dismiss()
+            }
+        }
+
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(SelectionMapFragment::class.java) {
-                val formIndex = requireArguments().getSerializable(ARG_FORM_INDEX) as FormIndex
-                val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
-                val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
                 SelectionMapFragment(
-                    SelectChoicesMapData(resources, scheduler, prompt, selectedIndex),
+                    selectionMapData,
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false,
                     zoomToFitItems = false
@@ -110,6 +118,7 @@ internal class SelectChoicesMapData(
     private val itemCount = MutableNonNullLiveData(0)
     private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
     private val isLoading = MutableNonNullLiveData(true)
+    private val invalidGeometry = MutableNonNullLiveData(false)
 
     init {
         isLoading.value = true
@@ -118,14 +127,23 @@ internal class SelectChoicesMapData(
             background = {
                 val selectChoices = prompt.selectChoices
                 val itemCount = selectChoices.size
-                val items: List<MappableSelectItem> = loadItemsFromChoices(selectChoices, prompt)
 
-                Pair(itemCount, items)
+                try {
+                    val items: List<MappableSelectItem> =
+                        loadItemsFromChoices(selectChoices, prompt)
+                    Pair(itemCount, items)
+                } catch (e: NumberFormatException) {
+                    null
+                }
             },
             foreground = {
-                itemCount.value = it.first
-                items.value = it.second
-                isLoading.value = false
+                if (it != null) {
+                    itemCount.value = it.first
+                    items.value = it.second
+                    isLoading.value = false
+                } else {
+                    invalidGeometry.value = true
+                }
             }
         )
     }
@@ -185,5 +203,9 @@ internal class SelectChoicesMapData(
 
     override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
         return items
+    }
+
+    fun hasInvalidGeometry(): NonNullLiveData<Boolean> {
+        return invalidGeometry
     }
 }
