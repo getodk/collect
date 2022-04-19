@@ -116,7 +116,7 @@ public final class AnalyticsUtils {
         } else if (exception instanceof ServerNotOpenRosaError) {
             return "SERVER_NOT_OPEN_ROSA_ERROR";
         } else {
-            throw new IllegalArgumentException();
+            return "UNKNOWN_ERROR";
         }
     }
 }
