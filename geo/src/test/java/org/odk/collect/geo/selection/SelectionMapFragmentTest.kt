@@ -57,7 +57,7 @@ class SelectionMapFragmentTest {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemType() } doReturn "Things"
-        on { getItemCount() } doReturn MutableLiveData(0)
+        on { getItemCount() } doReturn MutableNonNullLiveData(0)
         on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())
     }
 
