@@ -118,12 +118,11 @@ public interface MapFragment {
     void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate);
 
     /**
-     * Adds a marker to the map at the given location.  If draggable is true,
+     * Adds a marker to the map at the given location. If draggable is true,
      * the user will be able to drag the marker to change its location.
-     * By default, the marker icon will be R.drawable.ic_map_point.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor);
+    int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId);
 
     /** Sets the icon for a marker. */
     void setMarkerIcon(int featureId, int drawableId);

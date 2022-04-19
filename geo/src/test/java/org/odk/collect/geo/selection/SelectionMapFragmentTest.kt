@@ -307,12 +307,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
 
         map.clickOnFeature(0)
-        onView(
-            allOf(
-                isDescendantOfA(withId(R.id.summary_sheet)),
-                withText("Blah1")
-            )
-        ).check(matches(isDisplayed()))
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
+            .check(matches(isDisplayed()))
     }
 
     @Test
@@ -382,7 +378,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `recreating maintains zoom`() {
+    fun `recreating maintains zoom and position`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.zoomToPoint(MapPoint(55.0, 66.0), 7.0, false)
 
@@ -391,6 +387,39 @@ class SelectionMapFragmentTest {
         assertThat(map.getZoomBoundingBox(), equalTo(null))
         assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
         assertThat(map.zoom, equalTo(7.0))
+    }
+
+    @Test
+    fun `recreating maintains selection`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0, name = "Point1"),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, name = "Point2")
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(1)
+        scenario.recreate()
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point2")))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun `recreating with initial selection maintains new selection`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem()
+                .copy(id = 0, latitude = 40.0, name = "Point1", selected = true),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, name = "Point2")
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+
+        map.clickOnFeature(1)
+        scenario.recreate()
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point2")))
+            .check(matches(isDisplayed()))
     }
 
     @Test
