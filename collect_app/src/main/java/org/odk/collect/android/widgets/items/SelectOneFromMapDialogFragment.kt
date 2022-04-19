@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.items
 
-import android.app.Dialog
 import android.content.Context
 import android.content.res.Resources
 import android.os.Bundle
@@ -9,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
@@ -25,7 +22,6 @@ import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.items.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -35,6 +31,8 @@ import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.material.MaterialAlertDialogFragment
+import org.odk.collect.material.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.shared.result.Result
 import org.odk.collect.shared.result.Result.Companion.toError
@@ -233,17 +231,4 @@ internal class SelectChoicesMapData(
     }
 
     data class InvalidGeometry(val label: String, val geometry: String)
-}
-
-class MaterialAlertDialogFragment : DialogFragment() {
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return MaterialAlertDialogBuilder(requireContext())
-            .setMessage(requireArguments().getString(ARG_MESSAGE))
-            .create()
-    }
-
-    companion object {
-        const val ARG_MESSAGE = "arg_message"
-    }
 }

@@ -30,7 +30,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
-import org.odk.collect.android.widgets.items.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
@@ -43,6 +42,8 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.material.MaterialAlertDialogFragment
+import org.odk.collect.material.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers
 
