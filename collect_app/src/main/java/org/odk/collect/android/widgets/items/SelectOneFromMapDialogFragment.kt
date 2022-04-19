@@ -38,6 +38,7 @@ import org.odk.collect.shared.result.Result
 import org.odk.collect.shared.result.Result.Companion.toError
 import org.odk.collect.shared.result.Result.Companion.toSuccess
 import javax.inject.Inject
+import kotlin.math.absoluteValue
 
 class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
 
@@ -175,6 +176,11 @@ internal class SelectChoicesMapData(
                 try {
                     latitude = geometry.split(" ")[0].toDouble()
                     longitude = geometry.split(" ")[1].toDouble()
+
+                    if (latitude.absoluteValue > 90 || longitude.absoluteValue > 180) {
+                        return InvalidGeometry(prompt.getSelectChoiceText(selectChoice), geometry)
+                            .toError()
+                    }
                 } catch (e: NumberFormatException) {
                     return InvalidGeometry(prompt.getSelectChoiceText(selectChoice), geometry)
                         .toError()
