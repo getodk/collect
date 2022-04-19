@@ -7,6 +7,7 @@ import static org.odk.collect.forms.FormSourceException.FetchError;
 import static org.odk.collect.forms.FormSourceException.ParseError;
 import static org.odk.collect.forms.FormSourceException.SecurityError;
 import static org.odk.collect.forms.FormSourceException.ServerError;
+import static org.odk.collect.forms.FormSourceException.ServerNotOpenRosaError;
 import static org.odk.collect.forms.FormSourceException.Unreachable;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_SERVER_URL;
 import static java.lang.String.format;
@@ -112,6 +113,8 @@ public final class AnalyticsUtils {
             return "PARSE_ERROR";
         } else if (exception instanceof FetchError) {
             return "FETCH_ERROR";
+        } else if (exception instanceof ServerNotOpenRosaError) {
+            return "SERVER_NOT_OPEN_ROSA_ERROR";
         } else {
             throw new IllegalArgumentException();
         }
