@@ -26,8 +26,6 @@ import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
-import org.odk.collect.android.widgets.items.Result.Companion.toError
-import org.odk.collect.android.widgets.items.Result.Companion.toSuccess
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
@@ -38,6 +36,9 @@ import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.shared.result.Result
+import org.odk.collect.shared.result.Result.Companion.toError
+import org.odk.collect.shared.result.Result.Companion.toSuccess
 import javax.inject.Inject
 
 class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
@@ -244,20 +245,5 @@ class MaterialAlertDialogFragment : DialogFragment() {
 
     companion object {
         const val ARG_MESSAGE = "arg_message"
-    }
-}
-
-sealed interface Result<S, E> {
-    data class Success<S, E>(val value: S) : Result<S, E>
-    data class Error<S, E>(val value: E) : Result<S, E>
-
-    companion object {
-        fun <S, E> S.toSuccess(): Success<S, E> {
-            return Success(this)
-        }
-
-        fun <S, E> E.toError(): Error<S, E> {
-            return Error(this)
-        }
     }
 }

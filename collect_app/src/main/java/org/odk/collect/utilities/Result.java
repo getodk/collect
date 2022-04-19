@@ -5,7 +5,10 @@ import javax.annotation.Nullable;
 /**
  * Based on https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/ which is not
  * available to Java.
+ *
+ * @deprecated use {@link org.odk.collect.shared.result.Result} instead
  */
+@Deprecated
 public class Result<T> {
 
     @Nullable
