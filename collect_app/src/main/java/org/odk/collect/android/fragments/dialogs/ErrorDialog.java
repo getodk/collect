@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.odk.collect.material.MaterialAlertDialogFragment;
+
 /*
 Copyright 2018 Theodoros Tyrovouzis
 
@@ -24,6 +26,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+/**
+ * @deprecated Should be replaced with {@link MaterialAlertDialogFragment}
+ */
+@Deprecated
 public class ErrorDialog extends DialogFragment {
     private static final String ARG_MESSAGE = "message";
 
