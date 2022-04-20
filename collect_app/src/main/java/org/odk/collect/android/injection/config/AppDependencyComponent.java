@@ -17,7 +17,6 @@ import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.activities.SplashScreenActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
@@ -198,8 +197,6 @@ public interface AppDependencyComponent {
     void inject(AutoSendTaskSpec autoSendTaskSpec);
 
     void inject(AdminPasswordDialogFragment adminPasswordDialogFragment);
-
-    void inject(SplashScreenActivity splashScreenActivity);
 
     void inject(FormHierarchyActivity formHierarchyActivity);
 

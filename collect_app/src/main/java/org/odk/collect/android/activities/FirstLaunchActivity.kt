@@ -31,9 +31,15 @@ class FirstLaunchActivity : CollectAbstractActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        DaggerUtils.getComponent(this).inject(this)
+
+        if (projectsRepository.getAll().isNotEmpty()) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
+            return
+        }
+
         binding = FirstLaunchLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        DaggerUtils.getComponent(this).inject(this)
 
         binding.configureViaQrButton.setOnClickListener {
             DialogFragmentUtils.showIfNotShowing(

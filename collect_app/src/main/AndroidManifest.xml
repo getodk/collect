@@ -91,7 +91,13 @@ the specific language governing permissions and limitations under the License.
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".activities.FirstLaunchActivity" />
+        <activity android:name=".activities.FirstLaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.MainMenuActivity" />
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
@@ -149,9 +155,6 @@ the specific language governing permissions and limitations under the License.
             tools:replace="android:theme" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
-        <activity
-            android:name=".activities.SplashScreenActivity"
-            android:theme="@style/Theme.Transparent" />
         <activity android:name=".activities.CaptureSelfieActivity" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
@@ -269,17 +272,6 @@ the specific language governing permissions and limitations under the License.
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.dir/vnd.odk.instance" />
-            </intent-filter>
-        </activity-alias>
-
-        <activity-alias
-            android:name=".activities.SplashScreenActivity"
-            android:targetActivity=".activities.SplashScreenActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
 
