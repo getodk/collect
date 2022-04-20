@@ -27,8 +27,6 @@ class FirstLaunchActivity : CollectAbstractActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
-    private lateinit var binding: FirstLaunchLayoutBinding
-
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
@@ -38,36 +36,37 @@ class FirstLaunchActivity : CollectAbstractActivity() {
             return
         }
 
-        binding = FirstLaunchLayoutBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        FirstLaunchLayoutBinding.inflate(layoutInflater).apply {
+            setContentView(this.root)
 
-        binding.configureViaQrButton.setOnClickListener {
-            DialogFragmentUtils.showIfNotShowing(
-                QrCodeProjectCreatorDialog::class.java,
-                supportFragmentManager
+            configureViaQrButton.setOnClickListener {
+                DialogFragmentUtils.showIfNotShowing(
+                    QrCodeProjectCreatorDialog::class.java,
+                    supportFragmentManager
+                )
+            }
+
+            configureManuallyButton.setOnClickListener {
+                DialogFragmentUtils.showIfNotShowing(
+                    ManualProjectCreatorDialog::class.java,
+                    supportFragmentManager
+                )
+            }
+
+            appName.text = String.format(
+                "%s %s",
+                getString(R.string.collect_app_name),
+                versionInformation.versionToDisplay
             )
-        }
 
-        binding.configureManuallyButton.setOnClickListener {
-            DialogFragmentUtils.showIfNotShowing(
-                ManualProjectCreatorDialog::class.java,
-                supportFragmentManager
-            )
-        }
+            configureLater.addOnClickListener {
+                Analytics.log(AnalyticsEvents.TRY_DEMO)
 
-        binding.appName.text = String.format(
-            "%s %s",
-            getString(R.string.collect_app_name),
-            versionInformation.versionToDisplay
-        )
+                projectsRepository.save(Project.DEMO_PROJECT)
+                currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
-        binding.configureLater.addOnClickListener {
-            Analytics.log(AnalyticsEvents.TRY_DEMO)
-
-            projectsRepository.save(Project.DEMO_PROJECT)
-            currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
-
-            ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
+                ActivityUtils.startActivityAndCloseAllOthers(this@FirstLaunchActivity, MainMenuActivity::class.java)
+            }
         }
     }
 }
