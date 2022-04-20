@@ -663,13 +663,6 @@
   <string name="form_forward">Další</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Zpět</string>
-  <string name="show_splash_title">Úvodní obrazovka</string>
-  <string name="show_splash_summary">Zobrazit při startu aplikace</string>
-  <string name="splash_path">Vyberte úvodní obrázek</string>
-  <string name="default_splash_path">Výchozí obrazovka ODK</string>
-  <string name="select_another_image">Vybrat další obrázek</string>
-  <string name="use_odk_default">Použít výchozí obrázek</string>
-  <string name="change_splash_path">Změnit obrázek</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Aktualizace formuláře</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

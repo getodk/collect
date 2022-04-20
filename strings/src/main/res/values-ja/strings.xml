@@ -602,13 +602,6 @@
   <string name="form_forward">次へ</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">戻る</string>
-  <string name="show_splash_title">スプラッシュ画面</string>
-  <string name="show_splash_summary">アプリケーションの起動時に表示します</string>
-  <string name="splash_path">選択したスプラッシュ画像</string>
-  <string name="default_splash_path">ODK デフォルト</string>
-  <string name="select_another_image">別の画像を選択</string>
-  <string name="use_odk_default">デフォルト画像を使用</string>
-  <string name="change_splash_path">画像を変更</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">フォームの更新</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

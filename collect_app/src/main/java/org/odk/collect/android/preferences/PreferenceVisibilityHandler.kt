@@ -47,8 +47,7 @@ class PreferenceVisibilityHandler(
                         ProtectedProjectKeys.KEY_APP_THEME,
                         ProtectedProjectKeys.KEY_APP_LANGUAGE,
                         ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE,
-                        ProtectedProjectKeys.KEY_NAVIGATION,
-                        ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN
+                        ProtectedProjectKeys.KEY_NAVIGATION
                     )
                 )
                 "maps" -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_MAPS)
@@ -79,8 +78,6 @@ class PreferenceVisibilityHandler(
                 ProjectKeys.KEY_APP_LANGUAGE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_APP_LANGUAGE)
                 ProjectKeys.KEY_FONT_SIZE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE)
                 ProjectKeys.KEY_NAVIGATION -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_NAVIGATION)
-                ProjectKeys.KEY_SHOW_SPLASH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
-                ProjectKeys.KEY_SPLASH_PATH -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN)
 
                 ProjectKeys.KEY_FORM_UPDATE_MODE -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE)
                 ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)

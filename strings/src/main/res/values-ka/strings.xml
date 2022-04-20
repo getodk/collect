@@ -325,12 +325,6 @@
   <string name="form_forward">შემდეგი</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">უკან</string>
-  <string name="show_splash_summary">აჩვენებს, როდესაც ირთვება აპლიკაცია</string>
-  <string name="splash_path">არჩეული სპლეშ-სურათი</string>
-  <string name="default_splash_path">ODK დეფოლტი</string>
-  <string name="select_another_image">სხვა სურათების არჩევა</string>
-  <string name="use_odk_default">გამოიყენე დეფოლტ-სურათი</string>
-  <string name="change_splash_path">სურათის შეცვლა</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

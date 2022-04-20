@@ -367,12 +367,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Següent</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Mostrar quan inicia l\'aplicació</string>
-  <string name="splash_path">Imatge de benvinguda seleccionada</string>
-  <string name="default_splash_path">ODK per defecte</string>
-  <string name="select_another_image">Seleccionar una altre imatge</string>
-  <string name="use_odk_default">Usar imatge per defecte</string>
-  <string name="change_splash_path">Canviar imatge</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

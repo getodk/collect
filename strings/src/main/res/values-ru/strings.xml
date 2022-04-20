@@ -491,13 +491,6 @@
   <string name="form_forward">Далее</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Назад</string>
-  <string name="show_splash_title">Заставка</string>
-  <string name="show_splash_summary">Показывается при запуске</string>
-  <string name="splash_path">Выбранная заставка</string>
-  <string name="default_splash_path">Логотип по умолчанию</string>
-  <string name="select_another_image">Выбрать другое изображение</string>
-  <string name="use_odk_default">Использовать изображение по умолчанию</string>
-  <string name="change_splash_path">Изменить изображение</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">ОБНОВЛЕНИЕ БЛАНКОВ</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

@@ -31,10 +31,6 @@
             android:title="@string/navigation"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:key="show_splash_screen"
-            android:title="@string/show_splash_title"
-            app:iconSpaceReserved="false" />
-        <CheckBoxPreference
             android:key="maps"
             android:title="@string/maps"
             app:iconSpaceReserved="false" />

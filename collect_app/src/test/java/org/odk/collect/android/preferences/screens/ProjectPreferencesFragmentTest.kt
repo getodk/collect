@@ -70,7 +70,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
         adminSettings.save(ProtectedProjectKeys.KEY_MAPS, false)
         adminSettings.save(ProtectedProjectKeys.KEY_FORM_UPDATE_MODE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK, false)
@@ -231,7 +230,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -247,7 +245,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -263,7 +260,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -279,7 +275,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -295,7 +290,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, true)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 
@@ -311,7 +305,6 @@ class ProjectPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 

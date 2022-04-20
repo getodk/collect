@@ -18,8 +18,6 @@ object ProjectKeys {
     const val KEY_APP_LANGUAGE = "app_language"
     const val KEY_FONT_SIZE = "font_size"
     const val KEY_NAVIGATION = "navigation"
-    const val KEY_SHOW_SPLASH = "showSplash"
-    const val KEY_SPLASH_PATH = "splashPath"
 
     // map_preferences.xml
     const val KEY_BASEMAP_SOURCE = "basemap_source"

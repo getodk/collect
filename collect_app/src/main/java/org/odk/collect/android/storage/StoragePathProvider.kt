@@ -58,10 +58,6 @@ class StoragePathProvider(
         return path
     }
 
-    fun getCustomSplashScreenImagePath(): String {
-        return odkRootDirPath + File.separator + "customSplashScreenImage.jpg"
-    }
-
     fun getTmpImageFilePath(): String {
         return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg"
     }

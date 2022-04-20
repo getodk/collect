@@ -284,12 +284,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">ফর্মের সামনের দিকে</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">স্প্ল্যাশ summary দেখান</string>
-  <string name="splash_path">স্প্ল্যাশ path </string>
-  <string name="default_splash_path">default স্প্ল্যাশ path</string>
-  <string name="select_another_image">অন্য ভাষা নির্বাচন করুন।</string>
-  <string name="use_odk_default">odk ডিফল্ট ব্যবহার</string>
-  <string name="change_splash_path">ছবি পরিবর্তন করুন</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

@@ -313,12 +313,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">ເລື່ອນຕໍ່ໄປ</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">ສະແ​ດງເມື່ອໂປແກຼມ ເລີ່ມຕົ້ນໃຊ້ງານ</string>
-  <string name="splash_path">ເລືອກພາບເລີ່ມຕົ້ນ</string>
-  <string name="default_splash_path">ຄ່າເລີ່ມຕົ້ນ ODK</string>
-  <string name="select_another_image">ເລືອກພາບອື່ນ</string>
-  <string name="use_odk_default">ເລືອກພາບທີ່ກຳນົດໄວ້</string>
-  <string name="change_splash_path">ປ່ຽນຮູບພາບ</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

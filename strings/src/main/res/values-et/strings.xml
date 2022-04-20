@@ -377,12 +377,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Järgmine</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Ilmub rakenduse avamisel</string>
-  <string name="splash_path">Valitud käivitusekraani pilt</string>
-  <string name="default_splash_path">ODK vaikmisi</string>
-  <string name="select_another_image">Vali teine pilt</string>
-  <string name="use_odk_default">Kasuta vaikimisi pildina</string>
-  <string name="change_splash_path">Muuda pilti</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

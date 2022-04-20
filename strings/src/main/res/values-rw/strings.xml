@@ -614,13 +614,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="form_forward">Ibikurikira</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Subira inyuma </string>
-  <string name="show_splash_title">Mugaragaza ecran</string>
-  <string name="show_splash_summary">Erekana itangira ry\'igenamikorere.</string>
-  <string name="splash_path">Guhitamo amashusho</string>
-  <string name="default_splash_path">ODK Default</string>
-  <string name="select_another_image">Hitamo indi foto </string>
-  <string name="use_odk_default">Koresha ifoto</string>
-  <string name="change_splash_path">Hindura ifoto </string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Amakuru kuri form</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

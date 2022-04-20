@@ -91,12 +91,6 @@
   <string name="view_hierarchy">Pumunta sa Udyok</string>
   <string name="project_settings">Palitan ang Settings</string>
   <string name="client">Client</string>
-    <string name="show_splash_summary">Pinapakita sa umpisa ng application</string>
-  <string name="splash_path">Piniling larawan para sa Panimulang Tabing</string>
-  <string name="default_splash_path">Paunang natukoy ng ODK</string>
-  <string name="select_another_image">Pumili ng Ibang Imahe</string>
-  <string name="use_odk_default">Gamitin ang Paunang natukoy na Imahe</string>
-  <string name="change_splash_path">Palitan ang Imahe</string>
   <string name="keep_changes">Impukin ang mga binago</string>
   <string name="font_size">Laki ng Teklado</string>
   <string name="change_font_size">Laki ng Tipo ng Teksto</string>

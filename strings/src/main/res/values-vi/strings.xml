@@ -279,12 +279,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Next</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Hiển thị khi chương trình khởi động</string>
-  <string name="splash_path">Chọn ảnh màn hình chào</string>
-  <string name="default_splash_path">Mặc định ODK</string>
-  <string name="select_another_image">Chọn ảnh khác</string>
-  <string name="use_odk_default">Chọn ảnh mặc định</string>
-  <string name="change_splash_path">Đổi ảnh</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

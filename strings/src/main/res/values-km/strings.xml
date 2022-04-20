@@ -497,13 +497,6 @@
   <string name="form_forward">បន្ទាប់</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">ត្រឡប់ក្រោយ</string>
-  <string name="show_splash_title">ស្វាគមន៍អេក្រង់</string>
-  <string name="show_splash_summary">បង្ហាញពេលកម្មវិធីចាប់ផ្តើម</string>
-  <string name="splash_path">ជ្រើសរើសរូបស្វាគមន៍</string>
-  <string name="default_splash_path">ODK លំនាំដើម</string>
-  <string name="select_another_image">ជ្រើសរើសរូបផ្សេងទៀត</string>
-  <string name="use_odk_default">ប្រើប្រាស់រូបលំនាំដើម</string>
-  <string name="change_splash_path">ផ្លាស់ប្តូររូបថត</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">ទម្រង់សម្រាប់ធ្វើបច្ចុប្បន្នភាព</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

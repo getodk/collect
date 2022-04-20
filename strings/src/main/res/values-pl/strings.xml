@@ -572,13 +572,6 @@
   <string name="form_forward">Następny</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Powrót</string>
-  <string name="show_splash_title">Ekran powitalny</string>
-  <string name="show_splash_summary">Pokazuje się, gdy aplikacja startuje</string>
-  <string name="splash_path">Wybrany obraz ekranu powitalnego</string>
-  <string name="default_splash_path">Domyślne ODK</string>
-  <string name="select_another_image">Wybierz inny obraz</string>
-  <string name="use_odk_default">Użyj obraz domyślny</string>
-  <string name="change_splash_path">Zmień obraz</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Aktualizacja formularza</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

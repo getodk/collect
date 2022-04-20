@@ -297,12 +297,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">下一个</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">当应用开始时显示</string>
-  <string name="splash_path">选定的开始图片</string>
-  <string name="default_splash_path">ODK默认图片</string>
-  <string name="select_another_image">选择其他图片</string>
-  <string name="use_odk_default">使用默认图片</string>
-  <string name="change_splash_path">修改图片</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
