@@ -14,6 +14,7 @@ class MaterialAlertDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
             .setMessage(requireArguments().getString(ARG_MESSAGE))
+            .setPositiveButton(getString(R.string.ok), null)
             .create()
     }
 
