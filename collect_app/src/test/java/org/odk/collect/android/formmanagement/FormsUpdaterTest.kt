@@ -82,7 +82,6 @@ class FormsUpdaterTest {
         updateManager = FormsUpdater(
             context = application,
             notifier = notifier,
-            analytics = mock(),
             syncStatusAppState = syncStatusAppState,
             projectDependencyProviderFactory = projectDependencyProviderFactory
         )

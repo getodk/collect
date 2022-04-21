@@ -56,16 +56,6 @@ public final class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
 
     /**
-     * Used to measure how the relative frequencies of different outcomes for a Match Exactly sync.
-     * The action should indicate the outcome as any of:
-     * - "Success"
-     * - "UNKNOWN_HOST"
-     * - "AUTH_REQUIRED"
-     * - "FETCH_ERROR"
-     */
-    public static final String MATCH_EXACTLY_SYNC_COMPLETED = "MatchExactlySyncCompleted";
-
-    /**
      * Tracks how often the audio player seek bar is used.
      */
     public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";

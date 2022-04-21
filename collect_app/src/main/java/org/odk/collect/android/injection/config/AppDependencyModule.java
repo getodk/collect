@@ -532,8 +532,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsUpdater providesFormsUpdater(Context context, Notifier notifier, Analytics analytics, SyncStatusAppState syncStatusAppState, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
-        return new FormsUpdater(context, notifier, analytics, syncStatusAppState, projectDependencyProviderFactory);
+    public FormsUpdater providesFormsUpdater(Context context, Notifier notifier, SyncStatusAppState syncStatusAppState, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
+        return new FormsUpdater(context, notifier, syncStatusAppState, projectDependencyProviderFactory);
     }
 
     @Provides

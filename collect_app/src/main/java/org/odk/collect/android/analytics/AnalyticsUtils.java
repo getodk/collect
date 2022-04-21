@@ -2,19 +2,10 @@ package org.odk.collect.android.analytics;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.INVALID_FORM_HASH;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
-import static org.odk.collect.forms.FormSourceException.AuthRequired;
-import static org.odk.collect.forms.FormSourceException.FetchError;
-import static org.odk.collect.forms.FormSourceException.ParseError;
-import static org.odk.collect.forms.FormSourceException.SecurityError;
-import static org.odk.collect.forms.FormSourceException.ServerError;
-import static org.odk.collect.forms.FormSourceException.ServerNotOpenRosaError;
-import static org.odk.collect.forms.FormSourceException.Unreachable;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_SERVER_URL;
-import static java.lang.String.format;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 
@@ -41,10 +32,6 @@ public final class AnalyticsUtils {
 
     public static void logServerEvent(String event, Settings generalSettings) {
         Analytics.log(event, "server", getServerHash(generalSettings));
-    }
-
-    public static void logMatchExactlyCompleted(Analytics analytics, FormSourceException exception) {
-        analytics.logEvent(AnalyticsEvents.MATCH_EXACTLY_SYNC_COMPLETED, getFormSourceExceptionAction(exception));
     }
 
     public static void logServerConfiguration(Analytics analytics, String url) {
@@ -96,27 +83,5 @@ public final class AnalyticsUtils {
     private static String getServerHash(Settings generalSettings) {
         String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
         return Md5.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
-    }
-
-    private static String getFormSourceExceptionAction(FormSourceException exception) {
-        if (exception == null) {
-            return "Success";
-        } else if (exception instanceof Unreachable) {
-            return "UNREACHABLE";
-        } else if (exception instanceof AuthRequired) {
-            return "AUTH_REQUIRED";
-        } else if (exception instanceof ServerError) {
-            return format("SERVER_ERROR_%s", ((ServerError) exception).getStatusCode());
-        } else if (exception instanceof SecurityError) {
-            return "SECURITY_ERROR";
-        } else if (exception instanceof ParseError) {
-            return "PARSE_ERROR";
-        } else if (exception instanceof FetchError) {
-            return "FETCH_ERROR";
-        } else if (exception instanceof ServerNotOpenRosaError) {
-            return "SERVER_NOT_OPEN_ROSA_ERROR";
-        } else {
-            return "UNKNOWN_ERROR";
-        }
     }
 }
