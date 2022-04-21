@@ -25,7 +25,7 @@ object ExternalAppUtils {
     }
 
     @JvmStatic
-    fun getReturnedSingleValue(data: Intent): String? {
-        return data.getStringExtra(VALUE_KEY)
+    fun getReturnedSingleValue(data: Intent): Any? {
+        return data.extras?.get(VALUE_KEY)
     }
 }
