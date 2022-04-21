@@ -35,12 +35,12 @@ class FormMapViewModel(
 
     private var _form: Form? = null
 
-    private val mapTitle = MutableLiveData<String>()
+    private val mapTitle = MutableLiveData<String?>()
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
-    private var itemCount = MutableLiveData(0)
+    private var itemCount = MutableNonNullLiveData(0)
     private val isLoading = MutableNonNullLiveData(false)
 
-    override fun getMapTitle(): LiveData<String> {
+    override fun getMapTitle(): LiveData<String?> {
         return mapTitle
     }
 
@@ -48,7 +48,7 @@ class FormMapViewModel(
         return resources.getString(R.string.saved_forms)
     }
 
-    override fun getItemCount(): LiveData<Int> {
+    override fun getItemCount(): NonNullLiveData<Int> {
         return itemCount
     }
 
@@ -90,7 +90,7 @@ class FormMapViewModel(
             },
             foreground = {
                 mapTitle.value = it.first
-                mappableItems.value = it.second
+                mappableItems.value = it.second as List<MappableSelectItem>
                 itemCount.value = it.third
                 isLoading.value = false
             }

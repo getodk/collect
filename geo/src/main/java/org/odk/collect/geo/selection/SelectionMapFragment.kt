@@ -389,9 +389,9 @@ internal class SelectedFeatureViewModel : ViewModel() {
 
 interface SelectionMapData {
     fun isLoading(): NonNullLiveData<Boolean>
-    fun getMapTitle(): LiveData<String>
+    fun getMapTitle(): LiveData<String?>
     fun getItemType(): String
-    fun getItemCount(): LiveData<Int>
+    fun getItemCount(): NonNullLiveData<Int>
     fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
 }
 

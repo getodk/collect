@@ -442,6 +442,7 @@
     <!-- Button text to select a place from a list presented on a map -->
     <string name="select_place">Select place</string>
     <string name="choices">Choices</string>
+    <string name="invalid_geometry">The choice with label "%1$s" has invalid geometry ("%2$s")</string>
 
     <!--
     ##############################################
