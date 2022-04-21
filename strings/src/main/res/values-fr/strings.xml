@@ -20,6 +20,7 @@
   <string name="get_forms">Télécharger un formulaire vierge</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Supprimer formulaire enregistré</string>
+  <string name="saved_forms">Formulaires enregistrés</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -358,6 +359,9 @@
   <string name="reason_for_changes_description">Vous devez expliquer les raisons du changement de ce formulaire</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Enregistrer</string>
+  <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Sélectionner un emplacement</string>
+  <string name="choices">Choix</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +376,7 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Fonds de carte</string>
   <string name="basemap_source">Source</string>
-  <string name="basemap_source_unavailable">Désolé mais %s cartes de base ne sont pas disponibles sur votre appareil. Merci de choisir une auter carte de base dans les Paramètres Gànéraux / Cartes</string>
+  <string name="basemap_source_unavailable">Désolé, %s carte de base ne sont pas disponibles sur ce terminal. Merci d\'en choisir une autre dans Paramètres &gt; Cartes.</string>
   <string name="map_style_label">style de carte %s</string>
   <string name="streets">Streets</string>
   <string name="terrain">Terrain</string>
@@ -392,7 +396,7 @@
   <string name="record_geopoint">Enregistrer un point</string>
   <string name="location_accuracy">Précision: %1$s m</string>
   <string name="location_provider">Fournisseur de la localisation: 1%s</string>
-    <string name="get_location">Enregistrement du lieu</string>
+  <string name="get_location">Enregistrement du lieu</string>
   <string name="provider_disabled_error">Désolé, le fournisseur de localisation est désactivé.</string>
   <string name="gps_result">Latitude: %1$s\nLongitude: %2$s\nAltitude: %3$sm\nPrécision: %4$sm</string>
   <string name="google_play_services_not_available">Ce formulaire souhaite suivre votre localisation, mais les Services de Google Play ne sont pas disponible</string>
@@ -409,6 +413,19 @@
   <string name="geotrace_view_read_only">Voir le tracé</string>
   <string name="get_shape">Démarrer la FormeGéo</string>
   <string name="get_trace">Démarrer le TracéGéo</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">Temps écoulé : %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">Le point sera enregistré à %1$s</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">Satellites: %1$s</string>
+  <string name="waiting_for_location">Tentative de localisation. Veuillez patienter.</string>
+  <string name="poor_accuracy">Faible précision. Veuillez patienter.</string>
+  <string name="unacceptable_accuracy">Précision inacceptable. Veuillez patienter.</string>
+  <string name="improving_accuracy">Amélioration de la précision. Veuillez patienter.</string>
+  <string name="accuracy_status_title">Localisation en cours.</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm.</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -465,7 +482,10 @@
   <string name="discard">Abandoner changements</string>
   <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
   <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
-    <!--Name of an action button-->
+  <string name="select_item_count">%s: %d (%d affichés sur la carte)</string>
+  <string name="select_item">Sélectionner</string>
+  <string name="new_item">Nouvel item</string>
+  <!--Name of an action button-->
   <string name="view_data">Voir Questionnaire Enregistré </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>
@@ -492,6 +512,10 @@
   <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
   <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
+  <string name="forms_upload_succeeded">Succès de l\'envoi des formulaires.</string>
+  <string name="forms_upload_failed">Échec de l\'envoi des formulaires.</string>
+  <string name="all_uploads_succeeded">Succès de tous les envois !</string>
+  <string name="some_uploads_failed">%1$s des %2$s téléversements ont échoué !</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -507,6 +531,8 @@
   <string name="form_update_error">Échec de mise à jour des formulaires</string>
   <string name="form_update_succeeded">Succès de mise à jour des formulaires</string>
   <string name="load_remote_form_error">Échec de téléchargement de la liste des formulaires</string>
+  <string name="forms_download_succeeded">Succès du téléchargement des formulaires.</string>
+  <string name="forms_download_failed">Échec du téléchargement des formulaires.</string>
   <string name="all_downloads_succeeded">Succès de tous les téléchargements!</string>
   <string name="some_downloads_failed">%1$s de %2$s téléchargements ont échoués.</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
@@ -781,7 +807,7 @@
   <string name="reading_files">lecture des fichiers</string>
   <string name="drive_get_file">Récupération des %1$s et fichiers médias. </string>
   <string name="no_google_account">Pas de compte Google choisi!</string>
-  <string name="google_set_account">Vous avez choisi Google Sheets comme serveur. Merci de sélectionner un compte Google correspondant dans les paramètres généraux avant de continuer.</string>
+  <string name="google_set_account">Vous avez sélectionné Google Sheets comme serveur, merci de choisir le compte Google correspondant dans les Paramètres avant de poursuivre.</string>
   <string name="google_search_browse">Rechercher des formulaires ou sélectionner \'Mon Drive\' ci-dessous pour parcourir des formulaires.</string>
   <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
   <string name="missing_submission_url">URL de soumission manquante</string>
@@ -909,9 +935,15 @@
   <string name="scan_configuration_qr_code">Scanner un QR Code de configuration</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Pour ouvrir ce formulaire, vous devez d\'abord ouvrir ODK Collect et basculer sur le projet qui le contient.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect n\'a pas été configuré. Essayez d\'ouvrir ODK Collect et configure le.\n\nSi vous avez cliqué sur un raccourci, vous devrez le recréer après avoir configuré ODK Collect.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Montrer détails</string>
   <string name="errors">Erreurs</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">Ouvrir les paramètres</string>
 </resources>

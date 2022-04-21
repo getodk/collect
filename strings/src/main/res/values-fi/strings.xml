@@ -20,6 +20,7 @@
   <string name="get_forms">Hae tyhjä lomake</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Poista tallennettu lomake</string>
+  <string name="saved_forms">Tallennetut lomakkeet</string>
   <string name="version_number">Versio: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -358,6 +359,9 @@
   <string name="reason_for_changes_description">Tämän lomakkeen muutoksille tarvitaan selitys</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Tallenna</string>
+  <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Valitse paikka</string>
+  <string name="choices">Valinnan</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +376,7 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Peruskartta</string>
   <string name="basemap_source">Lähde</string>
-  <string name="basemap_source_unavailable">Pahoittelut, %s pohjakarttoja ei ole käytettävissä tällä laitteella. Ole kyvä ja valitse toinen pohjakartta kohdassa Yleiset asetukset &gt; Kartat.</string>
+  <string name="basemap_source_unavailable">Pahoittelut, %s pohjakartat eivät ole käytettävissä tällä laitteella. Ole hyvä ja valitse toinen pohjakartta kohdassa Asetukset &gt; Kartat.</string>
   <string name="map_style_label">%s kartan tyyli</string>
   <string name="streets">Kadut</string>
   <string name="terrain">Maasto</string>
@@ -392,7 +396,7 @@
   <string name="record_geopoint">Tallenna piste</string>
   <string name="location_accuracy">Tarkkuus: %1$s m</string>
   <string name="location_provider">Sijaintilähde: %s</string>
-    <string name="get_location">Tallenna sijainti</string>
+  <string name="get_location">Tallenna sijainti</string>
   <string name="provider_disabled_error">Pahoittelut, sijaintitiedot eivät ole käytössä!</string>
   <string name="gps_result">Leveysasteet: %1$s\nPituusasteet: %2$s\nKorkeus: %3$sm\nTarkkuus: %4$sm</string>
   <string name="google_play_services_not_available">Tämä lomake haluaa seurata sijaintiasi mutta Google Play Services ei ole käytettävissä.</string>
@@ -409,6 +413,19 @@
   <string name="geotrace_view_read_only">Katso GeoTrace</string>
   <string name="get_shape">Aloita GeoShape</string>
   <string name="get_trace">Aloita GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">Kulunut aika: %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">Piste tallennetaan tarkkuudella %1$s</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">Satelliitteja: %1$s</string>
+  <string name="waiting_for_location">Haetaan sijaintia, ole hyvä ja odota.</string>
+  <string name="poor_accuracy">Heikko tarkkuus, ole hyvä ja odota.</string>
+  <string name="unacceptable_accuracy">Kelpaamaton tarkkuus, ole hyvä ja odota.</string>
+  <string name="improving_accuracy">Parannetaan tarkkuutta, ole hyvä ja odota.</string>
+  <string name="accuracy_status_title">Sijainnin hakeminen</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -465,7 +482,10 @@
   <string name="discard">Hylkää</string>
   <string name="geoshape_view_change_location">Tarkastele tai Muuta GeoShape</string>
   <string name="geotrace_view_change_location">Tarkastele tai Muuta GeoTrace</string>
-    <!--Name of an action button-->
+  <string name="select_item_count">%s: %d (%d näytetty kartalla)</string>
+  <string name="select_item">Valitse</string>
+  <string name="new_item">Uusi kohde</string>
+  <!--Name of an action button-->
   <string name="view_data">Tallennetun lomakkeen tarkastelu</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>
@@ -492,6 +512,10 @@
   <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
   <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
+  <string name="forms_upload_succeeded">Lomakkeiden lähetys onnistui</string>
+  <string name="forms_upload_failed">Lomakkeiden lähetys epäonnistui</string>
+  <string name="all_uploads_succeeded">Kaikki lähetykset onnistuivat!</string>
+  <string name="some_uploads_failed">%1$s latausta epäonnistui (yhteensä %2$s)!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -507,6 +531,8 @@
   <string name="form_update_error">Lomakkeen päivitys epäonnistui</string>
   <string name="form_update_succeeded">Lomakkeen päivitys onnistui</string>
   <string name="load_remote_form_error">Lomakeluettelon lataaminen epäonnistui</string>
+  <string name="forms_download_succeeded">Lomakkeiden hakeminen onnistui</string>
+  <string name="forms_download_failed">Lomakkeiden hakeminen epäonnistui</string>
   <string name="all_downloads_succeeded">Kaikki lataukset onnistuivat!</string>
   <string name="some_downloads_failed">%1$s latausta epäonnistui (yhteensä %2$s)!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
@@ -729,7 +755,7 @@
   <string name="change_admin_password">Vaihda pääkäyttäjän salasana</string>
   <string name="show_password">Näytä salasana</string>
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
-  <string name="found_in_settings">Poista rasti piilottaaksesi yleisasetuksista</string>
+  <string name="found_in_settings">Poista rasti piilottaaksesi kohdasta Suojaamattomat asetukset</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
   <string name="reset_project_settings_title">Palautus alkutilaan</string>
   <string name="reset_project_settings_subtext">Valitse asetukset, lomakkeet tai data</string>
@@ -760,7 +786,7 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Siirtyminen taaksepäin</string>
   <string name="moving_backwards_disabled_title">Siirtyminen taaksepäin pois päältä</string>
-  <string name="moving_backwards_disabled_message">Määritä laitetta estääksesi käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Muokkaa talletettua tomaketta pois päältä\n\u2022 Tallenna lomake pois päältä\n\u2022 Siirtyminen kehotteeseen pois päältä\n\u2022 Aseta rajoiteprosessointi vahvistustilaan eteenpäin pyyhkäistäessä</string>
+  <string name="moving_backwards_disabled_message">Määritetäänkö laite jotta estettäisiin käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Muokkaa talletettua lomaketta - pois päältä\n\u2022 Tallenna lomake - pois päältä\n\u2022 Siirtyminen kehotteeseen - pois päältä\n\u2022 Aseta rajoiteprosessointi vahvistustilaan eteenpäin pyyhkäistäessä</string>
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
   <string name="moving_backwards_enabled_title">Siirtyminen taaksepäin päällä</string>
@@ -781,7 +807,7 @@
   <string name="reading_files">Luetaan tiedostoja</string>
   <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
-  <string name="google_set_account">Palvelimesi on Google Sheets, valitse vastaava Google-tili yleisasetuksissa ennen jatkamista</string>
+  <string name="google_set_account">Olet valinnut Google Sheets palvelimenasi, ole hyvä ja valitse vastaava Google-tili Asetuksissa ennen jatkamista</string>
   <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
@@ -854,6 +880,7 @@
   <string name="survey_multiple_forms_error">Olet ladannut kaksi eri lomaketta, joilla on sama lomake tunnus ja versio. Ehkä ne olivat samat lomake ladattuna eri aikoina tai eri palvelimille. Joka tapauksessa, sinun pitäisi poistaa toinen.</string>
   <string name="select_odk_shortcut">Valitse ODK-oikotie</string>
   <string name="background_audio_help">Tämä lomake tallentaa ääntä laitteesi mikrofonin avulla.\n\nVoit käyttää äänitason ilmaisinta varmistaaksesi, että mikrofoni on riittävän lähellä ääntä, jota haluat äänittää.\n\nSulje tämä lomake lopettaaksesi äänityksen.\n\nOle yhteydessä henkilöön joka pyysi sinua keräämään tietoja saadaksesi lisätietoja.</string>
+  <string name="loading">Ladataan…</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -909,9 +936,15 @@
   <string name="scan_configuration_qr_code">Skannaa asetukset QR-koodista</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Avataksesi tämän lomakkeen, avaa ensin ODK Collect ja vaihda projektiin johon se sisältyy.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect ei ole konfiguroitu. Yritä avata ODK Collect ja konfiguroida sitä.\n\nJos käytit pikakuvaketta, saatat joutua luomaan sen uudelleen kun ODK Collect on konfiguroitu.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Yksityiskohdat</string>
   <string name="errors">Virheitä</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">Avaa asetukset</string>
 </resources>

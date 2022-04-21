@@ -313,6 +313,7 @@
   <string name="reason_for_changes_description">براہ مہربانی اس فارم میں تبدیلیوں کی وجہ بیان کریں</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">محفوظ کریں</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -333,7 +334,7 @@
   <string name="google_play_services_error_occured">گوگل میپس تک رسائی حاصل کرنے میں ناکام۔ کیا گوگل پلے سروسز  انسٹالڈہے؟</string>
   <string name="view_change_location">مقام کو دیکھیں یا تبدیل کریں۔</string>
   <string name="change_location">جگہ تبدیل کریں </string>
-    <string name="get_location">لوکیشن ریکارڈ کریں</string>
+  <string name="get_location">لوکیشن ریکارڈ کریں</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -342,6 +343,10 @@
   <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
   <string name="get_shape">جیوشیپ شروع کریں</string>
   <string name="get_trace">جیو ٹریس شروع کریں</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ڈبلیو%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -584,7 +589,6 @@
   <string name="change_admin_password">ایڈمن پاسورڈ تبدیل کریں</string>
   <string name="show_password">پاس ورڈ دکھائیں</string>
   <string name="found_in_main">نشان ہٹا کرکے مرکزی فہرست سے ہٹا دیں</string>
-  <string name="found_in_settings">نشانی ہٹاکر جنرل سیٹنگز سے ہٹا دیں۔</string>
   <string name="form_entry">فارم اندراج سے چھپانے کے لئے انچیک کریں</string>
   <string name="reset_project_settings_title">ریس سیٹ کریں</string>
   <string name="select_all">تمام منتخب کریں</string>
@@ -630,7 +634,6 @@
   <string name="google_auth_io_exception_msg">اے پی آئ کالز بنانے میں ناکام اگر آپ لوکل بلڈ چلا رہے ہیں تو، براہ کرم پراجیکٹ ریڈمی پڑھ لیں.</string>
   <string name="drive_get_file">%1$sاور میڈیا فائلز کو حاصل کیا جا رہا ہے</string>
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
-  <string name="google_set_account">آپ نے اپنے سرور کے طور پر گوگل شیٹ کو منتخب کیا ہے، براہ کرم شمار کرنے سے قبل عام ترتیب میں اسی گوگل اکاؤنٹ کو منتخب کریں</string>
   <string name="google_search_browse">فارم تلاش کریں. یا  \'مائی ڈرائیو\' کو منتخب کریں.</string>
   <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
   <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
@@ -711,7 +714,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

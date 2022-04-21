@@ -199,6 +199,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -209,10 +210,14 @@
   <string name="terrain">መልከአ ምድር</string>
   <string name="satellite">ሳተላይት</string>
   <string name="view_change_location">አካባቢን ይመልከቱ ወይም ይቀይሩ</string>
-    <string name="get_location">ቦታን መዝግብ</string>
+  <string name="get_location">ቦታን መዝግብ</string>
   <string name="provider_disabled_error">ይቅርታ፣ የአካባቢ አቅራቢዎች አይሰሩም፡፡</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ም 1 %1$s  2 %2$s  3%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -380,7 +385,6 @@
   <string name="change_admin_password">የአስተዳዳሪ የይለፍ ቃል ለውጥ</string>
   <string name="show_password">የይለፍ ቃሉን አሳይ</string>
   <string name="found_in_main">ከመደበኛው ምናሌ ለመደበቅ አትምረጥ</string>
-  <string name="found_in_settings">ከጠቅላላ ቅንብሮች ለመደበቅ አትምረጥ</string>
   <string name="reset_project_settings_title">ዳግም አስጀምር</string>
   <string name="select_all">ሁሉንም ምረጥ</string>
   <string name="clear_all">ሁሉንም ያፅዱ</string>
@@ -410,7 +414,6 @@
   <string name="download_selected">የተመረጠውን አውርድ</string>
   <string name="go_back">ተመለስ</string>
   <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
-  <string name="google_set_account">Google ሉሆችን እንደ አገልጋይዎ መርጠዋል, እባክዎ ከመቀጠልዎ በፊት በአጠቃላይ ቅንብሮች ውስጥ ተዛማጅ የ Google መለያ ይምረጡ</string>
   <string name="google_search_browse">ቅጾችን ይፈልጉ፡፡ ወይም ለማሰስ ከታች \"የእኔ Drive\" ን ይምረጡ.</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
@@ -462,7 +465,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

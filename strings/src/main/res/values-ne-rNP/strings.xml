@@ -215,6 +215,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -234,7 +235,7 @@
   <string name="google_play_services_error_occured">गुगल  म्याप्स् मा जान सकिएन । के गुगल प्ले सर्भिसेस इन्स्टल गरिएको छ ?</string>
   <string name="view_change_location">स्थान हेर्नुहोस् वा परिवर्तन गर्नुहोस् </string>
   <string name="change_location">स्थान परिवर्तन गर्नुहोस्</string>
-    <string name="get_location">स्थान रेकर्ड गर्नुहोस् </string>
+  <string name="get_location">स्थान रेकर्ड गर्नुहोस् </string>
   <string name="provider_disabled_error">माफ गर्नुहोस्, स्थान प्रदायकहरु निष्क्रिय गरिएका छन् !</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -242,6 +243,10 @@
   <string name="geopoint_view_read_only">जियो पोइन्ट हेर्नुहोस्</string>
   <string name="get_shape">जियो सेप शुरू गर्नुहोस्</string>
   <string name="get_trace">जियो ट्रेस शुरू गर्नुहोस्</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -432,7 +437,6 @@
   <string name="change_admin_password">प्रशासक पासवर्ड परिवर्तन गर्न</string>
   <string name="show_password">पासवर्ड देखाउन</string>
   <string name="found_in_main">मूल मेनु मा नदेखाउनको लागि ठिक चिन्ह हटाउनुहोस् </string>
-  <string name="found_in_settings">जेनेरल सेटिंगमा नदेखाउनको लागि ठीक चिन्ह हटाउनुहोस् </string>
   <string name="reset_project_settings_title">पहिलाकै ठाउँमा ल्याउनुहोस् </string>
   <string name="select_all">सबै छान्नुहोस्</string>
   <string name="clear_all">सबै मेटाउनु होस्</string>
@@ -459,7 +463,6 @@
   <string name="go_back">पछाडि जानुहोस्</string>
   <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
-  <string name="google_set_account">तपाईंले गुगल गुगल सिट्सलाई आफ्नो सर्भरको रूपमा छान्नुभयो , अघि बढ्नु पूर्व कृपया जनरल सेटिङ्समा त्यहि अनुरूपको गुगल खाता छान्नुहोस्</string>
   <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="invalid_sheet_id">अमान्य शीट नम्बर 1 %1$s</string>
   <string name="google_sheets_access_denied">अस्वीकृत । स्प्रेडशीट धनीबाट तपाईंले सम्पादन गर्ने अनुमति प्राप्त गर्नुपर्दछ । </string>
@@ -526,7 +529,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

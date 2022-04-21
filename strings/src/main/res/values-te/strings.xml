@@ -334,6 +334,7 @@
   <string name="reason_for_changes_description">ఈ ఫారమ్‌లో మార్పులకు కారణాన్ని మీరు వివరించాలి</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">సేవ్ చేయండి</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -348,7 +349,6 @@
   <string name="openmap_cartodb_darkmatter">కార్టోడిబి డార్క్ మేటర్</string>
   <string name="basemap">బేస్ మ్యాప్</string>
   <string name="basemap_source">ఆధారం</string>
-  <string name="basemap_source_unavailable">క్షమించండి, %s ఈ పరికరంలో బేస్‌మ్యాప్‌లు అందుబాటులో లేవు. దయచేసి సాధారణ సెట్టింగులలో మరొక బేస్‌మ్యాప్‌ ఎంచుకోండి &amp; gt; మ్యాప్స్.</string>
   <string name="map_style_label">%s మ్యాప్ శైలి</string>
   <string name="streets">స్ట్రీట్స్</string>
   <string name="terrain">భుభాగము</string>
@@ -368,7 +368,7 @@
   <string name="record_geopoint">ఒక పాయింట్ రికార్డ్ చేయండి</string>
   <string name="location_accuracy">%1$s ఖచ్చితత్వం</string>
   <string name="location_provider">%s ప్రదేశ అనుమతులు</string>
-    <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
+  <string name="get_location">లొకేషన్ రికార్డు చెయ్యండి </string>
   <string name="provider_disabled_error">క్షమించండి, లొకేషన్ ప్రొవైడర్లు డిసేబుల్ చెయ్యబడ్డాయి!</string>
   <string name="gps_result">అక్షాంశం: %1$s\n రేఖాంశం:%2$s \n ఎత్తు: %3$sm\n ఖచ్చితత్వం: %4$sm</string>
   <string name="google_play_services_not_available">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది, కానీ గూగుల్ ప్లే సేవలు అందుబాటులో లేవు.</string>
@@ -383,6 +383,10 @@
   <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
   <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>
   <string name="get_trace">జియోట్రేస్ ప్రారంభించండి</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">పశ్చిమం %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -661,7 +665,6 @@
   <string name="change_admin_password">అడ్మిన్ పాస్‌వర్డ్‌ను మార్చండి</string>
   <string name="show_password">పాస్ వర్డ్ చూపించు </string>
   <string name="found_in_main">ప్రధాన మెనూ నుండి దాచడానికి ఎంపిక చేయకండి</string>
-  <string name="found_in_settings">సాధారణ సెట్టింగ్‌ల నుండి దాచడానికి సెలెక్ట్  చేయవద్దు</string>
   <string name="form_entry">ఫారం ఎంట్రీ నుండి దాచడానికి ఎంపిక చేయవద్దు</string>
   <string name="reset_project_settings_title">రీసెట్</string>
   <string name="select_all">అన్నీ ఎంపిక చేసుకొండి</string>
@@ -708,7 +711,6 @@
   <string name="reading_files">ఫైళ్ళను చదవడం జరుగుతున్నది</string>
   <string name="drive_get_file">గెట్టింగ్ %1$sమరియు మీడియా ఫైల్స్.</string>
   <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>
-  <string name="google_set_account">మీరు గూగుల్ షీట్లను మీ సర్వర్‌గా ఎంచుకున్నారు, దయచేసి కొనసాగడానికి ముందు సాధారణ సెట్టింగ్‌లలో సంబంధిత గూగుల్ అకౌంట్ ను ఎంచుకోండి</string>
   <string name="google_search_browse">ఫారమ్‌ల కోసం శోధించండి. లేదా బ్రౌజ్ చేయడానికి దిగువ \'మై డ్రైవ్\' ఎంచుకోండి.</string>
   <string name="invalid_sheet_id">చెల్లని షీట్ ఐడి:%1$s</string>
   <string name="missing_submission_url">URL సబ్మిషన్  మర్చిపొయారు</string>
@@ -797,7 +799,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

@@ -358,6 +358,7 @@
   <string name="reason_for_changes_description">Anda perlu menjelaskan alasan atas perubahan yang terjadi pada formulir ini</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Simpan</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +373,6 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Peta dasar</string>
   <string name="basemap_source">Sumber</string>
-  <string name="basemap_source_unavailable">Maaf, peta dasar %s tidak tersedia pada perangkat ini. Mohon pilih peta dasar lain di Pengaturan Umum &gt; Peta.</string>
   <string name="map_style_label">Gaya peta %s</string>
   <string name="streets">Jalan</string>
   <string name="terrain">Lahan</string>
@@ -392,7 +392,7 @@
   <string name="record_geopoint">Rekam titik</string>
   <string name="location_accuracy">Tingkat akurasi adalah %1$s meter</string>
   <string name="location_provider">Lokasi penyedia jasa: %s</string>
-    <string name="get_location">Rekam Lokasi</string>
+  <string name="get_location">Rekam Lokasi</string>
   <string name="provider_disabled_error">Maaf, penyedia lokasi belum diaktifkan</string>
   <string name="gps_result">Lintang: %1$s\nBujur: %2$s\nKetinggian: %3$s m\nAkurasi: %4$s m</string>
   <string name="google_play_services_not_available">Formulir ini hendak merekam pergerakan lokasi Anda, tetapi Google Play Service tidak tersedia.</string>
@@ -409,6 +409,10 @@
   <string name="geotrace_view_read_only">Lihat GeoTrace</string>
   <string name="get_shape">Mulai GeoShape</string>
   <string name="get_trace">Mulai GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">B %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -462,7 +466,7 @@
   <string name="discard">Buang</string>
   <string name="geoshape_view_change_location">Lihat atau Ubah GeoShape</string>
   <string name="geotrace_view_change_location">Lihat atau Ubah GeoTrace</string>
-    <!--Name of an action button-->
+  <!--Name of an action button-->
   <string name="view_data">Lihat Formulir Tersimpan</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Melacak lokasi</string>
@@ -726,7 +730,6 @@
   <string name="change_admin_password">Ubah Kata sandi Admin</string>
   <string name="show_password">Tunjukan kata sandi</string>
   <string name="found_in_main">Hapus centang untuk menyembunyikan dari Menu Utama</string>
-  <string name="found_in_settings">Hapus centang untuk menyembunyikan dari Pengaturan Umum</string>
   <string name="form_entry">Hapus centang untuk menyembunyikan dari Pengisian Formulir</string>
   <string name="reset_project_settings_title">Set Ulang</string>
   <string name="reset_project_settings_subtext">Pilih dari pengaturan, formulir, data</string>
@@ -778,7 +781,6 @@
   <string name="reading_files">Membaca berkas</string>
   <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih.</string>
-  <string name="google_set_account">Google Sheet telah dipilih sebagai server Anda, mohon tentukan akun Google pada Pengaturan Umum sebelum melanjutkan</string>
   <string name="google_search_browse">Mencari formulir. Atau memilih \'My Drive\' di bawah ini untuk browse.</string>
   <string name="invalid_sheet_id">Id sheet tidak valid: %1$s</string>
   <string name="missing_submission_url">URL pengiriman tidak ditemukan.</string>
@@ -904,9 +906,13 @@
   <string name="scan_configuration_qr_code">Pindai kode QR konfigurasi</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Untuk membuka formulir ini, Anda harus membuka ODK Collect dan beralih ke proyek yang memuatnya.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Tampilkan rincian</string>
   <string name="errors">Kesalahan</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
 </resources>

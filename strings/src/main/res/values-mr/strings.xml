@@ -225,6 +225,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -242,7 +243,7 @@
   <string name="satellite">उपग्रह</string>
   <string name="google_play_services_error_occured">गूगल नकाशे मध्ये प्रवेश करण्यात अक्षम. गूगल प्ले सेवा स्थापित केली आहे का?</string>
   <string name="view_change_location">दृश्य किंवा स्थान बदला</string>
-    <string name="get_location">स्थान रेकॉर्ड</string>
+  <string name="get_location">स्थान रेकॉर्ड</string>
   <string name="provider_disabled_error">क्षमस्व, स्थान प्रदाता अक्षम केले आहेत!</string>
   <string name="gps_result">अक्षांश: %1$s\nरेखांश: %2$s\nअल्टिट्यूड: %3$sm\nअॅक्चुसीसी: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -251,6 +252,10 @@
   <string name="geopoint_view_read_only">जिओ पॉईंट पहा</string>
   <string name="get_shape">जिओ पॉईंट प्रारंभ करा</string>
   <string name="get_trace">जिओ ट्रेस प्रारंभ करा</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">पश्चिम %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -457,7 +462,6 @@
   <string name="change_admin_password">प्रशासन पासवर्ड बदला</string>
   <string name="show_password">संकेतशब्द दर्शवा</string>
   <string name="found_in_main">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
-  <string name="found_in_settings">मुख्य मेनूमधून लपविण्यासाठी अनचेक करा</string>
   <string name="form_entry">फॉर्म एन्ट्रीमधून लपविण्यासाठी अनचेक करा</string>
   <string name="reset_project_settings_title">रीसेट करा</string>
   <string name="select_all">सर्व निवडा</string>
@@ -496,7 +500,6 @@
   <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
   <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
-  <string name="google_set_account">आपण गूगल पत्रक आपल्या सर्व्हर म्हणून निवडले आहे, कृपया सुरू ठेवण्यापूर्वी सामान्य सेटिंग्जमध्ये संबंधित गूगल खाते निवडा</string>
   <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
@@ -562,7 +565,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

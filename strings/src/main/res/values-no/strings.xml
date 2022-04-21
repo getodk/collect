@@ -188,6 +188,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -196,10 +197,14 @@
     tile caches, and are not shown in the UI.-->
   <string name="google_play_services_error_occured">Ikke mulig å åpne Google Maps. Er Google Play Services installert?</string>
   <string name="view_change_location">Vis eller endre plassering</string>
-    <string name="get_location">Registrer posisjon</string>
+  <string name="get_location">Registrer posisjon</string>
   <string name="provider_disabled_error">Beklager, stedstjenesten er deaktivert!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
@@ -354,7 +359,6 @@
   <string name="admin_password_incorrect">Sorry, password is incorrect!</string>
   <string name="enter_admin_password">Enter Admin Password</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
-  <string name="found_in_settings">Uncheck to hide from Unprotected Settings</string>
   <string name="reset_project_settings_title">Reset</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
@@ -369,7 +373,6 @@
   <!--Button for navigating across Google Drive folders-->
   <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
-  <string name="google_set_account">Du har valgt Google Sheets som din server. Nå må du angi en Google-konto i Generelle innstillinger før du fortsetter.</string>
   <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
@@ -420,7 +423,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

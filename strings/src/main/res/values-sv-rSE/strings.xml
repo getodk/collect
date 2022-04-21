@@ -308,6 +308,7 @@
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Spara</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -337,7 +338,7 @@
   <string name="reference_layer">Referenslager</string>
   <string name="view_change_location">Visa eller ändra position</string>
   <string name="change_location">Ändra plats</string>
-    <string name="get_location">Spara position</string>
+  <string name="get_location">Spara position</string>
   <string name="provider_disabled_error">Tyvärr, platstjänster är inaktiverade!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nNoggrannhet: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -346,6 +347,10 @@
   <string name="geopoint_view_read_only">Visa GeoPoint</string>
   <string name="get_shape">Starta GeoShape</string>
   <string name="get_trace">Starta GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -591,7 +596,6 @@
   <string name="change_admin_password">Ändra administratörslösenordet</string>
   <string name="show_password">Visa lösenordet</string>
   <string name="found_in_main">Avmarkera för att dölja i huvudmenyn</string>
-  <string name="found_in_settings">Avmarkera för att dölja under allmänna inställningar</string>
   <string name="form_entry">Avmarkera för att dölja i formulärinmatning</string>
   <string name="reset_project_settings_title">Återställ</string>
   <string name="select_all">Välj alla</string>
@@ -638,7 +642,6 @@
   <string name="reading_files">Läser filer</string>
   <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
-  <string name="google_set_account">Du har valt Google Sheets som din server, vänligen välj motsvarande Google-konto under allmänna inställningar innan du fortsätter</string>
   <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
   <string name="missing_submission_url">URL för inskickning saknas</string>
@@ -722,7 +725,11 @@ Dela ODK Collect med dem.</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

@@ -309,6 +309,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -330,7 +331,7 @@
   <string name="view_change_location">Подивитись або змінити місцезнаходження</string>
   <string name="change_location">Змінити Місцезнаходження</string>
   <string name="record_geopoint">Записати точку</string>
-    <string name="get_location">Записати місцезнаходження</string>
+  <string name="get_location">Записати місцезнаходження</string>
   <string name="provider_disabled_error">Вибачте! Джерела місцезнаходження не доступні!</string>
   <string name="gps_result">Широта: %1$s\nДовгота: %2$s\nВисота: %3$sm\nТочність: %4$sm</string>
   <string name="google_play_services_not_available">Ця анкета хоче відслідковувати ваше розташування але Сервіси Google Play не доступні.</string>
@@ -345,6 +346,10 @@
   <string name="geopoint_view_read_only">Переглянути ГеоТочку</string>
   <string name="get_shape">Почати ГеоФігуру</string>
   <string name="get_trace">Почати ГеоМаршрут</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">Захід %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -618,7 +623,6 @@
   <string name="change_admin_password">Змінити пароль адміністратора</string>
   <string name="show_password">Показати пароль</string>
   <string name="found_in_main">Зніміть позначку щоб прибрати з Головного меню</string>
-  <string name="found_in_settings">Зніміть позначку щоб прибрати з Загальні Налаштування</string>
   <string name="form_entry">Зніміть позначку аби прибрати з Заповнити Анкету</string>
   <string name="reset_project_settings_title">Скинути</string>
   <string name="select_all">Обрати всі</string>
@@ -664,7 +668,6 @@
   <string name="google_auth_io_exception_msg">Неможливо здійснити виклики API. Якщо ви використовуєте локальну збірку, будь ласка, звурніться до документації проекту.</string>
   <string name="drive_get_file">Отримання %1$s та медіа файлів.</string>
   <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
-  <string name="google_set_account">Ви обрали своїм сервером Google Сторінки, для продовження, будь ласка, вкажіть відповідний обліковий запис Google в Загальних налаштуваннях</string>
   <string name="google_search_browse">Шукайте анкети. Або натисніть \'Мій диск\' для навігації.</string>
   <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
   <string name="missing_submission_url">Відсутній URL для надсилання</string>
@@ -747,7 +750,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

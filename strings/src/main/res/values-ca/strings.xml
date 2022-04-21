@@ -213,6 +213,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -225,7 +226,7 @@
   <string name="satellite">Satel·lit</string>
   <string name="google_play_services_error_occured">No pot accedir a Google Maps. Teniu el servei instal·lat ?</string>
   <string name="view_change_location">Veure o modificar posició</string>
-    <string name="get_location">Enregistrar Localització</string>
+  <string name="get_location">Enregistrar Localització</string>
   <string name="provider_disabled_error">Atenció, la Locatització està desactivada!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisió: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -234,6 +235,10 @@
   <string name="geopoint_view_read_only">Veure localització gps</string>
   <string name="get_shape">Comença GeoForma</string>
   <string name="get_trace">Comença GeoTraça</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
@@ -411,7 +416,6 @@
   <string name="change_admin_password">Canviar clau d\'administrador</string>
   <string name="show_password">Mostra clau d\'accés</string>
   <string name="found_in_main">Desmarcar per amagar en el Menú Principal</string>
-  <string name="found_in_settings">Desmarcar per amagar en Configuració General</string>
   <string name="reset_project_settings_title">Reinicialitza</string>
   <string name="select_all">Selecciona tot</string>
   <string name="clear_all">Neteja-ho tot</string>
@@ -438,7 +442,6 @@
   <string name="go_back">Enrera</string>
   <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
-  <string name="google_set_account">Heu seleccionat Google Sheets com a servidor, si us plau, seleccioneu el compte Google abans de seguir</string>
   <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
@@ -497,7 +500,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

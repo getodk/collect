@@ -164,6 +164,8 @@
   <!--Error displayed when opened filled form has been deleted on disk-->
   <string name="instance_deleted_message">Inyandiko shingiro yujujwe yarasibwe.</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">Habaye ikosa mw\'ivugurura ry\'indangagaciro. Ibi ubusanzwe biterwa no kuba habayeimibarire idakwiye mu kubaka i fishi.\n\n
+N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -191,6 +193,7 @@
   <string name="svg_file_does_not_exist">Ububiko bwa SVG ntabwo buboneka! </string>
   <string name="capture_image">Fata ifoto </string>
   <string name="choose_image">Hitamo Ishusho</string>
+  <string name="choose_account">Hitamo konti</string>
   <string name="selected_invalid_image">Ifoto wahisemo mububiko si ifoto yukuri</string>
   <string name="take_picture_instruction">Kora kuri screen ufate ifoto </string>
   <string name="error_front_camera_unavailable">Ifoto y\'imbere ntabwo iboneka kuri iki gikoresho</string>
@@ -356,6 +359,7 @@
   <string name="reason_for_changes_description">Ugomba kwandi impamvu uhinduye amakuru wari watanze </string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Bika amakuru wanditse</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -370,7 +374,6 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Indangamimerere igaragaza amakuru.</string>
   <string name="basemap_source">Aho byatangiriye</string>
-  <string name="basemap_source_unavailable">Mwihangane.%s y\'ikarita yibanze ntabashije kuboneka muri telefone yawe.Twagusaba guhitamo indi mu igenamitere rusange yawe&gt;ikarita</string>
   <string name="map_style_label">1%s imiterere ya ikarita</string>
   <string name="streets">Imihanda</string>
   <string name="terrain">Ubutaka</string>
@@ -390,7 +393,7 @@
   <string name="record_geopoint">Irabika amakuru</string>
   <string name="location_accuracy">Birizewe: %1$s m</string>
   <string name="location_provider">Igitanga aho uri ubu: %s</string>
-    <string name="get_location">Fata amakuru y\'ahantu</string>
+  <string name="get_location">Fata amakuru y\'ahantu</string>
   <string name="provider_disabled_error">Ihangane, ibituma amakuru y\'ahantu afatwa birafunze</string>
   <string name="gps_result">Ubujy\'ejuru: %1$s \nUmurambararo: %2$s \nUbutumburuke: %3$s m\n Byizewe: %4$s m</string>
   <string name="google_play_services_not_available">Iyi form irashaka kugenzura aho uherereye, ariko Google Play Services ntabwo iboneka</string>
@@ -407,6 +410,10 @@
   <string name="geotrace_view_read_only">Garagaza ikimenyetso kiranga ahantu.</string>
   <string name="get_shape">Tangira cg Shushanya imiterere yahantu.</string>
   <string name="get_trace">Tangira cg Shakisha ibimenyetso biranga ahantu.</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -463,7 +470,7 @@
   <string name="discard">Kuraho cg Jugunya.</string>
   <string name="geoshape_view_change_location">Garagaza cg Uhindure imiterere yahantu.</string>
   <string name="geotrace_view_change_location">Garagaza cg Uhindure ikimenyetso ndangahantu.</string>
-    <!--Name of an action button-->
+  <!--Name of an action button-->
   <string name="view_data">Reba Form Wabitse </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
@@ -703,7 +710,6 @@
   <string name="change_admin_password">Hindura ijambo ryibanga  rya admin</string>
   <string name="show_password">garagaza ijambobanga</string>
   <string name="found_in_main">Kutemeza bihisha uhereye k\'urutonde rw\'ibanze cg fatizo.</string>
-  <string name="found_in_settings">Kutemeza bihisha uhereye ku igenamitere rusange</string>
   <string name="form_entry">Ntuhitemo inyandiko shingiro ihishwe ahubwo uyinjize.</string>
   <string name="reset_project_settings_title">Hindura</string>
   <string name="delete_project">Siba</string>
@@ -751,7 +757,6 @@
   <string name="reading_files">Usobanukirwe n\'ububiko</string>
   <string name="drive_get_file">Akira %1$s n\'ububiko bw\'amajwi.</string>
   <string name="no_google_account">Ntago wahisemo email</string>
-  <string name="google_set_account">Wahisemo urupapurombare rwa Google nka musakaza, Hitamo konti ya Google cg email yawe ijyanye n\'igenamiterere rusange, ubone gukomeza</string>
   <string name="google_search_browse">Shakisha ama fomu. Cyangwa uhitemo \'My Drive\' hepfo kugirango ubashe urebe.</string>
   <string name="invalid_sheet_id">Indangarupapurombare itemejwe: %1$s</string>
   <string name="missing_submission_url">Haraburamo kohereza URL</string>
@@ -870,7 +875,11 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="try_demo">Gerageza kubyerekana</string>
   <string name="scan_configuration_qr_code">Umubarendangabanga wemejwe kuri QR</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>
