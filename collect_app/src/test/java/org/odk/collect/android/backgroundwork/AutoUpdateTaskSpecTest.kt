@@ -12,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -32,7 +31,6 @@ class AutoUpdateTaskSpecTest {
             override fun providesFormsUpdater(
                 context: Context,
                 notifier: Notifier,
-                analytics: Analytics,
                 syncStatusAppState: SyncStatusAppState,
                 projectDependencyProviderFactory: ProjectDependencyProviderFactory
             ): FormsUpdater {

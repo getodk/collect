@@ -1,8 +1,6 @@
 package org.odk.collect.android.formmanagement
 
 import android.content.Context
-import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
@@ -18,7 +16,6 @@ import java.util.stream.Collectors
 class FormsUpdater(
     private val context: Context,
     private val notifier: Notifier,
-    private val analytics: Analytics,
     private val syncStatusAppState: SyncStatusAppState,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory
 ) {
@@ -88,14 +85,12 @@ class FormsUpdater(
                     syncStatusAppState.finishSync(projectId, null)
                     if (notify) {
                         notifier.onSync(null, projectId)
-                        AnalyticsUtils.logMatchExactlyCompleted(analytics, null)
                     }
                     null
                 } catch (e: FormSourceException) {
                     syncStatusAppState.finishSync(projectId, e)
                     if (notify) {
                         notifier.onSync(e, projectId)
-                        AnalyticsUtils.logMatchExactlyCompleted(analytics, e)
                     }
                     e
                 }
