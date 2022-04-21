@@ -20,6 +20,7 @@
   <string name="get_forms">Leeres Formular herunterladen</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Formulare löschen</string>
+  <string name="saved_forms">Gespeicherte Formulare</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -358,6 +359,10 @@
   <string name="reason_for_changes_description">Sie müssen den Grund für die Änderungen am Formular erklären</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Speichern</string>
+  <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Ort auswählen</string>
+  <string name="choices">Auswahl</string>
+  <string name="invalid_geometry">Die Auswahl mit dem Label \"%1$s\" hat eine ungültige Geometrie (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +377,7 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Basiskarte</string>
   <string name="basemap_source">Quelle</string>
-  <string name="basemap_source_unavailable">Entschuldigung, %s Basiskarten sind auf diesem Gerät nicht verfügbar. Bitte wählen Sie eine andere Basiskarten unter Allgemeine Einstellungen &gt; Karten. </string>
+  <string name="basemap_source_unavailable">%s Basiskarten sind leider nicht auf diesem Gerät verfügbar. Bitte eine andere Basiskarte unter Einstellungen &gt; Karten wählen.</string>
   <string name="map_style_label">%s Kartentyp</string>
   <string name="streets">Straßen</string>
   <string name="terrain">Gelände</string>
@@ -392,7 +397,7 @@
   <string name="record_geopoint">Punkt erfassen</string>
   <string name="location_accuracy">Genauigkeit: %1$s m</string>
   <string name="location_provider">Standortdienst: %s</string>
-    <string name="get_location">Standort erfassen</string>
+  <string name="get_location">Standort erfassen</string>
   <string name="provider_disabled_error">Standortdienste sind nicht aktiviert!</string>
   <string name="gps_result">Breite (Lat.): %1$s\nLänge (Long.): %2$s\nHöhe (Alt.): %3$sm\nGenauigkeit: %4$sm</string>
   <string name="google_play_services_not_available">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Google Play-Dienste sind nicht verfügbar.</string>
@@ -409,6 +414,19 @@
   <string name="geotrace_view_read_only">GeoTrace anzeigen</string>
   <string name="get_shape">GeoShape starten</string>
   <string name="get_trace">GeoTrace starten</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">Vergangene Zeit: %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">Punkt wird gespeichert bei %1$s</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">Satelliten: %1$s</string>
+  <string name="waiting_for_location">Versuche den Standort zu ermitteln. Bitte warten.</string>
+  <string name="poor_accuracy">Schlechte Genauigkeit. Bitte warten.</string>
+  <string name="unacceptable_accuracy">Inakzeptable Genauigkeit. Bitte warten.</string>
+  <string name="improving_accuracy">Verbessere Genauigkeit. Bitte warten.</string>
+  <string name="accuracy_status_title">Ermittle Standort</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -465,13 +483,17 @@
   <string name="discard">Verwerfen</string>
   <string name="geoshape_view_change_location">GeoShape anzeigen oder ändern</string>
   <string name="geotrace_view_change_location">GeoTrace anzeigen oder ändern</string>
-    <!--Name of an action button-->
+  <string name="select_item_count">%s: %d (%d auf der Karte angezeigt)</string>
+  <string name="select_item">Auswählen</string>
+  <string name="new_item">Neues Element</string>
+  <!--Name of an action button-->
   <string name="view_data">Gespeichertes Formular anzeigen</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Standortverlauf</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
   <string name="location_tracking_notification_title">Standort wird aufgezeichnet… </string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">Hilfe zu Referenzebenen</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -491,6 +513,10 @@
   <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
   <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
+  <string name="forms_upload_succeeded">Formular-Upload erfolgreich</string>
+  <string name="forms_upload_failed">Formular-Upload fehlgeschlagen</string>
+  <string name="all_uploads_succeeded">Alle Uploads erfolgreich!</string>
+  <string name="some_uploads_failed">%1$s von %2$s Uploads fehlgeschlagen!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -506,6 +532,8 @@
   <string name="form_update_error">Formular-Update fehlgeschlagen</string>
   <string name="form_update_succeeded">Formular-Update erfolgreich</string>
   <string name="load_remote_form_error">Formularlisten-Download fehlgeschlagen</string>
+  <string name="forms_download_succeeded">Formular-Download erfolgreich</string>
+  <string name="forms_download_failed">Formular-Download fehlgeschlagen</string>
   <string name="all_downloads_succeeded">Alle Downloads erfolgreich!</string>
   <string name="some_downloads_failed">%1$s von %2$s Downloads fehlgeschlagen!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
@@ -728,7 +756,7 @@
   <string name="change_admin_password">Admin-Passwort ändern</string>
   <string name="show_password">Passwort anzeigen</string>
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
-  <string name="found_in_settings">Deaktivieren, um aus dem Einstellungen-Menü auszublenden</string>
+  <string name="found_in_settings">Abwählen, um unter Ungeschützten Einstellungen zu verbergen.</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
   <string name="reset_project_settings_title">Zurücksetzen (Reset)</string>
   <string name="reset_project_settings_subtext">Wähle aus Einstellungen, Formulare, Daten</string>
@@ -780,7 +808,7 @@
   <string name="reading_files">Lese Dateien</string>
   <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
-  <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter den Allgemeinen Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
+  <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
   <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="missing_submission_url">Fehlende Übermittlungs-URL</string>
@@ -830,6 +858,7 @@
   <string name="generate">Generieren</string>
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
+  <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Projektmanagement-Einstellungen zurück oder importiere funktionierende.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -852,6 +881,7 @@
   <string name="survey_multiple_forms_error">Zwei unterschiedliche Formulare mit derselben Form ID und Version heruntergeladen. Vielleicht wurde das gleiche Formular zu unterschiedlichen Zeiten oder auf unterschiedliche Server hochgeladen. In jedem Fall sollten Sie ein Formular löschen.</string>
   <string name="select_odk_shortcut">ODK Verknüpfung auswählen</string>
   <string name="background_audio_help">Dieses Formular zeichnet Audio über das Mikrofon ihres Gerätes auf.\n\nSie können die Lautstärkeanzeige nutzen, um sicher zu gehen, dass das Mikrofon nah genug am Geräusch ist, das Sie aufzeichnen möchten.\n\nUm die Aufzeichnung zu beenden, verlassen Sie das Formular.\n\nFür weitere Informationen kontaktieren Sie bitte die Person, die Sie gebeten hat die Daten zu sammeln.</string>
+  <string name="loading">Lade…</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -907,9 +937,15 @@
   <string name="scan_configuration_qr_code">Konfigurations-QR-Code scannen</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Um dieses Formular zu öffnen, müssen Sie zuerst ODK Collect öffnen und in das Projekt wechseln, in dem es enthalten ist.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect wurde nicht konfiguriert. Versuchen Sie ODK Collect zu öffnen und zu konfigurieren.\n\nWenn Sie auf eine Verknüpfung getippt haben, müssen Sie diese vielleicht nach der Konfiguration neu erstellen.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Details anzeigen</string>
   <string name="errors">Fehler</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">Einstellungen öffnen</string>
 </resources>

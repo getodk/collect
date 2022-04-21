@@ -358,6 +358,7 @@
   <string name="reason_for_changes_description">Devi spiegare il motivo per la modifica di questo form</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Salvare</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +373,7 @@
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Mappa Base</string>
   <string name="basemap_source">Origine</string>
-  <string name="basemap_source_unavailable">Spiacente, %s le mappe di base non sono disponibili su questo dispositivo. Scegli un\'altra mappa di base in Impostazioni generali &gt; Mappe.</string>
+  <string name="basemap_source_unavailable">Spiacente, %s le mappe di base non sono disponibili su questo dispositivo. Scegli un\'altra mappa di base in Impostazioni &gt; Mappe.</string>
   <string name="map_style_label">%sstile mappa</string>
   <string name="streets">Streets - Stradale</string>
   <string name="terrain">Terrain - Territoriale</string>
@@ -392,7 +393,7 @@
   <string name="record_geopoint">Memorizza un punto</string>
   <string name="location_accuracy">Precisione: %1$s m</string>
   <string name="location_provider">Fornitore di posizione: %s</string>
-    <string name="get_location">Registra Posizione</string>
+  <string name="get_location">Registra Posizione</string>
   <string name="provider_disabled_error">Attenzione, i Sistemi di Posizionamento sono disabilitati!</string>
   <string name="gps_result">Latitudine: %1$s\nLongitudine: %2$s\nAltitudine: %3$sm\nPrecisione: %4$sm</string>
   <string name="google_play_services_not_available">Questo formulario vuole monitorare la tua posizione ma Google Play Services non è disponibile.</string>
@@ -409,6 +410,19 @@
   <string name="geotrace_view_read_only">Visualizza Geo-tracciatura</string>
   <string name="get_shape">Inizia Geo-contorno</string>
   <string name="get_trace">Inizia Geo-tracciatura</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">Tempo trascorso: %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">Il punto sarà salvato in %1$s</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">Satelliti: %1$s</string>
+  <string name="waiting_for_location">Provando a ottenere la posizione. Prego attendere.</string>
+  <string name="poor_accuracy">Scarsa precisione. Attendere prego.</string>
+  <string name="unacceptable_accuracy">Precisione inaccettabile. Attendere prego.</string>
+  <string name="improving_accuracy">Migliorando la precisione. Attendere prego.</string>
+  <string name="accuracy_status_title">Ottenendo la posizione.</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -465,7 +479,7 @@
   <string name="discard">Annulla</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
-    <!--Name of an action button-->
+  <!--Name of an action button-->
   <string name="view_data">Visualizza modulo salvato</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Tracciamento della posizione</string>
@@ -492,6 +506,9 @@
   <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
   <string name="odk_permissions_fail">Errore auto invio ODK, perpiacere assicurati di avere tutti i permessi necessari</string>
+  <string name="forms_upload_succeeded">Caricamento Formulario riuscito</string>
+  <string name="forms_upload_failed">Caricamento Formulario fallito</string>
+  <string name="all_uploads_succeeded">Tutti i caricamenti sono riusciti!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -507,6 +524,8 @@
   <string name="form_update_error">Aggiornamento Formulario fallito</string>
   <string name="form_update_succeeded">Aggiornamento Formulario riuscito</string>
   <string name="load_remote_form_error">Download elenco formulari non riuscito </string>
+  <string name="forms_download_succeeded">Download Formulari riuscito</string>
+  <string name="forms_download_failed">Download formulari non riuscito </string>
   <string name="all_downloads_succeeded">Tutti i download sono riusciti!</string>
   <string name="some_downloads_failed">%1$s di %2$s downloads falliti!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
@@ -729,7 +748,7 @@
   <string name="change_admin_password">Cambia la password di amministratore</string>
   <string name="show_password">Mostra password</string>
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
-  <string name="found_in_settings">Deseleziona per nascondere da Impostazioni Generali</string>
+  <string name="found_in_settings">Deseleziona per nascondere da Impostazioni non protette</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
   <string name="reset_project_settings_title">Reimposta</string>
   <string name="reset_project_settings_subtext">Scegli tra impostazioni, moduli, dati</string>
@@ -781,7 +800,7 @@
   <string name="reading_files">Leggendo i files</string>
   <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
-  <string name="google_set_account">Hai selezionato Google Sheets come tuo server. Perpiacere seleziona un corrispondente account Google nelle Impostazioni Generali prima di procedere.</string>
+  <string name="google_set_account">Hai selezionato Google sheets come server, per favore seleziona un account Google corrispondente in Impostazioni prima di continuare</string>
   <string name="google_search_browse">Ricerca per form o seleziona \'My Drive\' in basso.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="missing_submission_url">Sottomissione URL mancante</string>
@@ -831,6 +850,7 @@
   <string name="generate">Genera</string>
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
+  <string name="corrupt_imported_preferences_error">Le impostazioni attuali sono danneggiate. Dalle impostazioni di gestione del progetto, ripristinare le impostazioni o importare quelle funzionanti.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -908,9 +928,15 @@
   <string name="scan_configuration_qr_code">Scansiona codice QR</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Per aprire questo modulo, devi prima aprire ODK Collect e passare al progetto che lo contiene.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect non è stato configurato. Prova ad aprire ODK Collect e a configurarlo.\n\nSe hai toccato un collegamento, potrebbe essere necessario ricrearlo dopo aver configurato ODK Collect.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Mostra dettagli</string>
   <string name="errors">Errori</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">Apri impostazioni</string>
 </resources>

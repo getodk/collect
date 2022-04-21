@@ -187,6 +187,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -203,7 +204,7 @@
   <string name="topographic">توپوگرافی</string>
   <string name="carto_map_style_positron">پوزیترون</string>
   <string name="change_location">تغییر موقعیت</string>
-    <string name="get_location">ثبت مکان</string>
+  <string name="get_location">ثبت مکان</string>
   <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">رفتن به تنظیمات </string>
@@ -212,6 +213,10 @@
   <string name="geopoint_view_read_only">نمایش GeoPoint</string>
   <string name="get_shape">آغاز GeoShape</string>
   <string name="get_trace">آغاز GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -474,7 +479,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

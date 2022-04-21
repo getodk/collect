@@ -20,6 +20,7 @@
   <string name="get_forms">Obtener Formulario en Blanco</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Borrar Formularios Guardados</string>
+  <string name="saved_forms">Guardar formularios</string>
   <string name="version_number">Versión: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -358,6 +359,10 @@
   <string name="reason_for_changes_description">Favor explicar el motivo de los cambios para este formulario</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Guardar</string>
+  <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Seleccionar lugar</string>
+  <string name="choices">Opciones</string>
+  <string name="invalid_geometry">La selección con etiqueta \"%1$s\" tiene geometría inválida(\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -372,7 +377,7 @@
   <string name="openmap_cartodb_darkmatter">Materia Obscura CartoDB</string>
   <string name="basemap">Mapa Base</string>
   <string name="basemap_source">Fuente</string>
-  <string name="basemap_source_unavailable">Lo sentimos, Los mapas base %s no están disponibles en este dispositivo. Por favor escoja otro mapa base en   Please choose another basemap in Cambiar la configuración &gt; Mapas.</string>
+  <string name="basemap_source_unavailable">Lo sentimos, los mapas base de %s  no están disponibles en este dispositivo. Elija otro mapa base en Configuración &gt; Mapas.</string>
   <string name="map_style_label">Estilo de Mapa %s </string>
   <string name="streets">Calles</string>
   <string name="terrain">Terreno</string>
@@ -392,7 +397,7 @@
   <string name="record_geopoint">Registrando un punto</string>
   <string name="location_accuracy">Precisión: %1$s m</string>
   <string name="location_provider">Proveedor de Ubicación: %s</string>
-    <string name="get_location">Obtener localización</string>
+  <string name="get_location">Obtener localización</string>
   <string name="provider_disabled_error">¡Los proveedores de ubicación están deshabilitados!</string>
   <string name="gps_result">Latitud: %1$s\nLongitud: %2$s\nAltitud: %3$sm\nPrecisión: %4$sm</string>
   <string name="google_play_services_not_available">Este formulario quiere rastrear su ubicación, pero los servicios de Google Play no están disponibles.</string>
@@ -409,6 +414,19 @@
   <string name="geotrace_view_read_only">Ver GeoLínea</string>
   <string name="get_shape">Iniciar GeoArea</string>
   <string name="get_trace">Iniciar GeoLínea</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">Tiempo transcurrido: %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">Punto se guardará en %1$s</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">Satélites: %1$s</string>
+  <string name="waiting_for_location">Tratando de obtener la ubicación. Espere por favor.</string>
+  <string name="poor_accuracy">Mala precisión. Espere por favor.</string>
+  <string name="unacceptable_accuracy">Precisión inaceptable. Espere por favor.</string>
+  <string name="improving_accuracy">Mejorando precisión. Espere por favor.</string>
+  <string name="accuracy_status_title">Obteniendo ubicación</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">O %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -465,7 +483,10 @@
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
   <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
-    <!--Name of an action button-->
+  <string name="select_item_count">%s: %d (%d mostrar en el mapa)</string>
+  <string name="select_item">Seleccionar</string>
+  <string name="new_item">Nuevo ítem</string>
+  <!--Name of an action button-->
   <string name="view_data">Ver formulario guardado</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Seguimiento de ubicación</string>
@@ -492,6 +513,10 @@
   <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
   <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
+  <string name="forms_upload_succeeded">Carga de formularios exitosa</string>
+  <string name="forms_upload_failed">Error al cargar formularios</string>
+  <string name="all_uploads_succeeded">¡Todas las cargas se realizaron correctamente!</string>
+  <string name="some_uploads_failed">%1$s de %2$s cargas fallaron</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -507,6 +532,8 @@
   <string name="form_update_error">Error al actualizar formulario</string>
   <string name="form_update_succeeded">La actualización del formulario se realizó correctamente</string>
   <string name="load_remote_form_error">Error al descargar la lista de formularios</string>
+  <string name="forms_download_succeeded">Descarga de formularios exitosa</string>
+  <string name="forms_download_failed">Error al descargar formularios</string>
   <string name="all_downloads_succeeded">¡Todas las descargas se realizaron correctamente!</string>
   <string name="some_downloads_failed">%1$s de %2$s descargas fallidas!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
@@ -729,7 +756,7 @@
   <string name="change_admin_password">Cambiar Contraseña de Administrador</string>
   <string name="show_password">Mostrar contraseña</string>
   <string name="found_in_main">Desmarque para ocultar del Menú Principal</string>
-  <string name="found_in_settings">Desmarque para ocultar de la Configuración General</string>
+  <string name="found_in_settings">Desmarque para ocultar la configuración desprotegida</string>
   <string name="form_entry">Desmarque para ocultar el formulario</string>
   <string name="reset_project_settings_title">Restablecer</string>
   <string name="reset_project_settings_subtext">Elija entre configuraciones, formularios, datos</string>
@@ -781,7 +808,7 @@
   <string name="reading_files">Leyendo archivos</string>
   <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
-  <string name="google_set_account">Ha seleccionado Google Sheets como servidor, por favor, seleccionar la correspondiente cuenta Google en Características Generales antes de continuar</string>
+  <string name="google_set_account">Ha seleccionado Hojas de cálculo de Google como su servidor, seleccione una cuenta de Google correspondiente en Configuración antes de continuar</string>
   <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="missing_submission_url">Falta URL para envío </string>
@@ -799,7 +826,7 @@
      ##############################################-->
   <string name="about_preferences">Acerca de</string>
   <string name="tell_your_friends">Compartir ODK Collect</string>
-  <string name="tell_your_friends_msg">Sus colegas aún recogen datos en papel? Comparte con ellos la aplicación</string>
+  <string name="tell_your_friends_msg">¿Sus colegas aún recogen datos en papel? Comparte con ellos la aplicación</string>
   <string name="leave_a_review">Ir a Play Store - Comentar y/o Actualizar</string>
   <string name="leave_a_review_msg">Su reseña (ojalá positiva) incrementa la visibilidad de la aplicación en Play Store</string>
   <string name="odk_website">Visitar el sitio web</string>
@@ -854,7 +881,8 @@
   <string name="survey_multiple_forms_error">Ha descargado dos formularios distintos con el mismo ID y versión. Puede que los cargara en diferentes momentos o de distintas procedencias. Debe de borrar uno.
 </string>
   <string name="select_odk_shortcut">Seleccionar acceso directo</string>
-  <string name="background_audio_help">Este formulario graba el audio del micrófono de su dispositivo.\n\nYPuede usar el indicador de volumen para asegurarse de que el micrófono esté lo suficientemente cerca del sonido que necesita grabar.\n\nPara detener la grabación, salga de este formulario.\n\nPara obtener más información, comuníquese con la persona que le pidió que recopilara datos.</string>
+  <string name="background_audio_help">Este formulario graba el audio del micrófono de su dispositivo.\n\nY puede usar el indicador de volumen para asegurarse de que el micrófono esté lo suficientemente cerca del sonido que necesita grabar.\n\nPara detener la grabación, salga de este formulario.\n\nPara obtener más información, comuníquese con la persona que le pidió que recopilara datos.</string>
+  <string name="loading">Cargando…</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -910,9 +938,15 @@
   <string name="scan_configuration_qr_code">Escanear el código QR de configuración</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">No se ha configurado la aplicación móvil. Intente abrir la aplicación y configurarla.\n\nIfSi tocó un acceso directo, es posible que deba volver a crearlo después de configurarla.</string>
   <!--##############################################
     # Errors
     ##############################################-->
   <string name="show_details">Mostrar detalles</string>
   <string name="errors">Errores</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">Abrir Configuración</string>
 </resources>

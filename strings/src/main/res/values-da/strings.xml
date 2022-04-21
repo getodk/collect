@@ -223,6 +223,7 @@
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Gem</string>
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -247,7 +248,7 @@
   <string name="change_location">Skift position</string>
   <string name="location_accuracy">Præcision: 1%1$s m</string>
   <string name="location_provider">Lokalitetsudbyder: 1%s</string>
-    <string name="get_location">Gem lokation</string>
+  <string name="get_location">Gem lokation</string>
   <string name="provider_disabled_error">Geolokation er slået fra</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
@@ -257,6 +258,10 @@
   <string name="geotrace_view_read_only">Vis GeoTrace</string>
   <string name="get_shape">Start GeoShape</string>
   <string name="get_trace">Start GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">V %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -486,7 +491,6 @@
   <string name="change_admin_password">Skift administrator-adgangskode</string>
   <string name="show_password">Vis kodeord</string>
   <string name="found_in_main">Fjern markering for at skjule fra hovedmenu </string>
-  <string name="found_in_settings">Fjern markering for at skjule fra Generelle indstillinger</string>
   <string name="reset_project_settings_title">Nulstil</string>
   <string name="select_all">Vælg alle</string>
   <string name="clear_all">Ryd alle</string>
@@ -510,7 +514,6 @@
   <string name="reading_files">Læser filer</string>
   <string name="drive_get_file">Henter%1$s og mediefiler.</string>
   <string name="no_google_account">Ingen Google-konto valgt.</string>
-  <string name="google_set_account">Du har valgt Google Sheets som din server. Vælg tilsvarende Google-konto under \"Generelle indstllinger\" før du fortsætter.</string>
   <string name="google_search_browse">Søg efter formularer. Eller vælg \"My Drive/Mit Drev\" herunder for at gennemse.</string>
   <string name="invalid_sheet_id">Invalid sheet id: %1$s</string>
   <string name="missing_submission_url">Mangler indberetningsadresse</string>
@@ -570,7 +573,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

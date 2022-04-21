@@ -158,16 +158,21 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
-    <string name="get_location">တည္ေနရာအားမွတ္သားရန္</string>
+  <string name="get_location">တည္ေနရာအားမွတ္သားရန္</string>
   <string name="provider_disabled_error">တည္ေနရာဖမ္းယူမွု ခ်ိဳ႔ယြင္းေနပါသည္</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
@@ -311,7 +316,6 @@
   <string name="enter_admin_password">စီမံခန့္ခြဲမွုလ်ိဳ့၀ွက္နံပါတ္အား ထည့္သြင္းရန္</string>
   <string name="show_password">စကားဝှက်ပြပါ</string>
   <string name="found_in_main">Uncheck to hide from Main Menu</string>
-  <string name="found_in_settings">Uncheck to hide from Unprotected Settings</string>
   <string name="reset_project_settings_title">မူလအတုိင္းျပန္ထားရန္</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
@@ -366,7 +370,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

@@ -312,6 +312,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -333,7 +334,7 @@
   <string name="view_change_location">Vidi ili promijeni lokaciju</string>
   <string name="change_location">Promijeni lokaciju</string>
   <string name="record_geopoint">Zabilježi lokaciju</string>
-    <string name="get_location">Zabilježi lokaciju</string>
+  <string name="get_location">Zabilježi lokaciju</string>
   <string name="provider_disabled_error">Pronalaženje lokacije je isključeno!</string>
   <string name="gps_result">Geografska širina:%1$s\nGeografska dužina: %2$s\nVisina: %3$sm\nPreciznost: %4$sm</string>
   <string name="google_play_services_not_available">Ovaj formular želi da prati vašu poziciju ali Google Play Services nisu dostupne.</string>
@@ -348,6 +349,10 @@
   <string name="geopoint_view_read_only">Vidi GeoPoint</string>
   <string name="get_shape">Započni GeoShape</string>
   <string name="get_trace">Započni GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -618,7 +623,6 @@
   <string name="change_admin_password">Promijeni administratorsku lozinku</string>
   <string name="show_password">Prikaži lozinku</string>
   <string name="found_in_main">Uklonite oznaku da biste isključili iz glavnog menija</string>
-  <string name="found_in_settings">Uklonite oznaku da biste isključili iz opštih podešavanja</string>
   <string name="form_entry">Ukloni oznaku kako bi sakrio stavku iz Form Entry</string>
   <string name="reset_project_settings_title">Resetuj</string>
   <string name="select_all">Obilježi sve</string>
@@ -665,7 +669,6 @@
   <string name="reading_files">Učitavanje fajlova</string>
   <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>
-  <string name="google_set_account">Odabrali ste Google Sheets kao svoj server, molim Vas da odaberete ogovarajući Goodle korisnički nalog u opštim podešavanjima prije nego nastavite</string>
   <string name="google_search_browse">Traži formulare. Ili odaberi \"My Drive\" ispod za pretragu.</string>
   <string name="invalid_sheet_id">Pogrešan ID stranice:  %1$s</string>
   <string name="missing_submission_url">URL za otpremanje nedostaje</string>
@@ -750,7 +753,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>

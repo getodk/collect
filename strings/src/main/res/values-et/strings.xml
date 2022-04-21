@@ -215,6 +215,7 @@
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <!--Action to save the contents of a full screen dialog-->
+  <!--Button text to select a place from a list presented on a map-->
   <!--##############################################
     # GEO
     ##############################################-->
@@ -231,7 +232,7 @@
   <string name="satellite">Satelliit</string>
   <string name="google_play_services_error_occured">Puudub ligipääs Google Maps-ile. Veenduge, et Google Play teenused on paigaldatud.</string>
   <string name="view_change_location">Vaata või muuda asukohta</string>
-    <string name="get_location">Salvesta asukoht</string>
+  <string name="get_location">Salvesta asukoht</string>
   <string name="provider_disabled_error">Kahjuks on asukoha küsimine maha keeratud!</string>
   <string name="gps_result">Laiuskraad: %1$s\nPikkuskraad: %2$s\nKõrgus: %3$sm\nTäpsusaste: %4$sm</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
@@ -240,6 +241,10 @@
   <string name="geopoint_view_read_only">Vaata asukohapunkti</string>
   <string name="get_shape">Loo polügoon</string>
   <string name="get_trace">Alusta rada</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <!--%1$s is the number of satellites being used to get location-->
+  <!--The accuracy of a location fix in meters-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -416,7 +421,6 @@
   <string name="enter_admin_password">Sisestage administraatori salasõna</string>
   <string name="change_admin_password">Muuda administraatori salasõna</string>
   <string name="found_in_main">Peamenüüst eemaldamiseks puhasta väli</string>
-  <string name="found_in_settings">Üldseadetest eemaldamiseks puhasta väli </string>
   <string name="reset_project_settings_title">Lähtesta</string>
   <string name="select_all">Vali kõik</string>
   <string name="clear_all">Eemalda kõik</string>
@@ -450,7 +454,6 @@
   <string name="go_back">Liikuge tagasi</string>
   <string name="drive_get_file">Laen %1$s ja meediafailid.</string>
   <string name="no_google_account">Google kontot ei ole valitud!</string>
-  <string name="google_set_account">Olete serveriks valinud Google Sheets-i. Enne jätkamist palun valige vastav Google konto üldsätetest</string>
   <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
@@ -503,7 +506,11 @@
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
     # Errors
+    ##############################################-->
+  <!--##############################################
+    # Permissions
     ##############################################-->
 </resources>
