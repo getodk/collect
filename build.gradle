@@ -1,5 +1,6 @@
 import dependencies.Versions
 
+// Plugin for detecting outdated dependencies. Run './gradlew dependencyUpdates' to generate a report.
 apply plugin: "com.github.ben-manes.versions"
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
