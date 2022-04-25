@@ -91,7 +91,9 @@ the specific language governing permissions and limitations under the License.
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".activities.FirstLaunchActivity">
+        <activity
+            android:name=".activities.FirstLaunchActivity"
+            android:theme="@style/Theme.Collect.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />

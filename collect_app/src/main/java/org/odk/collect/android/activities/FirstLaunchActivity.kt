@@ -1,6 +1,7 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -28,6 +29,8 @@ class FirstLaunchActivity : CollectAbstractActivity() {
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     public override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
 
