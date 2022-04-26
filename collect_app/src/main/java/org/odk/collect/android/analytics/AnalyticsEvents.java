@@ -61,7 +61,6 @@ public final class AnalyticsEvents {
      */
     public static final String AUDIO_RECORDING_INTERNAL = "AudioRecordingInternal";
     public static final String AUDIO_RECORDING_EXTERNAL = "AudioRecordingExternal";
-    public static final String AUDIO_RECORDING_CHOOSE = "AudioRecordingChoose";
 
     /**
      * Track how many forms record background audio

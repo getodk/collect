@@ -5,16 +5,13 @@ import android.content.Intent
 import android.widget.Toast
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
-import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.IntentLauncher
 
 class GetContentAudioFileRequester(
     private val activity: Activity,
     private val intentLauncher: IntentLauncher,
-    private val waitingForDataRegistry: WaitingForDataRegistry,
-    private val formEntryViewModel: FormEntryViewModel
+    private val waitingForDataRegistry: WaitingForDataRegistry
 ) : AudioFileRequester {
 
     override fun requestFile(prompt: FormEntryPrompt) {
@@ -36,6 +33,5 @@ class GetContentAudioFileRequester(
             ).show()
             waitingForDataRegistry.cancelWaitingForData()
         }
-        formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_CHOOSE)
     }
 }

@@ -9,9 +9,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.odk.collect.android.R
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
@@ -35,12 +33,7 @@ class GetContentAudioFileRequesterTest {
     }
 
     private fun setupRequester() {
-        requester = GetContentAudioFileRequester(
-            activity, intentLauncher, waitingForDataRegistry,
-            mock(
-                FormEntryViewModel::class.java
-            )
-        )
+        requester = GetContentAudioFileRequester(activity, intentLauncher, waitingForDataRegistry)
     }
 
     @Test
