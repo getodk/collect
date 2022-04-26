@@ -56,11 +56,6 @@ public final class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
 
     /**
-     * Track how often background audio is disabled for a form
-     */
-    public static final String BACKGROUND_AUDIO_ENABLED = "BackgroundAudioEnabled";
-
-    /**
      * Track how often background audio is enabled for a form
      */
     public static final String BACKGROUND_AUDIO_DISABLED = "BackgroundAudioDisabled";

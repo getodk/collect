@@ -91,10 +91,6 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
             if (auditEventLogger != null) {
                 auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, clock.get());
             }
-
-            if (formController != null) {
-                AnalyticsUtils.logFormEvent(AnalyticsEvents.BACKGROUND_AUDIO_ENABLED);
-            }
         } else {
             audioRecorder.cleanUp();
 
