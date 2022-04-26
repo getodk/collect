@@ -209,11 +209,6 @@ public final class AnalyticsEvents {
     public static final String FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra";
 
     /**
-     * Tracks how many forms include the `allow-mock-accuracy` parameter in `geo` questions
-     */
-    public static final String ALLOW_MOCK_ACCURACY = "AllowMockAccuracy";
-
-    /**
      * Tracks how many forms include an accuracy threshold for the default `geopoint` question
      */
     public static final String ACCURACY_THRESHOLD = "AccuracyThreshold";
