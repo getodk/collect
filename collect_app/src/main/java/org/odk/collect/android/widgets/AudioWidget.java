@@ -25,8 +25,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.databinding.AudioWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -213,7 +211,6 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
                 @Override
                 public void onPositionChanged(Integer newPosition) {
-                    AnalyticsUtils.logFormEvent(AnalyticsEvents.AUDIO_PLAYER_SEEK);
                     audioPlayer.setPosition(clip.getClipID(), newPosition);
                 }
 

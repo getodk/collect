@@ -56,11 +56,6 @@ public final class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
 
     /**
-     * Tracks how often the audio player seek bar is used.
-     */
-    public static final String AUDIO_PLAYER_SEEK = "AudioPlayerSeek";
-
-    /**
      * Tracks how often pause action is used while recording audio
      */
     public static final String AUDIO_RECORDING_PAUSE = "AudioRecordingPause";
