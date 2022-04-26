@@ -56,11 +56,6 @@ public final class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
 
     /**
-     * Tracks how often pause action is used while recording audio
-     */
-    public static final String AUDIO_RECORDING_PAUSE = "AudioRecordingPause";
-
-    /**
      * Tracks usage or internal recording vs external recording vs choosing files for
      * audio question
      */

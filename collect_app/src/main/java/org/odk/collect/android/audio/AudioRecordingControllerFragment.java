@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBinding;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -149,7 +148,6 @@ public class AudioRecordingControllerFragment extends Fragment {
             binding.pauseRecording.setContentDescription(getString(R.string.pause_recording));
             binding.pauseRecording.setOnClickListener(v -> {
                 audioRecorder.pause();
-                formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_PAUSE);
             });
 
             binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_24));
