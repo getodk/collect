@@ -6,8 +6,6 @@ import android.provider.MediaStore
 import android.widget.Toast
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
-import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.permissions.PermissionListener
@@ -17,8 +15,7 @@ class ExternalAppRecordingRequester(
     private val activity: Activity,
     private val intentLauncher: IntentLauncher,
     private val waitingForDataRegistry: WaitingForDataRegistry,
-    private val permissionsProvider: PermissionsProvider,
-    private val formEntryViewModel: FormEntryViewModel
+    private val permissionsProvider: PermissionsProvider
 ) : RecordingRequester {
 
     override fun requestRecording(prompt: FormEntryPrompt) {
@@ -52,6 +49,5 @@ class ExternalAppRecordingRequester(
                 override fun denied() {}
             }
         )
-        formEntryViewModel.logFormEvent(AnalyticsEvents.AUDIO_RECORDING_EXTERNAL)
     }
 }
