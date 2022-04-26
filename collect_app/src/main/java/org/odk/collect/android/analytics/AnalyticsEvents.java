@@ -79,11 +79,6 @@ public final class AnalyticsEvents {
     public static final String ANSWER_WHILE_RECORDING = "AnswerWhileRecording";
 
     /**
-     * Tracks how many users have opted in to internal recording as their default
-     */
-    public static final String INTERNAL_RECORDING_OPT_IN = "InternalRecordingOptIn";
-
-    /**
      * Track how many forms record background audio
      */
     public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
