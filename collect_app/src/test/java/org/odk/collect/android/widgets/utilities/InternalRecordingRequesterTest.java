@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
-import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -35,7 +34,7 @@ public class InternalRecordingRequesterTest {
         ComponentActivity activity = Robolectric.buildActivity(ComponentActivity.class).get();
         when(audioRecorder.getCurrentSession()).thenReturn(new MutableLiveData<>(null));
 
-        requester = new InternalRecordingRequester(activity, audioRecorder, permissionsProvider, mock(FormEntryViewModel.class));
+        requester = new InternalRecordingRequester(activity, audioRecorder, permissionsProvider);
         permissionsProvider.setPermissionGranted(true);
     }
 

@@ -56,12 +56,6 @@ public final class AnalyticsEvents {
     public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
 
     /**
-     * Tracks usage or internal recording vs external recording vs choosing files for
-     * audio question
-     */
-    public static final String AUDIO_RECORDING_INTERNAL = "AudioRecordingInternal";
-
-    /**
      * Track how many forms record background audio
      */
     public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";
