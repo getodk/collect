@@ -1,177 +1,179 @@
-package org.odk.collect.android.analytics;
+package org.odk.collect.android.analytics
 
-public final class AnalyticsEvents {
-
-    private AnalyticsEvents() {
-
-    }
-
+object AnalyticsEvents {
     /**
      * Track changes to the server URL setting. The action should be the scheme followed by a space
      * followed by one of Appspot, Ona, Kobo or Other. The label should be a hash of the URL.
      */
-    public static final String SET_SERVER = "SetServer";
+    const val SET_SERVER = "SetServer"
 
     /**
      * Track changes to the Google Sheets fallback submission URL setting. The action should be
      * a hash of the URL.
      */
-    public static final String SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl";
+    const val SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl"
 
     /**
      * Track video requests with high resolution setting turned off. The action should be a hash of
      * the form definition.
      */
-    public static final String REQUEST_VIDEO_NOT_HIGH_RES = "RequestVideoNotHighRes";
+    const val REQUEST_VIDEO_NOT_HIGH_RES = "RequestVideoNotHighRes"
 
     /**
      * Track video requests with high resolution setting turned on. This is tracked to contextualize
      * the counts with the high resolution setting turned off since we expect that video is not very
      * common overall. The action should be a hash of the form definition.
      */
-    public static final String REQUEST_HIGH_RES_VIDEO = "RequestHighResVideo";
+    const val REQUEST_HIGH_RES_VIDEO = "RequestHighResVideo"
 
     /**
      * Track submission encryption. The action should be a hash of the form definition.
      */
-    public static final String ENCRYPT_SUBMISSION = "EncryptSubmission";
+    const val ENCRYPT_SUBMISSION = "EncryptSubmission"
 
     /**
      * Track submissions. The action should describe how it's being sent and the label should be a
      * hash of the form definition.
      */
-    public static final String SUBMISSION = "Submission";
+    const val SUBMISSION = "Submission"
 
     /**
      * Track form definitions with the saveIncomplete attribute. The action should be saveIncomplete
      * and the label should be a hash of the form definition.
      */
-    public static final String SAVE_INCOMPLETE = "WidgetAttribute";
+    const val SAVE_INCOMPLETE = "WidgetAttribute"
 
     /**
      * Used to measure how popular the refresh button on Fill Blank Forms is. The button
      * only displays when Match Exactly is enabled. Right now the action passed is "Manual". This
      * means that we could extend the event to track auto or other syncs in the future.
      */
-    public static final String MATCH_EXACTLY_SYNC = "MatchExactlySync";
+    const val MATCH_EXACTLY_SYNC = "MatchExactlySync"
 
     /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk
      */
-    public static final String IMPORT_INSTANCE = "ImportInstance";
+    const val IMPORT_INSTANCE = "ImportInstance"
 
     /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk and then encrypted
      */
-    public static final String IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance";
+    const val IMPORT_AND_ENCRYPT_INSTANCE = "ImportAndEncryptInstance"
 
     /**
      * Tracks responses from OpenMapKit to the OSMWidget
      */
-    public static final String OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse";
+    const val OPEN_MAP_KIT_RESPONSE = "OpenMapKitResponse"
 
     /**
      * Tracks how often users create shortcuts to forms
      */
-    public static final String CREATE_SHORTCUT = "CreateShortcut";
+    const val CREATE_SHORTCUT = "CreateShortcut"
 
     /**
      * Tracks how often instances that have been deleted on disk are opened for editing/viewing
      */
-    public static final String OPEN_DELETED_INSTANCE = "OpenDeletedInstance";
+    const val OPEN_DELETED_INSTANCE = "OpenDeletedInstance"
 
     /**
      * Tracks how often users switch between projects
      */
-    public static final String SWITCH_PROJECT = "ProjectSwitch";
+    const val SWITCH_PROJECT = "ProjectSwitch"
 
     /**
      * Tracks how often users choose to try the demo project
      */
-    public static final String TRY_DEMO = "ProjectCreateDemo";
+    const val TRY_DEMO = "ProjectCreateDemo"
 
     /**
      * Tracks how often projects are created using QR codes.
-     **/
-    public static final String QR_CREATE_PROJECT = "ProjectCreateQR";
+     */
+    const val QR_CREATE_PROJECT = "ProjectCreateQR"
 
     /**
      * Tracks how often projects are created by manually entering details.
      */
-    public static final String MANUAL_CREATE_PROJECT = "ProjectCreateManual";
+    const val MANUAL_CREATE_PROJECT = "ProjectCreateManual"
 
     /**
      * Tracks how often a Google account is used to configure a manually created project
      */
-    public static final String GOOGLE_ACCOUNT_PROJECT = "ProjectCreateGoogle";
+    const val GOOGLE_ACCOUNT_PROJECT = "ProjectCreateGoogle"
 
     /**
      * Tracks how often projects with the same connection settings as an existing one are attempted
      * to be created.
      */
-    public static final String DUPLICATE_PROJECT = "ProjectCreateDuplicate";
+    const val DUPLICATE_PROJECT = "ProjectCreateDuplicate"
 
     /**
      * Tracks how often users try to create projects with the same connection settings but then decide
      * to switch to an existing project instead. This will give us a sense of whether users are getting
      * confused about project identity and trying to recreate the same one multiple times.
      */
-    public static final String DUPLICATE_PROJECT_SWITCH = "ProjectCreateDuplicateSwitch";
+    const val DUPLICATE_PROJECT_SWITCH = "ProjectCreateDuplicateSwitch"
 
     /**
      * Tracks how often users delete projects
      */
-    public static final String DELETE_PROJECT = "ProjectDelete";
+    const val DELETE_PROJECT = "ProjectDelete"
 
     /**
      * These events track how often users change project display settings
-     **/
-    public static final String CHANGE_PROJECT_NAME = "ProjectChangeName";
-    public static final String CHANGE_PROJECT_ICON = "ProjectChangeIcon";
-    public static final String CHANGE_PROJECT_COLOR = "ProjectChangeColor";
+     */
+    const val CHANGE_PROJECT_NAME = "ProjectChangeName"
+    const val CHANGE_PROJECT_ICON = "ProjectChangeIcon"
+    const val CHANGE_PROJECT_COLOR = "ProjectChangeColor"
 
     /**
      * Tracks how often users reconfigure a project using QR codes
      */
-    public static final String RECONFIGURE_PROJECT = "ProjectReconfigure";
+    const val RECONFIGURE_PROJECT = "ProjectReconfigure"
 
-    public static final String FORMS_PROVIDER_QUERY = "FormsProviderQuery";
-    public static final String FORMS_PROVIDER_INSERT = "FormsProviderInsert";
-    public static final String FORMS_PROVIDER_UPDATE = "FormsProviderUpdate";
-    public static final String FORMS_PROVIDER_DELETE = "FormsProviderDelete";
+    const val FORMS_PROVIDER_QUERY = "FormsProviderQuery"
 
-    public static final String INSTANCE_PROVIDER_QUERY = "InstanceProviderQuery";
-    public static final String INSTANCE_PROVIDER_INSERT = "InstanceProviderInsert";
-    public static final String INSTANCE_PROVIDER_UPDATE = "InstanceProviderUpdate";
-    public static final String INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete";
+    const val FORMS_PROVIDER_INSERT = "FormsProviderInsert"
+
+    const val FORMS_PROVIDER_UPDATE = "FormsProviderUpdate"
+
+    const val FORMS_PROVIDER_DELETE = "FormsProviderDelete"
+
+    const val INSTANCE_PROVIDER_QUERY = "InstanceProviderQuery"
+
+    const val INSTANCE_PROVIDER_INSERT = "InstanceProviderInsert"
+
+    const val INSTANCE_PROVIDER_UPDATE = "InstanceProviderUpdate"
+
+    const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
      * These track how often the external edit or view actions are used for forms or instances.
      * One event tracks when a project ID is included with the action URI and the other tracks when
      * it's not included.
      */
-    public static final String FORM_ACTION_WITH_PROJECT_ID = "FormActionWithProjectId";
-    public static final String FORM_ACTION_WITHOUT_PROJECT_ID = "FormActionWithoutProjectId";
+    const val FORM_ACTION_WITH_PROJECT_ID = "FormActionWithProjectId"
+
+    const val FORM_ACTION_WITHOUT_PROJECT_ID = "FormActionWithoutProjectId"
 
     /**
      * Tracks how often an external edit or view action includes an extra we'd like to deprecate.
      */
-    public static final String FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra";
+    const val FORM_ACTION_WITH_FORM_MODE_EXTRA = "FormActionWithFormModeExtra"
 
     /**
      * Tracks how many forms include an accuracy threshold for the default `geopoint` question
      */
-    public static final String ACCURACY_THRESHOLD = "AccuracyThreshold";
+    const val ACCURACY_THRESHOLD = "AccuracyThreshold"
 
     /**
      * Tracks how many forms use default accuracy thresholds for the default `geopoint` question
      */
-    public static final String ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault";
+    const val ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault"
 
     /**
      * Tracks how often form details with invalid hashes are provided by a server
      */
-    public static final String INVALID_FORM_HASH = "InvalidFormHash";
+    const val INVALID_FORM_HASH = "InvalidFormHash"
 }
