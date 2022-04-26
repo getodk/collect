@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.logic.PropertyManager;
-import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 
 public class CollectSettingsChangeHandlerTest {
@@ -16,7 +15,7 @@ public class CollectSettingsChangeHandlerTest {
     private final PropertyManager propertyManager = mock(PropertyManager.class);
     private final FormUpdateScheduler formUpdateScheduler = mock(FormUpdateScheduler.class);
 
-    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, mock(Analytics.class), mock(SettingsProvider.class));
+    CollectSettingsChangeHandler handler = new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, mock(Analytics.class));
 
     @Test
     public void updatesPropertyManager() {
