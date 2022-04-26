@@ -74,11 +74,6 @@ public final class AnalyticsEvents {
     public static final String AUDIO_RECORDING_CHOOSE = "AudioRecordingChoose";
 
     /**
-     * Tracks how often questions are answered while an audio recording is being made
-     */
-    public static final String ANSWER_WHILE_RECORDING = "AnswerWhileRecording";
-
-    /**
      * Track how many forms record background audio
      */
     public static final String REQUESTS_BACKGROUND_AUDIO = "RequestsBackgroundAudio";

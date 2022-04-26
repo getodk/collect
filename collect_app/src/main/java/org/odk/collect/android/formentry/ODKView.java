@@ -56,7 +56,6 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.exception.ExternalParamsException;
@@ -136,8 +135,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
-    private final AudioRecorder audioRecorder;
-    private final FormEntryViewModel formEntryViewModel;
 
     /**
      * Builds the view for a specified question or field-list of questions.
@@ -150,8 +147,6 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
-        this.audioRecorder = audioRecorder;
-        this.formEntryViewModel = formEntryViewModel;
 
         getComponent(context).inject(this);
         this.audioHelper = audioHelperFactory.create(context);
@@ -673,13 +668,8 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
     }
 
     public void widgetValueChanged(QuestionWidget changedWidget) {
-        if (audioRecorder.isRecording()) {
-            formEntryViewModel.logFormEvent(AnalyticsEvents.ANSWER_WHILE_RECORDING);
-        }
-
         if (widgetValueChangedListener != null) {
             widgetValueChangedListener.widgetValueChanged(changedWidget);
         }
-
     }
 }
