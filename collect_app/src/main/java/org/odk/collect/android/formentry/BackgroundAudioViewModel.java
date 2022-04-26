@@ -14,8 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActions;
 import org.javarosa.core.model.instance.TreeReference;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -51,7 +49,6 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
     @Nullable
     private AuditEventLogger auditEventLogger;
-    private FormController formController;
 
     public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Supplier<Long> clock) {
         this.audioRecorder = audioRecorder;
@@ -69,7 +66,6 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
     @Override
     public void formLoaded(@NonNull FormController formController) {
-        this.formController = formController;
         this.auditEventLogger = formController.getAuditEventLogger();
     }
 
@@ -96,10 +92,6 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
             if (auditEventLogger != null) {
                 auditEventLogger.logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, clock.get());
-            }
-
-            if (formController != null) {
-                AnalyticsUtils.logFormEvent(AnalyticsEvents.BACKGROUND_AUDIO_DISABLED);
             }
         }
 
