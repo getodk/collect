@@ -86,7 +86,6 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
             }
         }
 
-        GeoWidgetUtils.logAllowMockAccuracy(prompt);
         return binding.getRoot();
     }
 

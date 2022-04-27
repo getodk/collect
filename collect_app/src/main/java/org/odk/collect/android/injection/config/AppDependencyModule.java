@@ -318,8 +318,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, Analytics analytics, SettingsProvider settingsProvider) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, analytics, settingsProvider);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, Analytics analytics) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, analytics);
     }
 
     @Provides

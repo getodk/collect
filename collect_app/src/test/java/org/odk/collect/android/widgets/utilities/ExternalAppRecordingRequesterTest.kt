@@ -10,10 +10,8 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
-import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
@@ -38,12 +36,7 @@ class ExternalAppRecordingRequesterTest {
     }
 
     private fun setupRequester() {
-        requester = ExternalAppRecordingRequester(
-            activity, intentLauncher, waitingForDataRegistry, permissionsProvider,
-            mock(
-                FormEntryViewModel::class.java
-            )
-        )
+        requester = ExternalAppRecordingRequester(activity, intentLauncher, waitingForDataRegistry, permissionsProvider)
     }
 
     @Test

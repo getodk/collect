@@ -71,7 +71,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setText(R.string.get_point);
         }
 
-        GeoWidgetUtils.logAllowMockAccuracy(prompt);
         logAccuracyThresholdUse(prompt);
 
         return binding.getRoot();

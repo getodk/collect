@@ -15,8 +15,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -55,10 +53,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
         this.hasBackgroundRecording.setValue(hasBackgroundRecording);
-
-        if (hasBackgroundRecording) {
-            AnalyticsUtils.logFormEvent(AnalyticsEvents.REQUESTS_BACKGROUND_AUDIO);
-        }
     }
 
     public boolean isFormControllerSet() {
@@ -174,10 +168,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public void openHierarchy() {
         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, clock.get());
-    }
-
-    public void logFormEvent(String event) {
-        AnalyticsUtils.logFormEvent(event);
     }
 
     public NonNullLiveData<Boolean> hasBackgroundRecording() {
