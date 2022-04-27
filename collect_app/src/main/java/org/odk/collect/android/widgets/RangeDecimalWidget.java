@@ -82,6 +82,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         widgetValueChanged();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
         if (fromUser) {

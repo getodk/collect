@@ -452,11 +452,13 @@
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d seconde</item>
+    <item quantity="many">%d secondes</item>
     <item quantity="other">%d secondes</item>
   </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%d minute</item>
+    <item quantity="many">%d minutes</item>
     <item quantity="other">%d minutes</item>
   </plurals>
   <string name="accuracy_requirement">Exigence de précision:</string>
@@ -464,6 +466,7 @@
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%d mètre</item>
+    <item quantity="many">%d mètres</item>
     <item quantity="other">%d mètres</item>
   </plurals>
   <string name="location_status_searching">Recherche de la localisation, veuillez patienter…</string>

@@ -44,7 +44,7 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         requireActivity().let {
-            AppBarUtils.setupAppBarLayout(it, preferenceScreen.title)
+            AppBarUtils.setupAppBarLayout(it, preferenceScreen.title ?: "")
         }
 
         super.onViewCreated(view, savedInstanceState)

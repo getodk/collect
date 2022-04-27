@@ -7,7 +7,7 @@ object Versions {
 
     const val androidx_fragment = "1.4.1"
     const val okhttp3 = "4.9.3"
-    const val dagger = "2.40.5"
+    const val dagger = "2.41"
     const val kotlin = "1.6.10"
-    const val mockito = "4.3.1"
+    const val mockito = "4.5.1"
 }

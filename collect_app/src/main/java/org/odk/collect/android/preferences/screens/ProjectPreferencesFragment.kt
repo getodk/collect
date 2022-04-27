@@ -117,7 +117,7 @@ class ProjectPreferencesFragment :
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setHasOptionsMenu(true) // Needs to be here rather than `onAttach` or crash can occur when switching system theme
         return super.onCreateView(inflater, container, savedInstanceState)
     }

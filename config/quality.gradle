@@ -5,7 +5,7 @@ def reportsDir = "${project.buildDir}/reports"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '9.2.1'
+checkstyle.toolVersion = '10.1'
 
 tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
@@ -24,7 +24,7 @@ tasks.register("checkstyle", Checkstyle) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '6.41.0'
+    toolVersion = '6.44.0'
 }
 
 tasks.register("pmd", Pmd) {

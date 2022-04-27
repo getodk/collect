@@ -40,11 +40,13 @@ public class TrackingTouchSlider extends Slider implements Slider.OnSliderTouchL
         return trackingTouch;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStopTrackingTouch(@NotNull Slider slider) {
         trackingTouch = false;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onStartTrackingTouch(@NotNull Slider slider) {
         trackingTouch = true;

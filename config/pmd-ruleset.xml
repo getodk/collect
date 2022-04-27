@@ -66,6 +66,7 @@
         <exclude name="AvoidCatchingGenericException" />
         <exclude name="AvoidDeeplyNestedIfStmts" />
         <exclude name="AvoidThrowingRawExceptionTypes" />
+        <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal" />
         <exclude name="CognitiveComplexity" />
         <exclude name="CollapsibleIfStatements" />
         <exclude name="CyclomaticComplexity" />
@@ -76,6 +77,7 @@
         <exclude name="ExcessivePublicCount" />
         <exclude name="ExcessiveClassLength" />
         <exclude name="GodClass" />
+        <exclude name="ImmutableField" />
         <exclude name="LawOfDemeter" />
         <exclude name="LoosePackageCoupling" />
         <exclude name="MutableStaticState" />
