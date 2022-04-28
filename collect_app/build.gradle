@@ -369,6 +369,8 @@ dependencies {
         exclude group: 'org.hamcrest'
     }
 
+    implementation Dependencies.splashscreen
+
     testImplementation project(':formstest')
 
     // Testing-only dependencies

@@ -49,8 +49,6 @@ object Defaults {
             hashMap[ProjectKeys.KEY_APP_LANGUAGE] = ""
             hashMap[ProjectKeys.KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[ProjectKeys.KEY_NAVIGATION] = ProjectKeys.NAVIGATION_BOTH
-            hashMap[ProjectKeys.KEY_SHOW_SPLASH] = false
-            hashMap[ProjectKeys.KEY_SPLASH_PATH] = Collect.getInstance().getString(R.string.default_splash_path)
             hashMap[ProjectKeys.KEY_EXTERNAL_APP_RECORDING] = false
             // map_preferences.xml
             hashMap[ProjectKeys.KEY_BASEMAP_SOURCE] = ProjectKeys.BASEMAP_SOURCE_GOOGLE

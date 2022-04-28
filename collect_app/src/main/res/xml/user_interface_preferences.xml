@@ -32,16 +32,4 @@
         android:key="navigation"
         android:title="@string/navigation"
         app:iconSpaceReserved="false" />
-
-    <CheckBoxPreference
-        android:key="showSplash"
-        android:summary="@string/show_splash_summary"
-        android:title="@string/show_splash_title"
-        app:iconSpaceReserved="false" />
-
-    <Preference
-        android:dependency="showSplash"
-        android:key="splashPath"
-        android:title="@string/splash_path"
-        app:iconSpaceReserved="false" />
 </PreferenceScreen>

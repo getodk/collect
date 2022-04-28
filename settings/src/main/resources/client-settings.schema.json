@@ -72,12 +72,6 @@
             "swipe_buttons"
           ]
         },
-        "showSplash": {
-          "type": "boolean"
-        },
-        "splashPath": {
-          "type": "string"
-        },
         "basemap_source": {
           "type": "string",
           "enum": [
@@ -256,9 +250,6 @@
           "type": "boolean"
         },
         "change_navigation": {
-          "type": "boolean"
-        },
-        "show_splash_screen": {
           "type": "boolean"
         },
         "maps": {

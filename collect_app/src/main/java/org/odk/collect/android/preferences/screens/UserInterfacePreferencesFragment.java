@@ -14,42 +14,25 @@
 
 package org.odk.collect.android.preferences.screens;
 
-import static android.app.Activity.RESULT_CANCELED;
 import static org.odk.collect.android.activities.ActivityUtils.startActivityAndCloseAllOthers;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_LANGUAGE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_APP_THEME;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_SPLASH_PATH;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.MainMenuActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.preferences.SplashClickListener;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.version.VersionInformation;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.TreeMap;
-
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFragment {
-
-    public static final int IMAGE_CHOOSER = 0;
 
     @Inject
     VersionInformation versionInformation;
@@ -69,7 +52,6 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
         initNavigationPrefs();
         initFontSizePref();
         initLanguagePrefs();
-        initSplashPrefs();
     }
 
     private void initThemePrefs() {
@@ -148,37 +130,5 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
                 return true;
             });
         }
-    }
-
-    private void initSplashPrefs() {
-        final Preference pref = findPreference(KEY_SPLASH_PATH);
-
-        if (pref != null) {
-            pref.setOnPreferenceClickListener(new SplashClickListener(this, pref));
-            pref.setSummary(settingsProvider.getUnprotectedSettings().getString(KEY_SPLASH_PATH));
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Timber.d("onActivityResult %d %d", requestCode, resultCode);
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == RESULT_CANCELED) {
-            // request was canceled, so do nothing
-            return;
-        }
-
-        if (requestCode == IMAGE_CHOOSER) {
-            File customImage = new File(new StoragePathProvider().getCustomSplashScreenImagePath());
-            FileUtils.saveAnswerFileFromUri(intent.getData(), customImage, Collect.getInstance());
-
-            setSplashPath(customImage.getAbsolutePath());
-        }
-    }
-
-    public void setSplashPath(String path) {
-        settingsProvider.getUnprotectedSettings().save(KEY_SPLASH_PATH, path);
-        Preference splashPathPreference = findPreference(KEY_SPLASH_PATH);
-        splashPathPreference.setSummary(path);
     }
 }

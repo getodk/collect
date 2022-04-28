@@ -339,12 +339,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Următor</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Afișat la startul aplicației</string>
-  <string name="splash_path">Pagină de start selectată</string>
-  <string name="default_splash_path">ODK Implicit</string>
-  <string name="select_another_image">Selectați altă imagine</string>
-  <string name="use_odk_default">Utilizați imaginea implicită</string>
-  <string name="change_splash_path">Schimbați imaginea</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

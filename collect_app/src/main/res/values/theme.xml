@@ -67,6 +67,12 @@
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
     </style>
 
+    <style name="Theme.Collect.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/colorSurface</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.Collect</item>
+    </style>
+
     <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
     <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="dialogCornerRadius">8dp</item>

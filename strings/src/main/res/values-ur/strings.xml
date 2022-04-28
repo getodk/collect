@@ -500,13 +500,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">اگلا</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_title">سپلیش اسکرین</string>
-  <string name="show_splash_summary">ایپلیکیشن جب  شروع ہو، دکھاتا ہے</string>
-  <string name="splash_path">منتخب شدہ سپلیش تصویر</string>
-  <string name="default_splash_path">ODK طے شدہ</string>
-  <string name="select_another_image">دوسری تصویر کاانتخاب کریں۔</string>
-  <string name="use_odk_default">پہلے سے دی گئی  تصویر کو استعمال کریں</string>
-  <string name="change_splash_path">تصویر بدل دیں</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">فارم اپ ڈیٹ</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

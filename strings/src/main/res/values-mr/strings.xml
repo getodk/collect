@@ -397,13 +397,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">पुढे</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_title">स्प्लॅश स्क्रीन</string>
-  <string name="show_splash_summary">अनुप्रयोग प्रारंभ झाल्यावर दर्शविते</string>
-  <string name="splash_path">निवडलेल्या स्प्लॅश प्रतिमा</string>
-  <string name="default_splash_path">डीफॉल्ट प्रतिमा वापरा</string>
-  <string name="select_another_image">भिन्न प्रतिमा निवडा</string>
-  <string name="use_odk_default">डीफॉल्ट प्रतिमा वापरा</string>
-  <string name="change_splash_path">प्रतिमा बदला</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

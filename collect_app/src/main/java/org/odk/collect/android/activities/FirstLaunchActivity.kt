@@ -1,6 +1,7 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -27,41 +28,48 @@ class FirstLaunchActivity : CollectAbstractActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
-    private lateinit var binding: FirstLaunchLayoutBinding
-
     public override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
-        binding = FirstLaunchLayoutBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         DaggerUtils.getComponent(this).inject(this)
 
-        binding.configureViaQrButton.setOnClickListener {
-            DialogFragmentUtils.showIfNotShowing(
-                QrCodeProjectCreatorDialog::class.java,
-                supportFragmentManager
-            )
-        }
-
-        binding.configureManuallyButton.setOnClickListener {
-            DialogFragmentUtils.showIfNotShowing(
-                ManualProjectCreatorDialog::class.java,
-                supportFragmentManager
-            )
-        }
-
-        binding.appName.text = String.format(
-            "%s %s",
-            getString(R.string.collect_app_name),
-            versionInformation.versionToDisplay
-        )
-
-        binding.configureLater.addOnClickListener {
-            Analytics.log(AnalyticsEvents.TRY_DEMO)
-
-            projectsRepository.save(Project.DEMO_PROJECT)
-            currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
-
+        if (projectsRepository.getAll().isNotEmpty()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
+            return
+        }
+
+        FirstLaunchLayoutBinding.inflate(layoutInflater).apply {
+            setContentView(this.root)
+
+            configureViaQrButton.setOnClickListener {
+                DialogFragmentUtils.showIfNotShowing(
+                    QrCodeProjectCreatorDialog::class.java,
+                    supportFragmentManager
+                )
+            }
+
+            configureManuallyButton.setOnClickListener {
+                DialogFragmentUtils.showIfNotShowing(
+                    ManualProjectCreatorDialog::class.java,
+                    supportFragmentManager
+                )
+            }
+
+            appName.text = String.format(
+                "%s %s",
+                getString(R.string.collect_app_name),
+                versionInformation.versionToDisplay
+            )
+
+            configureLater.addOnClickListener {
+                Analytics.log(AnalyticsEvents.TRY_DEMO)
+
+                projectsRepository.save(Project.DEMO_PROJECT)
+                currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
+
+                ActivityUtils.startActivityAndCloseAllOthers(this@FirstLaunchActivity, MainMenuActivity::class.java)
+            }
         }
     }
 }

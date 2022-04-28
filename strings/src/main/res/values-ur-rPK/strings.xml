@@ -285,12 +285,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">اگلا</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">ایپلیکیشن جب  شروع ہو، کو دکھاتا ہے</string>
-  <string name="splash_path">منتخب شدہ سپلیش تصویر</string>
-  <string name="default_splash_path">ODK طے شدہ</string>
-  <string name="select_another_image">دوسری تصویر کا ینتخاب کریں۔</string>
-  <string name="use_odk_default">Default  تصویر کو استعمال کریں</string>
-  <string name="change_splash_path">عکس بدل دیں</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

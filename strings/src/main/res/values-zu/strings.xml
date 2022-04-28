@@ -291,12 +291,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Okulandelayo</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Ikhombisa uma uhlu luqala</string>
-  <string name="splash_path">Cannot translate</string>
-  <string name="default_splash_path">ODK ngokungenhloso</string>
-  <string name="select_another_image">Khetha omunye umfanekiso</string>
-  <string name="use_odk_default">Sebenzisa isithombe ngokungenhloso</string>
-  <string name="change_splash_path">Shintsha umfanekiso</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->

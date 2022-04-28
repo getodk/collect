@@ -657,13 +657,6 @@
   <string name="form_forward">Seuraava</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_backward">Takaisin</string>
-  <string name="show_splash_title">Aloitusruutu</string>
-  <string name="show_splash_summary">Näytä sovelluksen käynnistyessä</string>
-  <string name="splash_path">Valittu aloitusruutu</string>
-  <string name="default_splash_path">ODK oletus</string>
-  <string name="select_another_image">Valitse toinen kuva</string>
-  <string name="use_odk_default">Käytä oletuskuvaa</string>
-  <string name="change_splash_path">Vaihda kuva</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">Lomakepäivitys</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->

@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.android.activities.SplashScreenActivity
+import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -23,7 +23,7 @@ class CollectTestRule @JvmOverloads constructor(
         val firstLaunchPage = launch(
             Intent(
                 ApplicationProvider.getApplicationContext(),
-                SplashScreenActivity::class.java
+                FirstLaunchActivity::class.java
             ),
             FirstLaunchPage()
         ).assertOnPage()

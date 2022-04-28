@@ -17,7 +17,6 @@ object ProtectedProjectKeys {
     const val KEY_APP_LANGUAGE = "change_app_language"
     const val KEY_CHANGE_FONT_SIZE = "change_font_size"
     const val KEY_NAVIGATION = "change_navigation"
-    const val KEY_SHOW_SPLASH_SCREEN = "show_splash_screen"
     const val KEY_MAPS = "maps"
     const val KEY_FORM_UPDATE_MODE = "form_update_mode"
     const val KEY_PERIODIC_FORM_UPDATES_CHECK = "periodic_form_updates_check"
@@ -61,7 +60,6 @@ object ProtectedProjectKeys {
         KEY_APP_LANGUAGE,
         KEY_CHANGE_FONT_SIZE,
         KEY_NAVIGATION,
-        KEY_SHOW_SPLASH_SCREEN,
         KEY_MAPS,
         KEY_FORM_UPDATE_MODE,
         KEY_PERIODIC_FORM_UPDATES_CHECK,

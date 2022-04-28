@@ -9,8 +9,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.activities.MainMenuActivity
-import org.odk.collect.android.activities.SplashScreenActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
@@ -112,7 +112,7 @@ class ProjectManagementPreferencesFragment :
                 } else {
                     ActivityUtils.startActivityAndCloseAllOthers(
                         requireActivity(),
-                        SplashScreenActivity::class.java
+                        FirstLaunchActivity::class.java
                     )
                 }
             }

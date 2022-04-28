@@ -61,8 +61,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
@@ -72,7 +70,6 @@ class UserInterfacePreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateLocked()
 
@@ -82,8 +79,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 
@@ -97,8 +92,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
@@ -108,7 +101,6 @@ class UserInterfacePreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateUnlocked()
 
@@ -118,8 +110,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
@@ -133,8 +123,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(true))
         }
     }
 
@@ -144,7 +132,6 @@ class UserInterfacePreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_APP_LANGUAGE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CHANGE_FONT_SIZE, false)
         adminSettings.save(ProtectedProjectKeys.KEY_NAVIGATION, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_SHOW_SPLASH_SCREEN, false)
 
         projectPreferencesViewModel.setStateNotProtected()
 
@@ -154,8 +141,6 @@ class UserInterfacePreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_APP_LANGUAGE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_FONT_SIZE)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_NAVIGATION)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SHOW_SPLASH)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_SPLASH_PATH)!!.isVisible, `is`(false))
         }
     }
 }

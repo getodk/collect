@@ -275,12 +275,6 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">Next</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
-  <string name="show_splash_summary">Rodyti užsklandą paleidžiant programą</string>
-  <string name="splash_path">Parinkta užsklanda</string>
-  <string name="default_splash_path">ODK numatytoji</string>
-  <string name="select_another_image">Parinkti kitą paveikslėlį</string>
-  <string name="use_odk_default">Naudoti numatytąjį paveikslėlį</string>
-  <string name="change_splash_path">Pakeisti paveikslėlį</string>
   <!--Heading for the settings category about updating blank forms-->
   <!--Name of the setting that defines how blank forms are updated from the server.-->
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
