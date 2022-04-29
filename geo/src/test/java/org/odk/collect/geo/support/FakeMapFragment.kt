@@ -90,7 +90,6 @@ class FakeMapFragment : MapFragment {
         return emptyList()
     }
 
-    override fun removeFeature(featureId: Int) {}
     override fun clearFeatures() {
         markers.clear()
         markerIcons.clear()

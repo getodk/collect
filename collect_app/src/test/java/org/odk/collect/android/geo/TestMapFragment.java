@@ -165,11 +165,6 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
-    public void removeFeature(int featureId) {
-
-    }
-
-    @Override
     public void clearFeatures() {
         mappedPoints.clear();
     }

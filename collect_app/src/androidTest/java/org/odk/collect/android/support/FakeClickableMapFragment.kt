@@ -66,8 +66,6 @@ class FakeClickableMapFragment : MapFragment {
         return mutableListOf()
     }
 
-    override fun removeFeature(featureId: Int) {}
-
     override fun clearFeatures() {}
 
     override fun setClickListener(listener: MapFragment.PointListener?) {}

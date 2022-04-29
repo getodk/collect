@@ -152,9 +152,6 @@ public interface MapFragment {
      */
     @NonNull List<MapPoint> getPolyPoints(int featureId);
 
-    /** Removes a specified map feature from the map, leaving its featureId invalid. */
-    void removeFeature(int featureId);
-
     /** Removes all map features from the map. */
     void clearFeatures();
 
