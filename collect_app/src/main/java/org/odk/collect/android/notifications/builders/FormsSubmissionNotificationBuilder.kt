@@ -76,7 +76,7 @@ object FormsSubmissionNotificationBuilder {
             application,
             RequestCodes.FORMS_UPLOADED_NOTIFICATION,
             notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -89,7 +89,7 @@ object FormsSubmissionNotificationBuilder {
             application,
             RequestCodes.FORMS_UPLOADED_NOTIFICATION,
             showDetailsIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 }

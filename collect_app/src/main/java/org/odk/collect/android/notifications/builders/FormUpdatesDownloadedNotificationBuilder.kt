@@ -35,7 +35,7 @@ object FormUpdatesDownloadedNotificationBuilder {
             application,
             ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val title =
