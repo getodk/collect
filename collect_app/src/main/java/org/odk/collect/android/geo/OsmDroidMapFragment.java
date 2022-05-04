@@ -367,10 +367,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void clearFeatures() {
-        if (map != null) {  // during Robolectric tests, map will be null
-            for (MapFeature feature : features.values()) {
-                feature.dispose();
-            }
+        for (MapFeature feature : features.values()) {
+            feature.dispose();
         }
         features.clear();
         nextFeatureId = 1;
