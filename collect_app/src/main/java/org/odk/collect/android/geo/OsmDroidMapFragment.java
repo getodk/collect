@@ -370,6 +370,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         for (MapFeature feature : features.values()) {
             feature.dispose();
         }
+        map.invalidate();
         features.clear();
         nextFeatureId = 1;
     }
