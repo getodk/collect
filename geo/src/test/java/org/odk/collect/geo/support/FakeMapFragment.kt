@@ -46,7 +46,9 @@ class FakeMapFragment : MapFragment {
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
+        zoomBoundingBox = null
         this.center = center
+        this.zoom = DEFAULT_ZOOM
     }
 
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
@@ -162,5 +164,10 @@ class FakeMapFragment : MapFragment {
          * [setCenter]
          */
         val DEFAULT_CENTER = MapPoint(-1.0, -1.0)
+
+        /**
+         * The value used to zoom when [zoomToPoint] is called without a zoom level
+         */
+        const val DEFAULT_ZOOM = -1.0
     }
 }

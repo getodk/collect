@@ -180,6 +180,7 @@ class SelectionMapFragmentTest {
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_ZOOM))
     }
 
     @Test
@@ -204,6 +205,7 @@ class SelectionMapFragmentTest {
         onView(withId(R.id.zoom_to_location)).perform(click())
 
         assertThat(map.center, equalTo(MapPoint(40.181389, 44.514444)))
+        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_ZOOM))
     }
 
     @Test
