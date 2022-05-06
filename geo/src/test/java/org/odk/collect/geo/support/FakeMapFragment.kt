@@ -9,6 +9,7 @@ import org.odk.collect.maps.MapPoint
 
 class FakeMapFragment : MapFragment {
 
+    private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
     private var locationProvider: String? = null
     private var retainMockAccuracy = false
@@ -103,7 +104,14 @@ class FakeMapFragment : MapFragment {
         markerIcons.clear()
     }
 
-    override fun setClickListener(listener: PointListener?) {}
+    override fun setClickListener(listener: PointListener?) {
+        this.clickListener = listener
+    }
+
+    fun click(point: MapPoint) {
+        clickListener?.onPoint(point)
+    }
+
     override fun setLongPressListener(listener: PointListener?) {}
     override fun setFeatureClickListener(listener: FeatureListener?) {
         featureClickListener = listener

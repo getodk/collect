@@ -12,8 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.GeoDependencyComponentProvider
@@ -24,6 +25,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import javax.inject.Inject
@@ -221,18 +223,18 @@ class SelectionMapFragment(
 
         if (mapCenter != null) {
             map.zoomToPoint(mapCenter, mapZoom, false)
-            viewportInitialized = true // avoid recentering as soon as location is received
+            viewportInitialized = true // avoid re-centering as soon as location is received
         }
     }
 
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
         summarySheet = binding.summarySheet
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
-        summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        summarySheetBehavior.state = STATE_HIDDEN
 
         val onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
-                summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                summarySheetBehavior.state = STATE_HIDDEN
             }
         }
 
@@ -242,27 +244,29 @@ class SelectionMapFragment(
         )
 
         bottomSheetCallback = object : BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
+            override fun onStateChanged(onStateChangedbottomSheet: View, newState: Int) {
                 val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-                if (newState == BottomSheetBehavior.STATE_HIDDEN && selectedFeatureId != null) {
+                if (newState == STATE_HIDDEN && selectedFeatureId != null) {
+                    selectedFeatureViewModel.setSelectedFeatureId(null)
                     map.setMarkerIcon(
                         selectedFeatureId,
                         itemsByFeatureId[selectedFeatureId]!!.smallIcon
                     )
-                    selectedFeatureViewModel.setSelectedFeatureId(null)
+
                     onBackPressedCallback.isEnabled = false
                 } else {
-                    onBackPressedCallback.isEnabled = newState == BottomSheetBehavior.STATE_EXPANDED
+                    onBackPressedCallback.isEnabled = true
                 }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         }
+
         summarySheetBehavior.addBottomSheetCallback(bottomSheetCallback)
 
         summarySheet.listener = object : SelectionSummarySheet.Listener {
             override fun selectionAction(id: Long) {
-                summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                summarySheetBehavior.state = STATE_HIDDEN
 
                 parentFragmentManager.setFragmentResult(
                     REQUEST_SELECT_ITEM,
@@ -285,39 +289,34 @@ class SelectionMapFragment(
     }
 
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
-        summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        if (!isSummaryForFeatureDisplayed(featureId)) {
-            removeEnlargedMarkerIfExist(featureId)
+        removeEnlargedMarkerIfExist(featureId)
 
-            val item = itemsByFeatureId[featureId]
-            if (item != null) {
-                if (!skipSummary) {
-                    if (maintainZoom) {
+        val item = itemsByFeatureId[featureId]
+        if (item != null) {
+            if (!skipSummary) {
+                if (maintainZoom) {
                         map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
                     } else {
                         map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
                     }
+                map.setMarkerIcon(featureId, item.largeIcon)
+                summarySheet.setItem(item)
+                selectedFeatureViewModel.setSelectedFeatureId(featureId)
 
-                    map.setMarkerIcon(featureId, item.largeIcon)
-                    summarySheet.setItem(item)
-                    summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                    selectedFeatureViewModel.setSelectedFeatureId(featureId)
-                } else {
-                    parentFragmentManager.setFragmentResult(
-                        REQUEST_SELECT_ITEM,
-                        Bundle().also {
-                            it.putLong(RESULT_SELECTED_ITEM, item.id)
-                        }
-                    )
-                }
+                summarySheetBehavior.state = STATE_EXPANDED
+            } else {
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_SELECT_ITEM,
+                    Bundle().also {
+                        it.putLong(RESULT_SELECTED_ITEM, item.id)
+                    }
+                )
             }
         }
     }
 
     private fun onClick() {
-        if (summarySheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
-            summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
+        summarySheetBehavior.state = STATE_HIDDEN
     }
 
     private fun updateItems(items: List<MappableSelectItem>) {
@@ -341,10 +340,6 @@ class SelectionMapFragment(
             map.zoomToBoundingBox(points, 0.8, false)
             viewportInitialized = true
         }
-    }
-
-    private fun isSummaryForFeatureDisplayed(featureId: Int): Boolean {
-        return selectedFeatureViewModel.getSelectedFeatureId() == featureId && summarySheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun removeEnlargedMarkerIfExist(itemId: Int) {

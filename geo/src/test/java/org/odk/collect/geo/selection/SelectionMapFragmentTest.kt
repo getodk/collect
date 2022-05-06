@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -43,6 +44,7 @@ import org.odk.collect.geo.support.RobolectricApplication
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
@@ -96,6 +98,27 @@ class SelectionMapFragmentTest {
                 override fun providesReferenceLayerSettingsNavigator() =
                     referenceLayerSettingsNavigator
             }).build()
+
+        BottomSheetBehavior.DRAGGING_ENABLED = false
+    }
+
+    @Test
+    fun `summary sheet is hidden initially`() {
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        onView(withId(R.id.summary_sheet)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun `pressing back closes host Activity`() {
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        scenario.onFragment {
+            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+            assertThat(it.requireActivity().isFinishing, equalTo(true))
+        }
     }
 
     @Test
@@ -364,6 +387,95 @@ class SelectionMapFragmentTest {
             actualResult!!.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM),
             equalTo(items[0].id)
         )
+    }
+
+    @Test
+    fun `clicking map with an item selected deselects it`() {
+        val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(0)
+        map.click(MapPoint(0.0, 0.0))
+
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
+            .check(matches(not(isDisplayed())))
+        assertThat(map.getMarkerIcons()[0], equalTo(item.smallIcon))
+    }
+
+    @Test
+    fun `pressing back with an item selected deselects it`() {
+        val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(0)
+        scenario.onFragment {
+            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
+            .check(matches(not(isDisplayed())))
+        assertThat(map.getMarkerIcons()[0], equalTo(item.smallIcon))
+    }
+
+    @Test
+    fun `pressing back after deselecting item closes host Activity`() {
+        val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(0)
+        scenario.onFragment {
+            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+            assertThat(it.requireActivity().isFinishing, equalTo(true))
+        }
+    }
+
+    @Test
+    fun `recreating after deselecting item has no item selected`() {
+        val items = listOf(Fixtures.actionMappableSelectItem().copy(id = 0, name = "Point1"))
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(0)
+        scenario.onFragment {
+            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        scenario.recreate()
+        map.ready()
+
+        onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point1")))
+            .check(doesNotExist())
+    }
+
+    @Test
+    fun `tapping action hides summary sheet`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(
+                id = 0,
+                name = "Item",
+                action = MappableSelectItem.IconifiedText(null, "Action")
+            )
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(0)
+        onView(withText("Action")).perform(click())
+        onView(withText("Item")).check(matches(not(isDisplayed())))
     }
 
     @Test
