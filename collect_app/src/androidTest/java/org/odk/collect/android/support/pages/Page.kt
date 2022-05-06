@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.PerformException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
@@ -161,14 +160,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnText(text: String): T {
-        try {
-            onView(withText(text)).perform(click())
-        } catch (e: PerformException) {
-            Timber.e(e)
-
-            // Create a standard view match error so the view hierarchy is visible in the failure
-            onView(withText("PerformException thrown clicking on \"$text\"")).check(matches(isDisplayed()))
-        }
+        onView(withText(text)).perform(click())
         return this as T
     }
 
