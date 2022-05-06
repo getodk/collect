@@ -15,7 +15,7 @@ class FakeMapFragment : MapFragment {
     private var center: MapPoint? = null
     private var zoom = 0.0
     private var zoomBoundingBox: Pair<Iterable<MapPoint>, Double>? = null
-
+    private var readyListener: ReadyListener? = null
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
@@ -27,7 +27,11 @@ class FakeMapFragment : MapFragment {
         readyListener: ReadyListener?,
         errorListener: MapFragment.ErrorListener?
     ) {
-        readyListener!!.onReady(this)
+        this.readyListener = readyListener
+    }
+
+    fun ready() {
+        readyListener?.onReady(this)
     }
 
     override fun getCenter(): MapPoint {

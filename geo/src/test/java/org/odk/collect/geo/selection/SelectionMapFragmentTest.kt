@@ -108,6 +108,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         assertThat(map.getMarkers(), equalTo(itemsLiveData.value.map { it.toMapPoint() }))
 
         itemsLiveData.value = emptyList()
@@ -125,6 +127,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         onView(withText(application.getString(R.string.select_item_count, "Things", 0, 2)))
             .check(matches(isDisplayed()))
 
@@ -143,6 +147,7 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
         val points = items.map { it.toMapPoint() }
@@ -164,6 +169,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(data, zoomToFitItems = false)
                 }.build()
         )
+        map.ready()
 
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
@@ -176,6 +182,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
         map.setLocation(MapPoint(1.0, 2.0))
@@ -188,6 +196,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
         map.setLocation(MapPoint(1.0, 2.0))
@@ -200,6 +210,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping current location button zooms to gps location`() {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.setLocation(MapPoint(40.181389, 44.514444))
         onView(withId(R.id.zoom_to_location)).perform(click())
@@ -217,6 +228,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         onView(withId(R.id.zoom_to_bounds)).perform(click())
 
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
@@ -227,6 +240,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `tapping layers button navigates to layers settings`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         onView(withId(R.id.layer_menu)).perform(click())
 
@@ -244,6 +258,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         map.zoomToPoint(MapPoint(55.0, 66.0), 2.0, false)
 
         map.clickOnFeature(1)
@@ -268,6 +284,7 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.clickOnFeature(1)
         assertThat(map.getMarkerIcons()[0], equalTo(items[0].smallIcon))
@@ -291,6 +308,7 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.clickOnFeature(0)
         map.clickOnFeature(1)
@@ -307,6 +325,7 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.clickOnFeature(0)
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
@@ -328,6 +347,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(data, skipSummary = true)
                 }.build()
         )
+        map.ready()
 
         var actualResult: Bundle? = null
         scenario.onFragment {
@@ -355,6 +375,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         assertThat(map.center, equalTo(items[1].toMapPoint()))
         assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
@@ -368,6 +390,8 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(items[1].toMapPoint()))
     }
@@ -381,6 +405,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(data, showNewItemButton = false)
                 }.build()
         )
+        map.ready()
 
         onView(withContentDescription(R.string.new_item)).check(matches(not(isDisplayed())))
     }
@@ -388,6 +413,8 @@ class SelectionMapFragmentTest {
     @Test
     fun `ignores feature clicks for IDs that are not item features`() {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         map.clickOnFeature(-1)
         map.clickOnFeature(-2) // First click is fine but second could use the ID and crash
     }
@@ -395,9 +422,12 @@ class SelectionMapFragmentTest {
     @Test
     fun `recreating maintains zoom and position`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
         map.zoomToPoint(MapPoint(55.0, 66.0), 7.0, false)
 
         scenario.recreate()
+        map.ready()
 
         assertThat(map.getZoomBoundingBox(), equalTo(null))
         assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
@@ -413,9 +443,13 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.clickOnFeature(1)
+
         scenario.recreate()
+        map.ready()
+
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point2")))
             .check(matches(isDisplayed()))
     }
@@ -430,9 +464,13 @@ class SelectionMapFragmentTest {
         whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
 
         map.clickOnFeature(1)
+
         scenario.recreate()
+        map.ready()
+
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Point2")))
             .check(matches(isDisplayed()))
     }
