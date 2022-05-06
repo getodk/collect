@@ -180,7 +180,7 @@ class SelectionMapFragmentTest {
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
-        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_ZOOM))
+        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
 
     @Test
@@ -205,7 +205,7 @@ class SelectionMapFragmentTest {
         onView(withId(R.id.zoom_to_location)).perform(click())
 
         assertThat(map.center, equalTo(MapPoint(40.181389, 44.514444)))
-        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_ZOOM))
+        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
     }
 
     @Test
@@ -347,7 +347,20 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `centers on already selected item and does not move when location changes`() {
+    fun `centers on already selected item`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
+            Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        assertThat(map.center, equalTo(items[1].toMapPoint()))
+        assertThat(map.zoom, equalTo(FakeMapFragment.DEFAULT_POINT_ZOOM))
+    }
+
+    @Test
+    fun `does not move when location changes when centered on already selected item`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)

@@ -48,7 +48,7 @@ class FakeMapFragment : MapFragment {
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
-        this.zoom = DEFAULT_ZOOM
+        this.zoom = DEFAULT_POINT_ZOOM
     }
 
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
@@ -67,7 +67,12 @@ class FakeMapFragment : MapFragment {
         zoomBoundingBox = Pair(points, scaleFactor)
     }
 
-    override fun addMarker(point: MapPoint, draggable: Boolean, iconAnchor: String, iconDrawableId: Int): Int {
+    override fun addMarker(
+        point: MapPoint,
+        draggable: Boolean,
+        iconAnchor: String,
+        iconDrawableId: Int
+    ): Int {
         markers.add(point)
         markerIcons.add(null)
         markerIcons[markers.size - 1] = iconDrawableId
@@ -168,6 +173,6 @@ class FakeMapFragment : MapFragment {
         /**
          * The value used to zoom when [zoomToPoint] is called without a zoom level
          */
-        const val DEFAULT_ZOOM = -1.0
+        const val DEFAULT_POINT_ZOOM = -1.0
     }
 }
