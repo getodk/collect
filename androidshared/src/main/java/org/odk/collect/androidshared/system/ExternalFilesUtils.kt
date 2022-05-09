@@ -14,7 +14,7 @@ object ExternalFilesUtils {
             throw IllegalStateException("External files dir is null!")
         } else {
             try {
-                val testFile = File(externalFilesDir.toString() + File.separator + ".test")
+                val testFile = File(externalFilesDir, ".test")
                 testFile.createNewFile()
                 testFile.delete()
             } catch (e: IOException) {
