@@ -176,12 +176,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void onDestroy() {
-        clearFeatures();  // prevent a memory leak due to refs held by markers
-        super.onDestroy();
-    }
-
-    @Override
     public void applyConfig(Bundle config) {
         webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
         referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
@@ -372,18 +366,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void removeFeature(int featureId) {
-        MapFeature feature = features.remove(featureId);
-        if (feature != null) {
+    public void clearFeatures() {
+        for (MapFeature feature : features.values()) {
             feature.dispose();
         }
-    }
-
-    @Override
-    public void clearFeatures() {
-        map.getOverlays().clear();
-        addAttributionAndMapEventsOverlays();
-        map.getOverlays().add(myLocationOverlay);
         map.invalidate();
         features.clear();
         nextFeatureId = 1;

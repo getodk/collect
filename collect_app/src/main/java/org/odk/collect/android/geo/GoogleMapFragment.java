@@ -304,13 +304,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void removeFeature(int featureId) {
-        MapFeature feature = features.remove(featureId);
-        if (feature != null) {
-            feature.dispose();
-        }
-    }
-
     @Override public void clearFeatures() {
         if (map != null) {  // during Robolectric tests, map will be null
             for (MapFeature feature : features.values()) {
