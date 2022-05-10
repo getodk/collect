@@ -54,7 +54,7 @@ class SelectionMapFragmentTest {
 
     private val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
 
-    private val map = FakeMapFragment()
+    private lateinit var map: FakeMapFragment
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val data = mock<SelectionMapData> {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
@@ -82,7 +82,9 @@ class SelectionMapFragmentTest {
                 override fun providesMapFragmentFactory(): MapFragmentFactory {
                     return object : MapFragmentFactory {
                         override fun createMapFragment(context: Context): MapFragment {
-                            return map
+                            return FakeMapFragment().also {
+                                map = it
+                            }
                         }
                     }
                 }
