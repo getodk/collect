@@ -37,6 +37,38 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_top"
         tools:text="Name" />
 
+    <FrameLayout
+        android:id="@id/action_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/name">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?colorOnPrimary"
+            app:chipBackgroundColor="?colorSecondary"
+            app:chipEndPadding="@dimen/margin_small"
+            app:chipIconTint="?colorOnPrimary"
+            app:iconStartPadding="@dimen/margin_small"
+            tools:text="Action"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/info"
+            style="?textAppearanceBody2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginVertical="@dimen/margin_small"
+            android:textColor="?colorOnSurface"
+            tools:text="Info"
+            tools:visibility="gone" />
+
+    </FrameLayout>
+
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
@@ -45,40 +77,16 @@
         android:background="?colorPrimary"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/name" />
+        app:layout_constraintTop_toBottomOf="@id/action_container" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/properties"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
         android:orientation="vertical"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/divider" />
-
-    <com.google.android.material.chip.Chip
-        android:id="@+id/action"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?colorOnPrimary"
-        app:chipBackgroundColor="?colorSecondary"
-        app:chipEndPadding="@dimen/margin_small"
-        app:chipIconTint="?colorOnPrimary"
-        app:iconStartPadding="@dimen/margin_small"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/properties"
-        tools:text="Action" />
-
-    <TextView
-        android:id="@+id/info"
-        style="?textAppearanceBody2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textColor="?colorOnSurface"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/properties"
-        tools:text="Info"
-        tools:visibility="gone" />
+        app:layout_constraintTop_toBottomOf="@id/action_container" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
