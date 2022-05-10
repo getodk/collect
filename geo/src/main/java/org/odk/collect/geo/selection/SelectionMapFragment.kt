@@ -284,7 +284,7 @@ class SelectionMapFragment(
         }
     }
 
-    private fun onFeatureClicked(featureId: Int) {
+    private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
         summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         if (!isSummaryForFeatureDisplayed(featureId)) {
             removeEnlargedMarkerIfExist(featureId)
@@ -292,7 +292,12 @@ class SelectionMapFragment(
             val item = itemsByFeatureId[featureId]
             if (item != null) {
                 if (!skipSummary) {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    if (maintainZoom) {
+                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    } else {
+                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
+                    }
+
                     map.setMarkerIcon(featureId, item.largeIcon)
                     summarySheet.setItem(item)
                     summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -322,11 +327,15 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
+        val previouslySelectedId =
+            itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
         val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-            ?: itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
 
         if (selectedFeatureId != null) {
             onFeatureClicked(selectedFeatureId)
+            viewportInitialized = true
+        } else if (previouslySelectedId != null) {
+            onFeatureClicked(previouslySelectedId, maintainZoom = false)
             viewportInitialized = true
         } else if (zoomToFitItems && !viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
