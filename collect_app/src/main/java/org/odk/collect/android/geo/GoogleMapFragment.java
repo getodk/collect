@@ -56,6 +56,7 @@ import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapFragmentUtils;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapsMarkerCache;
@@ -110,6 +111,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private Bundle previousState;
 
     private MapFragmentDelegate mapFragmentDelegate;
 
@@ -154,6 +156,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
+                MapFragmentUtils.onMapReady(this, previousState);
                 readyListener.onReady(this);
             }
         });
@@ -161,6 +164,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // In Robolectric tests, getMapAsync() never gets around to calling its
         // callback; we have to invoke the ready listener directly.
         if (testMode && readyListener != null) {
+            MapFragmentUtils.onMapReady(this, previousState);
             readyListener.onReady(this);
         }
     }
@@ -168,6 +172,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
     }
 
     @Override public void onAttach(@NonNull Context context) {
@@ -203,6 +213,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStop() {
         super.onStop();
         mapFragmentDelegate.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        MapFragmentUtils.onSaveInstanceState(this, outState);
     }
 
     @Override public void onDestroy() {
