@@ -20,6 +20,13 @@ class FakeClickableMapFragment : MapFragment {
         readyListener?.onReady(this)
     }
 
+    override fun recreate(
+        readyListener: MapFragment.ReadyListener?,
+        errorListener: MapFragment.ErrorListener?,
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun getCenter(): MapPoint {
         return MapPoint(0.0, 0.0)
     }

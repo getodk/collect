@@ -534,21 +534,6 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `recreating maintains zoom and position`() {
-        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        map.ready()
-
-        map.zoomToPoint(MapPoint(55.0, 66.0), 7.0, false)
-
-        scenario.recreate()
-        map.ready()
-
-        assertThat(map.getZoomBoundingBox(), equalTo(null))
-        assertThat(map.center, equalTo(MapPoint(55.0, 66.0)))
-        assertThat(map.zoom, equalTo(7.0))
-    }
-
-    @Test
     fun `recreating maintains selection`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0, name = "Point1"),

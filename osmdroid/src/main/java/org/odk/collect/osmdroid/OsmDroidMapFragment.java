@@ -131,6 +131,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
+    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        this.readyListener = readyListener;
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();

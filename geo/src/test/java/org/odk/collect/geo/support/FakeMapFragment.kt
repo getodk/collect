@@ -31,6 +31,13 @@ class FakeMapFragment : MapFragment {
         this.readyListener = readyListener
     }
 
+    override fun recreate(
+        readyListener: ReadyListener?,
+        errorListener: MapFragment.ErrorListener?,
+    ) {
+        TODO("Not yet implemented")
+    }
+
     fun ready() {
         readyListener?.onReady(this)
     }

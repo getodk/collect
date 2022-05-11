@@ -68,6 +68,8 @@ public interface MapFragment {
             FragmentManager fragmentManager, int containerId,
             @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
+    void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
+
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();
 

@@ -115,7 +115,6 @@ class MapboxMapFragment :
         readyListener: ReadyListener?,
         errorListener: ErrorListener?
     ) {
-
         mapReadyListener = readyListener
 
         // Mapbox SDK only knows how to fetch tiles via HTTP. If we want it to
@@ -135,6 +134,10 @@ class MapboxMapFragment :
             .beginTransaction()
             .replace(containerId, this)
             .commitNow()
+    }
+
+    override fun recreate(readyListener: ReadyListener?, errorListener: ErrorListener?) {
+        TODO("Not yet implemented")
     }
 
     override fun onCreateView(

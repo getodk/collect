@@ -165,6 +165,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
+    @Override
+    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);

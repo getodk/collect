@@ -38,7 +38,7 @@ class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
     val skipSummary: Boolean = false,
     val showNewItemButton: Boolean = true,
-    val zoomToFitItems: Boolean = true
+    val zoomToFitItems: Boolean = true,
 ) : Fragment() {
 
     @Inject
@@ -105,7 +105,7 @@ class SelectionMapFragment(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         return SelectionMapLayoutBinding.inflate(inflater).root
     }
@@ -122,18 +122,28 @@ class SelectionMapFragment(
             updateCounts(binding)
         }
 
-        val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
-        if (mapToAdd != null) {
-            mapToAdd.addTo(
-                childFragmentManager,
-                R.id.map_container,
+        val existingFragment = binding.mapContainer.getFragment<Fragment?>() as MapFragment?
+        if (existingFragment != null) {
+            existingFragment.recreate(
                 ReadyListener { newMapFragment ->
                     initMap(newMapFragment, binding)
                 },
                 MapFragment.ErrorListener { requireActivity().finish() }
             )
         } else {
-            requireActivity().finish() // The configured map provider is not available
+            val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
+            if (mapToAdd != null) {
+                mapToAdd.addTo(
+                    childFragmentManager,
+                    R.id.map_container,
+                    ReadyListener { newMapFragment ->
+                        initMap(newMapFragment, binding)
+                    },
+                    MapFragment.ErrorListener { requireActivity().finish() }
+                )
+            } else {
+                requireActivity().finish() // The configured map provider is not available
+            }
         }
 
         setUpSummarySheet(binding)
@@ -295,10 +305,10 @@ class SelectionMapFragment(
         if (item != null) {
             if (!skipSummary) {
                 if (maintainZoom) {
-                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
-                    } else {
-                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
-                    }
+                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                } else {
+                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
+                }
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
                 selectedFeatureViewModel.setSelectedFeatureId(featureId)
@@ -431,7 +441,7 @@ sealed interface MappableSelectItem {
         override val name: String,
         override val properties: List<IconifiedText>,
         val action: IconifiedText,
-        override val selected: Boolean = false
+        override val selected: Boolean = false,
     ) : MappableSelectItem
 
     data class IconifiedText(val icon: Int?, val text: String)
