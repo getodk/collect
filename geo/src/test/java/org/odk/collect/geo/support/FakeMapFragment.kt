@@ -26,7 +26,7 @@ class FakeMapFragment : MapFragment {
         fragmentManager: FragmentManager,
         containerId: Int,
         readyListener: ReadyListener?,
-        errorListener: MapFragment.ErrorListener?
+        errorListener: MapFragment.ErrorListener?,
     ) {
         this.readyListener = readyListener
     }
@@ -69,18 +69,21 @@ class FakeMapFragment : MapFragment {
     override fun zoomToBoundingBox(
         points: Iterable<MapPoint>,
         scaleFactor: Double,
-        animate: Boolean
+        animate: Boolean,
     ) {
         center = null
         zoom = 0.0
-        zoomBoundingBox = Pair(points, scaleFactor)
+        zoomBoundingBox = Pair(
+            points.toList(), // Clone list to prevent original changing captured values
+            scaleFactor
+        )
     }
 
     override fun addMarker(
         point: MapPoint,
         draggable: Boolean,
         iconAnchor: String,
-        iconDrawableId: Int
+        iconDrawableId: Int,
     ): Int {
         markers.add(point)
         markerIcons.add(null)

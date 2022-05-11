@@ -204,7 +204,7 @@ class SelectOneFromMapDialogFragmentTest {
             assertThat(fragment.showNewItemButton, equalTo(false))
 
             val data = fragment.selectionMapData
-            assertThat(data.getMappableItems().value[1].selected, equalTo(true))
+            assertThat(data.getMappableItems().value!![1].selected, equalTo(true))
         }
     }
 

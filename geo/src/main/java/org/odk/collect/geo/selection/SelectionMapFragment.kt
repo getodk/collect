@@ -74,6 +74,7 @@ class SelectionMapFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         previousState = savedInstanceState
+        viewportInitialized = savedInstanceState != null
     }
 
     override fun onAttach(context: Context) {
@@ -205,14 +206,15 @@ class SelectionMapFragment(
         }
 
         map.setGpsLocationEnabled(true)
-        map.setGpsLocationListener { point -> onLocationChanged(point) }
 
         map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
         selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
-            updateItems(it)
-            updateCounts(binding)
+            if (it != null) {
+                updateItems(it)
+                updateCounts(binding)
+            }
         }
     }
 
@@ -276,16 +278,6 @@ class SelectionMapFragment(
         }
     }
 
-    /**
-     * Zooms the map to the new location if the map viewport hasn't been initialized yet.
-     */
-    private fun onLocationChanged(point: MapPoint?) {
-        if (!viewportInitialized) {
-            map.zoomToPoint(point, true)
-            viewportInitialized = true
-        }
-    }
-
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
         removeEnlargedMarkerIfExist(featureId)
 
@@ -324,20 +316,26 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
-        val previouslySelectedId =
+        val previouslySelectedItem =
             itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
         val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
 
         if (selectedFeatureId != null) {
             onFeatureClicked(selectedFeatureId)
-            viewportInitialized = true
-        } else if (previouslySelectedId != null) {
-            onFeatureClicked(previouslySelectedId, maintainZoom = false)
-            viewportInitialized = true
-        } else if (zoomToFitItems && !viewportInitialized && points.isNotEmpty()) {
-            map.zoomToBoundingBox(points, 0.8, false)
-            viewportInitialized = true
+        } else if (previouslySelectedItem != null) {
+            onFeatureClicked(previouslySelectedItem, maintainZoom = false)
+        } else if (!viewportInitialized) {
+            if (zoomToFitItems && points.isNotEmpty()) {
+                map.zoomToBoundingBox(points, 0.8, false)
+            } else {
+                map.setGpsLocationListener { point ->
+                    map.zoomToPoint(point, true)
+                    map.setGpsLocationListener(null)
+                }
+            }
         }
+
+        viewportInitialized = true
     }
 
     private fun removeEnlargedMarkerIfExist(itemId: Int) {
@@ -370,9 +368,6 @@ class SelectionMapFragment(
         const val REQUEST_SELECT_ITEM = "select_item"
         const val RESULT_SELECTED_ITEM = "selected_item"
         const val RESULT_CREATE_NEW_ITEM = "create_new_item"
-
-        private const val MAP_CENTER_KEY = "map_center"
-        private const val MAP_ZOOM_KEY = "map_zoom"
     }
 }
 
@@ -394,7 +389,7 @@ interface SelectionMapData {
     fun getMapTitle(): LiveData<String?>
     fun getItemType(): String
     fun getItemCount(): NonNullLiveData<Int>
-    fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>>
+    fun getMappableItems(): LiveData<List<MappableSelectItem>?>
 }
 
 sealed interface MappableSelectItem {

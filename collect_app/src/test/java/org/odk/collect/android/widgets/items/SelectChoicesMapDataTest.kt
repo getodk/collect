@@ -46,8 +46,8 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         assertThat(data.getItemCount().value, equalTo(2))
-        assertThat(data.getMappableItems().value.size, equalTo(1))
-        assertThat(data.getMappableItems().value[0].name, equalTo("A"))
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("A"))
     }
 
     @Test
@@ -71,13 +71,13 @@ class SelectChoicesMapDataTest {
             .build()
 
         val data = loadDataForPrompt(prompt)
-        val properties = data.getMappableItems().value[0].properties
+        val properties = data.getMappableItems().value!![0].properties
         assertThat(properties.size, equalTo(1))
         assertThat(properties[0], equalTo(IconifiedText(null, "property: blah")))
     }
 
     @Test
-    fun `isLoading is true when items are being loaded from choices`() {
+    fun `isLoading is true and items is null when items are being loaded from choices`() {
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(emptyList())
             .withSelectChoiceText(emptyMap())
@@ -86,6 +86,7 @@ class SelectChoicesMapDataTest {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectChoicesMapData(resources, scheduler, prompt, null)
         assertThat(data.isLoading().value, equalTo(true))
+        assertThat(data.getMappableItems().value, equalTo(null))
 
         scheduler.runBackground()
         assertThat(data.isLoading().value, equalTo(false))

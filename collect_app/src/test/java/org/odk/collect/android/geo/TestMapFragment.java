@@ -79,6 +79,11 @@ public class TestMapFragment implements MapFragment {
         readyListener.onReady(this);
     }
 
+    @Override
+    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        throw new UnsupportedOperationException();
+    }
+
     @NonNull
     @Override
     public MapPoint getCenter() {

@@ -61,7 +61,7 @@ class SelectionMapFragmentTest {
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemType() } doReturn "Things"
         on { getItemCount() } doReturn MutableNonNullLiveData(0)
-        on { getMappableItems() } doReturn MutableNonNullLiveData(emptyList())
+        on { getMappableItems() } doReturn MutableLiveData(emptyList())
     }
 
     @get:Rule
@@ -129,13 +129,13 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        val itemsLiveData = MutableNonNullLiveData(items)
+        val itemsLiveData = MutableLiveData(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.getMarkers(), equalTo(itemsLiveData.value.map { it.toMapPoint() }))
+        assertThat(map.getMarkers(), equalTo(itemsLiveData.value?.map { it.toMapPoint() }))
 
         itemsLiveData.value = emptyList()
         assertThat(map.getMarkers(), equalTo(emptyList()))
@@ -148,7 +148,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 1)
         )
 
-        val itemsLiveData = MutableNonNullLiveData(items)
+        val itemsLiveData = MutableLiveData(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
@@ -169,7 +169,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
 
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -180,12 +180,51 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `does not zoom to fit all items again when they change`() {
+        val originalItems =
+            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0))
+        val itemsLiveData: MutableLiveData<List<MappableSelectItem>?> =
+            MutableLiveData(originalItems)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        itemsLiveData.value =
+            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 52.0))
+
+        val points = originalItems.map { it.toMapPoint() }
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
+    }
+
+    @Test
+    fun `does not zoom to fit all items again after they change after recreating`() {
+        val items = listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0))
+        val itemsLiveData: MutableLiveData<List<MappableSelectItem>?> =
+            MutableLiveData(items)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
+
+        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+        map.zoomToPoint(MapPoint(12.3, 45.6), false)
+
+        scenario.recreate()
+        map.ready()
+
+        itemsLiveData.value =
+            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 52.0))
+
+        assertThat(map.getZoomBoundingBox(), equalTo(null))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+    }
+
+    @Test
     fun `zooms to current location when zoomToFitItems is false`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(
             SelectionMapFragment::class.java,
@@ -204,7 +243,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `zooms to current location when there are no items`() {
-        whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
+        whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -218,7 +257,7 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `does not zoom to current location when it changes`() {
-        whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
+        whenever(data.getMappableItems()).doReturn(MutableLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -230,6 +269,25 @@ class SelectionMapFragmentTest {
 
         map.setLocation(MapPoint(3.0, 4.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+    }
+
+    @Test
+    fun `does not zoom to current location when items change`() {
+        val originalItems =
+            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0))
+        val itemsLiveData: MutableLiveData<List<MappableSelectItem>?> =
+            MutableLiveData(originalItems)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+        map.setLocation(MapPoint(67.0, 48.0))
+
+        itemsLiveData.value =
+            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 52.0))
+
+        val points = originalItems.map { it.toMapPoint() }
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }
 
     @Test
@@ -250,7 +308,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -280,7 +338,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -306,7 +364,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -330,7 +388,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm
             ),
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -347,7 +405,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1"),
             Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2"),
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -363,7 +421,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0),
             Fixtures.actionMappableSelectItem().copy(id = 1),
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         val scenario = launcherRule.launchInContainer(
             SelectionMapFragment::class.java,
@@ -394,7 +452,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `clicking map with an item selected deselects it`() {
         val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(listOf(item)))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -410,7 +468,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `pressing back with an item selected deselects it`() {
         val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(listOf(item)))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -428,7 +486,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `pressing back after deselecting item closes host Activity`() {
         val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(listOf(item)))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(listOf(item)))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -444,7 +502,7 @@ class SelectionMapFragmentTest {
     @Test
     fun `recreating after deselecting item has no item selected`() {
         val items = listOf(Fixtures.actionMappableSelectItem().copy(id = 0, name = "Point1"))
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -470,7 +528,7 @@ class SelectionMapFragmentTest {
                 action = MappableSelectItem.IconifiedText(null, "Action")
             )
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -486,7 +544,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -501,7 +559,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, selected = true)
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -539,7 +597,7 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0, name = "Point1"),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, name = "Point2")
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
@@ -560,7 +618,7 @@ class SelectionMapFragmentTest {
                 .copy(id = 0, latitude = 40.0, name = "Point1", selected = true),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0, name = "Point2")
         )
-        whenever(data.getMappableItems()).thenReturn(MutableNonNullLiveData(items))
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
