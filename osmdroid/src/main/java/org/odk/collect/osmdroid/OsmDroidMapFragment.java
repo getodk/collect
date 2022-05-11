@@ -47,6 +47,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
+import org.odk.collect.maps.MapFragmentUtils;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
@@ -115,6 +116,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
+    private Bundle previousState;
     private MapFragmentDelegate mapFragmentDelegate;
 
     @Override
@@ -133,6 +135,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         this.readyListener = readyListener;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        previousState = savedInstanceState;
     }
 
     @Override
@@ -166,6 +174,18 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     public void onStop() {
         super.onStop();
         mapFragmentDelegate.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        MapFragmentUtils.onSaveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onDestroy() {
+        clearFeatures();  // prevent a memory leak due to refs held by markers
+        super.onDestroy();
     }
 
     @Override
@@ -203,6 +223,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
+                MapFragmentUtils.onMapReady(this, previousState);
                 readyListener.onReady(this);
             }
         }, 100);

@@ -24,7 +24,7 @@ class FakeClickableMapFragment : MapFragment {
         readyListener: MapFragment.ReadyListener?,
         errorListener: MapFragment.ErrorListener?,
     ) {
-        TODO("Not yet implemented")
+        readyListener?.onReady(this)
     }
 
     override fun getCenter(): MapPoint {

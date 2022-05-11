@@ -24,6 +24,7 @@ import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.MapFragmentUtils
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
@@ -162,9 +163,6 @@ class SelectionMapFragment(
 
             return
         }
-
-        outState.putParcelable(MAP_CENTER_KEY, map.center)
-        outState.putDouble(MAP_ZOOM_KEY, map.zoom)
     }
 
     override fun onDestroy() {
@@ -178,6 +176,8 @@ class SelectionMapFragment(
     @SuppressLint("MissingPermission") // Permission handled in Constructor
     private fun initMap(newMapFragment: MapFragment, binding: SelectionMapLayoutBinding) {
         map = newMapFragment
+
+        MapFragmentUtils.onMapReady(map, previousState)
 
         binding.zoomToLocation.setOnClickListener {
             map.zoomToPoint(map.gpsLocation, true)
@@ -207,8 +207,6 @@ class SelectionMapFragment(
         map.setGpsLocationEnabled(true)
         map.setGpsLocationListener { point -> onLocationChanged(point) }
 
-        previousState?.let { restoreZoomFromPreviousState(it) }
-
         map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
@@ -225,16 +223,6 @@ class SelectionMapFragment(
             itemCount,
             points.size
         )
-    }
-
-    private fun restoreZoomFromPreviousState(state: Bundle) {
-        val mapCenter: MapPoint? = state.getParcelable(MAP_CENTER_KEY)
-        val mapZoom = state.getDouble(MAP_ZOOM_KEY)
-
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false)
-            viewportInitialized = true // avoid re-centering as soon as location is received
-        }
     }
 
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
