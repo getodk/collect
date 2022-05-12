@@ -12,8 +12,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -25,7 +23,6 @@ import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.Map;
@@ -47,7 +44,7 @@ import javax.inject.Singleton;
  */
 @Deprecated
 @Singleton
-public class MapProvider implements MapFragmentFactory {
+public class MapProvider {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -149,19 +146,6 @@ public class MapProvider implements MapFragmentFactory {
         };
     }
 
-    /** Gets a new MapFragment from the selected MapConfigurator. */
-    @Override
-    public MapFragment createMapFragment(@NonNull Context context) {
-        MapConfigurator cftor = getConfigurator();
-        MapFragment map = cftor.createMapFragment(context);
-        if (map != null) {
-            configuratorsByMap.put(map, cftor);
-            return map;
-        }
-        cftor.showUnavailableMessage(context);
-        return null;
-    }
-
     /** Gets the currently selected MapConfigurator. */
     public static @NonNull MapConfigurator getConfigurator() {
         return getOption(null).cftor;
@@ -173,11 +157,6 @@ public class MapProvider implements MapFragmentFactory {
      */
     public static @NonNull MapConfigurator getConfigurator(String id) {
         return getOption(id).cftor;
-    }
-
-    /** Gets the currently selected SourceOption's label string resource ID. */
-    public static int getSourceLabelId() {
-        return getOption(null).labelId;
     }
 
     /** Gets a list of the IDs of the basemap sources, in order. */

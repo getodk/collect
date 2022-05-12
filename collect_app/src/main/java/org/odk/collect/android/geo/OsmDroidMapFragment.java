@@ -15,6 +15,12 @@
 package org.odk.collect.android.geo;
 
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,6 +56,7 @@ import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
@@ -88,14 +95,22 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     // Bundle keys understood by applyConfig().
     static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
 
-    @Inject
-    MapProvider mapProvider;
+    private static final String USGS_URL_BASE =
+            "https://basemap.nationalmap.gov/arcgis/rest/services";
+    private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
+    private static final String CARTO_COPYRIGHT = "© CARTO";
+    private static final String CARTO_ATTRIBUTION = OSM_COPYRIGHT + ", " + CARTO_COPYRIGHT;
+    private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0.\nData by OpenStreetMap, under ODbL.";
+    private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
     @Inject
     ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
     LocationClient locationClient;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private MapView map;
     private ReadyListener readyListener;
@@ -113,6 +128,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
+    private org.odk.collect.shared.settings.Settings.OnSettingChangeListener onSettingChangeListener;
 
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
@@ -154,7 +170,69 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onStart() {
         super.onStart();
-        mapProvider.onMapFragmentStart(this);
+
+        org.odk.collect.shared.settings.Settings settings = settingsProvider.getUnprotectedSettings();
+        String basemap = settings.getString(KEY_BASEMAP_SOURCE);
+        MapConfigurator cftor = createConfigurator(basemap);
+
+        onSettingChangeListener = key -> {
+            if (cftor.getPrefKeys().contains(key)) {
+                applyConfig(cftor.buildConfig(settings));
+            }
+        };
+
+        applyConfig(cftor.buildConfig(settings));
+        settings.registerOnSettingChangeListener(onSettingChangeListener);
+    }
+
+    @NonNull
+    private MapConfigurator createConfigurator(String basemap) {
+        MapConfigurator cftor = new OsmDroidMapConfigurator(
+                new WebMapService(
+                        "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
+                        "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                )
+        );
+
+        if (BASEMAP_SOURCE_USGS.equals(basemap)) {
+            cftor = new OsmDroidMapConfigurator(
+                    KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
+                    new OsmDroidMapConfigurator.WmsOption("topographic", R.string.topographic, new WebMapService(
+                            R.string.openmap_usgs_topo, 0, 18, 256, USGS_ATTRIBUTION,
+                            USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
+                    )),
+                    new OsmDroidMapConfigurator.WmsOption("hybrid", R.string.hybrid, new WebMapService(
+                            R.string.openmap_usgs_sat, 0, 18, 256, USGS_ATTRIBUTION,
+                            USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
+                    )),
+                    new OsmDroidMapConfigurator.WmsOption("satellite", R.string.satellite, new WebMapService(
+                            R.string.openmap_usgs_img, 0, 18, 256, USGS_ATTRIBUTION,
+                            USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
+                    ))
+            );
+        } else if (BASEMAP_SOURCE_STAMEN.equals(basemap)) {
+            new OsmDroidMapConfigurator(
+                    new WebMapService(
+                            R.string.openmap_stamen_terrain, 0, 18, 256, STAMEN_ATTRIBUTION,
+                            "http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg"
+                    )
+            );
+        } else if (BASEMAP_SOURCE_CARTO.equals(basemap)) {
+            new OsmDroidMapConfigurator(
+                    KEY_CARTO_MAP_STYLE, R.string.basemap_source_carto,
+                    new OsmDroidMapConfigurator.WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
+                            R.string.openmap_cartodb_positron, 0, 18, 256, CARTO_ATTRIBUTION,
+                            "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                    )),
+                    new OsmDroidMapConfigurator.WmsOption("dark_matter", R.string.carto_map_style_dark_matter, new WebMapService(
+                            R.string.openmap_cartodb_darkmatter, 0, 18, 256, CARTO_ATTRIBUTION,
+                            "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+                    ))
+            );
+        }
+        return cftor;
     }
 
     @Override
@@ -171,8 +249,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void onStop() {
-        mapProvider.onMapFragmentStop(this);
         super.onStop();
+        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(onSettingChangeListener);
     }
 
     @Override

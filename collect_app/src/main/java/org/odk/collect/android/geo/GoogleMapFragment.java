@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -53,9 +55,10 @@ import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,13 +80,13 @@ public class GoogleMapFragment extends SupportMapFragment implements
     static final String KEY_MAP_TYPE = "MAP_TYPE";
 
     @Inject
-    MapProvider mapProvider;
-
-    @Inject
     ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
     LocationClient locationClient;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private GoogleMap map;
     private Marker locationCrosshairs;
@@ -104,6 +107,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private org.odk.collect.shared.settings.Settings.OnSettingChangeListener onSettingChangeListener;
 
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
@@ -164,7 +168,24 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onStart() {
         super.onStart();
-        mapProvider.onMapFragmentStart(this);
+
+        org.odk.collect.shared.settings.Settings settings = settingsProvider.getUnprotectedSettings();
+        MapConfigurator cftor = new GoogleMapConfigurator(
+                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
+                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
+                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
+                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
+                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
+        );
+
+        onSettingChangeListener = key -> {
+            if (cftor.getPrefKeys().contains(key)) {
+                applyConfig(cftor.buildConfig(settings));
+            }
+        };
+
+        applyConfig(cftor.buildConfig(settings));
+        settings.registerOnSettingChangeListener(onSettingChangeListener);
     }
 
     @Override public void onResume() {
@@ -178,8 +199,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onStop() {
-        mapProvider.onMapFragmentStop(this);
         super.onStop();
+        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(onSettingChangeListener);
     }
 
     @Override public void onDestroy() {

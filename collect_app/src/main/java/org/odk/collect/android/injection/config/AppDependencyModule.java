@@ -58,6 +58,7 @@ import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
@@ -621,7 +622,7 @@ public class AppDependencyModule {
 
     @Provides
     public MapFragmentFactory providesMapFragmentFactory(MapProvider mapProvider) {
-        return mapProvider;
+        return new MapFragmentFactoryImpl();
     }
 
     @Provides
